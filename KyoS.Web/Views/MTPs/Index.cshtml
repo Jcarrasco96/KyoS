@@ -217,7 +217,7 @@
                                                 @Html.DisplayFor(modelItem => item.Client.Code)                                                
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
@@ -239,24 +239,24 @@
                                             <td align="center">
                                                 @if (item.NumberOfMonths != null)
                                                 {
-                                                    @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
+                                                    @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
                                                     {
                                                         <span class="label label-danger" title="Expired days">
-                                                            @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days)
+                                                            @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days)
                                                         </span>
                                                     }
                                                     else
                                                     {
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
+                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
                                                         {
                                                             <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
+                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
                                                             </span>
                                                         }
                                                         else
                                                         {
                                                             <span class="label label-warning" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
+                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
                                                             </span>
                                                         }
                                                     }
@@ -379,7 +379,7 @@
                                                 @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
@@ -401,24 +401,24 @@
                                             <td align="center">
                                                 @if (item.NumberOfMonths != null)
                                                 {
-                                                    @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
+                                                    @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
                                                     {
                                                         <span class="label label-danger" title="Expired days">
-                                                            @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days )
+                                                            @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days )
                                                         </span>
                                                     }
                                                     else
                                                     {
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
+                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
                                                         {
                                                             <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
+                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
                                                             </span>
                                                         }
                                                         else 
                                                         {
                                                            <span class="label label-warning" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
+                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
                                                            </span>
                                                         }
                                                     }
@@ -646,7 +646,7 @@
                                                 @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
@@ -789,7 +789,7 @@
                                                 @Html.DisplayFor(modelItem => item.Client.Code)
                                             </td>
                                             <td align="center">
-                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).MTPDevelopedDate)
+                                                @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                                             </td>
                                             <td align="center">
                                                 @Html.DisplayFor(modelItem => item.Client.MTPs.ElementAtOrDefault(0).NumberOfMonths)
@@ -811,7 +811,7 @@
                                             <td align="center">
                                                 @* @if (item.NumberOfMonths != null)
                                                     {
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
+                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
                                                         {
                                                             <span class="label label-danger" title="Expired days">
                                                                 @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
