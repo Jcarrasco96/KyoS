@@ -88,7 +88,7 @@
                                     {
                                         @if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
                                         {
-                                            <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                            <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
@@ -96,13 +96,13 @@
                                         {
                                             @if (item.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                                <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                             }
@@ -110,7 +110,7 @@
                                     }
                                     else
                                     {
-                                        <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-backward"></i></a>
+                                        <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                         <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
