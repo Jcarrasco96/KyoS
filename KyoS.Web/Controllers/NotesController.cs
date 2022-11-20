@@ -9395,23 +9395,97 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> NotPresentNotesClinic(int id = 0)
+        public async Task<IActionResult> NotPresentNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            return View(await _context.Workdays_Clients.AsNoTracking()
-                                      
-                                      .Include(wc => wc.Facilitator).AsNoTracking()
+            IQueryable<Workday_Client> query = null;
 
-                                      .Include(wc => wc.Client).AsNoTracking()
+            if (dateInterval == string.Empty && idFacilitator == 0 && idClient == 0)
+            {
+                query = _context.Workdays_Clients
 
-                                      .Include(wc => wc.Workday).AsNoTracking()
-                                                       
-                                      .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                 && wc.Present == false)).AsNoTracking()
-                                      .ToListAsync());
+                                .Include(wc => wc.Facilitator)
+
+                                .Include(wc => wc.Client)
+
+                                .Include(wc => wc.Workday)
+
+                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                           && wc.Present == false
+                                           && wc.Workday.Date >= DateTime.Now.AddMonths(-1)));
+
+                return View(new NotPresentNotesClinicViewModel
+                {
+                    DateIterval = $"{DateTime.Now.AddMonths(-1).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                    IdFacilitator = 0,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    WorkDaysClients = query.ToList()
+                }
+                           );
+            }
+
+            query = _context.Workdays_Clients
+
+                            .Include(wc => wc.Facilitator)
+
+                            .Include(wc => wc.Client)
+
+                            .Include(wc => wc.Workday)
+
+                            .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                       && wc.Present == false));
+
+            if (dateInterval != string.Empty)
+            {
+                string[] date = dateInterval.Split(" - ");
+                query = query.Where(wc => (wc.Workday.Date >= Convert.ToDateTime(date[0]) && wc.Workday.Date <= Convert.ToDateTime(date[1])));
+            }
+
+            if (idFacilitator != 0)
+                query = query.Where(wc => wc.Facilitator.Id == idFacilitator);
+
+            if (idClient != 0)
+                query = query.Where(wc => wc.Client.Id == idClient);
+
+            try
+            {
+                NotPresentNotesClinicViewModel model = new NotPresentNotesClinicViewModel
+                {
+                    DateIterval = dateInterval,
+                    IdFacilitator = idFacilitator,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = idClient,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    WorkDaysClients = query.ToList()
+                };
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(NotPresentNotesClinic));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public IActionResult NotPresentNotesClinic(NotPresentNotesClinicViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(NotPresentNotesClinic), new { dateInterval = model.DateIterval, idFacilitator = model.IdFacilitator, idClient = model.IdClient });
+            }
+
+            return View(model);
         }
 
         [Authorize(Roles = "Facilitator, Manager")]
