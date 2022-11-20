@@ -11273,8 +11273,9 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            IndividualNoteEntity indNotes = await _context.IndividualNotes
-                                                     .FirstAsync(t => t.Workday_Client_FK == idWorkday_client);
+            IndividualNoteEntity indNotes = _context.IndividualNotes
+                                                    .Include(n => n.Workday_Cient)
+                                                    .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
 
             if (indNotes != null)
             {
