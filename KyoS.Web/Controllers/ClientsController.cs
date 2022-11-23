@@ -58,6 +58,8 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
                                           .Include(c => c.IndividualTherapyFacilitator)
+                                          .Include(c => c.Clients_HealthInsurances)
+                                          .ThenInclude(c => c.HealthInsurance)
                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Name).ToListAsync());
             }
@@ -66,6 +68,8 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
                                           .Include(c => c.IndividualTherapyFacilitator)
+                                          .Include(c => c.Clients_HealthInsurances)
+                                          .ThenInclude(c => c.HealthInsurance)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Bio.CreatedBy == user_logged.UserName
                                                      || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
@@ -78,6 +82,8 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
                                           .Include(c => c.IndividualTherapyFacilitator)
+                                          .Include(c => c.Clients_HealthInsurances)
+                                          .ThenInclude(c => c.HealthInsurance)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0)))
                                           .OrderBy(c => c.Name).ToListAsync());
@@ -93,6 +99,9 @@ namespace KyoS.Web.Controllers
                                                           
                                                           .Include(n => n.Client)
                                                           .ThenInclude(c => c.IndividualTherapyFacilitator)
+                                                          .Include(c => c.Client)
+                                                          .ThenInclude(c => c.Clients_HealthInsurances)
+                                                          .ThenInclude(c => c.HealthInsurance)
                                                           .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
 
                 return View(tcmClient.Client);
