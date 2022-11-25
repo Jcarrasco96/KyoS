@@ -132,6 +132,7 @@ namespace KyoS.Web.Controllers
             this.DeleteDiagnosticsTemp();
             this.DeleteDocumentsTemp();
             this.DeleteReferredsTemp();
+            this.DeleteHealthInsuranceTemp();
 
             ClientViewModel model = new ClientViewModel();
 
@@ -190,7 +191,8 @@ namespace KyoS.Web.Controllers
                         OtherLanguage_Speak = false,
                         OtherLanguage_Understand = false,
                         MedicareId = "",
-                        OnlyTCM = false
+                        OnlyTCM = false,
+                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName)
                     };
                     return View(model);
                 }
@@ -285,6 +287,26 @@ namespace KyoS.Web.Controllers
                     _context.ReferredsTemp.Remove(item);
                 }
 
+                //----------update Client_HealthInsurance table-------------//
+                IQueryable<HealthInsuranceTempEntity> listHealthInsurance_to_delete = _context.HealthInsuranceTemp
+                                                                                              .Where(d => d.UserName == user_logged.UserName);
+                Client_HealthInsurance clientHealthInsurance;
+                foreach (HealthInsuranceTempEntity item in listHealthInsurance_to_delete)
+                {
+                    clientHealthInsurance = new Client_HealthInsurance
+                    {
+                        Client = clientEntity,
+                        HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(d => d.Name == item.Name),
+                        Active = item.Active,
+                        ApprovedDate = item.ApprovedDate,
+                        DurationTime = item.DurationTime,
+                        MemberId = item.MemberId,
+                        Units = item.Units
+                    };
+                    _context.Add(clientHealthInsurance);
+                    _context.HealthInsuranceTemp.Remove(item);
+                }
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -369,11 +391,13 @@ namespace KyoS.Web.Controllers
             this.DeleteDiagnosticsTemp();
             this.DeleteDocumentsTemp();
             this.DeleteReferredsTemp();
+            this.DeleteHealthInsuranceTemp();
 
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
             this.SetReferredsTemp(clientEntity);
-
+            this.SetHealthInsuranceTemp(clientEntity);
+            
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
             if (!User.IsInRole("Admin"))
@@ -495,7 +519,33 @@ namespace KyoS.Web.Controllers
                         _context.Add(document);
                     }                    
                     _context.DocumentsTemp.Remove(item);
-                }               
+                }
+
+                //delete all client Health Insurance of this client
+                IEnumerable<Client_HealthInsurance> listHealthInsurance_to_delete = await _context.Clients_HealthInsurances
+                                                                                                  .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                                  .ToListAsync();
+                _context.Clients_HealthInsurances.RemoveRange(listHealthInsurance_to_delete);
+
+                //update Client_HealthInsurance table with the news HealthInsuranceTemp
+                IQueryable <HealthInsuranceTempEntity> listHealthInsuranceTemp = _context.HealthInsuranceTemp
+                                                                                         .Where(d => d.UserName == user_logged.UserName);
+                Client_HealthInsurance clientHealthInsurance ;
+                foreach (HealthInsuranceTempEntity item in listHealthInsuranceTemp)
+                {
+                    clientHealthInsurance = new Client_HealthInsurance
+                    {
+                        Client = clientEntity,
+                        HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(d => d.Name == item.Name),
+                        Active = item.Active,
+                        ApprovedDate = item.ApprovedDate,
+                        DurationTime = item.DurationTime,
+                        MemberId = item.MemberId,
+                        Units = item.Units
+                    };
+                    _context.Add(clientHealthInsurance);
+                    _context.HealthInsuranceTemp.Remove(item);
+                }
 
                 try
                 {
@@ -810,11 +860,11 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            DocumentEntity document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == documentTemp.DocumentPath);
+           // DocumentEntity document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == documentTemp.DocumentPath);
 
             _context.DocumentsTemp.Remove(documentTemp);
-            if(document != null)
-                _context.Documents.Remove(document);
+           // if(document != null)
+            //    _context.Documents.Remove(document);
 
             await _context.SaveChangesAsync();
 
@@ -1888,5 +1938,167 @@ namespace KyoS.Web.Controllers
            
             return View(problem);
         }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public void DeleteHealthInsuranceTemp()
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            //delete all HealthInsuranceTemp by UserName
+            List<HealthInsuranceTempEntity> list_to_delete = _context.HealthInsuranceTemp
+                                                                .Where(d => d.UserName == user_logged.UserName)
+                                                                .ToList();
+            _context.HealthInsuranceTemp.RemoveRange(list_to_delete);
+            _context.SaveChanges();
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public void SetHealthInsuranceTemp(ClientEntity client)
+        {
+            IEnumerable<Client_HealthInsurance> clientsHealthinsurance = _context.Clients_HealthInsurances
+                                                                                 .Include(cd => cd.HealthInsurance)
+                                                                                 .Where(cd => cd.Client == client).ToList();
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (clientsHealthinsurance.Count() > 0)
+            {
+                HealthInsuranceTempEntity healthInsuranceTemp;
+                foreach (var item in clientsHealthinsurance)
+                {
+                    healthInsuranceTemp = new HealthInsuranceTempEntity
+                    {
+                        Active = item.Active,
+                        ApprovedDate = item.ApprovedDate,
+                        DurationTime = item.DurationTime,
+                        MemberId = item.MemberId,
+                        Units = item.Units,
+                        Name = item.HealthInsurance.Name,
+                        UserName = user_logged.UserName
+
+                    };
+                    _context.Add(healthInsuranceTemp);
+                }
+                _context.SaveChanges();
+            }
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        public async Task<IActionResult> DeleteHealthInsurance_Temp(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            HealthInsuranceTempEntity healthInsurance = await _context.HealthInsuranceTemp.FirstOrDefaultAsync(d => d.Id == id);
+            if (healthInsurance == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.HealthInsuranceTemp.Remove(healthInsurance);
+            await _context.SaveChangesAsync();
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+        }
+
+        public async Task<IActionResult> AddHealthInsuranceClient(int idClient = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (idClient != 0)
+            {
+                ClientEntity client = await _context.Clients
+                                                    .FirstOrDefaultAsync(u => u.Id == idClient);
+
+                 HealthInsuranceTempViewModel entity = new HealthInsuranceTempViewModel()
+                {
+                    ApprovedDate = DateTime.Now,
+                    DurationTime = 12,
+                    IdhealthInsurance = 0,
+                    HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                    ClientName = client.Name,
+                    MemberId = "",
+                    Units = 0
+                };
+                return View(entity);
+            }
+            else
+            {
+                HealthInsuranceTempViewModel entity = new HealthInsuranceTempViewModel()
+                {
+                    ApprovedDate = DateTime.Now,
+                    DurationTime = 12,
+                    IdhealthInsurance = 0,
+                    HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                    ClientName ="",
+                    MemberId = "",
+                    Units = 0
+                };
+                return View(entity);
+            }
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddHealthInsuranceClient(int id, HealthInsuranceTempViewModel HealthInsuranceModel)
+        {
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (id == 0)
+                {
+                    List<HealthInsuranceTempEntity> healthInsuranceTempList = await _context.HealthInsuranceTemp
+                                                                                            .Where(n => n.UserName == user_logged.UserName).ToListAsync();
+
+                    foreach (var item in healthInsuranceTempList)
+                    {
+                        item.Active = false;
+                        _context.Update(item);
+                    }
+
+                    HealthInsuranceEntity healthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(n => n.Id == HealthInsuranceModel.IdhealthInsurance);
+                    HealthInsuranceTempEntity healthInsuranceTemp = new HealthInsuranceTempEntity
+                    {
+                        Id = 0,
+                        UserName = user_logged.UserName,
+                        ApprovedDate = HealthInsuranceModel.ApprovedDate,
+                        Active = true,
+                        DurationTime = HealthInsuranceModel.DurationTime,
+                        MemberId = HealthInsuranceModel.MemberId,
+                        Units = HealthInsuranceModel.Units,
+                        Name = healthInsurance.Name
+                    };
+                    _context.Add(healthInsuranceTemp);
+                    await _context.SaveChangesAsync();
+                }
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+            }
+
+            HealthInsuranceTempViewModel model = new HealthInsuranceTempViewModel
+            {
+                ApprovedDate = DateTime.Now,
+                DurationTime = 12,
+                IdhealthInsurance = 0,
+                HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                ClientName = HealthInsuranceModel.Name,
+                MemberId = "",
+                Units = 0
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
+        }
+
+    
     }
 }

@@ -126,6 +126,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMMessageEntity> TCMMessages { get; set; }
         public DbSet<GoalsTempEntity> GoalsTemp { get; set; }
         public DbSet<ObjectiveTempEntity> ObjetivesTemp { get; set; }
+        public DbSet<HealthInsuranceTempEntity> HealthInsuranceTemp { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

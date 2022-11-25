@@ -356,7 +356,8 @@ namespace KyoS.Web.Helpers
                 MedicareId = clientEntity.MedicareId,
                 DateOfClose = clientEntity.DateOfClose,
                 Documents = clientEntity.Documents,
-                OnlyTCM = clientEntity.OnlyTCM
+                OnlyTCM = clientEntity.OnlyTCM,
+                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName)
             };
         }
 
