@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div>
-                <div class=" col-md-5 form-group">
+                <div class=" col-md-8 form-group">
                     <label asp-for="ClientName" class="control-label">Client Name</label>
                     <input asp-for="ClientName" class="form-control" readonly/>
                     <span asp-validation-for="ClientName" class="text-danger"></span>
@@ -33,6 +33,8 @@
                     <input asp-for="Workday.Date" class="form-control" readonly/>
                     <span asp-validation-for="Workday.Date" class="text-danger"></span>
                 </div>
+            </div>
+            <div>
                 <div class=" col-md-3 form-group">
                     <label asp-for="Session" class="control-label"></label>
                     @*<input asp-for="Session" class="form-control"readonly />
@@ -46,7 +48,7 @@
                     {
                         <input type="radio" name="Meridian" value="Am" />
                     }
-                    <label style="font-weight: bold;"> AM</label>
+                    AM
                     &nbsp;&nbsp;
                     @if (ViewData["am"].ToString() == "true")
                     {
@@ -56,7 +58,10 @@
                     {
                         <input type="radio" name="Meridian" value="Pm" checked="checked" />
                     }
-                    <label style="font-weight: bold;"> PM</label>
+                    PM
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             </div>            
             <div class="form-group col-md-12"></div>
