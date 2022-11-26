@@ -12,6 +12,7 @@ namespace KyoS.Web.Models
         public int IdhealthInsurance { get; set; }
         public IEnumerable<SelectListItem> HealthInsurance { get; set; }
 
+        [Display(Name = "Client")]
         public string ClientName { get; set; }
     }
 }

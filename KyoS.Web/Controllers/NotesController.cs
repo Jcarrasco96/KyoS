@@ -10769,8 +10769,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 ViewData["am"] = "false";
-            }
-            
+            }            
             
             return View(wordayClientViewModel);
         }
@@ -10803,42 +10802,69 @@ namespace KyoS.Web.Controllers
                         break;
                 }
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                Workday_Client wordayClient = await _context.Workdays_Clients
-                                                        .Include(n => n.Facilitator)
-                                                        .Include(n => n.Client)
-                                                        .Include(n => n.Workday)
-                                                        .FirstOrDefaultAsync(c => c.Id == workdayClientModel.Id);
+                Workday_Client wordayClient = await _context.Workdays_Clients                                                        
+                                                            .FirstOrDefaultAsync(c => c.Id == workdayClientModel.Id);
+
                 wordayClient.Session = workdayClientModel.Session;
                 _context.Update(wordayClient);
                 try
                 {
                     await _context.SaveChangesAsync();
-                    
-                    List<WeekEntity> week = await _context.Weeks
 
-                                                          .Include(w => w.Days)
-                                                          .ThenInclude(d => d.Workdays_Clients)
-                                                          .ThenInclude(wc => wc.Client)
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        List<WeekEntity> week = await _context.Weeks
 
-                                                          .Include(w => w.Days)
-                                                          .ThenInclude(d => d.Workdays_Clients)
-                                                          .ThenInclude(g => g.Facilitator)
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.Client)
 
-                                                          .Include(w => w.Days)
-                                                          .ThenInclude(d => d.Workdays_Clients)
-                                                          .ThenInclude(wc => wc.Note)
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(g => g.Facilitator)
 
-                                                          .Include(w => w.Days)
-                                                          .ThenInclude(d => d.Workdays_Clients)
-                                                          .ThenInclude(wc => wc.NoteP)
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.Note)
 
-                                                          .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                    && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
-                                                          .ToListAsync();
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.NoteP)
 
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", week) });
+                                                              .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                                        && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
+                                                              .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", week) });
+                    }
+                    if(User.IsInRole("Manager"))
+                    {
+                        List<WeekEntity> week = await _context.Weeks
+
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.Client)
+
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(g => g.Facilitator)
+
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.Note)
+
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.NoteP)
+
+                                                              .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                                        && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0))
+                                                              .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesForChanges", week) });
+                    }                    
                 }
                 catch (System.Exception ex)
                 {
