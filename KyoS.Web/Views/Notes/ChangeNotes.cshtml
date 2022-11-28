@@ -1,9 +1,10 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+﻿@model KyoS.Web.Models.BillingReportViewModel
 @{
     ViewData["Title"] = "PSR Notes";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datepicker.min.css">
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -30,9 +31,36 @@
         </div>
     }
 </div>
-
-<div id="view-notes">
-    @await Html.PartialAsync("_ViewNotesForChanges", Model)
+<div class="row">
+    <form asp-action="ChangeNotes" enctype="multipart/form-data">
+        <div class="form-group col-md-4">
+            <label class="control-label">Date Range</label>&nbsp;*<br />
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <input type="text"
+                               asp-for="DateIterval"
+                               data-range="true"
+                               data-multiple-dates-separator=" - "
+                               data-language="en"
+                               class="form-control datepicker-here" />
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div id="view-notes">
+        @await Html.PartialAsync("_ViewNotesForChanges", Model)
+    </div>
 </div>
 
 <partial name="_ModalPopup" />
@@ -43,7 +71,9 @@
 
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/moment.min.js"></script>
-    <script src="~/js/datetime-moment.js"></script>
+    <script src="~/js/datetime-moment.js"></script>    
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
