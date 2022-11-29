@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/23/2022 17:30:13" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/29/2022 17:16:04" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SpWYPyF1JubWo3kLluIsOA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3n6eHxORVRxAiIt1JrpL35Q==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -153,7 +153,7 @@
       <TextObject Name="Text70" Left="9.45" Top="37.8" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text71" Left="113.4" Top="37.8" Width="292.95" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text72" Left="439.7" Top="37.8" Width="94.5" Height="18.9" Text="Client ID#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text73" Left="533.65" Top="37.8" Width="189" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
+      <TextObject Name="Text73" Left="533.65" Top="37.8" Width="189" Height="18.9" Text="[Clients.Code]" Font="Arial, 10pt"/>
       <TextObject Name="Text74" Top="85.05" Width="132.3" Height="18.9" Text="1. *CLIENT SSN:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text75" Left="110.4" Top="85.05" Width="292.95" Height="18.9" Text="[Clients.SSN]" Font="Arial, 10pt"/>
       <TextObject Name="Text76" Top="113.4" Width="151.2" Height="18.9" Text="2. *CONTRACTOR ID:" Font="Arial, 10pt, style=Bold"/>
