@@ -3097,7 +3097,8 @@ namespace KyoS.Web.Controllers
 
             MTPReviewEntity mtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
             mtpReview.Status = AdendumStatus.Approved;
-            mtpReview.LicensedPractitioner = user_logged.FullName;
+            mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.FullName).Name;
+                
             _context.Update(mtpReview);
 
             await _context.SaveChangesAsync();
@@ -3250,7 +3251,7 @@ namespace KyoS.Web.Controllers
                 model = new MTPReviewViewModel
                 {
                     CreatedOn = DateTime.Now,
-                    Therapist = user_logged.FullName,
+                    Therapist = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name,
                     DateClinicalDirector = DateTime.Now,
                     DateLicensedPractitioner = DateTime.Now,
                     DateSignaturePerson = DateTime.Now,
