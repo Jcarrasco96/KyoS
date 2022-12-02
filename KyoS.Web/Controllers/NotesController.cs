@@ -3524,7 +3524,19 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-            
+
+            bool am = false;
+            bool pm = false;
+
+            if (note.Workday_Cient.Session == "AM")
+            {
+                am = true;
+            }
+            else
+            {
+                pm = true;
+            }
+
             NotePViewModel noteViewModel = null;
 
             List<NoteP_Activity> note_Activity = await _context.NotesP_Activities
@@ -3538,11 +3550,23 @@ namespace KyoS.Web.Controllers
                                                                .Where(na => na.NoteP.Id == note.Id)
                                                                .ToListAsync();
 
-            List<Workday_Activity_Facilitator> activities = note.Workday_Cient
-                                                                .Workday
-                                                                .Workdays_Activities_Facilitators
-                                                                .Where(waf => waf.Facilitator == note.Workday_Cient.Facilitator)
-                                                                .ToList();
+            List<Workday_Activity_Facilitator> activities;
+            if (am == true)
+            {
+                activities = note.Workday_Cient.Workday
+                                           .Workdays_Activities_Facilitators
+                                           .Where(waf => (waf.Facilitator == note.Workday_Cient.Facilitator
+                                               && waf.AM == true))
+                                           .ToList();
+            }
+            else
+            {
+                activities = note.Workday_Cient.Workday
+                                           .Workdays_Activities_Facilitators
+                                           .Where(waf => (waf.Facilitator == note.Workday_Cient.Facilitator
+                                               && waf.PM == true))
+                                           .ToList();
+            }
 
             if (note.Schema == Common.Enums.SchemaType.Schema3)
             {
