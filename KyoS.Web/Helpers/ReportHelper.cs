@@ -3924,15 +3924,18 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetFacilitatorDS(facilitator));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
 
+            SupervisorEntity supervisor = _context.Supervisors
+                                                  .FirstOrDefault(s => s.Name == review.LicensedPractitioner);
+            
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
             string path;
-            //if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
-            //{
-            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
-            //    stream1 = _imageHelper.ImageToByteArray(path);
-            //}
+            if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
             if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
@@ -3990,20 +3993,27 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetFacilitatorDS(facilitator));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
 
+            SupervisorEntity supervisor = _context.Supervisors
+                                                  .FirstOrDefault(s => s.Name == review.LicensedPractitioner);
+
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
             string path;
-            //if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
-            //{
-            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
-            //    stream1 = _imageHelper.ImageToByteArray(path);
-            //}
+            if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
             if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
