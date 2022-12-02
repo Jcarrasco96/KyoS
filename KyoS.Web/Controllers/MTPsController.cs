@@ -3097,7 +3097,7 @@ namespace KyoS.Web.Controllers
 
             MTPReviewEntity mtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
             mtpReview.Status = AdendumStatus.Approved;
-            mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.FullName).Name;
+            mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
                 
             _context.Update(mtpReview);
 
