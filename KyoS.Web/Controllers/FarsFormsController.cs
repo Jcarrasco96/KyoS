@@ -114,7 +114,7 @@ namespace KyoS.Web.Controllers
                    ActivitiesScale = 0,
                    AnxietyScale = 0,
                    CognitiveScale = 0,
-                   ContractorID = client.Clinic.ProviderTaxId,
+                   ContractorID = client.Clinic.ProviderMedicaidId,
                    Country = "13",
                    DangerToOtherScale = 0,
                    DangerToSelfScale = 0,
