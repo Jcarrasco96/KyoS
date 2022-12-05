@@ -10321,7 +10321,7 @@ namespace KyoS.Web.Controllers
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
                     Weeks = query.ToList()
                 };
-
+                ViewData["setting"] = _context.Settings.First(c => c.Clinic.Id == user_logged.Clinic.Id).MHProblems;
                 return View(model);                
             }
             else
@@ -10358,7 +10358,7 @@ namespace KyoS.Web.Controllers
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
                     Weeks = query.ToList()
                 };
-
+                ViewData["setting"] = _context.Settings.First(c => c.Clinic.Id == user_logged.Clinic.Id).MHProblems;
                 return View(model);
             }                                   
         }
@@ -10535,7 +10535,7 @@ namespace KyoS.Web.Controllers
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
                     Weeks = query.ToList()
                 };
-
+                
                 return View(model);
             }
             else
@@ -11603,6 +11603,104 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditGroups()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            DateTime date = new DateTime();
+            List<AuditGroups> auditGroup = new List<AuditGroups>();
+            AuditGroups auditGroup_Temp = new AuditGroups();
+
+            List<WorkdayEntity> workday = await _context.Workdays
+                                                  .Include(n => n.Workdays_Clients)
+                                                  .ThenInclude(n => n.Note)
+
+                                                  .Include(n => n.Workdays_Clients)
+                                                  .ThenInclude(n => n.NoteP)
+
+                                                  .Include(n => n.Workdays_Clients)
+                                                  .ThenInclude(n => n.Facilitator)
+
+                                                  .Where(w => (w.Week.Clinic.Id == user_logged.Clinic.Id 
+                                                       && w.Service == 0))
+                                                  .ToListAsync();
+            List<FacilitatorEntity> facilitatorList = await _context.Facilitators.ToListAsync();
+            int countAM = 0;
+            int countPM = 0;
+            foreach (var item in workday)
+            {
+                foreach (var facilitator in facilitatorList)
+                {
+                    countAM = item.Workdays_Clients.Where(m => (m.Facilitator.Id == facilitator.Id && m.Session == "AM" && m.Present == true)).Count();
+                    countPM = item.Workdays_Clients.Where(m => (m.Facilitator.Id == facilitator.Id && m.Session == "PM" && m.Present == true)).Count();
+                    if (countAM > 12)
+                    {
+                        auditGroup_Temp.Date = item.Date.ToShortDateString();
+                        auditGroup_Temp.Count = countAM;
+                        auditGroup_Temp.Facilitator = facilitator.Name;
+                        auditGroup_Temp.Session = "AM";
+                        auditGroup_Temp.Active = 0;
+                        auditGroup.Add(auditGroup_Temp);
+                    }
+                    else
+                    {
+                        if (countAM < 3 && countAM > 0)
+                        {
+                            auditGroup_Temp.Date = item.Date.ToShortDateString();
+                            auditGroup_Temp.Count = countAM;
+                            auditGroup_Temp.Facilitator = facilitator.Name;
+                            auditGroup_Temp.Session = "AM";
+                            auditGroup_Temp.Active = 1;
+                            auditGroup.Add(auditGroup_Temp);
+                        }
+                    }
+
+                    auditGroup_Temp = new AuditGroups();
+                    countAM = 0;
+                   
+                    if (countPM > 12)
+                    {
+                        auditGroup_Temp.Date = item.Date.ToShortDateString();
+                        auditGroup_Temp.Count = countPM;
+                        auditGroup_Temp.Facilitator = facilitator.Name;
+                        auditGroup_Temp.Session = "PM";
+                        auditGroup_Temp.Active = 0;
+                        auditGroup.Add(auditGroup_Temp);
+                    }
+                    else
+                    {
+                       if (countPM < 3 && countPM > 0)
+                        {
+                            auditGroup_Temp.Date = item.Date.ToShortDateString();
+                            auditGroup_Temp.Count = countPM;
+                            auditGroup_Temp.Facilitator = facilitator.Name;
+                            auditGroup_Temp.Session = "PM";
+                            auditGroup_Temp.Active = 1;
+                            auditGroup.Add(auditGroup_Temp);
+                        }
+                    }
+                    auditGroup_Temp = new AuditGroups();
+                    countPM = 0;
+                }
+               
+
+            }
+
+            return View(auditGroup);
+        }
+
 
     }
 }
