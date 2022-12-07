@@ -2099,6 +2099,44 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }
 
-    
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditClientNotUsed()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditClientNotUsed> auditClient_List = new List<AuditClientNotUsed>();
+            AuditClientNotUsed auditClient = new AuditClientNotUsed();
+
+            List<ClientEntity> client_List = _context.Clients
+                                                     .Include(m => m.MTPs)
+                                                     .Include(m => m.Workdays_Clients)
+                                                     .Where(n => (n.Workdays_Clients.Count() == 0 
+                                                        && n.MTPs.Count() > 0))
+                                                     .ToList();
+            
+            foreach (var item in client_List)
+            {
+                auditClient.Name = item.Name;
+                auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                auditClient.Count = 0;
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditClientNotUsed();
+            }
+
+            return View(auditClient_List);
+        }
+
     }
 }
