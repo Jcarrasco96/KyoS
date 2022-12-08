@@ -29,20 +29,17 @@ namespace KyoS.Web.Controllers
                 ViewBag.EnabledPSR = "1";
                 if (_context.Workdays_Clients.Count(wc => (wc.Workday.Service == ServiceType.PSR && wc.Facilitator.LinkedUser == User.Identity.Name)) > 0)
                 {
-                    ViewBag.ApprovedNotes = _context.Workdays_Clients
-                                                   .Include(wc => wc.Note)
-                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                    ViewBag.ApprovedNotes = _context.Workdays_Clients                                                   
+                                                    .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                               && (wc.Note.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)
                                                               && wc.Workday.Service == ServiceType.PSR)).ToString();
 
-                    ViewBag.PendingNotes = _context.Workdays_Clients
-                                                      .Include(wc => wc.Note)
-                                                      .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                  && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
-                                                                  && wc.Workday.Service == ServiceType.PSR)).ToString();
+                    ViewBag.PendingNotes = _context.Workdays_Clients                                                      
+                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                                                             && (wc.Note.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)
+                                                             && wc.Workday.Service == ServiceType.PSR)).ToString();
 
-                    ViewBag.InProgressNotes = _context.Workdays_Clients
-                                                      .Include(wc => wc.Note)
+                    ViewBag.InProgressNotes = _context.Workdays_Clients                                                      
                                                       .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && (wc.Note.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition)
                                                                   && wc.Workday.Service == ServiceType.PSR)).ToString();
@@ -64,8 +61,7 @@ namespace KyoS.Web.Controllers
                     notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                     ViewBag.NotesWithReview = notes_review_list.Count.ToString();
 
-                    ViewBag.NotPresentNotes = _context.Workdays_Clients
-                                                      .Include(wc => wc.Note)
+                    ViewBag.NotPresentNotes = _context.Workdays_Clients                                                      
                                                       .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.PSR)).ToString();
@@ -78,20 +74,17 @@ namespace KyoS.Web.Controllers
                 ViewBag.EnabledInd = "1";
                 if (_context.Workdays_Clients.Count(wc => wc.Workday.Service == ServiceType.Individual && wc.Facilitator.LinkedUser == User.Identity.Name) > 0)
                 {
-                    ViewBag.ApprovedIndNotes = _context.Workdays_Clients
-                                                   .Include(wc => wc.IndividualNote)
-                                                   .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
+                    ViewBag.ApprovedIndNotes = _context.Workdays_Clients                                                   
+                                                       .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                               && wc.IndividualNote.Status == NoteStatus.Approved
                                                               && wc.Workday.Service == ServiceType.Individual)).ToString();
 
-                    ViewBag.PendingIndNotes = _context.Workdays_Clients
-                                                      .Include(wc => wc.IndividualNote)
+                    ViewBag.PendingIndNotes = _context.Workdays_Clients                                                      
                                                       .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.IndividualNote.Status == NoteStatus.Pending
                                                                   && wc.Workday.Service == ServiceType.Individual)).ToString();
 
-                    ViewBag.InProgressIndNotes = _context.Workdays_Clients
-                                                         .Include(wc => wc.IndividualNote)
+                    ViewBag.InProgressIndNotes = _context.Workdays_Clients                                                         
                                                          .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.IndividualNote.Status == NoteStatus.Edition
                                                                   && wc.Workday.Service == ServiceType.Individual)).ToString();
@@ -112,8 +105,7 @@ namespace KyoS.Web.Controllers
                     notes_review_list = notes_review_list.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                     ViewBag.IndNotesWithReview = notes_review_list.Count.ToString();
 
-                    ViewBag.NotPresentIndNotes = _context.Workdays_Clients
-                                                         .Include(wc => wc.IndividualNote)
+                    ViewBag.NotPresentIndNotes = _context.Workdays_Clients                                                         
                                                          .Count(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                   && wc.Present == false
                                                                   && wc.Workday.Service == ServiceType.Individual)).ToString();
@@ -202,59 +194,34 @@ namespace KyoS.Web.Controllers
 
                 List<ClientEntity> clientListPSR = await _context.Clients
                                                                   .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.PSR).ToList().Count == 0) 
-                                                                    && m.Clinic.Id == user_logged.Clinic.Id
-                                                                    && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                                                                             && m.Clinic.Id == user_logged.Clinic.Id
+                                                                             && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 List<ClientEntity> clientListIND = await _context.Clients
-                                                              .Include(m => m.DischargeList)
+                                                                 .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
+                                                                            && m.Clinic.Id == user_logged.Clinic.Id
+                                                                            && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                
+                ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count()).ToString();
 
-                                                              .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
-                                                                    && m.Clinic.Id == user_logged.Clinic.Id
-                                                                    && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
-                foreach (var item in clientListIND)
-                {
-                    clientListPSR.Add(item);
-                }
+                ViewBag.DischargeEdition = _context.Discharge
+                                                   .Count(n => (n.Status == DischargeStatus.Edition
+                                                             && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                             && n.CreatedBy == user_logged.UserName)).ToString();
+                
+                ViewBag.DischargePending = _context.Discharge
+                                                   .Count(n => (n.Status == DischargeStatus.Pending
+                                                             && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                             && n.CreatedBy == user_logged.UserName)).ToString();
 
-                ViewBag.ClientDischarge = clientListPSR.Count().ToString();
-
-                List<DischargeEntity> DischargeEdit = await _context.Discharge
-                                                                    .Include(f => f.Client)
-                                                                    .ThenInclude(n => n.Clinic)
-                                                                    .Where(n => (n.Status == DischargeStatus.Edition
-                                                                        && n.Client.Clinic.Id == user_logged.Clinic.Id 
-                                                                        && n.CreatedBy == user_logged.UserName))
-                                                                    .OrderBy(f => f.Client.Name)
-                                                                    .ToListAsync();
-                ViewBag.DischargeEdition = DischargeEdit.Count().ToString();
-
-                List<DischargeEntity> DischargePending = await _context.Discharge
-                                                                    .Include(f => f.Client)
-                                                                    .ThenInclude(n => n.Clinic)
-                                                                    .Where(n => (n.Status == DischargeStatus.Pending
-                                                                        && n.Client.Clinic.Id == user_logged.Clinic.Id 
-                                                                        && n.CreatedBy == user_logged.UserName))
-                                                                    .OrderBy(f => f.Client.Name)
-                                                                    .ToListAsync();
-                ViewBag.DischargePending = DischargePending.Count().ToString();
-
-                List<MTPReviewEntity> MTPReviewEdit = await _context.MTPReviews
-                                                                .Include(n => n.Mtp)
-                                                                .ThenInclude(n => n.Client)
-                                                                .ThenInclude(n => n.Clinic)
-                                                                .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                   && m.Status == AdendumStatus.Edition
-                                                                   && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id ||
-                                                                       m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))).ToListAsync();
-                ViewBag.MTPReviewEdition = MTPReviewEdit.Count().ToString();
-
-                List<MTPReviewEntity> MTPReviewPending = await _context.MTPReviews
-                                                                .Include(n => n.Mtp)
-                                                                .ThenInclude(n => n.Client)
-                                                                .ThenInclude(n => n.Clinic)
-                                                                .Where(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                   && m.Status == AdendumStatus.Pending
-                                                                   && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
-                ViewBag.MTPReviewPending = MTPReviewPending.Count().ToString();
+                ViewBag.MTPReviewEdition =  _context.MTPReviews                                                               
+                                                    .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                              && m.Status == AdendumStatus.Edition
+                                                              && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id ||
+                                                                 m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))).ToString();                
+                ViewBag.MTPReviewPending = _context.MTPReviews
+                                                   .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                             && m.Status == AdendumStatus.Pending
+                                                             && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToString();
 
             }
             if (User.IsInRole("Supervisor"))
@@ -356,334 +323,189 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = await _context.Users
+
                                                        .Include(u => u.Clinic)
+                                                       .ThenInclude(c => c.Setting)
+
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-                ViewBag.PendingNotes = _context.Workdays_Clients
-                                               .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                         && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending 
-                                                             || wc.GroupNote.Status == NoteStatus.Pending
-                                                             || wc.NoteP.Status == NoteStatus.Pending))).ToString();
-
-                ViewBag.InProgressNotes = _context.Workdays_Clients
-                                                  .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                            && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition
-                                                                || wc.GroupNote.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition))).ToString();
-
-                List<Workday_Client> not_started_list = await _context.Workdays_Clients
-
-                                                                      .Include(wc => wc.Note)
-                                                                      .Include(wc => wc.IndividualNote)
-                                                                      .Include(wc => wc.GroupNote)
-                                                                      .Include(wc => wc.NoteP)
-
-                                                                      .Where(wc => wc.Facilitator.Clinic.Id == user_logged.Clinic.Id)
-                                                                      .ToListAsync();
-
-                not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.IndividualNote == null && 
-                                                                 wc.GroupNote == null && wc.NoteP == null && wc.Present == true)).ToList();
-                ViewBag.NotStartedNotes = not_started_list.Count.ToString();
-
-                List<ClientEntity> client = await _context.Clients
-
-                                                          .Include(c => c.MTPs)
-
-                                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                                    && c.OnlyTCM == false))
-                                                          .ToListAsync();
-
-                client = client.Where(wc => wc.MTPs.Count == 0).ToList();
-                ViewBag.MTPMissing = client.Count.ToString();
-
-                List<Workday_Client> notes_review_list = await _context.Workdays_Clients
-                                                                       .Include(wc => wc.Messages)
-                                                                       .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                                    (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending ||
-                                                                                     wc.GroupNote.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending)))
-                                                                       .ToListAsync();
-
-                notes_review_list = notes_review_list.Where(wc => wc.Messages.Count() > 0).ToList();
-                ViewBag.NotesWithReview = notes_review_list.Count.ToString();
                 
-                //-------------clients without documentation--------------//
-                client = await _context.Clients
-                                       .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                 && c.OnlyTCM == false)).ToListAsync();
-                int clients_without_doc = 0;                
-                DocumentEntity doc_pe;
-                DocumentEntity doc_intake;
-                DocumentEntity doc_bio;
-                DocumentEntity doc_mtp;
-                DocumentEntity doc_fars;
-                DocumentEntity doc_consent;
-                foreach (var item in client)
+                if (user_logged.Clinic.Setting.MentalHealthClinic)
                 {
-                    doc_pe = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Psychiatrist_evaluation
-                                                                        && d.Client.Id == item.Id));
-                    doc_intake = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Intake
-                                                                        && d.Client.Id == item.Id));
-                    doc_bio = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Bio
-                                                                        && d.Client.Id == item.Id));
-                    doc_mtp = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.MTP
-                                                                        && d.Client.Id == item.Id));
-                    doc_fars = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Fars
-                                                                        && d.Client.Id == item.Id));
-                    doc_consent = await _context.Documents
-                                             .FirstOrDefaultAsync(d => (d.Description == DocumentDescription.Consent
-                                                                        && d.Client.Id == item.Id));
+                    ViewBag.PendingNotes = await _context.Workdays_Clients
+                                                     .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                    && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending
+                                                                     || wc.GroupNote.Status == NoteStatus.Pending
+                                                                     || wc.NoteP.Status == NoteStatus.Pending)));
 
-                    if (doc_pe == null || doc_intake == null || doc_bio == null || doc_mtp == null || doc_fars == null || doc_consent == null)
+                    ViewBag.InProgressNotes = await _context.Workdays_Clients
+                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                           && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition
+                                                                            || wc.GroupNote.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition)));
+
+                    ViewBag.NotStartedNotes = await _context.Workdays_Clients
+                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                           && wc.Note == null && wc.IndividualNote == null
+                                                                           && wc.GroupNote == null && wc.NoteP == null && wc.Present == true));
+
+                    ViewBag.MTPMissing = await _context.Clients
+                                                       .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
+                                                                      && c.MTPs.Count == 0));
+
+                    ViewBag.NotesWithReview = await _context.Workdays_Clients
+                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                              (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending ||
+                                                                               wc.GroupNote.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending) &&
+                                                                               wc.Messages.Count() > 0));
+
+                    ViewBag.AllDocumentsForClient = await this.AmountOfDocumentsCMH(user_logged.Clinic.Id);
+
+                    ViewBag.ApprovedNotes = await _context.Workdays_Clients
+                                                          .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                            (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved ||
+                                                                             wc.GroupNote.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)));
+
+                    ViewBag.NotPresentNotes = await _context.Workdays_Clients
+                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                               wc.Present == false));
+
+                    List<MTPEntity> mtps = await _context.MTPs
+                                                         .Include(n => n.MtpReviewList)
+                                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id &&
+                                                                      m.Active == true &&
+                                                                      m.Client.Status == StatusType.Open)).ToListAsync();
+                    int count = 0;
+                    int month = 0;
+                    foreach (var item in mtps)
                     {
-                        clients_without_doc++;
-                    }
-                }
-                ViewBag.ClientsWithoutDoc = clients_without_doc.ToString();
-
-                List<ClientEntity> Clients = await _context.Clients
-                                                           .Include(d => d.IntakeAcknowledgementHipa)
-                                                           .Include(d => d.IntakeConsentForRelease)
-                                                           .Include(d => d.IntakeConsentForTreatment)
-                                                           .Include(d => d.IntakeConsumerRights)
-                                                           .Include(d => d.IntakeOrientationChecklist)
-                                                           .Include(d => d.IntakeAccessToServices)
-                                                           .Include(d => d.IntakeConsentPhotograph)
-                                                           .Include(d => d.IntakeFeeAgreement)
-                                                           .Include(d => d.IntakeMedicalHistory)
-                                                           .Include(d => d.IntakeScreening)
-                                                           .Include(d => d.IntakeTransportation)
-                                                           .Include(d => d.IntakeTuberculosis)
-                                                           .Include(d => d.Bio)
-                                                           .Include(d => d.MTPs)
-                                                           .ThenInclude(d => d.MtpReviewList)
-                                                           .Include(d => d.MTPs)
-                                                           .ThenInclude(d => d.AdendumList)
-                                                           .Include(d => d.MTPs)
-                                                           .Include(d => d.DischargeList)
-                                                           .Include(d => d.FarsFormList)
-                                                           .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
-                                                                     && g.OnlyTCM == false))
-                                                           .ToListAsync();
-                int cantDocument = 0;
-                foreach (var item in Clients)
-                {
-                    if (item.IntakeAcknowledgementHipa != null)
-                        cantDocument++;
-                    if (item.IntakeConsentForRelease != null)
-                        cantDocument++;
-                    if (item.IntakeConsentForTreatment != null)
-                        cantDocument++;
-                    if (item.IntakeConsumerRights != null)
-                        cantDocument++;
-                    if (item.IntakeAccessToServices != null)
-                        cantDocument++;
-                    if (item.IntakeConsentPhotograph != null)
-                        cantDocument++;
-                    if (item.IntakeFeeAgreement != null)
-                        cantDocument++;
-                    if (item.IntakeMedicalHistory != null)
-                        cantDocument++;
-                    if (item.IntakeScreening != null)
-                        cantDocument++;
-                    if (item.IntakeTransportation != null)
-                        cantDocument++;
-                    if (item.IntakeTuberculosis != null)
-                        cantDocument++;
-                    if (item.Bio != null)
-                        cantDocument++;
-
-                    cantDocument += item.FarsFormList.Count();
-                    cantDocument += item.DischargeList.Count();
-                    cantDocument += item.MTPs.Count();
-                    cantDocument += item.MTPs.Sum(n => n.AdendumList.Count());
-                    cantDocument += item.MTPs.Sum(n => n.MtpReviewList.Count());
-                }
-
-                ViewBag.AllDocumentsForClient = cantDocument.ToString();
-
-                //ViewBag.AllDocumentsForClient = _context.Clients.Count(n => n.Clinic.Id == user_logged.Clinic.Id).ToString();
-
-                ViewBag.ApprovedNotes = _context.Workdays_Clients
-
-                                                .Include(wc => wc.Note)
-
-                                                .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                             (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved ||
-                                                              wc.GroupNote.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved))).ToString();
-
-                ViewBag.NotPresentNotes = _context.Workdays_Clients
-                                                  .Include(wc => wc.Note)
-                                                  .Count(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                             && wc.Present == false)).ToString();
-
-                List<MTPEntity> mtps = await _context.MTPs
-                                                     .Include(n => n.MtpReviewList)
-                                                     .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id 
-                                                               && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
-                int count = 0;
-                int month = 0;
-                foreach (var item in mtps)
-                {
-                    foreach (var product in item.MtpReviewList)
-                    {
-                        month += product.MonthOfTreatment;
-                    }
-                    if (item.NumberOfMonths != null)
-                    {
-                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+month)))
+                        foreach (var product in item.MtpReviewList)
                         {
-                            count++;
+                            month += product.MonthOfTreatment;
                         }
+                        if (item.NumberOfMonths != null)
+                        {
+                            if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
+                            {
+                                count++;
+                            }
+                        }
+                        month = 0;
                     }
-                    month = 0;
-                }
 
-                ViewBag.ExpiredMTPs = count.ToString();
+                    ViewBag.ExpiredMTPs = count;
+                }          
 
                 //TCM Dashboard
+                if (user_logged.Clinic.Setting.TCMClinic)
+                {
+                    ViewBag.NotStartedCases = await _context.TCMClient
+                                                            .CountAsync(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                           && s.Status == StatusType.Open
+                                                                           && (s.TcmServicePlan == null
+                                                                                || s.TcmServicePlan.Approved != 2
+                                                                                || s.TCMAssessment == null
+                                                                                || s.TCMAssessment.Approved != 2
+                                                                                || s.TcmIntakeAppendixJ == null
+                                                                                || s.TcmIntakeAcknowledgementHipa == null
+                                                                                || s.TCMIntakeAdvancedDirective == null
+                                                                                || s.TcmIntakeConsentForRelease == null
+                                                                                || s.TcmIntakeConsentForTreatment == null
+                                                                                || s.TcmIntakeConsumerRights == null
+                                                                                || s.TCMIntakeCoordinationCare == null
+                                                                                || s.TCMIntakeForeignLanguage == null
+                                                                                || s.TCMIntakeForm == null
+                                                                                || s.TCMIntakeOrientationChecklist == null
+                                                                                || s.TCMIntakeWelcome == null)));
+                    
+                    ViewBag.OpenBinder = await _context.TCMClient
+                                                       .CountAsync(g => (g.Status == StatusType.Open
+                                                                      && g.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                                .Include(g => g.Casemanager)
-                                                                .Include(g => g.Client)
-                                                                .Include(g => g.TcmServicePlan)
-                                                                .Include(g => g.TcmIntakeAppendixJ)
-                                                                .Include(g => g.TCMAssessment)
-                                                                .Include(g => g.TcmIntakeAcknowledgementHipa)
-                                                                .Include(g => g.TCMIntakeAdvancedDirective)
-                                                                .Include(g => g.TcmIntakeConsentForRelease)
-                                                                .Include(g => g.TcmIntakeConsentForTreatment)
-                                                                .Include(g => g.TcmIntakeConsumerRights)
-                                                                .Include(g => g.TCMIntakeForeignLanguage)
-                                                                .Include(g => g.TCMIntakeForm)
-                                                                .Include(g => g.TCMIntakeOrientationChecklist)
-                                                                .Include(g => g.TCMIntakeWelcome)
-                                                                .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                    && s.Status == StatusType.Open
-                                                                    && (s.TcmServicePlan == null
-                                                                        || s.TcmServicePlan.Approved != 2
-                                                                        || s.TCMAssessment == null
-                                                                        || s.TCMAssessment.Approved != 2
-                                                                        || s.TcmIntakeAppendixJ == null
-                                                                        || s.TcmIntakeAcknowledgementHipa == null
-                                                                        || s.TCMIntakeAdvancedDirective == null
-                                                                        || s.TcmIntakeConsentForRelease == null
-                                                                        || s.TcmIntakeConsentForTreatment == null
-                                                                        || s.TcmIntakeConsumerRights == null
-                                                                        || s.TCMIntakeCoordinationCare == null
-                                                                        || s.TCMIntakeForeignLanguage == null
-                                                                        || s.TCMIntakeForm == null
-                                                                        || s.TCMIntakeOrientationChecklist == null
-                                                                        || s.TCMIntakeWelcome == null)))
-                                                                .OrderBy(g => g.Casemanager.Name)
-                                                                .ToListAsync();
-                ViewBag.NotStartedCases = tcmClient.Count.ToString();
+                    //ViewBag.CloseCases = await _context.TCMClient
+                    //                                   .CountAsync(g => (g.Status == StatusType.Close
+                    //                                                  && g.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.OpenBinder = _context.TCMClient
-                                             .Where(g => (g.Status == StatusType.Open
-                                                && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    //ViewBag.Billing = _context.TCMClient
+                    //                          .Where(g => (g.Status == StatusType.Open
+                    //                             && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
 
-                ViewBag.CloseCases = _context.TCMClient
-                                             .Where(g => (g.Status == StatusType.Close
-                                                && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    //ViewBag.ServicePlanEdition = await _context.TCMClient
+                    //                                           .CountAsync(g => (g.Status == StatusType.Open
+                    //                                                          && g.Client.Clinic.Id == user_logged.Clinic.Id
+                    //                                                          && g.TcmServicePlan.Approved == 0));
 
-                ViewBag.Billing = _context.TCMClient
-                                          .Where(g => (g.Status == StatusType.Open
-                                             && g.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    ViewBag.ServicePlanPending = await _context.TCMClient                                                         
+                                                               .CountAsync(g => (g.Status == StatusType.Open
+                                                                              && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                              && g.TcmServicePlan.Approved == 1));
 
-                ViewBag.ServicePlanEdition = _context.TCMClient
-                                                     .Include(n => n.TcmServicePlan)
-                                                     .Where(g => (g.Status == StatusType.Open
-                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                        && g.TcmServicePlan.Approved == 0)).Count().ToString();
+                    //ViewBag.AdendumEdition = _context.TCMClient
+                    //                                 .Include(n => n.TcmServicePlan)
+                    //                                 .ThenInclude(n => n.TCMAdendum)
+                    //                                 .Where(g => (g.Status == StatusType.Open
+                    //                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
+                    //                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count() > 0)).Count().ToString();
 
-                ViewBag.ServicePlanPending = _context.TCMClient
-                                                     .Include(n => n.TcmServicePlan)
-                                                     .Where(g => (g.Status == StatusType.Open
-                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                        && g.TcmServicePlan.Approved == 1)).Count().ToString();
+                    ViewBag.AdendumPending = await _context.TCMClient                                                     
+                                                           .CountAsync(g => (g.Status == StatusType.Open
+                                                                          && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                          && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0));
 
-                ViewBag.AdendumEdition = _context.TCMClient
-                                                 .Include(n => n.TcmServicePlan)
-                                                 .ThenInclude(n => n.TCMAdendum)
-                                                 .Where(g => (g.Status == StatusType.Open
-                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count() > 0)).Count().ToString();
+                    //ViewBag.ServicePlanReviewEdition = _context.TCMClient
+                    //                                           .Include(n => n.TcmServicePlan)
+                    //                                           .ThenInclude(n => n.TCMServicePlanReview)
+                    //                                           .Where(g => (g.Status == StatusType.Open
+                    //                                                && g.Client.Clinic.Id == user_logged.Clinic.Id
+                    //                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 0)).Count().ToString();
 
-                ViewBag.AdendumPending = _context.TCMClient
-                                                 .Include(n => n.TcmServicePlan)
-                                                 .ThenInclude(n => n.TCMAdendum)
-                                                 .Where(g => (g.Status == StatusType.Open
-                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0)).Count().ToString();
+                    ViewBag.ServicePlanReviewPending = await _context.TCMClient                                                               
+                                                                     .CountAsync(g => (g.Status == StatusType.Open
+                                                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                                    && g.TcmServicePlan.TCMServicePlanReview.Approved == 1));
 
-                ViewBag.ServicePlanReviewEdition = _context.TCMClient
-                                                           .Include(n => n.TcmServicePlan)
-                                                           .ThenInclude(n => n.TCMServicePlanReview)
-                                                           .Where(g => (g.Status == StatusType.Open
-                                                                && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 0)).Count().ToString();
+                    //ViewBag.DischargeEdition = _context.TCMClient
+                    //                                   .Include(n => n.TcmServicePlan)
+                    //                                   .ThenInclude(n => n.TCMDischarge)
+                    //                                   .Where(g => (g.Status == StatusType.Open
+                    //                                       && g.Client.Clinic.Id == user_logged.Clinic.Id
+                    //                                       && g.TcmServicePlan.TCMDischarge.Approved == 0)).Count().ToString();
 
-                ViewBag.ServicePlanReviewPending = _context.TCMClient
-                                                           .Include(n => n.TcmServicePlan)
-                                                           .ThenInclude(n => n.TCMServicePlanReview)
-                                                           .Where(g => (g.Status == StatusType.Open
-                                                                && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 1)).Count().ToString();
+                    ViewBag.DischargePending = await _context.TCMClient                                                       
+                                                             .CountAsync(g => (g.Status == StatusType.Open
+                                                                            && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                            && g.TcmServicePlan.TCMDischarge.Approved == 1));
 
-                ViewBag.DischargeEdition = _context.TCMClient
-                                                   .Include(n => n.TcmServicePlan)
-                                                   .ThenInclude(n => n.TCMDischarge)
-                                                   .Where(g => (g.Status == StatusType.Open
-                                                       && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                       && g.TcmServicePlan.TCMDischarge.Approved == 0)).Count().ToString();
+                    ViewBag.TCMCaseManager = await _context.CaseManagers
+                                                           .CountAsync(g => (g.Status == StatusType.Open
+                                                                          && g.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.DischargePending = _context.TCMClient
-                                                   .Include(n => n.TcmServicePlan)
-                                                   .ThenInclude(n => n.TCMDischarge)
-                                                   .Where(g => (g.Status == StatusType.Open
-                                                       && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                       && g.TcmServicePlan.TCMDischarge.Approved == 1)).Count().ToString();
+                    ViewBag.TCMFarsPending = await _context.TCMFarsForm
+                                                           .CountAsync(g => (g.Status == FarsStatus.Pending
+                                                                          && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.TCMCaseManager = _context.CaseManagers
-                                                 .Where(g => (g.Status == StatusType.Open
-                                                    && g.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    ViewBag.AssesmentPending = await _context.TCMAssessment
+                                                       .CountAsync(g => (g.Approved == 1
+                                                                      && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.TCMFarsPending = _context.TCMFarsForm
-                                              .Where(g => (g.Status == FarsStatus.Pending
-                                                        && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    ViewBag.AllDocuments = await _context.TCMClient
+                                                         .CountAsync(g => g.Client.Clinic.Id == user_logged.Clinic.Id);
 
-                ViewBag.AssesmentPending = _context.TCMAssessment
-                                                   .Where(g => (g.Approved == 1
-                                                         && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    ViewBag.TCMNotesEdition = await _context.TCMNote
+                                                            .CountAsync(g => (g.Status == NoteStatus.Edition
+                                                                           && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.AllDocuments = _context.TCMClient
-                                               .Where(g => g.Client.Clinic.Id == user_logged.Clinic.Id).Count().ToString();
+                    ViewBag.TCMNotesPending = await _context.TCMNote
+                                                            .CountAsync(g => (g.Status == NoteStatus.Pending
+                                                                           && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.TCMNotesEdition = _context.TCMNote
-                                                  .Where(g => (g.Status == NoteStatus.Edition
-                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
+                    ViewBag.TCMNotesApproved = await _context.TCMNote
+                                                             .CountAsync(g => (g.Status == NoteStatus.Approved
+                                                                            && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                ViewBag.TCMNotesPending = _context.TCMNote
-                                                  .Where(g => (g.Status == NoteStatus.Pending
-                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
-
-                ViewBag.TCMNotesApproved = _context.TCMNote
-                                                .Where(g => (g.Status == NoteStatus.Approved
-                                                    && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id)).Count().ToString();
-
-                List<TCMNoteEntity> tcmNotes_review_list = await _context.TCMNote
-                                                                         .Include(wc => wc.TCMMessages)
-                                                                         .Where(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id &&
-                                                                                   (wc.Status == NoteStatus.Pending)))
-                                                                         .ToListAsync();
-
-                tcmNotes_review_list = tcmNotes_review_list.Where(wc => wc.TCMMessages.Count() > 0).ToList();
-                ViewBag.TCMNotesWithReview = tcmNotes_review_list.Count.ToString();
-
+                    ViewBag.TCMNotesWithReview = await _context.TCMNote
+                                                               .CountAsync(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id &&
+                                                                                  wc.Status == NoteStatus.Pending &&
+                                                                                  wc.TCMMessages.Count() > 0));                                                                             
+                }
             }
             if (User.IsInRole("Admin"))
             {
@@ -1039,6 +861,46 @@ namespace KyoS.Web.Controllers
                                                  .ToString();
             }
             return View();
+        }
+
+        private async Task<int> AmountOfDocumentsCMH(int idClinic)
+        {
+            int total = 0;
+            total += await _context.IntakeAcknowledgement
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeConsentForRelease
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeConsentForTreatment
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeConsumerRights
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeOrientationCheckList
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));            
+            total += await _context.IntakeAccessToServices
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeConsentPhotograph
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeFeeAgreement
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeMedicalHistory
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeScreenings
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.IntakeTransportation
+                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+            total += await _context.Bio
+                                   .CountAsync(b => (b.Client.Clinic.Id == idClinic && b.Client.OnlyTCM == false));
+            total += await _context.MTPs
+                                   .CountAsync(m => (m.Client.Clinic.Id == idClinic && m.Client.OnlyTCM == false));
+            total += await _context.MTPReviews
+                                   .CountAsync(m => (m.Mtp.Client.Clinic.Id == idClinic && m.Mtp.Client.OnlyTCM == false));
+            total += await _context.Adendums
+                                   .CountAsync(a => (a.Mtp.Client.Clinic.Id == idClinic && a.Mtp.Client.OnlyTCM == false));
+            total += await _context.Discharge
+                                   .CountAsync(d => (d.Client.Clinic.Id == idClinic && d.Client.OnlyTCM == false));
+            total += await _context.FarsForm
+                                   .CountAsync(f => (f.Client.Clinic.Id == idClinic && f.Client.OnlyTCM == false));
+            return total;
         }
     }
 }

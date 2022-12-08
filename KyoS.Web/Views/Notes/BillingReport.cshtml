@@ -15,37 +15,33 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Billing report</li>
+        <li class="active">Billing Report</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <form asp-action="BillingReport" enctype="multipart/form-data">
-        <div class="form-group col-md-3">
-            <label class="control-label">Select date interval</label>&nbsp;*<br />
-            <input type="text"
-                   asp-for="DateIterval"
-                   data-range="true"
-                   data-multiple-dates-separator=" - "
-                   data-language="en"
-                   class="form-control datepicker-here" />
-        </div>
-        @*<div class="form-group col-md-3">
-            <label asp-for="IdFacilitator" class="control-label">Select Facilitator</label>
-            <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
-            <span asp-validation-for="IdFacilitator" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdClient" class="control-label">Select client</label>
-            <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
-            <span asp-validation-for="IdClient" class="text-danger"></span>
-        </div>*@
-        <div class="container-fluid">
-            &nbsp;
-        </div>
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
-        </div>
+        <div class="form-group col-md-4">
+            <label class="control-label">Date Range</label>&nbsp;*<br />
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <input type="text"
+                               asp-for="DateIterval"
+                               data-range="true"
+                               data-multiple-dates-separator=" - "
+                               data-language="en"
+                               class="form-control datepicker-here" />
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>        
     </form>
     <div class="col-md-12">
         <hr />
@@ -184,13 +180,13 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                                     {
                                                                                         <label>4</label>
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                                         {
                                                                                             <label>8</label>
                                                                                         }
@@ -251,13 +247,13 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    if ((workdayClient.IndividualNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                     {
                                                                         units = units + 4;
                                                                     }
                                                                     else
                                                                     {
-                                                                        if ((workdayClient.GroupNote != null) || (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                         {
                                                                             units = units + 8;
                                                                         }
@@ -376,14 +372,17 @@
                                     </span>
                                 </td>
                                 <td align="center">
-                                    @if (item.Days.Where(d => d.Workdays_Clients.Where(wc => (wc.BilledDate == null && wc.Present == true && wc.Client != null)).Count() > 0).Count() > 0)
+                                    <a asp-action="BillingWeek" class="btn btn-success" asp-route-id="@item.Id" asp-route-billed="1" title="Billed"><i class="icon-usd"></i></a>
+                                    <a asp-action="BillingWeek" class="btn btn-danger" asp-route-id="@item.Id" asp-route-billed="0" title="Unbilled"><i class="icon-usd"></i></a>
+                                   @* @if (item.Days.Where(d => d.Workdays_Clients.Where(wc => (wc.BilledDate == null && wc.Present == true && wc.Client != null)).Count() > 0).Count() > 0)
                                     {
-                                        <a asp-action="BillingWeek" class="btn btn-danger" asp-route-id="@item.Id" asp-route-origin="0" title="Bill this week">Bill</a>
+                                        <a asp-action="BillingWeek" class="btn btn-success" asp-route-id="@item.Id" asp-route-billed="1" title="Bill this week">Bill</a>
+                                        <a asp-action="BillingWeek" class="btn btn-danger" asp-route-id="@item.Id" asp-route-billed="0" title="Bill this week">Bill</a>
                                     }
                                     else
                                     {
                                         <a asp-action="BillingWeek" class="btn btn-default" asp-route-id="@item.Id" asp-route-origin="0" title="Billing completed successfully">Bill</a>
-                                    }
+                                    }*@
                                 </td>
                             </tr>
                         }

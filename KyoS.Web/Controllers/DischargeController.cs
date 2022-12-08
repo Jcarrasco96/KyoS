@@ -434,8 +434,8 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", dischargeViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id, int clientId = 0)
         {
             if (id == null)
             {
@@ -458,7 +458,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ClientHistory", "Clients", new { idClient  = clientId});
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
@@ -913,5 +913,32 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, DischargeStatus aStatus = DischargeStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DischargeEntity dischargeEntity = await _context.Discharge.FirstOrDefaultAsync(s => s.Id == id);
+            if (dischargeEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                dischargeEntity.Status = aStatus;
+                _context.Discharge.Update(dischargeEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
     }
 }

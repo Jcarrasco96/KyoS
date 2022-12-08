@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+﻿@model KyoS.Web.Models.BillingReportViewModel
 @{
     ViewData["Title"] = "Group notes summary";
 }
@@ -16,6 +16,32 @@
 </div>
 
 <div class="row">
+    <form asp-action="GroupNotesSummaryDetails" enctype="multipart/form-data">
+        <div class="form-group col-md-4">
+            <label class="control-label">Date Range</label>&nbsp;*<br />
+            <table border="0" width="100%">
+                <tr>
+                    <td>
+                        <input type="text"
+                               asp-for="DateIterval"
+                               data-range="true"
+                               data-multiple-dates-separator=" - "
+                               data-language="en"
+                               class="form-control datepicker-here" />
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <hr />
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -43,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
+                        @foreach (var item in Model.Weeks.OrderBy(w => w.WeekOfYear))
                         {
                             <tr>
                                 <td align="center">

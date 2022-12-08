@@ -40,6 +40,9 @@ namespace KyoS.Web.Data.Entities
         public IEnumerable<Objetive_Classification> Classifications { get; set; }
         public IEnumerable<IndividualNoteEntity> IndividualNotes { get; set; }
 
+        public IEnumerable<Note_Activity> Note_Activity { get; set; }
+        public IEnumerable<NoteP_Activity> NoteP_Activity { get; set; }
+
         public bool Compliment { get; set; }
 
         [Display(Name = "Date of compliment")]

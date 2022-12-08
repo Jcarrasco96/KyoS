@@ -13,12 +13,12 @@
                         <tr>
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Service</th>
-                            <th class="col-md-2" style="text-align:center;">Session</th>
+                            <th class="col-md-1" style="text-align:center;">Session</th>
                             <th class="col-md-3">Name</th>
                             <th class="col-md-1" style="text-align:center;">Present</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
                             <th class="col-md-2">Facilitator</th>
-                            <th class="col-md-1"></th>
+                            <th class="col-md-2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +140,15 @@
                                     <td align="right">
                                         @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
                                         {
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+
                                             @if (day_client.Note != null)
                                             {
                                                 @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)
@@ -165,14 +174,41 @@
                                         }
                                         else
                                         {
-                                            @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual && day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                             {
-                                                <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                {
+                                                    @if (User.IsInRole("Manager"))
+                                                    {
+                                                        <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+
+                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+
                                             }
                                             else
                                             {
                                                 @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group && day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                                 {
+                                                    @if (User.IsInRole("Manager"))
+                                                    {
+                                                        <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+
                                                     <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
@@ -181,7 +217,14 @@
                                                 }
                                             }
                                         }
-
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
                                     </td>
                                 </tr>
 
@@ -225,6 +268,8 @@
                                     <td align="right">
                                         @if (day_client.Present == false)
                                         {
+                                            <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+
                                             @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
                                             {
                                                 <a asp-action="PrintAbsenceNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
@@ -249,12 +294,20 @@
                                             }
                                         }
                                         else
-                                        { 
+                                        {
+                                            <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                     </td>
                                 </tr>
-
                             }
                         }
                     </tbody>

@@ -60,5 +60,8 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a activity.")]
         public int IdActivity4 { get; set; }
         public IEnumerable<SelectListItem> Activities4 { get; set; }
+
+        public bool AM { get; set; }
+        public bool PM { get; set; }
     }
 }

@@ -89,7 +89,7 @@
                                 @if (item.NumberOfMonths != null)
                                 {
                                     <span class="label label-danger">
-                                        @((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days)
+                                        @((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days)
                                     </span>
                                 }
                             </td>

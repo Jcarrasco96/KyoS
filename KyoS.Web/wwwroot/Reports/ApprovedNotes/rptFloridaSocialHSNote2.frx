@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="09/13/2022 18:28:53" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="11/25/2022 21:25:31" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3m3RUjY7c7X+E814ZAl44PQ==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3z+8KetxwXYtCzMYnrISfrw==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -53,7 +53,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3MDqojrNdBPmP0K04GvnxEg==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u359cGXp3Y3PLl0uvd/A4tDg==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -105,7 +105,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3YDmct8jmc6sNbY7tXjPTCw==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cgvKvc/oaosgIHDv7Xj43g==">
       <TableDataSource Name="Themes3" Alias="Themes4" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -157,7 +157,7 @@
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3oWus2VhMOqEExqEortvj2w==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3CbJ4r5URa9Su6nt9JLmXBQ==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -362,12 +362,12 @@
           <TableCell Name="Cell7" Border.Lines="All" Text="[IIf([NotesP_Activities1.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;8:00 am - 9:00 am&quot;,&quot;12:30 pm - 1:30 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell15" Border.Lines="All" Text="[IIf([NotesP_Activities2.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;9:00 am - 10:00 am&quot;,&quot;1:30 pm - 2:30 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell8" Border.Lines="All" Text="[IIf([NotesP_Activities3.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;10:15 am - 11:15 am&quot;,&quot;2:45 pm - 3:45 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([NotesP_Activities4.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 am&quot;,&quot;3:45 pm - 4:45 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf([NotesP_Activities4.Present] == true,IIf([Workdays_Clients.Session] == &quot;AM&quot;,&quot;11:15 am - 12:15 pm&quot;,&quot;3:45 pm - 4:45 pm&quot;),&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
       <TextObject Name="Text57" Left="217.35" Top="28.25" Width="368.55" Height="18.9" Text="PROGRESS NOTE" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="141.87" Width="800.98" Height="1135.2" FirstRowStartsNewPage="true" DataSource="NotesP">
+    <DataBand Name="Data1" Top="141.75" Width="800.98" Height="1135.2" FirstRowStartsNewPage="true" DataSource="NotesP">
       <TextObject Name="Text2" Left="81.05" Top="61.35" Width="708.75" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[goal_text]" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text4" Left="3.45" Top="61.35" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text5" Left="3.45" Top="80.25" Width="75.6" Height="18.9" Text="[num_of_obj]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
@@ -647,7 +647,7 @@
       <TextObject Name="Text276" Left="148.65" Top="625.15" Width="70.69" Height="18.9" Text="Present" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
       <CheckBoxObject Name="CheckBox185" Left="135.3" Top="626.15" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Present" CheckWidthRatio="2"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="1281.2" Width="800.98" Height="69.25">
+    <PageFooterBand Name="PageFooter1" Top="1280.95" Width="800.98" Height="69.25">
       <LineObject Name="Line5" Left="793.8" Top="50.35" Width="-785.45"/>
       <TextObject Name="Text47" Left="9.45" Top="50.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text49" Left="359.1" Top="50.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>

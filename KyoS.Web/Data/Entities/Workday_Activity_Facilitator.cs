@@ -18,5 +18,8 @@ namespace KyoS.Web.Data.Entities
         public bool? activityDailyLiving { get; set; }
         public bool? socialSkills { get; set; }
         public bool? lifeSkills { get; set; }
+
+        public bool AM { get; set; }
+        public bool PM { get; set; }
     }
 }

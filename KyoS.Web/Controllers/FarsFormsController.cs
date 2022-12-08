@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -114,7 +115,7 @@ namespace KyoS.Web.Controllers
                    ActivitiesScale = 0,
                    AnxietyScale = 0,
                    CognitiveScale = 0,
-                   ContractorID = client.Clinic.ProviderTaxId,
+                   ContractorID = client.Clinic.ProviderMedicaidId,
                    Country = "13",
                    DangerToOtherScale = 0,
                    DangerToSelfScale = 0,
@@ -377,8 +378,8 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", farsFormViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id, int clientId = 0)
         {
             if (id == null)
             {
@@ -401,7 +402,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
@@ -703,6 +704,120 @@ namespace KyoS.Web.Controllers
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, FarsStatus aStatus = FarsStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FarsFormEntity farsFormEntity = await _context.FarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            if (farsFormEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                farsFormEntity.Status = aStatus;
+                _context.FarsForm.Update(farsFormEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditFARS()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditFARS> auditClient_List = new List<AuditFARS>();
+            AuditFARS auditClient = new AuditFARS();
+
+            List<ClientEntity> client_List = _context.Clients
+                                                     .Include(m => m.MTPs)
+                                                     .ThenInclude(m => m.MtpReviewList)
+                                                     .Include(m => m.MTPs)
+                                                     .ThenInclude(m => m.AdendumList)
+                                                     .Include(m => m.FarsFormList)
+                                                     .Include(m => m.DischargeList)
+                                                     .Include(m => m.IndividualTherapyFacilitator)
+                                                     .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                            && n.MTPs.Count() > 0)
+                                                     .ToList();
+            MTPEntity mtp = new MTPEntity();
+            List<MTPReviewEntity> review = new List<MTPReviewEntity>();
+            int individualTherapy = 0;
+            int admission = 1;
+            int close = 1;
+            int resto = 0;
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.IndividualTherapyFacilitator != null)
+                {
+                    individualTherapy = 1;
+                }
+                else
+                {
+                    individualTherapy = 0;
+                }
+
+                mtp = item.MTPs.FirstOrDefault(n => n.Active == true);
+                review = mtp.MtpReviewList;
+
+                if (item.Status == StatusType.Open)
+                {
+                    resto = (admission + review.Count()) - item.FarsFormList.Count();
+                    if (resto > 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "faltan" + resto + " FARS";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditFARS();
+                        resto = 0;
+                    }
+                }
+                else
+                {
+                    resto = (admission + review.Count() + individualTherapy + close) - item.FarsFormList.Count();
+                    if (resto > 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Missing FARS ( " + resto + " )";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditFARS();
+                        resto = 0;
+                    }
+                }
+               
+            }
+
+            return View(auditClient_List);
         }
 
     }

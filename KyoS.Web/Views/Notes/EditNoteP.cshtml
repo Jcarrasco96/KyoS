@@ -103,60 +103,62 @@
         </div>
         @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         {
-        <form asp-action="EditNoteP" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="IdActivity1" />
-            <input type="hidden" asp-for="IdActivity2" />
-            <input type="hidden" asp-for="IdActivity3" />
-            <input type="hidden" asp-for="IdActivity4" />
-            <input type="hidden" asp-for="Origin" />
-            <input type="hidden" asp-for="Schema" />
-            <partial name="_MCSP" />
-            <partial name="_NotesP" />
-            <div class="form-group col-md-12">
-                <input type="submit" value="Save All" class="btn btn-primary" />
-                @if (Model.Origin == 0) //viene de la pagina Index de las notas
-                {
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
-                {
-                    <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
-                {
-                    <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
-                {
-                    <a asp-action="PendingNotes" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
-                {
-                    <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
-                {
-                    <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
-                }
-
-                @if (Model.Status.ToString() == "Edition")
-                {
+            <form asp-action="EditNoteP" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdActivity1" />
+                <input type="hidden" asp-for="IdActivity2" />
+                <input type="hidden" asp-for="IdActivity3" />
+                <input type="hidden" asp-for="IdActivity4" />
+                <input type="hidden" asp-for="Origin" />
+                <input type="hidden" asp-for="Schema" />
+                <partial name="_MCSP" />
+                <partial name="_NotesP" />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save All" class="btn btn-primary" />
                     @if (Model.Origin == 0) //viene de la pagina Index de las notas
                     {
-                        <a asp-action="FinishEditingP" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                        <a asp-action="Index" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
+                    {
+                        <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
                     }
                     @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
                     {
-                        <a asp-action="FinishEditingP" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                        <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
                     }
-                }
-            </div>
-        </form>
+                    @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
+                    {
+                        <a asp-action="PendingNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
+                    {
+                        <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
+                    {
+                        <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
+                    }
+
+                    @if (Model.Status.ToString() == "Edition")
+                    {
+                        @if (Model.Origin == 0) //viene de la pagina Index de las notas
+                        {
+                            <a asp-action="FinishEditingP" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                        }
+                        @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+                        {
+                            <a asp-action="FinishEditingP" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                        }
+                    }
+                </div>
+            </form>
         }
     </div>
 </div>
+
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

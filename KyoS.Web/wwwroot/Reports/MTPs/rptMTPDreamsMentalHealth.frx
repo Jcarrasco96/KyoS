@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/11/2022 23:59:06" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/18/2022 21:57:20" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39aTiSLrQ//Q8KE4H57X36w==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/o7sNRQs8WLTmzdkzA2bvQ==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -32,7 +32,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38q3PBEt654f2RiKE0HM8aw==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Y8QHidr92i9ghvUXwtaDCQ==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -63,7 +63,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3IwjsoFba2JiAv5ELxsugtQ==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3T+CuClzfxnTuZRrakCBhxQ==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u36XiAXK0c6/P/wOpd11FB4w==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3kENPfNLnqQ+lcGbpIXihmw==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -125,7 +125,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3tybWhAol1mm0DoVAlwZFgg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jCr8SAPzNuXanLV60ZI64A==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -322,7 +322,7 @@
       <TextObject Name="Text54" Left="113.4" Top="89.05" Width="113.4" Height="18.9" Text="[MTPs.Setting]" Font="Arial, 10pt"/>
       <TextObject Name="Text1" Left="604.8" Width="94.5" Height="18.9" Text="SupervisorDate" HorzAlign="Center" Font="Arial, 10pt"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="178.35" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
+    <DataBand Name="Data1" Top="178.1" Width="778.3" Height="18.9" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics">
       <TableObject Name="Table1" Left="6.45" Top="-0.1" Width="765.44" Height="18.9">
         <TableColumn Name="Column1" Width="127.56"/>
         <TableColumn Name="Column2" Width="637.88"/>
@@ -331,7 +331,7 @@
           <TableCell Name="Cell2" Text="[Diagnostics.Description]" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="117.52" Width="778.3" Height="56.7">
+      <DataHeaderBand Name="DataHeader1" Top="117.4" Width="778.3" Height="56.7">
         <TableObject Name="Table2" Left="7" Top="37.8" Width="765.44" Height="18.9">
           <TableColumn Name="Column3" Width="127.56"/>
           <TableColumn Name="Column4" Width="637.88"/>
@@ -343,7 +343,7 @@
         <TextObject Name="Text85" Left="-11.55" Top="19.45" Width="103.95" Height="18.9" Text="DIAGNOSTIC " HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data7" Top="201.37" Width="778.3" Height="652.05" CanGrow="true" CanShrink="true" DataSource="MTPs">
+    <DataBand Name="Data7" Top="201" Width="778.3" Height="652.05" CanGrow="true" CanShrink="true" DataSource="MTPs">
       <TextObject Name="Text55" Left="0.45" Top="31.25" Width="774.9" Height="37.8" CanGrow="true" Text="[MTPs.ClientStrengths]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text86" Top="12.45" Width="463.05" Height="18.9" Text="&lt;b&gt;Client’s Strengths:&lt;/b&gt; (Factors that will assist in client’s recovery)" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text87" Top="92.95" Width="774.9" Height="37.8" CanGrow="true" Text="[MTPs.ClientLimitation]" HorzAlign="Justify" Font="Arial, 10pt"/>
@@ -480,7 +480,7 @@
         <TextObject Name="Text99" Left="4.9" Top="42.15" Width="765.45" Height="66.15" CanBreak="false" Text="[MTPs.AdditionalRecommended]" HorzAlign="Justify" Font="Arial, 10pt"/>
       </ContainerObject>
     </DataBand>
-    <DataBand Name="Data2" Top="857.54" Width="778.3" Height="247.59" CanGrow="true" CanShrink="true" StartNewPage="true" DataSource="Goals">
+    <DataBand Name="Data2" Top="857.05" Width="778.3" Height="247.59" CanGrow="true" CanShrink="true" StartNewPage="true" DataSource="Goals">
       <TextObject Name="Text110" Top="52.7" Width="132.3" Height="20.79" Text="Area of Focus 1:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text111" Top="69.6" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals1.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text112" Top="113.85" Width="264.6" Height="20.79" Text="Goal # [Goals1.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -503,7 +503,7 @@
       <TextObject Name="Text130" Left="593.35" Top="226.8" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
       <TextObject Name="Text109" Top="14.9" Width="774.9" Height="30.24" Text="Add Areas of Focus related with treatment needs identified during assessment. Describe symptoms to support Area of Focus" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <DataBand Name="Data4" Top="1113.38" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives">
+    <DataBand Name="Data4" Top="1112.64" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives">
       <TableObject Name="Table8" Width="777.78" Height="171.99">
         <TableColumn Name="Column18" Width="128.52"/>
         <TableColumn Name="Column19" Width="267.48"/>
@@ -546,9 +546,9 @@
           <TableCell Name="Cell183" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader2" Top="1109.26" Width="778.3" CanGrow="true"/>
+      <DataHeaderBand Name="DataHeader2" Top="1108.64" Width="778.3" CanGrow="true"/>
     </DataBand>
-    <DataBand Name="Data5" Top="1298.95" Width="778.3" Height="200.34" CanGrow="true" CanShrink="true" DataSource="Goals1">
+    <DataBand Name="Data5" Top="1298.08" Width="778.3" Height="200.34" CanGrow="true" CanShrink="true" DataSource="Goals1">
       <TextObject Name="Text131" Top="5" Width="132.3" Height="20.79" Text="Area of Focus 2:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text132" Top="26.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals2.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text133" Top="66.15" Width="264.6" Height="20.79" Text="Goal # [Goals2.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -570,7 +570,7 @@
       <TextObject Name="Text148" Left="500.85" Top="179.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text150" Left="593.35" Top="179.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data6" Top="1507.53" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives1">
+    <DataBand Name="Data6" Top="1506.42" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives1">
       <TableObject Name="Table23" Width="777.78" Height="171.99">
         <TableColumn Name="Column75" Width="128.52"/>
         <TableColumn Name="Column76" Width="267.48"/>
@@ -613,9 +613,9 @@
           <TableCell Name="Cell208" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader3" Top="1503.41" Width="778.3" CanGrow="true"/>
+      <DataHeaderBand Name="DataHeader3" Top="1502.42" Width="778.3" CanGrow="true"/>
     </DataBand>
-    <DataBand Name="Data8" Top="1693.1" Width="778.3" Height="201.89" CanGrow="true" CanShrink="true" DataSource="Goals2">
+    <DataBand Name="Data8" Top="1691.86" Width="778.3" Height="201.89" CanGrow="true" CanShrink="true" DataSource="Goals2">
       <TextObject Name="Text151" Top="4" Width="132.3" Height="20.79" Text="Area of Focus 3:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text152" Top="25.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals3.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text153" Top="66.15" Width="264.6" Height="20.79" Text="Goal # [Goals3.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -637,7 +637,7 @@
       <TextObject Name="Text169" Left="500.85" Top="181.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text170" Left="593.35" Top="181.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data9" Top="1903.23" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives2">
+    <DataBand Name="Data9" Top="1901.75" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives2">
       <TableObject Name="Table24" Width="777.78" Height="171.99">
         <TableColumn Name="Column80" Width="128.52"/>
         <TableColumn Name="Column81" Width="267.48"/>
@@ -680,9 +680,9 @@
           <TableCell Name="Cell233" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader4" Top="1899.11" Width="778.3" CanGrow="true" CanShrink="true"/>
+      <DataHeaderBand Name="DataHeader4" Top="1897.75" Width="778.3" CanGrow="true" CanShrink="true"/>
     </DataBand>
-    <DataBand Name="Data10" Top="2088.8" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals3">
+    <DataBand Name="Data10" Top="2087.19" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals3">
       <TextObject Name="Text171" Top="6" Width="132.3" Height="20.79" Text="Area of Focus 4:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text172" Top="27.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals4.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text173" Top="68.15" Width="264.6" Height="20.79" Text="Goal # [Goals4.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -704,7 +704,7 @@
       <TextObject Name="Text189" Left="500.85" Top="183.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text190" Left="593.35" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data11" Top="2300.94" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives3">
+    <DataBand Name="Data11" Top="2299.08" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives3">
       <TableObject Name="Table25" Width="777.78" Height="171.99">
         <TableColumn Name="Column85" Width="128.52"/>
         <TableColumn Name="Column86" Width="267.48"/>
@@ -747,9 +747,9 @@
           <TableCell Name="Cell258" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader5" Top="2296.81" Width="778.3" CanGrow="true" CanShrink="true"/>
+      <DataHeaderBand Name="DataHeader5" Top="2295.08" Width="778.3" CanGrow="true" CanShrink="true"/>
     </DataBand>
-    <DataBand Name="Data12" Top="2486.5" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals4">
+    <DataBand Name="Data12" Top="2484.52" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals4">
       <TextObject Name="Text191" Top="6" Width="132.3" Height="20.79" Text="Area of Focus 5:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text192" Top="27.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals5.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text193" Top="68.15" Width="264.6" Height="20.79" Text="Goal # [Goals5.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -771,7 +771,7 @@
       <TextObject Name="Text209" Left="500.85" Top="183.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text210" Left="593.35" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data13" Top="2698.64" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives4">
+    <DataBand Name="Data13" Top="2696.41" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives4">
       <TableObject Name="Table26" Width="777.78" Height="171.99">
         <TableColumn Name="Column90" Width="128.52"/>
         <TableColumn Name="Column91" Width="267.48"/>
@@ -814,9 +814,9 @@
           <TableCell Name="Cell283" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader6" Top="2694.51" Width="778.3" CanGrow="true" CanShrink="true"/>
+      <DataHeaderBand Name="DataHeader6" Top="2692.41" Width="778.3" CanGrow="true" CanShrink="true"/>
     </DataBand>
-    <DataBand Name="Data14" Top="2884.2" Width="778.3" Height="529.2" DataSource="DocumentsAssistant">
+    <DataBand Name="Data14" Top="2881.85" Width="778.3" Height="529.2" DataSource="DocumentsAssistant">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 1,true,false)" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>
@@ -840,7 +840,6 @@
       <TextObject Name="Text79" Left="262.7" Top="412.7" Width="255.15" Height="18.9" Text="Print Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text80" Left="576" Top="393.45" Width="189" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text81" Left="606.35" Top="411.7" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text211" Left="567.45" Top="62.7" Width="207.9" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text212" Left="4.9" Top="113.3" Width="774.9" Height="56.7" CanGrow="true" Text="[MTPs.InitialDischargeCriteria]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text213" Left="5.45" Top="94.5" Width="765.45" Height="18.9" Text="&lt;b&gt;Transition or discontinuation of services criteria and plan:&lt;/b&gt;" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text214" Left="24.35" Top="317.95" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
@@ -862,7 +861,7 @@
       <TextObject Name="Text227" Left="264.6" Top="463.6" Width="255.15" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text228" Left="264.6" Top="389.45" Width="255.15" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Name],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text229" Left="576.45" Top="463.05" Width="189" Height="18.9" Text="[MTPs.SupervisorDate]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text230" Left="576.45" Top="237.38" Width="189" Height="18.9" Text="[MTPs.MTPDevelopedDate]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text230" Left="576.45" Top="237.38" Width="189" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text231" Left="576.45" Top="312.98" Width="189" Height="18.9" Text="[IIf([DocumentsAssistant.Id] != 0,[MTPs.MTPDevelopedDate],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>

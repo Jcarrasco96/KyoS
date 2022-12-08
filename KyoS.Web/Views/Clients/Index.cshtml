@@ -19,6 +19,15 @@
 {
     <p>
         <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Client</a>
+
+        @if (Model.ElementAt(0).Clinic.Setting.MHProblems == true)
+        {
+            <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Client')" class="btn btn-danger" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Client</a>
+        }
+        else
+        {
+            <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Client')" class="btn btn-danger disabled" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Client</a>
+        }
     </p>
 }
 
@@ -49,14 +58,17 @@
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
+                                Health Insurance
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                            <th class="col-md-1" style="text-align:center;">
+                                Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Individual Therapy
-                            </th>                            
+                            </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
@@ -85,6 +97,12 @@
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
+                                        @if (item.Clients_HealthInsurances.Count > 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                        }
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="center">
@@ -95,7 +113,7 @@
                                         {
                                             @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
                                         }
-                                    </td>                                    
+                                    </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
@@ -114,14 +132,14 @@
                                     {
                                         <td align="right">
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Client"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt" ></i></a>
+                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
                                             <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                         </td>
                                     }
                                     else
                                     {
                                         <td align="right">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details" ><i class="glyphicon glyphicon-align-justify"></i></a>                                            
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                             <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
                                         </td>
                                     }
@@ -145,6 +163,15 @@
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
+                                        @if (item.Clients_HealthInsurances.Count() > 0)
+                                        {
+                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="center">
@@ -155,7 +182,7 @@
                                         {
                                             @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
                                         }
-                                    </td>                                    
+                                    </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
@@ -195,6 +222,7 @@
     </div>
 </div>
 
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/06/2022 16:01:29" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/02/2022 15:13:24" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3VUJihrv8bsuU6u10itg+2w==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Rr5HeJFhcO/n1SK7WP6U5Q==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -134,6 +134,21 @@
         <Column Name="StartTime" DataType="System.DateTime"/>
         <Column Name="DataOfService" DataType="System.DateTime"/>
       </TableDataSource>
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
     </MsSqlDataConnection>
     <Parameter Name="nutritionScoreTotal" DataType="System.String"/>
   </Dictionary>
@@ -144,7 +159,7 @@
       <TextObject Name="Text453" Left="160.65" Top="15.9" Width="459.5" Height="22" CanGrow="true" Text="Dreams Mental Health Inc" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <ContainerObject Name="Container1" Left="161.65" Top="3.45" Width="614.25" Height="66.53" Border.Lines="All"/>
     </PageHeaderBand>
-    <DataBand Name="Data9" Top="79.72" Width="778.3" Height="699.65" CanGrow="true" CanShrink="true" DataSource="MTPReviews">
+    <DataBand Name="Data9" Top="79.6" Width="778.3" Height="699.65" CanGrow="true" CanShrink="true" FirstRowStartsNewPage="true" DataSource="MTPReviews">
       <TableObject Name="Table64" Top="47.25" Width="774.9" Height="43.47">
         <TableColumn Name="Column215" Width="151.2"/>
         <TableColumn Name="Column216" Width="132.3"/>
@@ -193,26 +208,32 @@
       <TextObject Name="Text812" Left="271.6" Top="498.4" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox5" Left="199" Top="501.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="MTPReviews.TheTreatmentPlan"/>
       <CheckBoxObject Name="CheckBox6" Left="255.7" Top="501.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([MTPReviews.TheTreatmentPlan] == true,false,true)"/>
-      <TextObject Name="Text67" Left="245.7" Top="580.96" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text69" Left="-5" Top="580.9" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text783" Left="636.7" Top="580.96" Width="141.75" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
-      <TextObject Name="Text785" Left="392.45" Top="580.9" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text68" Left="244.25" Top="594.7" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text70" Left="3" Top="595.15" Width="226.8" Height="18.9" Text="Client / Guardian Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text784" Left="624.35" Top="594.7" Width="160.65" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text786" Left="392" Top="595.15" Width="236.25" Height="18.9" Text="Therapist Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text788" Left="245.7" Top="647.66" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
-      <TextObject Name="Text790" Left="-3" Top="647.6" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text793" Left="636.93" Top="647.66" Width="141.75" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
-      <TextObject Name="Text795" Left="392.74" Top="647.6" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text789" Left="246.25" Top="661.4" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text67" Left="246.7" Top="572.96" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text69" Left="-5" Top="573.9" Width="245.7" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text783" Left="665.05" Top="572.96" Width="113.4" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
+      <TextObject Name="Text785" Left="380" Top="571.9" Width="274.05" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text68" Left="245.25" Top="587.7" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text70" Left="3" Top="588.15" Width="226.8" Height="18.9" Text="Client / Guardian Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text784" Left="662.15" Top="586.7" Width="122.85" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text786" Left="392" Top="588.15" Width="264.6" Height="18.9" Text="Therapist Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text788" Left="246.7" Top="647.66" Width="132.3" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text790" Left="-3" Top="647.6" Width="245.7" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text793" Left="665.28" Top="647.66" Width="113.4" Height="18.9" Text="_______________________" Padding="1, 0, 1, 0" Font="Arial, 9pt"/>
+      <TextObject Name="Text795" Left="380.29" Top="646.6" Width="274.05" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text789" Left="247.25" Top="661.4" Width="132.3" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text791" Left="3" Top="661.85" Width="226.8" Height="32.13" Text="Clinical Director / Reviewer Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text794" Left="624.9" Top="661.4" Width="160.65" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text796" Left="393" Top="661.85" Width="236.25" Height="37.8" Text="Licensed Practitioner Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text813" Left="244.7" Top="575" Width="132.3" Height="18.9" Text="[MTPReviews.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text814" Left="633.15" Top="575" Width="141.75" Height="18.9" Text="[MTPReviews.DateTherapist]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text815" Left="245.7" Top="642.15" Width="132.3" Height="18.9" Text="[MTPReviews.DateClinicalDirector]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text816" Left="633.15" Top="641.7" Width="141.75" Height="18.9" Text="[MTPReviews.DateLicensedPractitioner]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text794" Left="662.7" Top="661.4" Width="122.85" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text796" Left="393" Top="661.85" Width="255.15" Height="37.8" Text="Licensed Practitioner Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text813" Left="245.7" Top="568" Width="132.3" Height="18.9" Text="[MTPReviews.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text814" Left="661.5" Top="567" Width="113.4" Height="18.9" Text="[MTPReviews.DateTherapist]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text815" Left="246.7" Top="642.15" Width="132.3" Height="18.9" Text="[MTPReviews.DateClinicalDirector]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text816" Left="661.5" Top="641.7" Width="113.4" Height="18.9" Text="[MTPReviews.DateLicensedPractitioner]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture5" Left="564.55" Top="527.65" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture7" Left="564.55" Top="601.8" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text817" Left="383" Top="567.65" Width="185.22" Height="18.9" Text="[MTPReviews.Therapist]" Font="Arial, 10pt"/>
+      <TextObject Name="Text818" Left="382.91" Top="642.6" Width="185.22" Height="18.9" Text="[MTPReviews.LicensedPractitioner]" Font="Arial, 10pt"/>
+      <TextObject Name="Text819" Top="568" Width="236.25" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text820" Top="642.6" Width="236.25" Height="18.9" Text="[MTPReviews.ClinicalDirector]" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
 </Report>

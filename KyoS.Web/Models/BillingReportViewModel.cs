@@ -17,5 +17,6 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Clients { get; set; }
 
         public List<WeekEntity> Weeks { get; set; }
+
     }
 }

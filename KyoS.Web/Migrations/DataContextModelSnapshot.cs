@@ -2279,6 +2279,51 @@ namespace KyoS.Web.Migrations
                     b.ToTable("HealthInsurances");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.HealthInsuranceTempEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DurationTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Units")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HealthInsuranceTemp");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.IncidentEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -8788,11 +8833,17 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<bool>("AM")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
 
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("PM")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Schema")
                         .HasColumnType("int");

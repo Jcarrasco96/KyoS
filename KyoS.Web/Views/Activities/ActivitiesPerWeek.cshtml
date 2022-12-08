@@ -14,8 +14,21 @@
         <li class="active">Activities per PSR week</li>
     </ul><!--.breadcrumb-->
 </div>
-
 <div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.NoDelete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete those activities
+                </strong>
+            </div>
+        }
+       
+    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -61,7 +74,7 @@
                                         <table class="table table-striped">
                                             <tr>
                                                 <th class="col-md-1"></th>
-                                                <th class="col-md-3">Date</th>
+                                                <th class="col-md-2">Date</th>
                                                 <th class="col-md-7">Day</th>
                                                 <th></th>
                                             </tr>
@@ -76,7 +89,10 @@
                                                                 <table class="table table-striped">
                                                                     <tr>
                                                                         <th class="col-md-3">Topic</th>
-                                                                        <th class="col-md-9">Activity</th>
+                                                                        <th class="col-md-7">Activity</th>
+                                                                        <th class="col-md-1" style="text-align:center;">AM</th>
+                                                                        <th class="col-md-1" style="text-align:center;">PM</th>
+                                                                        <th class="col-md-1"></th>
                                                                     </tr>
                                                                     @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
                                                                     {
@@ -86,6 +102,22 @@
                                                                             </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => activity.Activity.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => activity.AM)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => activity.PM)
+                                                                            </td>
+                                                                            <td align="right">
+                                                                                @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() > 4)
+                                                                                {
+                                                                                    <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" asp-route-am="@activity.AM" asp-route-pm="@activity.PM" class="btn btn-warning" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning disabled" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                                                }
                                                                             </td>
                                                                         </tr>
                                                                     }
@@ -100,7 +132,24 @@
                                                         @Html.DisplayFor(modelItem => day.Day)
                                                     </td>
                                                     <td align="right">
-                                                        <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                        @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() <= 4)
+                                                        {
+                                                            <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                            @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
+                                                            {
+                                                                <a asp-action="DeleteActivityPerWeek" asp-route-idWorkday="@day.Id" class="btn btn-danger" title="Activities per week"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="DeleteActivityPerWeek" asp-route-idWorkday="@day.Id" class="btn btn-danger disabled" title="Activities per week"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning disabled" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
+                                                            <a asp-action="DeleteActivityPerWeek" asp-route-idWorkday="@day.Id" class="btn btn-danger" title="Activities per week"><i class="glyphicon glyphicon-trash"></i></a>
+                                                        }
                                                     </td>
                                                 </tr>
                                             }

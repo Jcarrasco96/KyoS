@@ -23,6 +23,17 @@
     </div>
 </div>
 <div class="col-md-12">
+    @if (Model.Workday_Cient.Client.Clinic.Setting.MHProblems == true)
+    {
+        <a onclick="showInPopupLg('@Url.Action("AuditGoalsObjectiveInd", "Notes", new {idMtp = Model.MTPId}, Context.Request.Scheme)','Audit Goals')" class="btn btn-danger" title="Audit the goals"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Goals</a>
+    }
+    else
+    {
+        <a onclick="showInPopupLg('@Url.Action("AuditGoalsObjective", "Notes", null, Context.Request.Scheme)','Audit Goals')" class="btn btn-danger disabled" title="Audit the goals"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Goals</a>
+    }
+    <hr />
+</div>
+<div class="col-md-12">
     <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
 </div>
 <div class="col-md-12">
