@@ -791,7 +791,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "faltan" + resto + " FARS";
+                        auditClient.Description = "Missing FARS ( " + resto + " )";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);

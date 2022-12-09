@@ -2121,7 +2121,8 @@ namespace KyoS.Web.Controllers
                                                      .Include(m => m.MTPs)
                                                      .Include(m => m.Workdays_Clients)
                                                      .Where(n => (n.Workdays_Clients.Count() == 0 
-                                                        && n.MTPs.Count() > 0))
+                                                        && n.MTPs.Count() > 0
+                                                        && n.Status == StatusType.Close))
                                                      .ToList();
             
             foreach (var item in client_List)
