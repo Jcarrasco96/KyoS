@@ -1883,6 +1883,8 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.MTPs)
 
                                                                            .Include(wc => wc.Facilitator)
+                                                                           .ThenInclude(c => c.Clinic)  //es para saber la clinica cuando no existe la nota en individualNote
+                                                                           .ThenInclude(c => c.Setting)
 
                                                                            .Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Week)
@@ -1972,7 +1974,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id),
                     IdClient = 0,
-                    MTPId = mtp.Id
+                    MTPId = 0
                 };
             }
             else
