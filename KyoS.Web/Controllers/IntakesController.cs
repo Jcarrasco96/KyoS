@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {    
@@ -1883,6 +1884,169 @@ namespace KyoS.Web.Controllers
             }
 
             return View(clientEntity);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditIntake()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditIntake> auditClient_List = new List<AuditIntake>();
+            AuditIntake auditClient = new AuditIntake();
+
+            List<ClientEntity> client_List = _context.Clients
+                                                     .Include(m => m.IntakeAccessToServices)
+                                                     .Include(m => m.IntakeAcknowledgementHipa)
+                                                     .Include(m => m.IntakeConsentForRelease)
+                                                     .Include(m => m.IntakeConsentForTreatment)
+                                                     .Include(m => m.IntakeConsentPhotograph)
+                                                     .Include(m => m.IntakeConsumerRights)
+                                                     .Include(m => m.IntakeFeeAgreement)
+                                                     .Include(m => m.IntakeMedicalHistory)
+                                                     .Include(m => m.IntakeOrientationChecklist)
+                                                     .Include(m => m.IntakeScreening)
+                                                     .Include(m => m.IntakeTransportation)
+                                                     .Include(m => m.IntakeTuberculosis)
+                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                                     .ToList();
+
+           
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.IntakeAccessToServices == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Access To Services";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeAcknowledgementHipa == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Acknowledgement Hipa";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentForRelease == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent For Release";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentForTreatment == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent For Treatment";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentPhotograph == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent Photograph";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsumerRights == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consumer Rights";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeFeeAgreement == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Fee Agreement";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeMedicalHistory == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Medical History";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeOrientationChecklist == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Orientation Checklist";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeScreening == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Screening";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeTransportation == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Transportation";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeTuberculosis == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Tuberculosis";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+            }
+
+            return View(auditClient_List);
         }
 
     }
