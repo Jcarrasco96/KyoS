@@ -970,6 +970,7 @@ namespace KyoS.Web.Controllers
                                                      .ToList();
 
             int individualTherapy = 0;
+            bool HaveIndtherapy = false;
             int PSR = 0;
             int Group = 0;
 
@@ -978,10 +979,12 @@ namespace KyoS.Web.Controllers
                 if (item.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0)
                 {
                     individualTherapy = 1;
+                    HaveIndtherapy = true;
                 }
                 else
                 {
                     individualTherapy = 0;
+                    HaveIndtherapy = false;
                 }
                 if (item.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0)
                 {
@@ -1068,13 +1071,27 @@ namespace KyoS.Web.Controllers
                 }
                 if (individualTherapy < 0)
                 {
-                    auditClient.NameClient = item.Name;
-                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                    auditClient.Service = "Duplicate Discharge (Individual)";
-                    auditClient.Active = 1;
+                    if (HaveIndtherapy == true)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Service = "Duplicate Discharge (Individual)";
+                        auditClient.Active = 1;
 
-                    auditClient_List.Add(auditClient);
-                    auditClient = new AuditDischarge();
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditDischarge();
+                    }
+                    else
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Service = "There are discharges without individual notes";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditDischarge();
+                    }
+                    
                 }
             }
 
