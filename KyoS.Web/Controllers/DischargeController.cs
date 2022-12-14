@@ -960,14 +960,34 @@ namespace KyoS.Web.Controllers
             List<AuditDischarge> auditClient_List = new List<AuditDischarge>();
             AuditDischarge auditClient = new AuditDischarge();
 
-            List<ClientEntity> client_List = _context.Clients
-                                                     .Include(m => m.DischargeList)
-                                                     .Include(m => m.IndividualTherapyFacilitator)
-                                                     .Include(m => m.Workdays_Clients)
-                                                     .ThenInclude(m => m.Workday)
-                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
-                                                        && n.Status == StatusType.Close))
-                                                     .ToList();
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (!User.IsInRole("Facilitator"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.DischargeList)
+                                      .Include(m => m.IndividualTherapyFacilitator)
+                                      .Include(m => m.Workdays_Clients)
+                                      .ThenInclude(m => m.Workday)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                          && n.Status == StatusType.Close))
+                                      .ToList();
+
+            }
+            else
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                client_List = _context.Clients
+                                      .Include(m => m.DischargeList)
+                                      .Include(m => m.IndividualTherapyFacilitator)
+                                      .Include(m => m.Workdays_Clients)
+                                      .ThenInclude(m => m.Workday)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                         && n.Status == StatusType.Close
+                                         && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                      .ToList();
+
+            }
 
             int individualTherapy = 0;
             bool HaveIndtherapy = false;

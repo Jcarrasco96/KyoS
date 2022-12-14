@@ -752,17 +752,45 @@ namespace KyoS.Web.Controllers
             List<AuditFARS> auditClient_List = new List<AuditFARS>();
             AuditFARS auditClient = new AuditFARS();
 
-            List<ClientEntity> client_List = _context.Clients
-                                                     .Include(m => m.MTPs)
-                                                     .ThenInclude(m => m.MtpReviewList)
-                                                     .Include(m => m.MTPs)
-                                                     .ThenInclude(m => m.AdendumList)
-                                                     .Include(m => m.FarsFormList)
-                                                     .Include(m => m.DischargeList)
-                                                     .Include(m => m.IndividualTherapyFacilitator)
-                                                     .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.MTPs.Count() > 0)
-                                                     .ToList();
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.MTPs)
+                                      .ThenInclude(m => m.MtpReviewList)
+                                      .Include(m => m.MTPs)
+                                      .ThenInclude(m => m.AdendumList)
+                                      .Include(m => m.FarsFormList)
+                                      .Include(m => m.DischargeList)
+                                      .Include(m => m.IndividualTherapyFacilitator)
+                                      .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && n.MTPs.Count() > 0)
+                                      .ToList();
+
+            }
+            else
+            {
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                    client_List = _context.Clients
+                                          .Include(m => m.MTPs)
+                                          .ThenInclude(m => m.MtpReviewList)
+                                          .Include(m => m.MTPs)
+                                          .ThenInclude(m => m.AdendumList)
+                                          .Include(m => m.FarsFormList)
+                                          .Include(m => m.DischargeList)
+                                          .Include(m => m.IndividualTherapyFacilitator)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                          .ToList();
+
+                }
+
+            }
+
             MTPEntity mtp = new MTPEntity();
             List<MTPReviewEntity> review = new List<MTPReviewEntity>();
             int individualTherapy = 0;

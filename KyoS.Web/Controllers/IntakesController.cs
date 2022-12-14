@@ -55,23 +55,52 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return View(await _context.Clients
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                {
+                    return View(await _context.Clients
 
-                                           .Include(n => n.IntakeScreening)
-                                           .Include(n => n.IntakeConsentForTreatment)
-                                           .Include(n => n.IntakeConsentForRelease)
-                                           .Include(n => n.IntakeConsumerRights)
-                                           .Include(n => n.IntakeAcknowledgementHipa)
-                                           .Include(n => n.IntakeAccessToServices)
-                                           .Include(n => n.IntakeOrientationChecklist)
-                                           .Include(n => n.IntakeTransportation)
-                                           .Include(n => n.IntakeConsentPhotograph)
-                                           .Include(n => n.IntakeFeeAgreement)
-                                           .Include(n => n.IntakeTuberculosis)
-                                           .Include(n => n.IntakeMedicalHistory)
+                                              .Include(n => n.IntakeScreening)
+                                              .Include(n => n.IntakeConsentForTreatment)
+                                              .Include(n => n.IntakeConsentForRelease)
+                                              .Include(n => n.IntakeConsumerRights)
+                                              .Include(n => n.IntakeAcknowledgementHipa)
+                                              .Include(n => n.IntakeAccessToServices)
+                                              .Include(n => n.IntakeOrientationChecklist)
+                                              .Include(n => n.IntakeTransportation)
+                                              .Include(n => n.IntakeConsentPhotograph)
+                                              .Include(n => n.IntakeFeeAgreement)
+                                              .Include(n => n.IntakeTuberculosis)
+                                              .Include(n => n.IntakeMedicalHistory)
 
-                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                           .ToListAsync());                
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .ToListAsync());
+                }
+                else
+                {
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                        return View(await _context.Clients
+
+                                              .Include(n => n.IntakeScreening)
+                                              .Include(n => n.IntakeConsentForTreatment)
+                                              .Include(n => n.IntakeConsentForRelease)
+                                              .Include(n => n.IntakeConsumerRights)
+                                              .Include(n => n.IntakeAcknowledgementHipa)
+                                              .Include(n => n.IntakeAccessToServices)
+                                              .Include(n => n.IntakeOrientationChecklist)
+                                              .Include(n => n.IntakeTransportation)
+                                              .Include(n => n.IntakeConsentPhotograph)
+                                              .Include(n => n.IntakeFeeAgreement)
+                                              .Include(n => n.IntakeTuberculosis)
+                                              .Include(n => n.IntakeMedicalHistory)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                                  && n.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0))
+                                              .ToListAsync());
+                    }
+                }
+                return View(null);         
             }            
         }
 
@@ -1904,21 +1933,47 @@ namespace KyoS.Web.Controllers
             List<AuditIntake> auditClient_List = new List<AuditIntake>();
             AuditIntake auditClient = new AuditIntake();
 
-            List<ClientEntity> client_List = _context.Clients
-                                                     .Include(m => m.IntakeAccessToServices)
-                                                     .Include(m => m.IntakeAcknowledgementHipa)
-                                                     .Include(m => m.IntakeConsentForRelease)
-                                                     .Include(m => m.IntakeConsentForTreatment)
-                                                     .Include(m => m.IntakeConsentPhotograph)
-                                                     .Include(m => m.IntakeConsumerRights)
-                                                     .Include(m => m.IntakeFeeAgreement)
-                                                     .Include(m => m.IntakeMedicalHistory)
-                                                     .Include(m => m.IntakeOrientationChecklist)
-                                                     .Include(m => m.IntakeScreening)
-                                                     .Include(m => m.IntakeTransportation)
-                                                     .Include(m => m.IntakeTuberculosis)
-                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
-                                                     .ToList();
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (!User.IsInRole("Facilitator"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.IntakeAccessToServices)
+                                      .Include(m => m.IntakeAcknowledgementHipa)
+                                      .Include(m => m.IntakeConsentForRelease)
+                                      .Include(m => m.IntakeConsentForTreatment)
+                                      .Include(m => m.IntakeConsentPhotograph)
+                                      .Include(m => m.IntakeConsumerRights)
+                                      .Include(m => m.IntakeFeeAgreement)
+                                      .Include(m => m.IntakeMedicalHistory)
+                                      .Include(m => m.IntakeOrientationChecklist)
+                                      .Include(m => m.IntakeScreening)
+                                      .Include(m => m.IntakeTransportation)
+                                      .Include(m => m.IntakeTuberculosis)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                      .ToList();
+            }
+            else
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                client_List = _context.Clients
+                                       .Include(m => m.IntakeAccessToServices)
+                                       .Include(m => m.IntakeAcknowledgementHipa)
+                                       .Include(m => m.IntakeConsentForRelease)
+                                       .Include(m => m.IntakeConsentForTreatment)
+                                       .Include(m => m.IntakeConsentPhotograph)
+                                       .Include(m => m.IntakeConsumerRights)
+                                       .Include(m => m.IntakeFeeAgreement)
+                                       .Include(m => m.IntakeMedicalHistory)
+                                       .Include(m => m.IntakeOrientationChecklist)
+                                       .Include(m => m.IntakeScreening)
+                                       .Include(m => m.IntakeTransportation)
+                                       .Include(m => m.IntakeTuberculosis)
+                                       .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                       .ToList();
+            }
+           
 
            
 
