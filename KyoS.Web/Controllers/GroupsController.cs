@@ -968,6 +968,7 @@ namespace KyoS.Web.Controllers
 
                                         .Include(c => c.MTPs)
                                         .Include(c => c.Clients_HealthInsurances)
+                                        .ThenInclude(c => c.HealthInsurance)
                                         .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                     && c.Status == Common.Enums.StatusType.Open
                                                     && c.Service == serviceType
