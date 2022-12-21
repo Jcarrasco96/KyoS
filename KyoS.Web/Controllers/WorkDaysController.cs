@@ -243,7 +243,7 @@ namespace KyoS.Web.Controllers
 
                     foreach (KeyValuePair<int, DateTime> item in numofweeks)
                     {
-                        initdate = _dateHelper.FirstDateOfWeek(item.Key == 52 ? item.Value.AddYears(-1).Year : item.Value.Year, item.Key, CultureInfo.CurrentCulture);
+                        initdate = _dateHelper.FirstDateOfWeek(item.Value.Year, item.Key, CultureInfo.CurrentCulture);
                         finaldate = initdate.AddDays(6);
                         WeekEntity week = new WeekEntity
                         {

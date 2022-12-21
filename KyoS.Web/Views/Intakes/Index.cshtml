@@ -19,11 +19,11 @@
         @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
 
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditIntake", "Intakes", null, Context.Request.Scheme)','Audit Intake')" class="btn btn-danger" title="Audit Intake"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Intake</a>
+            <a onclick="showInPopupLg('@Url.Action("AuditIntake", "Intakes", null, Context.Request.Scheme)','Audit Intakes')" class="btn btn-danger" title="Audit Intakes"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Intakes</a>
         }
         else
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditIntake", "Intakes", null, Context.Request.Scheme)','Audit Intake')" class="btn btn-danger disabled" title="Audit Intake"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Intake</a>
+            <a class="btn btn-danger disabled" title="Audit Intakes"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Intakes</a>
         }
     </div>
     <div class="col-md-12">

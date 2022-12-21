@@ -22,11 +22,11 @@
 
         @if (Model.ElementAt(0).Clinic.Setting.MHProblems == true)
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Client')" class="btn btn-danger" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Client</a>
+            <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Clients')" class="btn btn-danger" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Clients</a>
         }
         else
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Client')" class="btn btn-danger disabled" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Client</a>
+            <a class="btn btn-danger disabled" title="Audit Clients"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Clients</a>
         }
     </p>
 }
