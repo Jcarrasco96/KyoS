@@ -11829,6 +11829,49 @@ namespace KyoS.Web.Controllers
             return View(auditGoalsObjetive_List);
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBill(int id = 0, int week = 0)
+        {
+            if (week == 0)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
 
+                                                                  .Include(wc => wc.Workday)
+                                                                  .ThenInclude(w => w.Week)
+                                                                  .ThenInclude(we => we.Clinic)
+
+                                                                  .Where(wc => wc.Id == id)
+                                                                  .FirstOrDefaultAsync();
+                workday_client.BilledDate = null;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id });
+            }
+            else
+            {
+                List<Workday_Client> workday_client = await _context.Workdays_Clients
+
+                                                                     .Include(wc => wc.Workday)
+                                                                     .ThenInclude(w => w.Week)
+                                                                     .ThenInclude(we => we.Clinic)
+
+                                                                     .Where(wc => wc.Client.Id == id
+                                                                        && wc.Workday.Week.Id == week)
+                                                                     .ToListAsync();
+
+                foreach (var item in workday_client)
+                {
+                    item.BilledDate = null;
+                    _context.Update(item);
+                    await _context.SaveChangesAsync();
+                }
+
+
+            }
+
+            return RedirectToAction("BillingWeek", "Notes", new { id = week });
+
+        }
     }
 }
