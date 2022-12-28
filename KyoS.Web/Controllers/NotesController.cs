@@ -55,8 +55,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.FinishEdition = "Y";
             }
-
-
+           
             UserEntity user_logged = _context.Users
 
                                              .Include(u => u.Clinic)
@@ -685,9 +684,31 @@ namespace KyoS.Web.Controllers
                     Workday_Client workday_client = await _context.Workdays_Clients
                                                                   .Include(wd => wd.Client)
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
-                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_client.Client.Id && m.Active == true));
-                    if(mtp != null)
+                    MTPEntity mtp = await _context.MTPs
+                                                  .Include(n => n.MtpReviewList)
+                                                  .FirstOrDefaultAsync(m => (m.Client.Id == workday_client.Client.Id && m.Active == true));
+
+                    bool mtpExpired = false;
+                    if (mtp != null)
+                    {
                         noteEntity.MTPId = mtp.Id;
+                        foreach (var item in mtp.MtpReviewList)
+                        {
+                            if (item.DataOfService.AddMonths(item.MonthOfTreatment) > workday_Client.Workday.Date)
+                            {
+                                mtpExpired = true;
+                            }
+                        }
+                        if (mtp.AdmissionDateMTP.AddMonths(mtp.NumberOfMonths.Value) > workday_Client.Workday.Date)
+                        {
+                            mtpExpired = true;
+                        }
+                    }
+
+                    if (mtpExpired == false)
+                    {
+                        return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    }
 
                     _context.Add(noteEntity);
                     note_Activity = new Note_Activity
@@ -1050,7 +1071,28 @@ namespace KyoS.Web.Controllers
 
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
             MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.MtpReviewList)
                                     .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            bool mtpExpired = false;
+            if (mtp != null)
+            {
+                foreach (var item in mtp.MtpReviewList)
+                {
+                    if (item.DataOfService.AddMonths(item.MonthOfTreatment) > workday_Client.Workday.Date)
+                    {
+                        mtpExpired = true;
+                    }
+                }
+                if (mtp.AdmissionDateMTP.AddMonths(mtp.NumberOfMonths.Value) > workday_Client.Workday.Date)
+                {
+                    mtpExpired = true;
+                }
+            }
+
+            if (mtpExpired == false)
+            {
+                return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1});
+            }
 
             List<Workday_Activity_Facilitator> activities;
             if (am == true)
@@ -8541,8 +8583,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Manager")]
-        public async Task<IActionResult> NotStartedNotes(string name, int id = 0)
+        public async Task<IActionResult> NotStartedNotes(string name, int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (name != string.Empty && id != 0)
             {
                 return View(await _context.Workdays_Clients
