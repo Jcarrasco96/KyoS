@@ -11920,5 +11920,68 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("BillingWeek", "Notes", new { id = week });
 
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> ViewAllGoals(int idMtp = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AllGoals> allGoals_List = new List<AllGoals>();
+            AllGoals goal_temp = new AllGoals();
+            List<AllObjectives> allObjective_List = new List<AllObjectives>();
+            AllObjectives objective_temp = new AllObjectives();
+
+            MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .Include(n => n.MtpReviewList)
+                                    .FirstOrDefault(n => n.Id == idMtp);
+
+            int month = 0;
+            if (mtp.MtpReviewList.Count() > 0)
+            {
+                foreach (var review in mtp.MtpReviewList)
+                {
+                    month = month + review.MonthOfTreatment;
+                }
+            }
+
+            foreach (var goal in mtp.Goals)
+            {
+                goal_temp.NumberGoal = goal.Number;
+                goal_temp.Name = goal.Name;
+                goal_temp.AreaFocus = goal.AreaOfFocus;
+                goal_temp.Service = goal.Service;
+                goal_temp.AllObjectives = new List<AllObjectives>();
+
+                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                {
+                    objective_temp.NumberObjective = objective.Objetive;
+                    objective_temp.Description = objective.Description;
+                    objective_temp.Intervention = objective.Intervention;
+                    objective_temp.DateTarget = objective.DateTarget.AddMonths(month).ToShortDateString().ToString();
+
+                    goal_temp.AllObjectives.Add(objective_temp);
+                    objective_temp = new AllObjectives();
+
+                }
+
+                allGoals_List.Add(goal_temp);
+                goal_temp = new AllGoals();
+            }
+
+            return View(allGoals_List);
+        }
+
     }
 }
