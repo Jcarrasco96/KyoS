@@ -45,7 +45,7 @@
     <div class="col-md-5">
         <center>
             @*@Model.First().Workday.Week.InitDate.ToLongDateString() - @Model.First().Workday.Week.FinalDate.ToLongDateString()*@
-           
+
         </center>
     </div>
     <div class="col-md-3">
@@ -137,6 +137,40 @@
     </div>
     <div class="col-md-3">
         &nbsp;
+    </div>
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+            <dt>
+                Client
+            </dt>
+            <dd>
+                @ViewData["ClientName"]
+            </dd>
+            <dt>
+                Code
+            </dt>
+            <dd>
+                @ViewData["Code"]
+            </dd>
+            <dt>
+                Diagnostics
+            </dt>
+            <dd>
+                @ViewData["Diagnostics"]
+            </dd>
+            <dt>
+                Medicaid Id
+            </dt>
+            <dd>
+                @ViewData["MedicaidId"]
+            </dd>
+            <dt>
+               Birth Date
+            </dt>
+            <dd>
+                @ViewData["BirthDate"]
+            </dd>
+        </dl>
     </div>
     <div id="view-templates">
         @await Html.PartialAsync("_BillingClient", Model)

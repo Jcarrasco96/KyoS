@@ -10322,7 +10322,7 @@ namespace KyoS.Web.Controllers
 
                 }
 
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingWeek", new { id = workday_client.Workday.Week.Id }) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingWeek", new { id = workday_client.Workday.Week.Id, billed = 1 }) });
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
@@ -11274,7 +11274,7 @@ namespace KyoS.Web.Controllers
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id });
+                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id, billed = 1 });
             }
             else
             {
@@ -11298,7 +11298,7 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return RedirectToAction("BillingWeek", "Notes", new { id = week });
+            return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
 
         }
 
@@ -11893,7 +11893,7 @@ namespace KyoS.Web.Controllers
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id });
+                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id, billed = 1 });
             }
             else
             {
@@ -11917,7 +11917,7 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return RedirectToAction("BillingWeek", "Notes", new { id = week });
+            return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
 
         }
 
@@ -12011,6 +12011,8 @@ namespace KyoS.Web.Controllers
 
                                                                  .Include(wc => wc.Facilitator)
                                                                  .Include(wc => wc.Workday)
+                                                                 .ThenInclude(wc => wc.Week)
+                                                                 .ThenInclude(wc => wc.Clinic)
 
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Present == true
@@ -12023,8 +12025,20 @@ namespace KyoS.Web.Controllers
 
                 int cantUnit = 0;
                 int money = 0;
+                string clientName = "";
+                string code = "";
+                string diagnostics = "";
+                string medicaidId = "";
+                string birthdate = "";
+
                 foreach (var item in work_client)
                 {
+                    clientName = item.ClientName;
+                    code = item.Client.Code;
+                    diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    medicaidId = item.Client.MedicaidID;
+                    birthdate = item.Client.DateOfBirth.ToShortDateString().ToString();
+
                     if (item.Note != null)
                     {
                         cantUnit += 16;
@@ -12064,6 +12078,11 @@ namespace KyoS.Web.Controllers
                 ViewData["Money"] = money;
                 ViewData["Billed"] = billed;
                 ViewData["Client"] = idClient;
+                ViewData["ClientName"] = clientName;
+                ViewData["Code"] = code;
+                ViewData["Diagnostics"] = diagnostics;
+                ViewData["MedicaidId"] = medicaidId;
+                ViewData["BirthDate"] = birthdate;
 
                 return View(work_client);
             }
@@ -12081,7 +12100,9 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(cd => cd.Diagnostic)
 
                                                                  .Include(wc => wc.Workday)
-                                                                 
+                                                                 .ThenInclude(wc => wc.Week)
+                                                                 .ThenInclude(wc => wc.Clinic)
+
                                                                  .Include(wc => wc.Facilitator)
 
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
@@ -12095,8 +12116,20 @@ namespace KyoS.Web.Controllers
 
                 int cantUnit = 0;
                 int money = 0;
+                string clientName = "";
+                string code = "";
+                string diagnostics = "";
+                string medicaidId = "";
+                string birthdate = "";
+
                 foreach (var item in work_client)
                 {
+                    clientName = item.ClientName;
+                    code = item.Client.Code;
+                    diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    medicaidId = item.Client.MedicaidID;
+                    birthdate = item.Client.DateOfBirth.ToShortDateString().ToString();
+
                     if (item.Note != null)
                     {
                         cantUnit += 16;
@@ -12136,6 +12169,11 @@ namespace KyoS.Web.Controllers
                 ViewData["Money"] = money;
                 ViewData["Billed"] = billed;
                 ViewData["Client"] = idClient;
+                ViewData["ClientName"] = clientName;
+                ViewData["Code"] = code;
+                ViewData["Diagnostics"] = diagnostics;
+                ViewData["MedicaidId"] = medicaidId;
+                ViewData["BirthDate"] = birthdate;
 
                 return View(work_client);
             }
@@ -12227,12 +12265,46 @@ namespace KyoS.Web.Controllers
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("BillingClient", "Notes", new { idClient = workday_client.Client.Id, biled = 1 });
+                return RedirectToAction("BillingClient", "Notes", new { idClient = workday_client.Client.Id, billed = 1 });
             }
 
             return RedirectToAction("NotAuthorized", "Account");
 
         }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult PaymentReceivedClient(int id)
+        {
+            PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedClient(PaymentReceivedViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Workday_Client workday_client;
+                workday_client = await _context.Workdays_Clients
+                                               .Include(wc => wc.Workday)
+                                               .ThenInclude(w => w.Week)
+                                               .ThenInclude(we => we.Clinic)
+                                               .Include(wc => wc.Client)
+
+                                               .Where(wc => wc.Id == model.Id)
+                                               .FirstOrDefaultAsync();
+
+                workday_client.PaymentDate = model.PaymentDate;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+            
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingClient", new { idClient = workday_client.Client.Id, billed = 1 }) });
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceivedClient", model) });
+        }
+
 
     }
 }
