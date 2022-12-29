@@ -283,7 +283,15 @@
                                         }
                                         else
                                         {
-                                            <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i></a>
+                                            @if (day_client.Present == false)
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+
                                         }
                                     </td>
                                     <td align="right">
