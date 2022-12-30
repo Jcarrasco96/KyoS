@@ -12222,17 +12222,22 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult BillNoteClient(int idWorkday)
+        public IActionResult BillNoteClient(int idWorkday, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = idWorkday, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillNoteClient(BillViewModel model)
+        public async Task<IActionResult> BillNoteClient(BillViewModel model, int abilled = 0)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 Workday_Client workday_client;
@@ -12246,7 +12251,65 @@ namespace KyoS.Web.Controllers
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingClient", new { idClient = workday_client.Client.Id, billed = 0 }) });
+                List<Workday_Client> list_workday_client = new List<Workday_Client>();
+                
+                if (abilled == 0)
+                {
+                    list_workday_client = await _context.Workdays_Clients
+
+                                                                     .Include(wc => wc.Note)
+                                                                     .Include(wc => wc.NoteP)
+                                                                     .Include(wc => wc.IndividualNote)
+                                                                     .Include(wc => wc.GroupNote)
+
+                                                                     .Include(wc => wc.Client)
+                                                                     .ThenInclude(c => c.Clients_Diagnostics)
+                                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                                     .Include(wc => wc.Workday)
+                                                                     .ThenInclude(wc => wc.Week)
+                                                                     .ThenInclude(wc => wc.Clinic)
+
+                                                                     .Include(wc => wc.Facilitator)
+
+                                                                     .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                                && wc.Present == true
+                                                                                && wc.Client.Id == workday_client.Client.Id
+                                                                                && wc.BilledDate == null))
+                                                                     .OrderBy(m => m.Workday.Date)
+                                                                     .ToListAsync();
+
+                }
+                else
+                {
+                   list_workday_client = await _context.Workdays_Clients
+
+                                                                     .Include(wc => wc.Note)
+                                                                     .Include(wc => wc.NoteP)
+                                                                     .Include(wc => wc.IndividualNote)
+                                                                     .Include(wc => wc.GroupNote)
+
+                                                                     .Include(wc => wc.Client)
+                                                                     .ThenInclude(c => c.Clients_Diagnostics)
+                                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                                     .Include(wc => wc.Workday)
+                                                                     .ThenInclude(wc => wc.Week)
+                                                                     .ThenInclude(wc => wc.Clinic)
+
+                                                                     .Include(wc => wc.Facilitator)
+
+                                                                     .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                                && wc.Present == true
+                                                                                && wc.Client.Id == workday_client.Client.Id
+                                                                                && wc.BilledDate != null))
+                                                                     .OrderBy(m => m.Workday.Date)
+                                                                     .ToListAsync();
+
+                }
+                ViewData["Billed"] = abilled;
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", list_workday_client) });
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNoteClient", model) });
         }
@@ -12284,6 +12347,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> PaymentReceivedClient(PaymentReceivedViewModel model)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 Workday_Client workday_client;
@@ -12299,8 +12365,33 @@ namespace KyoS.Web.Controllers
                 workday_client.PaymentDate = model.PaymentDate;
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
-            
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingClient", new { idClient = workday_client.Client.Id, billed = 1 }) });
+
+                List<Workday_Client> list_workday_client = await _context.Workdays_Clients
+
+                                                                 .Include(wc => wc.Note)
+                                                                 .Include(wc => wc.NoteP)
+                                                                 .Include(wc => wc.IndividualNote)
+                                                                 .Include(wc => wc.GroupNote)
+
+                                                                 .Include(wc => wc.Client)
+                                                                 .ThenInclude(c => c.Clients_Diagnostics)
+                                                                 .ThenInclude(cd => cd.Diagnostic)
+
+                                                                 .Include(wc => wc.Workday)
+                                                                 .ThenInclude(wc => wc.Week)
+                                                                 .ThenInclude(wc => wc.Clinic)
+
+                                                                 .Include(wc => wc.Facilitator)
+
+                                                                 .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                            && wc.Present == true
+                                                                            && wc.Client.Id == workday_client.Client.Id
+                                                                            && wc.BilledDate != null))
+                                                                 .OrderBy(m => m.Workday.Date)
+                                                                 .ToListAsync();
+                ViewData["Billed"] = "1";
+                
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", list_workday_client) });
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceivedClient", model) });
         }

@@ -125,14 +125,14 @@
                                     @if (ViewData["Billed"].ToString() == "0")
                                     {
                                         <a asp-action="BillNoteTodayClient" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                         <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
                                         <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                     }
                                     else
                                     {
                                         <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                         @if (item.PaymentDate != null)
                                         {
                                             <a asp-action="NotClientPayment" asp-route-id="@item.Id" class="btn btn-danger " title="Return not payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
