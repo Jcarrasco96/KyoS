@@ -12305,6 +12305,25 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceivedClient", model) });
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotClientPayment(int id = 0)
+        {
+            if (id != 0)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+                                                              .Include(n => n.Client)
+                                                              .Where(wc => wc.Id == id)
+                                                              .FirstOrDefaultAsync();
+
+                workday_client.PaymentDate = null;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("BillingClient", "Notes", new { idClient = workday_client.Client.Id, billed = 1 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
 
     }
 }
