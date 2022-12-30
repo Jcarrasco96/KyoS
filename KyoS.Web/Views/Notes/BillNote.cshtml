@@ -4,7 +4,7 @@
 }
 
 <div class="row">    
-        <form asp-action="BillNote" asp-route-id="@Model.Id" asp-route-week="@ViewData["week"]" onsubmit="return jQueryAjaxPostBillNote(this);">
+        <form asp-action="BillNote" asp-route-id="@Model.Id" asp-route-week="@ViewData["week"]" asp-route-abilled="@ViewData["Billed"]" onsubmit="return jQueryAjaxPostBillNote(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="col-md-7">
