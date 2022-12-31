@@ -201,39 +201,6 @@
     <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8"></textarea>   
     </pre>
 </div>
-<div class="col-md-12">
-    <pre>
-<strong>13. DIAGNOSTIC IMPRESSION:</strong> 
-
-    @if (Model.Client.Clients_Diagnostics.Count() > 0)
-    { 
-    <strong>Code: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code     <strong>Description: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description <br />
-    }
-    <strong>TREATMENT RECOMMENDATIOS:</strong>
-    <textarea asp-for="Treatmentrecomendations" style="width:90%" rows="8"></textarea>   
-    </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    <input type="checkbox" asp-for="IConcurWhitDiagnistic" class="form-check-input" id="check25"> I concur with the diagnosis and treatment recommendations
-    <input type="checkbox" class="form-check-input" id="check125"> I do not concur with the diagnosis and treatment recommendations
-    
-    Alternative diagnosis and/or recommendations 
-    <textarea asp-for="AlternativeDiagnosis" style="width:90%" rows="4"></textarea>
-    </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    @if (User.IsInRole("Supervisor"))
-    { 
-        <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner">                                                   
-    }
-    @if (User.IsInRole("Documents_Assistant"))
-    { 
-        <strong>Date Signature Unlicensed Therapist</strong> <input asp-for="DateSignatureUnlicensedTherapist">                                                   
-    }                                               
-    </pre>
-</div>
 <br />
 
 @section Scripts {

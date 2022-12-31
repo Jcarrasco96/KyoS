@@ -1250,6 +1250,7 @@ namespace KyoS.Web.Helpers
            
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_ClientIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1265,6 +1266,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_BehaviorIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1279,6 +1281,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_SpeechIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1293,6 +1296,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_Appetite()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1307,6 +1311,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_Hydration()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1322,6 +1327,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_RecentWeight()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1338,6 +1344,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1500,5 +1507,36 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboDiagnosticsByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients.Include(n => n.Clinic).FirstOrDefault(c => c.Id == idClient);
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == client.Clinic.Id);
+
+            List<DiagnosticEntity> diagnostics = _context.Diagnostics.OrderBy(d => d.Code).ToList();
+            List<Client_Diagnostic> diagnosticsForClient = _context.Clients_Diagnostics.Where(n => n.Client.Id == idClient).ToList();
+
+            foreach (var item in diagnosticsForClient)
+            {
+                if (diagnostics.Contains(item.Diagnostic))
+                {
+                    diagnostics.Remove(item.Diagnostic);               
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = diagnostics.Select(d => new SelectListItem
+            {
+                Text = $"{d.Code} {d.Description}",
+                Value = $"{d.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select diagnostic...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

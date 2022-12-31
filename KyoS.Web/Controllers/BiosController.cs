@@ -1678,5 +1678,120 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public IActionResult AddDiagnostic(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                Client_DiagnosticViewModel model = new Client_DiagnosticViewModel
+                {
+                    IdDiagnostic = 0,
+                    Diagnostics = _combosHelper.GetComboDiagnosticsByClient(id),
+                    IdClient = id
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new Client_DiagnosticViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> AddDiagnostic(Client_DiagnosticViewModel client_diagnosticViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                DiagnosticEntity diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Id == client_diagnosticViewModel.IdDiagnostic);
+                ClientEntity client = await _context.Clients.FirstOrDefaultAsync(n => n.Id == client_diagnosticViewModel.IdClient);
+
+                Client_Diagnostic client_diagnostic = new Client_Diagnostic
+                {
+                    Id = 0,
+                    Client = client,
+                    Diagnostic = diagnostic,
+                    Principal = client_diagnosticViewModel.Principal
+                   
+                };
+                
+                _context.Add(client_diagnostic);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => (d.Client.Id == client.Id )).ToList()) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the diagnostic: {diagnostic.Code}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", client_diagnosticViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public IActionResult DeleteDiagnostic(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new Client_DiagnosticViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteDiagnostic(int id, DeleteViewModel ClientDiagnosticsViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Client_Diagnostic client_diagnostic = await _context.Clients_Diagnostics.Include(n => n.Client).FirstOrDefaultAsync(d => d.Id == ClientDiagnosticsViewModel.Id_Element);
+                try
+                {
+                    _context.Clients_Diagnostics.Remove(client_diagnostic);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index", new { idError = 1 });
+                }
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => d.Client.Id == client_diagnostic.Client.Id).ToList()) });
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Where(d => d.Client.Id == 0).ToList()) });
+        }
+
     }
 }
