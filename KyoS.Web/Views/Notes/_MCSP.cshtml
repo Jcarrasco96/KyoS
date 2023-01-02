@@ -1,10 +1,26 @@
 ﻿@model KyoS.Web.Models.NotePViewModel
 <div class="col-md-12">
-    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
-    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>  <br />
-    <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">View of Goals</a>
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
-
+    <table>
+        <tr>
+            <td>
+                <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+            </td>
+            <td>
+                &nbsp;&nbsp;
+                <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">MTP's view</a>
+            </td>
+            <td>
+                &nbsp;&nbsp;
+                <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">Goals' view</a>
+            </td>
+        </tr>
+    </table>        
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session 
+    @if (Model.Workday_Cient.SharedSession)
+    { 
+        <b>(Shared Session)</b>
+    }
+    </h5>
 </div>
 <div class="col-md-12">
     @if (Model.Workday_Cient.Client.Clinic.Setting.MHProblems == true)

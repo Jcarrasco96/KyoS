@@ -25,10 +25,12 @@ namespace KyoS.Web.Helpers
 
         #region Approved PSR Notes reports
         Stream FloridaSocialHSNoteReportSchema3(Workday_Client workdayClient);
+        Stream FloridaSocialHSNoteReportSchema3SS(Workday_Client workdayClient);
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
         Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient);
+        Stream DreamsMentalHealthNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
-        
+
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);

@@ -28,7 +28,7 @@
     {
         <div class="col-md-12">
             <p class="alert alert-block alert-danger">
-                <strong class="red"> Note: </strong> There are PSR active clients that are not in any group (<a asp-action="ListClientWithoutGroup" > @ViewData["count"]</a> ).
+                <strong class="red"> Note: </strong> There are PSR active clients that are not in any group (<a asp-action="ListClientWithoutGroup" >@ViewData["count"]</a>).
             </p>
         </div>        
     }
@@ -45,7 +45,7 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 Facilitator
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -60,7 +60,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 PM
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
+                                Shared session
+                            </th>
+                            <th class="col-md-1">
 
                             </th>
                         </tr>
@@ -138,6 +141,12 @@
                                 </td>
                                 <td align="center">
                                     @if (item.Pm)
+                                    {
+                                        <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.SharedSession)
                                     {
                                         <i class="icon-ok green"></i>
                                     }

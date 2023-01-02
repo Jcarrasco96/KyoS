@@ -174,12 +174,28 @@ namespace KyoS.Web.Controllers
                         {
                             model.Am = true;
                             model.Pm = false;
+                            model.SharedSession = false;
+                            break;
+                        }
+                    case "SharedAm":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            model.SharedSession = true;
                             break;
                         }
                     case "Pm":
                         {
                             model.Am = false;
                             model.Pm = true;
+                            model.SharedSession = false;
+                            break;
+                        }
+                    case "SharedPm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            model.SharedSession = true;
                             break;
                         }
                     default:
@@ -244,7 +260,8 @@ namespace KyoS.Web.Controllers
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
-                                        Present = true
+                                        Present = true,
+                                        SharedSession = client.Group.SharedSession
                                     });                                    
                                 }                                
                             }
@@ -317,7 +334,10 @@ namespace KyoS.Web.Controllers
 
             MultiSelectList client_list;
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
-            ViewData["am"] = groupViewModel.Am ? "true" : "false";
+            ViewData["am"] = groupViewModel.Am && !groupViewModel.SharedSession ? "true" : "false";
+            ViewData["pm"] = groupViewModel.Pm && !groupViewModel.SharedSession ? "true" : "false";
+            ViewData["Sharedam"] = groupViewModel.Am && groupViewModel.SharedSession ? "true" : "false";
+            ViewData["Sharedpm"] = groupViewModel.Pm && groupViewModel.SharedSession ? "true" : "false";
             List<ClientEntity> clients = new List<ClientEntity>();
                         
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -363,12 +383,28 @@ namespace KyoS.Web.Controllers
                         {
                             model.Am = true;
                             model.Pm = false;
+                            model.SharedSession = false;
+                            break;
+                        }
+                    case "SharedAm":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            model.SharedSession = true;
                             break;
                         }
                     case "Pm":
                         {
                             model.Am = false;
                             model.Pm = true;
+                            model.SharedSession = false;
+                            break;
+                        }
+                    case "SharedPm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            model.SharedSession = true;
                             break;
                         }
                     default:
@@ -442,7 +478,8 @@ namespace KyoS.Web.Controllers
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
-                                        Present = true
+                                        Present = true,
+                                        SharedSession = client.Group.SharedSession
                                     });                                    
                                 }                                
                             }
@@ -683,7 +720,8 @@ namespace KyoS.Web.Controllers
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
-                                        Present = true
+                                        Present = true,
+                                        SharedSession = false
                                     });
                                 }                                
                             }
@@ -900,7 +938,8 @@ namespace KyoS.Web.Controllers
                                         Client = client,
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
-                                        Present = true
+                                        Present = true,
+                                        SharedSession = false
                                     });                                    
                                 }                                
                             }

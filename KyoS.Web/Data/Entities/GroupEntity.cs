@@ -21,5 +21,6 @@ namespace KyoS.Web.Data.Entities
                 return (this.Am) ? "AM" : "PM";
             } 
         }
+        public bool SharedSession { get; set; }
     }
 }

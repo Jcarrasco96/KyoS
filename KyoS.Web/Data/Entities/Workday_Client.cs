@@ -31,5 +31,6 @@ namespace KyoS.Web.Data.Entities
         public DateTime? BilledDate { get; set; }
         public DateTime? PaymentDate { get; set; }
         public int? GroupSize { get; set; }
+        public bool SharedSession { get; set; }
     }
 }

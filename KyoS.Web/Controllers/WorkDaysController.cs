@@ -310,7 +310,8 @@ namespace KyoS.Web.Controllers
                                                 Facilitator = client.Group.Facilitator,
                                                 Session = client.Group.Meridian,
                                                 Present = true,
-                                                GroupSize = client.Group.Clients.Count()
+                                                GroupSize = client.Group.Clients.Count(),
+                                                SharedSession = client.Group.SharedSession
                                             });                                           
                                         }
                                     }
@@ -541,7 +542,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "8.00 - 9.00 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -549,7 +551,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "9.05 - 10.05 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -557,7 +560,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "10.15 - 11.15 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -565,7 +569,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "11.20 - 12.20 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -573,7 +578,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "12.45 - 1.45 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -581,7 +587,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "1.50 - 2.50 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -589,7 +596,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "3.00 - 4.00 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -597,7 +605,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "4.05 - 5.05 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             }
                                         };                                       
                                         
@@ -626,7 +635,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "8.00 - 9.00 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -634,7 +644,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "9.05 - 10.05 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -642,7 +653,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "10.15 - 11.15 AM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -650,7 +662,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "11.20 - 12.20 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -658,7 +671,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "12.45 - 1.45 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -666,7 +680,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "1.50 - 2.50 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -674,7 +689,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "3.00 - 4.00 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             },
                                             new Workday_Client
                                             {
@@ -682,7 +698,8 @@ namespace KyoS.Web.Controllers
                                                 Client = null,
                                                 Facilitator = facilitator,
                                                 Session = "4.05 - 5.05 PM",
-                                                Present = true
+                                                Present = true,
+                                                SharedSession = false
                                             }
                                         };
 
@@ -915,7 +932,8 @@ namespace KyoS.Web.Controllers
                                                 Facilitator = client.Group.Facilitator,
                                                 Session = client.Group.Meridian,
                                                 Present = true,
-                                                GroupSize = client.Group.Clients.Count()
+                                                GroupSize = client.Group.Clients.Count(),
+                                                SharedSession = false
                                             });                                            
                                         }
                                     }

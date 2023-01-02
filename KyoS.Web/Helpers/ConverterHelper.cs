@@ -680,7 +680,8 @@ namespace KyoS.Web.Helpers
                 Am = model.Am,
                 Pm = model.Pm,
                 Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
-                Service = model.Service
+                Service = model.Service,
+                SharedSession = model.SharedSession
             };
         }
 
@@ -694,7 +695,8 @@ namespace KyoS.Web.Helpers
                 Facilitators = _combosHelper.GetComboFacilitators(),
                 Am = groupEntity.Am,
                 Pm = groupEntity.Pm,
-                Clients = groupEntity.Clients
+                Clients = groupEntity.Clients,
+                SharedSession = groupEntity.SharedSession
             };
         }
 

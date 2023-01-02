@@ -4619,7 +4619,11 @@ namespace KyoS.Web.Controllers
             {
                 if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
                 {
-                    Stream stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
+                    Stream stream;
+                    if (!workdayClient.SharedSession)                    
+                        stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);                            
+                    else
+                        stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(workdayClient);
                     return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
                 }
             }
@@ -4628,7 +4632,11 @@ namespace KyoS.Web.Controllers
             {
                 if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
                 {
-                    Stream stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(workdayClient);
                     return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
                 }
             }
