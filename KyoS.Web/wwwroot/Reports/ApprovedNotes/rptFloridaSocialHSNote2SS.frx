@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="01/02/2023 13:25:46" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="01/02/2023 18:22:00" ReportInfo.CreatorVersion="2021.1.0.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3CmTJ/8Km4T/Oojam2nTn5A==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u31XVKWj4gW+50h0CPUoQQZg==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -75,7 +75,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3KO0TQK8hG+SgF1KqeWcUVQ==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3x0LR4RUEUJc6u4rWRVkBSw==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -127,7 +127,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RkQ/Lga891hPCZmsAg7x6w==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3B34+d8Zsvcob2saVznI3Eg==">
       <TableDataSource Name="Themes3" Alias="Themes4" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -179,7 +179,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/YHmY4VPlpfTwhNUVh3wIA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3LYgZcDOFasXaPFD5BZTdQg==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -389,16 +389,16 @@ namespace FastReport
       </TableObject>
       <TextObject Name="Text57" Left="217.35" Top="28.25" Width="368.55" Height="18.9" Text="PROGRESS NOTE" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data4" Top="141.75" Width="800.98" Height="127.05">
+    <DataBand Name="Data4" Top="141.75" Width="800.98" Height="138.5" CanGrow="true" CanShrink="true">
       <TextObject Name="Text268" Left="151.2" Top="5" Width="472.5" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[NotesP.Title]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text58" Left="3.45" Top="31.55" Width="595.35" Height="18.9" Text="GOALS/OBJECTIVES ADDRESSED FROM CLIENT’S TREATMENT PLAN" Font="Times New Roman, 11pt, style=Bold, Underline"/>
       <TextObject Name="Text2" Left="81.05" Top="53.9" Width="708.75" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[goal_text]" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text4" Left="3.45" Top="53.9" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text5" Left="3.45" Top="72.8" Width="75.6" Height="18.9" Text="[num_of_obj]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text6" Left="81.05" Top="72.8" Width="708.75" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="[obj_text]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
-      <TextObject Name="Text59" Left="3.4" Top="108.15" Width="765.45" Height="18.9" Text="ACTIVITIES PROVIDED BY FACILITATOR TO BUILD CLIENT’S SKILLS" Font="Times New Roman, 11pt, style=Bold, Underline"/>
+      <TextObject Name="Text59" Left="2.65" Top="119.6" Width="765.45" Height="18.9" Text="ACTIVITIES PROVIDED BY FACILITATOR TO BUILD CLIENT’S SKILLS" Font="Times New Roman, 11pt, style=Bold, Underline"/>
     </DataBand>
-    <DataBand Name="Data2" Top="276.8" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities">
+    <DataBand Name="Data2" Top="288.25" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities">
       <ContainerObject Name="Container1" Left="10" Top="4.45" Width="801.36" Height="179.55" VisibleExpression="[IIf([NotesP_Activities1.Present] == true,true,false)]" CanShrink="true">
         <LineObject Name="Line7" Left="91.05" Top="19.9" Width="-95.6"/>
         <TextObject Name="Text61" Left="185.05" Top="24.35" Width="80.14" Height="18.9" Text="Coping Skills" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
@@ -449,9 +449,9 @@ namespace FastReport
       <TextObject Name="Text271" Left="3.55" Top="112.4" Width="130.41" Height="18.9" Text="Client's assistance:" Padding="0, 0, 0, 0" Font="Times New Roman, 11pt, style=Bold, Italic"/>
       <TextObject Name="Text39" Left="3.55" Top="72.6" Width="786.24" Height="37.8" CanGrow="true" CanShrink="true" Text="&lt;b&gt;Group Facilitator’s Intervention:&lt;/b&gt; [Activities1.Name]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text38" Left="2.55" Top="10.45" Width="788.13" Height="18.9" Text="&lt;b&gt;Group 1 Theme: &lt;/b&gt;[Themes1.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <DataHeaderBand Name="DataHeader2" Top="272.8" Width="800.98"/>
+      <DataHeaderBand Name="DataHeader2" Top="284.25" Width="800.98"/>
     </DataBand>
-    <DataBand Name="Data3" Top="488.92" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities1">
+    <DataBand Name="Data3" Top="500.37" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities1">
       <TextObject Name="Text196" Left="3.45" Top="7.65" Width="788.13" Height="18.9" Text="&lt;b&gt;[IIf([NotesP_Activities1.Present] == true,&quot;Group 2 Theme:&quot;,&quot;Group 1 Theme:&quot;)] &lt;/b&gt;[Themes2.Name]&#13;&#10;&#13;&#10;" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <LineObject Name="Line8" Left="100.95" Top="21.9" Width="-95.6"/>
       <TextObject Name="Text198" Left="3.45" Top="29" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
@@ -500,9 +500,9 @@ namespace FastReport
       <CheckBoxObject Name="CheckBox140" Left="231.75" Top="153.95" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Resistant" CheckWidthRatio="2"/>
       <TextObject Name="Text219" Left="318.25" Top="152.95" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
       <CheckBoxObject Name="CheckBox141" Left="304.9" Top="153.95" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities2.Other" CheckWidthRatio="2"/>
-      <DataHeaderBand Name="DataHeader3" Top="484.92" Width="800.98"/>
+      <DataHeaderBand Name="DataHeader3" Top="496.37" Width="800.98"/>
     </DataBand>
-    <DataBand Name="Data5" Top="701.04" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities2">
+    <DataBand Name="Data5" Top="712.49" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities2">
       <TextObject Name="Text220" Left="3.45" Top="7.1" Width="788.13" Height="18.9" Text="&lt;b&gt;[IIf([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == false,&quot;Group 1 Theme:&quot;,IIf(([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == false) ||([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == true),&quot;Group 2 Theme:&quot;,IIf([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == true,&quot;Group 3 Theme:&quot;,&quot;Group 1 Theme:&quot;)))] &lt;/b&gt;[Themes3.Name]" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <LineObject Name="Line9" Left="100.95" Top="21.35" Width="-95.6"/>
       <TextObject Name="Text222" Left="3.45" Top="28.45" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
@@ -551,9 +551,9 @@ namespace FastReport
       <CheckBoxObject Name="CheckBox160" Left="231.75" Top="154.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Resistant" CheckWidthRatio="2"/>
       <TextObject Name="Text243" Left="318.25" Top="153.4" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
       <CheckBoxObject Name="CheckBox161" Left="304.9" Top="154.4" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities3.Other" CheckWidthRatio="2"/>
-      <DataHeaderBand Name="DataHeader4" Top="697.04" Width="800.98"/>
+      <DataHeaderBand Name="DataHeader4" Top="708.49" Width="800.98"/>
     </DataBand>
-    <DataBand Name="Data6" Top="913.16" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities3">
+    <DataBand Name="Data6" Top="924.61" Width="800.98" Height="204.12" CanGrow="true" DataSource="NotesP_Activities3">
       <TextObject Name="Text244" Left="3" Top="7.65" Width="788.13" Height="18.9" Text="&lt;b&gt;[IIf([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == false &amp;&amp; [NotesP_Activities3.Present] == false,&quot;Group 1 Theme:&quot;,IIf(([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == false &amp;&amp; [NotesP_Activities3.Present] == false) || ([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == true &amp;&amp; [NotesP_Activities3.Present] == false)  || ([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == false &amp;&amp; [NotesP_Activities3.Present] == true),&quot;Group 2 Theme:&quot;,IIf([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == true &amp;&amp; [NotesP_Activities3.Present] == true,&quot;Group 4 Theme:&quot;,IIf(([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == false &amp;&amp; [NotesP_Activities3.Present] == true) || ([NotesP_Activities1.Present] == true &amp;&amp; [NotesP_Activities2.Present] == true &amp;&amp; [NotesP_Activities3.Present] == false)  || ([NotesP_Activities1.Present] == false &amp;&amp; [NotesP_Activities2.Present] == true &amp;&amp; [NotesP_Activities3.Present] == true),&quot;Group 3 Theme:&quot;,&quot;Group 2 Theme:&quot;))))] &lt;/b&gt;[Themes4.Name]&#13;&#10;&#13;&#10;&#13;&#10;" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <LineObject Name="Line10" Left="100.5" Top="21.9" Width="-95.6"/>
       <TextObject Name="Text246" Left="3" Top="29" Width="173.88" Height="18.9" Text="SKILL SETS ADDRESSED:" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt, style=Bold"/>
@@ -602,9 +602,9 @@ namespace FastReport
       <CheckBoxObject Name="CheckBox180" Left="231.3" Top="154.95" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Resistant" CheckWidthRatio="2"/>
       <TextObject Name="Text267" Left="317.8" Top="153.95" Width="51.03" Height="18.9" Text="Other" Padding="0, 0, 0, 0" Font="Times New Roman, 10pt"/>
       <CheckBoxObject Name="CheckBox181" Left="304.45" Top="154.95" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" DataColumn="NotesP_Activities4.Other" CheckWidthRatio="2"/>
-      <DataHeaderBand Name="DataHeader5" Top="909.16" Width="800.98"/>
+      <DataHeaderBand Name="DataHeader5" Top="920.61" Width="800.98"/>
     </DataBand>
-    <DataBand Name="Data1" Top="1125.28" Width="800.98" Height="222.9" FirstRowStartsNewPage="true" DataSource="NotesP">
+    <DataBand Name="Data1" Top="1136.73" Width="800.98" Height="222.9" FirstRowStartsNewPage="true" DataSource="NotesP">
       <TableObject Name="Table3" Left="9.45" Top="13.9" Width="784.35" Height="154.98" CanBreak="false">
         <TableColumn Name="Column8" Width="151.2"/>
         <TableColumn Name="Column9" Width="633.15"/>
@@ -684,9 +684,9 @@ namespace FastReport
         </TableRow>
       </TableObject>
       <TextObject Name="Text46" Left="10.96" Top="185.1" Width="782.46" Height="37.8" CanGrow="true" CanShrink="true" CanBreak="false" Text="&lt;b&gt;Client benefited from the above groups by:&lt;/b&gt; [NotesP.PlanNote]" Padding="0, 0, 0, 0" HorzAlign="Justify" Font="Times New Roman, 10pt" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
-      <DataHeaderBand Name="DataHeader1" Top="1121.28" Width="800.98"/>
+      <DataHeaderBand Name="DataHeader1" Top="1132.73" Width="800.98"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="1352.18" Width="800.98" Height="69.25">
+    <PageFooterBand Name="PageFooter1" Top="1363.63" Width="800.98" Height="69.25">
       <LineObject Name="Line5" Left="793.8" Top="50.35" Width="-785.45"/>
       <TextObject Name="Text47" Left="9.45" Top="50.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text49" Left="359.1" Top="50.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
