@@ -68,6 +68,19 @@
                 </div>
             </div>
             <partial name="_Bios2ReadOnly" />
+            <div class="col-md-push-12">
+                <div class="">
+                    <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("AddDiagnostic", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Add diagnostics')" class="btn btn-success disabled" title="Add Diagnostics"><i class="glyphicon glyphicon-plus"></i> Add Diagnostics</a>
+                    </div>
+                </div>
+                <div class="">
+                    <div id="view-ClientDiagnostics">
+                        @await Html.PartialAsync("_ViewDiagnosticReadOnly", Model.Client.Clients_Diagnostics.ToList())
+                    </div>
+                </div>
+            </div>
+            <partial name="_Bios3ReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor") && (Model.Status == KyoS.Common.Enums.BioStatus.Pending))
                 {

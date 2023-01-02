@@ -3,29 +3,29 @@
     Layout = null;
 }
 
-<div class="row">    
-        <form asp-action="BillNote" asp-route-id="@Model.Id" asp-route-week="@ViewData["week"]" asp-route-abilled="@ViewData["Billed"]" onsubmit="return jQueryAjaxPostBillNote(this);">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="col-md-7">
-                <div class="form-group">
-                    <label asp-for="BilledDate" class="control-label"></label>&nbsp;*
-                    <input asp-for="BilledDate" class="form-control" />
-                    <span asp-validation-for="BilledDate" class="text-danger"></span>
-                </div>
+<div class="row">
+    <form asp-action="BillNoteClient" asp-route-id="@Model.Id" asp-route-abilled="@ViewData["Billed"]" onsubmit="return jQueryAjaxPostBillNoteClient(this);">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-7">
+            <div class="form-group">
+                <label asp-for="BilledDate" class="control-label"></label>&nbsp;*
+                <input asp-for="BilledDate" class="form-control" />
+                <span asp-validation-for="BilledDate" class="text-danger"></span>
             </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    &nbsp;
-                </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                &nbsp;
             </div>
-            <div class="col-md-12">
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-offset-9">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
-        </form>    
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -63,3 +63,4 @@
     //}
     </script>
 }
+
