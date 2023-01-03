@@ -1842,7 +1842,7 @@ namespace KyoS.Web.Controllers
                 {
                     auditClient.NameClient = item.Name;
                     auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                    auditClient.Description = "Missing BIO";
+                    auditClient.Description = "The client has no BIO";
                     auditClient.Active = 0;
 
                     auditClient_List.Add(auditClient);
@@ -1854,7 +1854,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Admission date After Bio date";
+                        auditClient.Description = "The admission date is after the BIO date";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -1864,7 +1864,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Have not behavioral health history";
+                        auditClient.Description = "The client has no behavioral health history";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -1874,7 +1874,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Have not medication";
+                        auditClient.Description = "The client has no medication";
                         auditClient.Active = 1;
 
                         auditClient_List.Add(auditClient);
@@ -1884,7 +1884,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Bio in edition";
+                        auditClient.Description = "Bio is edition";
                         auditClient.Active = 1;
 
                         auditClient_List.Add(auditClient);
@@ -1894,7 +1894,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Bio in pending";
+                        auditClient.Description = "Bio is pending";
                         auditClient.Active = 1;
 
                         auditClient_List.Add(auditClient);
