@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using KyoS.Common.Helpers;
+
 
 namespace KyoS.Web.Controllers
 {
@@ -59,8 +61,6 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
@@ -71,8 +71,6 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant") )
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
 
@@ -84,8 +82,6 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
                                               .Include(g => g.List_BehavioralHistory)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -1792,6 +1788,125 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Where(d => d.Client.Id == 0).ToList()) });
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditBIO()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditBIO> auditClient_List = new List<AuditBIO>();
+            AuditBIO auditClient = new AuditBIO();
+
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.Bio)
+                                      .Include(m => m.List_BehavioralHistory)
+                                      .Include(m => m.MedicationList)
+                                      .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                      .ToList();
+
+            }
+            else
+            {
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                    client_List = _context.Clients
+                                         
+                                          .Include(m => m.IndividualTherapyFacilitator)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                          .ToList();
+
+                }
+
+            }
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.Bio == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing BIO";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditBIO();
+                }
+                else
+                {
+                    if (item.AdmisionDate > item.Bio.DateBio)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Admission date After Bio date";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.List_BehavioralHistory.Count() == 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Have not behavioral health history";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.MedicationList.Count() == 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Have not medication";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.Bio.Status == BioStatus.Edition)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Bio in edition";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.Bio.Status == BioStatus.Pending)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Bio in pending";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                }
+         
+            }
+
+            return View(auditClient_List);
+        }
+
 
     }
 }
