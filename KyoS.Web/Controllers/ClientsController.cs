@@ -1952,7 +1952,7 @@ namespace KyoS.Web.Controllers
                 if (client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) > 0)
                 {
                     tempProblem.Name = "Billed";
-                    tempProblem.Description = "There are notes not billed ("+ client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) + ")";
+                    tempProblem.Description = "There are therapies not billed ("+ client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) + ")";
                     tempProblem.Active = 0;
                     problem.Add(tempProblem);
                     tempProblem = new Problem();
@@ -1960,11 +1960,22 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                tempProblem.Name = "Billed";
-                tempProblem.Description = "All therapy are billed";
-                tempProblem.Active = 2;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.Workdays_Clients.Count(n => n.BilledDate != null && n.PaymentDate == null) > 0)
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "There is billed therapies without paying ";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "All therapies are billed and paid";
+                    tempProblem.Active = 2;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
             }
 
             return View(problem);

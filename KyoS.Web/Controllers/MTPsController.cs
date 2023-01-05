@@ -4521,12 +4521,6 @@ namespace KyoS.Web.Controllers
             List<AuditMtps> auditMtp_List = new List<AuditMtps>();
             AuditMtps auditMtp = new AuditMtps();
 
-           /* List<MTPEntity> mtp_List = _context.MTPs
-                                               .Include(m => m.Client)
-                                               .Include(m => m.Goals)
-                                               .ThenInclude(m => m.Objetives)
-                                               .ToList();*/
-
             List<ObjetiveEntity> objective_List = _context.Objetives
                                                           .Include(m => m.Goal)
                                                           .ThenInclude(m => m.MTP)
@@ -4552,47 +4546,6 @@ namespace KyoS.Web.Controllers
                 auditMtp_List.Add(auditMtp);
                 auditMtp = new AuditMtps();
             }
-
-
-            /* foreach (var item in mtp_List)
-             {
-                 foreach (var goal in item.Goals)
-                 {
-                     foreach (var objective in goal.Objetives)
-                     {
-                         if (goal.Service == ServiceType.PSR)
-                         {
-
-                             if (_context.Notes_Activities.FirstOrDefault(m => m.Objetive.Id == item.Id) != null && _context.NotesP_Activities.FirstOrDefault(m => m.Objetive.Id == item.Id) != null)
-                             {
-                                 auditMtp.NameClient = item.Client.Name;
-                                 auditMtp.AdmissionDate = item.Client.AdmisionDate.ToShortDateString();
-                                 auditMtp.Description = "Has Objective " + objective.Objetive + " that are not used";
-                                 auditMtp.Active = 0;
-                                 auditMtp_List.Add(auditMtp);
-                                 auditMtp = new AuditMtps();
-                                 break;
-                             }
-                         }
-                         else
-                         {
-                             if (goal.Service == ServiceType.Individual)
-                             {
-                                 if (_context.IndividualNotes.FirstOrDefault(m => m.Objective.Id == item.Id) != null)
-                                 {
-                                     auditMtp.NameClient = item.Client.Name;
-                                     auditMtp.Description = "Has Goal that are not used";
-                                     auditMtp.Active = 0;
-                                     auditMtp_List.Add(auditMtp);
-                                     auditMtp = new AuditMtps();
-                                     break;
-                                 }
-                             }
-                         }
-                     }
-
-                 }
-             }*/
 
             return View(auditMtp_List);
         }
