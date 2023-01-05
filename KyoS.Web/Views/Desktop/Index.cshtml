@@ -489,6 +489,37 @@
                     </a>
                 }
             </div>
+
+            //New line
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+
+            <div class="col-md-5">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.ClientWithoutFARS == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTPs</h4>
+                        <span class="message-counter-cero">@ViewBag.ClientWithoutFARS</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="FARSForms" asp-action="ClientswithoutFARS" role="button">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FARS</h4>
+                            <span class="message-counter">@ViewBag.ClientWithoutFARS</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-5">
+                &nbsp;
+            </div>
+
         }
         @if (User.IsInRole("Supervisor"))
         {

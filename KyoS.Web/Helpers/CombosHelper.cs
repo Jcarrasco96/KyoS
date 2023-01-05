@@ -1538,5 +1538,21 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboFARSType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = FARSType.Initial.ToString(), Value = "0"},
+                new SelectListItem { Text = FARSType.MtpReview.ToString(), Value = "1"},
+                new SelectListItem { Text = FARSType.Discharge_PSR.ToString(), Value = "2"},
+                new SelectListItem { Text = FARSType.Discharge_Ind.ToString(), Value = "3"},
+                new SelectListItem { Text = FARSType.Discharge_Group.ToString(), Value = "4"},
+                new SelectListItem { Text = FARSType.Other.ToString(), Value = "5"}
+            };
+
+            return list;
+        }
+
     }
 }

@@ -223,6 +223,14 @@ namespace KyoS.Web.Controllers
                                                              && m.Status == AdendumStatus.Pending
                                                              && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToString();
 
+                ViewBag.ClientWithoutFARS = _context.Clients
+                                                    
+                                                    .Count(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && ((n.IdFacilitatorPSR == facilitator.Id && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                            || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                            || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                       && n.OnlyTCM == false).ToString();
+
             }
             if (User.IsInRole("Supervisor"))
             {

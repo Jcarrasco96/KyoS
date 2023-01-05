@@ -2865,7 +2865,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null,
+                Type = FARSUtils.GetypeByIndex(model.IdType)
             };
         }
 
@@ -2918,7 +2919,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                Type = model.Type,
+                IdType = Convert.ToInt32(model.Type),
+                FarsType = _combosHelper.GetComboFARSType()
 
             };
             

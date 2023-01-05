@@ -14,14 +14,17 @@
                             <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-2" style="text-align:center">
-                                Date of Admission
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Evaluation Date
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Admissioned for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Type
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -56,6 +59,44 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                </td>
+                                <td align="center">
+                                    @if (item.Type == KyoS.Common.Enums.FARSType.Initial)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Type)
+                                    }
+                                    else
+                                    {
+                                        @if (item.Type == KyoS.Common.Enums.FARSType.MtpReview)
+                                        {
+                                            <p>MTPR</p>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_PSR)
+                                            {
+                                                <p>D_PSR</p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_Ind)
+                                                {
+                                                    <p>D_Ind</p>
+                                                }
+                                                else
+                                                {
+                                                    @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_Group)
+                                                    {
+                                                        <p>D_Group</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>Other</p>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)

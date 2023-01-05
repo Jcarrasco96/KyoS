@@ -27,8 +27,8 @@
                             <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-2" style="text-align:center">
-                                Date of admission
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Evaluation Date
@@ -36,10 +36,13 @@
                             <th class="col-md-2" style="text-align:center">
                                 Admissioned for
                             </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Type
+                            </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -69,6 +72,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Type)
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
