@@ -132,7 +132,13 @@ namespace KyoS.Web.Controllers
                     Value = $"{c.Id}"
                 }).ToList();
             }
-            
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
+            });
+
             List<SelectListItem> list_user = _context.Users.OrderBy(n => n.FirstName).Select(c => new SelectListItem
             {
                 Text = $"{c.FullName}",

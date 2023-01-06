@@ -12194,7 +12194,15 @@ namespace KyoS.Web.Controllers
                 {
                     clientName = item.ClientName;
                     code = item.Client.Code;
-                    diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    if (item.Client.Clients_Diagnostics.Count() == 0)
+                    {
+                        diagnostics = "";
+                    }
+                    else
+                    {
+                        diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    }
+
                     medicaidId = item.Client.MedicaidID;
                     birthdate = item.Client.DateOfBirth.ToShortDateString().ToString();
 
@@ -12285,7 +12293,15 @@ namespace KyoS.Web.Controllers
                 {
                     clientName = item.ClientName;
                     code = item.Client.Code;
-                    diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    if (item.Client.Clients_Diagnostics.Count() == 0)
+                    {
+                        diagnostics = "";
+                    }
+                    else
+                    {
+                        diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                    }
+
                     medicaidId = item.Client.MedicaidID;
                     birthdate = item.Client.DateOfBirth.ToShortDateString().ToString();
 
