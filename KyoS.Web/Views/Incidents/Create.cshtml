@@ -55,10 +55,41 @@
         <div>
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="col-md-6">                    
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="IdClient" class="control-label"></label>&nbsp;
+                        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
+                        <span asp-validation-for="IdClient" class="text-danger"></span>
+                    </div>
+                </div>
+                @if (User.IsInRole("Admin") == true || User.IsInRole("Manager") == true)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
+                            <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control"></select>
+                            <span asp-validation-for="IdUserAssigned" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
+                            <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control" disabled></select>
+                            <span asp-validation-for="IdUserAssigned" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                }
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-6">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
                     <textarea asp-for="Description" class="form-control" rows="8"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>                    
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="col-md-12">
                     &nbsp;

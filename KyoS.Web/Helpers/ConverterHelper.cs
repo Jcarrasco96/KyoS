@@ -1192,12 +1192,26 @@ namespace KyoS.Web.Helpers
                 Status = isNew ? IncidentsStatus.Pending : StatusUtils.GetIncidentStatusByIndex(model.IdStatus),
                 UserCreatedBy = isNew ? await _context.Users.FindAsync(userId) : await _context.Users.FindAsync(model.IdUserCreatedBy),
                 SolvedBy = isNew ? string.Empty : (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? userId : string.Empty,
-                SolvedDate = !isNew && (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? DateTime.Now : model.SolvedDate
+                SolvedDate = !isNew && (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? DateTime.Now : model.SolvedDate,
+                client = await _context.Clients.FindAsync(model.IdClient),
+                UserAsigned = await _context.Users.FindAsync(model.IdUserAssigned)
             };
         }
 
         public IncidentViewModel ToIncidentViewModel(IncidentEntity model)
         {
+            string idUserAssigned = "";
+            if (model.UserAsigned != null)
+            {
+                idUserAssigned = model.UserAsigned.Id;
+            }
+
+            int idClient = 0;
+            if (model.client != null)
+            {
+                idClient = model.client.Id;
+            }
+
             return new IncidentViewModel
             {
                 Id = model.Id,
@@ -1206,7 +1220,12 @@ namespace KyoS.Web.Helpers
                 IdStatus = (model.Status == IncidentsStatus.Pending) ? 0 : (model.Status == IncidentsStatus.Solved) ? 1 : (model.Status == IncidentsStatus.NotValid) ? 2 : 0,
                 StatusList = _combosHelper.GetComboIncidentsStatus(),
                 IdUserCreatedBy = model.UserCreatedBy.Id,
-                UserCreatedBy = model.UserCreatedBy
+                UserCreatedBy = model.UserCreatedBy,
+                IdClient = idClient,
+                IdUserAssigned = idUserAssigned,
+                Clients = _combosHelper.GetComboClientsByClinic(model.UserCreatedBy.Clinic.Id),
+                Users = _combosHelper.GetComboUserNamesByClinic(model.UserCreatedBy.Clinic.Id)
+
             };
         }
 

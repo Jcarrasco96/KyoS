@@ -42,10 +42,13 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
+                                @Html.DisplayNameFor(model => model.client.Name)
+                            </th>
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Description)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Created by
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -57,7 +60,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Solved
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-1">
+                                Assigned to
+                            </th>
+                            <th class="col-md-2">
                                 Clinic
                             </th>
                             <th class="col-md-1">
@@ -66,65 +72,91 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
-                        {                   
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Description)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.UserCreatedBy.FullName)
-                            </td>
-                            <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Pending)
-                                {
-                                    <span class="label label-danger">
-                                        Pending
-                                    </span>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Solved)
-                                {
-                                    <span class="label label-success">
-                                        Solved
-                                    </span>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.NotValid)
-                                {
-                                    <span class="label label-default">
-                                        Not valid
-                                    </span>
-                                }
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.CreatedDate)
-                            </td>
-                            <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Solved)
-                                {
-                                    @Html.DisplayFor(modelItem => item.SolvedDate)
-                                }
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Pending)
-                                {
-                                    <p>-</p>
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UserCreatedBy.Clinic.Name)
-                            </td>
-                            <td align="right">
-                                @if ((item.Status == KyoS.Common.Enums.IncidentsStatus.Pending) || (item.Status == KyoS.Common.Enums.IncidentsStatus.NotValid))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Solved)
-                                {
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>                                    
-                                }
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                }
-                            </td>
-                        </tr>                            
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.client != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.client.Name)
+                                    }
+                                    else
+                                    { 
+                                        <p>-</p>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.UserCreatedBy.FirstName)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Pending)
+                                    {
+                                        <span class="label label-danger">
+                                            Pending
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Solved)
+                                    {
+                                        <span class="label label-info">
+                                            Solved
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.NotValid)
+                                    {
+                                        <span class="label label-default">
+                                            Not valid
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Reviewed)
+                                    {
+                                        <span class="label label-success">
+                                            Not valid
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Solved)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.SolvedDate)
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Pending)
+                                    {
+                                        <p>-</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.UserAsigned != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.UserAsigned.FirstName)
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserCreatedBy.Clinic.Name)
+                                </td>
+                                <td align="right">
+                                    @if (item.Status != KyoS.Common.Enums.IncidentsStatus.Reviewed)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.IncidentsStatus.Reviewed)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>                                    
+                                    }
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                </td>
+                            </tr>                            
                         }
                     </tbody>
                 </table>

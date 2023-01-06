@@ -14,5 +14,7 @@ namespace KyoS.Web.Data.Entities
         public string SolvedBy { get; set; }
         public IncidentsStatus Status { get; set; }
         public UserEntity UserCreatedBy { get; set; }
+        public ClientEntity client { get; set; }
+        public UserEntity UserAsigned { get; set; }
     }
 }

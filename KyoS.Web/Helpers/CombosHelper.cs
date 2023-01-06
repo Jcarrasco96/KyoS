@@ -870,7 +870,8 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = IncidentsStatus.Pending.ToString(), Value = "0"},
                                   new SelectListItem { Text = IncidentsStatus.Solved.ToString(), Value = "1"},
-                                  new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"}};
+                                  new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"},
+                                  new SelectListItem { Text = IncidentsStatus.Reviewed.ToString(), Value = "3"}};
             
             return list;
         }
@@ -1554,5 +1555,33 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboUserNamesByClinic(int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (idClinic == 0)
+            {
+                list = _context.Users.Select(u => new SelectListItem
+                {
+                    Text = $"{u.UserName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.Users.Where(u => u.Clinic.Id == idClinic).Select(u => new SelectListItem
+                {
+                    Text = $"{u.FullName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select responsible person...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

@@ -38,7 +38,8 @@
     {
         Pending,
         Solved,
-        NotValid
+        NotValid,
+        Reviewed
     }
     public enum AdendumStatus
     {

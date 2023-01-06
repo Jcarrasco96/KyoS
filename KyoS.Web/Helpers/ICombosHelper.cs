@@ -76,5 +76,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboWeeksNameByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboDiagnosticsByClient(int idClient);
         IEnumerable<SelectListItem> GetComboFARSType();
+        IEnumerable<SelectListItem> GetComboUserNamesByClinic(int idClinic);
     }
 }

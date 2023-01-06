@@ -14,5 +14,13 @@ namespace KyoS.Web.Models
         public int IdStatus { get; set; }
 
         public IEnumerable<SelectListItem> StatusList { get; set; }
+
+        [Display(Name = "Client")]
+        public int IdClient { get; set; }
+        public IEnumerable<SelectListItem> Clients { get; set; }
+
+        [Display(Name = "Assigned to")]
+        public string IdUserAssigned { get; set; }
+        public IEnumerable<SelectListItem> Users { get; set; }
     }
 }

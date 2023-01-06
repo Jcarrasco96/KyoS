@@ -38,5 +38,7 @@ namespace KyoS.Web.Data.Entities
         public string To { get; set; }
 
         public bool Notification { get; set; }
+
+        public IncidentEntity Incident { get; set; }
     }
 }
