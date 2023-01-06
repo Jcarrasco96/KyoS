@@ -1577,7 +1577,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select responsible person...]",
+                Text = "[Select a person to assign this incident...]",
                 Value = "0"
             });
 

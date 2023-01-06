@@ -141,7 +141,7 @@ namespace KyoS.Web.Controllers
 
             list_user.Insert(0, new SelectListItem
             {
-                Text = "[Select responsible person...]",
+                Text = "[Select a person to assign this incident...]",
                 Value = "0"
             });
 
