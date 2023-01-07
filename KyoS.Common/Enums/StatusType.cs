@@ -15,7 +15,9 @@
         public static IncidentsStatus GetIncidentStatusByIndex(int index)
         {
             return (index == 0) ? IncidentsStatus.Pending:
-                   (index == 1) ? IncidentsStatus.Solved : IncidentsStatus.NotValid;
+                   (index == 1) ? IncidentsStatus.Solved :
+                   (index == 2) ? IncidentsStatus.NotValid :
+                   (index == 3) ? IncidentsStatus.Reviewed : IncidentsStatus.NotValid;
         }
     }
     public enum NoteStatus
