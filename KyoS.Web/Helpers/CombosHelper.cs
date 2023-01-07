@@ -1562,13 +1562,13 @@ namespace KyoS.Web.Helpers
             {
                 list = _context.Users.Select(u => new SelectListItem
                 {
-                    Text = $"{u.UserName}",
+                    Text = $"{u.FullName}",
                     Value = $"{u.Id}"
                 }).ToList();
             }
             else
             {
-                list = _context.Users.Where(u => u.Clinic.Id == idClinic).Select(u => new SelectListItem
+                list = _context.Users.Where(u => u.Clinic.Id == idClinic).OrderBy(n => n.FirstName).Select(u => new SelectListItem
                 {
                     Text = $"{u.FullName}",
                     Value = $"{u.Id}"
@@ -1583,5 +1583,24 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboClientsAdmissionByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Clients.Where(c => c.Clinic.Id == idClinic).OrderBy(n => n.Name)
+                                                        .Select(c => new SelectListItem
+                                                        {
+                                                            Text = $"{c.Name + " | " + c.AdmisionDate.ToShortDateString()}",
+                                                            Value = $"{c.Id}"
+                                                        }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }

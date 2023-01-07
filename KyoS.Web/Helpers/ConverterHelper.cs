@@ -1223,7 +1223,7 @@ namespace KyoS.Web.Helpers
                 UserCreatedBy = model.UserCreatedBy,
                 IdClient = idClient,
                 IdUserAssigned = idUserAssigned,
-                Clients = _combosHelper.GetComboClientsByClinic(model.UserCreatedBy.Clinic.Id),
+                Clients = _combosHelper.GetComboClientsAdmissionByClinic(model.UserCreatedBy.Clinic.Id),
                 Users = _combosHelper.GetComboUserNamesByClinic(model.UserCreatedBy.Clinic.Id)
 
             };

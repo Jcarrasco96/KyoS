@@ -135,7 +135,7 @@ namespace KyoS.Web.Controllers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[All Clients...]",
+                Text = "[All clients...]",
                 Value = "0"
             });
 
