@@ -17,6 +17,7 @@
 
 <p>
     <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>
+    <a asp-action="EXCEL" class="btn btn-success"><i class="glyphicon glyphicon-export"></i> Export Excel</a>
 </p>
 
 <div class="row">
@@ -99,7 +100,7 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Codigo)
                                     </td>
                                     <td align="center">

@@ -73,7 +73,8 @@ namespace KyoS.Web
             services.AddScoped<ITranslateHelper, TranslateHelper>();
             services.AddScoped<IReportHelper, ReportHelper>();
             services.AddScoped<IMimeType, MimeType>();
-            
+            services.AddScoped<IExportExcellHelper, ExportExcellHelper>();
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }

@@ -26,13 +26,25 @@
             <table border="0" width="100%">
                 <tr>
                     <td>
-                        <select asp-for="IdWeek" asp-items="Model.WeeksListName" class="form-control" id="cbWeek"></select>                        
+                        <select asp-for="IdWeek" asp-items="Model.WeeksListName" class="form-control" id="cbWeek"></select>
                     </td>
                     <td>
                         &nbsp;&nbsp;
                     </td>
                     <td>
                         <button type="submit" class="btn btn-success" title="Refresh"><i class="glyphicon glyphicon-refresh"></i></button>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=0 class="btn btn-info"><i class="glyphicon glyphicon-export"></i> Export Pending Report</a>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp; &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=1 class="btn btn-primary"><i class="glyphicon glyphicon-export"></i> Export Full Report</a>
                     </td>
                 </tr>                
             </table>

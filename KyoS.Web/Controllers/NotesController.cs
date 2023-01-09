@@ -33,8 +33,9 @@ namespace KyoS.Web.Controllers
         private readonly IWebHostEnvironment _webhostEnvironment;
         private readonly IReportHelper _reportHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IExportExcellHelper _exportExcelHelper;
 
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper, IRenderHelper renderHelper)
+        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IExportExcellHelper exportExcelHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -46,6 +47,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
             _renderHelper = renderHelper;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            _exportExcelHelper = exportExcelHelper;
         }
         
         [Authorize(Roles = "Facilitator")]
@@ -12633,6 +12635,85 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+        }
+
+        public IActionResult EXCEL(int idWeek, int all = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<Workday_Client> workday_Client = new List<Workday_Client>();
+
+            WeekEntity week = _context.Weeks.FirstOrDefault(w => w.Id == idWeek);
+            
+            string Periodo = "";
+            string ReportName = "SuperBill Report " + week.InitDate.ToShortDateString() + " To " + week.FinalDate.ToShortDateString() + ".xlsx";
+            string data = "";
+            if (all == 0)
+            {
+                workday_Client = _context.Workdays_Clients
+                                         .Include(f => f.Facilitator)
+                                         .Include(c => c.Client)
+                                         .Include(w => w.Workday)
+
+                                         .Include(w => w.Client)
+                                         .ThenInclude(w => w.Clients_Diagnostics)
+                                         .ThenInclude(w => w.Diagnostic)
+
+                                         .Include(w => w.Client)
+                                         .ThenInclude(w => w.Clients_HealthInsurances)
+                                         .ThenInclude(w => w.HealthInsurance)
+
+                                         .Include(w => w.Note)
+                                         .Include(w => w.NoteP)
+                                         .Include(w => w.IndividualNote)
+                                         .Include(w => w.GroupNote)
+
+                                         .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                               && n.Workday.Week.Id == idWeek
+                                               && n.Present == true
+                                               && n.Client != null
+                                               && n.BilledDate == null)
+                                         .OrderBy(n => n.Client.Name)
+                                         .ToList();
+                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                data = "NOT BILLED";
+            }
+            else
+            {
+                workday_Client = _context.Workdays_Clients
+                                             .Include(f => f.Facilitator)
+                                             .Include(c => c.Client)
+                                             .Include(w => w.Workday)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_Diagnostics)
+                                             .ThenInclude(w => w.Diagnostic)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_HealthInsurances)
+                                             .ThenInclude(w => w.HealthInsurance)
+
+                                             .Include(w => w.Note)
+                                             .Include(w => w.NoteP)
+                                             .Include(w => w.IndividualNote)
+                                             .Include(w => w.GroupNote)
+
+                                             .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Workday.Week.Id == idWeek
+                                                   && n.Present == true
+                                                   && n.Client != null)
+                                             .OrderBy(n => n.Client.Name)
+                                             .ToList();
+                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                data = "ALL DATA";
+            }
+            
+
+            byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo,week.Clinic.Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
         }
 
     }
