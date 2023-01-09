@@ -92,7 +92,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -180,6 +180,7 @@ namespace KyoS.Web.Controllers
 
                 if (model.Client.FarsFormList == null)
                     model.Client.FarsFormList = new List<FarsFormEntity>();
+                ViewData["Origin"] = origin;
                 return View(model);
                 }
             
@@ -189,7 +190,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
-        public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel)
+        public async Task<IActionResult> Create(FarsFormViewModel FarsFormViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -206,7 +207,18 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction(nameof(Index));
+                        if (origin == 0)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        if (origin == 1)
+                        {
+                            return RedirectToAction(nameof(ClientswithoutInitialFARS));
+                        }
+                        if (origin == 2)
+                        {
+                            return RedirectToAction(nameof(ClientswithoutFARS));
+                        }
                     }
                     catch (System.Exception ex)
                     {
