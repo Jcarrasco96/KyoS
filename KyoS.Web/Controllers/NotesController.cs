@@ -12637,6 +12637,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
         }
 
+        [Authorize(Roles = "Manager")]
         public IActionResult EXCEL(int idWeek, int all = 0)
         {
             UserEntity user_logged = _context.Users

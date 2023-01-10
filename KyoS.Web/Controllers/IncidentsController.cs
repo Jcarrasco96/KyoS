@@ -42,46 +42,50 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Admin"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
                                           .Include(i => i.client)
-                                          .Include(i => i.UserAsigned)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          .Include(i => i.UserAsigned)    
+                                          
                                           .ToListAsync());
             }
 
             if (User.IsInRole("CaseManager"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
                                           .Include(i => i.client)
                                           .Include(i => i.UserAsigned)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          
                                           .ToListAsync());
             }
             
             if (User.IsInRole("Manager"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
                                           .Include(i => i.client)
                                           .Include(i => i.UserAsigned)
-                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)
-                                          .OrderByDescending(i => i.CreatedDate)
+
+                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)                                          
                                           .ToListAsync());
             }
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
                                           .Include(i => i.client)
                                           .Include(i => i.UserAsigned)
-                                          .Where(i => i.UserCreatedBy == user_logged || i.UserAsigned == user_logged)
-                                          .OrderByDescending(i => i.CreatedDate)
+
+                                          .Where(i => i.UserCreatedBy == user_logged || i.UserAsigned == user_logged)                                          
                                           .ToListAsync());
             }
 

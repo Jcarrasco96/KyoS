@@ -96,7 +96,7 @@
                                 <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
                             </ul>
                         </li>
-                        <li class="class=" dropdown open"">
+                        <li>
                             @if (counts_of_incidents == 0)
                             {
                                 <span class="notifications-counter-cero">@counts_of_incidents</span>
@@ -106,13 +106,13 @@
                                 <span class="notifications-counter">@counts_of_incidents</span>
                             }
 
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                <i>&nbsp;Incidents&nbsp;&nbsp;</i>
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            @*<ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                                 <li role="separator" class="divider"></li>
-                            </ul>
+                            </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
@@ -359,7 +359,7 @@
                                 <a class="test" tabindex="-1" href="#">TCM</a>
                             </li>
                         }
-                        <li class="class=" dropdown open"">
+                        <li>
                             @if (counts_of_incidents == 0)
                             {
                                 <span class="notifications-counter-cero">@counts_of_incidents</span>
@@ -369,13 +369,13 @@
                                 <span class="notifications-counter">@counts_of_incidents</span>
                             }
 
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                <i>&nbsp;Incidents&nbsp;&nbsp;</i>
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            @*<ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                                 <li role="separator" class="divider"></li>
-                            </ul>
+                            </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
@@ -458,7 +458,7 @@
                                 <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                             </ul>
                         </li>
-                        <li class="class=" dropdown open"">
+                        <li>
                             @if (counts_of_incidents == 0)
                             {
                                 <span class="notifications-counter-cero">@counts_of_incidents</span>
@@ -468,13 +468,13 @@
                                 <span class="notifications-counter">@counts_of_incidents</span>
                             }
 
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                <i>&nbsp;Incidents&nbsp;&nbsp;</i>
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            @*<ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                                 <li role="separator" class="divider"></li>
-                            </ul>
+                            </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
@@ -569,7 +569,7 @@
                                 <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
                             </ul>
                         </li>
-                        <li class="class=" dropdown open"">
+                        <li>
                             @if (counts_of_incidents == 0)
                             {
                                 <span class="notifications-counter-cero">@counts_of_incidents</span>
@@ -579,13 +579,13 @@
                                 <span class="notifications-counter">@counts_of_incidents</span>
                             }
 
-                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                <i>&nbsp;Incidents&nbsp;&nbsp;</i>
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
                             </a>
-                            <ul class="dropdown-menu" role="menu">
+                            @*<ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                                 <li role="separator" class="divider"></li>
-                            </ul>
+                            </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
