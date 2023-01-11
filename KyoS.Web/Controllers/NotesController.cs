@@ -10393,6 +10393,7 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync();
 
                     workday_client.PaymentDate = model.PaymentDate;
+                    workday_client.DeniedBill = false;
                     _context.Update(workday_client);
                     await _context.SaveChangesAsync();
 
@@ -11431,6 +11432,7 @@ namespace KyoS.Web.Controllers
                                                             .Where(wc => wc.Id == id)
                                                             .FirstOrDefaultAsync();
                 workday_client.PaymentDate = DateTime.Now;
+                workday_client.DeniedBill = false;
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
@@ -12502,6 +12504,7 @@ namespace KyoS.Web.Controllers
                                                               .Where(wc => wc.Id == idWorkclient)
                                                               .FirstOrDefaultAsync();
                 workday_client.PaymentDate = DateTime.Now;
+                workday_client.DeniedBill = false;
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
@@ -12540,6 +12543,7 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync();
 
                 workday_client.PaymentDate = model.PaymentDate;
+                workday_client.DeniedBill = false;
                 _context.Update(workday_client);
                 await _context.SaveChangesAsync();
 
@@ -12763,6 +12767,105 @@ namespace KyoS.Web.Controllers
             byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, client.Clinic.Name, data);
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillClient(int idWorkclient = 0)
+        {
+            if (idWorkclient != 0)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+                                                              .Include(wc => wc.Client)
+
+                                                              .Where(wc => wc.Id == idWorkclient)
+                                                              .FirstOrDefaultAsync();
+                workday_client.DeniedBill = true;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("BillingClient", "Notes", new { idClient = workday_client.Client.Id, billed = 1 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillToday(int id = 0, int week = 0)
+        {
+            if (week == 0)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+
+                                                            .Include(wc => wc.Workday)
+                                                            .ThenInclude(w => w.Week)
+                                                            .ThenInclude(we => we.Clinic)
+
+                                                            .Where(wc => wc.Id == id)
+                                                            .FirstOrDefaultAsync();
+                workday_client.DeniedBill = true;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id, billed = 1 });
+            }
+            else
+            {
+                List<Workday_Client> workday_client = await _context.Workdays_Clients
+
+                                                                        .Include(wc => wc.Workday)
+                                                                        .ThenInclude(w => w.Week)
+                                                                        .ThenInclude(we => we.Clinic)
+
+                                                                        .Where(wc => wc.Client.Id == id
+                                                                           && wc.Workday.Week.Id == week
+                                                                           && wc.BilledDate != null)
+                                                                        .ToListAsync();
+
+                foreach (var item in workday_client)
+                {
+                    item.DeniedBill = true;
+                    _context.Update(item);
+                    await _context.SaveChangesAsync();
+                }
+
+
+            }
+
+            return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBill(int idWorkclient = 0, int client = 0)
+        {
+            if (idWorkclient != 0)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+                                                              .Include(wc => wc.Client)
+                                                              .Include(wc => wc.Workday)
+                                                              .ThenInclude(wc => wc.Week)
+
+                                                              .Where(wc => wc.Id == idWorkclient)
+                                                              .FirstOrDefaultAsync();
+                workday_client.DeniedBill = false;
+                _context.Update(workday_client);
+                await _context.SaveChangesAsync();
+
+                if (client == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = workday_client.Workday.Week.Id, billed = 1 }); 
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = workday_client.Client.Id, billed = 1 });
+                }
+
+                
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
         }
 
     }

@@ -118,7 +118,23 @@
                                     }
                                     else
                                     {
-                                        <p> - </p>
+                                        @if (item.BilledDate == null)
+                                        {
+                                            <p> - </p>
+                                        }
+                                        else
+                                        {
+                                            @if (item.DeniedBill == true)
+                                            {
+                                                <a asp-action="NotDeniedBill" asp-route-idWorkclient="@item.Id" asp-route-client="1" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="DeniedBillClient" asp-route-idWorkclient="@item.Id" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                            }
+
+                                        }
+
                                     }
                                 </td>
                                 <td align="right">

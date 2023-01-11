@@ -175,7 +175,23 @@
                                                     <td align="center">
                                                         @if (element.PaymentDate == null)
                                                         {
-                                                            <p>-</p>
+                                                            @if (element.BilledDate == null)
+                                                            {
+                                                                <p>-</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (element.DeniedBill == true)
+                                                                {
+                                                                    <a asp-action="NotDeniedBill" asp-route-idWorkclient="@element.Id" asp-route-client="0" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                }
+                                                                else
+                                                                { 
+                                                                    <a asp-action="DeniedBillToday" asp-route-id="@element.Id" asp-route-week="0" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                }
+
+                                                            }
+
                                                         }
                                                         else
                                                         {
