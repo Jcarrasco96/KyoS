@@ -99,7 +99,7 @@ namespace KyoS.Web.Helpers
                     currentRow++;
                     worksheet.Cell(currentRow, 1).Value = item.Client.Name;
                     worksheet.Cell(currentRow, 2).Value = item.Client.Code;
-                    worksheet.Cell(currentRow, 3).Value = item.Workday.Date.ToShortDateString();
+                    worksheet.Cell(currentRow, 3).Value = item.Client.DateOfBirth.ToShortDateString();
                     worksheet.Cell(currentRow, 4).Value = item.Client.MedicaidID;
                     if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                     {
@@ -117,7 +117,7 @@ namespace KyoS.Web.Helpers
                     {
                         worksheet.Cell(currentRow, 6).Value = "-";
                     }
-                    worksheet.Cell(currentRow, 7).Value = item.Client.DateOfBirth.ToShortDateString();
+                    worksheet.Cell(currentRow, 7).Value = item.Workday.Date.ToShortDateString(); 
                     if (item.Note != null)
                     {
                         worksheet.Cell(currentRow, 8).Value = item.Note.Setting;

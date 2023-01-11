@@ -12717,5 +12717,53 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
         }
 
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCELforClient(int idClient, int all = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<Workday_Client> workday_Client = new List<Workday_Client>();
+
+            ClientEntity client = _context.Clients.Include(n => n.Clinic).FirstOrDefault(c => c.Id == idClient);
+
+            string Periodo = "";
+            string ReportName = "SuperBill Report " + client.Name + ".xlsx";
+            string data = "";
+            
+            workday_Client = _context.Workdays_Clients
+                                     .Include(f => f.Facilitator)
+                                     .Include(c => c.Client)
+                                     .Include(w => w.Workday)
+
+                                     .Include(w => w.Client)
+                                     .ThenInclude(w => w.Clients_Diagnostics)
+                                     .ThenInclude(w => w.Diagnostic)
+
+                                     .Include(w => w.Client)
+                                     .ThenInclude(w => w.Clients_HealthInsurances)
+                                     .ThenInclude(w => w.HealthInsurance)
+
+                                     .Include(w => w.Note)
+                                     .Include(w => w.NoteP)
+                                     .Include(w => w.IndividualNote)
+                                     .Include(w => w.GroupNote)
+
+                                     .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                            && n.Present == true
+                                            && n.Client != null
+                                            && n.Client.Id == client.Id
+                                            && n.BilledDate == null)
+                                     .OrderBy(n => n.Client.Name)
+                                     .ToList();
+                Periodo = client.AdmisionDate.ToLongDateString() + " - " + client.DateOfClose.ToLongDateString();
+                data = "ALL RECORD";
+           
+            byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, client.Clinic.Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+        }
+
     }
 }
