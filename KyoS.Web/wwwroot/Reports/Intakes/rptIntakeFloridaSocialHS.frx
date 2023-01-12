@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/14/2022 12:04:27" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/12/2023 17:15:57" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ftMpA4GoRyX7ffAd95vFVA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ike4NYMfJI2wCGwvACE+wg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -89,6 +89,7 @@
         <Column Name="AdmisionDate" DataType="System.DateTime"/>
         <Column Name="PlaceOfBirth" DataType="System.String"/>
         <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="MedicareId" DataType="System.String" PropName="Column"/>
       </TableDataSource>
       <TableDataSource Name="IntakeConsentForRelease" DataType="System.Int32" Enabled="true" TableName="IntakeConsentForRelease">
         <Column Name="Id" DataType="System.Int32"/>
@@ -487,7 +488,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="89.17" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
+    <DataBand Name="Data7" Top="89.05" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
       <TextObject Name="Textbox64" Left="141.75" Top="13.9" Width="459.5" Height="22" CanGrow="true" Text="INTAKE SCREENING – FACESHEET / ADMISSION PROFILE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TableObject Name="Table3" Top="56.7" Width="774.9" Height="75.6" Border.Lines="All">
         <TableColumn Name="Column7" Width="135.45"/>
@@ -671,7 +672,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="915.45" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter1" Top="915.2" Width="778.3" Height="37.8">
       <TableObject Name="Table2" Left="37.35" Top="5.45" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column4" Width="189"/>
         <TableColumn Name="Column5" Width="415.8"/>
@@ -708,7 +709,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="89.17" Width="778.3" Height="887.75" DataSource="Clients">
+    <DataBand Name="Data1" Top="89.05" Width="778.3" Height="887.75" DataSource="Clients">
       <TextObject Name="Text34" Left="132.3" Top="13.99" Width="459.5" Height="22" CanGrow="true" Text="CONSENT FOR TREATMENT AND RECEIVE MEDICATION" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text41" Top="37.8" Width="774.9" Height="45.36" Text="The main objective of FLORIDA SOCIAL HEALTH SOLUTIONS is to provide comprehensive mental health services, which are sensitive to the needs of our recipient population. " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text42" Top="85.05" Width="18.9" Height="26.46" Text="I, " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
@@ -754,7 +755,7 @@
       <TextObject Name="Text221" Left="18.9" Top="85.05" Width="283.5" Height="26.46" Text="[Clients.Name]" HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text222" Left="18.9" Top="113.4" Width="283.5" Height="26.46" Text="[LegalGuardians.Name]" HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="981.05" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter2" Top="980.8" Width="778.3" Height="37.8">
       <TableObject Name="Table8" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column27" Width="189"/>
         <TableColumn Name="Column28" Width="415.8"/>
@@ -791,7 +792,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data2" Top="89.17" Width="778.3" Height="887.3" DataSource="Clients">
+    <DataBand Name="Data2" Top="89.05" Width="778.3" Height="887.3" DataSource="Clients">
       <TextObject Name="Text69" Left="132.3" Top="14.9" Width="459.5" Height="22" CanGrow="true" Text="CONSENT FOR RELEASE AND REQUEST OF INFORMATION" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text70" Left="0.45" Top="47.25" Width="151.2" Height="18.9" Text="Person Served Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text71" Left="454.05" Top="47.25" Width="85.05" Height="18.9" Text="Case No.:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -882,7 +883,7 @@
       <TextObject Name="Text141" Left="538.65" Top="170.1" Width="207.9" Height="18.9" Text="[Clinics.FaxNo]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text142" Left="151.2" Top="170.1" Width="311.85" Height="18.9" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter3" Top="980.6" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter3" Top="980.35" Width="778.3" Height="37.8">
       <TableObject Name="Table10" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column33" Width="189"/>
         <TableColumn Name="Column34" Width="415.8"/>
@@ -919,7 +920,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data3" Top="89.17" Width="778.3" Height="862.95">
+    <DataBand Name="Data3" Top="89.05" Width="778.3" Height="862.95">
       <TextObject Name="Text143" Left="132.3" Top="14.9" Width="459.5" Height="22" CanGrow="true" Text="CONSUMER RIGHTS" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text144" Top="38.25" Width="774.9" Height="26.46" Text="The purpose of this pamphlet is to remind and inform you of your &lt;b&gt;RIGHTS&lt;/b&gt; as a consumer of services." HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text145" Top="66.15" Width="774.9" Height="28.35" Text="&lt;b&gt;I.  Right to Voluntary Services&lt;/b&gt;&#13;&#10;         &#13;&#10;	" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -936,7 +937,7 @@
       <TextObject Name="Text156" Left="23.9" Top="743.1" Width="752.22" Height="85.05" Text="&lt;b&gt;YOU HAVE A RIGHT TO:&lt;/b&gt;&#13;&#10;1.  Be informed, verbally and/or in writing, of your rights.&#13;&#10;2.  Be informed, verbally and/or in writing, if any rights are being taken away and you have the right to a review of this action by requesting a Grievance Procedure.&#13;&#10;3.  Be informed of any actions, procedures or decision which might affect you.&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text157" Top="834.6" Width="774.9" Height="28.35" Text="&lt;b&gt;VI.  Rights Pertaining to Medication&lt;/b&gt;&#13;&#10;         &#13;&#10;	" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter4" Top="956.25" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter4" Top="956" Width="778.3" Height="37.8">
       <TableObject Name="Table12" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column39" Width="189"/>
         <TableColumn Name="Column40" Width="415.8"/>
@@ -973,7 +974,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data4" Top="89.17" Width="778.3" Height="881.3">
+    <DataBand Name="Data4" Top="89.05" Width="778.3" Height="881.3">
       <TextObject Name="Text158" Left="17.45" Top="9.45" Width="757.89" Height="189" Text="&lt;b&gt;YOU HAVE A RIGHT TO:&lt;/b&gt;&#13;&#10;1.  The administration of medication only with the written order of a physician.&#13;&#10;2.  A complete explanation of the purpose of any medication, the possible side effects it may have on you, and possible results of long-term use, in a language you can understand.&#13;&#10;3.  Full consideration of your opinion and reactions to medication.&#13;&#10;4.  A regular review of your medication for the purpose of adjustment, as a check for possible side effects, and for possible reduction or elimination of the medication.&#13;&#10;5.  Have accurate records kept, noting your medication history, which includes any adverse medication reactions or drug allergies.&#13;&#10;6.  Have medication prescribed for you only when necessary and not as a convenience for others.&#13;&#10;7.  Refuse medication, except when it is court ordered, or when it is necessary to prevent serious physical harm to yourself or others.&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text159" Top="207.45" Width="774.9" Height="28.35" Text="&lt;b&gt;VII.  Right to Grievance Procedure&lt;/b&gt;&#13;&#10;         &#13;&#10;	" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text160" Left="16.9" Top="224.35" Width="756" Height="47.25" Text="Any consumer or legal representative of a consumer may file a grievance as a formal notice of dissatisfaction regarding Center operations and/or staff actions.&#10;Whenever you wish to lodge a formal complaint you must proceed in the following manner:&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -1009,7 +1010,7 @@
       <CheckBoxObject Name="CheckBox51" Left="179" Top="849.95" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeConsumerRights.Documents"/>
       <TextObject Name="Text179" Left="191.95" Top="862.4" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter5" Top="974.6" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter5" Top="974.35" Width="778.3" Height="37.8">
       <TableObject Name="Table14" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column45" Width="189"/>
         <TableColumn Name="Column46" Width="415.8"/>
@@ -1046,7 +1047,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data5" Top="89.17" Width="778.3" Height="709.75" DataSource="LegalGuardians">
+    <DataBand Name="Data5" Top="89.05" Width="778.3" Height="709.75" DataSource="LegalGuardians">
       <TextObject Name="Text185" Left="75.6" Top="14.74" Width="610.7" Height="22" CanGrow="true" Text="ACKNOWLEDGEMENT OF RECEIPT OF HIPPA &quot;NOTICE OF PRIVACY PRACTICES&quot;" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text186" Left="9.45" Top="54.25" Width="18.9" Height="26.46" Text="I, " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <LineObject Name="Line35" Left="443.6" Top="74.15" Width="-419.58"/>
@@ -1078,7 +1079,7 @@
       <TextObject Name="Text223" Left="28.35" Top="94.5" Width="406.35" Height="26.46" Text="[LegalGuardians.Name]" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text224" Left="28.35" Top="54.7" Width="406.35" Height="26.46" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter6" Top="803.05" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter6" Top="802.8" Width="778.3" Height="37.8">
       <TableObject Name="Table16" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column51" Width="189"/>
         <TableColumn Name="Column52" Width="415.8"/>
@@ -1115,7 +1116,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data6" Top="89.17" Width="778.3" Height="728.65">
+    <DataBand Name="Data6" Top="89.05" Width="778.3" Height="728.65">
       <TextObject Name="Text204" Left="141.75" Top="14.74" Width="459.5" Height="22" CanGrow="true" Text="ACCESS TO SERVICES IN AN EMERGENCY" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text205" Left="9.45" Top="47.25" Width="757.89" Height="189" Text="In the event of an emergency, recipients will request assistance from a 24-hour staff member, all of whom are trained in evacuation emergency procedures and would help them evacuate the building.  &#13;&#10;The following events would constitute an emergency that would require the recipient to report immediately to a staff member: &#13;&#10;&#13;&#10;1.  Smelling or seeing smoke or fire&#13;&#10;2.  Smelling of gas&#13;&#10;3.  Flooding water&#13;&#10;4.  Apparent illness of another person or staff member&#13;&#10;5.  Unlawful entry of a person onto the facility&#13;&#10;6.  Accidents or injuries of another recipient or staff member&#13;&#10;7.  Violence or altercations&#13;&#10;8.  Finding drugs on premises&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text206" Left="9.45" Top="247.7" Width="757.89" Height="85.05" Text="Recipient or staff may call 911 in an emergency.  In the event of a fire, all staff is trained during bi-annual fire drills to meet at a pre-designated area (located in the grass area in front of the corporate office building).  &#13;&#10;Recipients who are experiencing an emergency in their home would access immediate services by dialing 911 and then contacting their case manager for support.  &#13;&#10;The above written policy has been explained to me and I understand what I need to do in the event of an emergency.&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -1138,7 +1139,7 @@
       <CheckBoxObject Name="CheckBox53" Left="177.55" Top="699.75" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeAccessToServices.Documents"/>
       <TextObject Name="Text217" Left="190.5" Top="709.75" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter7" Top="821.95" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter7" Top="821.7" Width="778.3" Height="37.8">
       <TableObject Name="Table18" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column57" Width="189"/>
         <TableColumn Name="Column58" Width="415.8"/>
@@ -1175,7 +1176,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data8" Top="89.17" Width="778.3" Height="869.4">
+    <DataBand Name="Data8" Top="89.05" Width="778.3" Height="869.4">
       <TextObject Name="Text218" Left="141.75" Top="14.74" Width="459.5" Height="22" CanGrow="true" Text="ORIENTATION CHECKLIST" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text219" Top="47.25" Width="776.79" Height="37.8" Text="The following  information has been provided as part of the Orientation Process. A check of the item and the signatures below indicate that each area has been fully explained and is understood  by: &#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox54" Left="5" Top="91.5" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeOrientationCheckList.TourFacility"/>
@@ -1243,7 +1244,7 @@
       <CheckBoxObject Name="CheckBox77" Left="177.55" Top="840.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeOrientationCheckList.Documents"/>
       <TextObject Name="Text257" Left="190.5" Top="850.05" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter8" Top="962.7" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter8" Top="962.45" Width="778.3" Height="37.8">
       <TableObject Name="Table20" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column63" Width="189"/>
         <TableColumn Name="Column64" Width="415.8"/>
@@ -1280,7 +1281,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data9" Top="89.17" Width="778.3" Height="862.5">
+    <DataBand Name="Data9" Top="89.05" Width="778.3" Height="862.5">
       <TextObject Name="Text258" Left="141.75" Top="14.74" Width="459.5" Height="22" CanGrow="true" Text="FEE AGREEMENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text259" Left="9.45" Top="47.25" Width="757.89" Height="160.65" Text="I hereby certify that the financial information I have provided is true and complete to the best of my knowledge. I understand that &lt;b&gt;[Clinics.Name]&lt;/b&gt; may use my protected health information in order to secure payment of my services from outside funding sources such as Medicaid, Florida Department of Children and Families, etc. &#13;&#10;&#13;&#10;For more information concerning the use and disclosure of your protected health information, please refer to a copy of the &lt;b&gt;[Clinics.Name]&lt;/b&gt; notice of Privacy Practices. &#13;&#10;&#13;&#10;I understand and agree to be responsible for any outstanding balance which may be refused for payment by my insurance company.  I understand that I will be responsible for the unpaid balance or my sliding fee scale, whichever is less.  If I have no insurance, I understand I am responsible for payment of services based on my sliding fee scale assessment. &#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TableObject Name="Table23" Left="24.35" Top="226.8" Width="727.65" Height="311.85">
@@ -1387,7 +1388,7 @@
       <CheckBoxObject Name="CheckBox78" Left="187" Top="833.6" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeFeeAgreement.Documents"/>
       <TextObject Name="Text270" Left="199.95" Top="843.6" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter9" Top="955.8" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter9" Top="955.55" Width="778.3" Height="37.8">
       <TableObject Name="Table22" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column69" Width="189"/>
         <TableColumn Name="Column70" Width="415.8"/>
@@ -1424,7 +1425,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data10" Top="89.17" Width="778.3" Height="892.3">
+    <DataBand Name="Data10" Top="89.05" Width="778.3" Height="892.3">
       <TextObject Name="Text271" Left="141.75" Top="14.74" Width="459.5" Height="22" CanGrow="true" Text="TUBERCULOSIS (TB) SCREENING TOOL" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TableObject Name="Table26" Left="9.45" Top="42.7" Width="756" Height="587.79">
         <TableColumn Name="Column81" Width="557.55"/>
@@ -1666,7 +1667,7 @@
       <CheckBoxObject Name="CheckBox125" Left="170.1" Top="862.5" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeTuberculosis.Documents"/>
       <TextObject Name="Text332" Left="183.05" Top="871.95" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter10" Top="985.6" Width="778.3" Height="32.13">
+    <PageFooterBand Name="PageFooter10" Top="985.35" Width="778.3" Height="32.13">
       <TableObject Name="Table25" Left="37.42" Top="2.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column78" Width="189"/>
         <TableColumn Name="Column79" Width="415.8"/>
@@ -1703,7 +1704,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data11" Top="89.17" Width="778.3" Height="774.9">
+    <DataBand Name="Data11" Top="89.05" Width="778.3" Height="774.9">
       <TextObject Name="Text333" Top="14.74" Width="780.8" Height="59.8" CanGrow="true" Text="TRANSPORTATION SAFETY POLICY STATEMENT &#10;FOOD SAFETY POLICY STATEMENT&#13;&#10;(Adult Clients Only)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text334" Top="94.5" Width="776.79" Height="217.35" Text="It is the policy of &lt;b&gt;[Clinics.Name]&lt;/b&gt; that all clients transported by &lt;b&gt;[Clinics.Name]&lt;/b&gt; must wear seatbelts at all times. If you fail to follow this policy, you agree that you do so at your own risk.  &#13;&#10;If an injury occurs as a result of failure to follow this policy, you agree that you will be fully responsible for any injuries sustained as a result of your failure to wear a seatbelt and you release &lt;b&gt;[Clinics.Name]&lt;/b&gt; from any liability whatever, resulting from the injury. &#13;&#10;&#13;&#10;						&lt;b&gt;&amp;&lt;/b&gt; &#13;&#10;&#13;&#10;It is the policy of &lt;b&gt;[Clinics.Name]&lt;/b&gt; from time to time, to distribute snacks and prepared foods, including breakfast and lunch, to clients attending the program. I hereby release &lt;b&gt;[Clinics.Name]&lt;/b&gt; from any liability, in the rare event that a possible ill effect may occur, as the result of our organization’s food distribution. This release of liability also applies to lunches that I may choose to take home to enjoy following the program. &#13;&#10;We, at &lt;b&gt;[Clinics.Name]&lt;/b&gt; strive to provide the best quality of services to our clients, and, as such, have implemented strict controls to closely monitor our food service process in order to prevent ill effects from occurring. &#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text335" Top="330.75" Width="776.79" Height="37.8" Text="I have read and understand all of the conditions stated above. Furthermore, I assert that I am the legal guardian of the above named client and that as such, I have the right to sign on behalf of the client. &#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -1726,7 +1727,7 @@
       <CheckBoxObject Name="CheckBox126" Left="179.55" Top="736.3" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeTransportation.Documents"/>
       <TextObject Name="Text346" Left="192.5" Top="755.2" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter11" Top="868.2" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter11" Top="867.95" Width="778.3" Height="37.8">
       <TableObject Name="Table28" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column86" Width="189"/>
         <TableColumn Name="Column87" Width="415.8"/>
@@ -1763,7 +1764,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data12" Top="89.17" Width="778.3" Height="881.5">
+    <DataBand Name="Data12" Top="89.05" Width="778.3" Height="881.5">
       <TextObject Name="Text347" Top="14.74" Width="780.8" Height="40.9" CanGrow="true" Text="PATIENT CONSENT TO PHOTOGRAPH/VIDEOTAPE/FILM/INTERVIEW AND/OR AUTHORIZATION TO RELEASE PROTECTED HEALTH INFORMATION" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <ContainerObject Name="Container11" Top="66.15" Width="774.9" Height="98.28" Border.Lines="All">
         <TextObject Name="Text351" Left="9.45" Top="9.45" Width="185.45" Height="22" CanGrow="true" Text="Patient consents to be:" Padding="2, 2, 2, 2" Font="Arial, 11pt, style=Bold"/>
@@ -1813,7 +1814,7 @@
       <TextObject Name="Text376" Left="183.05" Top="862.6" Width="434.7" Height="18.9" Text="[Clinics.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text377" Left="61.7" Top="756" Width="648.5" Height="24.57" CanGrow="true" Text="I have read the above and authorize the disclosure of the protected health information as stated." Padding="2, 2, 2, 2" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter12" Top="974.8" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter12" Top="974.55" Width="778.3" Height="37.8">
       <TableObject Name="Table29" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column89" Width="189"/>
         <TableColumn Name="Column90" Width="415.8"/>
@@ -1850,7 +1851,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data13" Top="89.17" Width="778.3" Height="841.05">
+    <DataBand Name="Data13" Top="89.05" Width="778.3" Height="841.05">
       <TextObject Name="Text378" Top="14.74" Width="780.8" Height="40.9" CanGrow="true" Text="FOOD SAFETY POLICY STATEMENT (Adult Clients ONLY) " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text379" Top="56.7" Width="113.4" Height="18.9" Text="PATIENT NAME" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text380" Left="481.95" Top="56.7" Width="66.15" Height="18.9" Text="MR #" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -1878,7 +1879,7 @@
       <CheckBoxObject Name="CheckBox138" Left="3" Top="223.8" Width="11.34" Height="11.34" Border.Lines="All"/>
       <TextObject Name="Text395" Left="16.9" Top="220.35" Width="440.37" Height="18.9" Text="Documents were translated in my native language. " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter13" Top="934.35" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter13" Top="934.1" Width="778.3" Height="37.8">
       <TableObject Name="Table31" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column95" Width="189"/>
         <TableColumn Name="Column96" Width="415.8"/>
@@ -1915,7 +1916,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data14" Top="89.55" Width="778.3" Height="737.1" DataSource="Clients">
+    <DataBand Name="Data14" Top="89.43" Width="778.3" Height="737.1" DataSource="Clients">
       <TextObject Name="Text396" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="MEDICAL HISTORY" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text399" Top="57.25" Width="160.65" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text400" Top="76.15" Width="160.65" Height="18.9" Text="Primary Care Physician:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -2205,7 +2206,7 @@
             <CheckBoxObject Name="CheckBox203" Left="16.97" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.Arthritis"/>
           </TableCell>
           <TableCell Name="Cell503" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox204" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="Clients.LastModifiedBy" Expression="IIf([IntakeMedicalHistory.Arthritis] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox204" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.Arthritis] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell504" Border.Lines="All" Text="Arthritis" Font="Arial, 10pt"/>
           <TableCell Name="Cell505" Border.Lines="All" Font="Arial, 10pt">
@@ -2228,7 +2229,7 @@
             <CheckBoxObject Name="CheckBox205" Left="16.97" Top="4.69" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.Hemorrhoids"/>
           </TableCell>
           <TableCell Name="Cell494" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox206" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="Clients.LastModifiedBy" Expression="IIf([IntakeMedicalHistory.Hemorrhoids] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox206" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.Hemorrhoids] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell495" Border.Lines="All" Text="Hemorrhoids" Font="Arial, 10pt"/>
           <TableCell Name="Cell496" Border.Lines="All" Font="Arial, 10pt">
@@ -2463,7 +2464,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter14" Top="830.78" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter14" Top="830.53" Width="778.3" Height="37.8">
       <TableObject Name="Table33" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column101" Width="189"/>
         <TableColumn Name="Column102" Width="415.8"/>
@@ -2500,7 +2501,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data15" Top="89.55" Width="778.3" Height="755.37">
+    <DataBand Name="Data15" Top="89.43" Width="778.3" Height="755.37">
       <TextObject Name="Text397" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="MEDICAL HISTORY (Continued)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text413" Left="9.45" Top="57.08" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text414" Left="510.3" Top="57.08" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -2763,7 +2764,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter15" Top="849.05" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter15" Top="848.8" Width="778.3" Height="37.8">
       <TableObject Name="Table35" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column107" Width="189"/>
         <TableColumn Name="Column108" Width="415.8"/>
@@ -2800,7 +2801,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data16" Top="89.55" Width="778.3" Height="875.77" Guides="519.75">
+    <DataBand Name="Data16" Top="89.43" Width="778.3" Height="875.77" Guides="519.75">
       <TextObject Name="Text398" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="MEDICAL HISTORY (Continued)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text417" Top="57.08" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text418" Left="500.85" Top="57.08" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -3126,7 +3127,7 @@
       <CheckBoxObject Name="CheckBox393" Top="669.95" Width="11.34" Height="11.34" Border.Lines="All"/>
       <TextObject Name="Text442" Left="13.9" Top="666.5" Width="440.37" Height="18.9" Text="Documents were translated in my native language (if needed).  " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter16" Top="969.45" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter16" Top="969.2" Width="778.3" Height="37.8">
       <TableObject Name="Table37" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column113" Width="189"/>
         <TableColumn Name="Column114" Width="415.8"/>
@@ -3163,7 +3164,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data17" Top="89.55" Width="778.3" Height="841.05">
+    <DataBand Name="Data17" Top="89.43" Width="778.3" Height="841.05">
       <TableObject Name="Table48" Top="18.9" Width="774.9" Height="763.56" Border.Lines="All">
         <TableColumn Name="Column169" Width="103.95"/>
         <TableColumn Name="Column170" Width="670.95"/>
@@ -3301,7 +3302,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter17" Top="934.73" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter17" Top="934.48" Width="778.3" Height="37.8">
       <TableObject Name="Table47" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column166" Width="189"/>
         <TableColumn Name="Column167" Width="415.8"/>

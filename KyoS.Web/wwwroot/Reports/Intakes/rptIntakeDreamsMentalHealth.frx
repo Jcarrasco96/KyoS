@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/14/2022 12:04:11" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/12/2023 17:19:03" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ONJ2b8U2NnFrZfDcFs9c5g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3VvMxkjA5OJ3+1C+sdEhjjg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -487,7 +487,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="89.17" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
+    <DataBand Name="Data7" Top="89.05" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
       <TextObject Name="Textbox64" Left="141.75" Top="13.9" Width="459.5" Height="22" CanGrow="true" Text="INTAKE SCREENING – FACESHEET / ADMISSION PROFILE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TableObject Name="Table3" Top="56.7" Width="774.9" Height="75.6" Border.Lines="All">
         <TableColumn Name="Column7" Width="135.45"/>
@@ -671,7 +671,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="915.45" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter1" Top="915.2" Width="778.3" Height="37.8">
       <TableObject Name="Table2" Left="37.35" Top="5.45" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column4" Width="189"/>
         <TableColumn Name="Column5" Width="415.8"/>
@@ -1915,7 +1915,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data14" Top="89.55" Width="778.3" Height="737.1" DataSource="Clients">
+    <DataBand Name="Data14" Top="89.43" Width="778.3" Height="737.1" DataSource="Clients">
       <TextObject Name="Text396" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="MEDICAL HISTORY" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text399" Top="57.25" Width="160.65" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text400" Top="76.15" Width="160.65" Height="18.9" Text="Primary Care Physician:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -2205,7 +2205,7 @@
             <CheckBoxObject Name="CheckBox203" Left="16.97" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.Arthritis"/>
           </TableCell>
           <TableCell Name="Cell503" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox204" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="Clients.LastModifiedBy" Expression="IIf([IntakeMedicalHistory.Arthritis] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox204" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.Arthritis] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell504" Border.Lines="All" Text="Arthritis" Font="Arial, 10pt"/>
           <TableCell Name="Cell505" Border.Lines="All" Font="Arial, 10pt">
@@ -2228,7 +2228,7 @@
             <CheckBoxObject Name="CheckBox205" Left="16.97" Top="4.69" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.Hemorrhoids"/>
           </TableCell>
           <TableCell Name="Cell494" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox206" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="Clients.LastModifiedBy" Expression="IIf([IntakeMedicalHistory.Hemorrhoids] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox206" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.Hemorrhoids] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell495" Border.Lines="All" Text="Hemorrhoids" Font="Arial, 10pt"/>
           <TableCell Name="Cell496" Border.Lines="All" Font="Arial, 10pt">
@@ -2463,7 +2463,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter14" Top="830.78" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter14" Top="830.53" Width="778.3" Height="37.8">
       <TableObject Name="Table33" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column101" Width="189"/>
         <TableColumn Name="Column102" Width="415.8"/>
