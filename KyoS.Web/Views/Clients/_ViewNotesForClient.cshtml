@@ -18,7 +18,7 @@
                             <th class="col-md-1" style="text-align:center;">Present</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
                             <th class="col-md-2">Facilitator</th>
-                            <th class="col-md-1">Billed</th>
+                            <th class="col-md-1" style="text-align:center;">Billed</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>
@@ -138,7 +138,7 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @if (day_client.BilledDate == null)
                                         {
                                             <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i> </a>
@@ -285,7 +285,7 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @if (day_client.BilledDate != null)
                                         {
                                             @if (day_client.PaymentDate != null)

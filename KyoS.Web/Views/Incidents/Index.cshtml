@@ -60,7 +60,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Solved
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
                                 Assigned to
                             </th>
                             <th class="col-md-1">
@@ -126,7 +126,7 @@
                                         <p>-</p>
                                     }
                                 </td>
-                                <td>
+                                <td align="center">
                                     @if (item.UserAsigned != null)
                                     {
                                         @Html.DisplayFor(modelItem => item.UserAsigned.FirstName)
