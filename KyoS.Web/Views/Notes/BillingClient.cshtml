@@ -174,7 +174,7 @@
         </dl>
     </div>
     <div class="col-md-6">
-        <a asp-action="EXCELforClient" asp-route-idClient="@ViewData["Client"]" asp-route-all=1 class="btn btn-info"><i class="glyphicon glyphicon-download-alt"></i> Export Bill record</a>
+        <a asp-action="EXCELforClient" asp-route-idClient="@ViewData["Client"]" class="btn btn-info"><i class="glyphicon glyphicon-download-alt"></i> Export Bill record</a>
     </div>
     <div id="view-templates">
         @await Html.PartialAsync("_BillingClient", Model)

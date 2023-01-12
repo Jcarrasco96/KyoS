@@ -2237,7 +2237,8 @@ namespace KyoS.Web.Controllers
             List<ClientEntity> client_List = _context.Clients
                                                      .Include(m => m.MTPs)
                                                      .Include(m => m.Workdays_Clients)
-                                                     .Where(n => (n.Workdays_Clients.Count() == 0 
+                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id 
+                                                        && n.Workdays_Clients.Count() == 0 
                                                         && n.MTPs.Count() > 0
                                                         && n.Status == StatusType.Close))
                                                      .ToList();
@@ -2246,11 +2247,44 @@ namespace KyoS.Web.Controllers
             {
                 auditClient.Name = item.Name;
                 auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                auditClient.Count = 0;
+                auditClient.Description = "The client have not Notes";
                 auditClient.Active = 0;
 
                 auditClient_List.Add(auditClient);
                 auditClient = new AuditClientNotUsed();
+            }
+
+            List<ClientEntity> client_Diagnostics_List = _context.Clients
+                                                                 .Include(m => m.Clients_Diagnostics)
+                                                                 .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                                                 .ToList();
+
+            foreach (var item in client_Diagnostics_List)
+            {
+                if (item.Clients_Diagnostics.Count() == 0)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client haven't a diagnostic code";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditClientNotUsed();
+                }
+                else
+                {
+                    if (item.Clients_Diagnostics.Where(n => n.Principal == true).Count() == 0)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client haven't a principal diagnostic code";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditClientNotUsed();
+                    }
+                }
+                
             }
 
             return View(auditClient_List);

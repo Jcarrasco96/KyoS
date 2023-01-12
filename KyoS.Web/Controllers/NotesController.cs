@@ -12198,13 +12198,13 @@ namespace KyoS.Web.Controllers
                 {
                     clientName = item.ClientName;
                     code = item.Client.Code;
-                    if (item.Client.Clients_Diagnostics.Count() == 0)
+                    if (item.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() == 0)
                     {
                         diagnostics = "";
                     }
                     else
                     {
-                        diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                        diagnostics = item.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code;
                     }
 
                     medicaidId = item.Client.MedicaidID;
@@ -12297,13 +12297,13 @@ namespace KyoS.Web.Controllers
                 {
                     clientName = item.ClientName;
                     code = item.Client.Code;
-                    if (item.Client.Clients_Diagnostics.Count() == 0)
+                    if (item.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() == 0)
                     {
                         diagnostics = "";
                     }
                     else
                     {
-                        diagnostics = item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                        diagnostics = item.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code;
                     }
 
                     medicaidId = item.Client.MedicaidID;
@@ -12722,7 +12722,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult EXCELforClient(int idClient, int all = 0)
+        public IActionResult EXCELforClient(int idClient)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -12757,8 +12757,7 @@ namespace KyoS.Web.Controllers
                                      .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                             && n.Present == true
                                             && n.Client != null
-                                            && n.Client.Id == client.Id
-                                            && n.BilledDate == null)
+                                            && n.Client.Id == client.Id)
                                      .OrderBy(n => n.Client.Name)
                                      .ToList();
                 Periodo = client.AdmisionDate.ToLongDateString() + " - " + client.DateOfClose.ToLongDateString();

@@ -243,9 +243,9 @@
                                     @Html.DisplayFor(modelItem => item.ElementAt(0).Client.MedicaidID)
                                 </td>
                                 <td align="center">
-                                    @if (item.ElementAt(0).Client.Clients_Diagnostics.Count() > 0)
+                                    @if (item.ElementAt(0).Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
                                     {
-                                        @Html.DisplayFor(modelItem => item.ElementAt(0).Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                        @Html.DisplayFor(modelItem => item.ElementAt(0).Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code)
                                     }
                                 </td>
                                 <td align="right">
