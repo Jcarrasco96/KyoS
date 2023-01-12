@@ -1,0 +1,28 @@
+﻿@model KyoS.Web.Models.FarsFormViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditOnlyTypeFARS" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdClient" />
+            <div class="col-md-12">
+                <label asp-for="Type" class="control-label"></label>*
+                <select asp-for="IdType" asp-items="Model.FarsType" class="form-control"></select>
+                <span asp-validation-for="IdType" class="text-danger"></span>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

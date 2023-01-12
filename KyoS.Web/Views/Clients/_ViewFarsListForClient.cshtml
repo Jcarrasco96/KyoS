@@ -8,7 +8,7 @@
                 <h3 class="panel-title">FARS</h3>
             </div>
             <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" >
+                <table class="table table-hover table-responsive table-striped">
                     <thead>
                         <tr>
                             <th class="col-md-3">
@@ -101,9 +101,8 @@
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
                                     {
-                                        <span class="label label-warning">
-                                            Edition
-                                        </span>
+                                        <a asp-action="EditOnlyTypeFARS" asp-controller="Clients" asp-route-id="@item.Id" class="btn btn-warning" title="Edit only Type"><i class="glyphicon glyphicon-check"></i>&nbsp;Type</a>
+                                        @*<a onclick="showInPopup('@Url.Action("EditOnlyTypeFARS", "Clients", new {id = item.Id }, Context.Request.Scheme)','Edit Only Type')" class="btn btn-warning" title="Edit Only Type"><i class="glyphicon glyphicon-ok"></i>&nbsp;&nbsp;Edit Only Type</a>*@
                                     }
                                     else
                                     {
@@ -164,4 +163,43 @@
         </div>
     </div>
 }
- 
+
+<partial name="_ModalPopup" />
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        //    jQueryAjaxPost = form => {
+        //        try {
+        //            $.ajax({
+        //                type: 'POST',
+        //                url: form.action,
+        //                data: new FormData(form),
+        //                contentType: false,
+        //                processData: false,
+        //                success: function (res) {
+        //                    if (res.isValid) {
+        //                        $('#view-all').html(res.html)
+        //                        $('#form-modal .modal-body').html('');
+        //                        $('#form-modal .modal-title').html('');
+        //                        $('#form-modal').modal('hide');
+        //                    }
+        //                    else
+        //                        $('#form-modal .modal-body').html(res.html);
+        //                },
+        //                error: function (err) {
+        //                    console.log(err)
+        //                }
+        //            })
+        //            //to prevent default form submit event
+        //            return false;
+        //        } catch (ex) {
+        //            console.log(ex)
+        //        }
+        //}
+    </script>
+}
+

@@ -2290,5 +2290,42 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
+        [Authorize(Roles = "Manager")]
+        public IActionResult EditOnlyTypeFARS(int id = 0)
+        {
+            FarsFormEntity fars = _context.FarsForm.Include(n => n.Client).FirstOrDefault(n => n.Id == id);
+
+            if (fars != null)
+            {
+                FarsFormViewModel model = new FarsFormViewModel()
+                {
+                    Id = id,
+                    IdClient = fars.Client.Id,
+                    IdType = Convert.ToInt32(fars.Type),
+                    FarsType = _combosHelper.GetComboFARSType()
+                };
+                return View(model);
+            }
+
+            return View(null);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditOnlyTypeFARS(FarsFormViewModel farsViewModel)
+        {
+            FarsFormEntity fars = await _context.FarsForm.FindAsync(farsViewModel.Id);
+            if (fars != null)
+            {
+                fars.Type = FARSUtils.GetypeByIndex(farsViewModel.IdType);
+
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+            }
+            
+            return RedirectToAction("ClientHistory","Clients", new { idClient = farsViewModel .IdClient});
+        }
+
     }
 }

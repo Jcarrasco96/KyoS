@@ -168,7 +168,9 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                SignaturePath = signaturePath
+                SignaturePath = signaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -185,7 +187,9 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(facilitatorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic),
-                SignaturePath = facilitatorEntity.SignaturePath
+                SignaturePath = facilitatorEntity.SignaturePath,
+                RaterEducation = facilitatorEntity.RaterEducation,
+                RaterFMHCertification = facilitatorEntity.RaterFMHCertification
             };
         }
 
