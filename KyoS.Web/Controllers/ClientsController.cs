@@ -25,8 +25,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IMimeType _mimeType;
+        private readonly IExportExcellHelper _exportExcelHelper;
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -34,6 +35,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _imageHelper = imageHelper;
             _mimeType = mimeType;
+            _exportExcelHelper = exportExcelHelper;
         }
         
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
@@ -2325,6 +2327,35 @@ namespace KyoS.Web.Controllers
             }
             
             return RedirectToAction("ClientHistory","Clients", new { idClient = farsViewModel .IdClient});
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCELallClient()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<ClientEntity> clients = new List<ClientEntity>();
+            DateTime date = DateTime.Today;
+
+            clients = _context.Clients
+                              .Include(w => w.Clients_Diagnostics)
+                              .ThenInclude(w => w.Diagnostic)
+
+                              .Include(w => w.Clients_HealthInsurances)
+                              .ThenInclude(w => w.HealthInsurance)
+
+                              //.Include(w => w.Workdays_Clients)
+                              //.ThenInclude(w => w.Workday)
+
+                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                              .OrderBy(n => n.Name)
+                              .ToList();
+
+            byte[] content = _exportExcelHelper.ExportAllClients(clients, date.ToLongDateString());
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_CLIENTS.xlsx");
         }
 
     }
