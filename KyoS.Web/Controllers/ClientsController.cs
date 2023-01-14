@@ -2337,7 +2337,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             List<ClientEntity> clients = new List<ClientEntity>();
-            DateTime date = DateTime.Today;
+            string date = "Date Report: " + DateTime.Today.ToLongDateString();
 
             clients = _context.Clients
                               .Include(w => w.Clients_Diagnostics)
@@ -2353,7 +2353,7 @@ namespace KyoS.Web.Controllers
                               .OrderBy(n => n.Name)
                               .ToList();
 
-            byte[] content = _exportExcelHelper.ExportAllClients(clients, date.ToLongDateString());
+            byte[] content = _exportExcelHelper.ExportAllClients(clients, date);
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_CLIENTS.xlsx");
         }

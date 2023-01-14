@@ -99,6 +99,32 @@ namespace KyoS.Web.Controllers
                                                   && n.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0))
                                               .ToListAsync());
                     }
+                    else
+                    {
+                        if (User.IsInRole("Documents_Assistant"))
+                        {
+                            DocumentsAssistantEntity doc_assistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                            return View(await _context.Clients
+
+                                                  .Include(n => n.IntakeScreening)
+                                                  .Include(n => n.IntakeConsentForTreatment)
+                                                  .Include(n => n.IntakeConsentForRelease)
+                                                  .Include(n => n.IntakeConsumerRights)
+                                                  .Include(n => n.IntakeAcknowledgementHipa)
+                                                  .Include(n => n.IntakeAccessToServices)
+                                                  .Include(n => n.IntakeOrientationChecklist)
+                                                  .Include(n => n.IntakeTransportation)
+                                                  .Include(n => n.IntakeConsentPhotograph)
+                                                  .Include(n => n.IntakeFeeAgreement)
+                                                  .Include(n => n.IntakeTuberculosis)
+                                                  .Include(n => n.IntakeMedicalHistory)
+                                                  .Include(n => n.Bio)
+
+                                                  .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                                      && n.Bio.DocumentsAssistant.Id == doc_assistant.Id))
+                                                  .ToListAsync());
+                        }
+                    }
                 }
                 return View(null);         
             }            
