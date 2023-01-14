@@ -762,6 +762,36 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult PrintMedicalHistory(int id)
+        {
+            IntakeMedicalHistoryEntity entity = _context.IntakeMedicalHistory
+
+                                                        .Include(i => i.Client)    
+                                                            .ThenInclude(c => c.Clinic)
+                                                        .Include(i => i.Client)
+                                                            .ThenInclude(c => c.IntakeTuberculosis)
+
+                                                        .FirstOrDefault(i => (i.Client.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }            
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
+
         [Authorize(Roles = "Manager")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {
