@@ -709,7 +709,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult PrintIntake(int id)
         {
             IntakeScreeningEntity entity = _context.IntakeScreenings
@@ -788,7 +788,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
         public IActionResult PrintMedicalHistory(int id)
         {
             IntakeMedicalHistoryEntity entity = _context.IntakeMedicalHistory
