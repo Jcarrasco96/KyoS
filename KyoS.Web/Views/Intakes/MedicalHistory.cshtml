@@ -148,13 +148,12 @@
                                         @if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
                                         {
                                             <a asp-action="CreateMedicalhistory" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
                                             <a class="btn btn-warning disabled" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a class="btn btn-success disabled" title="Print Medical History"><i class="glyphicon glyphicon-print"></i></a>
                                         }
+                                            <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </td>
                                 </tr>
                             }
