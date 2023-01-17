@@ -23,5 +23,7 @@ namespace KyoS.Web.Models
         public int IdBio { get; set; }
 
         public int Origin { get; set; }
+
+        public int IdBrief { get; set; }
     }
 }

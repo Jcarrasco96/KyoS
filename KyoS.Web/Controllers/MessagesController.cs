@@ -68,7 +68,12 @@ namespace KyoS.Web.Controllers
                                                                                               && m.Bio != null && m.Notification == false))
                                                     .ToString();
 
-                ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesMtp) + Convert.ToInt32(ViewBag.CountsMessagesBio);
+                ViewBag.CountsMessagesBrief = _context.Messages
+                                                      .Count(m => (m.To == user_logged.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead
+                                                                                             && m.Brief != null && m.Notification == false))
+                                                      .ToString();
+
+                ViewBag.Total = Convert.ToInt32(ViewBag.CountsMessagesMtp) + Convert.ToInt32(ViewBag.CountsMessagesBio) + Convert.ToInt32(ViewBag.CountsMessagesBrief);
             }
             return View();
         }
@@ -364,6 +369,8 @@ namespace KyoS.Web.Controllers
 
                                       .Include(m => m.Bio)
 
+                                      .Include(m => m.Brief)
+
                                       .Where(m => (m.To == user_logged.UserName && m.Notification == true))
                                       .ToListAsync());            
         }
@@ -380,6 +387,7 @@ namespace KyoS.Web.Controllers
                                                        .Include(m => m.Discharge)
                                                        .Include(m => m.Mtp)
                                                        .Include(m => m.Bio)
+                                                       .Include(m => m.Brief)
                                                        .FirstOrDefaultAsync(m => m.Id == id);
 
             if (notification == null)
@@ -441,6 +449,14 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
+            if (notification.Brief != null)
+            {
+                return View(await _context.Messages
+
+                                          .Where(m => (m.Brief.Id == notification.Brief.Id && m.Notification == false))
+                                          .ToListAsync());
+            }
+
             return null;
         }
 
@@ -478,6 +494,29 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Documents_Assistant"))
             {
                 return View(await _context.Bio
+
+                                          .Include(m => m.Client)
+
+                                          .Include(m => m.Messages.Where(m => m.Notification == false))
+
+                                          .Where(m => (m.CreatedBy == user_logged.UserName && m.Messages.Count() > 0))
+                                          .ToListAsync());
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "Documents_Assistant")]
+        public async Task<IActionResult> MessagesOfBrief(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                return View(await _context.Brief
 
                                           .Include(m => m.Client)
 

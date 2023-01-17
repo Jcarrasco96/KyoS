@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "BIOs";
+    ViewData["Title"] = "BRIEFs";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -18,21 +18,12 @@
     <div class="col-md-12">
         @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditBIO", "Bios", null, Context.Request.Scheme)','Audit BIO')" class="btn btn-danger" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
+            <a onclick="showInPopupLg('@Url.Action("AuditBrief", "Briefs", null, Context.Request.Scheme)','Audit BRIEFS')" class="btn btn-danger" title="Audit BRIEFS"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEFS</a>
         }
         else
         {
-            <a class="btn btn-danger disabled" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
+            <a class="btn btn-danger disabled" title="Audit BRIEF"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEF</a>
         }
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
-    <div class="col-md-12">
-        @*<div class="alert alert-warning" role="alert">
-            <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not BIO document
-        @*</div>*@
     </div>
     <div class="col-md-12">
         &nbsp;
@@ -40,7 +31,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">BIOs</h3>
+                <h3 class="panel-title">BRIEFS</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -62,7 +53,7 @@
                                 Admission for
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Date BIO
+                                Date BRIEF
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Document
@@ -74,7 +65,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if ((item.Bio == null))
+                            @if ((item.Brief == null))
                             {
                                 <tr style="color:orange">
                                     <td align="center">
@@ -159,15 +150,15 @@
                                     <td align="right">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                         {
-                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Create BRIEF"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
                                             <a class="btn btn-warning disabled" title="Create BIO"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
-                                        <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a class="btn btn-success disabled" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                         <a asp-action="EditReadOnly" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        <a class="btn btn-success disabled" title="Print BIO"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a class="btn btn-success disabled" title="Print BRIEF"><i class="glyphicon glyphicon-print"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -243,25 +234,25 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Bio.AdmissionedFor)
+                                        @Html.DisplayFor(modelItem => item.Brief.AdmissionedFor)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Bio.DateBio)
+                                        @Html.DisplayFor(modelItem => item.Brief.DateBio)
                                     </td>
                                     <td align="center">
-                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                        @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Approved)
                                         {
                                             <span class="label label-success">
                                                 Approved
                                             </span>
                                         }
-                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Pending)
+                                        @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Pending)
                                         {
                                             <span class="label label-info">
                                                 Pending
                                             </span>
                                         }
-                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
+                                        @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Edition)
                                         {
                                             <span class="label label-warning">
                                                 Edition
@@ -269,57 +260,57 @@
                                         }
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Documents_Assistant") && (@item.Bio.CreatedBy == User.Identity.Name))
+                                        @if (User.IsInRole("Documents_Assistant") && (@item.Brief.CreatedBy == User.Identity.Name))
                                         {
-                                            @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition)
+                                            @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Edition)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditing" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BRIEF"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditing" asp-route-id="@item.Brief.Id" class="btn btn-success" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                             }
                                             else
                                             {
-                                                <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a class="btn btn-warning disabled" title="Edit BRIEF"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                             }
                                         }
                                         else
                                         {
                                             @if (User.IsInRole("Supervisor"))
                                             {
-                                                @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Edition && item.Bio.CreatedBy == User.Identity.Name)
+                                                @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Edition && item.Brief.CreatedBy == User.Identity.Name)
                                                 {
                                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                    <a asp-action="FinishEditing" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    <a asp-action="FinishEditing" asp-route-id="@item.Brief.Id" class="btn btn-success" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                                 }
                                                 else
                                                 {
-                                                    @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Pending && item.CreatedBy != User.Identity.Name)
+                                                    @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Pending && item.CreatedBy != User.Identity.Name)
                                                     {
-                                                        <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                        <a asp-action="EditReadOnly" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        <a class="btn btn-warning disabled" title="Edit BRIEF"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="EditReadOnly" asp-route-id="@item.Brief.Id" class="btn btn-success" title="Approve BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                                     }
                                                     else
                                                     {
-                                                        <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                        <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                        <a class="btn btn-warning disabled" title="Edit BRIEF"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                <a class="btn btn-warning disabled" title="Edit BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a class="btn btn-success disabled" title="Finish Editing BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a class="btn btn-warning disabled" title="Edit BRIEF"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a class="btn btn-success disabled" title="Finish Editing BRIEF"><i class="glyphicon glyphicon-ok"></i></a>
                                             }
 
                                         }
-                                        <a asp-action="EditReadOnly" asp-route-id="@item.Bio.Id" asp-route-origi="0" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                        <a asp-action="EditReadOnly" asp-route-id="@item.Brief.Id" asp-route-origi="0" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Approved)
                                         {
-                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" class="btn btn-success" title="Print BRIEF" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" class="btn btn-success disabled" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" class="btn btn-success disabled" title="Print BRIEF" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     </td>
                                 </tr>

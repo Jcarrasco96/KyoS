@@ -18,7 +18,7 @@ using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
-    public class BiosController : Controller
+    public class BriefsController : Controller
     {
         private readonly IUserHelper _userHelper;
         private readonly IConverterHelper _converterHelper;
@@ -27,7 +27,7 @@ namespace KyoS.Web.Controllers
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
 
-        public BiosController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public BriefsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -61,20 +61,21 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
-                                              .Include(g => g.Bio)
+                                              .Include(g => g.Brief)
                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                    && n.Brief != null)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
                 if (User.IsInRole("Documents_Assistant") )
                     return View(await _context.Clients
 
-                                              .Include(g => g.Bio)
+                                              .Include(g => g.Brief)
                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Bio.CreatedBy == user_logged.UserName)
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Brief.CreatedBy == user_logged.UserName)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -82,7 +83,7 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.Clients
 
-                                              .Include(g => g.Bio)
+                                              .Include(g => g.Brief)
                                               .Include(g => g.List_BehavioralHistory)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
@@ -93,21 +94,21 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origi = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            BioViewModel model = new BioViewModel();
+            BriefViewModel model = new BriefViewModel();
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
 
-                    model = new BioViewModel
+                    model = new BriefViewModel
                     {
                         IdClient = id,
                         Client_FK = id,
@@ -120,7 +121,6 @@ namespace KyoS.Web.Controllers
                                                  .Include(f => f. Clients_Diagnostics)
                                                  .ThenInclude(f => f.Diagnostic)
                                                  .FirstOrDefault(n => n.Id == id),
-                        AdultCurrentExperience = "",
                         Affect_Angry = false,
                         Affect_Anxious = false,
                         Affect_Appropriate = false,
@@ -137,73 +137,29 @@ namespace KyoS.Web.Controllers
                         Appearance_Disheveled = false,
                         Appearance_FairHygiene = false,
                         Appearance_WellGroomed = false,
-                        Appetite = Bio_Appetite.Diminished,
-                        ApproximateDateReport = DateTime.Now,
-                        ApproximateDateReport_Where = "",
-                        AReferral = false,
-                        AReferral_Services = "",
-                        AReferral_When = "",
-                        AReferral_Where = "",
                         BioH0031HN = false,
                         IDAH0031HO = false,
-                        CanClientFollow = false,
-                        Children = "",
                         ClientAssessmentSituation = "",
-                        ClientFamilyAbusoTrauma = false,
                         CMH = false,
                         Comments = "",
-                        DateAbuse = DateTime.Now,
                         DateBio = DateTime.Now,
                         DateSignatureLicensedPractitioner = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
                         DateSignatureSupervisor = DateTime.Now,
                         DateSignatureUnlicensedTherapist = DateTime.Now,
-                        Details = "",
                         DoesClient = false,
-                        DoesClientRequired = false,
-                        DoesClientRequired_Where = "",
-                        DoesNotAlways = false,
-                        DoesTheClientExperience = false,
-                        DoesTheClientExperience_Where = "",
-                        DoYouHaveAnyPhysical = false,
-                        DoYouHaveAnyReligious = false,
-                        DoYouHaveAnyVisual = false,
                         DoYouOwn = false,
                         DoYouOwn_Explain = "",
-                        EastAlone = false,
-                        EastFew = false,
-                        EastFewer = false,
                         FamilyAssessmentSituation = "",
                         FamilyEmotional = "",
-                        GeneralDescription = "",
-                        Has3OrMore = false,
-                        HasAnIllnes = false,
-                        HasClientBeenTreatedPain = false,
-                        HasClientBeenTreatedPain_Ifnot = "",
-                        HasClientBeenTreatedPain_PleaseIncludeService = "",
-                        HasClientBeenTreatedPain_Where = "",
                         HasTheClient = false,
-                        HasTheClientVisitedPhysician = false,
-                        HasTheClientVisitedPhysician_Date = "",
-                        HasTheClientVisitedPhysician_Reason = "",
                         HasTheClient_Explain = "",
-                        HasTooth = false,
                         HaveYouEverBeen = false,
                         HaveYouEverBeen_Explain = "",
                         HaveYouEverThought = false,
                         HaveYouEverThought_Explain = "",
-                        HigHestEducation = "",
-                        Hydration = Bio_Hydration.Diminished,
                         IConcurWhitDiagnistic = false,
                         Id = 0,
-                        If6_Date = DateTime.Now,
-                        If6_ReferredTo = "",
-                        IfForeing_AgeArrival = 0,
-                        IfForeing_Born = false,
-                        IfForeing_YearArrival = 0,
-                        IfMarried = "",
-                        IfSeparated = "",
-                        IfSexuallyActive = Bio_IfSexuallyActive.N_A,
                         Insight_Fair = false,
                         Insight_Good = false,
                         Insight_Other = false,
@@ -217,9 +173,7 @@ namespace KyoS.Web.Controllers
                         Lacking_Place = false,
                         Lacking_Time = false,
                         LegalAssessment = "",
-                        LegalHistory = "",
                         //LicensedPractitioner = user_logged.FullName,
-                        MaritalStatus = "",
                         Mood_Angry = false,
                         Mood_Anxious = false,
                         Mood_Depressed = false,
@@ -234,23 +188,9 @@ namespace KyoS.Web.Controllers
                         Motor_RestLess = false,
                         Motor_Retardation = false,
                         Motor_Tremor = false,
-                        NotAlwaysPhysically = false,
-                        ObtainRelease = false,
-                        ObtainReleaseInformation = false,
-                        ObtainReleaseInformation7 = false,
                         Oriented_FullOriented = false,
-                        Outcome = "",
-                        PersonalFamilyPsychiatric = "",
-                        PersonInvolved = "",
-                        PleaseProvideGoal = "",
-                        PleaseRatePain = 0,
                         PresentingProblem = "",
-                        PrimaryLocation = "",
                         Priv = false,
-                        ProvideIntegratedSummary = "",
-                        RecentWeight = Bio_RecentWeightChange.Gained,
-                        RelationShips = "",
-                        RelationshipWithFamily = "",
                         RiskToOther_Chronic = false,
                         RiskToOther_High = false,
                         RiskToOther_Low = false,
@@ -271,8 +211,6 @@ namespace KyoS.Web.Controllers
                         Speech_Slow = false,
                         Speech_Slurred = false,
                         Speech_Stutters = false,
-                        SubstanceAbuse = "",
-                        Takes3OrMore = false,
                         ThoughtContent_Delusions = false,
                         ThoughtContent_Delusions_Type = "",
                         ThoughtContent_Hallucinations = false,
@@ -292,26 +230,10 @@ namespace KyoS.Web.Controllers
                         ThoughtProcess_Preoccupied = false,
                         ThoughtProcess_Rigid = false,
                         ThoughtProcess_Tangential = false,
-                        TreatmentNeeds = "",
                         Treatmentrecomendations = "",
-                        WhatIsTheClient = "",
-                        WhatIsYourLanguage = "",
-                        WhereRecord = false,
-                        WhereRecord_When = "",
-                        WhereRecord_Where = "",
-                        WithoutWanting = false,
-                        IdAppetite = 0,
-                        Appetite_Status = _combosHelper.GetComboBio_Appetite(),
-                        IdHydratation = 0,
-                        Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
-                        IdRecentWeight = 0,
-                        RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
-                        IdIfSexuallyActive = 0,
-                        IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
                         ClientDenied = false,
                         /*StartTime = DateTime.Now,
                         EndTime = DateTime.Now,*/
-                        ForHowLong = "",
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
                         AdmissionedFor = user_logged.FullName
@@ -342,6 +264,7 @@ namespace KyoS.Web.Controllers
                     model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
                     model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
 
+                    ViewData["Origi"] = origi;
                     return View(model);
                 }
             }
@@ -352,7 +275,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Create(BioViewModel bioViewModel)
+        public async Task<IActionResult> Create(BriefViewModel briefViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -360,26 +283,34 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BioEntity bioEntity = _context.Bio.Find(bioViewModel.Id);
-                if (bioEntity == null)
+                BriefEntity briefEntity = _context.Brief.Find(briefViewModel.Id);
+                if (briefEntity == null)
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                    bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
+                    briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, true, user_logged.UserName);
 
                     if (documentAssistant != null)
                     {
-                        bioEntity.DocumentsAssistant = documentAssistant;
-                        bioEntity.DateSignatureUnlicensedTherapist = DateTime.Now;
+                        briefEntity.DocumentsAssistant = documentAssistant;
+                        briefEntity.DateSignatureUnlicensedTherapist = DateTime.Now;
                     }
                     else
                     {
-                        bioEntity.DateSignatureLicensedPractitioner = DateTime.Now;
+                        briefEntity.DateSignatureLicensedPractitioner = DateTime.Now;
                     }
-                    _context.Bio.Add(bioEntity);
+                    _context.Brief.Add(briefEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("Index", "Bios");
+                        if (origi == 0)
+                        {
+                            return RedirectToAction("Index", "Briefs");
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("ClientswithoutBIO", "Bios");
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -388,22 +319,21 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Already exists the BIO.");
+                    ModelState.AddModelError(string.Empty, "Already exists the BRIEF.");
 
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", bioViewModel) });
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", briefViewModel) });
                 }
             }
-            BioViewModel model;
-            model = new BioViewModel
+            BriefViewModel model;
+            model = new BriefViewModel
             {
-                IdClient = bioViewModel.IdClient,
+                IdClient = briefViewModel.IdClient,
                 Client = _context.Clients.Include(n => n.LegalGuardian)
                                                  .Include(n => n.EmergencyContact)
                                                  .Include(n => n.MedicationList)
                                                  .Include(n => n.Client_Referred)
                                                  .Include(n => n.List_BehavioralHistory)
-                                                 .FirstOrDefault(n => n.Id == bioViewModel.IdClient),
-                AdultCurrentExperience = "",
+                                                 .FirstOrDefault(n => n.Id == briefViewModel.IdClient),
                 Affect_Angry = false,
                 Affect_Anxious = false,
                 Affect_Appropriate = false,
@@ -420,73 +350,29 @@ namespace KyoS.Web.Controllers
                 Appearance_Disheveled = false,
                 Appearance_FairHygiene = false,
                 Appearance_WellGroomed = false,
-                Appetite = Bio_Appetite.Diminished,
-                ApproximateDateReport = DateTime.Now,
-                ApproximateDateReport_Where = "",
-                AReferral = false,
-                AReferral_Services = "",
-                AReferral_When = "",
-                AReferral_Where = "",
                 BioH0031HN = false,
                 IDAH0031HO = false,
-                CanClientFollow = false,
-                Children = "",
                 ClientAssessmentSituation = "",
-                ClientFamilyAbusoTrauma = false,
                 CMH = false,
                 Comments = "",
-                DateAbuse = DateTime.Now,
                 DateBio = DateTime.Now,
                 DateSignatureLicensedPractitioner = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
                 DateSignatureSupervisor = DateTime.Now,
                 DateSignatureUnlicensedTherapist = DateTime.Now,
-                Details = "",
                 DoesClient = false,
-                DoesClientRequired = false,
-                DoesClientRequired_Where = "",
-                DoesNotAlways = false,
-                DoesTheClientExperience = false,
-                DoesTheClientExperience_Where = "",
-                DoYouHaveAnyPhysical = false,
-                DoYouHaveAnyReligious = false,
-                DoYouHaveAnyVisual = false,
                 DoYouOwn = false,
                 DoYouOwn_Explain = "",
-                EastAlone = false,
-                EastFew = false,
-                EastFewer = false,
                 FamilyAssessmentSituation = "",
                 FamilyEmotional = "",
-                GeneralDescription = "",
-                Has3OrMore = false,
-                HasAnIllnes = false,
-                HasClientBeenTreatedPain = false,
-                HasClientBeenTreatedPain_Ifnot = "",
-                HasClientBeenTreatedPain_PleaseIncludeService = "",
-                HasClientBeenTreatedPain_Where = "",
                 HasTheClient = false,
-                HasTheClientVisitedPhysician = false,
-                HasTheClientVisitedPhysician_Date = "",
-                HasTheClientVisitedPhysician_Reason = "",
                 HasTheClient_Explain = "",
-                HasTooth = false,
                 HaveYouEverBeen = false,
                 HaveYouEverBeen_Explain = "",
                 HaveYouEverThought = false,
                 HaveYouEverThought_Explain = "",
-                HigHestEducation = "",
-                Hydration = Bio_Hydration.Diminished,
                 IConcurWhitDiagnistic = false,
                 Id = 0,
-                If6_Date = DateTime.Now,
-                If6_ReferredTo = "",
-                IfForeing_AgeArrival = 0,
-                IfForeing_Born = false,
-                IfForeing_YearArrival = 0,
-                IfMarried = "",
-                IfSeparated = "",
-                IfSexuallyActive = Bio_IfSexuallyActive.N_A,
                 Insight_Fair = false,
                 Insight_Good = false,
                 Insight_Other = false,
@@ -500,8 +386,6 @@ namespace KyoS.Web.Controllers
                 Lacking_Place = false,
                 Lacking_Time = false,
                 LegalAssessment = "",
-                LegalHistory = "",
-                MaritalStatus = "",
                 Mood_Angry = false,
                 Mood_Anxious = false,
                 Mood_Depressed = false,
@@ -516,23 +400,9 @@ namespace KyoS.Web.Controllers
                 Motor_RestLess = false,
                 Motor_Retardation = false,
                 Motor_Tremor = false,
-                NotAlwaysPhysically = false,
-                ObtainRelease = false,
-                ObtainReleaseInformation = false,
-                ObtainReleaseInformation7 = false,
                 Oriented_FullOriented = false,
-                Outcome = "",
-                PersonalFamilyPsychiatric = "",
-                PersonInvolved = "",
-                PleaseProvideGoal = "",
-                PleaseRatePain = 0,
                 PresentingProblem = "",
-                PrimaryLocation = "",
                 Priv = false,
-                ProvideIntegratedSummary = "",
-                RecentWeight = Bio_RecentWeightChange.Gained,
-                RelationShips = "",
-                RelationshipWithFamily = "",
                 RiskToOther_Chronic = false,
                 RiskToOther_High = false,
                 RiskToOther_Low = false,
@@ -553,8 +423,6 @@ namespace KyoS.Web.Controllers
                 Speech_Slow = false,
                 Speech_Slurred = false,
                 Speech_Stutters = false,
-                SubstanceAbuse = "",
-                Takes3OrMore = false,
                 ThoughtContent_Delusions = false,
                 ThoughtContent_Delusions_Type = "",
                 ThoughtContent_Hallucinations = false,
@@ -574,26 +442,11 @@ namespace KyoS.Web.Controllers
                 ThoughtProcess_Preoccupied = false,
                 ThoughtProcess_Rigid = false,
                 ThoughtProcess_Tangential = false,
-                TreatmentNeeds = "",
                 Treatmentrecomendations = "",
-                WhatIsTheClient = "",
-                WhatIsYourLanguage = "",
-                WhereRecord = false,
-                WhereRecord_When = "",
-                WhereRecord_Where = "",
-                WithoutWanting = false,
-                IdAppetite = 0,
-                Appetite_Status = _combosHelper.GetComboBio_Appetite(),
-                IdHydratation = 0,
-                Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
-                IdRecentWeight = 0,
-                RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
-                IdIfSexuallyActive = 0,
-                IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
                 ClientDenied = false,
                 StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
-                ForHowLong = ""
+                EndTime = DateTime.Now
+                
             };
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
@@ -602,26 +455,26 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Edit(int id = 0, int origi = 0)
         {
-            BioEntity entity = _context.Bio
+            BriefEntity entity = _context.Brief
 
-                                       .Include(m => m.Client)
-                                       .Include(n => n.Client.LegalGuardian)
-                                       .Include(n => n.Client.EmergencyContact)
-                                       .Include(n => n.Client.MedicationList)
-                                       .Include(n => n.Client.Client_Referred)
-                                       .ThenInclude(n => n.Referred)
-                                       .Include(n => n.Client.List_BehavioralHistory)
-                                       .Include(f => f.Client)
-                                       .ThenInclude(f => f.Clients_Diagnostics)
-                                       .ThenInclude(f => f.Diagnostic)
-                                       .FirstOrDefault(i => i.Client.Id == id);
+                                         .Include(m => m.Client)
+                                         .Include(n => n.Client.LegalGuardian)
+                                         .Include(n => n.Client.EmergencyContact)
+                                         .Include(n => n.Client.MedicationList)
+                                         .Include(n => n.Client.Client_Referred)
+                                         .ThenInclude(n => n.Referred)
+                                         .Include(n => n.Client.List_BehavioralHistory)
+                                         .Include(f => f.Client)
+                                         .ThenInclude(f => f.Clients_Diagnostics)
+                                         .ThenInclude(f => f.Diagnostic)
+                                         .FirstOrDefault(i => i.Client.Id == id);
 
             if (entity == null)
             {
                 return RedirectToAction("Create", new { id = id });
             }
 
-            BioViewModel model;
+            BriefViewModel model;
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
@@ -633,7 +486,7 @@ namespace KyoS.Web.Controllers
 
                 if (user_logged.Clinic != null)
                 {
-                    model = _converterHelper.ToBioViewModel(entity);
+                    model = _converterHelper.ToBriefViewModel(entity);
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
                     if (model.Client.EmergencyContact == null)
@@ -672,14 +525,14 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            model = new BioViewModel();
+            model = new BriefViewModel();
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Edit(BioViewModel bioViewModel, int origi = 0)
+        public async Task<IActionResult> Edit(BriefViewModel briefViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -687,11 +540,11 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
-                _context.Bio.Update(bioEntity);
+                BriefEntity briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, false, user_logged.UserName);
+                _context.Brief.Update(briefEntity);
                 try
                 {
-                    List<MessageEntity> messages = bioEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    List<MessageEntity> messages = briefEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
                     //todos los mensajes no leidos que tiene el bio los pongo como leidos
                     foreach (MessageEntity value in messages)
                     {
@@ -708,9 +561,10 @@ namespace KyoS.Web.Controllers
                             Addendum = null,
                             Discharge = null,
                             Mtp = null,
-                            Bio = bioEntity,
-                            Title = "Update on reviewed BIO",
-                            Text = $"The BIO document of {bioEntity.Client.Name} that was evaluated on {bioEntity.DateBio.ToShortDateString()} was rectified",
+                            Bio = null,
+                            Brief = briefEntity,
+                            Title = "Update on reviewed Brief",
+                            Text = $"The Brief document of {briefEntity.Client.Name} that was evaluated on {briefEntity.DateBio.ToShortDateString()} was rectified",
                             From = value.To,
                             To = value.From,
                             DateCreated = DateTime.Now,
@@ -723,15 +577,15 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
                     if(origi == 0)
                     {
-                        return RedirectToAction("Index", "Bios");
+                        return RedirectToAction("Index", "Briefs");
                     }
                     if (origi == 1)
                     {
-                        return RedirectToAction("MessagesOfBio", "Messages");
+                        return RedirectToAction("MessagesOfBrief", "Messages");
                     }
                     if (origi == 2)
                     {
-                        return RedirectToAction("BioWithReview","Bios");
+                        return RedirectToAction("BriefWithReview", "Briefs");
                     }
                 }
                 catch (System.Exception ex)
@@ -741,48 +595,7 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
-        }
-
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult CreateBehavioral(int id = 0)
-        {
-
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            Bio_BehavioralHistoryViewModel model;
-
-            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
-            {
-                if (user_logged.Clinic != null)
-                {
-
-                    model = new Bio_BehavioralHistoryViewModel
-                    {
-                        IdClient = id,
-                        Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                        Date = "",
-                        Id = 0,
-                        Problem = ""
-                    };
-                    if (model.Client.List_BehavioralHistory == null)
-                        model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
-                    return View(model);
-                }
-            }
-
-            model = new Bio_BehavioralHistoryViewModel
-            {
-                IdClient = id,
-                Client = _context.Clients.Include(n => n.List_BehavioralHistory).FirstOrDefault(n => n.Id == id),
-                Date = "",
-                Id = 0,
-                Problem = ""
-            };
-            
-            return View(model);
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", briefViewModel) });
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -824,43 +637,6 @@ namespace KyoS.Web.Controllers
             };
 
             return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> CreateBehavioral(Bio_BehavioralHistoryViewModel bioViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                Bio_BehavioralHistoryEntity bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
-                _context.Bio_BehavioralHistory.Add(bioEntity);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                        
-                    return RedirectToAction("CreateBehavioral", new { id = bioViewModel.IdClient });
-                }
-                catch (System.Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                }
-                
-            }
-            Bio_BehavioralHistoryEntity model;
-            model = new Bio_BehavioralHistoryEntity
-            {
-               
-                Date = "",
-                Id = 0,
-                Problem = ""
-            };
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
         [HttpPost]
@@ -932,7 +708,7 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(f => f.Clients_Diagnostics)
-                                              .Include(g => g.Bio)
+                                              .Include(g => g.Brief)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -943,7 +719,7 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.Clients
                                               .Include(f => f.Clients_Diagnostics)
-                                              .Include(g => g.Bio)
+                                              .Include(g => g.Brief)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -952,43 +728,6 @@ namespace KyoS.Web.Controllers
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
-        }
-
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult EditBehavioral(int id = 0)
-        {
-            Bio_BehavioralHistoryViewModel model;
-
-            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                if (user_logged.Clinic != null)
-                {
-
-                    Bio_BehavioralHistoryEntity Behavioral = _context.Bio_BehavioralHistory
-                                                                     .Include(m => m.Client)
-                                                                     .ThenInclude(m => m.List_BehavioralHistory)
-                                                                     .FirstOrDefault(m => m.Id == id);
-                    if (Behavioral == null)
-                    {
-                        return RedirectToAction("NotAuthorized", "Account");
-                    }
-                    else
-                    {
-
-                        model = _converterHelper.ToBio_BehaviorViewModel(Behavioral);
-
-                        return View(model);
-                    }
-
-                }
-            }
-
-            model = new Bio_BehavioralHistoryViewModel();
-            return View(model);
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -1026,35 +765,6 @@ namespace KyoS.Web.Controllers
 
             model = new Bio_BehavioralHistoryViewModel();
             return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> EditBehavioral(Bio_BehavioralHistoryViewModel behavioralViewModel)
-        {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                Bio_BehavioralHistoryEntity behavioralEntity = await _converterHelper.ToBio_BehaviorEntity(behavioralViewModel, false);
-                _context.Bio_BehavioralHistory.Update(behavioralEntity);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("IndexBehavioralHealthHistory", "Bios");
-
-                }
-                catch (System.Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                }
-
-            }
-
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditBehavioral", behavioralViewModel) });
         }
 
         [HttpPost]
@@ -1121,41 +831,41 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
-        public IActionResult PrintBio(int id)
+        public IActionResult PrintBrief(int id)
         {
-            BioEntity entity = _context.Bio
+            BriefEntity entity = _context.Brief
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.Clinic)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.Clinic)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.EmergencyContact)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.EmergencyContact)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.LegalGuardian)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.LegalGuardian)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.List_BehavioralHistory)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.List_BehavioralHistory)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.MedicationList)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.MedicationList)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.Clients_Diagnostics)
-                                       .ThenInclude(cd => cd.Diagnostic)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.Clients_Diagnostics)
+                                         .ThenInclude(cd => cd.Diagnostic)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.Doctor)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.Doctor)
 
-                                       .Include(b => b.Supervisor)
+                                         .Include(b => b.Supervisor)
 
-                                       .Include(b => b.DocumentsAssistant)
+                                         .Include(b => b.DocumentsAssistant)
 
-                                       .Include(b => b.Client)
-                                       .ThenInclude(c => c.Client_Referred)
-                                       .ThenInclude(cr => cr.Referred)
+                                         .Include(b => b.Client)
+                                         .ThenInclude(c => c.Client_Referred)
+                                         .ThenInclude(cr => cr.Referred)
 
-                                       .FirstOrDefault(i => (i.Id == id));
+                                         .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -1169,43 +879,18 @@ namespace KyoS.Web.Controllers
 
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                Stream stream = _reportHelper.FloridaSocialHSBioReport(entity);
+                //Stream stream = _reportHelper.FloridaSocialHSBioReport(entity);
+                Stream stream = null;
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                Stream stream = _reportHelper.DreamsMentalHealthBioReport(entity);
+                //Stream stream = _reportHelper.DreamsMentalHealthBioReport(entity);
+                Stream stream = null;
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
             return null;
-        }
-
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
-        public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
-        {
-            UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null
-                                                            && n.Brief == null
-                                                            && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false)
-                                                          .ToListAsync();
-
-            return View(ClientList);
-
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -1357,9 +1042,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<MedicationEntity> medication = await _context.Medication
-                                                                         .Include(g => g.Client)
-                                                                         .Where(g => g.Client.Id == medicationViewModel.IdClient)
-                                                                         .ToListAsync();
+                                                                      .Include(g => g.Client)
+                                                                      .Where(g => g.Client.Id == medicationViewModel.IdClient)
+                                                                      .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
                 }
@@ -1403,9 +1088,9 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<MedicationEntity> medication = await _context.Medication
-                                                                         .Include(g => g.Client)
-                                                                         .Where(g => g.Client.Id == medicationEntity.Client.Id)
-                                                                         .ToListAsync();
+                                                                  .Include(g => g.Client)
+                                                                  .Where(g => g.Client.Id == medicationEntity.Client.Id)
+                                                                  .ToListAsync();
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
             }
@@ -1414,27 +1099,27 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
-            BioEntity entity = _context.Bio
+            BriefEntity entity = _context.Brief
 
-                                       .Include(m => m.Client)
-                                       .Include(n => n.Client.LegalGuardian)
-                                       .Include(n => n.Client.EmergencyContact)
-                                       .Include(n => n.Client.MedicationList)
-                                       .Include(n => n.Client.Client_Referred)
-                                       .ThenInclude(n => n.Referred)
-                                       .Include(n => n.Client.List_BehavioralHistory)
-                                       .Include(m => m.Client)
-                                       .ThenInclude(n => n.Clients_Diagnostics)
-                                       .ThenInclude(n => n.Diagnostic)
+                                         .Include(m => m.Client)
+                                         .Include(n => n.Client.LegalGuardian)
+                                         .Include(n => n.Client.EmergencyContact)
+                                         .Include(n => n.Client.MedicationList)
+                                         .Include(n => n.Client.Client_Referred)
+                                         .ThenInclude(n => n.Referred)
+                                         .Include(n => n.Client.List_BehavioralHistory)
+                                         .Include(m => m.Client)
+                                         .ThenInclude(n => n.Clients_Diagnostics)
+                                         .ThenInclude(n => n.Diagnostic)
 
-                                       .FirstOrDefault(i => i.Id == id);
+                                         .FirstOrDefault(i => i.Id == id);
 
             if (entity == null)
             {
                 return RedirectToAction("Create", new { id = id });
             }
 
-            BioViewModel model;
+            BriefViewModel model;
 
            
                 UserEntity user_logged = _context.Users
@@ -1445,7 +1130,7 @@ namespace KyoS.Web.Controllers
 
                 if (user_logged.Clinic != null)
                 {
-                    model = _converterHelper.ToBioViewModel(entity);
+                    model = _converterHelper.ToBriefViewModel(entity);
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
                     if (model.Client.EmergencyContact == null)
@@ -1485,26 +1170,26 @@ namespace KyoS.Web.Controllers
                 }
 
             ViewData["origi"] = origi;
-            model = new BioViewModel();
+            model = new BriefViewModel();
             return View(model);
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> FinishEditing(int id)
         {
-            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+            BriefEntity brief = await _context.Brief.FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
             {
-                bio.Status = BioStatus.Approved;
-                bio.DateSignatureSupervisor = DateTime.Now;
-                bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                brief.Status = BioStatus.Approved;
+                brief.DateSignatureSupervisor = DateTime.Now;
+                brief.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             }
             else
             {
-                bio.Status = BioStatus.Pending;
+                brief.Status = BioStatus.Pending;
             }
 
-            _context.Update(bio);
+            _context.Update(brief);
 
             await _context.SaveChangesAsync();
 
@@ -1515,13 +1200,13 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Approve(int id, int origi = 0)
         {
 
-            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+            BriefEntity brief = await _context.Brief.FirstOrDefaultAsync(n => n.Id == id);
 
 
-            bio.Status = BioStatus.Approved;
-            bio.DateSignatureSupervisor = DateTime.Now;
-            bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
-            _context.Update(bio);
+            brief.Status = BioStatus.Approved;
+            brief.DateSignatureSupervisor = DateTime.Now;
+            brief.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(brief);
 
             await _context.SaveChangesAsync();
 
@@ -1559,7 +1244,7 @@ namespace KyoS.Web.Controllers
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                     if (User.IsInRole("Documents_Assistant"))
                     {
-                        return View(await _context.Bio
+                        return View(await _context.Brief
 
                                                   .Include(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
@@ -1573,7 +1258,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        return View(await _context.Bio
+                        return View(await _context.Brief
 
                                                   .Include(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
@@ -1602,7 +1287,7 @@ namespace KyoS.Web.Controllers
             {
                 MessageViewModel model = new MessageViewModel()
                 {
-                    IdBio = id,
+                    IdBrief = id,
                     Origin = origi
                 };
 
@@ -1622,7 +1307,7 @@ namespace KyoS.Web.Controllers
                                                        .Include(u => u.Clinic)
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 model.From = user_logged.UserName;
-                model.To = model.Bio.CreatedBy;
+                model.To = model.Brief.CreatedBy;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
             }
@@ -1637,18 +1322,18 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Documents_Assistant, Supervisor")]
-        public async Task<IActionResult> BioWithReview()
+        public async Task<IActionResult> BriefWithReview()
         {
             if (User.IsInRole("Documents_Assistant"))
             {
-                List<BioEntity> salida = await _context.Bio
-                                                       .Include(wc => wc.Client)
-                                                       .Include(wc => wc.DocumentsAssistant)
-                                                       .Include(wc => wc.Messages.Where(m => m.Notification == false))
-                                                       .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
+                List<BriefEntity> salida = await _context.Brief
+                                                         .Include(wc => wc.Client)
+                                                         .Include(wc => wc.DocumentsAssistant)
+                                                         .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                         .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
                                                                && wc.Status == BioStatus.Pending
                                                                && wc.Messages.Count() > 0))
-                                                       .ToListAsync();
+                                                         .ToListAsync();
 
 
                 return View(salida);
@@ -1660,14 +1345,14 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    List<BioEntity> salida = await _context.Bio
-                                                      .Include(wc => wc.Client)
-                                                      .Include(wc => wc.DocumentsAssistant)
-                                                      .Include(wc => wc.Messages.Where(m => m.Notification == false))
-                                                      .Where(wc => (wc.Client.Clinic.Id == user_logged.Clinic.Id
-                                                              && wc.Status == BioStatus.Pending
-                                                              && wc.Messages.Count() > 0))
-                                                      .ToListAsync();
+                    List<BriefEntity> salida = await _context.Brief
+                                                             .Include(wc => wc.Client)
+                                                             .Include(wc => wc.DocumentsAssistant)
+                                                             .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                             .Where(wc => (wc.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                 && wc.Status == BioStatus.Pending
+                                                                 && wc.Messages.Count() > 0))
+                                                             .ToListAsync();
                     return View(salida);
                 }
             }
@@ -1791,7 +1476,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> AuditBIO()
+        public async Task<IActionResult> AuditBrief()
         {
             UserEntity user_logged = _context.Users
 
@@ -1814,6 +1499,7 @@ namespace KyoS.Web.Controllers
             {
                 client_List = _context.Clients
                                       .Include(m => m.Bio)
+                                      .Include(m => m.Brief)
                                       .Include(m => m.List_BehavioralHistory)
                                       .Include(m => m.MedicationList)
                                       .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -1839,11 +1525,11 @@ namespace KyoS.Web.Controllers
 
             foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
             {
-                if (item.Bio == null)
+                if (item.Brief == null && item.Bio == null)
                 {
                     auditClient.NameClient = item.Name;
                     auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                    auditClient.Description = "The client has no BIO";
+                    auditClient.Description = "The client has no BRIEF";
                     auditClient.Active = 0;
 
                     auditClient_List.Add(auditClient);
@@ -1851,11 +1537,11 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    if (item.AdmisionDate > item.Bio.DateBio)
+                    if (item.AdmisionDate > item.Brief.DateBio)
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "The admission date is after the BIO date";
+                        auditClient.Description = "The admission date is after the BRIEF date";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -1881,21 +1567,21 @@ namespace KyoS.Web.Controllers
                         auditClient_List.Add(auditClient);
                         auditClient = new AuditBIO();
                     }
-                    if (item.Bio.Status == BioStatus.Edition)
+                    if (item.Brief.Status == BioStatus.Edition)
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Bio is edition";
+                        auditClient.Description = "Brief is edition";
                         auditClient.Active = 1;
 
                         auditClient_List.Add(auditClient);
                         auditClient = new AuditBIO();
                     }
-                    if (item.Bio.Status == BioStatus.Pending)
+                    if (item.Brief.Status == BioStatus.Pending)
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Bio is pending";
+                        auditClient.Description = "Brief is pending";
                         auditClient.Active = 1;
 
                         auditClient_List.Add(auditClient);
@@ -1906,39 +1592,6 @@ namespace KyoS.Web.Controllers
             }
 
             return View(auditClient_List);
-        }
-
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult SelectBIOorBrief(int idClient = 0)
-        {
-            BIOTypeViewModel model = new BIOTypeViewModel()
-            {
-                IdClient = idClient,
-                IdType = 0,
-                Types = _combosHelper.GetComboBio_Type()
-
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> SelectBIOorBrief(BIOTypeViewModel BioTypeViewModel)
-        {
-            UserEntity user_logged = await _context.Users
-                                                       .Include(u => u.Clinic)
-                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (BioTypeViewModel.IdType == 0)
-            {
-                return RedirectToAction("Create", "Bios", new { id = BioTypeViewModel.IdClient });
-            }
-            else
-            {
-                return RedirectToAction("Create", "Briefs", new { id = BioTypeViewModel.IdClient, origi = 1});
-            }
-            
         }
 
     }

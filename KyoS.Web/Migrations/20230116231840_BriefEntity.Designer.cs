@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230116231840_BriefEntity")]
+    partial class BriefEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4452,7 +4454,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("BioId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BriefId")
+                    b.Property<int?>("BriefEntityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
@@ -4504,7 +4506,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("BioId");
 
-                    b.HasIndex("BriefId");
+                    b.HasIndex("BriefEntityId");
 
                     b.HasIndex("DischargeId");
 
@@ -10091,9 +10093,9 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("BioId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.BriefEntity", "Brief")
+                    b.HasOne("KyoS.Web.Data.Entities.BriefEntity", null)
                         .WithMany("Messages")
-                        .HasForeignKey("BriefId");
+                        .HasForeignKey("BriefEntityId");
 
                     b.HasOne("KyoS.Web.Data.Entities.DischargeEntity", "Discharge")
                         .WithMany("Messages")
@@ -10122,8 +10124,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Addendum");
 
                     b.Navigation("Bio");
-
-                    b.Navigation("Brief");
 
                     b.Navigation("Discharge");
 

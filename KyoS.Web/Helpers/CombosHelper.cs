@@ -1602,5 +1602,16 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboBio_Type()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = Bio_Type.BIO.ToString(), Value = "0"},
+                new SelectListItem { Text = Bio_Type.BRIEF.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
+
     }
 }
