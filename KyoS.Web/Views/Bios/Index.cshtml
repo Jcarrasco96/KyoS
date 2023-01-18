@@ -16,13 +16,16 @@
 
 <div class="row">
     <div class="col-md-12">
-        @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
+        @if (Model.Count() > 0)
         {
-            <a onclick="showInPopupLg('@Url.Action("AuditBIO", "Bios", null, Context.Request.Scheme)','Audit BIO')" class="btn btn-danger" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
-        }
-        else
-        {
-            <a class="btn btn-danger disabled" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
+            @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
+            {
+                <a onclick="showInPopupLg('@Url.Action("AuditBIO", "Bios", null, Context.Request.Scheme)','Audit BIO')" class="btn btn-danger" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
+            }
+            else
+            {
+                <a class="btn btn-danger disabled" title="Audit BIO"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BIO</a>
+            }
         }
     </div>
     <div class="col-md-12">

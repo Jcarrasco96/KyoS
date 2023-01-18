@@ -62,6 +62,8 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -72,6 +74,8 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Bio.CreatedBy == user_logged.UserName)
@@ -83,6 +87,8 @@ namespace KyoS.Web.Controllers
                     return View(await _context.Clients
 
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
