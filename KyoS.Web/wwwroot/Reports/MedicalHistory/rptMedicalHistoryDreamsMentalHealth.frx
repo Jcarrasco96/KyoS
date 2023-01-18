@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/14/2023 18:06:30" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/18/2023 12:22:36" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3NXjcDQ4aBg2uhdy5Lvq+9A==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38DxBHiPNbozAonwTe2r+Hw==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -243,6 +243,10 @@
         <Column Name="UsualDurationOfPeriods" DataType="System.String"/>
         <Column Name="UsualIntervalBetweenPeriods" DataType="System.String"/>
         <Column Name="InformationProvided" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
   </Dictionary>
@@ -1155,7 +1159,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data16" Top="89.43" Width="778.3" Height="875.77" Guides="519.75">
+    <DataBand Name="Data16" Top="89.43" Width="778.3" Height="894.67" Guides="519.75">
       <TextObject Name="Text398" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="MEDICAL HISTORY (Continued)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text417" Top="57.08" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text418" Left="500.85" Top="57.08" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -1456,32 +1460,34 @@
           <TableCell Name="Cell940" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row192" Height="39.69">
-          <TableCell Name="Cell941" Text="Immunizations: [IntakeMedicalHistory.Immunizations]" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell941" Text="Immunizations: [IntakeMedicalHistory.Immunizations]" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text442" Left="13.9" Top="42.8" Width="440.37" Height="18.9" Text="Documents were translated in my native language (if needed).  " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableCell>
           <TableCell Name="Cell942" Font="Arial, 10pt"/>
           <TableCell Name="Cell943" Font="Arial, 10pt"/>
           <TableCell Name="Cell944" Font="Arial, 10pt"/>
           <TableCell Name="Cell945" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <LineObject Name="Line85" Left="374.55" Top="739" Width="-287.28"/>
-      <TextObject Name="Text443" Left="85.05" Top="740.45" Width="289.4" Height="24.57" CanGrow="true" Text="Person Served Signature " Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text444" Left="478.95" Top="740.45" Width="213.8" Height="24.57" CanGrow="true" Text="DATE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <LineObject Name="Line86" Left="706.3" Top="739" Width="-240.03"/>
-      <TextObject Name="Text446" Left="479.95" Top="718.2" Width="217.35" Height="18.9" Text="[IntakeTuberculosis.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <LineObject Name="Line87" Left="374.55" Top="792.6" Width="-287.28"/>
-      <TextObject Name="Text447" Left="50.25" Top="795.95" Width="365" Height="24.57" CanGrow="true" Text="Parent, Legal Guardian or Authorized Representative " Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line85" Left="374.55" Top="720.1" Width="-325.08"/>
+      <TextObject Name="Text443" Left="47.25" Top="721.55" Width="327.2" Height="24.57" CanGrow="true" Text="Person Served Signature " Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text444" Left="478.95" Top="721.55" Width="213.8" Height="24.57" CanGrow="true" Text="DATE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line86" Left="706.3" Top="720.1" Width="-240.03"/>
+      <TextObject Name="Text446" Left="479.95" Top="699.3" Width="217.35" Height="18.9" Text="[IntakeTuberculosis.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <LineObject Name="Line87" Left="374.55" Top="792.6" Width="-325.08"/>
+      <TextObject Name="Text447" Left="50.25" Top="795.95" Width="327.2" Height="24.57" CanGrow="true" Text="Parent, Legal Guardian or Authorized Representative " Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text448" Left="478.95" Top="793.95" Width="213.8" Height="24.57" CanGrow="true" Text="DATE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line88" Left="706.3" Top="792.6" Width="-240.03"/>
       <TextObject Name="Text449" Left="477.95" Top="771.35" Width="217.35" Height="18.9" Text="[IntakeTuberculosis.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text445" Left="479.95" Top="828.5" Width="217.35" Height="18.9" Text="[IntakeTuberculosis.DateSignatureEmployee]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <LineObject Name="Line89" Left="374.55" Top="849.3" Width="-287.28"/>
-      <TextObject Name="Text450" Left="85.05" Top="851.2" Width="289.4" Height="24.57" CanGrow="true" Text="Employee Signature " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text451" Left="478.95" Top="851.2" Width="213.8" Height="24.57" CanGrow="true" Text="DATE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <LineObject Name="Line90" Left="706.3" Top="849.3" Width="-240.03"/>
-      <CheckBoxObject Name="CheckBox393" Top="669.95" Width="11.34" Height="11.34" Border.Lines="All"/>
-      <TextObject Name="Text442" Left="13.9" Top="666.5" Width="440.37" Height="18.9" Text="Documents were translated in my native language (if needed).  " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text445" Left="479.95" Top="847.4" Width="217.35" Height="18.9" Text="[IntakeTuberculosis.DateSignatureEmployee]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <LineObject Name="Line89" Left="374.55" Top="868.2" Width="-325.08"/>
+      <TextObject Name="Text450" Left="47.25" Top="870.1" Width="327.2" Height="24.57" CanGrow="true" Text="Employee Signature " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text451" Left="478.95" Top="870.1" Width="213.8" Height="24.57" CanGrow="true" Text="DATE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line90" Left="706.3" Top="868.2" Width="-240.03"/>
+      <CheckBoxObject Name="CheckBox393" Top="663.5" Width="11.34" Height="11.34" Border.Lines="All"/>
+      <PictureObject Name="Picture7" Left="161.65" Top="812.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter16" Top="969.2" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter16" Top="988.1" Width="778.3" Height="37.8">
       <TableObject Name="Table37" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column113" Width="189"/>
         <TableColumn Name="Column114" Width="415.8"/>
