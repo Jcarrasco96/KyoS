@@ -51,6 +51,7 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Setting)
 
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            List<ClientEntity> client = new List<ClientEntity>();
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
@@ -58,37 +59,49 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
-                    return View(await _context.Clients
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                {
+                    client = await _context.Clients
 
-                                              .Include(g => g.Brief)
-                                              .Include(g => g.List_BehavioralHistory)
+                                               .Include(g => g.Brief)
+                                               .Include(u => u.Clinic)
+                                               .ThenInclude(c => c.Setting)
+                                               .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                    && n.Brief != null)
-                                              .OrderBy(f => f.Name)
-                                              .ToListAsync());
+                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                        && n.Brief != null)
+                                               .OrderBy(f => f.Name)
+                                               .ToListAsync();
+                }
 
-                if (User.IsInRole("Documents_Assistant") )
-                    return View(await _context.Clients
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    client = await _context.Clients
 
-                                              .Include(g => g.Brief)
-                                              .Include(g => g.List_BehavioralHistory)
+                                           .Include(g => g.Brief)
+                                           .Include(u => u.Clinic)
+                                           .ThenInclude(c => c.Setting)
+                                           .Include(g => g.List_BehavioralHistory)
 
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Brief.CreatedBy == user_logged.UserName)
-                                              .OrderBy(f => f.Name)
-                                              .ToListAsync());
+                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Brief.CreatedBy == user_logged.UserName)
+                                           .OrderBy(f => f.Name)
+                                           .ToListAsync();
+
+                }
 
                 if (User.IsInRole("Facilitator"))
                 {
-                    return View(await _context.Clients
+                    client = await _context.Clients
 
-                                              .Include(g => g.Brief)
-                                              .Include(g => g.List_BehavioralHistory)
-                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                              .OrderBy(f => f.Name)
-                                              .ToListAsync());
+                                           .Include(g => g.Brief)
+                                           .Include(u => u.Clinic)
+                                           .ThenInclude(c => c.Setting)
+                                           .Include(g => g.List_BehavioralHistory)
+                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                           .OrderBy(f => f.Name)
+                                           .ToListAsync();
                 }
+                return View(client);
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
