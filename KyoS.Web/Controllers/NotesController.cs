@@ -1029,6 +1029,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
+                        ViewData["session"] = "AM";
                         return View(noteViewModel);
                     }
                 }
@@ -1041,6 +1042,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
+                        ViewData["session"] = "PM";
                         return View(noteViewModel);
                     }
                 }
