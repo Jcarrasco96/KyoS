@@ -37,7 +37,7 @@
                     <strong class="red">
                         Error. There are no activities for this date. Please must create them.
                     </strong>
-                    <a asp-action="CreateActivitiesWeek" asp-controller="Activities" asp-route-id="@Model.Id">Activities per day</a>
+                    <a asp-action="CreateActivitiesWeek" asp-controller="Activities" asp-route-session="@ViewData["session"].ToString()" asp-route-id="@Model.Id">Activities per day</a>
                 </div>
             }
             @if (ViewBag.Error == "2")

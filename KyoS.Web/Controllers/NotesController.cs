@@ -1029,6 +1029,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
+                        ViewData["session"] = "AM";
                         return View(noteViewModel);
                     }
                 }
@@ -1041,6 +1042,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
+                        ViewData["session"] = "PM";
                         return View(noteViewModel);
                     }
                 }
@@ -10083,7 +10085,8 @@ namespace KyoS.Web.Controllers
                                                                             && wc.Workday.Week.Id == id
                                                                             && wc.Present == true
                                                                             && wc.Client != null
-                                                                            && wc.BilledDate == null))
+                                                                            && wc.BilledDate == null
+                                                                            && wc.Hold == false))
                                                                  .OrderBy(m => m.Facilitator)
                                                                  .OrderBy(m => m.Client.Name)
                                                                  .OrderBy(m => m.Workday.Date)
@@ -10158,7 +10161,8 @@ namespace KyoS.Web.Controllers
                                                                             && wc.Workday.Week.Id == id
                                                                             && wc.Present == true
                                                                             && wc.Client != null
-                                                                            && wc.BilledDate != null))
+                                                                            && wc.BilledDate != null
+                                                                            && wc.Hold == false))
                                                                  .OrderBy(m => m.Facilitator)
                                                                  .OrderBy(m => m.Client.Name)
                                                                  .OrderBy(m => m.Workday.Date)
@@ -10314,7 +10318,8 @@ namespace KyoS.Web.Controllers
                                                                             && wc.Workday.Week.Id == idWeek
                                                                             && wc.Present == true
                                                                             && wc.Client != null
-                                                                            && wc.BilledDate == null))
+                                                                            && wc.BilledDate == null
+                                                                            && wc.Hold == false))
                                                                  .OrderBy(m => m.Facilitator)
                                                                  .OrderBy(m => m.Client.Name)
                                                                  .OrderBy(m => m.Workday.Date)
@@ -10343,7 +10348,8 @@ namespace KyoS.Web.Controllers
                                                                                && wc.Workday.Week.Id == idWeek
                                                                                && wc.Present == true
                                                                                && wc.Client != null
-                                                                               && wc.BilledDate != null))
+                                                                               && wc.BilledDate != null
+                                                                               && wc.Hold == false))
                                                                     .OrderBy(m => m.Facilitator)
                                                                     .OrderBy(m => m.Client.Name)
                                                                     .OrderBy(m => m.Workday.Date)
@@ -10417,7 +10423,8 @@ namespace KyoS.Web.Controllers
                                                                 && wc.Workday.Week.Id == workday_client.Workday.Week.Id
                                                                 && wc.Present == true
                                                                 && wc.Client != null
-                                                                && wc.BilledDate != null))
+                                                                && wc.BilledDate != null
+                                                                && wc.Hold == false))
                                                         .OrderBy(m => m.Facilitator)
                                                         .OrderBy(m => m.Client.Name)
                                                         .OrderBy(m => m.Workday.Date)
@@ -10471,7 +10478,8 @@ namespace KyoS.Web.Controllers
                                                                  && wc.Workday.Week.Id == week
                                                                  && wc.Present == true
                                                                  && wc.Client != null
-                                                                 && wc.BilledDate != null))
+                                                                 && wc.BilledDate != null
+                                                                 && wc.Hold == false))
                                                         .OrderBy(m => m.Facilitator)
                                                         .OrderBy(m => m.Client.Name)
                                                         .OrderBy(m => m.Workday.Date)
@@ -12454,7 +12462,8 @@ namespace KyoS.Web.Controllers
                                                                      .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                                 && wc.Present == true
                                                                                 && wc.Client.Id == workday_client.Client.Id
-                                                                                && wc.BilledDate == null))
+                                                                                && wc.BilledDate == null
+                                                                                && wc.Hold == false))
                                                                      .OrderBy(m => m.Workday.Date)
                                                                      .ToListAsync();
 
@@ -12481,7 +12490,8 @@ namespace KyoS.Web.Controllers
                                                                      .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                                 && wc.Present == true
                                                                                 && wc.Client.Id == workday_client.Client.Id
-                                                                                && wc.BilledDate != null))
+                                                                                && wc.BilledDate != null
+                                                                                && wc.Hold == false))
                                                                      .OrderBy(m => m.Workday.Date)
                                                                      .ToListAsync();
 
@@ -12567,7 +12577,8 @@ namespace KyoS.Web.Controllers
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Present == true
                                                                             && wc.Client.Id == workday_client.Client.Id
-                                                                            && wc.BilledDate != null))
+                                                                            && wc.BilledDate != null
+                                                                            && wc.Hold == false))
                                                                  .OrderBy(m => m.Workday.Date)
                                                                  .ToListAsync();
                 ViewData["Billed"] = "1";
@@ -12867,5 +12878,203 @@ namespace KyoS.Web.Controllers
 
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillingReportHold(int idWeek = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (idWeek != 0)
+            {
+                IQueryable<WeekEntity> query = _context.Weeks
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(g => g.Facilitator)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Note)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.NoteP)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Client)
+                                                       .ThenInclude(c => c.Clients_Diagnostics)
+                                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                                       .Include(w => w.Clinic)
+
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));
+
+                try
+                {
+                    BillingReport1ViewModel model = new BillingReport1ViewModel
+                    {
+                        IdFacilitator = 0,
+                        Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                        Weeks = query.ToList(),
+                        IdWeek = idWeek,
+                        WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
+                    };
+
+                    return View(model);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(BillingReport));
+                }
+            }
+            else
+            {
+                int max = _context.Weeks
+                                  .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
+                                  .Max(m => m.Id);
+
+                IQueryable<WeekEntity> query = _context.Weeks
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(g => g.Facilitator)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Note)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.NoteP)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Client)
+                                                       .ThenInclude(c => c.Clients_Diagnostics)
+                                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                                       .Include(w => w.Clinic)
+
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
+
+                BillingReport1ViewModel model = new BillingReport1ViewModel
+                {
+                    IdFacilitator = 0,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    Weeks = query.ToList(),
+                    IdWeek = max,
+                    WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillingReportHold(BillingReport1ViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(BillingReportHold), new { idWeek = model.IdWeek });
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCEL_Hold(int idWeek, int all = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<Workday_Client> workday_Client = new List<Workday_Client>();
+
+            WeekEntity week = _context.Weeks.FirstOrDefault(w => w.Id == idWeek);
+
+            string Periodo = "";
+            string ReportName = "SuperBill Hold Report " + week.InitDate.ToShortDateString() + " To " + week.FinalDate.ToShortDateString() + ".xlsx";
+            string data = "";
+            if (all == 0)
+            {
+                workday_Client = _context.Workdays_Clients
+                                         .Include(f => f.Facilitator)
+                                         .Include(c => c.Client)
+                                         .Include(w => w.Workday)
+
+                                         .Include(w => w.Client)
+                                         .ThenInclude(w => w.Clients_Diagnostics)
+                                         .ThenInclude(w => w.Diagnostic)
+
+                                         .Include(w => w.Client)
+                                         .ThenInclude(w => w.Clients_HealthInsurances)
+                                         .ThenInclude(w => w.HealthInsurance)
+
+                                         .Include(w => w.Note)
+                                         .Include(w => w.NoteP)
+                                         .Include(w => w.IndividualNote)
+                                         .Include(w => w.GroupNote)
+
+                                         .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                               && n.Workday.Week.Id == idWeek
+                                               && n.Present == true
+                                               && n.Client != null
+                                               && n.Hold == true)
+                                         .OrderBy(n => n.Client.Name)
+                                         .ToList();
+                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                data = "NOT BILLED";
+            }
+            else
+            {
+                workday_Client = _context.Workdays_Clients
+                                             .Include(f => f.Facilitator)
+                                             .Include(c => c.Client)
+                                             .Include(w => w.Workday)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_Diagnostics)
+                                             .ThenInclude(w => w.Diagnostic)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_HealthInsurances)
+                                             .ThenInclude(w => w.HealthInsurance)
+
+                                             .Include(w => w.Note)
+                                             .Include(w => w.NoteP)
+                                             .Include(w => w.IndividualNote)
+                                             .Include(w => w.GroupNote)
+
+                                             .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Present == true
+                                                   && n.Client != null
+                                                   && n.Hold == true)
+                                             .OrderBy(n => n.Client.Name)
+                                             .ToList();
+                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                data = "ALL DATA";
+            }
+
+
+            byte[] content = _exportExcelHelper.ExportBillHoldForWeekHelper(workday_Client, Periodo, week.Clinic.Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+        }
     }
 }

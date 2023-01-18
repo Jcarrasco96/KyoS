@@ -36,7 +36,7 @@ namespace KyoS.Web.Data.Entities
                 {
                     foreach (var item in this.Days)
                     {
-                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true))
+                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false))
                         {
                             if(workday_client.Note != null)
                             {
@@ -91,6 +91,70 @@ namespace KyoS.Web.Data.Entities
                 return units;
             }
         }
+        public int Units_Hold
+        {
+            get
+            {
+                int units = 0;
+                if (this.Days != null)
+                {
+                    foreach (var item in this.Days)
+                    {
+                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == true))
+                        {
+                            if (workday_client.Note != null)
+                            {
+                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Note.Schema == Common.Enums.SchemaType.Schema2))
+                                {
+                                    units = units + 16;
+                                }
+                                if ((workday_client.Note.Schema == Common.Enums.SchemaType.Schema4))
+                                {
+                                    units = units + 12;
+                                }
+                            }
+                            else
+                            {
+                                if (workday_client.NoteP != null)
+                                {
+                                    if ((workday_client.NoteP.Schema == Common.Enums.SchemaType.Schema3))
+                                    {
+                                        units = units + workday_client.NoteP.RealUnits;
+                                    }
+                                }
+                                else
+                                {
+                                    if ((workday_client.IndividualNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Individual))
+                                    {
+                                        units = units + 4;
+                                    }
+                                    else
+                                    {
+                                        if ((workday_client.GroupNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Group))
+                                        {
+                                            units = units + 8;
+                                        }
+                                        else
+                                        {
+                                            if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema1) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema2) || (workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema3))
+                                            {
+                                                units = units + 16;
+                                            }
+                                            if ((workday_client.Workday.Week.Clinic.Schema == Common.Enums.SchemaType.Schema4))
+                                            {
+                                                units = units + 12;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+                return units;
+            }
+        }
         public int Notes
         {
             get
@@ -100,7 +164,22 @@ namespace KyoS.Web.Data.Entities
                 { 
                     foreach (var item in this.Days)
                     {
-                        count += item.Workdays_Clients.Where(wc => wc.Present == true).Count();
+                        count += item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false).Count();
+                    }
+                }
+                return count;
+            }
+        }
+        public int Notes_Hold
+        {
+            get
+            {
+                int count = 0;
+                if (this.Days != null)
+                {
+                    foreach (var item in this.Days)
+                    {
+                        count += item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == true).Count();
                     }
                 }
                 return count;
