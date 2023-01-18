@@ -60,8 +60,9 @@
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Service</th>
                             <th class="col-md-2" style="text-align:center;">Session</th>
-                            <th class="col-md-4">Name</th>
+                            <th class="col-md-3">Name</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-1" style="text-align:center;">Hold</th>
                             <th class="col-md-2">Facilitator</th>
                             <th class="col-md-1"></th>
                         </tr>
@@ -87,21 +88,45 @@
                                         Approved
                                     </span>
                                 </td>
+                                <td align="center">
+                                    @if (day_client.Hold == true)
+                                    {
+                                        <span class="label label-default">
+                                            Hold
+                                        </span>
+                                    }
+                                    else
+                                    { 
+                                        <span class="label label-success">
+                                            Active
+                                        </span>
+                                    }
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
                                 </td>
                                 <td align="right">
-                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR && day_client.Hold == false)
                                     {
                                         <a asp-action="PrintNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
-                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                    else
                                     {
-                                        <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                    }
-                                    @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
-                                    {
-                                        <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual && day_client.Hold == false)
+                                        {
+                                            <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group && day_client.Hold == false)
+                                            {
+                                                <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
                                     }
                                 </td>
                             </tr>
