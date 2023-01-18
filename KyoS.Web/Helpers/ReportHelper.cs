@@ -4569,6 +4569,34 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
 
+            DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                         .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+
+            //signatures images 
+            string path;
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+                if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }            
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -4602,6 +4630,34 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                         .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+
+            //signatures images 
+            string path;
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+                if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -6654,6 +6710,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("UsualDurationOfPeriods", typeof(string));
             dt.Columns.Add("UsualIntervalBetweenPeriods", typeof(string));
             dt.Columns.Add("InformationProvided", typeof(bool));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
 
             if (intake != null)
             {
@@ -6809,7 +6866,8 @@ namespace KyoS.Web.Helpers
                                             intake.DateOfLastPeriod,
                                             intake.UsualDurationOfPeriods,
                                             intake.UsualIntervalBetweenPeriods,
-                                            intake.InformationProvided
+                                            intake.InformationProvided,
+                                            intake.AdmissionedFor
             });
             }
             else
@@ -6966,7 +7024,8 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             string.Empty,
-                                            false
+                                            false,
+                                            string.Empty
                                         });
             }
 
