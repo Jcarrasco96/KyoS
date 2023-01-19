@@ -4669,6 +4669,177 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Brief reports         
+        public Stream FloridaSocialHSBriefReport(BriefEntity brief)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Briefs\\rptBriefFloridaSocialHS.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(brief.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(brief.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(brief.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(brief.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(brief.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(brief.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBriefDS(brief));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(brief.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(brief.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(brief.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(brief.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(brief.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((brief.Supervisor != null) && (!string.IsNullOrEmpty(brief.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((brief.DocumentsAssistant != null) && (!string.IsNullOrEmpty(brief.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthBriefReport(BriefEntity brief)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Briefs\\rptBriefDreamsMentalHealth.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(brief.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(brief.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(brief.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(brief.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(brief.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(brief.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBriefDS(brief));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(brief.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(brief.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(brief.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(brief.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(brief.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((brief.Supervisor != null) && (!string.IsNullOrEmpty(brief.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((brief.DocumentsAssistant != null) && (!string.IsNullOrEmpty(brief.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -8992,6 +9163,416 @@ namespace KyoS.Web.Helpers
                                             0,
                                             0,
                                             0
+                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetBriefDS(BriefEntity brief)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "Brief"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateBio", typeof(DateTime));
+
+            dt.Columns.Add("Setting", typeof(string));
+
+            dt.Columns.Add("CMH", typeof(bool));
+            dt.Columns.Add("Priv", typeof(bool));
+            dt.Columns.Add("BioH0031HN", typeof(bool));
+            dt.Columns.Add("IDAH0031HO", typeof(bool));
+
+            dt.Columns.Add("PresentingProblem", typeof(string));
+            dt.Columns.Add("ClientAssessmentSituation", typeof(string));
+            dt.Columns.Add("FamilyAssessmentSituation", typeof(string));
+            dt.Columns.Add("FamilyEmotional", typeof(string));
+            dt.Columns.Add("LegalAssessment", typeof(string));
+
+            dt.Columns.Add("Appearance_Disheveled", typeof(bool));
+            dt.Columns.Add("Appearance_FairHygiene", typeof(bool));
+            dt.Columns.Add("Appearance_Cleaned", typeof(bool));
+            dt.Columns.Add("Appearance_WellGroomed", typeof(bool));
+            dt.Columns.Add("Appearance_Bizarre", typeof(bool));
+            dt.Columns.Add("Motor_Normal", typeof(bool));
+            dt.Columns.Add("Motor_Agitated", typeof(bool));
+            dt.Columns.Add("Motor_Retardation", typeof(bool));
+            dt.Columns.Add("Motor_RestLess", typeof(bool));
+            dt.Columns.Add("Motor_Akathisia", typeof(bool));
+            dt.Columns.Add("Motor_Tremor", typeof(bool));
+            dt.Columns.Add("Motor_Other", typeof(bool));
+            dt.Columns.Add("Speech_Normal", typeof(bool));
+            dt.Columns.Add("Speech_Loud", typeof(bool));
+            dt.Columns.Add("Speech_Mumbled", typeof(bool));
+            dt.Columns.Add("Speech_Stutters", typeof(bool));
+            dt.Columns.Add("Speech_Pressured", typeof(bool));
+            dt.Columns.Add("Speech_Rapid", typeof(bool));
+            dt.Columns.Add("Speech_Impoverished", typeof(bool));
+            dt.Columns.Add("Speech_Slow", typeof(bool));
+            dt.Columns.Add("Speech_Slurred", typeof(bool));
+            dt.Columns.Add("Speech_Other", typeof(bool));
+            dt.Columns.Add("Affect_Appropriate", typeof(bool));
+            dt.Columns.Add("Affect_labile", typeof(bool));
+            dt.Columns.Add("Affect_Flat", typeof(bool));
+            dt.Columns.Add("Affect_Tearful_Sad", typeof(bool));
+            dt.Columns.Add("Affect_Expansive", typeof(bool));
+            dt.Columns.Add("Affect_Anxious", typeof(bool));
+            dt.Columns.Add("Affect_Blunted", typeof(bool));
+            dt.Columns.Add("Affect_Angry", typeof(bool));
+            dt.Columns.Add("Affect_Constricted", typeof(bool));
+            dt.Columns.Add("Affect_Other", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Organized", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Obsessive", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_FightIdeas", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Disorganized", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Tangential", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_LooseAssociations", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_GoalDirected", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Circumstantial", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Other", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Irrational", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Preoccupied", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Rigid", typeof(bool));
+            dt.Columns.Add("ThoughtProcess_Blocking", typeof(bool));
+            dt.Columns.Add("Mood_Euthymic", typeof(bool));
+            dt.Columns.Add("Mood_Depressed", typeof(bool));
+            dt.Columns.Add("Mood_Anxious", typeof(bool));
+            dt.Columns.Add("Mood_Euphoric", typeof(bool));
+            dt.Columns.Add("Mood_Angry", typeof(bool));
+            dt.Columns.Add("Mood_Maniac", typeof(bool));
+            dt.Columns.Add("Mood_Other", typeof(bool));
+            dt.Columns.Add("Judgment_Good", typeof(bool));
+            dt.Columns.Add("Judgment_Fair", typeof(bool));
+            dt.Columns.Add("Judgment_Poor", typeof(bool));
+            dt.Columns.Add("Judgment_Other", typeof(bool));
+            dt.Columns.Add("Insight_Good", typeof(bool));
+            dt.Columns.Add("Insight_Fair", typeof(bool));
+            dt.Columns.Add("Insight_Poor", typeof(bool));
+            dt.Columns.Add("Insight_Other", typeof(bool));
+            dt.Columns.Add("ThoughtContent_Relevant", typeof(bool));
+            dt.Columns.Add("ThoughtContent_RealityBased", typeof(bool));
+            dt.Columns.Add("ThoughtContent_Hallucinations", typeof(bool));
+
+            dt.Columns.Add("ThoughtContent_Hallucinations_Type", typeof(string));
+
+            dt.Columns.Add("ThoughtContent_Delusions", typeof(bool));
+
+            dt.Columns.Add("ThoughtContent_Delusions_Type", typeof(string));
+
+            dt.Columns.Add("Oriented_FullOriented", typeof(bool));
+            dt.Columns.Add("Lacking_Time", typeof(bool));
+            dt.Columns.Add("Lacking_Place", typeof(bool));
+            dt.Columns.Add("Lacking_Person", typeof(bool));
+            dt.Columns.Add("Lacking_Location", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Low", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Medium", typeof(bool));
+            dt.Columns.Add("RiskToSelf_High", typeof(bool));
+            dt.Columns.Add("RiskToSelf_Chronic", typeof(bool));
+            dt.Columns.Add("RiskToOther_Low", typeof(bool));
+            dt.Columns.Add("RiskToOther_Medium", typeof(bool));
+            dt.Columns.Add("RiskToOther_High", typeof(bool));
+            dt.Columns.Add("RiskToOther_Chronic", typeof(bool));
+            dt.Columns.Add("SafetyPlan", typeof(bool));
+
+            dt.Columns.Add("Comments", typeof(string));
+
+            dt.Columns.Add("HaveYouEverThought", typeof(bool));
+
+            dt.Columns.Add("HaveYouEverThought_Explain", typeof(string));
+
+            dt.Columns.Add("DoYouOwn", typeof(bool));
+
+            dt.Columns.Add("DoYouOwn_Explain", typeof(string));
+
+            dt.Columns.Add("DoesClient", typeof(bool));
+            dt.Columns.Add("HaveYouEverBeen", typeof(bool));
+
+            dt.Columns.Add("HaveYouEverBeen_Explain", typeof(string));
+
+            dt.Columns.Add("HasTheClient", typeof(bool));
+
+            dt.Columns.Add("HasTheClient_Explain", typeof(string));//termine aqui
+
+            dt.Columns.Add("Treatmentrecomendations", typeof(string));//
+            dt.Columns.Add("DateSignatureLicensedPractitioner", typeof(DateTime));//
+            dt.Columns.Add("DateSignatureUnlicensedTherapist", typeof(DateTime));//
+            dt.Columns.Add("IConcurWhitDiagnistic", typeof(bool));//
+            dt.Columns.Add("AlternativeDiagnosis", typeof(string));//
+            dt.Columns.Add("DateSignatureSupervisor", typeof(DateTime));//
+            dt.Columns.Add("EndTime", typeof(DateTime));//
+            dt.Columns.Add("StartTime", typeof(DateTime));//
+            dt.Columns.Add("ClientDenied", typeof(bool));//
+            dt.Columns.Add("AdmissionedFor", typeof(string));//
+            dt.Columns.Add("CreatedBy", typeof(string));//
+            dt.Columns.Add("CreatedOn", typeof(DateTime));//
+            dt.Columns.Add("LastModifiedBy", typeof(string));//
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));//
+            dt.Columns.Add("DocumentsAssistantId", typeof(int));//
+            dt.Columns.Add("Status", typeof(int));//
+            dt.Columns.Add("SupervisorId", typeof(int));//
+            dt.Columns.Add("SumanrOfFindings", typeof(string));//
+
+            if (brief != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            brief.Id,
+                                            brief.Client_FK,
+                                            brief.DateSignaturePerson,
+                                            brief.DateBio,
+                                            brief.Setting,
+                                            brief.CMH,
+                                            brief.Priv,
+                                            brief.BioH0031HN,
+                                            brief.IDAH0031HO,
+                                            brief.PresentingProblem,
+                                            brief.ClientAssessmentSituation,
+                                            brief.FamilyAssessmentSituation,
+                                            brief.FamilyEmotional,
+                                            brief.LegalAssessment,
+                                            brief.Appearance_Disheveled,
+                                            brief.Appearance_FairHygiene,
+                                            brief.Appearance_Cleaned,
+                                            brief.Appearance_WellGroomed,
+                                            brief.Appearance_Bizarre,
+                                            brief.Motor_Normal,
+                                            brief.Motor_Agitated,
+                                            brief.Motor_Retardation,
+                                            brief.Motor_RestLess,
+                                            brief.Motor_Akathisia,
+                                            brief.Motor_Tremor,
+                                            brief.Motor_Other,
+                                            brief.Speech_Normal,
+                                            brief.Speech_Loud,
+                                            brief.Speech_Mumbled,
+                                            brief.Speech_Stutters,
+                                            brief.Speech_Pressured,
+                                            brief.Speech_Rapid,
+                                            brief.Speech_Impoverished,
+                                            brief.Speech_Slow,
+                                            brief.Speech_Slurred,
+                                            brief.Speech_Other,
+                                            brief.Affect_Appropriate,
+                                            brief.Affect_labile,
+                                            brief.Affect_Flat,
+                                            brief.Affect_Tearful_Sad,
+                                            brief.Affect_Expansive,
+                                            brief.Affect_Anxious,
+                                            brief.Affect_Blunted,
+                                            brief.Affect_Angry,
+                                            brief.Affect_Constricted,
+                                            brief.Affect_Other,
+                                            brief.ThoughtProcess_Organized,
+                                            brief.ThoughtProcess_Obsessive,
+                                            brief.ThoughtProcess_FightIdeas,
+                                            brief.ThoughtProcess_Disorganized,
+                                            brief.ThoughtProcess_Tangential,
+                                            brief.ThoughtProcess_LooseAssociations,
+                                            brief.ThoughtProcess_GoalDirected,
+                                            brief.ThoughtProcess_Circumstantial,
+                                            brief.ThoughtProcess_Other,
+                                            brief.ThoughtProcess_Irrational,
+                                            brief.ThoughtProcess_Preoccupied,
+                                            brief.ThoughtProcess_Rigid,
+                                            brief.ThoughtProcess_Blocking,
+                                            brief.Mood_Euthymic,
+                                            brief.Mood_Depressed,
+                                            brief.Mood_Anxious,
+                                            brief.Mood_Euphoric,
+                                            brief.Mood_Angry,
+                                            brief.Mood_Maniac,
+                                            brief.Mood_Other,
+                                            brief.Judgment_Good,
+                                            brief.Judgment_Fair,
+                                            brief.Judgment_Poor,
+                                            brief.Judgment_Other,
+                                            brief.Insight_Good,
+                                            brief.Insight_Fair,
+                                            brief.Insight_Poor,
+                                            brief.Insight_Other,
+                                            brief.ThoughtContent_Relevant,
+                                            brief.ThoughtContent_RealityBased,
+                                            brief.ThoughtContent_Hallucinations,
+                                            brief.ThoughtContent_Hallucinations_Type,
+                                            brief.ThoughtContent_Delusions,
+                                            brief.ThoughtContent_Delusions_Type,
+                                            brief.Oriented_FullOriented,
+                                            brief.Lacking_Time,
+                                            brief.Lacking_Place,
+                                            brief.Lacking_Person,
+                                            brief.Lacking_Location,
+                                            brief.RiskToSelf_Low,
+                                            brief.RiskToSelf_Medium,
+                                            brief.RiskToSelf_High,
+                                            brief.RiskToSelf_Chronic,
+                                            brief.RiskToOther_Low,
+                                            brief.RiskToOther_Medium,
+                                            brief.RiskToOther_High,
+                                            brief.RiskToOther_Chronic,
+                                            brief.SafetyPlan,
+                                            brief.Comments,
+                                            brief.HaveYouEverThought,
+                                            brief.HaveYouEverThought_Explain,
+                                            brief.DoYouOwn,
+                                            brief.DoYouOwn_Explain,
+                                            brief.DoesClient,
+                                            brief.HaveYouEverBeen,
+                                            brief.HaveYouEverBeen_Explain,
+                                            brief.HasTheClient,
+                                            brief.HasTheClient_Explain,//
+                                            brief.Treatmentrecomendations,
+                                            brief.DateSignatureLicensedPractitioner,
+                                            brief.DateSignatureUnlicensedTherapist,
+                                            brief.IConcurWhitDiagnistic,
+                                            brief.AlternativeDiagnosis,
+                                            brief.DateSignatureSupervisor,
+                                            brief.EndTime,
+                                            brief.StartTime,
+                                            brief.ClientDenied,                                            
+                                            brief.AdmissionedFor,
+                                            brief.CreatedBy,
+                                            brief.CreatedOn,
+                                            brief.LastModifiedBy,
+                                            brief.LastModifiedOn,
+                                            0,
+                                            brief.Status,
+                                            0,
+                                            brief.SumanrOfFindings
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,//                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            string.Empty,                                            
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty
                                         });
             }
 

@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">BIOs</li>
+        <li class="active">BRIEFs</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -20,11 +20,11 @@
         {
             @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
             {
-                <a onclick="showInPopupLg('@Url.Action("AuditBrief", "Briefs", null, Context.Request.Scheme)','Audit BRIEFS')" class="btn btn-danger" title="Audit BRIEFS"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEFS</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditBrief", "Briefs", null, Context.Request.Scheme)','Audit BRIEFS')" class="btn btn-danger" title="Audit BRIEFs"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEFs</a>
             }
             else
             {
-                <a class="btn btn-danger disabled" title="Audit BRIEF"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEF</a>
+                <a class="btn btn-danger disabled" title="Audit BRIEF"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit BRIEFs</a>
             }
         }
     </div>
@@ -34,7 +34,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">BRIEFS</h3>
+                <h3 class="panel-title">BRIEFs</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -56,7 +56,7 @@
                                 Admission for
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Date BRIEF
+                                BRIEF
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Document

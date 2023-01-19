@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/19/2023 12:10:48" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/19/2023 11:55:58" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ebMfHGxQ6kPLaT/d8IcHrQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3wBr5ih/pecNje0V/r2slEQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -92,11 +92,86 @@
         <Column Name="TelephoneSecondary" DataType="System.String"/>
         <Column Name="AdressLine2" DataType="System.String"/>
       </TableDataSource>
-      <TableDataSource Name="Bio" DataType="System.Int32" Enabled="true" TableName="Bio">
+      <TableDataSource Name="Bio_BehavioralHistory" DataType="System.Int32" Enabled="true" TableName="Bio_BehavioralHistory">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="Problem" DataType="System.String"/>
+        <Column Name="Date" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Medication" DataType="System.Int32" Enabled="true" TableName="Medication">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="Dosage" DataType="System.String"/>
+        <Column Name="Frequency" DataType="System.String"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Prescriber" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Doctors" DataType="System.Int32" Enabled="true" TableName="Doctors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="DocumentsAssistant" DataType="System.Int32" Enabled="true" TableName="DocumentsAssistant">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Referreds" DataType="System.Int32" Enabled="true" TableName="Referreds">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Agency" DataType="System.String"/>
+        <Column Name="Title" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Brief" Alias="Bio" DataType="System.Int32" Enabled="true" TableName="Brief">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Client_FK" DataType="System.Int32"/>
         <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
         <Column Name="DateBio" DataType="System.DateTime"/>
+        <Column Name="StartTime" DataType="System.DateTime"/>
+        <Column Name="EndTime" DataType="System.DateTime"/>
         <Column Name="Setting" DataType="System.String"/>
         <Column Name="CMH" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Priv" DataType="System.Boolean" BindableControl="CheckBox"/>
@@ -188,6 +263,7 @@
         <Column Name="RiskToOther_Chronic" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="SafetyPlan" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="Comments" DataType="System.String"/>
+        <Column Name="ClientDenied" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="HaveYouEverThought" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="HaveYouEverThought_Explain" DataType="System.String"/>
         <Column Name="DoYouOwn" DataType="System.Boolean" BindableControl="CheckBox"/>
@@ -197,179 +273,32 @@
         <Column Name="HaveYouEverBeen_Explain" DataType="System.String"/>
         <Column Name="HasTheClient" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="HasTheClient_Explain" DataType="System.String"/>
-        <Column Name="ClientFamilyAbusoTrauma" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="DateAbuse" DataType="System.DateTime"/>
-        <Column Name="PersonInvolved" DataType="System.String"/>
-        <Column Name="ApproximateDateReport" DataType="System.DateTime"/>
-        <Column Name="ApproximateDateReport_Where" DataType="System.String"/>
-        <Column Name="RelationShips" DataType="System.String"/>
-        <Column Name="Details" DataType="System.String"/>
-        <Column Name="Outcome" DataType="System.String"/>
-        <Column Name="AReferral" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="AReferral_Services" DataType="System.String"/>
-        <Column Name="AReferral_When" DataType="System.String"/>
-        <Column Name="AReferral_Where" DataType="System.String"/>
-        <Column Name="ObtainRelease" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="WhereRecord" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="WhereRecord_When" DataType="System.String"/>
-        <Column Name="WhereRecord_Where" DataType="System.String"/>
-        <Column Name="HasTheClientVisitedPhysician" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="HasTheClientVisitedPhysician_Reason" DataType="System.String"/>
-        <Column Name="HasTheClientVisitedPhysician_Date" DataType="System.String"/>
-        <Column Name="DoesTheClientExperience" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="DoesTheClientExperience_Where" DataType="System.String"/>
-        <Column Name="PleaseRatePain" DataType="System.Int32"/>
-        <Column Name="HasClientBeenTreatedPain" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="HasClientBeenTreatedPain_PleaseIncludeService" DataType="System.String"/>
-        <Column Name="HasClientBeenTreatedPain_Ifnot" DataType="System.String"/>
-        <Column Name="HasClientBeenTreatedPain_Where" DataType="System.String"/>
-        <Column Name="ObtainReleaseInformation" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="HasAnIllnes" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="EastFewer" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="EastFew" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="Has3OrMore" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="HasTooth" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="DoesNotAlways" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="EastAlone" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="Takes3OrMore" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="WithoutWanting" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="NotAlwaysPhysically" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="If6_ReferredTo" DataType="System.String"/>
-        <Column Name="If6_Date" DataType="System.DateTime"/>
-        <Column Name="Appetite" DataType="System.Int32"/>
-        <Column Name="Hydration" DataType="System.Int32"/>
-        <Column Name="RecentWeight" DataType="System.Int32"/>
-        <Column Name="SubstanceAbuse" DataType="System.String"/>
-        <Column Name="LegalHistory" DataType="System.String"/>
-        <Column Name="PersonalFamilyPsychiatric" DataType="System.String"/>
-        <Column Name="DoesClientRequired" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="DoesClientRequired_Where" DataType="System.String"/>
-        <Column Name="ObtainReleaseInformation7" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="IfForeing_Born" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="IfForeing_AgeArrival" DataType="System.Int32"/>
-        <Column Name="IfForeing_YearArrival" DataType="System.Int32"/>
-        <Column Name="PrimaryLocation" DataType="System.String"/>
-        <Column Name="GeneralDescription" DataType="System.String"/>
-        <Column Name="AdultCurrentExperience" DataType="System.String"/>
-        <Column Name="WhatIsTheClient" DataType="System.String"/>
-        <Column Name="RelationshipWithFamily" DataType="System.String"/>
-        <Column Name="Children" DataType="System.String"/>
-        <Column Name="MaritalStatus" DataType="System.String"/>
-        <Column Name="IfMarried" DataType="System.String"/>
-        <Column Name="IfSeparated" DataType="System.String"/>
-        <Column Name="IfSexuallyActive" DataType="System.Int32"/>
-        <Column Name="PleaseProvideGoal" DataType="System.String"/>
-        <Column Name="DoYouHaveAnyReligious" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="WhatIsYourLanguage" DataType="System.String"/>
-        <Column Name="DoYouHaveAnyVisual" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="HigHestEducation" DataType="System.String"/>
-        <Column Name="DoYouHaveAnyPhysical" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="CanClientFollow" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ProvideIntegratedSummary" DataType="System.String"/>
-        <Column Name="TreatmentNeeds" DataType="System.String"/>
+        <Column Name="SumanrOfFindings" DataType="System.String"/>
         <Column Name="Treatmentrecomendations" DataType="System.String"/>
+        <Column Name="SupervisorId" DataType="System.Int32"/>
         <Column Name="DateSignatureLicensedPractitioner" DataType="System.DateTime"/>
+        <Column Name="DocumentsAssistantId" DataType="System.Int32"/>
         <Column Name="DateSignatureUnlicensedTherapist" DataType="System.DateTime"/>
         <Column Name="IConcurWhitDiagnistic" DataType="System.Boolean" BindableControl="CheckBox"/>
         <Column Name="AlternativeDiagnosis" DataType="System.String"/>
         <Column Name="DateSignatureSupervisor" DataType="System.DateTime"/>
-        <Column Name="EndTime" DataType="System.DateTime"/>
-        <Column Name="StartTime" DataType="System.DateTime"/>
-        <Column Name="ClientDenied" DataType="System.Boolean" BindableControl="CheckBox"/>
-        <Column Name="ForHowLong" DataType="System.String"/>
         <Column Name="AdmissionedFor" DataType="System.String"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-        <Column Name="DocumentsAssistantId" DataType="System.Int32"/>
         <Column Name="Status" DataType="System.Int32"/>
-        <Column Name="SupervisorId" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Bio_BehavioralHistory" DataType="System.Int32" Enabled="true" TableName="Bio_BehavioralHistory">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="ClientId" DataType="System.Int32"/>
-        <Column Name="Problem" DataType="System.String"/>
-        <Column Name="Date" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Medication" DataType="System.Int32" Enabled="true" TableName="Medication">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="ClientId" DataType="System.Int32"/>
-        <Column Name="Dosage" DataType="System.String"/>
-        <Column Name="Frequency" DataType="System.String"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Prescriber" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Doctors" DataType="System.Int32" Enabled="true" TableName="Doctors">
-        <Column Name="Id" DataType="System.Int32"/>
         <Column Name="CreatedBy" DataType="System.String"/>
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Address" DataType="System.String"/>
-        <Column Name="Telephone" DataType="System.String"/>
-        <Column Name="Email" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Code" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-      </TableDataSource>
-      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Firm" DataType="System.String"/>
-        <Column Name="Code" DataType="System.String"/>
-        <Column Name="ClinicId" DataType="System.Int32"/>
-        <Column Name="LinkedUser" DataType="System.String"/>
-        <Column Name="SignaturePath" DataType="System.String"/>
-        <Column Name="RaterEducation" DataType="System.String"/>
-        <Column Name="RaterFMHCertification" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
-        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
-        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
-      </TableDataSource>
-      <TableDataSource Name="DocumentsAssistant" DataType="System.Int32" Enabled="true" TableName="DocumentsAssistant">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Firm" DataType="System.String"/>
-        <Column Name="Code" DataType="System.String"/>
-        <Column Name="LinkedUser" DataType="System.String"/>
-        <Column Name="SignaturePath" DataType="System.String"/>
-        <Column Name="ClinicId" DataType="System.Int32"/>
-        <Column Name="RaterEducation" DataType="System.String"/>
-        <Column Name="RaterFMHCertification" DataType="System.String"/>
-      </TableDataSource>
-      <TableDataSource Name="Referreds" DataType="System.Int32" Enabled="true" TableName="Referreds">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="CreatedBy" DataType="System.String"/>
-        <Column Name="CreatedOn" DataType="System.DateTime"/>
-        <Column Name="LastModifiedBy" DataType="System.String"/>
-        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="Address" DataType="System.String"/>
-        <Column Name="Telephone" DataType="System.String"/>
-        <Column Name="Email" DataType="System.String"/>
-        <Column Name="Agency" DataType="System.String"/>
-        <Column Name="Title" DataType="System.String"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <Parameter Name="nutritionScoreTotal" DataType="System.String"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAMqA10DASIAAhEBAxEB/8QAGwABAQEBAQEBAQAAAAAAAAAAAAUEAwIBBgn/xAAzEAEAAgECBAUDAgUFAQEAAAAAAQIDBBEFEiExEyJBUWEycaFCgUNSkZLRFBVTscEzcv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAdEQEBAQEAAwEBAQAAAAAAAAAAARECEiExQVEy/9oADAMBAAIRAxEAPwD+qYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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" Watermark.Font="Arial, 60pt">
     <PageHeaderBand Name="PageHeader1" Width="778.3" Height="75.6">
       <PictureObject Name="Picture1" Left="1.17" Top="3.45" Width="160.65" Height="66.53" Border.Lines="All" ImageFormat="Jpeg" Image="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"/>
-      <TextObject Name="Text452" Left="160.65" Top="37.25" Width="459.5" Height="22" CanGrow="true" Text="Bio-Psychosocial Assessment" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <TextObject Name="Text452" Left="160.65" Top="37.25" Width="459.5" Height="22" CanGrow="true" Text="Brief Behavioral Health Status Examination" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text453" Left="160.65" Top="15.9" Width="459.5" Height="22" CanGrow="true" Text="Florida Social Health Solutions" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <ContainerObject Name="Container1" Left="161.65" Top="3.45" Width="614.25" Height="66.53" Border.Lines="All"/>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="79.6" Width="778.3" Height="808.92" CanGrow="true" CanShrink="true" CanBreak="true" DataSource="Bio">
+    <DataBand Name="Data7" Top="79.6" Width="778.3" Height="808.92" CanGrow="true" CanShrink="true" CanBreak="true">
       <TextObject Name="Text454" Left="28.35" Top="9.45" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text455" Left="132.3" Top="9.45" Width="302.4" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
       <TextObject Name="Text456" Left="444.15" Top="9.45" Width="56.7" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
@@ -492,7 +421,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data3" Top="1059.72" Width="778.3" Height="2964.3" CanGrow="true" CanShrink="true" CanBreak="true" DataSource="Bio">
+    <DataBand Name="Data3" Top="1059.72" Width="778.3" Height="847.5" CanGrow="true" CanShrink="true" CanBreak="true">
       <TableObject Name="Table55" Top="68.15" Width="774.9" Height="359.1" CanBreak="false">
         <TableColumn Name="Column190" Width="141.75"/>
         <TableColumn Name="Column191" Width="132.3"/>
@@ -909,336 +838,13 @@
           <TableCell Name="Cell1194" Border.Lines="All" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text586" Top="683.4" Width="771.35" Height="102.06" CanGrow="true" Text="&lt;b&gt;C. Physical/Sexual/Emotional Abuse:&lt;/b&gt; (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)&#13;&#10;If any abuse is indicated  in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, if not previously reported (you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor &#13;&#10;" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text587" Left="28.35" Top="782.35" Width="743" Height="18.9" CanGrow="true" Text="Client and/or family denied any abuse or trauma history (physical, sexual, emotional abuse or financial exploitation)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox485" Left="15.45" Top="786.35" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.ClientFamilyAbusoTrauma"/>
-      <TextObject Name="Text588" Left="12.45" Top="803.25" Width="100.4" Height="18.9" CanGrow="true" Text="Date of abuse:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text589" Left="105.85" Top="803.25" Width="132.3" Height="18.9" Text="[Bio.DateAbuse]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text590" Left="239.25" Top="803.25" Width="138.2" Height="18.9" CanGrow="true" Text="Person(s) involved:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text591" Left="363.1" Top="803.25" Width="406.35" Height="18.9" Text="[Bio.PersonInvolved]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text592" Left="12.45" Top="829.15" Width="223.25" Height="18.9" CanGrow="true" Text="Approximate date report was filed:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text593" Left="229.7" Top="829.15" Width="103.95" Height="18.9" Text="[Bio.ApproximateDateReport]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text594" Left="337.2" Top="829.15" Width="53.15" Height="18.9" CanGrow="true" Text="Where:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text595" Left="382" Top="829.15" Width="387.45" Height="18.9" Text="[Bio.ApproximateDateReport_Where]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text596" Left="12.45" Top="855.05" Width="223.25" Height="18.9" CanGrow="true" Text="Relationship of the abuser to client:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text597" Left="236.15" Top="855.05" Width="538.65" Height="18.9" Text="[Bio.RelationShips]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text598" Left="12.45" Top="879.4" Width="147.65" Height="18.9" CanGrow="true" Text="Details of the incident:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text599" Left="163.55" Top="879.4" Width="604.8" Height="18.9" CanGrow="true" Text="[Bio.Details]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text485" Top="13.45" Width="298.85" Height="24.57" CanGrow="true" Text="5. MENTAL HEALTH STATUS" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text486" Top="40.8" Width="761.9" Height="24.57" CanGrow="true" Text="A. Mental Status Examination:  (check all that apply)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text600" Left="12.45" Top="904.75" Width="194.9" Height="18.9" CanGrow="true" Text="Outcome of the abuse report:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text601" Left="208.9" Top="904.75" Width="548.1" Height="18.9" CanGrow="true" Text="[Bio.Outcome]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text602" Left="26.35" Top="931.1" Width="298.85" Height="18.9" CanGrow="true" Text="A referral for assessment/ services is indicated " Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox486" Left="15.5" Top="934.55" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.AReferral"/>
-      <TextObject Name="Text603" Left="321.3" Top="933.1" Width="132.3" Height="18.9" Text="[Bio.AReferral_Services]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text604" Left="452.6" Top="931.1" Width="45.36" Height="18.9" CanGrow="true" Text="when:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text605" Left="492.85" Top="933.01" Width="94.5" Height="18.9" Text="[Bio.AReferral_When]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text606" Left="585.9" Top="931.1" Width="54.81" Height="18.9" CanGrow="true" Text="where:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text607" Left="633.15" Top="933.01" Width="141.75" Height="18.9" Text="[Bio.AReferral_Where]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text608" Left="26.75" Top="954.45" Width="355.55" Height="18.9" CanGrow="true" Text="Obtain release of information for coordination of care" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox487" Left="15.9" Top="956.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.ObtainRelease"/>
-      <TextObject Name="Text609" Left="26.75" Top="976.35" Width="393.35" Height="18.9" CanGrow="true" Text="Where records of previous treatment requested? If requested, " Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox488" Left="15.9" Top="980.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.WhereRecord"/>
-      <TextObject Name="Text611" Left="453" Top="976.35" Width="45.36" Height="18.9" CanGrow="true" Text="when:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text612" Left="493.25" Top="978.26" Width="94.5" Height="18.9" Text="[Bio.WhereRecord_When]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text613" Left="586.3" Top="976.35" Width="54.81" Height="18.9" CanGrow="true" Text="where:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text614" Left="633.55" Top="978.26" Width="141.75" Height="18.9" Text="[Bio.WhereRecord_Where]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text615" Top="1011.15" Width="261.05" Height="24.57" CanGrow="true" Text="6. PHYSICAL HEALTH ASSESSMENT " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text616" Top="1037.5" Width="346.1" Height="18.9" CanGrow="true" Text="Has the client visited a physician in the last two years?" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox489" Left="9.45" Top="1061.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.HasTheClientVisitedPhysician"/>
-      <CheckBoxObject Name="CheckBox490" Left="64.15" Top="1061.85" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.HasTheClientVisitedPhysician] == true,false,true)"/>
-      <TextObject Name="Text617" Left="76.05" Top="1058.4" Width="695.52" Height="18.9" Text="No (if no, provide client with education on preventive health measures and offer to refer to a physician) " VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text618" Left="20.9" Top="1058.4" Width="39.69" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text619" Left="9.45" Top="1077.3" Width="185.22" Height="18.9" Text="If yes, give reason and date:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text620" Left="194.45" Top="1077.3" Width="576.45" Height="18.9" Text="[Bio.HasTheClientVisitedPhysician_Reason] - [Bio.HasTheClientVisitedPhysician_Date] " Font="Arial, 10pt"/>
-      <TextObject Name="Text621" Top="1153.9" Width="242.15" Height="18.9" CanGrow="true" Text="Does the client experience any pain?    " Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox491" Left="9.45" Top="1176.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="[Bio.DoesTheClientExperience]"/>
-      <CheckBoxObject Name="CheckBox492" Left="64.15" Top="1176.25" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoesTheClientExperience] == true,false,true)"/>
-      <TextObject Name="Text622" Left="76.05" Top="1172.8" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text623" Left="20.9" Top="1172.8" Width="39.69" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text624" Left="9.45" Top="1191.7" Width="147.42" Height="18.9" Text="If yes, specify where?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text625" Left="151.2" Top="1191.7" Width="585.9" Height="18.9" Text="[Bio.DoesTheClientExperience_Where]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text626" Left="9.45" Top="1210.6" Width="279.72" Height="18.9" Text="For how long (including frequency of pain)?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text627" Left="283.5" Top="1210.6" Width="453.6" Height="18.9" Text="[Bio.ForHowLong]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text628" Top="1105.65" Width="771.35" Height="18.9" CanGrow="true" Text="Name of Primary Care physician: [Doctors.Name]" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text629" Top="1124.55" Width="771.35" Height="18.9" CanGrow="true" Text="Phone # and address: [Doctors.Telephone] - [Doctors.Address]" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text630" Left="9.45" Top="1229.5" Width="336.42" Height="18.9" Text="Please rate pain from 1 (no pain) to 10 (intense pain)" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text631" Left="346.65" Top="1229.5" Width="94.5" Height="18.9" Text="[Bio.PleaseRatePain]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text632" Left="9.45" Top="1247.4" Width="223.02" Height="18.9" Text="Has a client been treated for pain?" VertAlign="Center" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox493" Left="234.25" Top="1251.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.HasClientBeenTreatedPain"/>
-      <CheckBoxObject Name="CheckBox494" Left="288.95" Top="1251.85" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.HasClientBeenTreatedPain] == true,false,true)"/>
-      <TextObject Name="Text633" Left="300.85" Top="1248.4" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text634" Left="245.7" Top="1247.4" Width="39.69" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text635" Left="9.45" Top="1266.3" Width="393.12" Height="18.9" Text="Please include services that client is receiving for pain (if any):" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text636" Left="396.9" Top="1266.3" Width="378" Height="18.9" Text="[Bio.HasClientBeenTreatedPain_PleaseIncludeService]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text637" Left="9.45" Top="1285.2" Width="572.67" Height="18.9" Text="If not, describe referral to Primary Care Physician/ Specialist or case manager for follow up: " VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text638" Left="576.45" Top="1285.2" Width="198.45" Height="18.9" Text="[Bio.HasClientBeenTreatedPain_Ifnot]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text639" Left="9.45" Top="1304.1" Width="52.92" Height="18.9" Text="Where:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text640" Left="59.15" Top="1304.1" Width="349.65" Height="18.9" Text="[Bio.HasClientBeenTreatedPain_Where]" Font="Arial, 10pt, style=Underline"/>
-      <CheckBoxObject Name="CheckBox495" Left="8.9" Top="1328.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.ObtainReleaseInformation"/>
-      <TextObject Name="Text641" Left="20.35" Top="1325.45" Width="379.89" Height="18.9" Text="Obtain release of information so care can be coordinated" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text642" Left="9.45" Top="1362.8" Width="752.45" Height="24.57" CanGrow="true" Text="&lt;b&gt;A. Nutritional Risk Assessment:&lt;/b&gt; (Directions: Indicate with Yes to Assessment, then total SCORE to determine addition risk)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TableObject Name="Table57" Left="10.45" Top="1389.15" Width="756" Height="245.7">
-        <TableColumn Name="Column198" Width="618.98"/>
-        <TableColumn Name="Column199" Width="137.02"/>
-        <TableRow Name="Row265" Height="28.35">
-          <TableCell Name="Cell1195" Border.Lines="All" Text="NUTRITONIAL SCORE" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="2"/>
-          <TableCell Name="Cell1196" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-        </TableRow>
-        <TableRow Name="Row266">
-          <TableCell Name="Cell1200" Border.Lines="All" Text="Has an illness or condition that changed the kind and/or amount of food eaten? " Font="Arial, 10pt"/>
-          <TableCell Name="Cell1201" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox497" Left="81.5" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.HasAnIllnes] == true,false,true)"/>
-            <TextObject Name="Text643" Left="95.4" Width="24.57" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text644" Left="38.25" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox496" Left="25.35" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.HasAnIllnes"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row267">
-          <TableCell Name="Cell1205" Border.Lines="All" Text="Eats fewer than 2 meals per day?" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1206" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox498" Left="24.9" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.EastFewer"/>
-            <TextObject Name="Text646" Left="38.8" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox499" Left="82.05" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.EastFewer] == true,false,true)"/>
-            <TextObject Name="Text645" Left="94.95" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row268">
-          <TableCell Name="Cell1210" Border.Lines="All" Text="Eats few fruit, vegetables or milk products." Font="Arial, 10pt"/>
-          <TableCell Name="Cell1211" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox500" Left="82.95" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.EastFew] == true,false,true)"/>
-            <CheckBoxObject Name="CheckBox501" Left="24.8" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.EastFew"/>
-            <TextObject Name="Text647" Left="96.85" Width="24.57" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text648" Left="39.7" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row269">
-          <TableCell Name="Cell1215" Border.Lines="All" Text="Has 3 or more drinks of beer, liquor or vine almost every day. " Font="Arial, 10pt"/>
-          <TableCell Name="Cell1216" Border.Lines="All" Font="Arial, 10pt">
-            <TextObject Name="Text650" Left="96.4" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox502" Left="25.35" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.Has3OrMore"/>
-            <CheckBoxObject Name="CheckBox503" Left="82.5" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Has3OrMore] == true,false,true)"/>
-            <TextObject Name="Text649" Left="40.25" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row271">
-          <TableCell Name="Cell1219" Border.Lines="All" Text="Has tooth or mouth problems that make it hard to eat." Font="Arial, 10pt"/>
-          <TableCell Name="Cell1220" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox504" Left="82.6" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.HasTooth] == true,false,true)"/>
-            <CheckBoxObject Name="CheckBox505" Left="25.45" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.HasTooth"/>
-            <TextObject Name="Text652" Left="38.35" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text651" Left="96.5" Width="24.57" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row272">
-          <TableCell Name="Cell1221" Border.Lines="All" Text="Does not always have enough money to buy the food needed" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1222" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox506" Left="25" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoesNotAlways"/>
-            <CheckBoxObject Name="CheckBox507" Left="83.15" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoesNotAlways] == true,false,true)"/>
-            <TextObject Name="Text653" Left="38.45" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text654" Left="96.05" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row270">
-          <TableCell Name="Cell1217" Border.Lines="All" Text="Eats alone most of the time " Font="Arial, 10pt"/>
-          <TableCell Name="Cell1218" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox508" Left="83.05" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.EastAlone] == true,false,true)"/>
-            <CheckBoxObject Name="CheckBox509" Left="24.9" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.EastAlone"/>
-            <TextObject Name="Text656" Left="38.8" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text655" Left="95.95" Width="24.57" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row275">
-          <TableCell Name="Cell1227" Border.Lines="All" Text="Takes 3 or more different prescribed or over-the-counter drugs a day." Font="Arial, 10pt"/>
-          <TableCell Name="Cell1228" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox510" Left="25.45" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.Takes3OrMore"/>
-            <CheckBoxObject Name="CheckBox511" Left="82.6" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Takes3OrMore] == true,false,true)"/>
-            <TextObject Name="Text658" Left="38.35" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text657" Left="96.5" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row274">
-          <TableCell Name="Cell1225" Border.Lines="All" Text="Without wanting to. Has lost or gained 10 pounds in the last 6 months." Font="Arial, 10pt"/>
-          <TableCell Name="Cell1226" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox512" Left="83.05" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.WithoutWanting] == true,false,true)"/>
-            <CheckBoxObject Name="CheckBox513" Left="24.9" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.WithoutWanting"/>
-            <TextObject Name="Text659" Left="38.8" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text660" Left="95.95" Width="24.57" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row276">
-          <TableCell Name="Cell1229" Border.Lines="All" Text="Not always physically able to shop, cook and/or feed self. " Font="Arial, 10pt"/>
-          <TableCell Name="Cell1230" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox514" Left="25.45" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.NotAlwaysPhysically"/>
-            <CheckBoxObject Name="CheckBox515" Left="82.6" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.NotAlwaysPhysically] == true,false,true)"/>
-            <TextObject Name="Text661" Left="38.35" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text662" Left="96.5" Width="34.02" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row273" Height="28.35">
-          <TableCell Name="Cell1223" Border.Lines="All" Text="TOTAL: [nutritionScoreTotal]" VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="2"/>
-          <TableCell Name="Cell1224" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-      </TableObject>
-      <TextObject Name="Text663" Left="6.45" Top="1639.85" Width="761.9" Height="52.92" CanGrow="true" Text="&lt;b&gt;0-2 GOOD.&lt;/b&gt; As appropriate reassess and/or provide information based on situation.&#13;&#10;&lt;b&gt;3-5 Moderate risk.&lt;/b&gt; Educate, refer, monitor and reevaluate based on patient situation and organization policy.&#13;&#10;&lt;b&gt;6&gt; High risk.&lt;/b&gt; Coordinate with physician, dietitian, social service professional or RN about how to improve nutritional health. &#13;&#10;" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text664" Left="7.45" Top="1696.55" Width="221.13" Height="18.9" CanGrow="true" Text="IF 6 OR HIGHER, REFERRED TO" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text665" Left="224.8" Top="1696.55" Width="264.6" Height="18.9" Text="[Bio.If6_ReferredTo]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text666" Left="489.4" Top="1696.55" Width="52.92" Height="18.9" CanGrow="true" Text="DATE:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text667" Left="536.65" Top="1696.55" Width="94.5" Height="18.9" Text="[Bio.If6_Date]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
-      <TableObject Name="Table58" Left="9.45" Top="1729.35" Width="756" Height="151.14">
-        <TableColumn Name="Column200" Width="252"/>
-        <TableColumn Name="Column201" Width="252"/>
-        <TableColumn Name="Column202" Width="252"/>
-        <TableRow Name="Row277" Height="25.19">
-          <TableCell Name="Cell1231" Border.Lines="All" Text="NUTRITONIAL STATUS" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="3"/>
-          <TableCell Name="Cell1232" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1233" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-        <TableRow Name="Row278" Height="25.19">
-          <TableCell Name="Cell1236" Border.Lines="All" Text="APPETITE" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
-          <TableCell Name="Cell1237" Border.Lines="All" Text="HYDRATION" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
-          <TableCell Name="Cell1238" Border.Lines="All" Text="RECENT WEIGHT CHANGE" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
-        </TableRow>
-        <TableRow Name="Row279" Height="25.19">
-          <TableCell Name="Cell1241" Border.Lines="All" Font="Arial, 10pt" RowSpan="4">
-            <TextObject Name="Text668" Left="31.8" Top="9.45" Width="77.49" Height="18.9" Text="Diminished" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox516" Left="18.9" Top="12.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 0,true,false)"/>
-            <TextObject Name="Text669" Left="31.8" Top="31.35" Width="77.49" Height="18.9" Text="Increased" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox517" Left="18.9" Top="34.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 1,true,false)"/>
-            <TextObject Name="Text670" Left="31.8" Top="53.25" Width="77.49" Height="18.9" Text="WNL" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox518" Left="18.9" Top="56.7" Width="11.34" Height="11.34" Border.Lines="All" Checked="false"/>
-            <TextObject Name="Text671" Left="31.8" Top="75.15" Width="77.49" Height="18.9" Text="Anorexia" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox519" Left="18.9" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 3,true,false)"/>
-          </TableCell>
-          <TableCell Name="Cell1242" Border.Lines="All" Font="Arial, 10pt" RowSpan="4">
-            <TextObject Name="Text672" Left="37.8" Top="9.45" Width="77.49" Height="18.9" Text="Diminished" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox520" Left="24.9" Top="12.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Hydration] == 0,true,false)"/>
-            <CheckBoxObject Name="CheckBox521" Left="25.35" Top="34.35" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Hydration] == 1,true,false)"/>
-            <TextObject Name="Text673" Left="37.8" Top="30.9" Width="105.84" Height="18.9" Text="Increase Fluids" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text674" Left="37.8" Top="52.25" Width="105.84" Height="18.9" Text="Restrict Fluids" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox522" Left="24.9" Top="56.25" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Hydration] == 2,true,false)"/>
-            <TextObject Name="Text675" Left="38.8" Top="75.15" Width="77.49" Height="18.9" Text="WNL" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox523" Left="24.9" Top="78.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Hydration] == 3,true,false)"/>
-            <TextObject Name="Text676" Left="155.3" Top="75.6" Width="77.49" Height="18.9" Text="Inadequate" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox524" Left="143.4" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Hydration] == 4,true,false)"/>
-          </TableCell>
-          <TableCell Name="Cell1243" Border.Lines="All" Font="Arial, 10pt" RowSpan="4">
-            <CheckBoxObject Name="CheckBox525" Left="18.9" Top="12.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.RecentWeight] == 0,true,false)"/>
-            <CheckBoxObject Name="CheckBox526" Left="18.35" Top="34.35" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.RecentWeight] == 1,true,false)"/>
-            <TextObject Name="Text678" Left="33.25" Top="30.9" Width="105.84" Height="18.9" Text="Unintended" VertAlign="Center" Font="Arial, 9pt"/>
-            <TextObject Name="Text679" Left="31.8" Top="52.25" Width="105.84" Height="18.9" Text="Gained" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox527" Left="18.9" Top="56.25" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.RecentWeight] == 2,true,false)"/>
-            <TextObject Name="Text680" Left="32.8" Top="75.15" Width="77.49" Height="18.9" Text="Lost" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox528" Left="18.9" Top="78.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.RecentWeight] == 3,true,false)"/>
-            <TextObject Name="Text681" Left="158.75" Top="75.6" Width="49.14" Height="18.9" Text="N/A" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox529" Left="146.85" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.RecentWeight] == 4,true,false)"/>
-            <TextObject Name="Text677" Left="33.25" Top="9.45" Width="77.49" Height="18.9" Text="Intended" VertAlign="Center" Font="Arial, 9pt"/>
-          </TableCell>
-        </TableRow>
-        <TableRow Name="Row280" Height="25.19">
-          <TableCell Name="Cell1246" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1247" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1248" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-        <TableRow Name="Row282" Height="25.19">
-          <TableCell Name="Cell1254" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1255" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1256" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-        <TableRow Name="Row281" Height="25.19">
-          <TableCell Name="Cell1251" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1252" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell1253" Border.Lines="All" Font="Arial, 10pt"/>
-        </TableRow>
-      </TableObject>
-      <TextObject Name="Text682" Top="1899.45" Width="109.85" Height="24.57" CanGrow="true" Text="7. HISTORY" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text683" Top="1922.35" Width="771.35" Height="18.9" Text="Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text684" Top="1943.7" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.SubstanceAbuse]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text685" Top="1965.6" Width="771.35" Height="22.68" Text="Legal History (specifying changes, date, convictions and incarcerations):" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text686" Top="1987.95" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.LegalHistory]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text687" Top="2009.4" Width="771.35" Height="37.8" Text="Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services, duration of use and any treatment received):" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text688" Top="2048.65" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.PersonalFamilyPsychiatric]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text689" Left="17.9" Top="2079" Width="285.39" Height="18.9" Text="Does  client  require a referral? If referred, where? " VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox530" Left="5" Top="2082.45" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoesClientRequired"/>
-      <TextObject Name="Text690" Left="303.4" Top="2079" Width="472.5" Height="18.9" Text="[Bio.DoesClientRequired_Where]" HorzAlign="Justify" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text691" Left="17.9" Top="2102.35" Width="342.09" Height="18.9" Text="Obtain release of information so care can be coordinated." VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox531" Left="5" Top="2105.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.ObtainReleaseInformation7"/>
-      <TextObject Name="Text692" Top="2136.25" Width="355.55" Height="24.57" CanGrow="true" Text="8. BACKGROUND, SOCIAL AND EDUCATIONAL " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text693" Top="2164.05" Width="96.39" Height="18.9" Text="Place of Birth:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text694" Left="95.5" Top="2164.05" Width="141.75" Height="18.9" Text="[Clients.PlaceOfBirth]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text695" Left="236.25" Top="2164.05" Width="257.04" Height="18.9" Text="If foreign-Born, age/date of arrival to US: " Font="Arial, 10pt"/>
-      <TextObject Name="Text696" Left="487.4" Top="2164.05" Width="236.25" Height="18.9" Text="[Bio.IfForeing_AgeArrival] / [Bio.IfForeing_YearArrival]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text697" Top="2183.95" Width="260.82" Height="18.9" Text="Primary location where client was raised:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text698" Left="252.15" Top="2183.95" Width="472.5" Height="18.9" Text="[Bio.PrimaryLocation]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text699" Top="2211.85" Width="771.35" Height="18.9" Text="General description of childhood/adolescence:" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text700" Top="2233.65" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.GeneralDescription]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text701" Top="2261.55" Width="771.35" Height="18.9" Text="Adult and current experience: (include work history/ leisure activities and interest)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text702" Top="2283.8" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.AdultCurrentExperience]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text703" Top="2310.8" Width="771.35" Height="37.8" Text="What is the client`s/family beliefs and important spiritual practices? (Include how these beliefs assist client in dealing with stressor)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text704" Top="2348.95" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.WhatIsTheClient]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text705" Top="2388.85" Width="450.05" Height="24.57" CanGrow="true" Text="&lt;b&gt;9. FAMILY EXPERIENCE:&lt;/b&gt; (if child is under 16, skip to 10)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text706" Top="2418.2" Width="771.35" Height="18.9" Text="Relationship with family, friends, romantic interests:" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text707" Top="2440.9" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.RelationshipWithFamily]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text708" Top="2466.45" Width="771.35" Height="20.79" Text="Number of children (specify name or gender and current age)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text709" Top="2490.35" Width="774.9" Height="18.9" CanGrow="true" CanShrink="true" Text="[Bio.Children]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text710" Top="2516.7" Width="105.84" Height="18.9" Text="Marital Status:" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text711" Left="102.85" Top="2516.7" Width="49.14" Height="18.9" Text="Single" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox532" Left="146.2" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 1,true,false)"/>
-      <TextObject Name="Text712" Left="170.1" Top="2516.7" Width="58.59" Height="18.9" Text="Married" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox533" Left="221.9" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 2,true,false)"/>
-      <TextObject Name="Text713" Left="245.15" Top="2516.7" Width="68.04" Height="18.9" Text="Separated" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox534" Left="312.4" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 5,true,false)"/>
-      <TextObject Name="Text714" Left="331.75" Top="2516.7" Width="58.59" Height="18.9" Text="Divorced" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox535" Left="390.55" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 4,true,false)"/>
-      <TextObject Name="Text715" Left="409.8" Top="2516.7" Width="68.04" Height="18.9" Text="Widowed" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox536" Left="470.05" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 6,true,false)"/>
-      <TextObject Name="Text716" Left="491.95" Top="2516.7" Width="77.49" Height="18.9" Text="Cohabitating" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox537" Left="569.65" Top="2521.15" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.MaritalStatus] == 3,true,false)"/>
-      <TextObject Name="Text717" Left="9.45" Top="2538.6" Width="241.92" Height="18.9" Text="• If Married or Cohabitating, how long: " VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text718" Left="252.15" Top="2538.05" Width="94.5" Height="18.9" Text="[Bio.IfMarried]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text719" Left="9.45" Top="2558.5" Width="298.62" Height="18.9" Text="• If Separated, Divorce, or Widowed, how long:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text720" Left="304.85" Top="2558.95" Width="94.5" Height="18.9" Text="[Bio.IfSeparated]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text721" Left="9.45" Top="2578.85" Width="506.52" Height="18.9" Text="• If sexually active, is client aware of risk regarding Sexual Transmitted Diseases:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text722" Left="532.65" Top="2579.85" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox538" Left="519.75" Top="2583.3" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IfSexuallyActive] == 0,true,false)"/>
-      <TextObject Name="Text723" Left="579.9" Top="2579.85" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox539" Left="567" Top="2583.3" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IfSexuallyActive] == 1,true,false)"/>
-      <TextObject Name="Text724" Left="627.15" Top="2579.85" Width="39.69" Height="18.9" Text="N/A" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox540" Left="614.25" Top="2583.3" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IfSexuallyActive] == 2,true,false)"/>
-      <TextObject Name="Text725" Left="9.45" Top="2598.75" Width="506.52" Height="18.9" Text="• If “No” please educate client as to risk of sexually transmitted diseases." VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text726" Top="2636.55" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;10. EDUCATIONAL ASSESSMENT:&lt;/b&gt; is geared towards indicating whether a client needs educational services in addition to therapeutic interventions." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text727" Top="2674.35" Width="771.35" Height="20.79" Text="(Please provide goal for educational services if applicable and/or if unviable at the clinic, refer client to a community provider): " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text728" Top="2696.25" Width="774.9" Height="18.9" CanGrow="true" Text="[Bio.PleaseProvideGoal]" Font="Arial, 10pt, style=Underline"/>
-      <TextObject Name="Text729" Left="14.45" Top="2715.6" Width="534.87" Height="18.9" Text="1. Do you have any religious/cultural practice that may hinder your educational goals?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text730" Left="564" Top="2715.15" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox541" Left="551.1" Top="2718.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoYouHaveAnyReligious"/>
-      <TextObject Name="Text731" Left="611.25" Top="2715.15" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox542" Left="598.35" Top="2718.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoYouHaveAnyReligious] == true,false,true)"/>
-      <TextObject Name="Text732" Left="14.9" Top="2735.05" Width="251.37" Height="18.9" Text="2. What is your language of preference:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text733" Left="264.6" Top="2735.5" Width="132.3" Height="18.9" Text="[Bio.WhatIsYourLanguage]" Font="Arial, 10pt"/>
-      <TextObject Name="Text734" Left="14.9" Top="2753.4" Width="619.92" Height="18.9" Text="3. Do you have any visual, hearing or other sensory impairment that may affect your ability to learn?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text735" Left="648.95" Top="2753.95" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox543" Left="636.05" Top="2757.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoYouHaveAnyVisual"/>
-      <TextObject Name="Text736" Left="696.2" Top="2753.95" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox544" Left="683.3" Top="2757.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoYouHaveAnyVisual] == true,false,true)"/>
-      <TextObject Name="Text737" Left="14.9" Top="2773.85" Width="185.22" Height="18.9" Text="4. Highest educational level:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text738" Left="193.45" Top="2773.3" Width="576.45" Height="18.9" Text="[Bio.HigHestEducation]" Font="Arial, 10pt"/>
-      <TextObject Name="Text739" Left="14.45" Top="2793.75" Width="478.17" Height="18.9" Text="5. Do you have any physical limitations that may hinder your ability to learn?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text740" Left="504.3" Top="2794.2" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox545" Left="491.4" Top="2797.65" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoYouHaveAnyPhysical"/>
-      <TextObject Name="Text741" Left="551.55" Top="2794.2" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox546" Left="538.65" Top="2797.65" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoYouHaveAnyPhysical] == true,false,true)"/>
-      <TextObject Name="Text742" Left="14.9" Top="2814.1" Width="601.02" Height="18.9" Text="6. Can client follow/understand directions (ask client to print name and sign on Treatment Plan)?" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text743" Left="627.6" Top="2813.55" Width="30.24" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox547" Left="614.7" Top="2817" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.CanClientFollow"/>
-      <TextObject Name="Text744" Left="674.85" Top="2813.55" Width="30.24" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox548" Left="661.95" Top="2817" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.CanClientFollow] == true,false,true)"/>
-      <TextObject Name="Text745" Top="2853.9" Width="771.35" Height="24.57" CanGrow="true" Text="11. PROVIDE INTEGRATED SUMMARY BELOW: &#13;&#10;" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text746" Top="2879.25" Width="774.9" Height="18.9" CanGrow="true" Text="[Bio.ProvideIntegratedSummary]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text747" Top="2920.05" Width="771.35" Height="24.57" CanGrow="true" Text="&lt;b&gt;12. TREATMENT NEEDS:&lt;/b&gt; (use client’s own words)" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text748" Top="2945.4" Width="774.9" Height="18.9" CanGrow="true" Text="[Bio.TreatmentNeeds]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text615" Top="684.85" Width="261.05" Height="24.57" CanGrow="true" Text="6. SUMMARY OF FINDINGS" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text616" Top="711.2" Width="774.9" Height="37.8" CanGrow="true" Text=" (Include and integrate if client is identified as high risk, past intensive services received, justify client’s need for services with need of a higher level of care)" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
+      <TextObject Name="Text775" Top="751" Width="774.9" Height="94.5" CanGrow="true" CanShrink="true" Text="[Bio.SumanrOfFindings]" HorzAlign="Justify" Font="Arial, 10pt"/>
     </DataBand>
-    <DataBand Name="Data4" Top="4098.17" Width="778.3" Height="18.9" DataSource="Diagnostics">
+    <DataBand Name="Data4" Top="1976.37" Width="778.3" Height="18.9" DataSource="Diagnostics">
       <TableObject Name="Table60" Left="9.45" Width="755.94" Height="18.9">
         <TableColumn Name="Column205" Width="99.2"/>
         <TableColumn Name="Column206" Width="656.74"/>
@@ -1247,9 +853,9 @@
           <TableCell Name="Cell1260" Border.Lines="All" Text="[Diagnostics.Description]Description" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader3" Top="4028.02" Width="778.3" Height="66.15">
-        <TextObject Name="Text749" Top="18.9" Width="771.35" Height="24.57" CanGrow="true" Text="13. DIAGNOSTIC IMPRESSION:&#13;&#10;" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-        <TableObject Name="Table59" Left="9.45" Top="47.25" Width="755.94" Height="18.9">
+      <DataHeaderBand Name="DataHeader3" Top="1911.22" Width="778.3" Height="61.15">
+        <TextObject Name="Text749" Top="13.9" Width="771.35" Height="24.57" CanGrow="true" Text="7. DIAGNOSTIC IMPRESSION&#13;&#10;" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+        <TableObject Name="Table59" Left="9.45" Top="42.25" Width="755.94" Height="18.9">
           <TableColumn Name="Column203" Width="99.2"/>
           <TableColumn Name="Column204" Width="656.74"/>
           <TableRow Name="Row283">
@@ -1259,47 +865,54 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data5" Top="4121.07" Width="778.3" Height="655.72" DataSource="Bio">
-      <TextObject Name="Text750" Top="18.9" Width="771.35" Height="24.57" CanGrow="true" Text="TREATMENT RECOMMENDATIONS:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text751" Left="5.45" Top="44.8" Width="765.45" Height="18.9" Border.Lines="All" CanGrow="true" Text="[Bio.Treatmentrecomendations]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text752" Top="85.05" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text753" Top="112.4" Width="771.35" Height="39.69" Text="This Licensed Clinical has completed a telemedicine interview with the client and has made appropriate treatment recommendations based on such interaction." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <LineObject Name="Line9" Left="254.7" Top="199" Width="-240.03"/>
-      <TextObject Name="Text35" Left="9.45" Top="203.9" Width="242.15" Height="24.57" CanGrow="true" Text="Licensed Practitioner &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <LineObject Name="Line10" Left="556.1" Top="198.45" Width="-240.03"/>
-      <TextObject Name="Text36" Left="300.4" Top="203.9" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text37" Left="614.25" Top="204.45" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <LineObject Name="Line11" Left="756.55" Top="199" Width="-136.08"/>
-      <TextObject Name="Text755" Left="606.8" Top="179.55" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Bio.DateSignatureLicensedPractitioner],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text756" Top="236.25" Width="771.35" Height="24.57" CanGrow="true" Text="UNLICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text757" Top="265.6" Width="771.35" Height="52.92" Text="This Unlicensed Therapist has completed a telemedicine interview with the client and has made appropriate treatment recommendations based on the interaction (Qualified Licensed Supervisor review and signature documented showing concurrence with diagnosis and treatment recommendations) " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text762" Left="606.8" Top="351.65" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,&quot;&quot;,[Bio.DateSignatureUnlicensedTherapist])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line12" Left="254.7" Top="371.1" Width="-240.03"/>
-      <LineObject Name="Line13" Left="556.1" Top="370.55" Width="-240.03"/>
-      <LineObject Name="Line14" Left="756.55" Top="371.1" Width="-136.08"/>
-      <TextObject Name="Text758" Left="9.45" Top="376" Width="242.15" Height="24.57" CanGrow="true" Text="Unlicensed Therapist &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text759" Left="300.4" Top="376" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text760" Left="614.25" Top="376.55" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text763" Top="415.8" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text766" Left="606.8" Top="595.9" Width="160.65" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line15" Left="254.7" Top="615.35" Width="-240.03"/>
-      <LineObject Name="Line16" Left="556.1" Top="614.8" Width="-240.03"/>
-      <LineObject Name="Line17" Left="756.55" Top="615.35" Width="-136.08"/>
-      <TextObject Name="Text767" Left="1" Top="620.25" Width="270.5" Height="34.02" CanGrow="true" Text="Clinical Supervisor/Reviewer’s Signature &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text768" Left="300.4" Top="620.25" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text769" Left="614.25" Top="620.8" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <CheckBoxObject Name="CheckBox549" Left="8.9" Top="480.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IConcurWhitDiagnistic] == true,false,true)"/>
-      <TextObject Name="Text770" Left="22.8" Top="476.95" Width="515.97" Height="18.9" Text="I do not concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text771" Left="22.35" Top="453.6" Width="389.34" Height="18.9" Text="I concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
-      <CheckBoxObject Name="CheckBox550" Left="9.45" Top="457.05" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IConcurWhitDiagnistic"/>
-      <TextObject Name="Text772" Left="6.45" Top="504.3" Width="402.57" Height="18.9" Text="Alternative diagnosis and/or recommendations" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text773" Left="9.45" Top="527.2" Width="763.56" Height="18.9" Border.Lines="All" CanGrow="true" Text="[Bio.AlternativeDiagnosis]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="75.6" Top="311.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture3" Left="75.6" Top="141.75" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
-      <PictureObject Name="Picture2" Left="75.6" Top="557.55" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
-      <TextObject Name="Text226" Left="300.51" Top="350.65" Width="270.65" Height="18.9" Text="[DocumentsAssistant.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text228" Left="300.4" Top="179.55" Width="270.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Name],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text227" Left="300.4" Top="594.35" Width="270.65" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    <DataBand Name="Data5" Top="1999.27" Width="778.3" Height="721.87" DataSource="Clients">
+      <TextObject Name="Text750" Top="11.9" Width="771.35" Height="24.57" CanGrow="true" Text="TREATMENT RECOMMENDATIONS:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text751" Left="5.45" Top="37.8" Width="765.45" Height="18.9" CanGrow="true" Text="[Bio.Treatmentrecomendations]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text752" Top="150.75" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text753" Top="178.1" Width="771.35" Height="39.69" Text="This Licensed Clinical has completed a face to face interview with the client and has made appropriate treatment recommendations based on such interaction." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <LineObject Name="Line9" Left="254.7" Top="264.7" Width="-240.03"/>
+      <TextObject Name="Text35" Left="9.45" Top="269.6" Width="251.6" Height="24.57" CanGrow="true" Text="Licensed Practitioner &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line10" Left="556.1" Top="264.15" Width="-240.03"/>
+      <TextObject Name="Text36" Left="300.4" Top="269.6" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text37" Left="614.25" Top="270.15" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line11" Left="756.55" Top="264.7" Width="-136.08"/>
+      <TextObject Name="Text755" Left="606.8" Top="245.25" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Bio.DateSignatureLicensedPractitioner],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text756" Top="304.95" Width="771.35" Height="24.57" CanGrow="true" Text="UNLICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text757" Top="334.3" Width="771.35" Height="52.92" Text="This Unlicensed Clinical has complete a face to face interview with the client and has made appropriate treatment recommendations based on the interaction (Qualified Licensed Supervisor review and signature documented showing concurrence with diagnosis and treatment recommendations) " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text762" Left="606.8" Top="420.35" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,&quot;&quot;,[Bio.DateSignatureUnlicensedTherapist])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line12" Left="254.7" Top="439.8" Width="-240.03"/>
+      <LineObject Name="Line13" Left="556.1" Top="439.25" Width="-240.03"/>
+      <LineObject Name="Line14" Left="756.55" Top="439.8" Width="-136.08"/>
+      <TextObject Name="Text758" Left="9.45" Top="444.7" Width="251.6" Height="24.57" CanGrow="true" Text="Unlicensed Therapist &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text759" Left="300.4" Top="444.7" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text760" Left="614.25" Top="445.25" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text763" Top="481.5" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text766" Left="606.8" Top="662.05" Width="160.65" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line15" Left="254.7" Top="681.5" Width="-240.03"/>
+      <LineObject Name="Line16" Left="556.1" Top="680.95" Width="-240.03"/>
+      <LineObject Name="Line17" Left="756.55" Top="681.5" Width="-136.08"/>
+      <TextObject Name="Text767" Left="1" Top="686.4" Width="270.5" Height="34.02" CanGrow="true" Text="Clinical Supervisor/Reviewer’s Signature &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text768" Left="300.4" Top="686.4" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text769" Left="614.25" Top="686.95" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox549" Left="8.9" Top="537.1" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IConcurWhitDiagnistic] == true,false,true)"/>
+      <TextObject Name="Text770" Left="22.8" Top="533.65" Width="515.97" Height="18.9" Text="I do not concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text771" Left="22.35" Top="510.3" Width="389.34" Height="18.9" Text="I concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox550" Left="9.45" Top="513.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IConcurWhitDiagnistic"/>
+      <TextObject Name="Text772" Top="570.45" Width="402.57" Height="18.9" Text="ALTERNATIVE DIAGNOSIS AND/OR RECOMMENDATIONS" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text773" Left="7.45" Top="593.35" Width="763.56" Height="18.9" CanGrow="true" Text="[Bio.AlternativeDiagnosis]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="75.6" Top="380.55" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="75.6" Top="207.45" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture2" Left="75.6" Top="623.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text226" Left="300.51" Top="419.35" Width="270.65" Height="18.9" Text="[DocumentsAssistant.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text228" Left="300.4" Top="245.25" Width="270.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Name],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text227" Left="300.4" Top="660.5" Width="270.65" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line18" Left="254.7" Top="111.5" Width="-240.03"/>
+      <TextObject Name="Text776" Left="9.45" Top="116.4" Width="251.6" Height="24.57" CanGrow="true" Text="Client Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text777" Left="614.25" Top="116.95" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line19" Left="756.55" Top="111.5" Width="-136.08"/>
+      <LineObject Name="Line20" Left="558.1" Top="111.95" Width="-240.03"/>
+      <TextObject Name="Text778" Left="302.4" Top="116.4" Width="270.5" Height="24.57" CanGrow="true" Text="Client Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text779" Left="309.85" Top="92.05" Width="255.15" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
 </Report>

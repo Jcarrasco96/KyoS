@@ -95,6 +95,11 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
+        #region Brief reports
+        Stream FloridaSocialHSBriefReport(BriefEntity brief);
+        Stream DreamsMentalHealthBriefReport(BriefEntity brief);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);
         #endregion
