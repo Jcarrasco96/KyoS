@@ -61,7 +61,7 @@ namespace KyoS.Web.Helpers
             int unit_total = 0;
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("All Clients ("+aworkday_Clients.Count() +")");
+                var worksheet = workbook.Worksheets.Add("All Services ("+aworkday_Clients.Count() +")");
                 worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                 worksheet.Cell(2, 1).Value = ClinicName;
                 worksheet.Cell(3, 2).Value = Periodo;
@@ -226,6 +226,186 @@ namespace KyoS.Web.Helpers
                 range3.Style.Font.Bold = false;
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range3.Merge();
+
+
+                foreach (var item in workday_Clients.GroupBy(n => n.Client))
+                {
+                    worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                    worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
+                    worksheet.Cell(2, 1).Value = ClinicName;
+                    worksheet.Cell(3, 2).Value = Periodo;
+                    worksheet.Cell(3, 12).Value = data;
+                    worksheet.Cell(3, 12).Style.Font.FontColor = XLColor.Red;
+                    worksheet.Cell(3, 12).Style.Font.FontSize = 16;
+                    worksheet.Cell(3, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(3, 1).Value = "SUPERBILL";
+                    worksheet.Cell(3, 1).Style.Font.FontColor = XLColor.BlueGray;
+                    worksheet.Cell(3, 1).Style.Font.FontSize = 16;
+                    worksheet.Cell(3, 1).Style.Font.Bold = true;
+                    worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+                    range11.Style.Font.FontSize = 18;
+                    range11.Style.Font.Bold = false;
+                    range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                    range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    range11.Merge();
+                    IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 12).Address);
+                    range21.Style.Font.FontSize = 16;
+                    range21.Style.Font.Bold = false;
+                    range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    range21.Merge();
+                    IXLRange range31 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 11).Address);
+                    range31.Style.Font.FontSize = 14;
+                    range31.Style.Font.Bold = false;
+                    range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    range31.Merge();
+
+                    currentRow = 4;
+                    worksheet.Cell(currentRow, 1).Value = "Client Name";
+                    worksheet.Cell(currentRow, 2).Value = "Case No";
+                    worksheet.Cell(currentRow, 3).Value = "DOB";
+                    worksheet.Cell(currentRow, 4).Value = "Member Id";
+                    worksheet.Cell(currentRow, 5).Value = "Insurance";
+                    worksheet.Cell(currentRow, 6).Value = "Diagnostics";
+                    worksheet.Cell(currentRow, 7).Value = "Date";
+                    worksheet.Cell(currentRow, 8).Value = "Setting";
+                    worksheet.Cell(currentRow, 9).Value = "Units";
+                    worksheet.Cell(currentRow, 10).Value = "Amount";
+                    worksheet.Cell(currentRow, 11).Value = "Therapist";
+                    worksheet.Cell(currentRow, 12).Value = "Status Bill";
+
+
+                    IXLRange range0 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 12).Address);
+                    range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                    range0.SetAutoFilter();
+                    range0.Style.Font.Bold = true;
+                    currentRow++;
+                    unit_total = 0;
+                    amount = 0;
+                    worksheet.ColumnsUsed().AdjustToContents();
+                    foreach (var product in item)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = product.Client.Name;
+                        worksheet.Cell(currentRow, 2).Value = product.Client.Code;
+                        worksheet.Cell(currentRow, 3).Value = product.Client.DateOfBirth.ToShortDateString();
+                        worksheet.Cell(currentRow, 4).Value = product.Client.MedicaidID;
+                        if (product.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                        {
+                            worksheet.Cell(currentRow, 5).Value = product.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                        }
+                        else
+                        {
+                            worksheet.Cell(currentRow, 5).Value = "-";
+                        }
+                        if (product.Client.Clients_Diagnostics.Count() > 0)
+                        {
+                            worksheet.Cell(currentRow, 6).Value = product.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code;
+                        }
+                        else
+                        {
+                            worksheet.Cell(currentRow, 6).Value = "-";
+                        }
+                        worksheet.Cell(currentRow, 7).Value = product.Workday.Date.ToShortDateString();
+                        if (product.Note != null)
+                        {
+                            worksheet.Cell(currentRow, 8).Value = product.Note.Setting;
+                            worksheet.Cell(currentRow, 9).Value = 16;
+                            worksheet.Cell(currentRow, 10).Value = 16 * 9;
+                            unit_total += 16;
+                            amount += (16 * 9);
+                        }
+                        else
+                        {
+                            if (product.NoteP != null)
+                            {
+                                worksheet.Cell(currentRow, 8).Value = product.NoteP.Setting;
+                                worksheet.Cell(currentRow, 9).Value = product.NoteP.RealUnits;
+                                worksheet.Cell(currentRow, 10).Value = product.NoteP.RealUnits * 9;
+                                unit_total += product.NoteP.RealUnits;
+                                amount += (product.NoteP.RealUnits * 9);
+                            }
+                            else
+                            {
+                                if (product.IndividualNote != null)
+                                {
+                                    worksheet.Cell(currentRow, 8).Value = "53";
+                                    worksheet.Cell(currentRow, 9).Value = 4;
+                                    worksheet.Cell(currentRow, 10).Value = 4 * 12;
+                                    unit_total += 4;
+                                    amount += (4 * 9);
+                                }
+                                else
+                                {
+                                    if (product.GroupNote != null)
+                                    {
+                                        worksheet.Cell(currentRow, 8).Value = "101";
+                                        worksheet.Cell(currentRow, 9).Value = 8;
+                                        worksheet.Cell(currentRow, 10).Value = 8 * 7;
+                                        unit_total += 8;
+                                        amount += (8 * 7);
+                                    }
+                                    else
+                                    {
+                                        worksheet.Cell(currentRow, 8).Value = "53";
+                                        worksheet.Cell(currentRow, 9).Value = 16;
+                                        worksheet.Cell(currentRow, 10).Value = 16 * 9;
+                                        unit_total += 16;
+                                        amount += (16 * 9);
+                                    }
+                                }
+                            }
+
+                        }
+
+                        worksheet.Cell(currentRow, 11).Value = product.Facilitator.Name;
+                        if (product.DeniedBill == true)
+                        {
+                            worksheet.Cell(currentRow, 12).Value = "Denied";
+                            worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Red);
+                        }
+                        else
+                        {
+                            if (product.BilledDate != null && product.PaymentDate != null)
+                            {
+                                worksheet.Cell(currentRow, 12).Value = "Paid";
+                                worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Green);
+                            }
+                            else
+                            {
+                                if (product.BilledDate != null && product.PaymentDate == null)
+                                {
+                                    worksheet.Cell(currentRow, 12).Value = "Pending";
+                                    worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                }
+                                else
+                                {
+                                    worksheet.Cell(currentRow, 12).Value = "Not Billed";
+                                    worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                                }
+                            }
+                        }
+
+                        IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
+                        rangeCurrent.Style.Font.FontSize = 11;
+                        rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        rangeCurrent.Style.Font.Bold = false;
+
+                        worksheet.Cell(5, 8).Value = "Total";
+                        worksheet.Cell(5, 9).Value = unit_total;
+                        worksheet.Cell(5, 10).Value = amount;
+                        IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 8).Address, worksheet.Cell(5, 10).Address);
+                        rangeTotal.Style.Font.FontSize = 13;
+                        rangeTotal.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        rangeTotal.Style.Font.Bold = true;
+                        //rangeTotal.Style.Fill.SetBackgroundColor(XLColor.GoldenYellow);
+                        rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
+                    }
+                    worksheet.ColumnsUsed().AdjustToContents();
+
+                }
+
 
                 using (var stream = new MemoryStream())
                 {

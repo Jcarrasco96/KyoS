@@ -995,11 +995,13 @@ namespace KyoS.Web.Controllers
             if (workday_Client.Session == "AM")
             {
                 am = true;
+                ViewData["session"] = "AM";
             }
             else
             {
                 pm = true;
-             }
+                ViewData["session"] = "PM";
+            }
 
             FacilitatorEntity facilitator_logged = _context.Facilitators
                                                            .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
@@ -1029,7 +1031,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
-                        ViewData["session"] = "AM";
+                       
                         return View(noteViewModel);
                     }
                 }
@@ -1042,7 +1044,7 @@ namespace KyoS.Web.Controllers
                         {
                             Id = workday_Client.Workday.Id,
                         };
-                        ViewData["session"] = "PM";
+                        
                         return View(noteViewModel);
                     }
                 }
@@ -12692,6 +12694,7 @@ namespace KyoS.Web.Controllers
                                                && n.Client != null
                                                && n.BilledDate == null)
                                          .OrderBy(n => n.Client.Name)
+                                         .OrderBy(n => n.Workday.Date)
                                          .ToList();
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "NOT BILLED";
@@ -12720,7 +12723,8 @@ namespace KyoS.Web.Controllers
                                                    && n.Workday.Week.Id == idWeek
                                                    && n.Present == true
                                                    && n.Client != null)
-                                             .OrderBy(n => n.Client.Name)
+                                             .OrderBy(n => n.Client.Name).ThenBy( n => n.Workday.Date)
+                                             
                                              .ToList();
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "ALL DATA";
