@@ -849,34 +849,34 @@ namespace KyoS.Web.Controllers
             BriefEntity entity = _context.Brief
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.Clinic)
+                                            .ThenInclude(c => c.Clinic)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.EmergencyContact)
+                                            .ThenInclude(c => c.EmergencyContact)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.LegalGuardian)
+                                            .ThenInclude(c => c.LegalGuardian)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.List_BehavioralHistory)
+                                            .ThenInclude(c => c.List_BehavioralHistory)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.MedicationList)
+                                            .ThenInclude(c => c.MedicationList)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.Clients_Diagnostics)
-                                         .ThenInclude(cd => cd.Diagnostic)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                                .ThenInclude(cd => cd.Diagnostic)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.Doctor)
+                                            .ThenInclude(c => c.Doctor)
 
                                          .Include(b => b.Supervisor)
 
                                          .Include(b => b.DocumentsAssistant)
 
                                          .Include(b => b.Client)
-                                         .ThenInclude(c => c.Client_Referred)
-                                         .ThenInclude(cr => cr.Referred)
+                                            .ThenInclude(c => c.Client_Referred)
+                                                .ThenInclude(cr => cr.Referred)
 
                                          .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
@@ -884,22 +884,14 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                //Stream stream = _reportHelper.FloridaSocialHSBioReport(entity);
-                Stream stream = null;
+                Stream stream = _reportHelper.FloridaSocialHSBriefReport(entity);                
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                //Stream stream = _reportHelper.DreamsMentalHealthBioReport(entity);
-                Stream stream = null;
+                Stream stream = _reportHelper.DreamsMentalHealthBriefReport(entity);                
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
