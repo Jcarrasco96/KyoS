@@ -6,7 +6,7 @@ namespace KyoS.Web.Helpers
 {
     public interface IConverterHelper
     {
-        ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew);
+        ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew, string pathSignatureClinical);
         ClinicViewModel ToClinicViewModel(ClinicEntity model);
         Task<ThemeEntity> ToThemeEntity(ThemeViewModel model, bool isNew);
         Task<ThemeEntity> ToTheme3Entity(Theme3ViewModel model, bool isNew);

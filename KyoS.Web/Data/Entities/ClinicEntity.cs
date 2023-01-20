@@ -53,5 +53,8 @@ namespace KyoS.Web.Data.Entities
 
         public string ProviderMedicaidId { get; set; }
         public string ProviderTaxId { get; set; }
+
+        [Display(Name = "Signature")]
+        public string SignaturePath { get; set; }
     }
 }

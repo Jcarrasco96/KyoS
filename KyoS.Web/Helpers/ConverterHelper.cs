@@ -22,7 +22,7 @@ namespace KyoS.Web.Helpers
             _userHelper = userHelper;
         }
 
-        public ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew)
+        public ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew, string pathSignatureClinical)
         {
             return new ClinicEntity
             {
@@ -38,7 +38,9 @@ namespace KyoS.Web.Helpers
                 FaxNo = model.FaxNo,
                 ClinicalDirector = model.ClinicalDirector,
                 ProviderMedicaidId = model.ProviderMedicaidId,
-                ProviderTaxId = model.ProviderTaxId
+                ProviderTaxId = model.ProviderTaxId,
+                SignaturePath = pathSignatureClinical
+
             };
         }
 
@@ -58,7 +60,8 @@ namespace KyoS.Web.Helpers
                 FaxNo = clinicEntity.FaxNo,
                 ClinicalDirector = clinicEntity.ClinicalDirector,
                 ProviderMedicaidId = clinicEntity.ProviderMedicaidId,
-                ProviderTaxId = clinicEntity.ProviderTaxId
+                ProviderTaxId = clinicEntity.ProviderTaxId,
+                SignaturePath = clinicEntity.SignaturePath
             };
         }
 

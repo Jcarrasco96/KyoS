@@ -64,6 +64,11 @@
         <input asp-for="LogoFile" type="file" class="form-control" />
         <span asp-validation-for="LogoFile" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-4">
+        <label asp-for="SignatureFile" class="control-label"></label>
+        <input asp-for="SignatureFile" type="file" class="form-control" />
+        <span asp-validation-for="SignatureFile" class="text-danger"></span>
+    </div>
     <div class="container-fluid">
         &nbsp;
     </div>
@@ -113,11 +118,20 @@
         @*<label style="font-weight: bold;">*@ Schema 4 @*</label>*@ <a href="~/images/Schemas/Schema4.jpeg" target="_blank" title="Schema 4">(Total Units: 12)</a>
     </div>
     <div class="col-md-4">
-        @if(@Model.Id != 0)
-        { 
+        @if (@Model.Id != 0)
+        {
             @if (!string.IsNullOrEmpty(Model.LogoPath))
             {
                 <img src="@Url.Content(Model.LogoPath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
+            }
+        }
+    </div>
+    <div class="col-md-4">
+        @if (@Model.Id != 0)
+        {
+            @if (!string.IsNullOrEmpty(Model.SignaturePath))
+            {
+                <img src="@Url.Content(Model.SignaturePath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
             }
         }
     </div>

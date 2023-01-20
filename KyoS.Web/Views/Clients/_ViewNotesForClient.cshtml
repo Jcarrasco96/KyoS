@@ -171,7 +171,7 @@
 
                                             @if (day_client.Note != null)
                                             {
-                                                @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
                                                 {
                                                     <a asp-action="PrintNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
@@ -182,7 +182,7 @@
                                             }
                                             @if (day_client.NoteP != null)
                                             {
-                                                @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
                                                 {
                                                     <a asp-action="PrintNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
@@ -206,8 +206,15 @@
                                                     {
                                                         <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
+                                                    @if (day_client.Hold == false)
+                                                    {
+                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
+                                                    else
+                                                    { 
+                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
 
-                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
@@ -228,8 +235,15 @@
                                                     {
                                                         <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
+                                                    @if (day_client.Hold == false)
+                                                    {
+                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>  
+                                                    }
+                                                    else
+                                                    { 
+                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
 
-                                                    <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
