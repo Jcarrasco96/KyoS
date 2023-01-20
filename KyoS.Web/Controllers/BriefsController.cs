@@ -1542,56 +1542,60 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    if (item.AdmisionDate > item.Brief.DateBio)
+                    if (item.Brief != null)
                     {
-                        auditClient.NameClient = item.Name;
-                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "The admission date is after the BRIEF date";
-                        auditClient.Active = 0;
+                        if (item.AdmisionDate > item.Brief.DateBio)
+                        {
+                            auditClient.NameClient = item.Name;
+                            auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                            auditClient.Description = "The admission date is after the BRIEF date";
+                            auditClient.Active = 0;
 
-                        auditClient_List.Add(auditClient);
-                        auditClient = new AuditBIO();
-                    }
-                    if (item.List_BehavioralHistory.Count() == 0)
-                    {
-                        auditClient.NameClient = item.Name;
-                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "The client has no behavioral health history";
-                        auditClient.Active = 0;
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditBIO();
+                        }
+                        if (item.List_BehavioralHistory.Count() == 0)
+                        {
+                            auditClient.NameClient = item.Name;
+                            auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                            auditClient.Description = "The client has no behavioral health history";
+                            auditClient.Active = 0;
 
-                        auditClient_List.Add(auditClient);
-                        auditClient = new AuditBIO();
-                    }
-                    if (item.MedicationList.Count() == 0)
-                    {
-                        auditClient.NameClient = item.Name;
-                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "The client has no medication";
-                        auditClient.Active = 1;
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditBIO();
+                        }
+                        if (item.MedicationList.Count() == 0)
+                        {
+                            auditClient.NameClient = item.Name;
+                            auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                            auditClient.Description = "The client has no medication";
+                            auditClient.Active = 1;
 
-                        auditClient_List.Add(auditClient);
-                        auditClient = new AuditBIO();
-                    }
-                    if (item.Brief.Status == BioStatus.Edition)
-                    {
-                        auditClient.NameClient = item.Name;
-                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Brief is edition";
-                        auditClient.Active = 1;
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditBIO();
+                        }
+                        if (item.Brief.Status == BioStatus.Edition)
+                        {
+                            auditClient.NameClient = item.Name;
+                            auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                            auditClient.Description = "Brief is edition";
+                            auditClient.Active = 1;
 
-                        auditClient_List.Add(auditClient);
-                        auditClient = new AuditBIO();
-                    }
-                    if (item.Brief.Status == BioStatus.Pending)
-                    {
-                        auditClient.NameClient = item.Name;
-                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Brief is pending";
-                        auditClient.Active = 1;
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditBIO();
+                        }
+                        if (item.Brief.Status == BioStatus.Pending)
+                        {
+                            auditClient.NameClient = item.Name;
+                            auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                            auditClient.Description = "Brief is pending";
+                            auditClient.Active = 1;
 
-                        auditClient_List.Add(auditClient);
-                        auditClient = new AuditBIO();
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditBIO();
+                        }
                     }
+                    
                 }
          
             }
