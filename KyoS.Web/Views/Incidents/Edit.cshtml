@@ -42,10 +42,13 @@
                 <div class="col-md-12">
                     &nbsp;
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
                     <textarea asp-for="Description" class="form-control" rows="8"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             }
             else
@@ -67,10 +70,13 @@
                 <div class="col-md-12">
                     &nbsp;
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
                     <textarea asp-for="Description" class="form-control" rows="8" readonly></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             }
             @if (ViewData["Assigned"].ToString() == "1" || User.IsInRole("Admin") || User.IsInRole("Manager"))

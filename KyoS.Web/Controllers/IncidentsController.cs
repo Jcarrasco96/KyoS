@@ -251,7 +251,8 @@ namespace KyoS.Web.Controllers
             IncidentEntity incidentEntity = await _context.Incidents
                                                           .Include(n => n.client)
                                                           .Include(n => n.UserAsigned)
-                                                          .Include(i => i.UserCreatedBy)                                                      
+                                                          .Include(i => i.UserCreatedBy)
+                                                            .ThenInclude(u => u.Clinic)
                                                           .FirstOrDefaultAsync(i => i.Id == id);
 
             if (incidentEntity.UserAsigned != null)

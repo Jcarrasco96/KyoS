@@ -5,7 +5,7 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="CEO" class="control-label"></label>
         <input asp-for="CEO" class="form-control" />
         <span asp-validation-for="CEO" class="text-danger"></span>
@@ -20,14 +20,14 @@
         <input asp-for="ProviderMedicaidId" class="form-control" />
         <span asp-validation-for="ProviderMedicaidId" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="ClinicalDirector" class="control-label"></label>
         <input asp-for="ClinicalDirector" class="form-control" />
         <span asp-validation-for="ClinicalDirector" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="Address" class="control-label"></label>
         <input asp-for="Address" class="form-control" />
         <span asp-validation-for="Address" class="text-danger"></span>
@@ -52,22 +52,45 @@
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-1">
         <label asp-for="FaxNo" class="control-label"></label>
         <input asp-for="FaxNo" class="form-control" />
         <span asp-validation-for="FaxNo" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="LogoFile" class="control-label"></label>
         <input asp-for="LogoFile" type="file" class="form-control" />
         <span asp-validation-for="LogoFile" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="SignatureFile" class="control-label"></label>
         <input asp-for="SignatureFile" type="file" class="form-control" />
         <span asp-validation-for="SignatureFile" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        @if (@Model.Id != 0)
+        {
+            @if (!string.IsNullOrEmpty(Model.LogoPath))
+            {
+                <img src="@Url.Content(Model.LogoPath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
+            }
+        }
+    </div>
+    <div class="form-group col-md-3">
+        @if (@Model.Id != 0)
+        {
+            @if (!string.IsNullOrEmpty(Model.SignaturePath))
+            {
+                <img src="@Url.Content(Model.SignaturePath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
+            }
+        }
     </div>
     <div class="container-fluid">
         &nbsp;
@@ -86,7 +109,7 @@
             <input type="radio" name="Schema" value="Schema1" />
         }
         @*<label style="font-weight: bold;">*@Schema 1 @*</label>*@ <a href="~/images/Schemas/Schema1.jpeg" target="_blank" title="Schema 1">(Total Units: 16)</a>
-        <br />
+        &nbsp; &nbsp;
         @if (ViewBag.Schema == "2")
         {
             <input type="radio" name="Schema" value="Schema2" checked="checked" />
@@ -106,7 +129,7 @@
             <input type="radio" name="Schema" value="Schema3" />
         }
         @*<label style="font-weight: bold;">*@ Schema 3 @*</label>*@ <a href="~/images/Schemas/Schema3.jpeg" target="_blank" title="Schema 3">(Total Units: 16)</a>
-        <br />
+        &nbsp; &nbsp;
         @if (ViewBag.Schema == "4")
         {
             <input type="radio" name="Schema" value="Schema4" checked="checked" />
@@ -116,24 +139,6 @@
             <input type="radio" name="Schema" value="Schema4" />
         }
         @*<label style="font-weight: bold;">*@ Schema 4 @*</label>*@ <a href="~/images/Schemas/Schema4.jpeg" target="_blank" title="Schema 4">(Total Units: 12)</a>
-    </div>
-    <div class="col-md-4">
-        @if (@Model.Id != 0)
-        {
-            @if (!string.IsNullOrEmpty(Model.LogoPath))
-            {
-                <img src="@Url.Content(Model.LogoPath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
-            }
-        }
-    </div>
-    <div class="col-md-4">
-        @if (@Model.Id != 0)
-        {
-            @if (!string.IsNullOrEmpty(Model.SignaturePath))
-            {
-                <img src="@Url.Content(Model.SignaturePath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
-            }
-        }
     </div>
     <div class="container-fluid">
         &nbsp;
