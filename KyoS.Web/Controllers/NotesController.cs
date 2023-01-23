@@ -12169,6 +12169,19 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            ClientEntity client = _context.Clients
+                                             .Include(n => n.Clients_Diagnostics)
+                                             .ThenInclude(n => n.Diagnostic)
+                                             .FirstOrDefault(n => n.Id == idClient);
+
+            int cantUnit = 0;
+            int money = 0;
+            string clientName = client.Name;
+            string code = client.Code;
+            string diagnostics = client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic.Code;
+            string medicaidId = client.MedicaidID;
+            string birthdate = client.DateOfBirth.ToShortDateString();
+
             if (billed == 0)
             {
                 List<Workday_Client> work_client = await _context.Workdays_Clients
@@ -12195,14 +12208,6 @@ namespace KyoS.Web.Controllers
                                                                  .OrderBy(m => m.Client.Name)
                                                                  .OrderBy(m => m.Workday.Date)
                                                                  .ToListAsync();
-
-                int cantUnit = 0;
-                int money = 0;
-                string clientName = "";
-                string code = "";
-                string diagnostics = "";
-                string medicaidId = "";
-                string birthdate = "";
 
                 foreach (var item in work_client)
                 {
@@ -12294,14 +12299,6 @@ namespace KyoS.Web.Controllers
                                                                  .OrderBy(m => m.Client.Name)
                                                                  .OrderBy(m => m.Workday.Date)
                                                                  .ToListAsync();
-
-                int cantUnit = 0;
-                int money = 0;
-                string clientName = "";
-                string code = "";
-                string diagnostics = "";
-                string medicaidId = "";
-                string birthdate = "";
 
                 foreach (var item in work_client)
                 {

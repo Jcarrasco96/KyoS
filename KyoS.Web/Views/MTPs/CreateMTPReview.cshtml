@@ -35,12 +35,13 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="ClinicalDirector" />
             <partial name="_MTPReviews" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save All" class="btn btn-primary" />
                 @if (Model.Origin == 0)
                 {
-                <a asp-action="Index" class="btn btn-success">Back</a>
+                    <a asp-action="Index" class="btn btn-success">Back</a>
                 }
                 @if (Model.Origin == 1)
                 {
