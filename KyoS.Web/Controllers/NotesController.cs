@@ -12691,7 +12691,7 @@ namespace KyoS.Web.Controllers
                                                && n.Client != null
                                                && n.BilledDate == null)
                                          .OrderBy(n => n.Client.Name)
-                                         .OrderBy(n => n.Workday.Date)
+                                         .ThenBy(n => n.Workday.Date)
                                          .ToList();
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "NOT BILLED";
@@ -12720,9 +12720,10 @@ namespace KyoS.Web.Controllers
                                                    && n.Workday.Week.Id == idWeek
                                                    && n.Present == true
                                                    && n.Client != null)
-                                             .OrderBy(n => n.Client.Name).ThenBy( n => n.Workday.Date)
-                                             
+                                             .OrderBy(n => n.Client.Name)
+                                             .ThenBy( n => n.Workday.Date)
                                              .ToList();
+
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "ALL DATA";
             }
@@ -13038,6 +13039,7 @@ namespace KyoS.Web.Controllers
                                                && n.Client != null
                                                && n.Hold == true)
                                          .OrderBy(n => n.Client.Name)
+                                         .ThenBy(n => n.Workday.Date)
                                          .ToList();
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "NOT BILLED";
@@ -13067,6 +13069,7 @@ namespace KyoS.Web.Controllers
                                                    && n.Client != null
                                                    && n.Hold == true)
                                              .OrderBy(n => n.Client.Name)
+                                             .ThenBy(n => n.Workday.Date)
                                              .ToList();
                 Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
                 data = "ALL DATA";
