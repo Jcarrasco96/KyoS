@@ -1364,6 +1364,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(w => w.AdendumList)
 
                                                 .Include(w => w.Bio)
+                                                .Include(w => w.Brief)
                                                 .Include(w => w.FarsFormList)
                                                 .Include(w => w.DischargeList)
 
@@ -1415,6 +1416,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(w => w.MtpReviewList)
 
                                                 .Include(w => w.Bio)
+                                                .Include(w => w.Brief)
                                                 .Include(w => w.FarsFormList)
                                                 .Include(w => w.DischargeList)
 
@@ -1444,7 +1446,7 @@ namespace KyoS.Web.Controllers
 
             List<Problem> problem = new List<Problem>();
             //BIO
-            if (client.MTPs.Count() > 0 && client.Bio != null)
+            if (client.MTPs.Count() > 0 && (client.Bio != null || client.Brief != null))
             {
                 if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                 {
@@ -1454,19 +1456,37 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    if (client.Bio != null)
                     {
-                        tempProblem.Name = "MTP Date";
-                        tempProblem.Description = "MTP date is prior to BIO date";
-                        tempProblem.Active = 0;
+                        if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is prior to BIO date";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is posterior to admision date and BIO date";
+                            tempProblem.Active = 2;
+                        }
                     }
-                    else
+                    if (client.Brief != null)
                     {
-                        tempProblem.Name = "MTP Date";
-                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
-                        tempProblem.Active = 2;
+                        if (client.Brief.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is prior to BRIEF date";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is posterior to admision date and BRIEF date";
+                            tempProblem.Active = 2;
+                        }
                     }
-                    
+
                 }
                 problem.Add(tempProblem);
                 cant_Fars++;
@@ -1500,19 +1520,37 @@ namespace KyoS.Web.Controllers
                 tempProblem = new Problem();
             }
            
-            if (client.Bio != null)
+            if (client.Bio != null || client.Brief != null)
             {
-                if (client.AdmisionDate > client.Bio.DateBio)
+                if (client.Bio != null)
                 {
-                    tempProblem.Name = "BIO Date";
-                    tempProblem.Description = "BIO date is prior to admission date";
-                    tempProblem.Active = 0;
+                    if (client.AdmisionDate > client.Bio.DateBio)
+                    {
+                        tempProblem.Name = "BIO Date";
+                        tempProblem.Description = "BIO date is prior to admission date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "BIO Date";
+                        tempProblem.Description = "BIO date is posterior to admission date";
+                        tempProblem.Active = 2;
+                    }
                 }
-                else
+                if (client.Brief != null)
                 {
-                    tempProblem.Name = "BIO Date";
-                    tempProblem.Description = "BIO date is posterior to admission date";
-                    tempProblem.Active = 2;
+                    if (client.AdmisionDate > client.Brief.DateBio)
+                    {
+                        tempProblem.Name = "BRIEF Date";
+                        tempProblem.Description = "BRIEF date is prior to admission date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "BRIEF Date";
+                        tempProblem.Description = "BRIEF date is posterior to admission date";
+                        tempProblem.Active = 2;
+                    }
                 }
             }
             else
@@ -1675,7 +1713,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Discharge";
                             tempProblem.Description = "Discharge date match with date of close";
-                            tempProblem.Active = 1;
+                            tempProblem.Active = 2;
                         }
                         problem.Add(tempProblem);
                         tempProblem = new Problem();
@@ -1701,7 +1739,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Discharge";
                             tempProblem.Description = "Discharge date match with date of close";
-                            tempProblem.Active = 1;
+                            tempProblem.Active = 2;
                         }
                         problem.Add(tempProblem);
                         tempProblem = new Problem();
