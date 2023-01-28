@@ -160,7 +160,7 @@ namespace KyoS.Web.Helpers
                 }
             }
 
-            //signatures images                      
+            //logo images                      
             string path = string.Empty;
             if (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.Clinic.LogoPath))
             {
@@ -172,6 +172,19 @@ namespace KyoS.Web.Helpers
 
             PictureObject pic2 = WebReport.Report.FindObject("Picture2") as PictureObject;
             pic2.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            if ((workdayClientList.First().Facilitator != null) && (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.SetParameterValue("dateNote", date);
             WebReport.Report.SetParameterValue("session1", "AM");
@@ -221,6 +234,19 @@ namespace KyoS.Web.Helpers
 
             PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
             pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            if ((workdayClientList.First().Facilitator != null) && (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             string session = workdayClientList.First().Session;
             WebReport.Report.SetParameterValue("session1", session);
