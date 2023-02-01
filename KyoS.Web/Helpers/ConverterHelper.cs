@@ -39,7 +39,10 @@ namespace KyoS.Web.Helpers
                 ClinicalDirector = model.ClinicalDirector,
                 ProviderMedicaidId = model.ProviderMedicaidId,
                 ProviderTaxId = model.ProviderTaxId,
-                SignaturePath = pathSignatureClinical
+                SignaturePath = pathSignatureClinical,
+                CodeGroupTherapy = model.CodeGroupTherapy,
+                CodeIndTherapy = model.CodeIndTherapy,
+                CodePSRTherapy = model.CodePSRTherapy
 
             };
         }
@@ -61,7 +64,11 @@ namespace KyoS.Web.Helpers
                 ClinicalDirector = clinicEntity.ClinicalDirector,
                 ProviderMedicaidId = clinicEntity.ProviderMedicaidId,
                 ProviderTaxId = clinicEntity.ProviderTaxId,
-                SignaturePath = clinicEntity.SignaturePath
+                SignaturePath = clinicEntity.SignaturePath,
+                CodeGroupTherapy = clinicEntity.CodeGroupTherapy,
+                CodeIndTherapy = clinicEntity.CodeIndTherapy,
+                CodePSRTherapy = clinicEntity.CodePSRTherapy
+
             };
         }
 

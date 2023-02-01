@@ -171,7 +171,7 @@ namespace KyoS.Web.Controllers
                     path = await _imageHelper.UploadImageAsync(clinicViewModel.LogoFile, "Clinics");
                 }
 
-                string pathSignatureClinical = string.Empty;
+                string pathSignatureClinical = clinicViewModel.SignaturePath;
 
                 if (clinicViewModel.SignatureFile != null)
                 {

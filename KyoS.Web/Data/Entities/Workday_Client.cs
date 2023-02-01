@@ -37,5 +37,6 @@ namespace KyoS.Web.Data.Entities
         public bool SharedSession { get; set; }
         public bool DeniedBill { get; set; }
         public bool Hold { get; set; }
+        public string CodeBill { get; set; }
     }
 }
