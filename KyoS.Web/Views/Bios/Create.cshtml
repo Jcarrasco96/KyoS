@@ -35,7 +35,7 @@
             <div class="col-md-push-12">
                 <div class="">
                     <div class="col-md-12 form-group">
-                        <a onclick="showInPopup('@Url.Action("CreateBehavioralModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Behavioral Health')" class="btn btn-success" title="Create Behavioral Health of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Behavioral</a>
+                        <a onclick="showInPopup('@Url.Action("CreateBehavioralModal", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Create Behavioral Health')" class="btn btn-success" title="Create Behavioral Health of this BIO"><i class="glyphicon glyphicon-plus"></i> Add Behavioral</a>
                     </div>
                 </div>
                 <div class="">
@@ -57,6 +57,19 @@
                 </div>
             </div>
             <partial name="_Bios2" />
+            <div class="col-md-push-12">
+                <div class="">
+                    <div class="col-md-12 form-group">
+                        <a onclick="showInPopup('@Url.Action("AddDiagnostic", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Add Diagnostics')" class="btn btn-success" title="Add Diagnostics"><i class="glyphicon glyphicon-plus"></i> Add Diagnostics</a>
+                    </div>
+                </div>
+                <div class="">
+                    <div id="view-ClientDiagnostics">
+                        @await Html.PartialAsync("_ViewDiagnostic", Model.Client.Clients_Diagnostics.ToList())
+                    </div>
+                </div>
+            </div>
+            <partial name="_Bios3" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="ClientswithoutBIO" class="btn btn-success">Back</a>

@@ -74,7 +74,14 @@ namespace KyoS.Web.Controllers
                         path = await _imageHelper.UploadImageAsync(clinicViewModel.LogoFile, "Clinics");
                     }
 
-                    ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, true);
+                    string pathSignatureClinical = string.Empty;
+
+                    if (clinicViewModel.SignatureFile != null)
+                    {
+                        pathSignatureClinical = await _imageHelper.UploadImageAsync(clinicViewModel.SignatureFile, "Clinics");
+                    }
+
+                    ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, true, pathSignatureClinical);
                     clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : (form["Schema"] == "Schema3") ? SchemaType.Schema3 : SchemaType.Schema4;
                     _context.Add(clinicEntity);
                     try
@@ -164,7 +171,14 @@ namespace KyoS.Web.Controllers
                     path = await _imageHelper.UploadImageAsync(clinicViewModel.LogoFile, "Clinics");
                 }
 
-                ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, false);
+                string pathSignatureClinical = clinicViewModel.SignaturePath;
+
+                if (clinicViewModel.SignatureFile != null)
+                {
+                    pathSignatureClinical = await _imageHelper.UploadImageAsync(clinicViewModel.SignatureFile, "Clinics");
+                }
+
+                ClinicEntity clinicEntity = _converterHelper.ToClinicEntity(clinicViewModel, path, false, pathSignatureClinical);
                 clinicEntity.Schema = (form["Schema"] == "Schema1") ? SchemaType.Schema1 : (form["Schema"] == "Schema2") ? SchemaType.Schema2 : (form["Schema"] == "Schema3") ? SchemaType.Schema3 : SchemaType.Schema4;
                 _context.Update(clinicEntity);
                 try

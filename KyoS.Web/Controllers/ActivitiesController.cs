@@ -498,7 +498,7 @@ namespace KyoS.Web.Controllers
 
         //Schema 1 and schema 2
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> CreateActivitiesWeek(int id = 0, bool am = false, bool pm = false)
+        public async Task<IActionResult> CreateActivitiesWeek(int id = 0, bool am = false, bool pm = false, string session = "AM")
         {
             List<ThemeEntity> topics;
             List<SelectListItem> list1 = new List<SelectListItem>();
@@ -526,7 +526,7 @@ namespace KyoS.Web.Controllers
                                                            .FirstOrDefaultAsync(w => w.Id == id);
 
             //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
-            if (WorkdayReadOnly(workday))
+            if (WorkdayReadOnly(workday, session))
             {
                 ViewBag.Error = "0";
                 return View(null);
@@ -555,7 +555,7 @@ namespace KyoS.Web.Controllers
             {
                 if (user_logged.Clinic.Schema == SchemaType.Schema3)
                 {
-                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id });
+                    return RedirectToAction(nameof(CreateActivitiesWeek3), "Activities", new { id = id, session = session });
                 }
 
                 if (user_logged.Clinic.Schema == SchemaType.Schema4)
@@ -811,7 +811,7 @@ namespace KyoS.Web.Controllers
 
         //Schema 3
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0, bool am = false, bool pm = false)
+        public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0, bool am = false, bool pm = false, string session = "AM")
         {
             //The user must select at least one skill adressed per theme 
             if (error == 1)
@@ -845,7 +845,7 @@ namespace KyoS.Web.Controllers
                                                   .FirstOrDefaultAsync(w => w.Id == id);
 
             //el workday ya tiene notas creadas por el facilitator logueado por tanto no es posible su edición
-            if (WorkdayReadOnly(workday))
+            if (WorkdayReadOnly(workday, session))
             {
                 ViewBag.Error = "0";
                 return View(null);
@@ -1853,9 +1853,9 @@ namespace KyoS.Web.Controllers
         }
 
         #region Utils functions
-        public bool WorkdayReadOnly(WorkdayEntity workday)
+        public bool WorkdayReadOnly(WorkdayEntity workday, string session = "AM")
         {
-            if (workday.Workdays_Clients.Count > 0)
+            if (workday.Workdays_Clients.Count() > 0)
             {
                 FacilitatorEntity facilitator_logged = _context.Facilitators
 
@@ -1867,13 +1867,18 @@ namespace KyoS.Web.Controllers
                 {
                     if (facilitator_logged.Clinic.Schema == SchemaType.Schema3)
                     {
-                        if ((item.NoteP != null) && (item.Facilitator == facilitator_logged))
+                        if ((item.NoteP != null) && (item.Facilitator == facilitator_logged) && (item.Session == session))
+                        {
                             return true;
+                        }
                     }
                     else
                     {
-                        if ((item.Note != null) && (item.Facilitator == facilitator_logged))
+                        if ((item.Note != null) && (item.Facilitator == facilitator_logged) && (item.Session == session))
+                        {
                             return true;
+                        }
+
                     }
                 }
                 return false;

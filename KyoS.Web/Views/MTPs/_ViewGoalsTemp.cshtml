@@ -56,7 +56,8 @@
                                             <td align="left">@Html.DisplayFor(modelItem => value.Intervention)</td>
                                             <td align="center">
                                                 <a onclick="showInPopup('@Url.Action("EditObjectiveModalTemp", "MTPs", new {id =  value.Id, nameGoal = @item.Name, numberGoal = @item.Number}, Context.Request.Scheme)','Edit Objective')" class="btn btn-warning" title="Edit objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="DeleteObjectiveTemp" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete objective"></i></a>
+                                                @*<a asp-action="DeleteObjectiveTemp" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete objective"></i></a>*@
+                                                <a onclick="showInPopup('@Url.Action("DeleteObjectiveTemp1", "MTPs",new { id = value.Id}, Context.Request.Scheme)','Confirmation')" class="btn btn-danger" title="Delete objective"><i class="glyphicon glyphicon-trash"></i></a>
                                             </td>
                                         </tr>
                                     }
@@ -78,7 +79,7 @@
                         <td align="center">
                             <a onclick="showInPopup('@Url.Action("EditGoalModalTemp", "MTPs", new {id =  @item.Id}, Context.Request.Scheme)','Edit Goal')" class="btn btn-warning" title="Edit goal"><i class="glyphicon glyphicon-pencil"></i></a>
                             <a onclick="showInPopup('@Url.Action("CreateObjectiveModalTemp", "MTPs", new {idGoal =  @item.Id, idClient = @item.IdClient, nameGoal = @item.Name, numberGoal = @item.Number, number = item.numberMonths, admissisonDate = item.AdmissionDate}, Context.Request.Scheme)','Create Objective')" class="btn btn-info" title="Create objective"><i class="glyphicon glyphicon-plus"></i></a>
-                            <a asp-action="DeleteGoalTemp" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Goal"></i></a>
+                            <a onclick="showInPopup('@Url.Action("DeleteGoalTemp1", "MTPs",new { id = item.Id}, Context.Request.Scheme)','Confirmation')" class="btn btn-danger" title="Delete goal"><i class="glyphicon glyphicon-trash"></i></a>
                         </td>
                     </tr>
                 }

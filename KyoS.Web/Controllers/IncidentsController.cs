@@ -9,6 +9,11 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 
 namespace KyoS.Web.Controllers
 {
@@ -37,38 +42,50 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Admin"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          .Include(i => i.client)
+                                          .Include(i => i.UserAsigned)    
+                                          
                                           .ToListAsync());
             }
 
             if (User.IsInRole("CaseManager"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          .Include(i => i.client)
+                                          .Include(i => i.UserAsigned)
+                                          
                                           .ToListAsync());
             }
             
             if (User.IsInRole("Manager"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
-                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          .Include(i => i.client)
+                                          .Include(i => i.UserAsigned)
+
+                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)                                          
                                           .ToListAsync());
             }
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 return View(await _context.Incidents
+
                                           .Include(i => i.UserCreatedBy)
                                           .ThenInclude(u => u.Clinic)
-                                          .Where(i => i.UserCreatedBy == user_logged)
-                                          .OrderByDescending(i => i.CreatedDate)
+                                          .Include(i => i.client)
+                                          .Include(i => i.UserAsigned)
+
+                                          .Where(i => i.UserCreatedBy == user_logged || i.UserAsigned == user_logged)                                          
                                           .ToListAsync());
             }
 
@@ -99,7 +116,53 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);            
 
             IncidentViewModel model = new IncidentViewModel();
-            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                list = _context.Clients.Where(n => n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id).OrderBy(n => n.Name).Select(c => new SelectListItem
+                {
+                    Text = $"{c.Name + " | " + c.AdmisionDate.ToShortDateString()}",
+                    Value = $"{c.Id}"
+                }).ToList();
+
+            }
+            else
+            {
+                list = _context.Clients.OrderBy(n => n.Name).Select(c => new SelectListItem
+                {
+                    Text = $"{c.Name + " | " + c.AdmisionDate.ToShortDateString()}",
+                    Value = $"{c.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All clients...]",
+                Value = "0"
+            });
+
+            List<SelectListItem> list_user = _context.Users.OrderBy(n => n.FirstName).Select(c => new SelectListItem
+            {
+                Text = $"{c.FullName}",
+                Value = $"{c.Id}"
+            }).ToList();
+
+            list_user.Insert(0, new SelectListItem
+            {
+                Text = "[Select a person to assign this incident...]",
+                Value = "0"
+            });
+
+            model = new IncidentViewModel()
+            {
+                IdClient = 0,
+                Clients = list,
+                IdUserAssigned = "",
+                Users = list_user
+            };
+
             return View(model);
         }
 
@@ -110,7 +173,7 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                IncidentEntity incident = await _context.Incidents.FirstOrDefaultAsync(c => c.Description == incidentViewModel.Description);
+                IncidentEntity incident = await _context.Incidents.FirstOrDefaultAsync(c => c.Description == incidentViewModel.Description && c.client.Id == incidentViewModel.IdClient);
                 if (incident == null)
                 {
                     UserEntity user_logged = _context.Users
@@ -184,10 +247,45 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            
+
             IncidentEntity incidentEntity = await _context.Incidents
-                                                          .Include(i => i.UserCreatedBy)                                                      
+                                                          .Include(n => n.client)
+                                                          .Include(n => n.UserAsigned)
+                                                          .Include(i => i.UserCreatedBy)
+                                                            .ThenInclude(u => u.Clinic)
                                                           .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (incidentEntity.UserAsigned != null)
+            {
+                if (incidentEntity.UserAsigned.Id == user_logged.Id)
+                {
+                    ViewData["Assigned"] = 1;
+                }
+                else
+                {
+                    ViewData["Assigned"] = 0;
+                }
+            }
+            else
+            {
+                ViewData["Assigned"] = 0;
+            }
+            if (incidentEntity.UserCreatedBy != null)
+            {
+                if (incidentEntity.UserCreatedBy.Id == user_logged.Id)
+                {
+                    ViewData["CreatedBy"] = 1;
+                }
+                else
+                {
+                    ViewData["CreatedBy"] = 0;
+                }
+            }
+            else
+            {
+                ViewData["CreatedBy"] = 0;
+            }
+
             if (incidentEntity == null)
             {
                 return RedirectToAction("Home/Error404");

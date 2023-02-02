@@ -14,10 +14,11 @@
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Service</th>
                             <th class="col-md-1" style="text-align:center;">Session</th>
-                            <th class="col-md-3">Name</th>
+                            <th class="col-md-2">Name</th>
                             <th class="col-md-1" style="text-align:center;">Present</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
                             <th class="col-md-2">Facilitator</th>
+                            <th class="col-md-1" style="text-align:center;">Billed</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>
@@ -137,6 +138,25 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
                                     </td>
+                                    <td align="center">
+                                        @if (day_client.BilledDate == null)
+                                        {
+                                            <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i> </a>
+
+                                        }
+                                        else
+                                        {
+                                            @if(day_client.PaymentDate == null)
+                                            { 
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success"><i class="glyphicon glyphicon-usd"></i></a>    
+                                            }
+                                            
+                                        }
+                                    </td>
                                     <td align="right">
                                         @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
                                         {
@@ -151,7 +171,7 @@
 
                                             @if (day_client.Note != null)
                                             {
-                                                @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
                                                 {
                                                     <a asp-action="PrintNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
@@ -162,7 +182,7 @@
                                             }
                                             @if (day_client.NoteP != null)
                                             {
-                                                @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
                                                 {
                                                     <a asp-action="PrintNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print PSR note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
@@ -186,8 +206,15 @@
                                                     {
                                                         <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
+                                                    @if (day_client.Hold == false)
+                                                    {
+                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
+                                                    else
+                                                    { 
+                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
 
-                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
@@ -208,8 +235,15 @@
                                                     {
                                                         <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
+                                                    @if (day_client.Hold == false)
+                                                    {
+                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>  
+                                                    }
+                                                    else
+                                                    { 
+                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    }
 
-                                                    <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                                 else
                                                 {
@@ -264,6 +298,31 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
+                                    </td>
+                                    <td align="center">
+                                        @if (day_client.BilledDate != null)
+                                        {
+                                            @if (day_client.PaymentDate != null)
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @if (day_client.Present == false)
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i></a>
+                                            }
+
+                                        }
                                     </td>
                                     <td align="right">
                                         @if (day_client.Present == false)

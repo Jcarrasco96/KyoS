@@ -3226,7 +3226,7 @@ namespace KyoS.Web.Controllers
                     ReviewedOn = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Status = AdendumStatus.Edition,
                     ACopy = false,
-                    ClinicalDirector = "",
+                    ClinicalDirector = mtp.Client.Clinic.ClinicalDirector,
                     CreatedBy = user_logged.UserName,
                     DescribeAnyGoals = "",
                     DescribeClient = "",
@@ -3264,7 +3264,7 @@ namespace KyoS.Web.Controllers
                     ReviewedOn = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Status = AdendumStatus.Edition,
                     ACopy = false,
-                    ClinicalDirector = "",
+                    ClinicalDirector = mtp.Client.Clinic.ClinicalDirector,
                     CreatedBy = user_logged.UserName,
                     DescribeAnyGoals = "",
                     DescribeClient = "",
@@ -4521,12 +4521,6 @@ namespace KyoS.Web.Controllers
             List<AuditMtps> auditMtp_List = new List<AuditMtps>();
             AuditMtps auditMtp = new AuditMtps();
 
-           /* List<MTPEntity> mtp_List = _context.MTPs
-                                               .Include(m => m.Client)
-                                               .Include(m => m.Goals)
-                                               .ThenInclude(m => m.Objetives)
-                                               .ToList();*/
-
             List<ObjetiveEntity> objective_List = _context.Objetives
                                                           .Include(m => m.Goal)
                                                           .ThenInclude(m => m.MTP)
@@ -4553,48 +4547,105 @@ namespace KyoS.Web.Controllers
                 auditMtp = new AuditMtps();
             }
 
-
-            /* foreach (var item in mtp_List)
-             {
-                 foreach (var goal in item.Goals)
-                 {
-                     foreach (var objective in goal.Objetives)
-                     {
-                         if (goal.Service == ServiceType.PSR)
-                         {
-
-                             if (_context.Notes_Activities.FirstOrDefault(m => m.Objetive.Id == item.Id) != null && _context.NotesP_Activities.FirstOrDefault(m => m.Objetive.Id == item.Id) != null)
-                             {
-                                 auditMtp.NameClient = item.Client.Name;
-                                 auditMtp.AdmissionDate = item.Client.AdmisionDate.ToShortDateString();
-                                 auditMtp.Description = "Has Objective " + objective.Objetive + " that are not used";
-                                 auditMtp.Active = 0;
-                                 auditMtp_List.Add(auditMtp);
-                                 auditMtp = new AuditMtps();
-                                 break;
-                             }
-                         }
-                         else
-                         {
-                             if (goal.Service == ServiceType.Individual)
-                             {
-                                 if (_context.IndividualNotes.FirstOrDefault(m => m.Objective.Id == item.Id) != null)
-                                 {
-                                     auditMtp.NameClient = item.Client.Name;
-                                     auditMtp.Description = "Has Goal that are not used";
-                                     auditMtp.Active = 0;
-                                     auditMtp_List.Add(auditMtp);
-                                     auditMtp = new AuditMtps();
-                                     break;
-                                 }
-                             }
-                         }
-                     }
-
-                 }
-             }*/
-
             return View(auditMtp_List);
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteGoalTemp1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteGoalTemp1(DeleteViewModel GoalTempViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                GoalsTempEntity goalTemp = await _context.GoalsTemp.FirstAsync(n => n.Id == GoalTempViewModel.Id_Element);
+                try
+                {
+                    _context.GoalsTemp.Remove(goalTemp);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(n => n.ObjetiveTempList).Where(d => d.IdClient == goalTemp.IdClient).ToList()) });
+                }
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(n => n.ObjetiveTempList).Where(d => d.IdClient == goalTemp.IdClient).ToList()) });
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(n => n.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteObjectiveTemp1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteObjectiveTemp1(DeleteViewModel ObjectiveTempViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ObjectiveTempEntity objectiveTemp = await _context.ObjetivesTemp
+                                                                  .Include(o => o.GoalTemp)
+                                                                  .FirstAsync(n => n.Id == ObjectiveTempViewModel.Id_Element);
+                try
+                {
+                    _context.ObjetivesTemp.Remove(objectiveTemp);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == objectiveTemp.GoalTemp.IdClient).ToList()) });
+                }
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == objectiveTemp.GoalTemp.IdClient).ToList()) });
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
         }
 
 

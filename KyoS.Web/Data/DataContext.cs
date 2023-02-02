@@ -127,6 +127,8 @@ namespace KyoS.Web.Data
         public DbSet<GoalsTempEntity> GoalsTemp { get; set; }
         public DbSet<ObjectiveTempEntity> ObjetivesTemp { get; set; }
         public DbSet<HealthInsuranceTempEntity> HealthInsuranceTemp { get; set; }
+        public DbSet<BriefEntity> Brief { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -574,6 +576,12 @@ namespace KyoS.Web.Data
                        .HasOne(o => o.GoalTemp)
                        .WithMany(g => g.ObjetiveTempList)
                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.Brief)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<BriefEntity>(s => s.Client_FK);
         }
     }
 }

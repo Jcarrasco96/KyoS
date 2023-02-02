@@ -200,33 +200,7 @@
     <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8" disabled></textarea>   
     </pre>
 </div>
-<div class="col-md-12">
-    <pre>
-<strong>13. DIAGNOSTIC IMPRESSION:</strong>
 
-    @if (Model.Client.Clients_Diagnostics.Count() > 0)
-    { 
-    <strong>Code: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code     <strong>Description: </strong>@Model.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Description <br />
-    }
-    <strong>TREATMENT RECOMMENDATIOS:</strong>
-    <textarea asp-for="Treatmentrecomendations" style="width:90%" rows="8" disabled></textarea>   
-    </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    <input type="checkbox" asp-for="IConcurWhitDiagnistic" class="form-check-input" id="check25" disabled> I concur with the diagnosis and treatment recommendations
-    <input type="checkbox" class="form-check-input" id="check125" disabled> I do not concur with the diagnosis and treatment recommendations
-    
-    Alternative diagnosis and/or recommendations 
-    <textarea asp-for="AlternativeDiagnosis" style="width:90%" rows="4" disabled></textarea>
-    </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    
-    <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner" disabled>                                                   
-    </pre>
-</div>
 <br />
 
 @section Scripts {

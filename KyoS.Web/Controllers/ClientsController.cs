@@ -25,8 +25,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IMimeType _mimeType;
+        private readonly IExportExcellHelper _exportExcelHelper;
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -34,6 +35,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _imageHelper = imageHelper;
             _mimeType = mimeType;
+            _exportExcelHelper = exportExcelHelper;
         }
         
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
@@ -85,7 +87,8 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0)))
+                                                && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
+                                                    || c.IndividualTherapyFacilitator.Id == facilitator.Id)))
                                           .OrderBy(c => c.Name).ToListAsync());
             }
             if (User.IsInRole("CaseManager"))
@@ -1119,6 +1122,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(g => g.IntakeTuberculosis)
                                                               .Include(g => g.DischargeList)
                                                               .Include(g => g.Bio)
+                                                              .Include(g => g.Brief)
                                                               .Include(g => g.MedicationList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.AdendumList)
@@ -1154,6 +1158,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(g => g.IntakeTuberculosis)
                                                               .Include(g => g.DischargeList)
                                                               .Include(g => g.Bio)
+                                                              .Include(g => g.Brief)
                                                               .Include(g => g.MedicationList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.AdendumList)
@@ -1189,6 +1194,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(g => g.IntakeTuberculosis)
                                                               .Include(g => g.DischargeList)
                                                               .Include(g => g.Bio)
+                                                              .Include(g => g.Brief)
                                                               .Include(g => g.MedicationList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.AdendumList)
@@ -1358,6 +1364,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(w => w.AdendumList)
 
                                                 .Include(w => w.Bio)
+                                                .Include(w => w.Brief)
                                                 .Include(w => w.FarsFormList)
                                                 .Include(w => w.DischargeList)
 
@@ -1409,6 +1416,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(w => w.MtpReviewList)
 
                                                 .Include(w => w.Bio)
+                                                .Include(w => w.Brief)
                                                 .Include(w => w.FarsFormList)
                                                 .Include(w => w.DischargeList)
 
@@ -1438,7 +1446,7 @@ namespace KyoS.Web.Controllers
 
             List<Problem> problem = new List<Problem>();
             //BIO
-            if (client.MTPs.Count() > 0 && client.Bio != null)
+            if (client.MTPs.Count() > 0 && (client.Bio != null || client.Brief != null))
             {
                 if (client.AdmisionDate > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
                 {
@@ -1448,19 +1456,37 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                    if (client.Bio != null)
                     {
-                        tempProblem.Name = "MTP Date";
-                        tempProblem.Description = "MTP date is prior to BIO date";
-                        tempProblem.Active = 0;
+                        if (client.Bio.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is prior to BIO date";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is posterior to admision date and BIO date";
+                            tempProblem.Active = 2;
+                        }
                     }
-                    else
+                    if (client.Brief != null)
                     {
-                        tempProblem.Name = "MTP Date";
-                        tempProblem.Description = "MTP date is posterior to admision date and BIO date";
-                        tempProblem.Active = 2;
+                        if (client.Brief.DateBio > client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP)
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is prior to BRIEF date";
+                            tempProblem.Active = 0;
+                        }
+                        else
+                        {
+                            tempProblem.Name = "MTP Date";
+                            tempProblem.Description = "MTP date is posterior to admision date and BRIEF date";
+                            tempProblem.Active = 2;
+                        }
                     }
-                    
+
                 }
                 problem.Add(tempProblem);
                 cant_Fars++;
@@ -1494,19 +1520,37 @@ namespace KyoS.Web.Controllers
                 tempProblem = new Problem();
             }
            
-            if (client.Bio != null)
+            if (client.Bio != null || client.Brief != null)
             {
-                if (client.AdmisionDate > client.Bio.DateBio)
+                if (client.Bio != null)
                 {
-                    tempProblem.Name = "BIO Date";
-                    tempProblem.Description = "BIO date is prior to admission date";
-                    tempProblem.Active = 0;
+                    if (client.AdmisionDate > client.Bio.DateBio)
+                    {
+                        tempProblem.Name = "BIO Date";
+                        tempProblem.Description = "BIO date is prior to admission date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "BIO Date";
+                        tempProblem.Description = "BIO date is posterior to admission date";
+                        tempProblem.Active = 2;
+                    }
                 }
-                else
+                if (client.Brief != null)
                 {
-                    tempProblem.Name = "BIO Date";
-                    tempProblem.Description = "BIO date is posterior to admission date";
-                    tempProblem.Active = 2;
+                    if (client.AdmisionDate > client.Brief.DateBio)
+                    {
+                        tempProblem.Name = "BRIEF Date";
+                        tempProblem.Description = "BRIEF date is prior to admission date";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "BRIEF Date";
+                        tempProblem.Description = "BRIEF date is posterior to admission date";
+                        tempProblem.Active = 2;
+                    }
                 }
             }
             else
@@ -1521,7 +1565,7 @@ namespace KyoS.Web.Controllers
             //FARS
             if (client.FarsFormList.Count() > 0 && client.Bio != null )
             {
-                if (client.FarsFormList.ElementAtOrDefault(0).EvaluationDate != client.Bio.DateBio)
+                if (client.FarsFormList.Where(n => n.EvaluationDate == client.Bio.DateBio ).Count() == 0)
                 {
                     tempProblem.Name = "Initial FARS";
                     tempProblem.Description = "Initial FARS date doesn't match with the BIO document";
@@ -1537,9 +1581,11 @@ namespace KyoS.Web.Controllers
                 tempProblem = new Problem();
             }
 
-            if (client.MTPs.Count() > 0 && client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
+            //MTP
+            bool mtpr = false;
+            if (client.MTPs.Count() > 0 && client.MTPs.FirstOrDefault(n => n.Active == true).MtpReviewList.Count() > 0)
             {
-                if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) < client.MTPs.ElementAtOrDefault(0).MtpReviewList.Min(n => n.DataOfService))
+                if (client.MTPs.FirstOrDefault(n => n.Active == true).AdmissionDateMTP.AddMonths(client.MTPs.FirstOrDefault(n => n.Active == true).NumberOfMonths.Value) < client.MTPs.FirstOrDefault(n => n.Active == true).MtpReviewList.Min(n => n.DataOfService))
                 {
                     tempProblem.Name = "MTP Review";
                     tempProblem.Description = "MTP Review date is out of term";
@@ -1553,6 +1599,7 @@ namespace KyoS.Web.Controllers
                 }
                 problem.Add(tempProblem);
                 cant_Fars++;
+                mtpr = true;
             }
             
             tempProblem = new Problem();
@@ -1618,20 +1665,26 @@ namespace KyoS.Web.Controllers
             tempProblem = new Problem();
 
             //Discharge
+            bool dischage_ind = false;
+            bool dischage_psr = false;
+            bool dischage_group = false;
             if (client.Status == StatusType.Close)
             {
                 int cant_Discharge = 0;
                 if (client.Workdays_Clients.Where(n => n.Note != null).Count() > 0 || client.Workdays_Clients.Where(n => n.NoteP != null).Count() > 0)
                 {
-                   cant_Discharge++;
+                    cant_Discharge++;
+                    dischage_psr = true;
                 }
                 if (client.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
                 {
                     cant_Discharge++;
+                    dischage_ind = true;
                 }
                 if (client.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
                 {
                     cant_Discharge++;
+                    dischage_group = true;
                 }
 
                 if (client.DischargeList.Count() != cant_Discharge)
@@ -1660,7 +1713,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Discharge";
                             tempProblem.Description = "Discharge date match with date of close";
-                            tempProblem.Active = 1;
+                            tempProblem.Active = 2;
                         }
                         problem.Add(tempProblem);
                         tempProblem = new Problem();
@@ -1686,7 +1739,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Discharge";
                             tempProblem.Description = "Discharge date match with date of close";
-                            tempProblem.Active = 1;
+                            tempProblem.Active = 2;
                         }
                         problem.Add(tempProblem);
                         tempProblem = new Problem();
@@ -1747,8 +1800,40 @@ namespace KyoS.Web.Controllers
 
             bool farsEdition = false;
             bool farsPending = false;
+            bool fars_mtpr = false;
+            bool fars_d_psr = false;
+            bool fars_d_ind = false;
+            bool fars_d_group = false;
             foreach (var item in client.FarsFormList)
             {
+                if (mtpr == true && item.Type == FARSType.MtpReview)
+                {
+                    if (client.MTPs.FirstOrDefault(n => n.Active == true).MtpReviewList.FirstOrDefault().DataOfService == item.EvaluationDate)
+                    {
+                        fars_mtpr = true;
+                    }
+                }
+                if (dischage_psr == true && item.Type == FARSType.Discharge_PSR)
+                {
+                    if (client.DischargeList.Where(n => n.TypeService == ServiceType.PSR && n.DateDischarge == item.EvaluationDate).Count() > 0)
+                    {
+                        fars_d_psr = true;
+                    }
+                }
+                if (dischage_group == true && item.Type == FARSType.Discharge_Group)
+                {
+                    if (client.DischargeList.Where(n => n.TypeService == ServiceType.Group && n.DateDischarge == item.EvaluationDate).Count() > 0)
+                    {
+                        fars_d_group = true;
+                    }
+                }
+                if (dischage_ind == true && item.Type == FARSType.Discharge_Ind)
+                {
+                    if (client.DischargeList.Where(n => n.TypeService == ServiceType.Individual && n.DateDischarge == item.EvaluationDate).Count() > 0)
+                    {
+                        fars_d_ind = true;
+                    }
+                }
                 if (item.Status == FarsStatus.Edition)
                 {
                     farsEdition = true;
@@ -1757,6 +1842,39 @@ namespace KyoS.Web.Controllers
                 {
                     farsPending = true;
                 }
+            }
+
+            if (mtpr == true && fars_mtpr == false)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS with incompatible date (MTPR)";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            if (dischage_psr == true && fars_d_psr == false)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS with incompatible date (Discharge PSR)";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            if (dischage_group == true && fars_d_group == false)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS with incompatible date (Discharge Group)";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            if (dischage_ind == true && fars_d_ind == false)
+            {
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "FARS with incompatible date (Discharge Ind.)";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
             }
 
             if (farsEdition == true)
@@ -1935,7 +2053,49 @@ namespace KyoS.Web.Controllers
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
             }
-           
+
+            
+            tempProblem = new Problem();
+
+            if (client.Workdays_Clients.Count(n => n.Present == false && n.BilledDate != null) > 0 || client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) > 0)
+            {
+                if (client.Workdays_Clients.Count(n => n.Present == false && n.BilledDate != null) > 0)
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "There are billed clients who have been absent (" + client.Workdays_Clients.Count(n => n.Present == false && n.BilledDate != null) + ")";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                if (client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) > 0)
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "There are therapies not billed ("+ client.Workdays_Clients.Count(n => n.Present == true && n.BilledDate == null) + ")";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+            }
+            else
+            {
+                if (client.Workdays_Clients.Count(n => n.BilledDate != null && n.PaymentDate == null) > 0)
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "There is billed therapies without paying ";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    tempProblem.Name = "Billed";
+                    tempProblem.Description = "All therapies are billed and paid";
+                    tempProblem.Active = 2;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+            }
+
             return View(problem);
         }
 
@@ -2120,22 +2280,123 @@ namespace KyoS.Web.Controllers
             List<ClientEntity> client_List = _context.Clients
                                                      .Include(m => m.MTPs)
                                                      .Include(m => m.Workdays_Clients)
-                                                     .Where(n => (n.Workdays_Clients.Count() == 0 
-                                                        && n.MTPs.Count() > 0))
+                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id 
+                                                        && n.Workdays_Clients.Count() == 0 
+                                                        && n.MTPs.Count() > 0
+                                                        && n.Status == StatusType.Close))
                                                      .ToList();
             
             foreach (var item in client_List)
             {
                 auditClient.Name = item.Name;
                 auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                auditClient.Count = 0;
+                auditClient.Description = "The client have not Notes";
                 auditClient.Active = 0;
 
                 auditClient_List.Add(auditClient);
                 auditClient = new AuditClientNotUsed();
             }
 
+            List<ClientEntity> client_Diagnostics_List = _context.Clients
+                                                                 .Include(m => m.Clients_Diagnostics)
+                                                                 .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                                                 .ToList();
+
+            foreach (var item in client_Diagnostics_List)
+            {
+                if (item.Clients_Diagnostics.Count() == 0)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client haven't a diagnostic code";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditClientNotUsed();
+                }
+                else
+                {
+                    if (item.Clients_Diagnostics.Where(n => n.Principal == true).Count() == 0)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client haven't a principal diagnostic code";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditClientNotUsed();
+                    }
+                }
+                
+            }
+
             return View(auditClient_List);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EditOnlyTypeFARS(int id = 0)
+        {
+            FarsFormEntity fars = _context.FarsForm.Include(n => n.Client).FirstOrDefault(n => n.Id == id);
+
+            if (fars != null)
+            {
+                FarsFormViewModel model = new FarsFormViewModel()
+                {
+                    Id = id,
+                    IdClient = fars.Client.Id,
+                    IdType = Convert.ToInt32(fars.Type),
+                    FarsType = _combosHelper.GetComboFARSType()
+                };
+                return View(model);
+            }
+
+            return View(null);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditOnlyTypeFARS(FarsFormViewModel farsViewModel)
+        {
+            FarsFormEntity fars = await _context.FarsForm.FindAsync(farsViewModel.Id);
+            if (fars != null)
+            {
+                fars.Type = FARSUtils.GetypeByIndex(farsViewModel.IdType);
+
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+            }
+            
+            return RedirectToAction("ClientHistory","Clients", new { idClient = farsViewModel .IdClient});
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCELallClient()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<ClientEntity> clients = new List<ClientEntity>();
+            string date = "Date Report: " + DateTime.Today.ToLongDateString();
+
+            clients = _context.Clients
+                              .Include(w => w.Clients_Diagnostics)
+                              .ThenInclude(w => w.Diagnostic)
+
+                              .Include(w => w.Clients_HealthInsurances)
+                              .ThenInclude(w => w.HealthInsurance)
+
+                              //.Include(w => w.Workdays_Clients)
+                              //.ThenInclude(w => w.Workday)
+
+                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                              .OrderBy(n => n.Name)
+                              .ToList();
+
+            byte[] content = _exportExcelHelper.ExportAllClients(clients, date);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_CLIENTS.xlsx");
         }
 
     }

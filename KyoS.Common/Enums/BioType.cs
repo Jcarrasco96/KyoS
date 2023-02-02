@@ -33,6 +33,11 @@ namespace KyoS.Common.Enums
         NO,
         N_A
     }
+    public enum Bio_Type
+    {
+        BIO,
+        BRIEF
+    }
     public class BioType
     {
         public static Bio_Appetite GetBioAppetiteByIndex(int index)
@@ -65,6 +70,11 @@ namespace KyoS.Common.Enums
             return (index == 1) ? Bio_IfSexuallyActive.YES :
                    (index == 2) ? Bio_IfSexuallyActive.NO :
                    (index == 3) ? Bio_IfSexuallyActive.N_A : Bio_IfSexuallyActive.N_A;
+        }
+        public static Bio_Type GetBioTypeByIndex(int index)
+        {
+            return (index == 0) ? Bio_Type.BIO :
+                   (index == 1) ? Bio_Type.BRIEF : Bio_Type.BIO;
         }
     }
 }

@@ -8,5 +8,8 @@ namespace KyoS.Web.Models
     {
         [Display(Name = "Logo")]
         public IFormFile LogoFile { get; set; }
+
+        [Display(Name = "Signature Clinical Director")]
+        public IFormFile SignatureFile { get; set; }
     }
 }

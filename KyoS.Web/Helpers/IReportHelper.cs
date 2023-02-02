@@ -25,10 +25,12 @@ namespace KyoS.Web.Helpers
 
         #region Approved PSR Notes reports
         Stream FloridaSocialHSNoteReportSchema3(Workday_Client workdayClient);
+        Stream FloridaSocialHSNoteReportSchema3SS(Workday_Client workdayClient);
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
         Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient);
+        Stream DreamsMentalHealthNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
-        
+
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
@@ -86,6 +88,16 @@ namespace KyoS.Web.Helpers
         #region MTP Review reports
         Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review);
         Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
+        #endregion
+
+        #region Medical History
+        Stream FloridaSocialHSMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream DreamsMentalHealthMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        #endregion
+
+        #region Brief reports
+        Stream FloridaSocialHSBriefReport(BriefEntity brief);
+        Stream DreamsMentalHealthBriefReport(BriefEntity brief);
         #endregion
 
         #region Utils functions

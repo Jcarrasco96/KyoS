@@ -94,7 +94,7 @@
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clients_HealthInsurances)
+                                        @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
@@ -132,7 +132,7 @@
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clients_HealthInsurances)
+                                        @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)

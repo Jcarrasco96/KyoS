@@ -53,28 +53,48 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                @if (ViewData["am"].ToString() == "true")
+                @if (ViewData["Am"].ToString() == "true")
                 {
                     <input type="radio" name="Meridian" value="Am" checked="checked" />
                 }
                 else
                 {
-                    <input type="radio" name="Meridian" value="Am" checked="checked" />
+                    <input type="radio" name="Meridian" value="Am"/>
                 }
                 <label style="font-weight: bold;"> AM</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @if (ViewData["Sharedam"].ToString() == "true")
+                {
+                    <input type="radio" name="Meridian" value="SharedAm" checked="checked" />
+                }
+                else
+                {
+                    <input type="radio" name="Meridian" value="SharedAm"/>
+                }
+                <b>AM</b> (Shared session with another group of the same facilitator)
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                @if (ViewData["am"].ToString() == "true")
-                {
-                    <input type="radio" name="Meridian" value="Pm" />
-                }
-                else
+                @if (ViewData["Pm"].ToString() == "true")
                 {
                     <input type="radio" name="Meridian" value="Pm" checked="checked" />
                 }
+                else
+                {
+                    <input type="radio" name="Meridian" value="Pm"/>
+                }
                 <label style="font-weight: bold;"> PM</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @if (ViewData["Sharedpm"].ToString() == "true")
+                {
+                    <input type="radio" name="Meridian" value="SharedPm" checked="checked" />
+                }
+                else
+                {
+                    <input type="radio" name="Meridian" value="SharedPm" />
+                }
+                <b>PM</b> (Shared session with another group of the same facilitator)
             </div>
         </div>
         <div class="col-md-12">

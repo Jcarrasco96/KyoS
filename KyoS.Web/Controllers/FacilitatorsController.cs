@@ -1,4 +1,6 @@
-﻿using KyoS.Common.Enums;
+﻿//using ClosedXML.Excel;
+using ClosedXML.Excel;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,13 +23,17 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
+        private readonly IExportExcellHelper _exportExcelHelper;
 
-        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
+        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IExportExcellHelper exportExcelHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
+            _exportExcelHelper = exportExcelHelper;
+
+
         }
 
         public async Task<IActionResult> Index(int idError = 0)
@@ -264,5 +271,45 @@ namespace KyoS.Web.Controllers
             }
             return View(facilitatorViewModel);
         }
+
+        public IActionResult EXCEL()
+        {
+            /* var facilitator = _context.Facilitators.ToList();
+
+             using (var workbook = new XLWorkbook())
+             {
+                 var worksheet = workbook.Worksheets.Add("facilitator");
+                 var currentRow = 4;
+                 worksheet.Cell(currentRow, 4).Value = "Name";
+                 worksheet.Cell(currentRow, 5).Value = "Status";
+                 worksheet.Cell(currentRow, 6).Value = "Link User";
+                 worksheet.Style.Font.Bold = true;
+                 IXLRange range =  worksheet.Range(worksheet.Cell(4, 4).Address, worksheet.Cell(4, 6).Address);
+                 range.Style.Fill.SetBackgroundColor(XLColor.DarkGray);
+                 range.SetAutoFilter();
+                 foreach (var item in facilitator)
+                 {
+                     currentRow++;
+                     worksheet.Cell(currentRow, 4).Value = item.Name;
+                     worksheet.Cell(currentRow, 5).Value = item.Status;
+                     worksheet.Cell(currentRow, 6).Value = item.LinkedUser;
+
+                 }
+
+                 worksheet.ColumnsUsed().AdjustToContents();
+
+                 using (var stream = new MemoryStream())
+                 {
+                     workbook.SaveAs(stream);
+                     var content = stream.ToArray();
+                     return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                 }
+             }*/
+
+            byte[] content = _exportExcelHelper.ExportFacilitatorHelper(_context.Facilitators.ToList());
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+        }
     }
+
 }

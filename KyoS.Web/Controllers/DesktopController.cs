@@ -223,6 +223,14 @@ namespace KyoS.Web.Controllers
                                                              && m.Status == AdendumStatus.Pending
                                                              && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToString();
 
+                ViewBag.ClientWithoutFARS = _context.Clients
+                                                    
+                                                    .Count(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && ((n.IdFacilitatorPSR == facilitator.Id && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                            || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                            || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                       && n.OnlyTCM == false).ToString();
+
             }
             if (User.IsInRole("Supervisor"))
             {
@@ -251,7 +259,7 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.ClientWithoutBIO = _context.Clients
                                                     .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                               && wc.Bio == null
+                                                               && (wc.Bio == null && wc.Brief == null)
                                                                && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingInitialFars = _context.Clients
@@ -319,6 +327,10 @@ namespace KyoS.Web.Controllers
                 ViewBag.PendingBio = _context.Bio
                                              .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                   && m.Status == BioStatus.Pending)).ToString();
+
+                ViewBag.PendingBrief = _context.Brief
+                                               .Count(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                 && m.Status == BioStatus.Pending)).ToString();
             }
             if (User.IsInRole("Manager"))
             {
@@ -688,7 +700,7 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.PendingBIO = _context.Clients
                                              .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                        && wc.Bio == null
+                                                        && (wc.Bio == null && wc.Brief == null)
                                                         && wc.OnlyTCM == false)).ToString();
 
                 ViewBag.PendingInitialFars = _context.Clients
@@ -721,6 +733,16 @@ namespace KyoS.Web.Controllers
                                                            .ToListAsync();
                 ViewBag.BioPending = BioPending.Count().ToString();
 
+                List<BriefEntity> BriefPending = await _context.Brief
+                                                               .Include(f => f.Client)
+                                                               .ThenInclude(n => n.Clinic)
+                                                               .Where(n => (n.Status == BioStatus.Pending
+                                                                    && n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && n.CreatedBy == user_logged.UserName))
+                                                               .OrderBy(f => f.Client.Name)
+                                                               .ToListAsync();
+                ViewBag.BriefPending = BriefPending.Count().ToString();
+
                 List<MTPEntity> MtpWithReview = await _context.MTPs
                                                       .Include(wc => wc.Messages)
                                                       .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name
@@ -734,6 +756,13 @@ namespace KyoS.Web.Controllers
                                                                      && wc.Status == BioStatus.Pending)).ToListAsync();
                 BioWithReview = BioWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.BioWithReview = BioWithReview.Count.ToString();
+
+                List<BriefEntity> BriefWithReview = await _context.Brief
+                                                                  .Include(wc => wc.Messages)
+                                                                  .Where(wc => (wc.DocumentsAssistant.LinkedUser == User.Identity.Name
+                                                                     && wc.Status == BioStatus.Pending)).ToListAsync();
+                BriefWithReview = BriefWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.BriefWithReview = BriefWithReview.Count.ToString();
             }
             if (User.IsInRole("TCMSupervisor"))
             {

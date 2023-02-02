@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/19/2022 11:40:18" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/19/2023 12:10:48" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3roJGfnRUAP3jZxSeFcVeUQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ebMfHGxQ6kPLaT/d8IcHrQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -407,7 +407,7 @@
           </TableCell>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text467" Top="135.3" Width="270.5" Height="24.57" CanGrow="true" Text="1.   DEMOGRAPHIC DATA:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text467" Top="135.3" Width="270.5" Height="24.57" CanGrow="true" Text="1. DEMOGRAPHIC DATA:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
       <TableObject Name="Table50" Top="160.65" Width="774.9" Height="56.7">
         <TableColumn Name="Column175" Width="305.55"/>
         <TableColumn Name="Column176" Width="277.2"/>
@@ -430,7 +430,7 @@
           <TableCell Name="Cell1056" Border.Lines="All" Text="&lt;b&gt;Phone #:&lt;/b&gt; [EmergencyContacts.Telephone]" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text468" Top="233.8" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;2.   CLIENT’S PRESENTING PROBLEM(S):&lt;/b&gt; (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text468" Top="233.8" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;2. CLIENT’S PRESENTING PROBLEM(S):&lt;/b&gt; (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text469" Top="270.15" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.PresentingProblem]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text475" Top="331.75" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;CLIENT’S ASSESSMENT OF SITUATION:&lt;/b&gt; (list how the client’s symptoms are affecting clients emotional functioning and use their own words)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text476" Top="368.55" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.ClientAssessmentSituation]" HorzAlign="Justify" Font="Arial, 10pt"/>
@@ -493,7 +493,7 @@
       </DataHeaderBand>
     </DataBand>
     <DataBand Name="Data3" Top="1059.72" Width="778.3" Height="2964.3" CanGrow="true" CanShrink="true" CanBreak="true" DataSource="Bio">
-      <TableObject Name="Table55" Top="68.15" Width="774.9" Height="359.1">
+      <TableObject Name="Table55" Top="68.15" Width="774.9" Height="359.1" CanBreak="false">
         <TableColumn Name="Column190" Width="141.75"/>
         <TableColumn Name="Column191" Width="132.3"/>
         <TableColumn Name="Column192" Width="132.3"/>
@@ -1260,10 +1260,10 @@
       </DataHeaderBand>
     </DataBand>
     <DataBand Name="Data5" Top="4121.07" Width="778.3" Height="655.72" DataSource="Bio">
-      <TextObject Name="Text750" Top="18.9" Width="771.35" Height="24.57" CanGrow="true" Text="TREATMENT RECOMMENDATIOS:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text750" Top="18.9" Width="771.35" Height="24.57" CanGrow="true" Text="TREATMENT RECOMMENDATIONS:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text751" Left="5.45" Top="44.8" Width="765.45" Height="18.9" Border.Lines="All" CanGrow="true" Text="[Bio.Treatmentrecomendations]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <TextObject Name="Text752" Top="85.05" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED CLINICIAN SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text753" Top="112.4" Width="771.35" Height="39.69" Text="This Licensed Clinician has completed a telemedicine interview with the client and has made appropriate treatment recommendations based on such interaction." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text752" Top="85.05" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text753" Top="112.4" Width="771.35" Height="39.69" Text="This Licensed Clinical has completed a telemedicine interview with the client and has made appropriate treatment recommendations based on such interaction." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <LineObject Name="Line9" Left="254.7" Top="199" Width="-240.03"/>
       <TextObject Name="Text35" Left="9.45" Top="203.9" Width="242.15" Height="24.57" CanGrow="true" Text="Licensed Practitioner &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line10" Left="556.1" Top="198.45" Width="-240.03"/>

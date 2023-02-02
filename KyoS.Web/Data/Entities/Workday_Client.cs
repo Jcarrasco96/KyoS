@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -28,8 +29,14 @@ namespace KyoS.Web.Data.Entities
                 return Client.Name;
             }
         }
+        [DataType(DataType.Date)]
         public DateTime? BilledDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? PaymentDate { get; set; }
         public int? GroupSize { get; set; }
+        public bool SharedSession { get; set; }
+        public bool DeniedBill { get; set; }
+        public bool Hold { get; set; }
+        public string CodeBill { get; set; }
     }
 }

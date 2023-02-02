@@ -1,0 +1,586 @@
+﻿@model KyoS.Web.Models.BriefViewModel
+<div class="col-md-12">
+    <pre>
+<strong>5. MENTAL HEALTH STATUS:</strong>
+
+    <strong>A. Mental Status Examination:  (check all that apply)</strong>
+
+    <strong>Appearance</strong>             <input type="checkbox" asp-for="Appearance_Disheveled" class="form-check-input" disabled> Disheveled             <input type="checkbox" asp-for="Appearance_FairHygiene" class="form-check-input" disabled> Fair Hygiene                  <input type="checkbox" asp-for="Appearance_Cleaned" class="form-check-input" disabled> Cleaned                  <input type="checkbox" asp-for="Appearance_WellGroomed" class="form-check-input" disabled> Well groomed           <input type="checkbox" asp-for="Appearance_Bizarre" class="form-check-input" disabled> Bizarre
+    
+    <strong>Motor</strong>                  <input type="checkbox" asp-for="Motor_Normal" class="form-check-input" disabled> Normal                 <input type="checkbox" asp-for="Motor_Agitated" class="form-check-input" disabled> Agitated <input type="checkbox" asp-for="Motor_Retardation" class="form-check-input" disabled> Retardation       <input type="checkbox" asp-for="Motor_RestLess" class="form-check-input" disabled> Restless                 <input type="checkbox" asp-for="Motor_Akathisia" class="form-check-input" disabled> Akathisia              <input type="checkbox" asp-for="Motor_Tremor" class="form-check-input" disabled> Tremor  <input type="checkbox" asp-for="Motor_Other" class="form-check-input" disabled> Other
+    
+    <strong>Speech</strong>                 <input type="checkbox" asp-for="Speech_Normal" class="form-check-input" disabled> Normal                 <input type="checkbox" asp-for="Speech_Loud" class="form-check-input" disabled> Loud                          <input type="checkbox" asp-for="Speech_Pressured" class="form-check-input" disabled> Pressured                <input type="checkbox" asp-for="Speech_Impoverished" class="form-check-input" disabled> Impoverished           <input type="checkbox" asp-for="Speech_Slurred" class="form-check-input" disabled> Slurred       
+                           <input type="checkbox" asp-for="Speech_Mumbled" class="form-check-input" disabled> Mumbled                <input type="checkbox" asp-for="Speech_Stutters" class="form-check-input" disabled> Stutters                      <input type="checkbox" asp-for="Speech_Rapid" class="form-check-input" disabled> Rapid                    <input type="checkbox" asp-for="Speech_Slow" class="form-check-input" disabled> Slow                   <input type="checkbox" asp-for="Speech_Other" class="form-check-input" disabled> Other       
+
+    <strong>Affect</strong>                 <input type="checkbox" asp-for="Affect_Appropriate" class="form-check-input" disabled> Appropriate            <input type="checkbox" asp-for="Affect_labile" class="form-check-input" disabled> Labile                        <input type="checkbox" asp-for="Affect_Expansive" class="form-check-input" disabled> Expansive                <input type="checkbox" asp-for="Affect_Blunted" class="form-check-input" disabled> Blunted                <input type="checkbox" asp-for="Affect_Constricted" class="form-check-input" disabled> Constricted       
+                           <input type="checkbox" asp-for="Affect_Flat" class="form-check-input" disabled> Flat                   <input type="checkbox" asp-for="Affect_Tearful_Sad" class="form-check-input" disabled> Tearful/Sad                   <input type="checkbox" asp-for="Affect_Anxious" class="form-check-input"disabled> Anxious                  <input type="checkbox" asp-for="Affect_Angry" class="form-check-input" disabled> Angry                  <input type="checkbox" asp-for="Affect_Other" class="form-check-input" disabled> Other       
+    
+    <strong>Thought Process</strong>        <input type="checkbox" asp-for="ThoughtProcess_Organized" class="form-check-input" disabled> Organized              <input type="checkbox" asp-for="ThoughtProcess_Disorganized" class="form-check-input" disabled> Disorganized                  <input type="checkbox" asp-for="ThoughtProcess_GoalDirected" class="form-check-input" disabled> Goal directed            <input type="checkbox" asp-for="ThoughtProcess_Irrational" class="form-check-input" disabled> Irrational             <input type="checkbox" asp-for="ThoughtProcess_Rigid" class="form-check-input" disabled> Rigid       
+                           <input type="checkbox" asp-for="ThoughtProcess_Obsessive" class="form-check-input" disabled> Obsessive              <input type="checkbox" asp-for="ThoughtProcess_Tangential" class="form-check-input" disabled> Tangential                    <input type="checkbox" asp-for="ThoughtProcess_Circumstantial" class="form-check-input" disabled> Circumstantial           <input type="checkbox" asp-for="ThoughtProcess_Preoccupied" class="form-check-input" disabled> Preoccupied            <input type="checkbox" asp-for="ThoughtProcess_Blocking" class="form-check-input" disabled> Blocking       
+                           <input type="checkbox" asp-for="ThoughtProcess_FightIdeas" class="form-check-input" disabled> Fight of ideas         <input type="checkbox" asp-for="ThoughtProcess_LooseAssociations" class="form-check-input" disabled> Loose Associations            <input type="checkbox" asp-for="ThoughtProcess_Other" class="form-check-input" disabled> Other  
+    
+    <strong>Mood</strong>                   <input type="checkbox" asp-for="Mood_Euthymic" class="form-check-input" disabled> Euthymic               <input type="checkbox" asp-for="Mood_Depressed" class="form-check-input" disabled>  Depressed <input type="checkbox" asp-for="Mood_Anxious" class="form-check-input" disabled>  Anxious        <input type="checkbox" asp-for="Mood_Euphoric" class="form-check-input" disabled> Euphoric                 <input type="checkbox" asp-for="Mood_Angry" class="form-check-input" disabled> Angry                  <input type="checkbox" asp-for="Mood_Maniac" class="form-check-input" disabled> Maniac  <input type="checkbox" asp-for="Mood_Other" class="form-check-input" disabled> Other
+    
+    <strong>Judgment</strong>               <input type="checkbox" asp-for="Judgment_Good" class="form-check-input" disabled> Good                   <input type="checkbox" asp-for="Judgment_Fair" class="form-check-input" disabled>  Fair                         <input type="checkbox" asp-for="Judgment_Poor" class="form-check-input" disabled> Poor                     <input type="checkbox" asp-for="Judgment_Other" class="form-check-input" disabled> Other
+    
+    <strong>Insight</strong>                <input type="checkbox" asp-for="Insight_Good" class="form-check-input" disabled> Good                   <input type="checkbox" asp-for="Insight_Fair" class="form-check-input" disabled>  Fair                         <input type="checkbox" asp-for="Insight_Poor" class="form-check-input" disabled> Poor                     <input type="checkbox" asp-for="Insight_Other" class="form-check-input" disabled> Other
+    
+    <strong>Thought content</strong>        <input type="checkbox" asp-for="ThoughtContent_Relevant" class="form-check-input" disabled> Relevant           Hallucinations <input type="checkbox" asp-for="ThoughtContent_Hallucinations" class="form-check-input" id="check1" disabled> Yes   <input type="checkbox" class="form-check-input" id="check101" disabled> No                   Type:  <input asp-for="ThoughtContent_Hallucinations_Type" style="width:25%" disabled>
+
+                           <input type="checkbox" asp-for="ThoughtContent_RealityBased" class="form-check-input" disabled> Reality based          Delusions  <input type="checkbox" asp-for="ThoughtContent_Delusions" class="form-check-input" id="check2" disabled> Yes   <input type="checkbox" class="form-check-input" id="check102" disabled> No                   Type:  <input asp-for="ThoughtContent_Delusions_Type" style="width:25%" disabled>
+
+
+                                 
+    <strong>Oriented</strong>               <input type="checkbox" asp-for="Oriented_FullOriented" class="form-check-input" disabled> Fully oriented                             <strong>Lacking</strong>      <input type="checkbox" asp-for="Lacking_Time" class="form-check-input" disabled> Time <input type="checkbox" asp-for="Lacking_Place" class="form-check-input" disabled> Place <input type="checkbox" asp-for="Lacking_Person" class="form-check-input" disabled> Person <input type="checkbox" asp-for="Lacking_Location" class="form-check-input" disabled> Location 
+    
+    <strong>Risk To Self</strong>           <input type="checkbox" asp-for="RiskToSelf_Low" class="form-check-input" disabled> Low                    <input type="checkbox" asp-for="RiskToSelf_Medium" class="form-check-input" disabled> Medium                        <input type="checkbox" asp-for="RiskToSelf_High" class="form-check-input" disabled> High                    <input type="checkbox" asp-for="RiskToSelf_Chronic" class="form-check-input" disabled> Chronic
+    
+    <strong>Risk To others</strong>         <input type="checkbox" asp-for="RiskToOther_Low" class="form-check-input" disabled> Low                    <input type="checkbox" asp-for="RiskToOther_Medium" class="form-check-input" disabled> Medium                        <input type="checkbox" asp-for="RiskToOther_High" class="form-check-input" disabled> High                    <input type="checkbox" asp-for="RiskToOther_Chronic" class="form-check-input" disabled> Chronic
+    
+    <strong>Safety plan reviewed</strong>   <input type="checkbox" asp-for="SafetyPlan" class="form-check-input" id="check3" disabled> Yes   <input type="checkbox" class="form-check-input" id="check103" disabled> No             
+    
+    <strong>Comments</strong>               <input asp-for="Comments" style="width:60%" disabled><br />
+
+
+    <strong>B. Suicide/Homicide Risk Mini Screening: </strong>(if any of the following question are answered “yes”, please complete the SBQ-R with client and follow precautionary procedures)
+    
+    <input type="checkbox" asp-for="ClientDenied" class="form-check-input" disabled> <strong>Client denied any current suicidal/homicidal ideations (if denied, skip this section)</strong>
+            
+            Have you ever thought about killing yourself or others?                                 <input type="checkbox" asp-for="HaveYouEverThought" class="form-check-input" id="check4" disabled> Yes   <input type="checkbox" class="form-check-input" id="check104" disabled> No     If yes, explain:  <input asp-for="HaveYouEverThought_Explain" style="width:15%" disabled>
+            Do you own a weapon?                                                                    <input type="checkbox" asp-for="DoYouOwn" class="form-check-input" id="check5" disabled> Yes   <input type="checkbox" class="form-check-input" id="check105" disabled> No     If yes, explain:  <input asp-for="DoYouOwn_Explain" style="width:15%" disabled>
+            Does Client have a plan or access to plan or individual?                                <input type="checkbox" asp-for="DoesClient" class="form-check-input" id="check6" disabled> Yes   <input type="checkbox" class="form-check-input" id="check106" disabled> No
+            Have you ever been hospitalized for depressive symptoms?                                <input type="checkbox" asp-for="HaveYouEverBeen" class="form-check-input" id="check7" disabled> Yes   <input type="checkbox" class="form-check-input" id="check107" disabled> No     If yes, detail:   <input asp-for="HaveYouEverBeen_Explain" style="width:15%" disabled>
+            Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8" disabled> Yes   <input type="checkbox" class="form-check-input" id="check108" disabled> No     If yes, specify:  <input asp-for="HasTheClient_Explain" style="width:15%" disabled>
+
+
+    <strong>C. Physical/Sexual/Emotional Abuse:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
+      If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
+      if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
+      reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
+
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+<strong>6. SUMMARY OF FINDINGS </strong>
+    (Include and integrate if client is identified as high risk, past intensive services received, justify client’s need for services with need of a higher level of care)
+    <textarea asp-for="SumanrOfFindings" style="width:90%" rows="8" disabled></textarea>   
+</pre>
+</div>
+
+<br />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+
+    </script>
+}
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //---------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+    //---------------------------------
+    check3.addEventListener('change', (e) => {
+        if (check3.checked == true) {
+            check103.checked = false;
+        } else {
+            check103.checked = true;
+        }
+    })
+    check103.addEventListener('change', (e) => {
+        if (check103.checked == true) {
+            check3.checked = false;
+        } else {
+            check3.checked = true;
+        }
+    })
+    if (check3.checked == true) {
+        check103.checked = false;
+    } else {
+        check103.checked = true;
+    }
+    //---------------------------------
+    check4.addEventListener('change', (e) => {
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+    })
+    check104.addEventListener('change', (e) => {
+        if (check104.checked == true) {
+            check4.checked = false;
+        } else {
+            check4.checked = true;
+        }
+    })
+    if (check4.checked == true) {
+        check104.checked = false;
+    } else {
+        check104.checked = true;
+    }
+    //---------------------------------
+    check5.addEventListener('change', (e) => {
+        if (check5.checked == true) {
+            check105.checked = false;
+        } else {
+            check105.checked = true;
+        }
+    })
+    check105.addEventListener('change', (e) => {
+        if (check105.checked == true) {
+            check5.checked = false;
+        } else {
+            check5.checked = true;
+        }
+    })
+    if (check5.checked == true) {
+        check105.checked = false;
+    } else {
+        check105.checked = true;
+    }
+    //---------------------------------
+    check6.addEventListener('change', (e) => {
+        if (check6.checked == true) {
+            check106.checked = false;
+        } else {
+            check106.checked = true;
+        }
+    })
+    check106.addEventListener('change', (e) => {
+        if (check106.checked == true) {
+            check6.checked = false;
+        } else {
+            check6.checked = true;
+        }
+    })
+    if (check6.checked == true) {
+        check106.checked = false;
+    } else {
+        check106.checked = true;
+    }
+    //---------------------------------
+    check7.addEventListener('change', (e) => {
+        if (check7.checked == true) {
+            check107.checked = false;
+        } else {
+            check107.checked = true;
+        }
+    })
+    check107.addEventListener('change', (e) => {
+        if (check107.checked == true) {
+            check7.checked = false;
+        } else {
+            check7.checked = true;
+        }
+    })
+    if (check7.checked == true) {
+        check107.checked = false;
+    } else {
+        check107.checked = true;
+    }
+    //---------------------------------
+    check8.addEventListener('change', (e) => {
+        if (check8.checked == true) {
+            check108.checked = false;
+        } else {
+            check108.checked = true;
+        }
+    })
+    check108.addEventListener('change', (e) => {
+        if (check108.checked == true) {
+            check8.checked = false;
+        } else {
+            check8.checked = true;
+        }
+    })
+    if (check8.checked == true) {
+        check108.checked = false;
+    } else {
+        check108.checked = true;
+    }
+    //---------------------------------
+    check9.addEventListener('change', (e) => {
+        if (check9.checked == true) {
+            check109.checked = false;
+        } else {
+            check109.checked = true;
+        }
+    })
+    check109.addEventListener('change', (e) => {
+        if (check109.checked == true) {
+            check9.checked = false;
+        } else {
+            check9.checked = true;
+        }
+    })
+    if (check9.checked == true) {
+        check109.checked = false;
+    } else {
+        check109.checked = true;
+    }
+    //---------------------------------
+    check10.addEventListener('change', (e) => {
+        if (check10.checked == true) {
+            check110.checked = false;
+        } else {
+            check110.checked = true;
+        }
+    })
+    check110.addEventListener('change', (e) => {
+        if (check110.checked == true) {
+            check10.checked = false;
+        } else {
+            check10.checked = true;
+        }
+    })
+    if (check10.checked == true) {
+        check110.checked = false;
+    } else {
+        check110.checked = true;
+    }
+    //---------------------------------
+    check11.addEventListener('change', (e) => {
+        if (check11.checked == true) {
+            check111.checked = false;
+        } else {
+            check111.checked = true;
+        }
+    })
+    check111.addEventListener('change', (e) => {
+        if (check111.checked == true) {
+            check11.checked = false;
+        } else {
+            check11.checked = true;
+        }
+    })
+    if (check11.checked == true) {
+        check111.checked = false;
+    } else {
+        check111.checked = true;
+    }
+    //---------------------------------
+    check12.addEventListener('change', (e) => {
+        if (check12.checked == true) {
+            check112.checked = false;
+        } else {
+            check112.checked = true;
+        }
+    })
+    check112.addEventListener('change', (e) => {
+        if (check112.checked == true) {
+            check12.checked = false;
+        } else {
+            check12.checked = true;
+        }
+    })
+    if (check12.checked == true) {
+        check112.checked = false;
+    } else {
+        check112.checked = true;
+    }
+    //---------------------------------
+    check13.addEventListener('change', (e) => {
+        if (check13.checked == true) {
+            check113.checked = false;
+        } else {
+            check113.checked = true;
+        }
+    })
+    check113.addEventListener('change', (e) => {
+        if (check113.checked == true) {
+            check13.checked = false;
+        } else {
+            check13.checked = true;
+        }
+    })
+    if (check13.checked == true) {
+        check113.checked = false;
+    } else {
+        check113.checked = true;
+    }
+    //---------------------------------
+    check14.addEventListener('change', (e) => {
+        if (check14.checked == true) {
+            check114.checked = false;
+        } else {
+            check114.checked = true;
+        }
+    })
+    check114.addEventListener('change', (e) => {
+        if (check114.checked == true) {
+            check14.checked = false;
+        } else {
+            check14.checked = true;
+        }
+    })
+    if (check14.checked == true) {
+        check114.checked = false;
+    } else {
+        check114.checked = true;
+    }
+    //---------------------------------
+    check15.addEventListener('change', (e) => {
+        if (check15.checked == true) {
+            check115.checked = false;
+        } else {
+            check115.checked = true;
+        }
+    })
+    check115.addEventListener('change', (e) => {
+        if (check115.checked == true) {
+            check15.checked = false;
+        } else {
+            check15.checked = true;
+        }
+    })
+    if (check15.checked == true) {
+        check115.checked = false;
+    } else {
+        check115.checked = true;
+    }
+    //---------------------------------
+    check16.addEventListener('change', (e) => {
+        if (check16.checked == true) {
+            check116.checked = false;
+        } else {
+            check116.checked = true;
+        }
+    })
+    check116.addEventListener('change', (e) => {
+        if (check116.checked == true) {
+            check16.checked = false;
+        } else {
+            check16.checked = true;
+        }
+    })
+    if (check16.checked == true) {
+        check116.checked = false;
+    } else {
+        check116.checked = true;
+    }
+    //---------------------------------
+    check17.addEventListener('change', (e) => {
+        if (check17.checked == true) {
+            check117.checked = false;
+        } else {
+            check117.checked = true;
+        }
+    })
+    check117.addEventListener('change', (e) => {
+        if (check117.checked == true) {
+            check17.checked = false;
+        } else {
+            check17.checked = true;
+        }
+    })
+    if (check17.checked == true) {
+        check117.checked = false;
+    } else {
+        check117.checked = true;
+    }
+    //---------------------------------
+    check18.addEventListener('change', (e) => {
+        if (check18.checked == true) {
+            check118.checked = false;
+        } else {
+            check118.checked = true;
+        }
+    })
+    check118.addEventListener('change', (e) => {
+        if (check118.checked == true) {
+            check18.checked = false;
+        } else {
+            check18.checked = true;
+        }
+    })
+    if (check18.checked == true) {
+        check118.checked = false;
+    } else {
+        check118.checked = true;
+    }
+    //---------------------------------
+    check19.addEventListener('change', (e) => {
+        if (check19.checked == true) {
+            check119.checked = false;
+        } else {
+            check119.checked = true;
+        }
+    })
+    check119.addEventListener('change', (e) => {
+        if (check119.checked == true) {
+            check19.checked = false;
+        } else {
+            check19.checked = true;
+        }
+    })
+    if (check19.checked == true) {
+        check119.checked = false;
+    } else {
+        check119.checked = true;
+    }
+    //---------------------------------
+    check20.addEventListener('change', (e) => {
+        if (check20.checked == true) {
+            check120.checked = false;
+        } else {
+            check120.checked = true;
+        }
+    })
+    check120.addEventListener('change', (e) => {
+        if (check120.checked == true) {
+            check20.checked = false;
+        } else {
+            check20.checked = true;
+        }
+    })
+    if (check20.checked == true) {
+        check120.checked = false;
+    } else {
+        check120.checked = true;
+    }
+    //---------------------------------
+    check21.addEventListener('change', (e) => {
+        if (check21.checked == true) {
+            check121.checked = false;
+        } else {
+            check121.checked = true;
+        }
+    })
+    check121.addEventListener('change', (e) => {
+        if (check121.checked == true) {
+            check21.checked = false;
+        } else {
+            check21.checked = true;
+        }
+    })
+    if (check21.checked == true) {
+        check121.checked = false;
+    } else {
+        check121.checked = true;
+    }
+    //---------------------------------
+    check22.addEventListener('change', (e) => {
+        if (check22.checked == true) {
+            check122.checked = false;
+        } else {
+            check122.checked = true;
+        }
+    })
+    check122.addEventListener('change', (e) => {
+        if (check122.checked == true) {
+            check22.checked = false;
+        } else {
+            check22.checked = true;
+        }
+    })
+    if (check22.checked == true) {
+        check122.checked = false;
+    } else {
+        check122.checked = true;
+    }
+    //---------------------------------
+    check23.addEventListener('change', (e) => {
+        if (check23.checked == true) {
+            check123.checked = false;
+        } else {
+            check123.checked = true;
+        }
+    })
+    check123.addEventListener('change', (e) => {
+        if (check123.checked == true) {
+            check23.checked = false;
+        } else {
+            check23.checked = true;
+        }
+    })
+    if (check23.checked == true) {
+        check123.checked = false;
+    } else {
+        check123.checked = true;
+    }
+    //---------------------------------
+    check24.addEventListener('change', (e) => {
+        if (check24.checked == true) {
+            check124.checked = false;
+        } else {
+            check124.checked = true;
+        }
+    })
+    check124.addEventListener('change', (e) => {
+        if (check124.checked == true) {
+            check24.checked = false;
+        } else {
+            check24.checked = true;
+        }
+    })
+    if (check24.checked == true) {
+        check124.checked = false;
+    } else {
+        check124.checked = true;
+    }
+    //---------------------------------
+    check25.addEventListener('change', (e) => {
+        if (check25.checked == true) {
+            check125.checked = false;
+        } else {
+            check125.checked = true;
+        }
+    })
+    check125.addEventListener('change', (e) => {
+        if (check125.checked == true) {
+            check25.checked = false;
+        } else {
+            check25.checked = true;
+        }
+    })
+    if (check25.checked == true) {
+        check125.checked = false;
+    } else {
+        check125.checked = true;
+    }
+</script>
+
+

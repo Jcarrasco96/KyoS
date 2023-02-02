@@ -15,15 +15,15 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <!--<div class="col-md-12">-->
         @*<div class="alert alert-warning" role="alert">
             <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents
+        @*<strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents*@
         @*</div>*@
-    </div>
-    <div class="col-md-12">
+    <!--</div>-->
+    @*<div class="col-md-12">
         &nbsp;
-    </div>
+    </div>*@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -40,15 +40,15 @@
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                                Admission
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 MH Therapy
                             </th>
-                            <th class="col-md-1" align="right">
+                            <th class="col-md-2" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -147,13 +147,13 @@
                                     <td align="right">
                                         @if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
                                         {
-                                            <a asp-action="CreateMedicalhistory" asp-route-id="@item.Id" class="btn btn-success" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="CreateMedicalhistory" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         {
-                                            <a class="btn btn-success disabled" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a class="btn btn-warning disabled" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
-                                       
+                                            <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </td>
                                 </tr>
                             }

@@ -507,7 +507,7 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboGoalsByService(int idMTP, ServiceType service)
         {            
-            List<SelectListItem> list = _context.Goals.Where(g => (g.MTP.Id == idMTP && g.Service == service)).Select(g => new SelectListItem
+            List<SelectListItem> list = _context.Goals.Where(g => (g.MTP.Id == idMTP && g.Service == service && g.Compliment == false)).Select(g => new SelectListItem
             {
                 Text = $"{g.Number}",
                 Value = $"{g.Id}"
@@ -524,7 +524,7 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboObjetives(int idGoal)
         {
-            List<SelectListItem> list = _context.Objetives.Where(o => o.Goal.Id == idGoal).Select(o => new SelectListItem
+            List<SelectListItem> list = _context.Objetives.Where(o => o.Goal.Id == idGoal && o.Compliment == false).Select(o => new SelectListItem
             {
                 Text = $"{o.Objetive}",
                 Value = $"{o.Id}"
@@ -870,7 +870,8 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = IncidentsStatus.Pending.ToString(), Value = "0"},
                                   new SelectListItem { Text = IncidentsStatus.Solved.ToString(), Value = "1"},
-                                  new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"}};
+                                  new SelectListItem { Text = IncidentsStatus.NotValid.ToString(), Value = "2"},
+                                  new SelectListItem { Text = IncidentsStatus.Reviewed.ToString(), Value = "3"}};
             
             return list;
         }
@@ -1250,6 +1251,7 @@ namespace KyoS.Web.Helpers
            
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_ClientIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1265,6 +1267,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_BehaviorIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1279,6 +1282,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboIntake_SpeechIs()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1293,6 +1297,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_Appetite()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1307,6 +1312,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_Hydration()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1322,6 +1328,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_RecentWeight()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1338,6 +1345,7 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
         public IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive()
         {
             List<SelectListItem> list = new List<SelectListItem>
@@ -1496,6 +1504,111 @@ namespace KyoS.Web.Helpers
                 Text = "[Select date range...]",
                 Value = "0"
             });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboDiagnosticsByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients.Include(n => n.Clinic).FirstOrDefault(c => c.Id == idClient);
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == client.Clinic.Id);
+
+            List<DiagnosticEntity> diagnostics = _context.Diagnostics.OrderBy(d => d.Code).ToList();
+            List<Client_Diagnostic> diagnosticsForClient = _context.Clients_Diagnostics.Where(n => n.Client.Id == idClient).ToList();
+
+            foreach (var item in diagnosticsForClient)
+            {
+                if (diagnostics.Contains(item.Diagnostic))
+                {
+                    diagnostics.Remove(item.Diagnostic);               
+                }
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = diagnostics.Select(d => new SelectListItem
+            {
+                Text = $"{d.Code} {d.Description}",
+                Value = $"{d.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select diagnostic...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboFARSType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = FARSType.Initial.ToString(), Value = "0"},
+                new SelectListItem { Text = FARSType.MtpReview.ToString(), Value = "1"},
+                new SelectListItem { Text = FARSType.Discharge_PSR.ToString(), Value = "2"},
+                new SelectListItem { Text = FARSType.Discharge_Ind.ToString(), Value = "3"},
+                new SelectListItem { Text = FARSType.Discharge_Group.ToString(), Value = "4"},
+                new SelectListItem { Text = FARSType.Other.ToString(), Value = "5"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboUserNamesByClinic(int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (idClinic == 0)
+            {
+                list = _context.Users.Select(u => new SelectListItem
+                {
+                    Text = $"{u.FullName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.Users.Where(u => u.Clinic.Id == idClinic).OrderBy(n => n.FirstName).Select(u => new SelectListItem
+                {
+                    Text = $"{u.FullName}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a person to assign this incident...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsAdmissionByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Clients.Where(c => c.Clinic.Id == idClinic).OrderBy(n => n.Name)
+                                                        .Select(c => new SelectListItem
+                                                        {
+                                                            Text = $"{c.Name + " | " + c.AdmisionDate.ToShortDateString()}",
+                                                            Value = $"{c.Id}"
+                                                        }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboBio_Type()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = Bio_Type.BIO.ToString(), Value = "0"},
+                new SelectListItem { Text = Bio_Type.BRIEF.ToString(), Value = "1"}
+            };
 
             return list;
         }

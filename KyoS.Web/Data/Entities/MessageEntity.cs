@@ -32,11 +32,15 @@ namespace KyoS.Web.Data.Entities
         public MTPEntity Mtp { get; set; }
 
         public BioEntity Bio { get; set; }
+        
+        public BriefEntity Brief { get; set; }
 
         public string From { get; set; }
 
         public string To { get; set; }
 
         public bool Notification { get; set; }
+
+        public IncidentEntity Incident { get; set; }
     }
 }

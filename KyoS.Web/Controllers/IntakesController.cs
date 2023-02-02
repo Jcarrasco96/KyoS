@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {    
@@ -54,23 +55,78 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return View(await _context.Clients
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                {
+                    return View(await _context.Clients
 
-                                           .Include(n => n.IntakeScreening)
-                                           .Include(n => n.IntakeConsentForTreatment)
-                                           .Include(n => n.IntakeConsentForRelease)
-                                           .Include(n => n.IntakeConsumerRights)
-                                           .Include(n => n.IntakeAcknowledgementHipa)
-                                           .Include(n => n.IntakeAccessToServices)
-                                           .Include(n => n.IntakeOrientationChecklist)
-                                           .Include(n => n.IntakeTransportation)
-                                           .Include(n => n.IntakeConsentPhotograph)
-                                           .Include(n => n.IntakeFeeAgreement)
-                                           .Include(n => n.IntakeTuberculosis)
-                                           .Include(n => n.IntakeMedicalHistory)
+                                              .Include(n => n.IntakeScreening)
+                                              .Include(n => n.IntakeConsentForTreatment)
+                                              .Include(n => n.IntakeConsentForRelease)
+                                              .Include(n => n.IntakeConsumerRights)
+                                              .Include(n => n.IntakeAcknowledgementHipa)
+                                              .Include(n => n.IntakeAccessToServices)
+                                              .Include(n => n.IntakeOrientationChecklist)
+                                              .Include(n => n.IntakeTransportation)
+                                              .Include(n => n.IntakeConsentPhotograph)
+                                              .Include(n => n.IntakeFeeAgreement)
+                                              .Include(n => n.IntakeTuberculosis)
+                                              .Include(n => n.IntakeMedicalHistory)
 
-                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                           .ToListAsync());                
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .ToListAsync());
+                }
+                else
+                {
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                        return View(await _context.Clients
+
+                                              .Include(n => n.IntakeScreening)
+                                              .Include(n => n.IntakeConsentForTreatment)
+                                              .Include(n => n.IntakeConsentForRelease)
+                                              .Include(n => n.IntakeConsumerRights)
+                                              .Include(n => n.IntakeAcknowledgementHipa)
+                                              .Include(n => n.IntakeAccessToServices)
+                                              .Include(n => n.IntakeOrientationChecklist)
+                                              .Include(n => n.IntakeTransportation)
+                                              .Include(n => n.IntakeConsentPhotograph)
+                                              .Include(n => n.IntakeFeeAgreement)
+                                              .Include(n => n.IntakeTuberculosis)
+                                              .Include(n => n.IntakeMedicalHistory)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                                  && n.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0))
+                                              .ToListAsync());
+                    }
+                    else
+                    {
+                        if (User.IsInRole("Documents_Assistant"))
+                        {
+                            DocumentsAssistantEntity doc_assistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                            return View(await _context.Clients
+
+                                                  .Include(n => n.IntakeScreening)
+                                                  .Include(n => n.IntakeConsentForTreatment)
+                                                  .Include(n => n.IntakeConsentForRelease)
+                                                  .Include(n => n.IntakeConsumerRights)
+                                                  .Include(n => n.IntakeAcknowledgementHipa)
+                                                  .Include(n => n.IntakeAccessToServices)
+                                                  .Include(n => n.IntakeOrientationChecklist)
+                                                  .Include(n => n.IntakeTransportation)
+                                                  .Include(n => n.IntakeConsentPhotograph)
+                                                  .Include(n => n.IntakeFeeAgreement)
+                                                  .Include(n => n.IntakeTuberculosis)
+                                                  .Include(n => n.IntakeMedicalHistory)
+                                                  .Include(n => n.Bio)
+
+                                                  .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                                      && n.Bio.DocumentsAssistant.Id == doc_assistant.Id))
+                                                  .ToListAsync());
+                        }
+                    }
+                }
+                return View(null);         
             }            
         }
 
@@ -653,7 +709,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsumerRights", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult PrintIntake(int id)
         {
             IntakeScreeningEntity entity = _context.IntakeScreenings
@@ -726,6 +782,36 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public IActionResult PrintMedicalHistory(int id)
+        {
+            IntakeMedicalHistoryEntity entity = _context.IntakeMedicalHistory
+
+                                                        .Include(i => i.Client)    
+                                                            .ThenInclude(c => c.Clinic)
+                                                        .Include(i => i.Client)
+                                                            .ThenInclude(c => c.IntakeTuberculosis)
+
+                                                        .FirstOrDefault(i => (i.Client.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }            
+
+            if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = _reportHelper.FloridaSocialHSMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = _reportHelper.DreamsMentalHealthMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -1883,6 +1969,195 @@ namespace KyoS.Web.Controllers
             }
 
             return View(clientEntity);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditIntake()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditIntake> auditClient_List = new List<AuditIntake>();
+            AuditIntake auditClient = new AuditIntake();
+
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (!User.IsInRole("Facilitator"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.IntakeAccessToServices)
+                                      .Include(m => m.IntakeAcknowledgementHipa)
+                                      .Include(m => m.IntakeConsentForRelease)
+                                      .Include(m => m.IntakeConsentForTreatment)
+                                      .Include(m => m.IntakeConsentPhotograph)
+                                      .Include(m => m.IntakeConsumerRights)
+                                      .Include(m => m.IntakeFeeAgreement)
+                                      .Include(m => m.IntakeMedicalHistory)
+                                      .Include(m => m.IntakeOrientationChecklist)
+                                      .Include(m => m.IntakeScreening)
+                                      .Include(m => m.IntakeTransportation)
+                                      .Include(m => m.IntakeTuberculosis)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                      .ToList();
+            }
+            else
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                client_List = _context.Clients
+                                       .Include(m => m.IntakeAccessToServices)
+                                       .Include(m => m.IntakeAcknowledgementHipa)
+                                       .Include(m => m.IntakeConsentForRelease)
+                                       .Include(m => m.IntakeConsentForTreatment)
+                                       .Include(m => m.IntakeConsentPhotograph)
+                                       .Include(m => m.IntakeConsumerRights)
+                                       .Include(m => m.IntakeFeeAgreement)
+                                       .Include(m => m.IntakeMedicalHistory)
+                                       .Include(m => m.IntakeOrientationChecklist)
+                                       .Include(m => m.IntakeScreening)
+                                       .Include(m => m.IntakeTransportation)
+                                       .Include(m => m.IntakeTuberculosis)
+                                       .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                       .ToList();
+            }
+           
+
+           
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.IntakeAccessToServices == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Access To Services";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeAcknowledgementHipa == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Acknowledgement Hipa";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentForRelease == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent For Release";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentForTreatment == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent For Treatment";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsentPhotograph == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consent Photograph";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeConsumerRights == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Consumer Rights";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeFeeAgreement == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Fee Agreement";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeMedicalHistory == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Medical History";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeOrientationChecklist == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Orientation Checklist";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeScreening == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Screening";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeTransportation == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Transportation";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+                if (item.IntakeTuberculosis == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing Intake Tuberculosis";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditIntake();
+                }
+            }
+
+            return View(auditClient_List);
         }
 
     }

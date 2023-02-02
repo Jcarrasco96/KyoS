@@ -22,11 +22,13 @@
     int counts_of_notificationTCM = DataContext.TCMMessages.Count(m => (m.To == user.UserName && m.Status == KyoS.Common.Enums.MessageStatus.NotRead && m.Notification == true));
     int counts_of_messageTOTAL = counts_of_message + counts_of_messageTCM;
     int counts_of_notificationTOTAL = counts_of_notification + counts_of_notificationTCM;
+    int counts_of_incidents = DataContext.Incidents.Count(m => (m.UserAsigned.Id == user.Id && m.Status != KyoS.Common.Enums.IncidentsStatus.Solved && m.Status != KyoS.Common.Enums.IncidentsStatus.Reviewed));
+
     IEnumerable<MessageEntity> last3_notifications = DataContext.Messages
-                                                        .Where(m => (m.To == user.UserName && m.Notification == true))
-                                                        .OrderByDescending(m => m.Id)
-                                                        .Take(3)
-                                                        .ToList();
+                                                .Where(m => (m.To == user.UserName && m.Notification == true))
+                                                .OrderByDescending(m => m.Id)
+                                                .Take(3)
+                                                .ToList();
     IEnumerable<TCMMessageEntity> last3_notificationsTCM = DataContext.TCMMessages
                                                         .Where(m => (m.To == user.UserName && m.Notification == true))
                                                         .OrderByDescending(m => m.Id)
@@ -94,12 +96,29 @@
                                 <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
                             </ul>
                         </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                            @*<ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li role="separator" class="divider"></li>
+                            </ul>*@
+                        </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-                 if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+           if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -222,10 +241,11 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                    <li>@Html.ActionLink("Medical History", "MedicalHistory", "Intakes")</li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Fars Forms</a>
                                         <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                            <li>@Html.ActionLink("Clients without FARS", "ClientswithoutInitialFARS", "FarsForms")</li>
                                             <li>@Html.ActionLink("Edition FARS", "EditionFars", "FarsForms")</li>
                                             <li>@Html.ActionLink("FARS Forms", "Index", "FarsForms")</li>
                                         </ul>
@@ -260,6 +280,7 @@
                                             <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Discharges</a>
                                         <ul class="dropdown-menu">
@@ -273,6 +294,7 @@
                                         <a class="test" tabindex="-1" href="#">History</a>
                                         <ul class="dropdown-menu">
                                             <li>@Html.ActionLink("Billing Report", "BillingReport", "Notes")</li>
+                                            <li>@Html.ActionLink("Billing Hold", "BillingReportHold", "Notes")</li>
                                             <li>@Html.ActionLink("All Documents", "AllDocuments", "Clients")</li>
                                         </ul>
                                     </li>
@@ -340,11 +362,28 @@
                                 <a class="test" tabindex="-1" href="#">TCM</a>
                             </li>
                         }
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                            @*<ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li role="separator" class="divider"></li>
+                            </ul>*@
+                        </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                      if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -408,6 +447,7 @@
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                     </ul>
                                 </li>
+                                <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
                                 <li>@Html.ActionLink("Discharges", "Index", "Discharge")</li>
                                 <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
@@ -422,11 +462,28 @@
                                 <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                             </ul>
                         </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                            @*<ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li role="separator" class="divider"></li>
+                            </ul>*@
+                        </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                         if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -461,7 +518,7 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Fars Forms</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutInitialFARS", "FarsForms")</li>
                                         <li>@Html.ActionLink("Edition FARS", "EditionFars", "FarsForms")</li>
                                         <li>@Html.ActionLink("All FARS Forms", "Index", "FarsForms")</li>
                                     </ul>
@@ -516,11 +573,28 @@
                                 <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
                             </ul>
                         </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                            @*<ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                                <li role="separator" class="divider"></li>
+                            </ul>*@
+                        </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                             if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
+                                       if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="TCMClients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -629,7 +703,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                                 if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                                           if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -644,7 +718,7 @@
                                         <li>@Html.ActionLink("Closed", "GetCaseClose", "TCMClients")</li>
                                         <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
                                     </ul>
-                                </li>   
+                                </li>
                                 <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
                             </ul>
                         </li>
@@ -654,7 +728,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
 
-                                
+
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Binders</a>
                                     <ul class="dropdown-menu">
@@ -727,7 +801,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                 if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
+           if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -753,7 +827,13 @@
                                 </li>
                                 <li>@Html.ActionLink("Medical History", "MedicalHistory", "Intakes")</li>
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
-                                <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">BIOs / BRIEFs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                        <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
+                                    </ul>
+                                </li>
                                 <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>

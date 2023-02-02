@@ -8,7 +8,7 @@ namespace KyoS.Web.Models
 {
     public class DocumentsAssistantViewModel : DocumentsAssistantEntity
     {
-        internal object TCM_Active;
+        //internal object TCM_Active;
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Clinic")]

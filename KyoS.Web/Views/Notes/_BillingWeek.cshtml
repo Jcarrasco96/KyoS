@@ -175,7 +175,23 @@
                                                     <td align="center">
                                                         @if (element.PaymentDate == null)
                                                         {
-                                                            <p>-</p>
+                                                            @if (element.BilledDate == null)
+                                                            {
+                                                                <p>-</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (element.DeniedBill == true)
+                                                                {
+                                                                    <a asp-action="NotDeniedBill" asp-route-idWorkclient="@element.Id" asp-route-client="0" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                }
+                                                                else
+                                                                { 
+                                                                    <a asp-action="DeniedBillToday" asp-route-id="@element.Id" asp-route-week="0" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                }
+
+                                                            }
+
                                                         }
                                                         else
                                                         {
@@ -186,16 +202,23 @@
                                                         @if (ViewData["Billed"].ToString() == "0")
                                                         {
                                                             <a asp-action="BillNoteToday" asp-route-id="@element.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                                            <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = element.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                            <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = element.Id, abilled = @ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                                             <a asp-action="PaymentReceivedToday" asp-route-id="@element.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
                                                             <a onclick="showInPopup('@Url.Action("PaymentReceived", "Notes", new { id = element.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
 
                                                         }
                                                         @if (ViewData["Billed"].ToString() == "1")
                                                         {
-                                                            <a asp-action="BillNoteToday" asp-route-id="@element.Id" class="btn btn-warning disabled" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                                            <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = element.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning disabled" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                            <a asp-action="PaymentReceivedToday" asp-route-id="@element.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            <a asp-action="NotBill" asp-route-id="@element.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = element.Id, abilled = @ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                            @if (element.PaymentDate == null)
+                                                            {
+                                                                <a asp-action="PaymentReceivedToday" asp-route-id="@element.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                            }
+                                                            else
+                                                            { 
+                                                                <a asp-action="NotPaymentReceived" asp-route-id="@element.Id" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
                                                             <a onclick="showInPopup('@Url.Action("PaymentReceived", "Notes", new { id = element.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
 
                                                         }
@@ -220,24 +243,31 @@
                                     @Html.DisplayFor(modelItem => item.ElementAt(0).Client.MedicaidID)
                                 </td>
                                 <td align="center">
-                                    @if (item.ElementAt(0).Client.Clients_Diagnostics.Count() > 0)
+                                    @if (item.ElementAt(0).Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
                                     {
-                                        @Html.DisplayFor(modelItem => item.ElementAt(0).Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                        @Html.DisplayFor(modelItem => item.ElementAt(0).Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code)
                                     }
                                 </td>
                                 <td align="right">
                                     @if (ViewData["Billed"].ToString() == "0")
                                     {
                                         <a asp-action="BillNoteToday" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"], abilled = @ViewData["Billed"]}, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                         <a asp-action="PaymentReceivedToday" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
                                         <a onclick="showInPopup('@Url.Action("PaymentReceived", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"] }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                     }
                                     else
                                     {
-                                        <a asp-action="BillNoteToday" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-warning disabled" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning disabled" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                        <a asp-action="PaymentReceivedToday" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="NotBill" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("BillNote", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"], abilled = @ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning " title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        @if (item.Where(n => n.PaymentDate == null).Count() > 0)
+                                        {
+                                            <a asp-action="PaymentReceivedToday" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>                                        
+                                        }
+                                        else
+                                        { 
+                                            <a asp-action="NotPaymentReceived" asp-route-id="@item.ElementAt(0).Client.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        }
                                         <a onclick="showInPopup('@Url.Action("PaymentReceived", "Notes", new { id = item.ElementAt(0).Client.Id, week = @ViewData["idWeek"] }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                     }
 

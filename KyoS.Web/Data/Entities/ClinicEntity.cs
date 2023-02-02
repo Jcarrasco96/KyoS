@@ -53,5 +53,17 @@ namespace KyoS.Web.Data.Entities
 
         public string ProviderMedicaidId { get; set; }
         public string ProviderTaxId { get; set; }
+
+        [Display(Name = "Signature")]
+        public string SignaturePath { get; set; }
+
+        [Display(Name = "Bill code of Ind. Therapy")]
+        public string CodeIndTherapy { get; set; }
+
+        [Display(Name = "Bill code of Group Therapy")]
+        public string CodeGroupTherapy { get; set; }
+
+        [Display(Name = "Bill code of PSR Therapy")]
+        public string CodePSRTherapy { get; set; }
     }
 }

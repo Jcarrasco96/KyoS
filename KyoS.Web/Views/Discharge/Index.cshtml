@@ -15,8 +15,21 @@
 </div>
 <div class="row">
     <div class="col-md-12">
+        @if (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true)
+        {
+            <a onclick="showInPopupLg('@Url.Action("AuditDischarge", "Discharge", null, Context.Request.Scheme)','Audit Discharges')" class="btn btn-danger" title="Audit Discharge"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Discharges</a>
+        }
+        else
+        {
+            <a class="btn btn-danger disabled" title="Audit Discharge"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Discharges</a>
+        }
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
         @*<div class="alert alert-warning" role="alert">
-        <span class="sr-only"></span>*@
+            <span class="sr-only"></span>*@
         <strong>Note: </strong> Only closed clients will be displayed, orange color means the client has not discharge documents
         @*</div>*@
     </div>
@@ -97,31 +110,31 @@
                                                         <td>@Html.DisplayFor(modelItem => element.AdmissionedFor)</td>
                                                         <td align="center">@Html.DisplayFor(modelItem => element.TypeService)</td>
                                                         <td align="center">
-                                                                @if (element.Status == KyoS.Common.Enums.DischargeStatus.Edition)
+                                                            @if (element.Status == KyoS.Common.Enums.DischargeStatus.Edition)
+                                                            {
+                                                                <span class="label label-default">
+                                                                    Edition
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (element.Status == KyoS.Common.Enums.DischargeStatus.Pending)
                                                                 {
-                                                                    <span class="label label-default">
-                                                                        Edition
+                                                                    <span class="label label-info">
+                                                                        Pending
                                                                     </span>
                                                                 }
                                                                 else
                                                                 {
-                                                                    if (element.Status == KyoS.Common.Enums.DischargeStatus.Pending)
+                                                                    if (element.Status == KyoS.Common.Enums.DischargeStatus.Approved)
                                                                     {
-                                                                        <span class="label label-info">
-                                                                            Pending
+                                                                        <span class="label label-success">
+                                                                            Approved
                                                                         </span>
                                                                     }
-                                                                    else
-                                                                    {
-                                                                        if (element.Status == KyoS.Common.Enums.DischargeStatus.Approved)
-                                                                        {
-                                                                            <span class="label label-success">
-                                                                                Approved
-                                                                            </span>
-                                                                        }
-                                                                    }
                                                                 }
-                                                            </td>       
+                                                            }
+                                                        </td>
                                                         <td align="center">
                                                             @if (User.IsInRole("Supervisor"))
                                                             {
@@ -222,14 +235,14 @@
                                     </td>
                                     <td align="right">
                                         @*@if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Facilitator"))
-                                        {
-                                            <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
-                                        }
-                                        else
-                                        {
-                                           
-                                        }*@
-                                         <a class="btn btn-warning disabled" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                            {
+                                                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                            }
+                                            else
+                                            {
+
+                                            }*@
+                                        <a class="btn btn-warning disabled" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -275,7 +288,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Facilitator") && (item.DischargeList.Count() == 0 ))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close && User.IsInRole("Facilitator") && (item.DischargeList.Count() == 0))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-warning" title="New Discharge"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
@@ -294,6 +307,7 @@
     </div>
 </div>
 
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

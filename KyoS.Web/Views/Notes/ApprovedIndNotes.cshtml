@@ -27,9 +27,10 @@
                         <tr>
                             <th class="col-md-2" style="text-align:center;">Date</th>
                             <th class="col-md-2" style="text-align:left;">Session</th>
-                            <th class="col-md-4">Name</th>
+                            <th class="col-md-3">Name</th>
                             <th class="col-md-1" style="text-align:center;">Present</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
+                            <th class="col-md-1" style="text-align:center;">Hold</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>
@@ -54,8 +55,29 @@
                                         Approved
                                     </span>
                                 </td>
+                                <td align="center">
+                                    @if (day_client.Hold == true)
+                                    {
+                                        <span class="label label-default">
+                                            Hold
+                                        </span>
+                                    }
+                                    else
+                                    { 
+                                        <span class="label label-success">
+                                            Active
+                                        </span>
+                                    }
+                                </td>
                                 <td align="right">
-                                    <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    @if (day_client.Hold == false)
+                                    {
+                                        <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="PrintIndNote" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }

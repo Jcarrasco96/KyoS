@@ -86,7 +86,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
+                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -99,11 +99,11 @@
                                                 <th class="col-md-2" style="text-align:center;">Notes</th>
                                                 <th class="col-md-2" style="text-align:center;">Units</th>
                                             </tr>
-                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
+                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
+                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
                                                         {
                                                             <a class="icon-plus-sign-alt"></a>
                                                         }
@@ -120,7 +120,7 @@
                                                                     <th class="col-md-1" style="text-align:center;">Notes</th>
                                                                     <th class="col-md-1" style="text-align:center;">Units</th>
                                                                 </tr>
-                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
+                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
                                                                 {
                                                                     <tr>
                                                                         <td align="center">
@@ -139,9 +139,9 @@
                                                                             @Html.DisplayFor(modelItem => workdayClient.Session)
                                                                         </td>
                                                                         <td align="center">
-                                                                            @if (workdayClient.Client.Clients_Diagnostics.Count() > 0)
+                                                                            @if (workdayClient.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
                                                                             {
-                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code)
                                                                             }
                                                                         </td>
                                                                         <td align="center">
@@ -214,16 +214,16 @@
                                                         @Html.DisplayFor(modelItem => facilitator.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Select(wc => wc.Client).Distinct().Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Select(wc => wc.Client).Distinct().Count()
                                                     </td>
                                                     <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
+                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
                                                     </td>
                                                     <td align="center">
                                                         @{
                                                             units = 0;
                                                         }
-                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Client != null)))
+                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)))
                                                         {
                                                             @if (workdayClient.Note != null)
                                                             {

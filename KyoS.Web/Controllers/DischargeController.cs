@@ -13,6 +13,7 @@ using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -940,5 +941,183 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditDischarge()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditDischarge> auditClient_List = new List<AuditDischarge>();
+            AuditDischarge auditClient = new AuditDischarge();
+
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (!User.IsInRole("Facilitator"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.DischargeList)
+                                      .Include(m => m.IndividualTherapyFacilitator)
+                                      .Include(m => m.Workdays_Clients)
+                                      .ThenInclude(m => m.Workday)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                          && n.Status == StatusType.Close))
+                                      .ToList();
+
+            }
+            else
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+                client_List = _context.Clients
+                                      .Include(m => m.DischargeList)
+                                      .Include(m => m.IndividualTherapyFacilitator)
+                                      .Include(m => m.Workdays_Clients)
+                                      .ThenInclude(m => m.Workday)
+                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                         && n.Status == StatusType.Close
+                                         && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                      .ToList();
+
+            }
+
+            int individualTherapy = 0;
+            bool HaveIndtherapy = false;
+            int PSR = 0;
+            int Group = 0;
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0)
+                {
+                    individualTherapy = 1;
+                    HaveIndtherapy = true;
+                }
+                else
+                {
+                    individualTherapy = 0;
+                    HaveIndtherapy = false;
+                }
+                if (item.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0)
+                {
+                    PSR = 1;
+                }
+                else
+                {
+                    PSR = 0;
+                }
+                if (item.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0)
+                {
+                    Group = 1;
+                }
+                else
+                {
+                    Group = 0;
+                }
+
+                foreach(var discharge in item.DischargeList)
+                {
+                    if (discharge.TypeService == ServiceType.PSR)
+                    {
+                        PSR --;
+                    }
+                    if (discharge.TypeService == ServiceType.Group)
+                    {
+                        Group --;
+                    }
+                    if (discharge.TypeService == ServiceType.Individual)
+                    {
+                        individualTherapy --;
+                    }
+                }
+
+                if (PSR == 1)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Service = "Missing Discharge (PSR)";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditDischarge();
+                }
+                if (PSR < 0)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Service = "Duplicate Discharge (PSR)";
+                    auditClient.Active = 1;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditDischarge();
+                }
+                if (Group == 1)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Service = "Missing Discharge (Group)";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditDischarge();
+                }
+                if (Group < 0)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Service = "Duplicate Discharge (Group)";
+                    auditClient.Active = 1;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditDischarge();
+                }
+                if (individualTherapy == 1)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Service = "Missing Discharge (Individual)";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditDischarge();
+                }
+                if (individualTherapy < 0)
+                {
+                    if (HaveIndtherapy == true)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Service = "Duplicate Discharge (Individual)";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditDischarge();
+                    }
+                    else
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Service = "There are discharges without individual notes";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditDischarge();
+                    }
+                    
+                }
+            }
+
+            return View(auditClient_List);
+        }
+
+
     }
 }

@@ -735,6 +735,388 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Bio_BehavioralHistory");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BriefEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Affect_Angry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Anxious")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Appropriate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Blunted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Constricted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Expansive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Flat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_Tearful_Sad")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Affect_labile")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AlternativeDiagnosis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Appearance_Bizarre")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_Cleaned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_Disheveled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_FairHygiene")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Appearance_WellGroomed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BioH0031HN")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CMH")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ClientAssessmentSituation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ClientDenied")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Client_FK")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateBio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureLicensedPractitioner")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureSupervisor")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureUnlicensedTherapist")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DoYouOwn")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoYouOwn_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DocumentsAssistantId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("DoesClient")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FamilyAssessmentSituation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FamilyEmotional")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasTheClient")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HasTheClient_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HaveYouEverBeen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HaveYouEverBeen_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HaveYouEverThought")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HaveYouEverThought_Explain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IConcurWhitDiagnistic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IDAH0031HO")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Fair")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Good")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Insight_Poor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Fair")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Good")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Judgment_Poor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Location")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Person")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Place")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacking_Time")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LegalAssessment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Mood_Angry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Anxious")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Depressed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Euphoric")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Euthymic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Maniac")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mood_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Agitated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Akathisia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_RestLess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Retardation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Motor_Tremor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Oriented_FullOriented")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PresentingProblem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Priv")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_Chronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_High")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_Low")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToOther_Medium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Chronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_High")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Low")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RiskToSelf_Medium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SafetyPlan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Speech_Impoverished")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Loud")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Mumbled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Pressured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Rapid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Slow")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Slurred")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Speech_Stutters")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SumanrOfFindings")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ThoughtContent_Delusions")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ThoughtContent_Delusions_Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThoughtContent_Hallucinations")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ThoughtContent_Hallucinations_Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThoughtContent_RealityBased")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtContent_Relevant")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Blocking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Circumstantial")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Disorganized")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_FightIdeas")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_GoalDirected")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Irrational")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_LooseAssociations")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Obsessive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Organized")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Other")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Preoccupied")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Rigid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThoughtProcess_Tangential")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Treatmentrecomendations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Client_FK")
+                        .IsUnique();
+
+                    b.HasIndex("DocumentsAssistantId");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("Brief");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1087,6 +1469,15 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ClinicalDirector")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CodeGroupTherapy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodeIndTherapy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodePSRTherapy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FaxNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -1109,6 +1500,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int>("Schema")
                         .HasColumnType("int");
+
+                    b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -1773,6 +2167,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("TraumaticsScale")
                         .HasColumnType("int");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.Property<int>("WorkScale")
                         .HasColumnType("int");
 
@@ -2037,6 +2434,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int>("Service")
                         .HasColumnType("int");
+
+                    b.Property<bool>("SharedSession")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -2347,12 +2747,22 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserAsignedId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserCreatedById")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("clientId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserAsignedId");
+
                     b.HasIndex("UserCreatedById");
+
+                    b.HasIndex("clientId");
 
                     b.ToTable("Incidents");
                 });
@@ -4054,6 +4464,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("BioId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BriefId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -4068,6 +4481,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("From")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IncidentId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("MTPReviewId")
                         .HasColumnType("int");
@@ -4100,9 +4516,13 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("BioId");
 
+                    b.HasIndex("BriefId");
+
                     b.HasIndex("DischargeId");
 
                     b.HasIndex("FarsFormId");
+
+                    b.HasIndex("IncidentId");
 
                     b.HasIndex("MTPReviewId");
 
@@ -8905,11 +9325,20 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CodeBill")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DeniedBill")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GroupSize")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Hold")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
@@ -8919,6 +9348,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("Session")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SharedSession")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("WorkdayId")
                         .HasColumnType("int");
@@ -9139,6 +9571,29 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BriefEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                        .WithOne("Brief")
+                        .HasForeignKey("KyoS.Web.Data.Entities.BriefEntity", "Client_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentsAssistant")
+                        .WithMany()
+                        .HasForeignKey("DocumentsAssistantId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("DocumentsAssistant");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
@@ -9429,9 +9884,21 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.IncidentEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.UserEntity", "UserAsigned")
+                        .WithMany()
+                        .HasForeignKey("UserAsignedId");
+
                     b.HasOne("KyoS.Web.Data.Entities.UserEntity", "UserCreatedBy")
                         .WithMany()
                         .HasForeignKey("UserCreatedById");
+
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "client")
+                        .WithMany()
+                        .HasForeignKey("clientId");
+
+                    b.Navigation("client");
+
+                    b.Navigation("UserAsigned");
 
                     b.Navigation("UserCreatedBy");
                 });
@@ -9642,6 +10109,10 @@ namespace KyoS.Web.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("BioId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.BriefEntity", "Brief")
+                        .WithMany("Messages")
+                        .HasForeignKey("BriefId");
+
                     b.HasOne("KyoS.Web.Data.Entities.DischargeEntity", "Discharge")
                         .WithMany("Messages")
                         .HasForeignKey("DischargeId");
@@ -9649,6 +10120,10 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.FarsFormEntity", "FarsForm")
                         .WithMany("Messages")
                         .HasForeignKey("FarsFormId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.IncidentEntity", "Incident")
+                        .WithMany()
+                        .HasForeignKey("IncidentId");
 
                     b.HasOne("KyoS.Web.Data.Entities.MTPReviewEntity", "MTPReview")
                         .WithMany("Messages")
@@ -9666,9 +10141,13 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Bio");
 
+                    b.Navigation("Brief");
+
                     b.Navigation("Discharge");
 
                     b.Navigation("FarsForm");
+
+                    b.Navigation("Incident");
 
                     b.Navigation("Mtp");
 
@@ -9722,7 +10201,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("NotePId");
 
                     b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
+                        .WithMany("NoteP_Activity")
                         .HasForeignKey("ObjetiveId");
 
                     b.Navigation("Activity");
@@ -9768,7 +10247,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("NoteId");
 
                     b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
+                        .WithMany("Note_Activity")
                         .HasForeignKey("ObjetiveId");
 
                     b.Navigation("Activity");
@@ -10558,6 +11037,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.BriefEntity", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
                 {
                     b.Navigation("NotesClassification");
@@ -10570,6 +11054,8 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
                 {
                     b.Navigation("Bio");
+
+                    b.Navigation("Brief");
 
                     b.Navigation("Client_Referred");
 
@@ -10729,6 +11215,10 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Classifications");
 
                     b.Navigation("IndividualNotes");
+
+                    b.Navigation("Note_Activity");
+
+                    b.Navigation("NoteP_Activity");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.PlanEntity", b =>

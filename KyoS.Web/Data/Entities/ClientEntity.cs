@@ -202,6 +202,8 @@ namespace KyoS.Web.Data.Entities
                 }
                 return missingDoc;      
             } 
-        }        
+        }
+
+        public BriefEntity Brief { get; set; }
     }
 }

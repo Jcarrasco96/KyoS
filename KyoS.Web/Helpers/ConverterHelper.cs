@@ -22,7 +22,7 @@ namespace KyoS.Web.Helpers
             _userHelper = userHelper;
         }
 
-        public ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew)
+        public ClinicEntity ToClinicEntity(ClinicViewModel model, string path, bool isNew, string pathSignatureClinical)
         {
             return new ClinicEntity
             {
@@ -38,7 +38,12 @@ namespace KyoS.Web.Helpers
                 FaxNo = model.FaxNo,
                 ClinicalDirector = model.ClinicalDirector,
                 ProviderMedicaidId = model.ProviderMedicaidId,
-                ProviderTaxId = model.ProviderTaxId
+                ProviderTaxId = model.ProviderTaxId,
+                SignaturePath = pathSignatureClinical,
+                CodeGroupTherapy = model.CodeGroupTherapy,
+                CodeIndTherapy = model.CodeIndTherapy,
+                CodePSRTherapy = model.CodePSRTherapy
+
             };
         }
 
@@ -58,7 +63,12 @@ namespace KyoS.Web.Helpers
                 FaxNo = clinicEntity.FaxNo,
                 ClinicalDirector = clinicEntity.ClinicalDirector,
                 ProviderMedicaidId = clinicEntity.ProviderMedicaidId,
-                ProviderTaxId = clinicEntity.ProviderTaxId
+                ProviderTaxId = clinicEntity.ProviderTaxId,
+                SignaturePath = clinicEntity.SignaturePath,
+                CodeGroupTherapy = clinicEntity.CodeGroupTherapy,
+                CodeIndTherapy = clinicEntity.CodeIndTherapy,
+                CodePSRTherapy = clinicEntity.CodePSRTherapy
+
             };
         }
 
@@ -168,7 +178,9 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                SignaturePath = signaturePath
+                SignaturePath = signaturePath,
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -185,7 +197,9 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(facilitatorEntity.LinkedUser),
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic),
-                SignaturePath = facilitatorEntity.SignaturePath
+                SignaturePath = facilitatorEntity.SignaturePath,
+                RaterEducation = facilitatorEntity.RaterEducation,
+                RaterFMHCertification = facilitatorEntity.RaterFMHCertification
             };
         }
 
@@ -680,7 +694,8 @@ namespace KyoS.Web.Helpers
                 Am = model.Am,
                 Pm = model.Pm,
                 Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
-                Service = model.Service
+                Service = model.Service,
+                SharedSession = model.SharedSession
             };
         }
 
@@ -694,7 +709,8 @@ namespace KyoS.Web.Helpers
                 Facilitators = _combosHelper.GetComboFacilitators(),
                 Am = groupEntity.Am,
                 Pm = groupEntity.Pm,
-                Clients = groupEntity.Clients
+                Clients = groupEntity.Clients,
+                SharedSession = groupEntity.SharedSession
             };
         }
 
@@ -956,8 +972,8 @@ namespace KyoS.Web.Helpers
                                                                      .FirstOrDefaultAsync(d => d.Id == model.IdDischarge) : null,
                 Mtp = (model.IdMtp != 0) ? await _context.MTPs
                                                          .FirstOrDefaultAsync(d => d.Id == model.IdMtp) : null,
-                Bio = (model.IdBio != 0) ? await _context.Bio
-                                                         .FirstOrDefaultAsync(d => d.Id == model.IdBio) : null,
+                Brief = (model.IdBrief != 0) ? await _context.Brief
+                                                         .FirstOrDefaultAsync(d => d.Id == model.IdBrief) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
@@ -1190,12 +1206,26 @@ namespace KyoS.Web.Helpers
                 Status = isNew ? IncidentsStatus.Pending : StatusUtils.GetIncidentStatusByIndex(model.IdStatus),
                 UserCreatedBy = isNew ? await _context.Users.FindAsync(userId) : await _context.Users.FindAsync(model.IdUserCreatedBy),
                 SolvedBy = isNew ? string.Empty : (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? userId : string.Empty,
-                SolvedDate = !isNew && (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? DateTime.Now : model.SolvedDate
+                SolvedDate = !isNew && (StatusUtils.GetIncidentStatusByIndex(model.IdStatus) == IncidentsStatus.Solved) ? DateTime.Now : model.SolvedDate,
+                client = await _context.Clients.FindAsync(model.IdClient),
+                UserAsigned = await _context.Users.FindAsync(model.IdUserAssigned)
             };
         }
 
         public IncidentViewModel ToIncidentViewModel(IncidentEntity model)
         {
+            string idUserAssigned = "";
+            if (model.UserAsigned != null)
+            {
+                idUserAssigned = model.UserAsigned.Id;
+            }
+
+            int idClient = 0;
+            if (model.client != null)
+            {
+                idClient = model.client.Id;
+            }
+
             return new IncidentViewModel
             {
                 Id = model.Id,
@@ -1204,7 +1234,12 @@ namespace KyoS.Web.Helpers
                 IdStatus = (model.Status == IncidentsStatus.Pending) ? 0 : (model.Status == IncidentsStatus.Solved) ? 1 : (model.Status == IncidentsStatus.NotValid) ? 2 : 0,
                 StatusList = _combosHelper.GetComboIncidentsStatus(),
                 IdUserCreatedBy = model.UserCreatedBy.Id,
-                UserCreatedBy = model.UserCreatedBy
+                UserCreatedBy = model.UserCreatedBy,
+                IdClient = idClient,
+                IdUserAssigned = idUserAssigned,
+                Clients = _combosHelper.GetComboClientsAdmissionByClinic(model.UserCreatedBy.Clinic.Id),
+                Users = _combosHelper.GetComboUserNamesByClinic(model.UserCreatedBy.Clinic.Id)
+
             };
         }
 
@@ -2863,7 +2898,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null,
+                Type = FARSUtils.GetypeByIndex(model.IdType)
             };
         }
 
@@ -2916,7 +2952,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                Type = model.Type,
+                IdType = Convert.ToInt32(model.Type),
+                FarsType = _combosHelper.GetComboFARSType()
 
             };
             
@@ -5987,6 +6026,273 @@ namespace KyoS.Web.Helpers
                 Intervention = objectiveEntity.Intervention
                
             };
+        }
+
+        public async Task<BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId)
+        {
+            return new BriefEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
+                Affect_Angry = model.Affect_Angry,
+                Affect_Anxious = model.Affect_Anxious,
+                Affect_Appropriate = model.Affect_Appropriate,
+                Affect_Blunted = model.Affect_Blunted,
+                Affect_Constricted = model.Affect_Constricted,
+                Affect_Expansive = model.Affect_Expansive,
+                Affect_Flat = model.Affect_Flat,
+                Affect_labile = model.Affect_labile,
+                Affect_Other = model.Affect_Other,
+                Affect_Tearful_Sad = model.Affect_Tearful_Sad,
+                AlternativeDiagnosis = model.AlternativeDiagnosis,
+                Appearance_Bizarre = model.Appearance_Bizarre,
+                Appearance_Cleaned = model.Appearance_Cleaned,
+                Appearance_Disheveled = model.Appearance_Disheveled,
+                Appearance_FairHygiene = model.Appearance_FairHygiene,
+                Appearance_WellGroomed = model.Appearance_WellGroomed,
+                BioH0031HN = model.BioH0031HN,
+                IDAH0031HO = model.IDAH0031HO,
+                ClientAssessmentSituation = model.ClientAssessmentSituation,
+                CMH = model.CMH,
+                Comments = model.Comments,
+                DateBio = model.DateBio,
+                DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist,
+                DoesClient = model.DoesClient,
+                DoYouOwn = model.DoYouOwn,
+                DoYouOwn_Explain = model.DoYouOwn_Explain,
+                FamilyAssessmentSituation = model.FamilyAssessmentSituation,
+                FamilyEmotional = model.FamilyEmotional,
+                HasTheClient = model.HasTheClient,
+                HasTheClient_Explain = model.HasTheClient_Explain,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverBeen_Explain = model.HaveYouEverBeen_Explain,
+                HaveYouEverThought = model.HaveYouEverThought,
+                HaveYouEverThought_Explain = model.HaveYouEverThought_Explain,
+                IConcurWhitDiagnistic = model.IConcurWhitDiagnistic,
+                Insight_Fair = model.Insight_Fair,
+                Insight_Good = model.Insight_Good,
+                Insight_Other = model.Insight_Other,
+                Insight_Poor = model.Insight_Poor,
+                Judgment_Fair = model.Judgment_Fair,
+                Judgment_Good = model.Judgment_Good,
+                Judgment_Other = model.Judgment_Other,
+                Judgment_Poor = model.Judgment_Poor,
+                Lacking_Location = model.Lacking_Location,
+                Lacking_Person = model.Lacking_Person,
+                Lacking_Place = model.Lacking_Place,
+                Lacking_Time = model.Lacking_Time,
+                LegalAssessment = model.LegalAssessment,
+                Supervisor = model.Supervisor,
+                Mood_Angry = model.Mood_Angry,
+                Mood_Anxious = model.Mood_Anxious,
+                Mood_Depressed = model.Mood_Depressed,
+                Mood_Euphoric = model.Mood_Euphoric,
+                Mood_Euthymic = model.Mood_Euthymic,
+                Mood_Maniac = model.Mood_Maniac,
+                Mood_Other = model.Mood_Other,
+                Motor_Agitated = model.Motor_Agitated,
+                Motor_Akathisia = model.Motor_Akathisia,
+                Motor_Normal = model.Motor_Normal,
+                Motor_Other = model.Motor_Other,
+                Motor_RestLess = model.Motor_RestLess,
+                Motor_Retardation = model.Motor_Retardation,
+                Motor_Tremor = model.Motor_Tremor,
+                Oriented_FullOriented = model.Oriented_FullOriented,
+                PresentingProblem = model.PresentingProblem,
+                Priv = model.Priv,
+                RiskToOther_Chronic = model.RiskToOther_Chronic,
+                RiskToOther_High = model.RiskToOther_High,
+                RiskToOther_Low = model.RiskToOther_Low,
+                RiskToOther_Medium = model.RiskToOther_Medium,
+                RiskToSelf_Chronic = model.RiskToSelf_Chronic,
+                RiskToSelf_High = model.RiskToSelf_High,
+                RiskToSelf_Low = model.RiskToSelf_Low,
+                RiskToSelf_Medium = model.RiskToSelf_Medium,
+                SafetyPlan = model.SafetyPlan,
+                Setting = model.Setting,
+                Speech_Impoverished = model.Speech_Impoverished,
+                Speech_Loud = model.Speech_Loud,
+                Speech_Mumbled = model.Speech_Mumbled,
+                Speech_Normal = model.Speech_Normal,
+                Speech_Other = model.Speech_Other,
+                Speech_Pressured = model.Speech_Pressured,
+                Speech_Rapid = model.Speech_Rapid,
+                Speech_Slow = model.Speech_Slow,
+                Speech_Slurred = model.Speech_Slurred,
+                Speech_Stutters = model.Speech_Stutters,
+                ThoughtContent_Delusions = model.ThoughtContent_Delusions,
+                ThoughtContent_Delusions_Type = model.ThoughtContent_Delusions_Type,
+                ThoughtContent_Hallucinations = model.ThoughtContent_Hallucinations,
+                ThoughtContent_Hallucinations_Type = model.ThoughtContent_Hallucinations_Type,
+                ThoughtContent_RealityBased = model.ThoughtContent_RealityBased,
+                ThoughtContent_Relevant = model.ThoughtContent_Relevant,
+                ThoughtProcess_Blocking = model.ThoughtProcess_Blocking,
+                ThoughtProcess_Circumstantial = model.ThoughtProcess_Circumstantial,
+                ThoughtProcess_Disorganized = model.ThoughtProcess_Disorganized,
+                ThoughtProcess_FightIdeas = model.ThoughtProcess_FightIdeas,
+                ThoughtProcess_GoalDirected = model.ThoughtProcess_GoalDirected,
+                ThoughtProcess_Irrational = model.ThoughtProcess_Irrational,
+                ThoughtProcess_LooseAssociations = model.ThoughtProcess_LooseAssociations,
+                ThoughtProcess_Obsessive = model.ThoughtProcess_Obsessive,
+                ThoughtProcess_Organized = model.ThoughtProcess_Organized,
+                ThoughtProcess_Other = model.ThoughtProcess_Other,
+                ThoughtProcess_Preoccupied = model.ThoughtProcess_Preoccupied,
+                ThoughtProcess_Rigid = model.ThoughtProcess_Rigid,
+                ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
+                Treatmentrecomendations = model.Treatmentrecomendations,
+                DocumentsAssistant = model.DocumentsAssistant,
+                Client_FK = model.Client_FK,
+                ClientDenied = model.ClientDenied,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                AdmissionedFor = model.AdmissionedFor,
+                Messages = _context.Messages
+                                   .Where(n => n.Brief.Id == model.Id)
+                                   .ToList(),
+                Status = model.Status,
+                SumanrOfFindings = model.SumanrOfFindings
+
+            };
+        }
+
+        public BriefViewModel ToBriefViewModel(BriefEntity model)
+        {
+            return new BriefViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Affect_Angry = model.Affect_Angry,
+                Affect_Anxious = model.Affect_Anxious,
+                Affect_Appropriate = model.Affect_Appropriate,
+                Affect_Blunted = model.Affect_Blunted,
+                Affect_Constricted = model.Affect_Constricted,
+                Affect_Expansive = model.Affect_Expansive,
+                Affect_Flat = model.Affect_Flat,
+                Affect_labile = model.Affect_labile,
+                Affect_Other = model.Affect_Other,
+                Affect_Tearful_Sad = model.Affect_Tearful_Sad,
+                AlternativeDiagnosis = model.AlternativeDiagnosis,
+                Appearance_Bizarre = model.Appearance_Bizarre,
+                Appearance_Cleaned = model.Appearance_Cleaned,
+                Appearance_Disheveled = model.Appearance_Disheveled,
+                Appearance_FairHygiene = model.Appearance_FairHygiene,
+                Appearance_WellGroomed = model.Appearance_WellGroomed,
+                BioH0031HN = model.BioH0031HN,
+                IDAH0031HO = model.IDAH0031HO,
+                ClientAssessmentSituation = model.ClientAssessmentSituation,
+                CMH = model.CMH,
+                Comments = model.Comments,
+                DateBio = model.DateBio,
+                DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner,
+                DateSignaturePerson = model.DateSignaturePerson,
+                DateSignatureSupervisor = model.DateSignatureSupervisor,
+                DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist,
+                DoesClient = model.DoesClient,
+                DoYouOwn = model.DoYouOwn,
+                DoYouOwn_Explain = model.DoYouOwn_Explain,
+                FamilyAssessmentSituation = model.FamilyAssessmentSituation,
+                FamilyEmotional = model.FamilyEmotional,
+                HasTheClient = model.HasTheClient,
+                HasTheClient_Explain = model.HasTheClient_Explain,
+                HaveYouEverBeen = model.HaveYouEverBeen,
+                HaveYouEverBeen_Explain = model.HaveYouEverBeen_Explain,
+                HaveYouEverThought = model.HaveYouEverThought,
+                HaveYouEverThought_Explain = model.HaveYouEverThought_Explain,
+                IConcurWhitDiagnistic = model.IConcurWhitDiagnistic,
+                Insight_Fair = model.Insight_Fair,
+                Insight_Good = model.Insight_Good,
+                Insight_Other = model.Insight_Other,
+                Insight_Poor = model.Insight_Poor,
+                Judgment_Fair = model.Judgment_Fair,
+                Judgment_Good = model.Judgment_Good,
+                Judgment_Other = model.Judgment_Other,
+                Judgment_Poor = model.Judgment_Poor,
+                Lacking_Location = model.Lacking_Location,
+                Lacking_Person = model.Lacking_Person,
+                Lacking_Place = model.Lacking_Place,
+                Lacking_Time = model.Lacking_Time,
+                LegalAssessment = model.LegalAssessment,
+                Supervisor = model.Supervisor,
+                Mood_Angry = model.Mood_Angry,
+                Mood_Anxious = model.Mood_Anxious,
+                Mood_Depressed = model.Mood_Depressed,
+                Mood_Euphoric = model.Mood_Euphoric,
+                Mood_Euthymic = model.Mood_Euthymic,
+                Mood_Maniac = model.Mood_Maniac,
+                Mood_Other = model.Mood_Other,
+                Motor_Agitated = model.Motor_Agitated,
+                Motor_Akathisia = model.Motor_Akathisia,
+                Motor_Normal = model.Motor_Normal,
+                Motor_Other = model.Motor_Other,
+                Motor_RestLess = model.Motor_RestLess,
+                Motor_Retardation = model.Motor_Retardation,
+                Motor_Tremor = model.Motor_Tremor,
+                Oriented_FullOriented = model.Oriented_FullOriented,
+                PresentingProblem = model.PresentingProblem,
+                Priv = model.Priv,
+                RiskToOther_Chronic = model.RiskToOther_Chronic,
+                RiskToOther_High = model.RiskToOther_High,
+                RiskToOther_Low = model.RiskToOther_Low,
+                RiskToOther_Medium = model.RiskToOther_Medium,
+                RiskToSelf_Chronic = model.RiskToSelf_Chronic,
+                RiskToSelf_High = model.RiskToSelf_High,
+                RiskToSelf_Low = model.RiskToSelf_Low,
+                RiskToSelf_Medium = model.RiskToSelf_Medium,
+                SafetyPlan = model.SafetyPlan,
+                Setting = model.Setting,
+                Speech_Impoverished = model.Speech_Impoverished,
+                Speech_Loud = model.Speech_Loud,
+                Speech_Mumbled = model.Speech_Mumbled,
+                Speech_Normal = model.Speech_Normal,
+                Speech_Other = model.Speech_Other,
+                Speech_Pressured = model.Speech_Pressured,
+                Speech_Rapid = model.Speech_Rapid,
+                Speech_Slow = model.Speech_Slow,
+                Speech_Slurred = model.Speech_Slurred,
+                Speech_Stutters = model.Speech_Stutters,
+                ThoughtContent_Delusions = model.ThoughtContent_Delusions,
+                ThoughtContent_Delusions_Type = model.ThoughtContent_Delusions_Type,
+                ThoughtContent_Hallucinations = model.ThoughtContent_Hallucinations,
+                ThoughtContent_Hallucinations_Type = model.ThoughtContent_Hallucinations_Type,
+                ThoughtContent_RealityBased = model.ThoughtContent_RealityBased,
+                ThoughtContent_Relevant = model.ThoughtContent_Relevant,
+                ThoughtProcess_Blocking = model.ThoughtProcess_Blocking,
+                ThoughtProcess_Circumstantial = model.ThoughtProcess_Circumstantial,
+                ThoughtProcess_Disorganized = model.ThoughtProcess_Disorganized,
+                ThoughtProcess_FightIdeas = model.ThoughtProcess_FightIdeas,
+                ThoughtProcess_GoalDirected = model.ThoughtProcess_GoalDirected,
+                ThoughtProcess_Irrational = model.ThoughtProcess_Irrational,
+                ThoughtProcess_LooseAssociations = model.ThoughtProcess_LooseAssociations,
+                ThoughtProcess_Obsessive = model.ThoughtProcess_Obsessive,
+                ThoughtProcess_Organized = model.ThoughtProcess_Organized,
+                ThoughtProcess_Other = model.ThoughtProcess_Other,
+                ThoughtProcess_Preoccupied = model.ThoughtProcess_Preoccupied,
+                ThoughtProcess_Rigid = model.ThoughtProcess_Rigid,
+                ThoughtProcess_Tangential = model.ThoughtProcess_Tangential,
+                Treatmentrecomendations = model.Treatmentrecomendations,
+                DocumentsAssistant = model.DocumentsAssistant,
+                Client_FK = model.Client_FK,
+                ClientDenied = model.ClientDenied,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                AdmissionedFor = model.AdmissionedFor,
+                Status = model.Status,
+                SumanrOfFindings = model.SumanrOfFindings
+
+            };
+
         }
 
     }

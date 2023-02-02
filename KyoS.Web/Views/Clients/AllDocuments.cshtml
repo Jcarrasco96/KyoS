@@ -46,7 +46,7 @@
                                     Addendum
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
-                                    BIO
+                                    BIO/BRIEF
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     FARS
@@ -127,14 +127,21 @@
                                             <a asp-action="AddendumForClient" asp-route-idClient="@item.Id" asp-controller="MTPs" class="btn btn-default disabled" title="Go"><i class="glyphicon glyphicon-share"></i></a>
                                         }
                                     </td>
-                                     <td align="center">
-                                        @if (item.Bio == null)
+                                    <td align="center">
+                                        @if (item.Bio == null && item.Brief == null)
                                         {
                                             <a asp-action="PrintBio" asp-controller="Bios" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                           <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            @if (item.Bio != null)
+                                            {
+                                                <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.Brief != null)
+                                            {
+                                                <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" asp-controller="Briefs" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
                                         }
 
                                     </td>

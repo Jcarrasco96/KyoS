@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using KyoS.Common.Helpers;
+
 
 namespace KyoS.Web.Controllers
 {
@@ -59,9 +61,9 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
@@ -71,9 +73,9 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant") )
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id && n.Bio.CreatedBy == user_logged.UserName)
@@ -84,9 +86,9 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.Clients
 
-                                              .Include(f => f.Clients_Diagnostics)
-                                              .ThenInclude(f => f.Diagnostic)
                                               .Include(g => g.Bio)
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
                                               .Include(g => g.List_BehavioralHistory)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .OrderBy(f => f.Name)
@@ -1202,7 +1204,8 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null 
+                                                          .Where(n => n.Bio == null
+                                                            && n.Brief == null
                                                             && n.Clinic.Id == user_logged.Clinic.Id
                                                             && n.OnlyTCM == false)
                                                           .ToListAsync();
@@ -1676,6 +1679,272 @@ namespace KyoS.Web.Controllers
             }
 
             return View();
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public IActionResult AddDiagnostic(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                Client_DiagnosticViewModel model = new Client_DiagnosticViewModel
+                {
+                    IdDiagnostic = 0,
+                    Diagnostics = _combosHelper.GetComboDiagnosticsByClient(id),
+                    IdClient = id
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new Client_DiagnosticViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> AddDiagnostic(Client_DiagnosticViewModel client_diagnosticViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                DiagnosticEntity diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Id == client_diagnosticViewModel.IdDiagnostic);
+                ClientEntity client = await _context.Clients.FirstOrDefaultAsync(n => n.Id == client_diagnosticViewModel.IdClient);
+
+                Client_Diagnostic client_diagnostic = new Client_Diagnostic
+                {
+                    Id = 0,
+                    Client = client,
+                    Diagnostic = diagnostic,
+                    Principal = client_diagnosticViewModel.Principal
+                   
+                };
+                
+                _context.Add(client_diagnostic);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => (d.Client.Id == client.Id )).ToList()) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the diagnostic: {diagnostic.Code}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", client_diagnosticViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public IActionResult DeleteDiagnostic(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new Client_DiagnosticViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteDiagnostic(int id, DeleteViewModel ClientDiagnosticsViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Client_Diagnostic client_diagnostic = await _context.Clients_Diagnostics.Include(n => n.Client).FirstOrDefaultAsync(d => d.Id == ClientDiagnosticsViewModel.Id_Element);
+                try
+                {
+                    _context.Clients_Diagnostics.Remove(client_diagnostic);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index", new { idError = 1 });
+                }
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => d.Client.Id == client_diagnostic.Client.Id).ToList()) });
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Where(d => d.Client.Id == 0).ToList()) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditBIO()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditBIO> auditClient_List = new List<AuditBIO>();
+            AuditBIO auditClient = new AuditBIO();
+
+            List<ClientEntity> client_List = new List<ClientEntity>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                client_List = _context.Clients
+                                      .Include(m => m.Bio)
+                                      .Include(m => m.List_BehavioralHistory)
+                                      .Include(m => m.MedicationList)
+                                      .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                      .ToList();
+
+            }
+            else
+            {
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                    client_List = _context.Clients
+                                         
+                                          .Include(m => m.IndividualTherapyFacilitator)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                          .ToList();
+
+                }
+
+            }
+
+            foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
+            {
+                if (item.Bio == null)
+                {
+                    auditClient.NameClient = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client has no BIO";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditBIO();
+                }
+                else
+                {
+                    if (item.AdmisionDate > item.Bio.DateBio)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The admission date is after the BIO date";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.List_BehavioralHistory.Count() == 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client has no behavioral health history";
+                        auditClient.Active = 0;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.MedicationList.Count() == 0)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client has no medication";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.Bio.Status == BioStatus.Edition)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Bio is edition";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                    if (item.Bio.Status == BioStatus.Pending)
+                    {
+                        auditClient.NameClient = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "Bio is pending";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditBIO();
+                    }
+                }
+         
+            }
+
+            return View(auditClient_List);
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult SelectBIOorBrief(int idClient = 0)
+        {
+            BIOTypeViewModel model = new BIOTypeViewModel()
+            {
+                IdClient = idClient,
+                IdType = 0,
+                Types = _combosHelper.GetComboBio_Type()
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> SelectBIOorBrief(BIOTypeViewModel BioTypeViewModel)
+        {
+            UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (BioTypeViewModel.IdType == 0)
+            {
+                return RedirectToAction("Create", "Bios", new { id = BioTypeViewModel.IdClient });
+            }
+            else
+            {
+                return RedirectToAction("Create", "Briefs", new { id = BioTypeViewModel.IdClient, origi = 1});
+            }
+            
         }
 
     }
