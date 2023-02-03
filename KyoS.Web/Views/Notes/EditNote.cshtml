@@ -91,73 +91,74 @@
         </div>
         @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         { 
-            <form asp-action="EditNote" enctype="multipart/form-data">
-                @*<div class="form-group col-md-12">*@
-                    <!-- Nav tabs -->
-                    @*<ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
-                        <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
-                    </ul>*@
-                    <!-- Tab panes -->
-                    @*<div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="note">*@
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
-                            <input type="hidden" asp-for="IdActivity1" />
-                            <input type="hidden" asp-for="IdActivity2" />
-                            <input type="hidden" asp-for="IdActivity3" />
-                            <input type="hidden" asp-for="IdActivity4" />
-                            <input type="hidden" asp-for="Origin" />
-                            <input type="hidden" asp-for="Schema" />                            
-                            <partial name="_MCS" />
-                            <partial name="_Notes" />
-                            <div class="form-group col-md-12">
-                                <input type="submit" value="Save All" class="btn btn-primary" />
-                                @if (Model.Origin == 0) //viene de la pagina Index de las notas
-                                {
-                                    <a asp-action="Index" class="btn btn-success">Back</a>
-                                }
-                                @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
-                                {
-                                    <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
-                                }
-                                @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
-                                {
-                                    <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
-                                }
-                                @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
-                                {
-                                    <a asp-action="PendingNotes" class="btn btn-success">Back</a>
-                                }
-                                @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
-                                {
-                                    <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
-                                }
-                                @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
-                                {
-                                    <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
-                                }
+    <form asp-action="EditNote" enctype="multipart/form-data">
+        @*<div class="form-group col-md-12">*@
+        <!-- Nav tabs -->
+        @*<ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#note" aria-controls="note" role="tab" data-toggle="tab">Note</a></li>
+            <li role="presentation"><a href="#cms" aria-controls="cms" role="tab" data-toggle="tab">Client's Mental Status</a></li>
+        </ul>*@
+        <!-- Tab panes -->
+        @*<div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="note">*@
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IdActivity1" />
+        <input type="hidden" asp-for="IdActivity2" />
+        <input type="hidden" asp-for="IdActivity3" />
+        <input type="hidden" asp-for="IdActivity4" />
+        <input type="hidden" asp-for="Origin" />
+        <input type="hidden" asp-for="Schema" />
+        <input type="hidden" asp-for="CodeBill" />
+        <partial name="_MCS" />
+        <partial name="_Notes" />
+        <div class="form-group col-md-12">
+            <input type="submit" value="Save All" class="btn btn-primary" />
+            @if (Model.Origin == 0) //viene de la pagina Index de las notas
+            {
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 1) //viene de la pagina NotStartedNotes de las notas
+            {
+                <a asp-action="NotStartedNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+            {
+                <a asp-action="NotesInEdit" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 3) //viene de la pagina PendingNotes de las notas
+            {
+                <a asp-action="PendingNotes" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 4) //viene de la pagina NotesWithReview de las notas
+            {
+                <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+            }
+            @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
+            {
+                <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
+            }
 
-                                @if (Model.Status.ToString() == "Edition")
-                                {
-                                    @if (Model.Origin == 0) //viene de la pagina Index de las notas
-                                    {
-                                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
-                                    }
-                                    @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
-                                    {
-                                        <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
-                                    }
-                                }
-                            </div>
-                        @*</div>
-                        <div role="tabpanel" class="tab-pane" id="cms">*@
-                            @*<br />*@
-                            
-                        @*</div>*@
-                        @*</div>*@
-                @*</div>*@
-            </form>
+            @if (Model.Status.ToString() == "Edition")
+            {
+                @if (Model.Origin == 0) //viene de la pagina Index de las notas
+                {
+                    <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                }
+                @if (Model.Origin == 2) //viene de la pagina NotesInEdit de las notas
+                {
+                    <a asp-action="FinishEditing" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                }
+            }
+        </div>
+        @*</div>
+        <div role="tabpanel" class="tab-pane" id="cms">*@
+        @*<br />*@
+
+        @*</div>*@
+        @*</div>*@
+        @*</div>*@
+    </form>
         }
     </div>
 </div>      

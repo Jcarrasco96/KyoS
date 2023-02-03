@@ -100,5 +100,7 @@ namespace KyoS.Web.Models
         public string Activity4 { get; set; }
         public string Goal4 { get; set; }
         public string Objetive4 { get; set; }
+
+        public string CodeBill { get; set; }
     }
 }

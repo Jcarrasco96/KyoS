@@ -1,9 +1,10 @@
 ﻿@model KyoS.Web.Models.NoteViewModel
 <div class="col-md-12">
     <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
-    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a><br/>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a><br />
     <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">View of Goals</a>
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <h5>Bill Code: @Model.CodeBill</h5>
     <hr />
 </div>
 <div class="col-md-8">

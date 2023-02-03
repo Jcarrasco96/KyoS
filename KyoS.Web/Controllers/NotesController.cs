@@ -453,6 +453,8 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
+                    CodeBill = workday_Client.CodeBill,
+
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
@@ -526,7 +528,8 @@ namespace KyoS.Web.Controllers
                     Schema = note.Schema,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
-                    
+                    CodeBill = workday_Client.CodeBill,
+
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
                     NotPlace = note.NotPlace,
@@ -749,6 +752,13 @@ namespace KyoS.Web.Controllers
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                     };
                     _context.Add(note_Activity);
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -898,7 +908,11 @@ namespace KyoS.Web.Controllers
                         };
                         _context.Add(notification);
                     }
-
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1152,6 +1166,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
                     Setting = "53",
+                    CodeBill = workday_Client.CodeBill,
 
                     Present1 = true,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -1264,6 +1279,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     Title = note.Title,
                     Setting = note.Setting,
+                    CodeBill = workday_Client.CodeBill,
 
                     //mental client status
                     Attentive = note.Attentive,
@@ -1612,7 +1628,13 @@ namespace KyoS.Web.Controllers
                         Other = (model.Present4) ? model.Other4 : false
                     };
                     _context.Add(note_Activity);
-                    
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1862,6 +1884,12 @@ namespace KyoS.Web.Controllers
                         _context.Add(notification);                                                              
                     }
 
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -2046,6 +2074,7 @@ namespace KyoS.Web.Controllers
                     Assessment = note.Assessment,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -2168,6 +2197,12 @@ namespace KyoS.Web.Controllers
                     Workday_Client workday_client = await _context.Workdays_Clients                                                                 
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
+
+                    if (workday_client.CodeBill != model.CodeBill)
+                    {
+                        workday_client.CodeBill = model.CodeBill;
+                    }
+
                     _context.Update(workday_client);
 
                     //Create individual note
@@ -2257,6 +2292,12 @@ namespace KyoS.Web.Controllers
                     Workday_Client workday_client = await _context.Workdays_Clients
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
+
+                    if (workday_client.CodeBill != model.CodeBill)
+                    {
+                        workday_client.CodeBill = model.CodeBill;
+                    }
+
                     _context.Update(workday_client);                    
                     
                     List<MessageEntity> messages = note.Workday_Cient.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
@@ -2448,7 +2489,8 @@ namespace KyoS.Web.Controllers
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
-                    Origin = origin,                   
+                    Origin = origin,      
+                    CodeBill = workday_Client.CodeBill,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -2507,6 +2549,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -2655,8 +2698,14 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                     };
-                    _context.Add(note_Activity);                   
-                    
+                    _context.Add(note_Activity);
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -2784,6 +2833,12 @@ namespace KyoS.Web.Controllers
                             Notification = true
                         };
                         _context.Add(notification);
+                    }
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
                     }
 
                     try
