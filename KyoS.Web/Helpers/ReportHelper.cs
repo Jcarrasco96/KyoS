@@ -4918,6 +4918,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("FacilitatorId", typeof(int));
             dt.Columns.Add("CauseOfNotPresent", typeof(string));
             dt.Columns.Add("GroupSize", typeof(int));
+            dt.Columns.Add("CodeBill", typeof(string));
 
             dt.Rows.Add(new object[]
                                         {
@@ -4928,7 +4929,8 @@ namespace KyoS.Web.Helpers
                                             workdayClient.Present,
                                             workdayClient.Facilitator.Id,
                                             workdayClient.CauseOfNotPresent,
-                                            (workdayClient.GroupSize != null) ? workdayClient.GroupSize : 0
+                                            (workdayClient.GroupSize != null) ? workdayClient.GroupSize : 0,
+                                            workdayClient.CodeBill
                                         });
 
             return dt;
