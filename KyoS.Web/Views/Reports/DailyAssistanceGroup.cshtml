@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "PSR Daily Assistance";
+    ViewData["Title"] = "Group Daily Assistance";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">PSR Daily assistance</li>
+        <li class="active">Group therapy daily assistance</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -65,7 +65,7 @@
                                                 <th class="col-md-7">Day</th>
                                                 <th></th>
                                             </tr>
-                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Group).OrderBy(d => d.Date))
                                             {
                                                 <tr>
                                                     <td align="center">
@@ -104,7 +104,7 @@
                                                         @Html.DisplayFor(modelItem => day.Day)
                                                     </td>
                                                     <td align="right">
-                                                        <a asp-action="PrintDailyAssistance" asp-route-id="@day.Id" class="btn btn-success" title="Daily assistance" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="PrintDailyAssistanceGroup" asp-route-id="@day.Id" class="btn btn-success" title="Daily assistance" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     </td>
                                                 </tr>
                                             }
@@ -222,7 +222,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('MM/DD/YYYY');    
+            $.fn.dataTable.moment('MM/DD/YYYY');
 
             $('#MyTable').DataTable({
               "order": [[3, "asc"]],

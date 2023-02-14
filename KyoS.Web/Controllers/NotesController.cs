@@ -9798,14 +9798,15 @@ namespace KyoS.Web.Controllers
         {
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
 
-                                                            .Include(wc => wc.Facilitator)
-                                                            .ThenInclude(c => c.Clinic)
+                                                                   .Include(wc => wc.Facilitator)
+                                                                    .ThenInclude(c => c.Clinic)
 
-                                                            .Include(wc => wc.Client)                                                  
+                                                                   .Include(wc => wc.Client)                                                  
 
-                                                            .Include(wc => wc.Workday)
+                                                                   .Include(wc => wc.Workday)
 
-                                                            .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek && wc.Workday.Service == service)).ToListAsync();
+                                                                   .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek 
+                                                                              && wc.Workday.Service == service)).ToListAsync();
             if (workdayClientList.Count() == 0)
             {
                 return RedirectToAction("Home/Error404");
@@ -9813,6 +9814,28 @@ namespace KyoS.Web.Controllers
 
             Stream stream = _reportHelper.PrintIndividualSign(workdayClientList);            
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintIndividualSignGroup(int id, int idWeek)
+        {
+            List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+                                                                    .ThenInclude(c => c.Clinic)
+
+                                                                   .Include(wc => wc.Client)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Group)).ToListAsync();
+            if (workdayClientList.Count() == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.PrintIndividualSignGroup(workdayClientList);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
 
         [Authorize(Roles = "Manager")]
@@ -10827,33 +10850,41 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic == null)
                 return View(null);
 
-            return View(await _context.Weeks.Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.Group)
+            return View(await _context.Weeks
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(wc => wc.Client)
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(g => g.Facilitator)
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(g => g.Facilitator)
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Note)
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
+                                      .ToListAsync());
+        }
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.MTPs)
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> IndividualSignInSheetGroup()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
 
-                                            .Include(w => w.Days)
-                                            .ThenInclude(d => d.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Client)
-                                            .ThenInclude(c => c.Clients_Diagnostics)
-                                            .ThenInclude(cd => cd.Diagnostic)
+            return View(await _context.Weeks
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(wc => wc.Client)                                            
 
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                      && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
-                                            .ToListAsync());
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(g => g.Facilitator)                                  
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
+                                      .ToListAsync());
         }
 
         #region Utils funtions

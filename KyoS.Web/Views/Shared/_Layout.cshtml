@@ -569,8 +569,20 @@
                                 Reports <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
-                                <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">PSR Therapy</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
+                                        <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Group Therapy</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Group Daily assistance", "DailyAssistanceGroup", "Reports")</li>
+                                        <li>@Html.ActionLink("Group Individual sign in sheet", "IndividualSignInSheetGroup", "Notes")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li>

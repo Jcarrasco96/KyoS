@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
 @{
-    ViewData["Title"] = "PSR Daily Assistance";
+    ViewData["Title"] = "Individual sign in sheet";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">PSR Daily assistance</li>
+        <li class="active">Group therapy individual sign in sheet</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Daily assistance</h3>
+                <h3 class="panel-title">Group therapy Individual sign in sheet</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -40,12 +40,6 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Final Date
                             </th>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <th class="col-md-2">
-                                    Clinic
-                                </th>
-                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -53,62 +47,36 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Days.Count() != 0)
+                                    @if (item.Clinic.Clients.Where(c => (c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group))).Count() != 0).Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
                                     <div style="display:none">
                                         <table class="table table-striped">
                                             <tr>
-                                                <th class="col-md-1"></th>
-                                                <th class="col-md-3">Date</th>
-                                                <th class="col-md-7">Day</th>
-                                                <th></th>
+                                                <th class="col-md-1" style="text-align:center;">Code</th>
+                                                <th class="col-md-6">Client Name</th>
+                                                <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
+                                                <th class="col-md-3"></th>
                                             </tr>
-                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.PSR).OrderBy(d => d.Date))
+                                            @foreach (var client in item.Clinic.Clients.Where(c => c.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id && wc.Facilitator.LinkedUser == User.Identity.Name && wc.Workday.Service == KyoS.Common.Enums.ServiceType.Group)).Count() != 0))
                                             {
                                                 <tr>
                                                     <td align="center">
-                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
-                                                        {
-                                                            <a class="icon-plus-sign-alt"></a>
-                                                            <div style="display:none">
-                                                                <table class="table table-striped">
-                                                                    <tr>
-                                                                        <th class="col-md-1" style="text-align:center;">Session</th>
-                                                                        <th class="col-md-8">Name</th>
-                                                                        <th class="col-md-2" style="text-align:center;">Present</th>
-                                                                    </tr>
-                                                                    @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
-                                                                    {
-                                                                        <tr>
-                                                                            <td align="center">
-                                                                                @Html.DisplayFor(modelItem => day_client.Session)
-                                                                            </td>
-                                                                            <td>
-                                                                                @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                                                            </td>
-                                                                            <td align="center">
-                                                                                @Html.DisplayFor(modelItem => day_client.Present)
-                                                                            </td>
-                                                                        </tr>
-                                                                    }
-                                                                </table>
-                                                            </div>
-                                                        }
+                                                        @Html.DisplayFor(modelItem => client.Code)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelItem => day.Date)
+                                                        @Html.DisplayFor(modelItem => client.Name)
                                                     </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => day.Day)
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => client.MedicaidID)
                                                     </td>
                                                     <td align="right">
-                                                        <a asp-action="PrintDailyAssistance" asp-route-id="@day.Id" class="btn btn-success" title="Daily assistance" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="PrintIndividualSignGroup" asp-route-id="@client.Id" asp-route-idWeek="@item.Id" class="btn btn-success" title="Print" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     </td>
                                                 </tr>
-                                            }
 
+                                            }
                                         </table>
                                     </div>
                                 </td>
@@ -195,12 +163,6 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.FinalDate)
                                 </td>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
-                                }
                             </tr>
                         }
                     </tbody>
@@ -222,7 +184,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('MM/DD/YYYY');    
+            $.fn.dataTable.moment('MM/DD/YYYY');
 
             $('#MyTable').DataTable({
               "order": [[3, "asc"]],
@@ -257,4 +219,5 @@
 
     </script>
 }
+
 

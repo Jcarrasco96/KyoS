@@ -58,6 +58,8 @@ namespace KyoS.Web.Helpers
         #region PSR general reports
         Stream DailyAssistanceReport(List<Workday_Client> workdayClientList);
         Stream PrintIndividualSign(List<Workday_Client> workdayClientList);
+        Stream DailyAssistanceReportGroup(List<Workday_Client> workdayClientList);
+        Stream PrintIndividualSignGroup(List<Workday_Client> workdayClientList);
         #endregion
 
         #region Intake reports
