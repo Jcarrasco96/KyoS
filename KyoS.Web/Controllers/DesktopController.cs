@@ -216,12 +216,11 @@ namespace KyoS.Web.Controllers
                 ViewBag.MTPReviewEdition =  _context.MTPReviews                                                               
                                                     .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                               && m.Status == AdendumStatus.Edition
-                                                              && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id ||
-                                                                 m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))).ToString();                
+                                                              && m.CreatedBy == user_logged.UserName)).ToString();                
                 ViewBag.MTPReviewPending = _context.MTPReviews
                                                    .Count(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                              && m.Status == AdendumStatus.Pending
-                                                             && m.Mtp.Client.Group.Facilitator.Id == facilitator.Id)).ToString();
+                                                             && m.CreatedBy == user_logged.UserName)).ToString();
 
                 ViewBag.ClientWithoutFARS = _context.Clients
                                                     
