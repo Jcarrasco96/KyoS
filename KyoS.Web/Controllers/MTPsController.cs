@@ -3159,8 +3159,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                            && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                            && m.Status == AdendumStatus.Pending 
+                                                            && m.CreatedBy == user_logged.UserName)
                                                   .ToListAsync());
                     }
                     else
@@ -3458,8 +3458,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Clinic)
 
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                        && (m.MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0)
                                                         ))
                                                   .OrderBy(m => m.Client.Clinic.Name)
                                                   .ToListAsync();
