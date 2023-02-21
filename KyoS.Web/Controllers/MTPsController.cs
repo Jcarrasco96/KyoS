@@ -182,6 +182,7 @@ namespace KyoS.Web.Controllers
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
                             GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList()
+
                     };
                     }
                     else
@@ -272,6 +273,12 @@ namespace KyoS.Web.Controllers
                         return View(model);
                     }
                 }
+
+                //esto es para cuando el MTP es de group no tener que cambiar mas nada
+                if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
+                {
+                    mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
+                }                
 
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 mtpEntity.Setting = form["Setting"].ToString();
