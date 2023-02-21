@@ -167,6 +167,7 @@ namespace KyoS.Web.Controllers
                             MedicationCode = "T1015",
                             IndividualCode = "H2019 HR",
                             FamilyCode = "H2019 HR",
+                            GroupCode = "90853",
                             PsychosocialCode = "H2017",
                             PsychosocialUnits = 16,
                             PsychosocialFrecuency = "4 times for week",
@@ -203,6 +204,7 @@ namespace KyoS.Web.Controllers
                             MedicationCode = "T1015",
                             IndividualCode = "H2019 HR",
                             FamilyCode = "H2019 HR",
+                            GroupCode = "90853",
                             PsychosocialCode = "H2017",
                             PsychosocialUnits = 16,
                             PsychosocialFrecuency = "4 times for week",
@@ -474,6 +476,12 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
+                }
+
+                //esto es para cuando el MTP es de group no tener que cambiar mas nada
+                if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
+                {
+                    mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
                 }
 
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
