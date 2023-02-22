@@ -66,9 +66,16 @@ namespace KyoS.Web.Data.Entities
                                     }
                                     else
                                     {
-                                        if ((workday_client.GroupNote != null) || (workday_client.Workday.Service == Common.Enums.ServiceType.Group))
+                                        if (workday_client.Workday.Service == Common.Enums.ServiceType.Group)
                                         {
-                                            units = units + 8;
+                                            if (workday_client.GroupNote2 != null)
+                                            {
+                                                units = units + workday_client.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                            }
+                                            else
+                                            {
+                                                units = units + 8;
+                                            }
                                         }
                                         else
                                         { 

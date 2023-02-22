@@ -11524,6 +11524,16 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+                                                       .ThenInclude(wc => wc.GroupNotes_Activities)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+                                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.Client)
                                                        .ThenInclude(c => c.Clients_Diagnostics)
                                                        .ThenInclude(cd => cd.Diagnostic)
@@ -11571,6 +11581,16 @@ namespace KyoS.Web.Controllers
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.NoteP)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+                                                       .ThenInclude(wc => wc.GroupNotes_Activities)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+                                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -11637,7 +11657,9 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Note)
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
-                                                                 .Include(wc => wc.GroupNote)                                                                 
+                                                                 .Include(wc => wc.GroupNote)
+                                                                 .Include(wc => wc.GroupNote2)
+                                                                 .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -11686,16 +11708,25 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.GroupNote != null)
+                                if (item.Workday.Service == ServiceType.Group)
                                 {
-                                    cantUnit += 8;
-                                    money += 8 * 7;
+                                    if (item.GroupNote2 != null)
+                                    {
+                                        cantUnit += item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                        money += item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 7;
+                                    }
+                                    else
+                                    {
+                                        cantUnit += 8;
+                                        money += 8 * 7;
+                                    }
                                 }
                                 else
                                 {
                                     cantUnit += 16;
                                     money += 16 * 9;
                                 }
+                                
                             }
                         }
                     }
@@ -11713,7 +11744,9 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Note)
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
-                                                                 .Include(wc => wc.GroupNote)                                                                
+                                                                 .Include(wc => wc.GroupNote)
+                                                                 .Include(wc => wc.GroupNote2)
+                                                                 .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -11762,10 +11795,18 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.GroupNote != null)
+                                if (item.Workday.Service == ServiceType.Group)
                                 {
-                                    cantUnit += 8;
-                                    money += 8 * 7;
+                                    if (item.GroupNote2 != null)
+                                    {
+                                        cantUnit += item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                        money += item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 7;
+                                    }
+                                    else
+                                    {
+                                        cantUnit += 8;
+                                        money += 8 * 7;
+                                    }
                                 }
                                 else
                                 {
@@ -13763,6 +13804,8 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
                                                                  .Include(wc => wc.GroupNote)
+                                                                 .Include(wc => wc.GroupNote2)
+                                                                 .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -13819,10 +13862,18 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.GroupNote != null)
+                                if (item.Workday.Service == ServiceType.Group)
                                 {
-                                    cantUnit += 8;
-                                    money += 8 * 7;
+                                    if (item.GroupNote2 != null)
+                                    {
+                                        cantUnit += item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                        money += item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 7;
+                                    }
+                                    else
+                                    {
+                                        cantUnit += 8;
+                                        money += 8 * 7;
+                                    }
                                 }
                                 else
                                 {
@@ -13853,6 +13904,8 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.NoteP)
                                                                  .Include(wc => wc.IndividualNote)
                                                                  .Include(wc => wc.GroupNote)
+                                                                 .Include(wc => wc.GroupNote2)
+                                                                 .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
@@ -13910,10 +13963,18 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.GroupNote != null)
+                                if (item.Workday.Service == ServiceType.Group)
                                 {
-                                    cantUnit += 8;
-                                    money += 8 * 7;
+                                    if (item.GroupNote2 != null)
+                                    {
+                                        cantUnit += item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                        money += item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 7;
+                                    }
+                                    else
+                                    {
+                                        cantUnit += 8;
+                                        money += 8 * 7;
+                                    }
                                 }
                                 else
                                 {

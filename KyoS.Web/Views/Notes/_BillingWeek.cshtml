@@ -64,70 +64,79 @@
                                                      <td>
                                                         @Html.DisplayFor(modelItem => element.Facilitator.Name)
                                                     </td>
-                                                    <td align="center">
-                                                        @if (element.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
-                                                        {
-                                                            @Html.DisplayFor(modelItem => element.Workday.Service)
-                                                        }
-                                                        else
-                                                        {
-                                                            @if (element.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
-                                                            {
-                                                                @Html.DisplayFor(modelItem => element.Workday.Service)
-                                                            }
-                                                            else
-                                                            {
-                                                                <label>Ind</label>
-                                                            }
-                                                        }
-                                                        |
-                                                        @if (element.Note != null)
-                                                        {
-                                                            if ((element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
-                                                            {
-                                                                <label>16</label>
-                                                            }
-                                                            if ((element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                            {
-                                                                <label>12</label>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            @if (element.NoteP != null)
-                                                            {
-                                                                if (element.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
-                                                                {
-                                                                    <label>@element.NoteP.RealUnits</label>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                if ((element.IndividualNote != null) || (element.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
-                                                                {
-                                                                    <label>4</label>
-                                                                }
-                                                                else
-                                                                {
-                                                                    if ((element.GroupNote != null) || (element.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
-                                                                    {
-                                                                        <label>8</label>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        if ((element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
-                                                                        {
-                                                                            <label>16</label>
-                                                                        }
-                                                                        if ((element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                        {
-                                                                            <label>12</label>
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    </td>
+                                                     <td align="center">
+                                                         @if (element.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                                         {
+                                                             @Html.DisplayFor(modelItem => element.Workday.Service)
+                                                         }
+                                                         else
+                                                         {
+                                                             @if (element.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                             {
+                                                                 @Html.DisplayFor(modelItem => element.Workday.Service)
+                                                             }
+                                                             else
+                                                             {
+                                                                 <label>Ind</label>
+                                                             }
+                                                         }
+                                                         |
+                                                         @if (element.Note != null)
+                                                         {
+                                                             if ((element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
+                                                             {
+                                                                 <label>16</label>
+                                                             }
+                                                             if ((element.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                             {
+                                                                 <label>12</label>
+                                                             }
+                                                         }
+                                                         else
+                                                         {
+                                                             @if (element.NoteP != null)
+                                                             {
+                                                                 if (element.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                                 {
+                                                                     <label>@element.NoteP.RealUnits</label>
+                                                                 }
+                                                             }
+                                                             else
+                                                             {
+                                                                 if ((element.IndividualNote != null) || (element.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                                 {
+                                                                     <label>4</label>
+                                                                 }
+                                                                 else
+                                                                 {
+                                                                     if (element.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                                     {
+                                                                         if (element.GroupNote2 != null)
+                                                                         {
+                                                                             var value = @element.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                             <label>@value</label>
+                                                                             value = 0;
+                                                                         }
+                                                                         else
+                                                                         {
+                                                                             <label>8</label>
+                                                                         }
+                                                                     }
+                                                                     else
+                                                                     {
+                                                                         if ((element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                         {
+                                                                             <label>16</label>
+                                                                         }
+                                                                         if ((element.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                         {
+                                                                             <label>12</label>
+                                                                         }
+                                                                     }
+                                                                 }
+                                                             }
+                                                         }
+                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => element.Workday.Date)
                                                     </td>

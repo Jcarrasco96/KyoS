@@ -82,9 +82,18 @@
                                             }
                                             else
                                             {
-                                                if ((item.GroupNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group))
+                                                if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                 {
-                                                    <label>8</label>
+                                                    if (item.GroupNote2 != null)
+                                                    {
+                                                        var value = @item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                        <label>@value</label>
+                                                        value = 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        <label>8</label>
+                                                    }
                                                 }
                                                 else
                                                 {
