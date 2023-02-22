@@ -1,0 +1,79 @@
+﻿@model KyoS.Web.Models.GroupNote3ViewModel
+@{
+    if (User.IsInRole("Facilitator"))
+    {
+        ViewData["Title"] = "Preview Group note";
+    }
+    if (User.IsInRole("Supervisor"))
+    {
+        ViewData["Title"] = "Approve Group note";
+    }
+}
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Group Notes Supervision", "GroupNotesSupervision", "Notes")
+        </li>
+        <li class="active">Approve Group note</li>
+    </ul>
+</div>
+
+@if (User.IsInRole("Facilitator"))
+{
+    <h4>Preview Group note</h4>
+}
+@if (User.IsInRole("Supervisor"))
+{
+    <h4>Approve Group note</h4>
+}
+
+<div class="row">
+    <div>
+        <form asp-action="ApproveGroupNote3" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <partial name="_GroupMCS3ReadOnly" />
+            <partial name="_GroupNotes3ReadOnly" />            
+            <div class="form-group col-md-12">
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
+                    @if (Model.Origin == 0) //viene de la pagina GroupNotesSupervision
+                    {
+                        <a asp-action="GroupNotesSupervision" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 7) //viene de la pagina GroupPendingNotes
+                    {
+                        <a asp-action="PendingGroupNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 8) //viene de la pagina GroupNotesWithReview
+                    {
+                        <a asp-action="GroupNotesWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 9) //viene de la pagina Notifications
+                    {
+                        <a asp-controller="Messages" asp-action="Notifications" class="btn btn-success">Back</a>
+                    }
+                }
+                @if (User.IsInRole("Facilitator"))
+                {
+                    <a asp-action="GroupNotes" class="btn btn-success">Back</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

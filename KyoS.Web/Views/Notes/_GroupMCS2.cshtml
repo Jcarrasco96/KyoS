@@ -1,0 +1,32 @@
+﻿@model KyoS.Web.Models.GroupNote2ViewModel
+<div class="col-md-12">
+    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
+    <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
+    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    <h5>Bill Code: @Model.CodeBill</h5>
+    <hr />
+</div>
+<div class="col-md-12">
+    <p style="font-weight:bold;">Group Leader Interventions:</p>
+</div>
+
+<div class="col-md-12">
+    <input type="checkbox" asp-for="GroupLeaderFacilitator" /> Group leader facilitator discussion about: &nbsp;&nbsp; <strong>@Model.Topic1</strong></br>
+    <input type="checkbox" asp-for="Facilitated" /> Faciliated group process</br>
+    <input type="checkbox" asp-for="Involved" /> Involved all group members in topic discussion</br>
+    <input type="checkbox" asp-for="Kept" /> Kept group members focused on the topic</br>
+    <input type="checkbox" asp-for="GroupLeaderProviderPsychoeducation" /> Group Leader provided psychoeeducation regarding clarifying and identifying better coping skills</br>
+    <input type="checkbox" asp-for="GroupLeaderProviderSupport" /> Group Leader provided support and structure dynamic</br>
+    <input type="checkbox" asp-for="Assigned" /> Assigned homework regarding the topic of: &nbsp;&nbsp;<input asp-for="AssignedTopicOf" style="width:40%" />
+
+</div>
+
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+
+
+
+

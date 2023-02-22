@@ -190,5 +190,7 @@ namespace KyoS.Web.Helpers
         ObjectiveTempViewModel ToObjectiveTempViewModel(ObjectiveTempEntity model);
         Task<BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId);
         BriefViewModel ToBriefViewModel(BriefEntity model);
+        Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew);
+        Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew);
     }
 }

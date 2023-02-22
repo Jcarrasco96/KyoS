@@ -42,14 +42,17 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-4" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.LogoPath)
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Schema
+                            <th class="col-md-2" style="text-align:center;">
+                                PSR Schema
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Group Schema
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -58,24 +61,27 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td align="center">
-                                @if (!string.IsNullOrEmpty(item.LogoPath))
-                                {
-                                    <img src="@Url.Content(item.LogoPath)" alt="Image" style="width:100px;height:100px;max-width: 100%; height: auto;" />
-                                }
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Schema)
-                            </td>
-                            <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @if (!string.IsNullOrEmpty(item.LogoPath))
+                                    {
+                                        <img src="@Url.Content(item.LogoPath)" alt="Image" style="width:100px;height:100px;max-width: 100%; height: auto;" />
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Schema)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.SchemaGroup)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

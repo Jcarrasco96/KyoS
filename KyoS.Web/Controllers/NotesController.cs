@@ -2449,7 +2449,16 @@ namespace KyoS.Web.Controllers
                                                  .Include(n => n.GroupNotes_Activities)
                                                  .ThenInclude(na => na.Activity)
 
-                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);            
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema2 ))
+            {
+                return RedirectToAction(nameof(EditGroupNote2), new { id = id, origin = origin });
+            }
+            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema3 ))
+            {
+                return RedirectToAction(nameof(EditGroupNote3), new { id = id, origin = origin });
+            }
 
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
             MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -2874,6 +2883,1061 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> EditGroupNote2(int id, int error = 0, int origin = 0, string errorText = "")
+        {
+            GroupNote2ViewModel noteViewModel;
+
+            //la nota no tiene linkeado ningun goal
+            if (error == 1)
+                ViewBag.Error = "0";
+
+            //la nota no esta completa, faltan campos por editar
+            if (error == 2)
+                ViewBag.Error = "2";
+
+            //la nota tiene problemas con el genero
+            if (error == 4)
+            {
+                ViewBag.Error = "4";
+                ViewBag.errorText = errorText;
+            }
+
+            //el cliente seleccionado tiene una nota ya creada de otro servicio en ese mismo horario
+            if (error == 5)
+            {
+                ViewBag.Error = "5";
+            }
+
+            Workday_Client workday_Client = await _context.Workdays_Clients
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(waf => waf.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
+            if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
+            {
+                ViewBag.Error = "1";
+                noteViewModel = new GroupNote2ViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            //el cliente no tiene mtp activos
+            if (workday_Client.Client.MTPs.Where(m => m.Active == true).Count() == 0)
+            {
+                ViewBag.Error = "3";
+                noteViewModel = new GroupNote2ViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Client)
+                                                 .ThenInclude(c => c.Group)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.GroupNotes2_Activities)
+                                                 .ThenInclude(na => na.Activity)
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
+            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            List<Workday_Activity_Facilitator> activities = workday_Client.Workday
+                                                                          .Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator == facilitator_logged)
+                                                                          .ToList();
+
+            //Evaluate setting for goals's classification
+            SettingEntity setting = _context.Settings
+                                            .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
+            if (note == null)   //la nota no está creada
+            {
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new GroupNote2ViewModel
+                {
+                    Id = id,
+                    Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
+                    Origin = origin,
+                    CodeBill = workday_Client.CodeBill,
+
+                    //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    Goals1 = goals,
+                    Objetives1 = objs,
+
+                    //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
+                    Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
+                    Goals2 = goals,
+                    Objetives2 = objs,
+
+                    Workday_Cient = workday_Client
+                };
+            }
+            else
+            {
+                List<GroupNote2_Activity> note_Activity = await _context.GroupNotes2_Activities
+
+                                                                       .Include(na => na.Activity)
+                                                                       .ThenInclude(a => a.Theme)
+
+                                                                       .Include(na => na.Objetive)
+                                                                       .ThenInclude(o => o.Goal)
+
+                                                                       .Where(na => na.GroupNote2.Id == note.Id)
+                                                                       .ToListAsync();
+
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new GroupNote2ViewModel
+                {
+                    Id = id,
+                    Origin = origin,
+                    Workday_Cient = workday_Client,
+                    Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
+
+                    Other = note.Other,
+                    Impaired = note.Impaired,
+                    Euthymic = note.Euthymic,
+                    Depressed = note.Depressed,
+                    Anxious = note.Anxious,
+                    Irritable = note.Irritable,
+                    Guarded = note.Guarded,
+                    Withdrawn = note.Withdrawn,
+                    Hostile = note.Hostile,
+                    Adequated = note.Adequated,
+                    Assigned = note.Assigned,
+                    AssignedTopicOf = note.AssignedTopicOf,
+                    Congruent = note.Congruent,
+                    Descompensating = note.Descompensating,
+                    Developing = note.Developing,
+                    Dramatic = note.Dramatic,
+                    Euphoric = note.Euphoric,
+                    Expressing = note.Expressing,
+                    Facilitated = note.Facilitated,
+                    Fair = note.Fair,
+                    FairAttitude = note.FairAttitude,
+                    Faulty = note.Faulty,
+                    Getting = note.Getting,
+                    GroupLeaderFacilitator = note.GroupLeaderFacilitator,
+                    GroupLeaderFacilitatorAbout = note.GroupLeaderFacilitatorAbout,
+                    GroupLeaderProviderPsychoeducation = note.GroupLeaderProviderPsychoeducation,
+                    GroupLeaderProviderSupport = note.GroupLeaderProviderSupport,
+                    Inadequated = note.Inadequated,
+                    InsightAdequate = note.InsightAdequate,
+                    Involved = note.Involved,
+                    Kept = note.Kept,
+                    LearningAbout = note.LearningAbout,
+                    LearningFrom = note.LearningFrom,
+                    Limited = note.Limited,
+                    MildlyImpaired = note.MildlyImpaired,
+                    MinimalProgress = note.MinimalProgress,
+                    ModerateProgress = note.ModerateProgress,
+                    Motivated = note.Motivated,
+                    Negativistic = note.Negativistic,
+                    NoProgress = note.NoProgress,
+                    Normal = note.Normal,
+                    NotToPerson = note.NotToPerson,
+                    NotToPlace = note.NotToPlace,
+                    NotToTime = note.NotToTime,
+                    Optimistic = note.Optimistic,
+                    Oriented = note.Oriented,
+                    OtherExplain = note.OtherExplain,
+                    Providing = note.Providing,
+                    Received = note.Received,
+                    Regression = note.Regression,
+                    SevereryImpaired = note.SevereryImpaired,
+                    Sharing = note.Sharing,
+                    Short = note.Short,
+                    SignificantProgress = note.SignificantProgress,
+                    UnableToDetermine = note.UnableToDetermine,
+                    Unmotivated = note.Unmotivated,
+                    
+                    
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    IdGoal1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0,
+                    Goals1 = goals,
+                    IdObjetive1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Id : 0,
+                    //Paso el IdGoal1 como parametro
+                    Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0),
+                    Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
+
+                    Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
+                    IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
+                    Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
+                    AnswerClient2 = note_Activity[1].AnswerClient,
+                    IdGoal2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Goal.Id : 0,
+                    Goals2 = goals,
+                    IdObjetive2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Id : 0,
+                    //Paso el IdGoal2 como parametro
+                    Objetives2 = _combosHelper.GetComboObjetives(((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Goal.Id : 0),
+                    Intervention2 = ((note_Activity.Count > 1) && (note_Activity[1].Objetive != null)) ? note_Activity[1].Objetive.Intervention : string.Empty
+                };
+            }
+            return View(noteViewModel);
+        }
+
+        //Group Notes
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditGroupNote2(GroupNote2ViewModel model, IFormCollection form)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clinic)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.MTPs)
+
+                                                                           .Include(wc => wc.Facilitator)
+
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                GroupNote2Entity note = await _context.GroupNotes2
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Messages)
+
+                                                      .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+
+                GroupNote2_Activity note_Activity;
+                GroupNote2Entity groupNoteEntity;
+                if (note == null)   //la nota no está creada
+                {
+                    //Verify the client is not present in other services of notes at the same time
+                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    {
+                        return RedirectToAction(nameof(EditGroupNote), new { id = model.Id, error = 5, origin = model.Origin });
+                    }
+
+                    groupNoteEntity = await _converterHelper.ToGroupNote2Entity(model, true);
+
+                    //Update plan progress
+                    /*groupNoteEntity.SignificantProgress = (form["Progress"] == "SignificantProgress") ? true : false;
+                    groupNoteEntity.ModerateProgress = (form["Progress"] == "ModerateProgress") ? true : false;
+                    groupNoteEntity.MinimalProgress = (form["Progress"] == "MinimalProgress") ? true : false;
+                    groupNoteEntity.NoProgress = (form["Progress"] == "NoProgress") ? true : false;
+                    groupNoteEntity.Regression = (form["Progress"] == "Regression") ? true : false;
+                    groupNoteEntity.Descompensating = (form["Progress"] == "Decompensating") ? true : false;
+                    groupNoteEntity.UnableToDetermine = (form["Progress"] == "Unabled") ? true : false;*/
+
+                    //vinculo el mtp activo del cliente a la nota que se creará
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                        groupNoteEntity.MTPId = mtp.Id;
+
+                    _context.Add(groupNoteEntity);
+
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = groupNoteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        AnswerClient = model.AnswerClient1.Trim(),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                    };
+                    _context.Add(note_Activity);
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = groupNoteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
+                        AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                    };
+                    _context.Add(note_Activity);
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(GroupNotes));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedGroupNotes));
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else    //la nota está creada y sólo se debe actualizar
+                {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0 && model.IdObjetive2 == 0)
+                        {
+                            return RedirectToAction(nameof(EditGroupNote2), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                    }
+
+                    note.Adequated = model.Adequated;
+                    note.Assigned = model.Assigned;
+                    note.AssignedTopicOf = model.AssignedTopicOf;
+                    note.Congruent = model.Congruent;
+                    note.Descompensating = model.Descompensating;
+                    note.Developing = model.Developing;
+                    note.Dramatic = model.Dramatic;
+                    note.Euphoric = model.Euphoric;
+                    note.Expressing = model.Expressing;
+                    note.Facilitated = model.Facilitated;
+                    note.Fair = model.Fair;
+                    note.FairAttitude = model.FairAttitude;
+                    note.Faulty = model.Faulty;
+                    note.Getting = model.Getting;
+                    note.GroupLeaderFacilitator = model.GroupLeaderFacilitator;
+                    note.GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout;
+                    note.GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation;
+                    note.GroupLeaderProviderSupport = model.GroupLeaderProviderSupport;
+                    note.Inadequated = model.Inadequated;
+                    note.InsightAdequate = model.InsightAdequate;
+                    note.Involved = model.Involved;
+                    note.Kept = model.Kept;
+                    note.LearningAbout = model.LearningAbout;
+                    note.LearningFrom = model.LearningFrom;
+                    note.Limited = model.Limited;
+                    note.MildlyImpaired = model.MildlyImpaired;
+                    note.MinimalProgress = model.MinimalProgress;
+                    note.ModerateProgress = model.ModerateProgress;
+                    note.Motivated = model.Motivated;
+                    note.Negativistic = model.Negativistic;
+                    note.NoProgress = model.NoProgress;
+                    note.Normal = model.Normal;
+                    note.NotToPerson = model.NotToPerson;
+                    note.NotToPlace = model.NotToPlace;
+                    note.NotToTime = model.NotToTime;
+                    note.Optimistic = model.Optimistic;
+                    note.Oriented = model.Oriented;
+                    note.OtherExplain = model.OtherExplain;
+                    note.Providing = model.Providing;
+                    note.Received = model.Received;
+                    note.Regression = model.Regression;
+                    note.SevereryImpaired = model.SevereryImpaired;
+                    note.Sharing = model.Sharing;
+                    note.Short = model.Short;
+                    note.SignificantProgress = model.SignificantProgress;
+                    note.UnableToDetermine = model.UnableToDetermine;
+                    note.Unmotivated = model.Unmotivated;
+                    note.MTPId = model.MTPId;
+                    note.Other = model.Other;
+                    note.Impaired = model.Impaired;
+                    note.Euthymic = model.Euthymic;
+                    note.Depressed = model.Depressed;
+                    note.Anxious = model.Anxious;
+                    note.Irritable = model.Irritable;
+                    note.Guarded = model.Guarded;
+                    note.Withdrawn = model.Withdrawn;
+                    note.Hostile = model.Hostile;
+                    
+                    //actualizo el mtp activo del cliente a la nota que se creará                   
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                        note.MTPId = mtp.Id;
+
+                    _context.Update(note);
+
+                    List<GroupNote2_Activity> noteActivities_list = await _context.GroupNotes2_Activities
+                                                                                 .Where(na => na.GroupNote2.Id == note.Id)
+                                                                                 .ToListAsync();
+
+                    _context.RemoveRange(noteActivities_list);
+
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        AnswerClient = model.AnswerClient1.Trim(),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                    };
+                    _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
+                        AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                    };
+                    _context.Add(note_Activity);
+
+                    List<MessageEntity> messages = note.Workday_Cient.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = workday_Client,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed group note",
+                            Text = $"The group note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
+                    }
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(GroupNotes));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedGroupNotes));
+                        if (model.Origin == 2)
+                            return RedirectToAction(nameof(GroupNotesInEdit));
+                        if (model.Origin == 3)
+                            return RedirectToAction(nameof(PendingGroupNotes));
+                        if (model.Origin == 4)
+                            return RedirectToAction(nameof(GroupNotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditGroupNote3(int id, int error = 0, int origin = 0, string errorText = "")
+        {
+            GroupNote3ViewModel noteViewModel;
+
+            //la nota no tiene linkeado ningun goal
+            if (error == 1)
+                ViewBag.Error = "0";
+
+            //la nota no esta completa, faltan campos por editar
+            if (error == 2)
+                ViewBag.Error = "2";
+
+            //la nota tiene problemas con el genero
+            if (error == 4)
+            {
+                ViewBag.Error = "4";
+                ViewBag.errorText = errorText;
+            }
+
+            //el cliente seleccionado tiene una nota ya creada de otro servicio en ese mismo horario
+            if (error == 5)
+            {
+                ViewBag.Error = "5";
+            }
+
+            Workday_Client workday_Client = await _context.Workdays_Clients
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(waf => waf.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorEntity facilitator_logged = _context.Facilitators
+                                                           .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+
+            //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
+            if (workday_Client.Workday.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator == facilitator_logged).Count() == 0)
+            {
+                ViewBag.Error = "1";
+                noteViewModel = new GroupNote3ViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            //el cliente no tiene mtp activos
+            if (workday_Client.Client.MTPs.Where(m => m.Active == true).Count() == 0)
+            {
+                ViewBag.Error = "3";
+                noteViewModel = new GroupNote3ViewModel
+                {
+                    Id = workday_Client.Workday.Id,
+                };
+                return View(noteViewModel);
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Client)
+                                                 .ThenInclude(c => c.Group)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.GroupNotes2_Activities)
+                                                 .ThenInclude(na => na.Activity)
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
+            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            List<Workday_Activity_Facilitator> activities = workday_Client.Workday
+                                                                          .Workdays_Activities_Facilitators
+                                                                          .Where(waf => waf.Facilitator == facilitator_logged)
+                                                                          .ToList();
+
+            //Evaluate setting for goals's classification
+            SettingEntity setting = _context.Settings
+                                            .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
+
+            if (note == null)   //la nota no está creada
+            {
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new GroupNote3ViewModel
+                {
+                    Id = id,
+                    Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
+                    Origin = origin,
+                    CodeBill = workday_Client.CodeBill,
+
+                    //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    Goals1 = goals,
+                    Objetives1 = objs,
+
+                    Workday_Cient = workday_Client
+                };
+            }
+            else
+            {
+                List<GroupNote2_Activity> note_Activity = await _context.GroupNotes2_Activities
+
+                                                                       .Include(na => na.Activity)
+                                                                       .ThenInclude(a => a.Theme)
+
+                                                                       .Include(na => na.Objetive)
+                                                                       .ThenInclude(o => o.Goal)
+
+                                                                       .Where(na => na.GroupNote2.Id == note.Id)
+                                                                       .ToListAsync();
+
+                IEnumerable<SelectListItem> goals = null;
+                IEnumerable<SelectListItem> objs = null;
+                if (mtp != null)
+                {
+                    if (setting != null)
+                    {
+                        if (setting.MHClassificationOfGoals)
+                            goals = _combosHelper.GetComboGoalsByService(mtp.Id, ServiceType.Group);
+                        else
+                            goals = _combosHelper.GetComboGoals(mtp.Id);
+                    }
+
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+                else
+                {
+                    goals = _combosHelper.GetComboGoals(0);
+                    objs = _combosHelper.GetComboObjetives(0);
+                }
+
+                noteViewModel = new GroupNote3ViewModel
+                {
+                    Id = id,
+                    Origin = origin,
+                    Workday_Cient = workday_Client,
+                    Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
+
+                    Other = note.Other,
+                    Impaired = note.Impaired,
+                    Euthymic = note.Euthymic,
+                    Depressed = note.Depressed,
+                    Anxious = note.Anxious,
+                    Irritable = note.Irritable,
+                    Guarded = note.Guarded,
+                    Withdrawn = note.Withdrawn,
+                    Hostile = note.Hostile,
+                    Adequated = note.Adequated,
+                    Assigned = note.Assigned,
+                    AssignedTopicOf = note.AssignedTopicOf,
+                    Congruent = note.Congruent,
+                    Descompensating = note.Descompensating,
+                    Developing = note.Developing,
+                    Dramatic = note.Dramatic,
+                    Euphoric = note.Euphoric,
+                    Expressing = note.Expressing,
+                    Facilitated = note.Facilitated,
+                    Fair = note.Fair,
+                    FairAttitude = note.FairAttitude,
+                    Faulty = note.Faulty,
+                    Getting = note.Getting,
+                    GroupLeaderFacilitator = note.GroupLeaderFacilitator,
+                    GroupLeaderFacilitatorAbout = note.GroupLeaderFacilitatorAbout,
+                    GroupLeaderProviderPsychoeducation = note.GroupLeaderProviderPsychoeducation,
+                    GroupLeaderProviderSupport = note.GroupLeaderProviderSupport,
+                    Inadequated = note.Inadequated,
+                    InsightAdequate = note.InsightAdequate,
+                    Involved = note.Involved,
+                    Kept = note.Kept,
+                    LearningAbout = note.LearningAbout,
+                    LearningFrom = note.LearningFrom,
+                    Limited = note.Limited,
+                    MildlyImpaired = note.MildlyImpaired,
+                    MinimalProgress = note.MinimalProgress,
+                    ModerateProgress = note.ModerateProgress,
+                    Motivated = note.Motivated,
+                    Negativistic = note.Negativistic,
+                    NoProgress = note.NoProgress,
+                    Normal = note.Normal,
+                    NotToPerson = note.NotToPerson,
+                    NotToPlace = note.NotToPlace,
+                    NotToTime = note.NotToTime,
+                    Optimistic = note.Optimistic,
+                    Oriented = note.Oriented,
+                    OtherExplain = note.OtherExplain,
+                    Providing = note.Providing,
+                    Received = note.Received,
+                    Regression = note.Regression,
+                    SevereryImpaired = note.SevereryImpaired,
+                    Sharing = note.Sharing,
+                    Short = note.Short,
+                    SignificantProgress = note.SignificantProgress,
+                    UnableToDetermine = note.UnableToDetermine,
+                    Unmotivated = note.Unmotivated,
+                    
+
+                    Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
+                    IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
+                    Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    IdGoal1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0,
+                    Goals1 = goals,
+                    IdObjetive1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Id : 0,
+                    //Paso el IdGoal1 como parametro
+                    Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0),
+                    Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
+
+                };
+            }
+            return View(noteViewModel);
+        }
+
+        //Group Notes
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditGroupNote3(GroupNote3ViewModel model, IFormCollection form) 
+        {                    
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clinic)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.MTPs)
+
+                                                                           .Include(wc => wc.Facilitator)
+
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                GroupNote2Entity note = await _context.GroupNotes2
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Messages)
+
+                                                      .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+
+                GroupNote2_Activity note_Activity;
+                GroupNote2Entity groupNoteEntity;
+                if (note == null)   //la nota no está creada
+                {
+                    //Verify the client is not present in other services of notes at the same time
+                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    {
+                        return RedirectToAction(nameof(EditGroupNote), new { id = model.Id, error = 5, origin = model.Origin });
+                    }
+
+                    groupNoteEntity = await _converterHelper.ToGroupNote3Entity(model, true);
+
+                    //Update plan progress
+                    /*groupNoteEntity.SignificantProgress = (form["Progress"] == "SignificantProgress") ? true : false;
+                    groupNoteEntity.ModerateProgress = (form["Progress"] == "ModerateProgress") ? true : false;
+                    groupNoteEntity.MinimalProgress = (form["Progress"] == "MinimalProgress") ? true : false;
+                    groupNoteEntity.NoProgress = (form["Progress"] == "NoProgress") ? true : false;
+                    groupNoteEntity.Regression = (form["Progress"] == "Regression") ? true : false;
+                    groupNoteEntity.Descompensating = (form["Progress"] == "Decompensating") ? true : false;
+                    groupNoteEntity.UnableToDetermine = (form["Progress"] == "Unabled") ? true : false;*/
+
+                    //vinculo el mtp activo del cliente a la nota que se creará
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                        groupNoteEntity.MTPId = mtp.Id;
+
+                    _context.Add(groupNoteEntity);
+
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = groupNoteEntity,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        AnswerClient = model.AnswerClient1.Trim(),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                    };
+                    _context.Add(note_Activity);
+                   
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(GroupNotes));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedGroupNotes));
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else    //la nota está creada y sólo se debe actualizar
+                {
+                    //I verify that the note has a selected goal
+                    if (note.Status == NoteStatus.Pending)
+                    {
+                        if (model.IdObjetive1 == 0 )
+                        {
+                            return RedirectToAction(nameof(EditGroupNote2), new { id = model.Id, error = 1, origin = model.Origin });
+                        }
+                    }
+
+                    note.Adequated = model.Adequated;
+                    note.Assigned = model.Assigned;
+                    note.AssignedTopicOf = model.AssignedTopicOf;
+                    note.Congruent = model.Congruent;
+                    note.Descompensating = model.Descompensating;
+                    note.Developing = model.Developing;
+                    note.Dramatic = model.Dramatic;
+                    note.Euphoric = model.Euphoric;
+                    note.Expressing = model.Expressing;
+                    note.Facilitated = model.Facilitated;
+                    note.Fair = model.Fair;
+                    note.FairAttitude = model.FairAttitude;
+                    note.Faulty = model.Faulty;
+                    note.Getting = model.Getting;
+                    note.GroupLeaderFacilitator = model.GroupLeaderFacilitator;
+                    note.GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout;
+                    note.GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation;
+                    note.GroupLeaderProviderSupport = model.GroupLeaderProviderSupport;
+                    note.Inadequated = model.Inadequated;
+                    note.InsightAdequate = model.InsightAdequate;
+                    note.Involved = model.Involved;
+                    note.Kept = model.Kept;
+                    note.LearningAbout = model.LearningAbout;
+                    note.LearningFrom = model.LearningFrom;
+                    note.Limited = model.Limited;
+                    note.MildlyImpaired = model.MildlyImpaired;
+                    note.MinimalProgress = model.MinimalProgress;
+                    note.ModerateProgress = model.ModerateProgress;
+                    note.Motivated = model.Motivated;
+                    note.Negativistic = model.Negativistic;
+                    note.NoProgress = model.NoProgress;
+                    note.Normal = model.Normal;
+                    note.NotToPerson = model.NotToPerson;
+                    note.NotToPlace = model.NotToPlace;
+                    note.NotToTime = model.NotToTime;
+                    note.Optimistic = model.Optimistic;
+                    note.Oriented = model.Oriented;
+                    note.OtherExplain = model.OtherExplain;
+                    note.Providing = model.Providing;
+                    note.Received = model.Received;
+                    note.Regression = model.Regression;
+                    note.SevereryImpaired = model.SevereryImpaired;
+                    note.Sharing = model.Sharing;
+                    note.Short = model.Short;
+                    note.SignificantProgress = model.SignificantProgress;
+                    note.UnableToDetermine = model.UnableToDetermine;
+                    note.Unmotivated = model.Unmotivated;
+                    note.MTPId = model.MTPId;
+                    note.Other = model.Other;
+                    note.Impaired = model.Impaired;
+                    note.Euthymic = model.Euthymic;
+                    note.Depressed = model.Depressed;
+                    note.Anxious = model.Anxious;
+                    note.Irritable = model.Irritable;
+                    note.Guarded = model.Guarded;
+                    note.Withdrawn = model.Withdrawn;
+                    note.Hostile = model.Hostile;
+
+                    //actualizo el mtp activo del cliente a la nota que se creará                   
+                    MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+                    if (mtp != null)
+                        note.MTPId = mtp.Id;
+
+                    _context.Update(note);
+
+                    List<GroupNote2_Activity> noteActivities_list = await _context.GroupNotes2_Activities
+                                                                                 .Where(na => na.GroupNote2.Id == note.Id)
+                                                                                 .ToListAsync();
+
+                    _context.RemoveRange(noteActivities_list);
+
+                    note_Activity = new GroupNote2_Activity
+                    {
+                        GroupNote2 = note,
+                        Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
+                        AnswerClient = model.AnswerClient1.Trim(),
+                        Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                    };
+                    _context.Add(note_Activity);
+                    await _context.SaveChangesAsync();
+
+                    List<MessageEntity> messages = note.Workday_Cient.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = workday_Client,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = null,
+                            Discharge = null,
+                            Title = "Update on reviewed group note",
+                            Text = $"The group note of {workday_Client.ClientName} on {workday_Client.Workday.Date.ToShortDateString()} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
+                    }
+
+                    if (workday_Client.CodeBill != model.CodeBill)
+                    {
+                        workday_Client.CodeBill = model.CodeBill;
+                        _context.Update(workday_Client);
+                    }
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (model.Origin == 0)
+                            return RedirectToAction(nameof(GroupNotes));
+                        if (model.Origin == 1)
+                            return RedirectToAction(nameof(NotStartedGroupNotes));
+                        if (model.Origin == 2)
+                            return RedirectToAction(nameof(GroupNotesInEdit));
+                        if (model.Origin == 3)
+                            return RedirectToAction(nameof(PendingGroupNotes));
+                        if (model.Origin == 4)
+                            return RedirectToAction(nameof(GroupNotesWithReview));
+                        if (model.Origin == 5)
+                            return RedirectToAction("MessagesOfNotes", "Messages");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the element");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> FinishEditing(int id, int origin = 0)
         {
@@ -3093,6 +4157,11 @@ namespace KyoS.Web.Controllers
 
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
+            if (note == null) 
+            {
+                return RedirectToAction(nameof(FinishEditingGroup2), new { id = id, origin = origin });
+            }
+
             bool exist = false;
             bool complete = true;
             string gender_problems = string.Empty;
@@ -3126,6 +4195,78 @@ namespace KyoS.Web.Controllers
                 if (origin == 2)
                     return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 2 });
             }            
+
+            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
+            {
+                if (origin == 0)
+                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 0, errorText = gender_problems });
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 2, errorText = gender_problems });
+            }
+
+            note.Status = NoteStatus.Pending;
+            _context.Update(note);
+
+            await _context.SaveChangesAsync();
+            if (origin == 2)
+                return RedirectToAction(nameof(GroupNotesInEdit), new { id = 1 });
+            else
+                return RedirectToAction(nameof(GroupNotes), new { id = 1 });
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> FinishEditingGroup2(int id, int origin = 0)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Client)
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                  .Include(n => n.Workday_Cient)
+                                                  .ThenInclude(wc => wc.Facilitator)
+                                                  .ThenInclude(f => f.Clinic)
+
+                                                  .Include(n => n.GroupNotes2_Activities)
+                                                  .ThenInclude(na => na.Objetive)
+
+                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            bool exist = false;
+            bool complete = true;
+            string gender_problems = string.Empty;
+            int index = 1;
+            foreach (GroupNote2_Activity item in note.GroupNotes2_Activities)
+            {
+                if (item.Objetive != null)
+                    exist = true;
+                if (string.IsNullOrEmpty(item.AnswerClient) || string.IsNullOrEmpty(item.AnswerFacilitator))
+                    complete = false;
+                if (!string.IsNullOrEmpty(item.AnswerClient))
+                {
+                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Client Answer #{index}" : $"{gender_problems}, Client Answer #{index}";
+                }
+               /* if (!string.IsNullOrEmpty(item.AnswerFacilitator))
+                {
+                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
+                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Facilitator Answer #{index}" : $"{gender_problems}, Facilitator Answer #{index}";
+                }*/
+                index++;
+            }
+
+           
+            if (!exist)     //la nota no tiene goal relacionado
+            {
+                if (origin == 0)
+                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 0 });
+                if (origin == 2)
+                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 2 });
+            }
 
             if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
             {
@@ -4043,6 +5184,11 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
+            if (note == null)
+            {
+                return RedirectToAction(nameof(ApproveGroupNote2), new { id = id, origin = origin });
+            }
+
             GroupNoteViewModel noteViewModel = null;
 
             List<GroupNote_Activity> note_Activity = await _context.GroupNotes_Activities
@@ -4133,6 +5279,339 @@ namespace KyoS.Web.Controllers
             }
 
             GroupNoteEntity note = await _context.GroupNotes                                                 
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+
+            if (note == null)
+            {
+                GroupNote2Entity note2 = await _context.GroupNotes2
+                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+                note2.Status = NoteStatus.Approved;
+                note2.DateOfApprove = DateTime.Now;
+                note2.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                _context.Update(note2);
+            }
+
+
+            note.Status = NoteStatus.Approved;
+            note.DateOfApprove = DateTime.Now;
+            note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(note);
+
+            await _context.SaveChangesAsync();
+
+            if (model.Origin == 7)  //viene de la pagina PendingGroupNotes
+                return RedirectToAction(nameof(PendingGroupNotes));
+            if (model.Origin == 8)  //viene de la pagina GroupNotesWithReview
+                return RedirectToAction(nameof(GroupNotesWithReview));
+            if (model.Origin == 9)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
+
+            return RedirectToAction(nameof(GroupNotesSupervision));
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ApproveGroupNote2(int id, int origin = 0)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clinic)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Facilitator)
+
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Client)
+                                                 .ThenInclude(c => c.Group)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.GroupNotes2_Activities)
+                                                 .ThenInclude(na => na.Activity)
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            
+            List<GroupNote2_Activity> note_Activity = await _context.GroupNotes2_Activities
+
+                                                                   .Include(na => na.Activity)
+                                                                   .ThenInclude(a => a.Theme)
+
+                                                                   .Include(n => n.Objetive)
+                                                                   .ThenInclude(o => o.Goal)
+
+                                                                   .Where(na => na.GroupNote2.Id == note.Id)
+                                                                   .ToListAsync();
+            if (note_Activity.Count() == 2)
+            {
+                GroupNote2ViewModel noteViewModel = null;
+                noteViewModel = new GroupNote2ViewModel
+                {
+                    Id = id,
+                    Origin = origin,
+                    Workday_Cient = workday_Client,
+                    Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
+
+                    Other = note.Other,
+                    Impaired = note.Impaired,
+                    Euthymic = note.Euthymic,
+                    Depressed = note.Depressed,
+                    Anxious = note.Anxious,
+                    Irritable = note.Irritable,
+                    Guarded = note.Guarded,
+                    Withdrawn = note.Withdrawn,
+                    Hostile = note.Hostile,
+                    Adequated = note.Adequated,
+                    Assigned = note.Assigned,
+                    AssignedTopicOf = note.AssignedTopicOf,
+                    Congruent = note.Congruent,
+                    Descompensating = note.Descompensating,
+                    Developing = note.Developing,
+                    Dramatic = note.Dramatic,
+                    Euphoric = note.Euphoric,
+                    Expressing = note.Expressing,
+                    Facilitated = note.Facilitated,
+                    Fair = note.Fair,
+                    FairAttitude = note.FairAttitude,
+                    Faulty = note.Faulty,
+                    Getting = note.Getting,
+                    GroupLeaderFacilitator = note.GroupLeaderFacilitator,
+                    GroupLeaderFacilitatorAbout = note.GroupLeaderFacilitatorAbout,
+                    GroupLeaderProviderPsychoeducation = note.GroupLeaderProviderPsychoeducation,
+                    GroupLeaderProviderSupport = note.GroupLeaderProviderSupport,
+                    Inadequated = note.Inadequated,
+                    InsightAdequate = note.InsightAdequate,
+                    Involved = note.Involved,
+                    Kept = note.Kept,
+                    LearningAbout = note.LearningAbout,
+                    LearningFrom = note.LearningFrom,
+                    Limited = note.Limited,
+                    MildlyImpaired = note.MildlyImpaired,
+                    MinimalProgress = note.MinimalProgress,
+                    ModerateProgress = note.ModerateProgress,
+                    Motivated = note.Motivated,
+                    Negativistic = note.Negativistic,
+                    NoProgress = note.NoProgress,
+                    Normal = note.Normal,
+                    NotToPerson = note.NotToPerson,
+                    NotToPlace = note.NotToPlace,
+                    NotToTime = note.NotToTime,
+                    Optimistic = note.Optimistic,
+                    Oriented = note.Oriented,
+                    OtherExplain = note.OtherExplain,
+                    Providing = note.Providing,
+                    Received = note.Received,
+                    Regression = note.Regression,
+                    SevereryImpaired = note.SevereryImpaired,
+                    Sharing = note.Sharing,
+                    Short = note.Short,
+                    SignificantProgress = note.SignificantProgress,
+                    UnableToDetermine = note.UnableToDetermine,
+                    Unmotivated = note.Unmotivated,
+
+                    Topic1 = note_Activity[0].Activity.Theme.Name,
+                    Activity1 = note_Activity[0].Activity.Name,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+
+                    Topic2 = note_Activity[1].Activity.Theme.Name,
+                    Activity2 = note_Activity[1].Activity.Name,
+                    AnswerClient2 = note_Activity[1].AnswerClient,
+                    Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty
+                };
+                return View(noteViewModel);
+            }
+            if (note_Activity.Count() == 1)
+            {
+                return RedirectToAction(nameof(ApproveGroupNote3), new { id = id, origin = origin });
+            }
+
+            return View(null);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ApproveGroupNote2(GroupNote2ViewModel model)
+        {
+            if (model == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+
+
+            note.Status = NoteStatus.Approved;
+            note.DateOfApprove = DateTime.Now;
+            note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+            _context.Update(note);
+
+            await _context.SaveChangesAsync();
+
+            if (model.Origin == 7)  //viene de la pagina PendingGroupNotes
+                return RedirectToAction(nameof(PendingGroupNotes));
+            if (model.Origin == 8)  //viene de la pagina GroupNotesWithReview
+                return RedirectToAction(nameof(GroupNotesWithReview));
+            if (model.Origin == 9)  ///viene de la pagina Notifications
+                return RedirectToAction("Notifications", "Messages");
+
+            return RedirectToAction(nameof(GroupNotesSupervision));
+        }
+
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ApproveGroupNote3(int id, int origin = 0)
+        {
+            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clinic)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Group)
+
+                                                                           .Include(wc => wc.Facilitator)
+
+                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Client)
+                                                 .ThenInclude(c => c.Group)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.GroupNotes2_Activities)
+                                                 .ThenInclude(na => na.Activity)
+
+                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+
+            List<GroupNote2_Activity> note_Activity = await _context.GroupNotes2_Activities
+
+                                                                   .Include(na => na.Activity)
+                                                                   .ThenInclude(a => a.Theme)
+
+                                                                   .Include(n => n.Objetive)
+                                                                   .ThenInclude(o => o.Goal)
+
+                                                                   .Where(na => na.GroupNote2.Id == note.Id)
+                                                                   .ToListAsync();
+            GroupNote3ViewModel noteViewModel = null;
+
+            if (note_Activity.Count() == 1)
+            {
+                noteViewModel = new GroupNote3ViewModel
+                {
+                    Id = id,
+                    Origin = origin,
+                    Workday_Cient = workday_Client,
+                    Status = note.Status,
+                    CodeBill = workday_Client.CodeBill,
+
+                    Other = note.Other,
+                    Impaired = note.Impaired,
+                    Euthymic = note.Euthymic,
+                    Depressed = note.Depressed,
+                    Anxious = note.Anxious,
+                    Irritable = note.Irritable,
+                    Guarded = note.Guarded,
+                    Withdrawn = note.Withdrawn,
+                    Hostile = note.Hostile,
+                    Adequated = note.Adequated,
+                    Assigned = note.Assigned,
+                    AssignedTopicOf = note.AssignedTopicOf,
+                    Congruent = note.Congruent,
+                    Descompensating = note.Descompensating,
+                    Developing = note.Developing,
+                    Dramatic = note.Dramatic,
+                    Euphoric = note.Euphoric,
+                    Expressing = note.Expressing,
+                    Facilitated = note.Facilitated,
+                    Fair = note.Fair,
+                    FairAttitude = note.FairAttitude,
+                    Faulty = note.Faulty,
+                    Getting = note.Getting,
+                    GroupLeaderFacilitator = note.GroupLeaderFacilitator,
+                    GroupLeaderFacilitatorAbout = note.GroupLeaderFacilitatorAbout,
+                    GroupLeaderProviderPsychoeducation = note.GroupLeaderProviderPsychoeducation,
+                    GroupLeaderProviderSupport = note.GroupLeaderProviderSupport,
+                    Inadequated = note.Inadequated,
+                    InsightAdequate = note.InsightAdequate,
+                    Involved = note.Involved,
+                    Kept = note.Kept,
+                    LearningAbout = note.LearningAbout,
+                    LearningFrom = note.LearningFrom,
+                    Limited = note.Limited,
+                    MildlyImpaired = note.MildlyImpaired,
+                    MinimalProgress = note.MinimalProgress,
+                    ModerateProgress = note.ModerateProgress,
+                    Motivated = note.Motivated,
+                    Negativistic = note.Negativistic,
+                    NoProgress = note.NoProgress,
+                    Normal = note.Normal,
+                    NotToPerson = note.NotToPerson,
+                    NotToPlace = note.NotToPlace,
+                    NotToTime = note.NotToTime,
+                    Optimistic = note.Optimistic,
+                    Oriented = note.Oriented,
+                    OtherExplain = note.OtherExplain,
+                    Providing = note.Providing,
+                    Received = note.Received,
+                    Regression = note.Regression,
+                    SevereryImpaired = note.SevereryImpaired,
+                    Sharing = note.Sharing,
+                    Short = note.Short,
+                    SignificantProgress = note.SignificantProgress,
+                    UnableToDetermine = note.UnableToDetermine,
+                    Unmotivated = note.Unmotivated,
+
+                    Topic1 = note_Activity[0].Activity.Theme.Name,
+                    Activity1 = note_Activity[0].Activity.Name,
+                    AnswerClient1 = note_Activity[0].AnswerClient,
+                    Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty
+
+                };
+               
+            }
+
+            return View(noteViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ApproveGroupNote3(GroupNote3ViewModel model)
+        {
+            if (model == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupNote2Entity note = await _context.GroupNotes2
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
 
@@ -8726,7 +10205,9 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(w => w.Week)
 
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                 && wc.GroupNote == null && wc.Present == true
+                                                 && (wc.GroupNote == null 
+                                                 && wc.GroupNote2 == null)
+                                                 && wc.Present == true
                                                  && wc.Workday.Service == ServiceType.Group))
                                       .ToListAsync());
         }
@@ -8789,7 +10270,8 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(w => w.Week)
 
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                  && wc.GroupNote.Status == NoteStatus.Edition
+                                                                  && (wc.GroupNote.Status == NoteStatus.Edition
+                                                                  || wc.GroupNote2.Status == NoteStatus.Edition)
                                                                   && wc.Workday.Service == ServiceType.Group))
                                                        .ToListAsync());
         }
@@ -8913,7 +10395,8 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                            .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                                      && wc.GroupNote.Status == NoteStatus.Pending
+                                                                      && (wc.GroupNote.Status == NoteStatus.Pending
+                                                                      || wc.GroupNote2.Status == NoteStatus.Pending)
                                                                       && wc.Workday.Service == ServiceType.Group))
                                                            .ToListAsync());
             }
@@ -8938,7 +10421,8 @@ namespace KyoS.Web.Controllers
                                                                .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                                                .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                          && wc.GroupNote.Status == NoteStatus.Pending
+                                                                          && (wc.GroupNote.Status == NoteStatus.Pending
+                                                                          || wc.GroupNote2.Status == NoteStatus.Pending)
                                                                           && wc.Workday.Service == ServiceType.Group))
                                                                .ToListAsync());
                 }
@@ -9003,7 +10487,8 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(w => w.Week)
 
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                 && wc.GroupNote.Status == NoteStatus.Approved
+                                                 && (wc.GroupNote.Status == NoteStatus.Approved
+                                                    || wc.GroupNote2.Status == NoteStatus.Approved)
                                                  && wc.Workday.Service == ServiceType.Group))
                                       .ToListAsync());
         }
@@ -9301,7 +10786,8 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
-                                                     && wc.GroupNote.Status == NoteStatus.Pending
+                                                     && (wc.GroupNote.Status == NoteStatus.Pending
+                                                     || wc.GroupNote2.Status == NoteStatus.Pending)
                                                      && wc.Messages.Count() > 0
                                                      && wc.Workday.Service == ServiceType.Group))
                                           .ToListAsync());
@@ -9329,7 +10815,8 @@ namespace KyoS.Web.Controllers
                                               .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
                                               .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                         && wc.GroupNote.Status == NoteStatus.Pending
+                                                         && (wc.GroupNote.Status == NoteStatus.Pending
+                                                            || wc.GroupNote2.Status == NoteStatus.Pending)
                                                          && wc.Messages.Count() > 0
                                                          && wc.Workday.Service == ServiceType.Group))
                                               .ToListAsync());

@@ -37,6 +37,7 @@ namespace KyoS.Web.Data.Entities
         public string FaxNo { get; set; }
 
         public SchemaType Schema { get; set; }
+        public SchemaTypeGroup SchemaGroup { get; set; }
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }
         public ICollection<CaseMannagerEntity> CaseManagers { get; set; }

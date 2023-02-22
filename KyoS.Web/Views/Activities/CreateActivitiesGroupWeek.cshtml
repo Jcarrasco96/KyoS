@@ -37,30 +37,48 @@
     <div>
         &nbsp;
     </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="IdTopic1" class="control-label"></label>
-            <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
-            <span asp-validation-for="IdTopic1" class="text-danger"></span>
+    @if (ViewData["Schema"].ToString() == "Schema1" || ViewData["Schema"].ToString() == "Schema2")
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic1" class="control-label"></label>
+                <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                <span asp-validation-for="IdTopic1" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity1" class="control-label"></label>
+                <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                <span asp-validation-for="IdActivity1" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-9">
-            <label asp-for="IdActivity1" class="control-label"></label>
-            <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
-            <span asp-validation-for="IdActivity1" class="text-danger"></span>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic2" class="control-label"></label>
+                <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
+                <span asp-validation-for="IdTopic2" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity2" class="control-label"></label>
+                <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
+                <span asp-validation-for="IdActivity2" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="IdTopic2" class="control-label"></label>
-            <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
-            <span asp-validation-for="IdTopic2" class="text-danger"></span>
+    }
+    else
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="IdTopic1" class="control-label"></label>
+                <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                <span asp-validation-for="IdTopic1" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="IdActivity1" class="control-label"></label>
+                <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                <span asp-validation-for="IdActivity1" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-9">
-            <label asp-for="IdActivity2" class="control-label"></label>
-            <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
-            <span asp-validation-for="IdActivity2" class="text-danger"></span>
-        </div>
-    </div>
+    }
     <div>
         &nbsp;
     </div>

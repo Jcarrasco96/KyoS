@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230221194643_Model2GroupTherapy")]
+    partial class Model2GroupTherapy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2448,241 +2450,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote2Entity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("Adequated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Anxious")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Assigned")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AssignedTopicOf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Congruent")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("DateOfApprove")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Depressed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Descompensating")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Developing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Dramatic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Euphoric")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Euthymic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Expressing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Facilitated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Fair")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("FairAttitude")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Faulty")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Getting")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("GroupLeaderFacilitator")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("GroupLeaderFacilitatorAbout")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("GroupLeaderProviderPsychoeducation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("GroupLeaderProviderSupport")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Guarded")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Hostile")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Impaired")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Inadequated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("InsightAdequate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Involved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Irritable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Kept")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LearningAbout")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LearningFrom")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Limited")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("MTPId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("MildlyImpaired")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("MinimalProgress")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ModerateProgress")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Motivated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Negativistic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NoProgress")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Normal")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NotToPerson")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NotToPlace")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NotToTime")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Optimistic")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Oriented")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Other")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OtherExplain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Providing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Received")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Regression")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SevereryImpaired")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Sharing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Short")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SignificantProgress")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SupervisorId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("UnableToDetermine")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Unmotivated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Withdrawn")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Workday_CientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Workday_Client_FK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupervisorId");
-
-                    b.HasIndex("Workday_CientId");
-
-                    b.ToTable("GroupNotes2");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote2_Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AnswerClient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AnswerFacilitator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GroupNote2Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ObjetiveId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("GroupNote2Id");
-
-                    b.HasIndex("ObjetiveId");
-
-                    b.ToTable("GroupNotes2_Activities");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -2855,9 +2622,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AnswerFacilitator")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupNote2EntityId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("GroupNoteId")
                         .HasColumnType("int");
 
@@ -2867,8 +2631,6 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
-
-                    b.HasIndex("GroupNote2EntityId");
 
                     b.HasIndex("GroupNoteId");
 
@@ -10078,42 +9840,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Facilitator");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote2Entity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
-                        .WithMany()
-                        .HasForeignKey("SupervisorId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Workday_Cient")
-                        .WithMany()
-                        .HasForeignKey("Workday_CientId");
-
-                    b.Navigation("Supervisor");
-
-                    b.Navigation("Workday_Cient");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote2_Activity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.GroupNote2Entity", "GroupNote2")
-                        .WithMany()
-                        .HasForeignKey("GroupNote2Id");
-
-                    b.HasOne("KyoS.Web.Data.Entities.ObjetiveEntity", "Objetive")
-                        .WithMany()
-                        .HasForeignKey("ObjetiveId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("GroupNote2");
-
-                    b.Navigation("Objetive");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
@@ -10136,10 +9862,6 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.ActivityEntity", "Activity")
                         .WithMany()
                         .HasForeignKey("ActivityId");
-
-                    b.HasOne("KyoS.Web.Data.Entities.GroupNote2Entity", null)
-                        .WithMany("GroupNotes_Activities")
-                        .HasForeignKey("GroupNote2EntityId");
 
                     b.HasOne("KyoS.Web.Data.Entities.GroupNoteEntity", "GroupNote")
                         .WithMany("GroupNotes_Activities")
@@ -11450,11 +11172,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupEntity", b =>
                 {
                     b.Navigation("Clients");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNote2Entity", b =>
-                {
-                    b.Navigation("GroupNotes_Activities");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>

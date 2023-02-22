@@ -1,0 +1,229 @@
+﻿@model KyoS.Web.Models.GroupNote2ViewModel
+@{
+    ViewData["Title"] = "Group note management";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Group Notes", "GroupNotes", "Notes")
+        </li>
+        <li class="active">Group Note</li>
+    </ul>
+</div>
+
+<h4>Group Note Management</h4>
+
+<div class="row">
+    <div>
+        <div class="col-md-12">
+            @if (ViewBag.Error == "0")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note must have at least one related goal.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "1")
+            {
+                <div class="alert alert-block alert-danger">
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are no activities for this date. Please must create them.
+                    </strong>
+                    <a asp-action="CreateActivitiesGroupWeek" asp-controller="Activities" asp-route-id="@Model.Id">Activities per day</a>
+                </div>
+            }
+            @if (ViewBag.Error == "2")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The note has fields mandatory.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "3")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The client have not active MTP.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "4")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are gender issues in: @ViewBag.errorText
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Error == "5")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The selected client has a created note from another service at that time.
+                    </strong>
+                </div>
+            }
+        </div>
+        @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
+        {
+            <form asp-action="EditGroupNote2" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdActivity1" />
+                <input type="hidden" asp-for="IdActivity2" />                
+                <input type="hidden" asp-for="Origin" />
+                <input type="hidden" asp-for="CodeBill" />
+                @*<input type="hidden" asp-for="Schema" />*@
+                <partial name="_GroupMCS2" />
+                <partial name="_GroupNotes2" />
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Save All" class="btn btn-primary" />
+                    @if (Model.Origin == 0) //viene de la pagina GroupNotes de las notas de grupo
+                    {
+                        <a asp-action="GroupNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 1) //viene de la pagina NotStartedGroupNotes de las notas de grupo
+                    {
+                        <a asp-action="NotStartedGroupNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 2) //viene de la pagina GroupNotesInEdit de las notas
+                    {
+                        <a asp-action="GroupNotesInEdit" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 3) //viene de la pagina PendingGroupNotes de las notas
+                    {
+                        <a asp-action="PendingGroupNotes" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 4) //viene de la pagina GroupNotesWithReview de las notas
+                    {
+                        <a asp-action="GroupNotesWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (Model.Origin == 5) //viene de la pagina MessagesOfNotes
+                    {
+                        <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
+                    }
+
+                    @if (Model.Status.ToString() == "Edition")
+                    {
+                        @if (Model.Origin == 0) //viene de la pagina GroupNotes de las notas
+                        {
+                            <a asp-action="FinishEditingGroup" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                        }
+                        @if (Model.Origin == 2) //viene de la pagina GroupNotesInEdit de las notas
+                        {
+                            <a asp-action="FinishEditingGroup" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                        }
+                    }
+                </div>                
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#cbGoal1").change(function () {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                    $("#cbObjetive1").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                        $("#lbIntervention1").text(data);
+                    });
+                });
+            })
+            $("#cbGoal2").change(function () {
+                var url = "@Url.Action("GetObjetiveList", "Notes")";
+                $.get(url, { idGoal: $("#cbGoal2").val() }, function (data) {
+                    $("#cbObjetive2").empty();
+                    $.each(data, function (index, row) {
+                        $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+
+                    //actualizo el label con la intervention que corresponde al obj seleccionado
+                    url = "@Url.Action("GetIntervention", "Notes")";
+                    $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
+                        $("#lbIntervention2").text(data);
+                    });
+                });
+            })
+            $("#cbObjetive1").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                    $("#lbIntervention1").text(data);
+                });
+            })
+            $("#cbObjetive2").change(function () {
+                var url = "@Url.Action("GetIntervention", "Notes")";
+                $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
+                    $("#lbIntervention2").text(data);
+                });
+            })
+            $("#EnglishAnswerClient1").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient1").val() }, function (data) {
+                    $("#AnswerClient1").val(data);
+                });
+            })
+            $("#EnglishAnswerFacilitator1").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator1").val() }, function (data) {
+                    $("#AnswerFacilitator1").val(data);
+                });
+            })
+            $("#EnglishAnswerClient2").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerClient2").val() }, function (data) {
+                    $("#AnswerClient2").val(data);
+                });
+            })
+            $("#EnglishAnswerFacilitator2").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#AnswerFacilitator2").val() }, function (data) {
+                    $("#AnswerFacilitator2").val(data);
+                });
+            })            
+            $("#EnglishPlanNote").click(function () {
+                var url = "@Url.Action("Translate", "Notes")";
+                $.get(url, { text: $("#PlanNote").val() }, function (data) {
+                    $("#PlanNote").val(data);
+                });
+            })
+        });
+    </script>
+}
+
+
+

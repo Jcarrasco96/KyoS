@@ -38,5 +38,6 @@ namespace KyoS.Web.Data.Entities
         public bool DeniedBill { get; set; }
         public bool Hold { get; set; }
         public string CodeBill { get; set; }
+        public GroupNote2Entity GroupNote2 { get; set; }
     }
 }

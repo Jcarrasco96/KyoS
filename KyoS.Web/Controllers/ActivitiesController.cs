@@ -1568,7 +1568,7 @@ namespace KyoS.Web.Controllers
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
             }
-
+            ViewData["Schema"] = user_logged.Clinic.SchemaGroup;
             return View(model);
         }
 
@@ -1577,11 +1577,12 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateActivitiesGroupWeek(Workday_Activity_FacilitatorGroupViewModel model)
         {
-            if (ModelState.IsValid)
+            FacilitatorEntity facilitator_logged = await _context.Facilitators
+                                                                    .Include(f => f.Clinic)
+                                                                    .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+            if (ModelState.IsValid || (facilitator_logged.Clinic.SchemaGroup == SchemaTypeGroup.Schema3 && model.IdTopic1 > 0 && model.IdActivity1 > 0))
             {
-                FacilitatorEntity facilitator_logged = await _context.Facilitators
-                                                                     .Include(f => f.Clinic)
-                                                                     .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+               
 
                 WorkdayEntity workday = await _context.Workdays
                                                       .FirstOrDefaultAsync(w => w.Id == model.IdWorkday);
@@ -1607,14 +1608,18 @@ namespace KyoS.Web.Controllers
                     Schema = SchemaType.Schema1
                 };
                 _context.Add(activity);
-                activity = new Workday_Activity_Facilitator
+                
+                if (facilitator_logged.Clinic.SchemaGroup != SchemaTypeGroup.Schema3)
                 {
-                    Facilitator = facilitator_logged,
-                    Workday = workday,
-                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
-                    Schema = SchemaType.Schema1
-                };
-                _context.Add(activity);        
+                    activity = new Workday_Activity_Facilitator
+                    {
+                        Facilitator = facilitator_logged,
+                        Workday = workday,
+                        Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
+                        Schema = SchemaType.Schema1
+                    };
+                    _context.Add(activity);
+                }
 
                 try
                 {

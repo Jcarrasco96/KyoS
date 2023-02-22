@@ -6295,5 +6295,148 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public async Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew)
+        {
+            GroupNote2Entity entity = await _context.GroupNotes2.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new GroupNote2Entity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                Status = NoteStatus.Edition,
+                Other = model.Other,
+                Impaired = model.Impaired,
+                Euthymic = model.Euthymic,
+                Depressed = model.Depressed,
+                Anxious = model.Anxious,
+                Irritable = model.Irritable,
+                Guarded = model.Guarded,
+                Withdrawn = model.Withdrawn,
+                Hostile = model.Hostile,
+
+                Adequated = model.Adequated,
+                Assigned = model.Assigned,
+                AssignedTopicOf = model.AssignedTopicOf,
+                Congruent = model.Congruent,
+                Descompensating = model.Descompensating,
+                Developing = model.Developing,
+                Dramatic = model.Dramatic,
+                Euphoric = model.Euphoric,
+                Expressing = model.Expressing,
+                Facilitated = model.Facilitated,
+                Fair = model.Fair,
+                FairAttitude = model.FairAttitude,
+                Faulty = model.Faulty,
+                Getting = model.Getting,
+                GroupLeaderFacilitator = model.GroupLeaderFacilitator,
+                GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout,
+                GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation,
+                GroupLeaderProviderSupport = model.GroupLeaderProviderSupport,
+                Inadequated = model.Inadequated,
+                InsightAdequate = model.InsightAdequate,
+                Involved = model.Involved,
+                Kept = model.Kept,
+                LearningAbout = model.LearningAbout,
+                LearningFrom = model.LearningFrom,
+                Limited = model.Limited,
+                MildlyImpaired = model.MildlyImpaired,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                Motivated = model.Motivated,
+                Negativistic = model.Negativistic,
+                NoProgress = model.NoProgress,
+                Normal = model.Normal,
+                NotToPerson = model.NotToPerson,
+                NotToPlace = model.NotToPlace,
+                NotToTime = model.NotToTime,
+                Optimistic = model.Optimistic,
+                Oriented = model.Oriented,
+                OtherExplain = model.OtherExplain,
+                Providing = model.Providing,
+                Received = model.Received,
+                Regression = model.Regression,
+                SevereryImpaired = model.SevereryImpaired,
+                Sharing = model.Sharing,
+                Short = model.Short,
+                SignificantProgress = model.SignificantProgress,
+                UnableToDetermine = model.UnableToDetermine,
+                Unmotivated = model.Unmotivated,
+                MTPId = model.MTPId
+                
+
+
+            };
+        }
+
+        public async Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew)
+        {
+            GroupNote2Entity entity = await _context.GroupNotes2.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new GroupNote2Entity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                Status = NoteStatus.Edition,
+                Other = model.Other,
+                Impaired = model.Impaired,
+                Euthymic = model.Euthymic,
+                Depressed = model.Depressed,
+                Anxious = model.Anxious,
+                Irritable = model.Irritable,
+                Guarded = model.Guarded,
+                Withdrawn = model.Withdrawn,
+                Hostile = model.Hostile,
+
+                Adequated = model.Adequated,
+                Assigned = model.Assigned,
+                AssignedTopicOf = model.AssignedTopicOf,
+                Congruent = model.Congruent,
+                Descompensating = model.Descompensating,
+                Developing = model.Developing,
+                Dramatic = model.Dramatic,
+                Euphoric = model.Euphoric,
+                Expressing = model.Expressing,
+                Facilitated = model.Facilitated,
+                Fair = model.Fair,
+                FairAttitude = model.FairAttitude,
+                Faulty = model.Faulty,
+                Getting = model.Getting,
+                GroupLeaderFacilitator = model.GroupLeaderFacilitator,
+                GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout,
+                GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation,
+                GroupLeaderProviderSupport = model.GroupLeaderProviderSupport,
+                Inadequated = model.Inadequated,
+                InsightAdequate = model.InsightAdequate,
+                Involved = model.Involved,
+                Kept = model.Kept,
+                LearningAbout = model.LearningAbout,
+                LearningFrom = model.LearningFrom,
+                Limited = model.Limited,
+                MildlyImpaired = model.MildlyImpaired,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                Motivated = model.Motivated,
+                Negativistic = model.Negativistic,
+                NoProgress = model.NoProgress,
+                Normal = model.Normal,
+                NotToPerson = model.NotToPerson,
+                NotToPlace = model.NotToPlace,
+                NotToTime = model.NotToTime,
+                Optimistic = model.Optimistic,
+                Oriented = model.Oriented,
+                OtherExplain = model.OtherExplain,
+                Providing = model.Providing,
+                Received = model.Received,
+                Regression = model.Regression,
+                SevereryImpaired = model.SevereryImpaired,
+                Sharing = model.Sharing,
+                Short = model.Short,
+                SignificantProgress = model.SignificantProgress,
+                UnableToDetermine = model.UnableToDetermine,
+                Unmotivated = model.Unmotivated,
+                MTPId = model.MTPId
+                
+
+            };
+        }
+
     }
 }
