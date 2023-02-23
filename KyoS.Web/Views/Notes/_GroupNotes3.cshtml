@@ -54,22 +54,6 @@
     <hr />
 </div>
 
-@if (Model.Goals1.Count() == 1)
-{
-    <div class="col-md-12">
-        <div class="alert alert-warning form-group col-md-4">
-            <i class="icon-info-sign"></i>
-            The client must have MTP, it is mandatory.
-        </div>
-        <div class="form-group col-md-4">
-            &nbsp;
-        </div>
-    </div>
-}
-<div class="col-md-12">
-    <hr />
-</div>
-
 
 @*si se va a crear la nota doy la posibilidad de seleccionar el avance del plan para que despues se agregue al futuro plan*@
 @if (@Model.Workday_Cient.GroupNote2 == null)
