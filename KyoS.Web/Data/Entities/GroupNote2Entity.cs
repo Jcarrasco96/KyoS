@@ -90,5 +90,6 @@ namespace KyoS.Web.Data.Entities
         public ICollection<GroupNote2_Activity> GroupNotes2_Activities { get; set; }
 
         public int? MTPId { get; set; }
+        public SchemaTypeGroup Schema { get; set; }
     }
 }

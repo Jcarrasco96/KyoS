@@ -6360,9 +6360,8 @@ namespace KyoS.Web.Helpers
                 SignificantProgress = model.SignificantProgress,
                 UnableToDetermine = model.UnableToDetermine,
                 Unmotivated = model.Unmotivated,
-                MTPId = model.MTPId
-                
-
+                MTPId = model.MTPId,
+                Schema = model.Schema
 
             };
         }
@@ -6432,8 +6431,8 @@ namespace KyoS.Web.Helpers
                 SignificantProgress = model.SignificantProgress,
                 UnableToDetermine = model.UnableToDetermine,
                 Unmotivated = model.Unmotivated,
-                MTPId = model.MTPId
-                
+                MTPId = model.MTPId,
+                Schema = model.Schema                
 
             };
         }

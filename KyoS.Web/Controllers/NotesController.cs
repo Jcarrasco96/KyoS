@@ -2451,15 +2451,36 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema2 ))
+            GroupNote2Entity note2 = await _context.GroupNotes2
+
+                                                   .Include(n => n.Workday_Cient)
+                                                
+                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (note == null && note2 == null)
             {
-                return RedirectToAction(nameof(EditGroupNote2), new { id = id, origin = origin });
-            }
-            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema3 ))
-            {
-                return RedirectToAction(nameof(EditGroupNote3), new { id = id, origin = origin });
+                if (workday_Client.Client.Clinic.SchemaGroup == SchemaTypeGroup.Schema2)
+                {
+                    return RedirectToAction(nameof(EditGroupNote2), new { id = id, error = errorText, origin = origin, errorText = errorText });
+                }
+                if (workday_Client.Client.Clinic.SchemaGroup == SchemaTypeGroup.Schema3)
+                {
+                    return RedirectToAction(nameof(EditGroupNote3), new { id = id, error = errorText, origin = origin, errorText = errorText });
+                }
             }
 
+
+            if ((note2 != null))
+            {
+                if (note2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    return RedirectToAction(nameof(EditGroupNote2), new { id = id, error = error, origin = origin, errorText = errorText });
+                }
+                if (note2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    return RedirectToAction(nameof(EditGroupNote3), new { id = id, error = error, origin = origin, errorText = errorText });
+                }
+            }
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
             MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
@@ -2883,6 +2904,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditGroupNote2(int id, int error = 0, int origin = 0, string errorText = "")
         {
             GroupNote2ViewModel noteViewModel;
@@ -3027,7 +3049,8 @@ namespace KyoS.Web.Controllers
                     Goals2 = goals,
                     Objetives2 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Schema = workday_Client.Client.Clinic.SchemaGroup
                 };
             }
             else
@@ -3070,6 +3093,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Schema = note.Schema,
 
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3328,6 +3352,7 @@ namespace KyoS.Web.Controllers
                     note.Guarded = model.Guarded;
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
+                    note.Schema = model.Schema;
                     
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -3427,6 +3452,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditGroupNote3(int id, int error = 0, int origin = 0, string errorText = "")
         {
             GroupNote3ViewModel noteViewModel;
@@ -3564,7 +3590,8 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Schema = workday_Client.Client.Clinic.SchemaGroup
                 };
             }
             else
@@ -3607,6 +3634,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Schema = note.Schema,
 
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3786,7 +3814,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (model.IdObjetive1 == 0 )
                         {
-                            return RedirectToAction(nameof(EditGroupNote2), new { id = model.Id, error = 1, origin = model.Origin });
+                            return RedirectToAction(nameof(EditGroupNote3), new { id = model.Id, error = 1, origin = model.Origin });
                         }
                     }
 
@@ -3847,6 +3875,7 @@ namespace KyoS.Web.Controllers
                     note.Guarded = model.Guarded;
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
+                    note.Schema = model.Schema;
 
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -5184,9 +5213,18 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            if (note == null)
+            GroupNote2Entity note2 = await _context.GroupNotes2
+
+                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (note2 != null && note2.Schema == SchemaTypeGroup.Schema2)
             {
                 return RedirectToAction(nameof(ApproveGroupNote2), new { id = id, origin = origin });
+            }
+
+            if (note2 != null && note2.Schema == SchemaTypeGroup.Schema3)
+            {
+                return RedirectToAction(nameof(ApproveGroupNote3), new { id = id, origin = origin });
             }
 
             GroupNoteViewModel noteViewModel = null;
@@ -5474,7 +5512,6 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(GroupNotesSupervision));
         }
-
 
         [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveGroupNote3(int id, int origin = 0)
