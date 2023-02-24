@@ -41,6 +41,10 @@ namespace KyoS.Web.Helpers
         Stream DavilaGroupNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSGroupNoteReportSchema1(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema1(Workday_Client workdayClient);
+        Stream FloridaSocialHSGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream DreamsMentalHealthGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream FloridaSocialHSGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream DreamsMentalHealthGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports

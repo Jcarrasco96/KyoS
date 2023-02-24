@@ -6262,10 +6262,16 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(wc => wc.Workday)
 
-                                                   .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote.Status == NoteStatus.Approved));
+                                                   .FirstOrDefault(wc => (wc.Id == id && (wc.GroupNote.Status == NoteStatus.Approved || wc.GroupNote2.Status == NoteStatus.Approved)));
             if (workdayClient == null)
             {
                 return RedirectToAction("Home/Error404");
+            }
+
+            //redirect to notes of schema 2 or squema 3 in Group Therapy
+            if (workdayClient.GroupNote == null)
+            {
+                return RedirectToAction("PrintGroupNote2", new { id = id });
             }
 
             if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")
@@ -6281,6 +6287,74 @@ namespace KyoS.Web.Controllers
             if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            return null;
+        }
+
+        [Authorize(Roles = "Facilitator, Manager")]
+        public IActionResult PrintGroupNote2(int id)
+        {
+            Workday_Client workdayClient = _context.Workdays_Clients
+
+                                                   .Include(wc => wc.Facilitator)
+
+                                                   .Include(wc => wc.Client)
+                                                   .ThenInclude(c => c.MTPs)
+                                                   .ThenInclude(m => m.Goals)
+                                                   .ThenInclude(g => g.Objetives)
+
+                                                   .Include(wc => wc.GroupNote2)
+                                                   .ThenInclude(n => n.Supervisor)
+                                                   .ThenInclude(s => s.Clinic)
+
+                                                   .Include(wc => wc.GroupNote2)
+                                                   .ThenInclude(n => n.GroupNotes2_Activities)
+                                                   .ThenInclude(na => na.Activity)
+                                                   .ThenInclude(a => a.Theme)
+
+                                                   .Include(wc => wc.GroupNote2)
+                                                   .ThenInclude(n => n.GroupNotes2_Activities)
+                                                   .ThenInclude(na => na.Objetive)
+                                                   .ThenInclude(o => o.Goal)
+
+                                                   .Include(wc => wc.Workday)
+
+                                                   .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote2.Status == NoteStatus.Approved));
+            if (workdayClient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+            {
+                Stream stream = null;
+
+                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                //{
+                //    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema2(workdayClient);
+                //}
+                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                //{
+                //    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+                //}
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+            {
+                Stream stream = null;
+
+                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                //{
+                //    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema2(workdayClient);
+                //}
+                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                //{
+                //    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+                //}
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
