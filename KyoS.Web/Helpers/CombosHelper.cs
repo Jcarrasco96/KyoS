@@ -1613,5 +1613,23 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic)
+        {
+            List<SelectListItem> list = _context.Schedule.Where(n => n.Clinic.Id == idClinic).OrderBy(f => f.Service).Select(f => new SelectListItem
+            {
+                Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+           
+
+            return list;
+        }
+
     }
 }

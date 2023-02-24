@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230224003325_ScheduleDinamicGroupTherapy")]
+    partial class ScheduleDinamicGroupTherapy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2678,9 +2680,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SubScheduleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
@@ -2688,8 +2687,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("GroupNote2Id");
 
                     b.HasIndex("ObjetiveId");
-
-                    b.HasIndex("SubScheduleId");
 
                     b.ToTable("GroupNotes2_Activities");
                 });
@@ -2872,9 +2869,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SubScheduleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
@@ -2882,8 +2876,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("GroupNoteId");
 
                     b.HasIndex("ObjetiveId");
-
-                    b.HasIndex("SubScheduleId");
 
                     b.ToTable("GroupNotes_Activities");
                 });
@@ -5522,9 +5514,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -5553,8 +5542,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
 
                     b.ToTable("Schedule");
                 });
@@ -5611,6 +5598,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -5633,6 +5623,8 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
 
                     b.HasIndex("ScheduleId");
 
@@ -9679,9 +9671,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Present")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ScheduleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Session")
                         .HasColumnType("nvarchar(max)");
 
@@ -9696,8 +9685,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("ClientId");
 
                     b.HasIndex("FacilitatorId");
-
-                    b.HasIndex("ScheduleId");
 
                     b.HasIndex("WorkdayId");
 
@@ -10210,17 +10197,11 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("ObjetiveId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.SubScheduleEntity", "SubSchedule")
-                        .WithMany()
-                        .HasForeignKey("SubScheduleId");
-
                     b.Navigation("Activity");
 
                     b.Navigation("GroupNote2");
 
                     b.Navigation("Objetive");
-
-                    b.Navigation("SubSchedule");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>
@@ -10254,17 +10235,11 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("ObjetiveId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.SubScheduleEntity", "SubSchedule")
-                        .WithMany()
-                        .HasForeignKey("SubScheduleId");
-
                     b.Navigation("Activity");
 
                     b.Navigation("GroupNote");
 
                     b.Navigation("Objetive");
-
-                    b.Navigation("SubSchedule");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.HealthInsuranceEntity", b =>
@@ -10703,15 +10678,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Plan");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.ScheduleEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId");
-
-                    b.Navigation("Clinic");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.SettingEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -10725,9 +10691,15 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.SubScheduleEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId");
+
                     b.HasOne("KyoS.Web.Data.Entities.ScheduleEntity", "Schedule")
                         .WithMany("SubSchedules")
                         .HasForeignKey("ScheduleId");
+
+                    b.Navigation("Clinic");
 
                     b.Navigation("Schedule");
                 });
@@ -11368,10 +11340,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("FacilitatorId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.ScheduleEntity", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleId");
-
                     b.HasOne("KyoS.Web.Data.Entities.WorkdayEntity", "Workday")
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("WorkdayId");
@@ -11379,8 +11347,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Facilitator");
-
-                    b.Navigation("Schedule");
 
                     b.Navigation("Workday");
                 });

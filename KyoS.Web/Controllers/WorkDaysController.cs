@@ -1,4 +1,4 @@
-﻿using KyoS.Common.Enums;
+﻿ using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;

@@ -695,13 +695,19 @@ namespace KyoS.Web.Helpers
                 Pm = model.Pm,
                 Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
                 Service = model.Service,
-                SharedSession = model.SharedSession
+                SharedSession = model.SharedSession,
+                Schedule = await _context.Schedule.FindAsync(model.IdSchedule)
             };
         }
 
         public GroupViewModel ToGroupViewModel(GroupEntity groupEntity)
         {
-            return new GroupViewModel
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(c => c.Clinic)
+                                                    .FirstOrDefault(n => n.Id == groupEntity.Facilitator.Id);
+
+            GroupViewModel model = new GroupViewModel();
+            model = new GroupViewModel
             {
                 Id = groupEntity.Id,
                 Facilitator = groupEntity.Facilitator,
@@ -710,8 +716,16 @@ namespace KyoS.Web.Helpers
                 Am = groupEntity.Am,
                 Pm = groupEntity.Pm,
                 Clients = groupEntity.Clients,
-                SharedSession = groupEntity.SharedSession
+                SharedSession = groupEntity.SharedSession,
+                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id)
             };
+            if (groupEntity.Schedule != null)
+            {
+                model.Schedule = groupEntity.Schedule;
+                model.IdSchedule = groupEntity.Schedule.Id;
+                
+            }
+            return model;
         }
 
         public async Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew)
@@ -6432,7 +6446,8 @@ namespace KyoS.Web.Helpers
                 UnableToDetermine = model.UnableToDetermine,
                 Unmotivated = model.Unmotivated,
                 MTPId = model.MTPId,
-                Schema = model.Schema                
+                Schema = model.Schema,
+                Workday_Client_FK = model.Workday_Client_FK
 
             };
         }
