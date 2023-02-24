@@ -2404,6 +2404,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(c => c.MTPs)
 
                                                           .Include(wc => wc.Facilitator)
+                                                          .Include(wc => wc.Schedule)
 
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -2451,15 +2452,36 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema2 ))
+            GroupNote2Entity note2 = await _context.GroupNotes2
+
+                                                   .Include(n => n.Workday_Cient)
+                                                
+                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (note == null && note2 == null)
             {
-                return RedirectToAction(nameof(EditGroupNote2), new { id = id, origin = origin });
-            }
-            if ((note == null) && (facilitator_logged.Clinic.SchemaGroup == Common.Enums.SchemaTypeGroup.Schema3 ))
-            {
-                return RedirectToAction(nameof(EditGroupNote3), new { id = id, origin = origin });
+                if (workday_Client.Client.Clinic.SchemaGroup == SchemaTypeGroup.Schema2)
+                {
+                    return RedirectToAction(nameof(EditGroupNote2), new { id = id, error = errorText, origin = origin, errorText = errorText });
+                }
+                if (workday_Client.Client.Clinic.SchemaGroup == SchemaTypeGroup.Schema3)
+                {
+                    return RedirectToAction(nameof(EditGroupNote3), new { id = id, error = errorText, origin = origin, errorText = errorText });
+                }
             }
 
+
+            if ((note2 != null))
+            {
+                if (note2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    return RedirectToAction(nameof(EditGroupNote2), new { id = id, error = error, origin = origin, errorText = errorText });
+                }
+                if (note2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    return RedirectToAction(nameof(EditGroupNote3), new { id = id, error = error, origin = origin, errorText = errorText });
+                }
+            }
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
             MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
@@ -2647,6 +2669,7 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.MTPs)
 
                                                                            .Include(wc => wc.Facilitator)
+                                                                           .Include(wc => wc.Schedule)
 
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
@@ -2690,6 +2713,8 @@ namespace KyoS.Web.Controllers
 
                     _context.Add(groupNoteEntity);
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+
                     note_Activity = new GroupNote_Activity
                     {
                         GroupNote = groupNoteEntity,
@@ -2697,6 +2722,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = model.AnswerClient1.Trim(),
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                     note_Activity = new GroupNote_Activity
@@ -2706,6 +2732,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        SubSchedule = subSchedules.ElementAtOrDefault(1)
                     };
                     _context.Add(note_Activity);
 
@@ -2794,7 +2821,9 @@ namespace KyoS.Web.Controllers
                                                                                  .Where(na => na.GroupNote.Id == note.Id)
                                                                                  .ToListAsync();
                     
-                    _context.RemoveRange(noteActivities_list);                    
+                    _context.RemoveRange(noteActivities_list);
+
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
 
                     note_Activity = new GroupNote_Activity
                     {
@@ -2803,6 +2832,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = model.AnswerClient1.Trim(),
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -2814,6 +2844,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        SubSchedule = subSchedules.ElementAtOrDefault(1)
                     };
                     _context.Add(note_Activity);
                     
@@ -2883,6 +2914,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditGroupNote2(int id, int error = 0, int origin = 0, string errorText = "")
         {
             GroupNote2ViewModel noteViewModel;
@@ -2925,6 +2957,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(c => c.MTPs)
 
                                                           .Include(wc => wc.Facilitator)
+                                                          .Include(wc => wc.Schedule)
 
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -3027,7 +3060,8 @@ namespace KyoS.Web.Controllers
                     Goals2 = goals,
                     Objetives2 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Schema = workday_Client.Client.Clinic.SchemaGroup
                 };
             }
             else
@@ -3070,6 +3104,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Schema = note.Schema,
 
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3173,6 +3208,7 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.MTPs)
 
                                                                            .Include(wc => wc.Facilitator)
+                                                                           .Include(wc => wc.Schedule)
 
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
@@ -3217,12 +3253,15 @@ namespace KyoS.Web.Controllers
 
                     _context.Add(groupNoteEntity);
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+
                     note_Activity = new GroupNote2_Activity
                     {
                         GroupNote2 = groupNoteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1.Trim(),
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                     note_Activity = new GroupNote2_Activity
@@ -3231,6 +3270,7 @@ namespace KyoS.Web.Controllers
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        SubSchedule = subSchedules.ElementAtOrDefault(1)
                     };
                     _context.Add(note_Activity);
 
@@ -3328,6 +3368,7 @@ namespace KyoS.Web.Controllers
                     note.Guarded = model.Guarded;
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
+                    note.Schema = model.Schema;
                     
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -3342,12 +3383,15 @@ namespace KyoS.Web.Controllers
 
                     _context.RemoveRange(noteActivities_list);
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+
                     note_Activity = new GroupNote2_Activity
                     {
                         GroupNote2 = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1.Trim(),
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -3358,6 +3402,7 @@ namespace KyoS.Web.Controllers
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity2),
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
+                        SubSchedule = subSchedules.ElementAtOrDefault(1)
                     };
                     _context.Add(note_Activity);
 
@@ -3427,6 +3472,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> EditGroupNote3(int id, int error = 0, int origin = 0, string errorText = "")
         {
             GroupNote3ViewModel noteViewModel;
@@ -3469,6 +3515,7 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(c => c.MTPs)
 
                                                           .Include(wc => wc.Facilitator)
+                                                          .Include(wc => wc.Schedule)
 
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -3564,7 +3611,8 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Schema = workday_Client.Client.Clinic.SchemaGroup
                 };
             }
             else
@@ -3607,6 +3655,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Schema = note.Schema,
 
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3700,6 +3749,7 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.MTPs)
 
                                                                            .Include(wc => wc.Facilitator)
+                                                                           .Include(wc => wc.Schedule)
 
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
@@ -3744,12 +3794,15 @@ namespace KyoS.Web.Controllers
 
                     _context.Add(groupNoteEntity);
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+
                     note_Activity = new GroupNote2_Activity
                     {
                         GroupNote2 = groupNoteEntity,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1.Trim(),
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                    
@@ -3786,7 +3839,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (model.IdObjetive1 == 0 )
                         {
-                            return RedirectToAction(nameof(EditGroupNote2), new { id = model.Id, error = 1, origin = model.Origin });
+                            return RedirectToAction(nameof(EditGroupNote3), new { id = model.Id, error = 1, origin = model.Origin });
                         }
                     }
 
@@ -3847,6 +3900,7 @@ namespace KyoS.Web.Controllers
                     note.Guarded = model.Guarded;
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
+                    note.Schema = model.Schema;
 
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -3861,12 +3915,15 @@ namespace KyoS.Web.Controllers
 
                     _context.RemoveRange(noteActivities_list);
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+
                     note_Activity = new GroupNote2_Activity
                     {
                         GroupNote2 = note,
                         Activity = _context.Activities.FirstOrDefault(a => a.Id == model.IdActivity1),
                         AnswerClient = model.AnswerClient1.Trim(),
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
+                        SubSchedule = subSchedules.ElementAtOrDefault(0)
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -5184,9 +5241,18 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            if (note == null)
+            GroupNote2Entity note2 = await _context.GroupNotes2
+
+                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (note2 != null && note2.Schema == SchemaTypeGroup.Schema2)
             {
                 return RedirectToAction(nameof(ApproveGroupNote2), new { id = id, origin = origin });
+            }
+
+            if (note2 != null && note2.Schema == SchemaTypeGroup.Schema3)
+            {
+                return RedirectToAction(nameof(ApproveGroupNote3), new { id = id, origin = origin });
             }
 
             GroupNoteViewModel noteViewModel = null;
@@ -5474,7 +5540,6 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(GroupNotesSupervision));
         }
-
 
         [Authorize(Roles = "Supervisor, Facilitator")]
         public async Task<IActionResult> ApproveGroupNote3(int id, int origin = 0)

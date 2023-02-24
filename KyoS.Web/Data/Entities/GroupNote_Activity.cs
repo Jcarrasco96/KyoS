@@ -17,5 +17,6 @@ namespace KyoS.Web.Data.Entities
         public string AnswerFacilitator { get; set; }
 
         public ObjetiveEntity Objetive { get; set; }
+        public SubScheduleEntity SubSchedule { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace KyoS.Web.Data.Entities
         public ServiceType Service { get; set; }
         public FacilitatorEntity Facilitator { get; set; }
         public IEnumerable<ClientEntity> Clients { get; set; }
+        
         public string Meridian 
         {
             get
@@ -22,5 +23,6 @@ namespace KyoS.Web.Data.Entities
             } 
         }
         public bool SharedSession { get; set; }
+        public ScheduleEntity Schedule { get; set; }
     }
 }

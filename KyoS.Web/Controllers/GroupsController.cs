@@ -557,6 +557,7 @@ namespace KyoS.Web.Controllers
                                       .Include(g => g.Facilitator)
 
                                       .Include(g => g.Clients)
+                                      .Include(g => g.Schedule)
 
                                       .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
                                       .OrderBy(g => g.Facilitator.Name)
@@ -612,10 +613,11 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-                        
+
             model = new GroupViewModel
             {
-                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
             };
 
             clients = await _context.Clients
@@ -721,7 +723,8 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = false
+                                        SharedSession = false,
+                                        Schedule = client.Group.Schedule
                                     });
                                 }                                
                             }
@@ -781,6 +784,7 @@ namespace KyoS.Web.Controllers
             GroupEntity groupEntity = await _context.Groups
                                                     .Include(g => g.Facilitator)
                                                     .Include(g => g.Clients)
+                                                    .Include(g => g.Schedule)
                                                     .FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
@@ -820,6 +824,7 @@ namespace KyoS.Web.Controllers
             }
             
             groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
 
             clients = await _context.Clients
 
@@ -939,7 +944,8 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = false
+                                        SharedSession = false,
+                                        Schedule = client.Group.Schedule
                                     });                                    
                                 }                                
                             }
