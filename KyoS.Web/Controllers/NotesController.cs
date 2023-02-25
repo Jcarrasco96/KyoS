@@ -6385,6 +6385,8 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(o => o.Goal)
 
                                                    .Include(wc => wc.Workday)
+                                                   
+                                                   .Include(wc => wc.Schedule)
 
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote2.Status == NoteStatus.Approved));
             if (workdayClient == null)
@@ -6396,14 +6398,14 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = null;
 
-                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
-                //{
-                //    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema2(workdayClient);
-                //}
-                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
-                //{
-                //    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
-                //}
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+                }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
@@ -6411,14 +6413,14 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = null;
 
-                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
-                //{
-                //    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema2(workdayClient);
-                //}
-                //if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
-                //{
-                //    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
-                //}
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+                }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
