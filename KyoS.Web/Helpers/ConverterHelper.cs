@@ -6452,5 +6452,89 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public ScheduleViewModel ToScheduleViewModel(ScheduleEntity model)
+        {
+            return new ScheduleViewModel
+            {
+                Id = model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                Clinic = model.Clinic,
+                Description = model.Description,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                //IdSession = (model.Session == SessionType.AM) ? 0 : (model.Session == SessionType.PM) ? 1 : 0,
+                Services = _combosHelper.GetComboServices(),
+                IdService = Convert.ToInt32(model.Service),
+                Sessions = _combosHelper.GetComboSession(),
+                IdSession = (model.Session == "AM") ? 0 : 1,
+            };
+        }
+
+        public ScheduleEntity ToScheduleEntity(ScheduleViewModel model, bool isNew, UserEntity user)
+        {
+            ScheduleEntity schedule;
+            schedule = new ScheduleEntity()
+            {
+                Id = isNew ? 0 : model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                Clinic = user.Clinic,
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+               
+                Description = model.Description,
+                CreatedBy = isNew ? user.UserName : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? user.UserName : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+            if (model.IdSession == 0)
+            {
+                schedule.Session = "AM";
+            }
+            if (model.IdSession == 1)
+            {
+                schedule.Session = "PM";
+            }
+
+            return schedule;
+        }
+
+        public SubScheduleViewModel ToSubScheduleViewModel(SubScheduleEntity model)
+        {
+            return new SubScheduleViewModel
+            {
+                Id = model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdSchedule = model.Schedule.Id
+               
+            };
+        }
+
+        public SubScheduleEntity ToSubScheduleEntity(SubScheduleViewModel model, bool isNew, UserEntity user)
+        {
+            SubScheduleEntity subSchedule;
+            subSchedule = new SubScheduleEntity()
+            {
+                Id = isNew ? 0 : model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                CreatedBy = isNew ? user.UserName : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? user.UserName : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule)
+            };
+            
+            return subSchedule;
+        }
+
     }
 }
