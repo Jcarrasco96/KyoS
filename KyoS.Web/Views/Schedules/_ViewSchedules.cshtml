@@ -1,0 +1,139 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ScheduleEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Schedule
+                </strong>
+            </div>
+        }
+       
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Schedule</h3>
+                </div>
+                <div class="panel-body" id="view-schedule">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">Service</th>
+                                <th class="col-md-1" style="text-align:center;">Session</th>
+                                <th class="col-md-2" style="text-align:center;">InitialTime</th>
+                                <th class="col-md-2" style="text-align:center;">EndTime</th>
+                                <th class="col-md-2" style="text-align:center;">Description</th>
+                                <th class="col-md-2">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @if (item.SubSchedules.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-5" style="text-align:center;">Initial time</th>
+                                                    <th class="col-md-5" style="text-align:center;">End time</th>
+                                                    <th class="col-md-2" style="text-align:center;"></th>
+                                                </tr>
+                                                @foreach (var product1 in item.SubSchedules)
+                                                {
+                                                    <tr>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product1.InitialTime)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => product1.EndTime)</td>
+                                                        <td align="center">
+                                                            @if (User.IsInRole("Manager"))
+                                                            {
+                                                                <a onclick="showInPopup('@Url.Action("EditSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning" title="Edit SubSchedule"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("DeleteSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Delete SubSchedule')" class="btn btn-danger" title="Delete SubSchedule"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-danger disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                        {
+                                            <span class="label label-success">
+                                                PSR
+                                            </span>
+                                        }
+                                        @if (item.Service == KyoS.Common.Enums.ServiceType.Group)
+                                        {
+                                            <span class="label label-success">
+                                                Group
+                                            </span>
+                                        }
+                                        @if (item.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        {
+                                            <span class="label label-success">
+                                                Ind
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Session == "AM")
+                                        {
+                                            <label>AM</label>
+                                        }
+                                        @if (item.Session == "PM")
+                                        {
+                                            <label>PM</label>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.InitialTime)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.EndTime)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td align="right">
+                                        <a onclick="showInPopup('@Url.Action("Edit", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning" title="Edit Schedule"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("CreateSubSchedule", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Create Schedule')" class="btn btn-primary" title="Create SubSchedule"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("Delete", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Delete Schedule')" class="btn btn-danger" title="Delete Schedule"><i class="glyphicon glyphicon-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+

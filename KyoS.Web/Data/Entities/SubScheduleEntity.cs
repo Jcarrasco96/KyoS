@@ -15,7 +15,7 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime InitialTime { get; set; }
 
-        [Display(Name = "Diagnostic")]
+        [Display(Name = "End Time")]
         [DataType(DataType.Time)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime EndTime { get; set; }

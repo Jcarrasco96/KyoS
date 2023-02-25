@@ -192,5 +192,9 @@ namespace KyoS.Web.Helpers
         BriefViewModel ToBriefViewModel(BriefEntity model);
         Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew);
         Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew);
+        ScheduleEntity ToScheduleEntity(ScheduleViewModel model, bool isNew, UserEntity user);
+        ScheduleViewModel ToScheduleViewModel(ScheduleEntity model);
+        SubScheduleEntity ToSubScheduleEntity(SubScheduleViewModel model, bool isNew, UserEntity user);
+        SubScheduleViewModel ToSubScheduleViewModel(SubScheduleEntity model);
     }
 }

@@ -1631,5 +1631,17 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboSession()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = SessionType.AM.ToString(), Value = "0"},
+                new SelectListItem { Text = SessionType.PM.ToString(), Value = "1"},
+                
+            };
+
+            return list;
+        }
+
     }
 }
