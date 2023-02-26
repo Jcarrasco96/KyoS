@@ -3045,6 +3045,7 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     CodeBill = workday_Client.CodeBill,
+                    GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3061,7 +3062,8 @@ namespace KyoS.Web.Controllers
                     Objetives2 = objs,
 
                     Workday_Cient = workday_Client,
-                    Schema = workday_Client.Client.Clinic.SchemaGroup
+                    Schema = workday_Client.Client.Clinic.SchemaGroup,
+                    Workday_Client_FK = workday_Client.Id
                 };
             }
             else
@@ -3105,7 +3107,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
-
+                    
                     Other = note.Other,
                     Impaired = note.Impaired,
                     Euthymic = note.Euthymic,
@@ -3162,8 +3164,10 @@ namespace KyoS.Web.Controllers
                     SignificantProgress = note.SignificantProgress,
                     UnableToDetermine = note.UnableToDetermine,
                     Unmotivated = note.Unmotivated,
-                    
-                    
+                    Workday_Client_FK = workday_Client.Id,
+
+
+
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
                     Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
@@ -3603,6 +3607,7 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     CodeBill = workday_Client.CodeBill,
+                    GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3612,7 +3617,8 @@ namespace KyoS.Web.Controllers
                     Objetives1 = objs,
 
                     Workday_Cient = workday_Client,
-                    Schema = workday_Client.Client.Clinic.SchemaGroup
+                    Schema = workday_Client.Client.Clinic.SchemaGroup,
+                    Workday_Client_FK = workday_Client.Id
                 };
             }
             else
@@ -3656,7 +3662,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
-
+                   
                     Other = note.Other,
                     Impaired = note.Impaired,
                     Euthymic = note.Euthymic,
@@ -3713,7 +3719,9 @@ namespace KyoS.Web.Controllers
                     SignificantProgress = note.SignificantProgress,
                     UnableToDetermine = note.UnableToDetermine,
                     Unmotivated = note.Unmotivated,
-                    
+                    Workday_Client_FK = workday_Client.Id,
+
+
 
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,

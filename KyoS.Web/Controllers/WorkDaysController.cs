@@ -842,6 +842,8 @@ namespace KyoS.Web.Controllers
                     List<ClientEntity> clients = await _context.Clients
 
                                                 .Include(c => c.Group)
+                                                .ThenInclude(c => c.Schedule)
+                                                .Include(c => c.Group)
                                                 .ThenInclude(g => g.Facilitator)
 
                                                 .Include(c => c.MTPs)
@@ -952,7 +954,8 @@ namespace KyoS.Web.Controllers
                                                 Present = true,
                                                 GroupSize = client.Group.Clients.Count(),
                                                 SharedSession = false,
-                                                CodeBill = clinic_entity.CodeGroupTherapy
+                                                CodeBill = clinic_entity.CodeGroupTherapy,
+                                                Schedule = client.Group.Schedule
                                             });                                            
                                         }
                                     }

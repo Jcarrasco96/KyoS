@@ -724,6 +724,7 @@ namespace KyoS.Web.Controllers
                                         Session = client.Group.Meridian,
                                         Present = true,
                                         SharedSession = false,
+                                        CodeBill = user_logged.Clinic.CodeGroupTherapy,
                                         Schedule = client.Group.Schedule
                                     });
                                 }                                
