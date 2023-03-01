@@ -1999,6 +1999,8 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(n => n.Objective)
                                                       .ThenInclude(o => o.Goal)
+                                                       
+                                                      .Include(n => n.SubSchedule)
 
                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
@@ -2123,7 +2125,8 @@ namespace KyoS.Web.Controllers
                     //Paso el IdGoal1 como parametro
                     Objetives1 = _combosHelper.GetComboObjetives((note.Objective == null) ? 0 : note.Objective.Goal.Id),
                     Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
-                    MTPId = mtp.Id
+                    MTPId = mtp.Id,
+                    IdSubSchedule = note.SubSchedule.Id
                 };
             }
 
@@ -2148,6 +2151,9 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Facilitator)
 
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(c => c.SubSchedules)
+
                                                           .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
             {
@@ -2168,8 +2174,21 @@ namespace KyoS.Web.Controllers
                
                 if (note == null)   //the note is not exist
                 {
+
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
+                    string time = workday_Client.Session.Substring(0, 7);
+                    foreach (var value in subSchedules)
+                    {
+                        if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                        {
+                            subScheduleEntity = value;
+                        }
+                    }
+                   
+                    //note.SubSchedule = workday_Client.Schedule.SubSchedules.FirstOrDefault(n => n.Schedule.SubSchedules.Where(m => m.InitialTime.ToString().Contains(time) == true).Count() > 0);
                     //Verify the client is not present in other services of notes at the same time
-                    if (this.VerifyNotesAtSameTime(model.IdClient, workday_Client.Session, workday_Client.Workday.Date))
+                    if (this.VerifyNotesAtSameTime(model.IdClient, workday_Client.Session, workday_Client.Workday.Date, subScheduleEntity.InitialTime, subScheduleEntity.EndTime, workday_Client.Id))
                     {
                         return RedirectToAction(nameof(EditIndNote), new { id = model.Id, error = 5, origin = model.Origin });
                     }
@@ -2194,9 +2213,13 @@ namespace KyoS.Web.Controllers
                         individualNoteEntity.MTPId = mtp.Id;
 
                     //Update selected client in Workday_Client
-                    Workday_Client workday_client = await _context.Workdays_Clients                                                                 
+                    Workday_Client workday_client = await _context.Workdays_Clients  
+                                                                  .Include(n => n.Schedule)
+                                                                  .ThenInclude(n => n.SubSchedules)
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
+
+                    individualNoteEntity.SubSchedule = subScheduleEntity;
 
                     if (workday_client.CodeBill != model.CodeBill)
                     {
@@ -2277,7 +2300,8 @@ namespace KyoS.Web.Controllers
                     note.CBT = model.CBT;
                     note.Psychodynamic = model.Psychodynamic;
                     note.BehaviorModification = model.BehaviorModification;
-                    note.Other_Intervention = model.Other_Intervention;               
+                    note.Other_Intervention = model.Other_Intervention;  
+                    
 
                     note.Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null;
 
@@ -2286,12 +2310,16 @@ namespace KyoS.Web.Controllers
                     if (mtp != null)
                         note.MTPId = mtp.Id;
 
+                    note.SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule);
                     _context.Update(note);
 
                     //Update selected client in Workday_Client
                     Workday_Client workday_client = await _context.Workdays_Clients
+                                                                  
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
+
+                   
 
                     if (workday_client.CodeBill != model.CodeBill)
                     {
@@ -12653,8 +12681,13 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date)
+        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, DateTime initialTime = new DateTime(), DateTime endTime = new DateTime(), int idWordayClient = 0)
         {
+            Workday_Client wordayClient =  _context.Workdays_Clients
+                                                   .Include(n => n.Schedule)
+                                                   .ThenInclude(n => n.SubSchedules)
+                                                   .Include(n => n.Workday)
+                                                   .FirstOrDefault(n => n.Id == idWordayClient);
             //Individual notes
             if (session == "8.00 - 9.00 AM" || session == "9.05 - 10.05 AM" || session == "10.15 - 11.15 AM" || session == "11.20 - 12.20 PM")
             {
@@ -12665,49 +12698,66 @@ namespace KyoS.Web.Controllers
                 return false;
 
             }
-            if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+            else
             {
-                if (_context.Workdays_Clients
-                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
-                            .Count() > 0)
-                    return true;
-                return false;
-            }
+                if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+                {
+                    if (_context.Workdays_Clients
+                                .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
+                                .Count() > 0)
+                        return true;
+                    return false;
+                }
+                else
+                {
 
-            //PSR notes
-            if (session == "AM")
-            {
-                if (_context.Workdays_Clients
-                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "8.00 - 9.00 AM" && wc.Workday.Date == date))
-                            .Count() > 0 
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "9.05 - 10.05 AM" && wc.Workday.Date == date))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "10.15 - 11.15 AM" && wc.Workday.Date == date))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
-                                  .Count() > 0)
-                    return true;
-                return false;
-            }
-            if (session == "PM")
-            {
-                if (_context.Workdays_Clients
-                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "12.45 - 1.45 PM" && wc.Workday.Date == date))
-                            .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "1.50 - 2.50 PM" && wc.Workday.Date == date))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "3.00 - 4.00 PM" && wc.Workday.Date == date))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
-                                  .Count() > 0)
-                    return true;
-                return false;
+                    //PSR notes
+                    if (session == "AM")
+                    {
+                        if (_context.Workdays_Clients
+                                    .Where(wc => (wc.Client.Id == idClient && wc.Session.Contains("AM") == true && wc.Workday.Date == date))
+                                    .Count() > 0)
+                            return true;
+                        return false;
+                    }
+                    else
+                    {
+                        if (session == "PM")
+                        {
+                            if (_context.Workdays_Clients
+                                        .Where(wc => (wc.Client.Id == idClient && wc.Session.Contains("PM") == true && wc.Workday.Date == date))
+                                        .Count() > 0)
+                                return true;
+                            return false;
+                        }
+                        else
+                        {
+                            List<Workday_Client> temp = _context.Workdays_Clients.Where(n => n.Workday.Date == date
+                                                                && ((n.Schedule.InitialTime >= initialTime
+                                                                && n.Schedule.InitialTime <= endTime)
+                                                                    || (n.Schedule.EndTime >= initialTime
+                                                                       && n.Schedule.EndTime <= endTime)
+                                                                    || (n.Schedule.InitialTime <= initialTime
+                                                                       && n.Schedule.EndTime >= initialTime)
+                                                                    || (n.Schedule.InitialTime <= endTime
+                                                                       && n.Schedule.EndTime >= endTime))
+                                                               && n.Id != idWordayClient
+                                                               && n.Client.Id == idClient)
+                                                            .ToList();
+
+
+                            if (temp.Count() > 0)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            
+                        }
+                    }
+                }
             }
 
             return true;

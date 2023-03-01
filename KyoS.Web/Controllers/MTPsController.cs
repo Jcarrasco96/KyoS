@@ -2379,7 +2379,9 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Clinic)
 
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                            || m.Client.Group.Facilitator.Id == facilitator.Id)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                     }

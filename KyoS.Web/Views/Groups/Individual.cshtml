@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.GroupEntity>
 @{
-    ViewData["Title"] = "Group-Therapy Groups";
+    ViewData["Title"] = "Individual-Therapy Groups";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,27 +11,25 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Group-Therapy Groups</li>
+        <li class="active">Individual-Therapy Groups</li>
     </ul><!--.breadcrumb-->
 </div>
-
 <p>
-    <a asp-action="CreateGT" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create GT Group</a>
+    <a asp-action="CreateIndividualGroup" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Individual Group</a>
 </p>
-
 <div class="row">
     @if (ViewBag.Message == "1")
     {
         <div class="col-md-12">
             <p class="alert alert-block alert-danger">
-                <strong class="red"> Note: </strong> There are group therapy active clients that are not in any group (<a asp-action="ListClientWithoutGroup" asp-route-serviceType="@KyoS.Common.Enums.ServiceType.Group">@ViewData["count"]</a>).
+                <strong class="red"> Note: </strong> There are active clients who do not receive individual therapy (<a asp-action="ListClientWithoutIndividualTherapy" asp-route-serviceType="@KyoS.Common.Enums.ServiceType.Individual">@ViewData["count"]</a>).
             </p>
         </div>
     }
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Group - Therapy Groups</h3>
+                <h3 class="panel-title">Individual - Therapy Groups</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -55,12 +53,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 PM
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-3" style="text-align:center;">
                                 Schedule
                             </th>
-                            <th class="col-md-1">
-
-                            </th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +64,7 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Clients.Count() != 0)
+                                    @if (item.Facilitator.ClientsFromIndividualTherapy.Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -83,7 +79,7 @@
                                                 <th class="col-md-3" style="text-align:center;">Date of birth</th>
                                                 <th class="col-md-3" style="text-align:center;">Medical ID</th>
                                             </tr>
-                                            @foreach (var client in item.Clients)
+                                            @foreach (var client in item.Facilitator.ClientsFromIndividualTherapy)
                                             {
                                                 <tr>
                                                     <td>@Html.DisplayFor(modelItem => client.Name)</td>
@@ -101,7 +97,7 @@
                                     @Html.DisplayFor(modelItem => item.Service)
                                 </td>
                                 <td align="center">
-                                    @item.Clients.Count()
+                                    @item.Facilitator.ClientsFromIndividualTherapy.Count()
                                 </td>
                                 <td align="center">
                                     @if (item.Am)
@@ -121,9 +117,7 @@
                                         <label> @item.Schedule.InitialTime.ToShortTimeString() to @item.Schedule.EndTime.ToShortTimeString()</label>
                                     }
                                 </td>
-                                <td align="right">
-                                    <a asp-action="EditGT" asp-route-id="@item.Id" class="btn btn-warning" title="Edit GT group"><i class="glyphicon glyphicon-pencil"></i></a>
-                                </td>
+                               
                             </tr>
                         }
                     </tbody>
@@ -174,5 +168,6 @@
 
     </script>
 }
+
 
 

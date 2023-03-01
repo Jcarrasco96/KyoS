@@ -9,14 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @if (ViewData["service"].ToString() == "PSR")
-            {
-                @Html.ActionLink("Group PSR", "Index", "Groups")
-            }
-            @if (ViewData["service"].ToString() == "Group")
-            {
-                @Html.ActionLink("Group", "Group", "Groups")
-            }
+               @Html.ActionLink("Individual", "Individual", "Groups")
         </li>
         <li class="active">Clients</li>
     </ul><!--.breadcrumb-->
@@ -39,21 +32,13 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                @if (ViewData["service"].ToString() == "PSR")
-                {
-                   <h3 class="panel-title">PSR active clients that are not in any group</h3>
-                }
-                @if (ViewData["service"].ToString() == "Group")
-                {
-                    <h3 class="panel-title">Active clients that are not in any group</h3>
-                }
-                
+                <h3 class="panel-title">Active clients that are not in any individual therapy</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -64,9 +49,6 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Initial Therapy
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Individual Therapy
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Admission for
@@ -106,13 +88,6 @@
                                         @Html.DisplayFor(modelItem => item.MTPs.Where(m => m.Active == true).ElementAt(0).MTPDevelopedDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
-                                    </td>
-                                    
-                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.MTPs.Where(m => m.Active == true).ElementAt(0).AdmissionedFor)
                                     </td>
                                 </tr>
@@ -145,12 +120,6 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.MTPs.Where(m => m.Active == true).ElementAt(0).MTPDevelopedDate)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.MTPs.Where(m => m.Active == true).ElementAt(0).AdmissionedFor)
@@ -192,5 +161,7 @@
                         });
     </script>
 }
+
+
 
 

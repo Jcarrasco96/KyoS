@@ -1037,6 +1037,199 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ListClientWithoutIndividualTherapy(ServiceType serviceType = ServiceType.Individual)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
+            {
+
+                clients = await _context.Clients
+
+                                        .Include(c => c.MTPs)
+                                        .Include(c => c.Clients_HealthInsurances)
+                                        .ThenInclude(c => c.HealthInsurance)
+                                        .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                    && c.Status == Common.Enums.StatusType.Open
+                                                    && c.IndividualTherapyFacilitator == null))
+                                        .OrderBy(c => c.Name).ToListAsync();
+
+                clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+               
+                ViewData["service"] = "Individual";
+                
+                return View(clients);
+            }
+
+            return View(null);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Individual()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.IndividualTherapyFacilitator == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+                ViewData["count"] = count;
+            }
+
+            return View(await _context.Groups
+
+                                      .Include(g => g.Facilitator)
+                                      .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                      .Include(g => g.Clients)
+                                      .Include(g => g.Schedule)
+
+                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
+                                            && g.Service == ServiceType.Individual))
+                                      .OrderBy(g => g.Facilitator.Name)
+                                      .ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> CreateIndividualGroup(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            //the facilitator has not availability on that dates
+            if (error == 1)
+            {
+                FacilitatorEntity facilitator = _context.Facilitators
+                                                        .FirstOrDefault(f => f.Id == idFacilitator);
+                ViewBag.Error = "0";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+            }
+
+            //One client has a created note from another service at that time.
+            if (error == 2)
+            {
+                ClientEntity client = _context.Clients
+                                              .FirstOrDefault(f => f.Id == idClient);
+                ViewBag.Error = "1";
+                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
+            }
+
+            GroupViewModel model;
+            MultiSelectList client_list;
+            List<ClientEntity> clients = new List<ClientEntity>();
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            model = new GroupViewModel
+            {
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
+            };
+
+            clients = await _context.Clients
+
+                                    .Include(c => c.MTPs)
+
+                                    .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                        && c.Status == Common.Enums.StatusType.Open
+                                        && c.Service == Common.Enums.ServiceType.Group
+                                        && c.Group == null))
+                                    .OrderBy(c => c.Name).ToListAsync();
+
+            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+            client_list = new MultiSelectList(clients, "Id", "Name");
+            ViewData["clients"] = client_list;
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateIndividualGroup(GroupViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                switch (form["Meridian"])
+                {
+                    case "Am":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            break;
+                        }
+                    case "Pm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                model.Service = Common.Enums.ServiceType.Individual;
+                GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
+                _context.Add(group);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("CreateIndividualGroup", new { id = 1 });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the group");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            model.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+
+            return View(model);
+        }
+
+
+        [Authorize(Roles = "Manager")]
         #region Utils Functions     
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, ServiceType service, string session, DateTime date)
         {

@@ -902,7 +902,8 @@ namespace KyoS.Web.Helpers
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
-                Other_Intervention = model.Other_Intervention
+                Other_Intervention = model.Other_Intervention,
+                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule)
             };
         }
 
