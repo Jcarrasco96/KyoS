@@ -1536,11 +1536,11 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     Activities1 = null,
 
                     IdTopic2 = 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     Activities2 = null,                    
                 };
             }
@@ -1558,12 +1558,12 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
