@@ -22,13 +22,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IReportHelper _reportHelper;
-        
-        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _renderHelper = renderHelper;
         }
 
         [Authorize(Roles = "Manager, Facilitator")]
@@ -345,7 +347,7 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic != null)
             {
                 groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-
+               
                 clients = await _context.Clients
 
                                         .Include(c => c.MTPs)
@@ -1119,28 +1121,8 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            //the facilitator has not availability on that dates
-            if (error == 1)
-            {
-                FacilitatorEntity facilitator = _context.Facilitators
-                                                        .FirstOrDefault(f => f.Id == idFacilitator);
-                ViewBag.Error = "0";
-                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
-            }
-
-            //One client has a created note from another service at that time.
-            if (error == 2)
-            {
-                ClientEntity client = _context.Clients
-                                              .FirstOrDefault(f => f.Id == idClient);
-                ViewBag.Error = "1";
-                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
-            }
-
             GroupViewModel model;
-            MultiSelectList client_list;
-            List<ClientEntity> clients = new List<ClientEntity>();
-
+           
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -1155,20 +1137,7 @@ namespace KyoS.Web.Controllers
                 Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                 Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
             };
-
-            clients = await _context.Clients
-
-                                    .Include(c => c.MTPs)
-
-                                    .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                        && c.Status == Common.Enums.StatusType.Open
-                                        && c.Service == Common.Enums.ServiceType.Group
-                                        && c.Group == null))
-                                    .OrderBy(c => c.Name).ToListAsync();
-
-            clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-            client_list = new MultiSelectList(clients, "Id", "Name");
-            ViewData["clients"] = client_list;
+           
             return View(model);
         }
 
@@ -1226,6 +1195,173 @@ namespace KyoS.Web.Controllers
             model.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
 
             return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditIndividualGroup(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(g => g.Facilitator)
+                                                    .Include(g => g.Clients)
+                                                    .Include(g => g.Schedule)
+                                                    .FirstOrDefaultAsync(g => g.Id == id);
+            if (groupEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //the facilitator has not availability on that dates
+           
+            GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";
+            
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
+
+            return View(groupViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditIndividualGroup(GroupViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                switch (form["Meridian"])
+                {
+                    case "Am":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            break;
+                        }
+                    case "Pm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                model.Service = Common.Enums.ServiceType.Individual;
+                GroupEntity group = await _converterHelper.ToGroupEntity(model, false);
+                _context.Update(group);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Individual));
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the group");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(g => g.Facilitator)
+                                                    .Include(g => g.Clients)
+                                                    .FirstOrDefaultAsync(g => g.Id == model.Id);
+
+            GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";
+
+            return View(groupViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult DeleteIndividual(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteIndividual(DeleteViewModel groupViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                GroupEntity group = await _context.Groups
+                                                  .FirstAsync(n => n.Id == groupViewModel.Id_Element);
+
+                try
+                {
+                    _context.Groups.Remove(group);
+                    await _context.SaveChangesAsync();
+                    List<GroupEntity> ListGroup = await _context.Groups
+
+                                                                .Include(g => g.Facilitator)
+                                                                .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                                .Include(g => g.Clients)
+                                                                .Include(g => g.Schedule)
+
+                                                                .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                    && g.Service == ServiceType.Individual))
+                                                                .OrderBy(g => g.Facilitator.Name)
+                                                                .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", ListGroup) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
         }
 
 

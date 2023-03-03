@@ -1,0 +1,114 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.GroupEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Individual Group
+                </strong>
+            </div>
+        }
+       
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Individual group</h3>
+                </div>
+                <div class="panel-body" id="view-group">
+                    <table class="table table-hover table-responsive table-striped" id="MyTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">
+
+                                </th>
+                                <th class="col-md-3">
+                                    Facilitator
+                                </th>
+                                <th class="col-md-2" style="text-align:center;">
+                                    Therapy
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Clients
+                                </th>
+                                <th class="col-md-3" style="text-align:center;">
+                                    Schedule
+                                </th>
+                                <th class="col-md-2" style="text-align:center;">
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td align="center">
+                                        @if (item.Facilitator.ClientsFromIndividualTherapy.Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <tr>
+                                                    <th class="col-md-6">Client Name</th>
+                                                    <th class="col-md-3" style="text-align:center;">Date of birth</th>
+                                                    <th class="col-md-3" style="text-align:center;">Medical ID</th>
+                                                </tr>
+                                                @foreach (var client in item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open))
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => client.Name)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => client.DateOfBirth)</td>
+                                                        <td align="center">@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="center">
+                                        @item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open).Count()
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Schedule != null)
+                                        {
+                                            <label> @item.Schedule.InitialTime.ToShortTimeString() to @item.Schedule.EndTime.ToShortTimeString()</label>
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a asp-action="EditIndividualGroup" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Individual group"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DeleteIndividual", "Groups", new { id = item.Id}, Context.Request.Scheme)','Delete Individual Group')" class="btn btn-danger" title="Delete Individual group"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+

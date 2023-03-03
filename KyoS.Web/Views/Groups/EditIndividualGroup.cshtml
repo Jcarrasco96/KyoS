@@ -1,0 +1,119 @@
+﻿@model KyoS.Web.Models.GroupViewModel
+
+@{
+    ViewData["Title"] = "Create Individual-Therapy Group";
+}
+
+<link rel="stylesheet" href="~/css/prism.css">
+<link rel="stylesheet" href="~/css/chosen.css">
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Individual-Therapy Group", "Individual", "Groups")
+        </li>
+        <li class="active">Create GT Individual</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<h4>Create GT Individual</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Creado == "Y")
+        {
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok green"></i>
+                <strong class="green">
+                    GT Group been successfully created
+                </strong>
+
+            </div>
+        }
+        @if (ViewBag.Creado == "E")
+        {
+            <div class="alert alert-block alert-warning">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Group already exist
+                </strong>
+            </div>
+        }
+    </div>
+    <div>
+        <form asp-action="EditIndividualGroup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group col-md-12"></div>
+
+            <div class="form-group col-md-12"></div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-4">
+                    <label asp-for="IdFacilitator" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
+                    <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="IdSchedule" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSchedule" asp-items="Model.Schedules" class="form-control"></select>
+                    <span asp-validation-for="IdSchedule" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-8">
+                    &nbsp;
+                </div>
+            </div>
+           
+            <div class="col-md-12">
+                <div class="form-group">
+                    @if (ViewData["am"].ToString() == "true")
+                    {
+                        <input type="radio" name="Meridian" value="Am" checked="checked" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="Meridian" value="Am" checked="checked" />
+                    }
+                    <label style="font-weight: bold;"> AM</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @if (ViewData["am"].ToString() == "true")
+                    {
+                        <input type="radio" name="Meridian" value="Pm" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="Meridian" value="Pm" checked="checked" />
+                    }
+                    <label style="font-weight: bold;"> PM</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="form-group col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Individual" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/chosen.jquery.js" type="text/javascript"></script>
+    <script src="~/js/prism.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/init.js" type="text/javascript" charset="utf-8"></script>
+}
+
