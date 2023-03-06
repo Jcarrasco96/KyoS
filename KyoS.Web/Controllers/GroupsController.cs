@@ -141,7 +141,8 @@ namespace KyoS.Web.Controllers
             {
                 model = new GroupViewModel
                 {
-                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
                 };
 
                 clients = await _context.Clients
@@ -168,6 +169,10 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GroupViewModel model, IFormCollection form)
         {
+            UserEntity user_logged = _context.Users
+                                                .Include(u => u.Clinic)
+                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 switch (form["Meridian"])
@@ -203,10 +208,6 @@ namespace KyoS.Web.Controllers
                     default:
                         break;
                 }
-
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 model.Service = Common.Enums.ServiceType.PSR;
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
@@ -294,6 +295,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.Facilitators = _combosHelper.GetComboFacilitators();
+            model.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
 
             MultiSelectList client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
             ViewData["clients"] = client_list;
@@ -360,7 +362,7 @@ namespace KyoS.Web.Controllers
                                         .ToListAsync();
 
                 clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-                foreach (ClientEntity item in groupViewModel.Clients)
+                foreach (ClientEntity item in groupViewModel.Clients) 
                 {
                     clients.Add(item);
                 }
@@ -706,29 +708,44 @@ namespace KyoS.Web.Controllers
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
-                                    //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                    {
-                                        return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
-                                    }
+                                    /* //Verify the client is not present in other services of notes at the same time
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                     {
+                                         return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
+                                     }
 
-                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                    {
-                                        return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
-                                    }
+                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                     {
+                                         return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                     }
 
-                                    workday_client.Add(new Workday_Client
+                                     workday_client.Add(new Workday_Client
+                                     {
+                                         Workday = item,
+                                         Client = client,
+                                         Facilitator = client.Group.Facilitator,
+                                         Session = client.Group.Meridian,
+                                         Present = true,
+                                         SharedSession = false,
+                                         CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                         Schedule = client.Group.Schedule
+                                     });*/
+                                    if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                        && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
-                                        Workday = item,
-                                        Client = client,
-                                        Facilitator = client.Group.Facilitator,
-                                        Session = client.Group.Meridian,
-                                        Present = true,
-                                        SharedSession = false,
-                                        CodeBill = user_logged.Clinic.CodeGroupTherapy,
-                                        Schedule = client.Group.Schedule
-                                    });
+                                        workday_client.Add(new Workday_Client
+                                        {
+                                            Workday = item,
+                                            Client = client,
+                                            Facilitator = client.Group.Facilitator,
+                                            Session = client.Group.Meridian,
+                                            Present = true,
+                                            SharedSession = false,
+                                            CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                            Schedule = client.Group.Schedule
+                                        });
+                                    }
                                 }                                
                             }
 
@@ -928,28 +945,43 @@ namespace KyoS.Web.Controllers
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
-                                    //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                    {
-                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
-                                    }
+                                    /* //Verify the client is not present in other services of notes at the same time
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                     {
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
+                                     }
 
-                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                    {
-                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
-                                    }
+                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                     {
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                     }
 
-                                    workday_client.Add(new Workday_Client
+                                     workday_client.Add(new Workday_Client
+                                     {
+                                         Workday = item,
+                                         Client = client,
+                                         Facilitator = client.Group.Facilitator,
+                                         Session = client.Group.Meridian,
+                                         Present = true,
+                                         SharedSession = false,
+                                         Schedule = client.Group.Schedule
+                                     });     */
+                                    if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                        && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
-                                        Workday = item,
-                                        Client = client,
-                                        Facilitator = client.Group.Facilitator,
-                                        Session = client.Group.Meridian,
-                                        Present = true,
-                                        SharedSession = false,
-                                        Schedule = client.Group.Schedule
-                                    });                                    
+                                        workday_client.Add(new Workday_Client
+                                        {
+                                            Workday = item,
+                                            Client = client,
+                                            Facilitator = client.Group.Facilitator,
+                                            Session = client.Group.Meridian,
+                                            Present = true,
+                                            SharedSession = false,
+                                            CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                            Schedule = client.Group.Schedule
+                                        });
+                                    }
                                 }                                
                             }
 
