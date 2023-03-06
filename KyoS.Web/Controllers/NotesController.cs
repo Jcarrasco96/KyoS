@@ -2077,7 +2077,7 @@ namespace KyoS.Web.Controllers
                     Assessment = note.Assessment,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = user_logged.Clinic.CodeIndTherapy,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -2127,7 +2127,7 @@ namespace KyoS.Web.Controllers
                     Objetives1 = _combosHelper.GetComboObjetives((note.Objective == null) ? 0 : note.Objective.Goal.Id),
                     Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
                     MTPId = mtp.Id,
-                    IdSubSchedule = note.SubSchedule.Id
+                    IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id
                 };
             }
 
@@ -11717,7 +11717,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
-
+                                                       
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));
 
                 try
@@ -11777,7 +11777,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
-
+                                                      
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
                 
                 BillingReport1ViewModel model = new BillingReport1ViewModel
