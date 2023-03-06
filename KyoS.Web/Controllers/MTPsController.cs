@@ -2375,6 +2375,9 @@ namespace KyoS.Web.Controllers
                                                   .Include(m => m.AdendumList)
                                                   .ThenInclude(c => c.Facilitator)
 
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Goals)
+
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
 
@@ -2390,6 +2393,9 @@ namespace KyoS.Web.Controllers
                         return View(await _context.MTPs
                                                   .Include(m => m.AdendumList)
                                                   .ThenInclude(c => c.Facilitator)
+
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Goals)
 
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)

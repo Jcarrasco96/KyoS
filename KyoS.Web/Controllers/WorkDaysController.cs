@@ -1062,7 +1062,10 @@ namespace KyoS.Web.Controllers
                     if (session == "AM")
                     {
                         if (_context.Workdays_Clients
-                                    .Where(wc => (wc.Client.Id == idClient && wc.Session.Contains("AM") == true && wc.Workday.Date == date))
+                                    .Where(wc => (wc.Client.Id == idClient 
+                                        && wc.Session.Contains("AM") == true 
+                                        && wc.Workday.Date == date
+                                        && wc.Id != idWordayClient))
                                     .Count() > 0)
                             return true;
                         return false;
@@ -1072,7 +1075,10 @@ namespace KyoS.Web.Controllers
                         if (session == "PM")
                         {
                             if (_context.Workdays_Clients
-                                        .Where(wc => (wc.Client.Id == idClient && wc.Session.Contains("PM") == true && wc.Workday.Date == date))
+                                        .Where(wc => (wc.Client.Id == idClient 
+                                            && wc.Session.Contains("PM") == true 
+                                            && wc.Workday.Date == date
+                                            && wc.Id != idWordayClient))
                                         .Count() > 0)
                                 return true;
                             return false;

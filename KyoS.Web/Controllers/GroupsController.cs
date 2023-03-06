@@ -535,7 +535,7 @@ namespace KyoS.Web.Controllers
             return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));            
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> Group()
         {
             UserEntity user_logged = await _context.Users
@@ -554,18 +554,33 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Message = "1";
                 ViewData["count"] = count;
-            }           
+            }
 
-            return View(await _context.Groups
-
-                                      .Include(g => g.Facilitator)
-
-                                      .Include(g => g.Clients)
-                                      .Include(g => g.Schedule)
-
-                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
-                                      .OrderBy(g => g.Facilitator.Name)
-                                      .ToListAsync());
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+            if (user_logged.UserType.ToString() == "Facilitator")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
+                                                            && g.Service == Common.Enums.ServiceType.Group
+                                                            && g.Facilitator.LinkedUser == user_logged.UserName))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+            return RedirectToAction("Home/Error404");
         }
 
         [Authorize(Roles = "Manager")]
@@ -1100,7 +1115,7 @@ namespace KyoS.Web.Controllers
             return View(null);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> Individual()
         {
             UserEntity user_logged = await _context.Users
@@ -1121,17 +1136,38 @@ namespace KyoS.Web.Controllers
                 ViewData["count"] = count;
             }
 
-            return View(await _context.Groups
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
 
-                                      .Include(g => g.Facilitator)
-                                      .ThenInclude(n => n.ClientsFromIndividualTherapy)
-                                      .Include(g => g.Clients)
-                                      .Include(g => g.Schedule)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                            && g.Service == ServiceType.Individual))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+          
+            if (user_logged.UserType.ToString() == "Facilitator")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
 
-                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
-                                            && g.Service == ServiceType.Individual))
-                                      .OrderBy(g => g.Facilitator.Name)
-                                      .ToListAsync());
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                            && g.Service == ServiceType.Individual
+                                                            && g.Facilitator.LinkedUser == user_logged.UserName))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+
+            return RedirectToAction("Home/Error404");
         }
 
         [Authorize(Roles = "Manager")]

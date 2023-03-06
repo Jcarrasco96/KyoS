@@ -2052,7 +2052,8 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id),
                     IdClient = 0,
-                    MTPId = 0
+                    MTPId = 0,
+                    CodeBill = user_logged.Clinic.CodeIndTherapy
                 };
             }
             else
@@ -12716,7 +12717,8 @@ namespace KyoS.Web.Controllers
                     {
                         if (_context.Workdays_Clients
                                     .Where(wc => (wc.Client.Id == idClient 
-                                        && wc.Session.Contains("AM") == true && wc.Workday.Date == date
+                                        && wc.Session.Contains("AM") == true 
+                                        && wc.Workday.Date == date
                                         && wc.Id != idWordayClient))
                                     .Count() > 0)
                             return true;
@@ -12728,7 +12730,8 @@ namespace KyoS.Web.Controllers
                         {
                             if (_context.Workdays_Clients
                                         .Where(wc => (wc.Client.Id == idClient 
-                                            && wc.Session.Contains("PM") == true && wc.Workday.Date == date
+                                            && wc.Session.Contains("PM") == true 
+                                            && wc.Workday.Date == date
                                             && wc.Id != idWordayClient))
                                         .Count() > 0)
                                 return true;
