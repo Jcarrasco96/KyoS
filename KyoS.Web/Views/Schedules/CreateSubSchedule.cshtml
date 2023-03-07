@@ -12,6 +12,19 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="IdSchedule" />
             <div class="col-md-12">
+                @if (ViewData["error"].ToString() == "1")
+                {
+                    <div class="alert alert-block alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <strong class="red">
+                            Error. The date range is incorrect.
+                        </strong>
+                    </div>
+                }
+            </div>
+            <div class="col-md-12">
                 <div class="col-md-6">
                     <label asp-for="InitialTime" class="control-label"></label>
                     <input asp-for="InitialTime" class="form-control" />

@@ -2175,18 +2175,24 @@ namespace KyoS.Web.Controllers
                
                 if (note == null)   //the note is not exist
                 {
-
-                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    List<SubScheduleEntity> subSchedules = new List<SubScheduleEntity>();
                     SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
-                    string time = workday_Client.Session.Substring(0, 7);
-                    foreach (var value in subSchedules)
+
+                    if (workday_Client.Schedule != null)
                     {
-                        if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                        subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                       
+                        string time = workday_Client.Session.Substring(0, 7);
+                        foreach (var value in subSchedules)
                         {
-                            subScheduleEntity = value;
+                            if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                            {
+                                subScheduleEntity = value;
+                            }
                         }
+
                     }
-                   
+
                     //note.SubSchedule = workday_Client.Schedule.SubSchedules.FirstOrDefault(n => n.Schedule.SubSchedules.Where(m => m.InitialTime.ToString().Contains(time) == true).Count() > 0);
                     //Verify the client is not present in other services of notes at the same time
                     if (this.VerifyNotesAtSameTime(model.IdClient, workday_Client.Session, workday_Client.Workday.Date, subScheduleEntity.InitialTime, subScheduleEntity.EndTime, workday_Client.Id))

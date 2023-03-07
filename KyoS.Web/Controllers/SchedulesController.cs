@@ -269,24 +269,10 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSchedules", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
         }
 
-        public async Task<IActionResult> CreateSubSchedule(int id = 0)
+        public async Task<IActionResult> CreateSubSchedule(int id = 0, int error = 0)
         {
-            if (id == 1)
-            {
-                ViewBag.Creado = "Y";
-            }
-            else
-            {
-                if (id == 2)
-                {
-                    ViewBag.Creado = "E";
-                }
-                else
-                {
-                    ViewBag.Creado = "N";
-                }
-            }
-
+            ViewData["error"] = error;
+           
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
@@ -297,10 +283,29 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
+            ScheduleEntity schedule = await _context.Schedule
+                                                    .Include(n => n.SubSchedules)
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+            DateTime initial = new DateTime();
+            DateTime end = new DateTime();
+
+            if (schedule.SubSchedules.Count() == 0)
+            {
+                initial = schedule.InitialTime;
+                end = schedule.EndTime;
+            }
+            else
+            {
+                initial = schedule.SubSchedules.Max(n => n.EndTime).AddMinutes(5);
+                end = schedule.EndTime;
+            }
             SubScheduleViewModel model = new SubScheduleViewModel();
             model = new SubScheduleViewModel()
             {
-                IdSchedule = id
+                IdSchedule = id,
+                InitialTime = initial,
+                EndTime = end
             };
             return View(model);
         }
@@ -312,52 +317,52 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                SubScheduleEntity subSchedule = await _context.SubSchedule.FirstOrDefaultAsync(c => c.Id == subScheduleViewModel.Id);
-                if (subSchedule == null)
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                          .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                SubScheduleEntity subScheduleEntity = _converterHelper.ToSubScheduleEntity(subScheduleViewModel, true, user_logged);
+
+                if (this.VerifySubScheduleTime(subScheduleViewModel.IdSchedule, 0, subScheduleViewModel.InitialTime, subScheduleViewModel.EndTime))
                 {
-                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                    SubScheduleEntity subScheduleEntity = _converterHelper.ToSubScheduleEntity(subScheduleViewModel, true, user_logged);
-
-                    _context.Add(subScheduleEntity);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-
-                        List<ScheduleEntity> listSchedules = await _context.Schedule
-                                                                           .Include(n => n.SubSchedules)
-                                                                           .OrderBy(d => d.Service).ThenBy(n => n.Session).ThenBy(n => n.InitialTime)
-                                                                           .ToListAsync();
-
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSchedules", listSchedules) });
-                    }
-                    catch (System.Exception ex)
-                    {
-                        if (ex.InnerException.Message.Contains("duplicate"))
-                        {
-                            ModelState.AddModelError(string.Empty, $"Already exists the schedule: {subScheduleEntity.Id}");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                        }
-                    }
+                    ViewData["error"] = 1;
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSubSchedule", subScheduleViewModel) });
                 }
-                else
+
+                _context.Add(subScheduleEntity);
+                try
                 {
-                    return RedirectToAction("Create", new { id = 2 });
+                    await _context.SaveChangesAsync();
+
+                    List<ScheduleEntity> listSchedules = await _context.Schedule
+                                                                       .Include(n => n.SubSchedules)
+                                                                       .OrderBy(d => d.Service).ThenBy(n => n.Session).ThenBy(n => n.InitialTime)
+                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSchedules", listSchedules) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the schedule: {subScheduleEntity.Id}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
                 }
             }
-            return View(subScheduleViewModel);
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSubSchedule", subScheduleViewModel) });
         }
 
-        public async Task<IActionResult> EditSubSchedule(int? id)
+        public async Task<IActionResult> EditSubSchedule(int? id, int error = 0)
         {
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
+
+            ViewData["error"] = error;
 
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
@@ -395,8 +400,32 @@ namespace KyoS.Web.Controllers
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
                 SubScheduleEntity subScheduleEntity = _converterHelper.ToSubScheduleEntity(subScheduleViewModel, false, user_logged);
+
+                /*if (this.VerifySubScheduleTime(subScheduleViewModel.IdSchedule, subScheduleViewModel.Id, subScheduleViewModel.InitialTime, subScheduleViewModel.EndTime))
+                 {
+                     ViewData["error"] = 1;
+                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSubSchedule", subScheduleViewModel) });
+                 }*/
+                 if (subScheduleViewModel.InitialTime > subScheduleViewModel.EndTime)
+                 {
+                     ViewData["error"] = 1;
+                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSubSchedule", subScheduleViewModel) });
+                 }
+
+                /* List<SubScheduleEntity> ListSubSchedule = await _context.SubSchedule
+                                                                         .Where(n => n.Schedule.Id == subScheduleViewModel.IdSchedule)
+                                                                         .ToListAsync();
+                 foreach(var item in ListSubSchedule)
+                 {
+                     if (item.Id != subScheduleViewModel.Id && item.InitialTime <= subScheduleViewModel.InitialTime && item.EndTime >= subScheduleViewModel.InitialTime)
+                     {
+                         ViewData["error"] = 1;
+                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSubSchedule", subScheduleViewModel) });
+                     }
+
+                 }*/
+
                 _context.Update(subScheduleEntity);
                 try
                 {
@@ -480,5 +509,37 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSchedules", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
         }
 
+        #region Utils funtions
+        private bool VerifySubScheduleTime(int idSchedule = 0, int idSubSchedule = 0, DateTime initialTime = new DateTime(), DateTime endTime = new DateTime())
+        {
+            ScheduleEntity schedule = _context.Schedule
+                                              .Include(n => n.SubSchedules)
+                                              .FirstOrDefault(n => n.Id == idSchedule);
+            if (endTime <= initialTime)
+            {
+                return true;
+            }
+            if (initialTime >= schedule.InitialTime && initialTime < schedule.EndTime && endTime > schedule.InitialTime && endTime <= schedule.EndTime)
+            {
+                if (schedule.SubSchedules.Count() > 0)
+                {
+                    foreach (var item in schedule.SubSchedules)
+                    {
+                        if (item.Id != idSubSchedule)
+                        {
+                            if ((initialTime >= item.InitialTime && initialTime <= item.EndTime) || (endTime >= item.InitialTime && endTime <= item.EndTime))
+                            {
+                                return true;
+                            }
+                        }
+                        
+                    }
+                }
+                return false;
+            }
+           
+            return true;
+        }
+        #endregion
     }
 }
