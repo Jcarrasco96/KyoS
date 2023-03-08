@@ -74,7 +74,7 @@ namespace KyoS.Web.Data.Entities
                                             }
                                             else
                                             {
-                                                units = units + 8;
+                                                units = units + workday_client.Schedule.SubSchedules.Count() * 4;
                                             }
                                         }
                                         else

@@ -201,7 +201,9 @@
                                                                                             }
                                                                                             else
                                                                                             {
-                                                                                                <label>8</label>
+                                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                                <label>@value</label>
+                                                                                                value = 0;
                                                                                             }
                                                                                         }
                                                                                         else
@@ -277,7 +279,9 @@
                                                                             }
                                                                             else
                                                                             {
-                                                                                units = units + 8;
+                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                units = units + value;
+                                                                                value = 0;
                                                                             }
                                                                         }
                                                                         else

@@ -188,7 +188,18 @@
                                                                                     {
                                                                                         if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                                         {
-                                                                                            <label>8</label>
+                                                                                            if (workdayClient.GroupNote2 != null)
+                                                                                            {
+                                                                                                var value = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                                <label>@value</label>
+                                                                                                value = 0;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                                <label>@value</label>
+                                                                                                value = 0;
+                                                                                            }
                                                                                         }
                                                                                         else
                                                                                         {
@@ -255,7 +266,18 @@
                                                                     {
                                                                         if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                         {
-                                                                            units = units + 8;
+                                                                            if (workdayClient.GroupNote2 != null)
+                                                                            {
+                                                                                var value1 = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                units = units + value1;
+                                                                                value1 = 0;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                units = units + value;
+                                                                                value = 0;
+                                                                            }
                                                                         }
                                                                         else
                                                                         {

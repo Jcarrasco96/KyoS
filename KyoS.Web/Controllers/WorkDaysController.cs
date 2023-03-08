@@ -312,7 +312,8 @@ namespace KyoS.Web.Controllers
                                                 Present = true,
                                                 GroupSize = client.Group.Clients.Count(),
                                                 SharedSession = client.Group.SharedSession,
-                                                CodeBill = clinic_entity.CodePSRTherapy
+                                                CodeBill = clinic_entity.CodePSRTherapy,
+                                                Schedule = client.Group.Schedule
                                             });                                           
                                         }
                                     }

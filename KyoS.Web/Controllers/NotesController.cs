@@ -11595,11 +11595,26 @@ namespace KyoS.Web.Controllers
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
+                                                        .ThenInclude(wc => wc.GroupNotes_Activities)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote2)
+                                                        .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(wc => wc.Client)
                                                         .ThenInclude(c => c.Clients_Diagnostics)
                                                         .ThenInclude(cd => cd.Diagnostic)
 
                                                         .Include(w => w.Clinic)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(d => d.Schedule)
+                                                        .ThenInclude(d => d.SubSchedules)
 
                                                         .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));
 
@@ -11640,11 +11655,26 @@ namespace KyoS.Web.Controllers
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
+                                                        .ThenInclude(wc => wc.GroupNotes_Activities)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote2)
+                                                        .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
                                                         .ThenInclude(wc => wc.Client)
                                                         .ThenInclude(c => c.Clients_Diagnostics)
                                                         .ThenInclude(cd => cd.Diagnostic)
 
                                                         .Include(w => w.Clinic)
+
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(d => d.Schedule)
+                                                        .ThenInclude(d => d.SubSchedules)
 
                                                         .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
 
@@ -11723,7 +11753,12 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
-                                                       
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(d => d.Schedule)
+                                                       .ThenInclude(d => d.SubSchedules)
+
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));
 
                 try
@@ -11783,7 +11818,12 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
-                                                      
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(d => d.Schedule)
+                                                       .ThenInclude(d => d.SubSchedules)
+
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
                 
                 BillingReport1ViewModel model = new BillingReport1ViewModel
@@ -11854,6 +11894,9 @@ namespace KyoS.Web.Controllers
 
                                                                  .Include(wc => wc.Facilitator)
 
+                                                                 .Include(wc => wc.Schedule)
+                                                                 .ThenInclude(wc => wc.SubSchedules)
+
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Workday.Week.Id == id
                                                                             && wc.Present == true
@@ -11901,8 +11944,8 @@ namespace KyoS.Web.Controllers
                                     }
                                     else
                                     {
-                                        cantUnit += 8;
-                                        money += 8 * 7;
+                                        cantUnit += item.Schedule.SubSchedules.Count() * 4;
+                                        money += item.Schedule.SubSchedules.Count() * 4 * 7;
                                     }
                                 }
                                 else
@@ -11940,6 +11983,9 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(w => w.Week)
 
                                                                  .Include(wc => wc.Facilitator)
+
+                                                                 .Include(wc => wc.Schedule)
+                                                                 .ThenInclude(wc => wc.SubSchedules)
 
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Workday.Week.Id == id
@@ -11988,8 +12034,8 @@ namespace KyoS.Web.Controllers
                                     }
                                     else
                                     {
-                                        cantUnit += 8;
-                                        money += 8 * 7;
+                                        cantUnit += item.Schedule.SubSchedules.Count() * 4;
+                                        money += item.Schedule.SubSchedules.Count() * 4 * 7;
                                     }
                                 }
                                 else
@@ -14028,6 +14074,9 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(wc => wc.Week)
                                                                  .ThenInclude(wc => wc.Clinic)
 
+                                                                 .Include(wc => wc.Schedule)
+                                                                 .ThenInclude(wc => wc.SubSchedules)
+
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Present == true
                                                                             && wc.Client.Id == idClient
@@ -14083,8 +14132,8 @@ namespace KyoS.Web.Controllers
                                     }
                                     else
                                     {
-                                        cantUnit += 8;
-                                        money += 8 * 7;
+                                        cantUnit += item.Schedule.SubSchedules.Count() * 4;
+                                        money += item.Schedule.SubSchedules.Count() * 4 * 7;
                                     }
                                 }
                                 else
@@ -14128,6 +14177,9 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(wc => wc.Clinic)
 
                                                                  .Include(wc => wc.Facilitator)
+
+                                                                 .Include(wc => wc.Schedule)
+                                                                 .ThenInclude(wc => wc.SubSchedules)
 
                                                                  .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                             && wc.Present == true
@@ -14184,8 +14236,8 @@ namespace KyoS.Web.Controllers
                                     }
                                     else
                                     {
-                                        cantUnit += 8;
-                                        money += 8 * 7;
+                                        cantUnit += item.Schedule.SubSchedules.Count() * 4;
+                                        money += item.Schedule.SubSchedules.Count() * 4 * 7;
                                     }
                                 }
                                 else
@@ -14293,6 +14345,8 @@ namespace KyoS.Web.Controllers
                                                                      .Include(wc => wc.NoteP)
                                                                      .Include(wc => wc.IndividualNote)
                                                                      .Include(wc => wc.GroupNote)
+                                                                     .Include(wc => wc.GroupNote2)
+                                                                     .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                      .Include(wc => wc.Client)
                                                                      .ThenInclude(c => c.Clients_Diagnostics)
@@ -14303,6 +14357,9 @@ namespace KyoS.Web.Controllers
                                                                      .ThenInclude(wc => wc.Clinic)
 
                                                                      .Include(wc => wc.Facilitator)
+                                                                     
+                                                                     .Include(wc => wc.Schedule)
+                                                                     .ThenInclude(wc => wc.SubSchedules)
 
                                                                      .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                                 && wc.Present == true
@@ -14321,6 +14378,8 @@ namespace KyoS.Web.Controllers
                                                                      .Include(wc => wc.NoteP)
                                                                      .Include(wc => wc.IndividualNote)
                                                                      .Include(wc => wc.GroupNote)
+                                                                     .Include(wc => wc.GroupNote2)
+                                                                     .ThenInclude(wc => wc.GroupNotes2_Activities)
 
                                                                      .Include(wc => wc.Client)
                                                                      .ThenInclude(c => c.Clients_Diagnostics)
@@ -14331,6 +14390,9 @@ namespace KyoS.Web.Controllers
                                                                      .ThenInclude(wc => wc.Clinic)
 
                                                                      .Include(wc => wc.Facilitator)
+
+                                                                     .Include(wc => wc.Schedule)
+                                                                     .ThenInclude(wc => wc.SubSchedules)
 
                                                                      .Where(wc => (wc.Workday.Week.Clinic.Id == user_logged.Clinic.Id
                                                                                 && wc.Present == true

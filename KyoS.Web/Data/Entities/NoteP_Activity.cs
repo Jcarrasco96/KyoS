@@ -27,5 +27,6 @@ namespace KyoS.Web.Data.Entities
         public bool Other { get; set; }
 
         public ObjetiveEntity Objetive { get; set; }
+        public SubScheduleEntity SubSchedule { get; set; }
     }
 }
