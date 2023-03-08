@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/12/2023 17:21:27" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/07/2023 18:14:41" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3b0qBNHjug9vQJo83/PNcrg==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3pnfH7GZMp5HWFCp04kWm/A==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -32,7 +32,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ARKu+hWY/4Ef4StG5U61DQ==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3BZVXtHZcCnvbb0d+o4lLyQ==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -63,7 +63,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cTuv235Ps5bxrS9/9bwQ/g==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3TyNKybKwDVqJSIJwXarROA==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3fzy6FNnQXJ5Q+zXhUTIQGg==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33xArgDJwqKJPsfjpVdePVw==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -125,7 +125,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39c+8Vtj5KGX/1dBn6H+EeA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3U97k+Bmr6GPiPrE9I1pq5A==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -296,6 +296,161 @@
         <Column Name="ClinicId" DataType="System.Int32"/>
         <Column Name="RaterEducation" DataType="System.String"/>
         <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u37Wey8MQHVGXzrpGfn96zNA==">
+      <TableDataSource Name="Goals5" Alias="Goals6" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives5" Alias="Objetives6" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3OjCyCfYWXg+ENKGrGTdVJA==">
+      <TableDataSource Name="Goals6" Alias="Goals7" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives6" Alias="Objetives7" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3KP9x2EPP06fhwJ1rOD53vQ==">
+      <TableDataSource Name="Goals7" Alias="Goals8" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives7" Alias="Objetives8" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3hRNxjg+0GV4DVBJhGTmJZg==">
+      <TableDataSource Name="Goals8" Alias="Goals9" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives8" Alias="Objetives9" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3e25phu2LpkYCqJR+iduLmQ==">
+      <TableDataSource Name="Goals9" Alias="Goals10" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives9" Alias="Objetives10" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+        <Column Name="Compliment" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Compliment_Date" DataType="System.DateTime"/>
+        <Column Name="Compliment_Explain" DataType="System.String"/>
+        <Column Name="Compliment_IdMTPReview" DataType="System.Int32"/>
+        <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
   </Dictionary>
@@ -815,7 +970,342 @@
       </TableObject>
       <DataHeaderBand Name="DataHeader6" Top="2692.41" Width="778.3" CanGrow="true" CanShrink="true"/>
     </DataBand>
-    <DataBand Name="Data14" Top="2881.85" Width="778.3" Height="529.2" DataSource="DocumentsAssistant">
+    <DataBand Name="Data3" Top="2881.85" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals5">
+      <TextObject Name="Text232" Top="6" Width="132.3" Height="20.79" Text="Area of Focus 6:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text233" Top="27.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals6.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text234" Top="68.15" Width="264.6" Height="20.79" Text="Goal # [Goals6.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text235" Top="90.05" Width="774.9" Height="28.35" CanGrow="true" Text="[Goals6.Name]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text236" Top="120.4" Width="128.52" Height="20.79" Text="Date Goal Opened:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text237" Left="359.1" Top="120.4" Width="128.52" Height="20.79" Text="Target Date:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text238" Left="123.3" Top="120.4" Width="141.75" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text239" Left="487.4" Top="120.4" Width="113.4" Height="18.9" Text="[Objetives6.DateTarget]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text240" Top="154.75" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text241" Left="64.15" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text242" Left="245.7" Top="154.75" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text243" Left="309.85" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text244" Left="500.85" Top="154.75" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text245" Left="593.35" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text246" Top="183.1" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text247" Left="64.15" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text248" Left="245.7" Top="183.1" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text249" Left="309.85" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text250" Left="500.85" Top="183.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text251" Left="593.35" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data15" Top="3093.74" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives5">
+      <TableObject Name="Table27" Width="777.78" Height="171.99">
+        <TableColumn Name="Column95" Width="128.52"/>
+        <TableColumn Name="Column96" Width="267.48"/>
+        <TableColumn Name="Column97" Width="92.61"/>
+        <TableColumn Name="Column98" Width="120.96"/>
+        <TableColumn Name="Column99" Width="168.21"/>
+        <TableRow Name="Row68" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell284" Text="&#13;&#10;&lt;b&gt;Objective [Objetives6.Objetive]:&lt;/b&gt;&#13;&#10;[Objetives6.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell285" Font="Arial, 10pt"/>
+          <TableCell Name="Cell286" Font="Arial, 10pt"/>
+          <TableCell Name="Cell287" Font="Arial, 10pt"/>
+          <TableCell Name="Cell288" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row69" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell289" Text="&#13;&#10;&lt;b&gt;Clinical Interventions (treatment strategies): &lt;/b&gt;&#13;&#10;[Objetives6.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell290" Font="Arial, 10pt"/>
+          <TableCell Name="Cell291" Font="Arial, 10pt"/>
+          <TableCell Name="Cell292" Font="Arial, 10pt"/>
+          <TableCell Name="Cell293" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row70">
+          <TableCell Name="Cell294" Text="Date Goal Opened: " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell295" Text="&lt;u&gt;[Objetives6.DateOpened]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell296" Text="Target Date:" Format="Date" Format.Format="d" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell297" Text=" &lt;u&gt;[Objetives6.DateTarget]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="2"/>
+          <TableCell Name="Cell298" HorzAlign="Justify" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row71" Height="28.35">
+          <TableCell Name="Cell299" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell300" Font="Arial, 10pt"/>
+          <TableCell Name="Cell301" Font="Arial, 10pt"/>
+          <TableCell Name="Cell302" Font="Arial, 10pt"/>
+          <TableCell Name="Cell303" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row72" Height="30.24">
+          <TableCell Name="Cell304" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell305" Font="Arial, 10pt"/>
+          <TableCell Name="Cell306" Font="Arial, 10pt"/>
+          <TableCell Name="Cell307" Font="Arial, 10pt"/>
+          <TableCell Name="Cell308" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader7" Top="3089.74" Width="778.3"/>
+    </DataBand>
+    <DataBand Name="Data16" Top="3279.18" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals6">
+      <TextObject Name="Text252" Top="6" Width="132.3" Height="20.79" Text="Area of Focus 7:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text253" Top="27.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals7.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text254" Top="68.15" Width="264.6" Height="20.79" Text="Goal # [Goals7.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text255" Top="90.05" Width="774.9" Height="28.35" CanGrow="true" Text="[Goals7.Name]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text256" Top="120.4" Width="128.52" Height="20.79" Text="Date Goal Opened:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text257" Left="359.1" Top="120.4" Width="128.52" Height="20.79" Text="Target Date:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text258" Left="123.3" Top="120.4" Width="141.75" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text259" Left="487.4" Top="120.4" Width="113.4" Height="18.9" Text="[Objetives7.DateTarget]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text260" Top="154.75" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text261" Left="64.15" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text262" Left="245.7" Top="154.75" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text263" Left="309.85" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text264" Left="500.85" Top="154.75" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text265" Left="593.35" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text266" Top="183.1" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text267" Left="64.15" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text268" Left="245.7" Top="183.1" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text269" Left="309.85" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text270" Left="500.85" Top="183.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text271" Left="593.35" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data17" Top="3491.07" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives6">
+      <TableObject Name="Table28" Width="777.78" Height="171.99">
+        <TableColumn Name="Column100" Width="128.52"/>
+        <TableColumn Name="Column101" Width="267.48"/>
+        <TableColumn Name="Column102" Width="92.61"/>
+        <TableColumn Name="Column103" Width="120.96"/>
+        <TableColumn Name="Column104" Width="168.21"/>
+        <TableRow Name="Row73" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell309" Text="&#13;&#10;&lt;b&gt;Objective [Objetives7.Objetive]:&lt;/b&gt;&#13;&#10;[Objetives7.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell310" Font="Arial, 10pt"/>
+          <TableCell Name="Cell311" Font="Arial, 10pt"/>
+          <TableCell Name="Cell312" Font="Arial, 10pt"/>
+          <TableCell Name="Cell313" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row74" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell314" Text="&#13;&#10;&lt;b&gt;Clinical Interventions (treatment strategies): &lt;/b&gt;&#13;&#10;[Objetives7.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell315" Font="Arial, 10pt"/>
+          <TableCell Name="Cell316" Font="Arial, 10pt"/>
+          <TableCell Name="Cell317" Font="Arial, 10pt"/>
+          <TableCell Name="Cell318" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row75">
+          <TableCell Name="Cell319" Text="Date Goal Opened: " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell320" Text="&lt;u&gt;[Objetives7.DateOpened]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell321" Text="Target Date:" Format="Date" Format.Format="d" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell322" Text=" &lt;u&gt;[Objetives7.DateTarget]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="2"/>
+          <TableCell Name="Cell323" HorzAlign="Justify" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row76" Height="28.35">
+          <TableCell Name="Cell324" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell325" Font="Arial, 10pt"/>
+          <TableCell Name="Cell326" Font="Arial, 10pt"/>
+          <TableCell Name="Cell327" Font="Arial, 10pt"/>
+          <TableCell Name="Cell328" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row77" Height="30.24">
+          <TableCell Name="Cell329" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell330" Font="Arial, 10pt"/>
+          <TableCell Name="Cell331" Font="Arial, 10pt"/>
+          <TableCell Name="Cell332" Font="Arial, 10pt"/>
+          <TableCell Name="Cell333" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader8" Top="3487.07" Width="778.3"/>
+    </DataBand>
+    <DataBand Name="Data18" Top="3676.51" Width="778.3" Height="203.89" CanGrow="true" CanShrink="true" DataSource="Goals7">
+      <TextObject Name="Text272" Top="6" Width="132.3" Height="20.79" Text="Area of Focus 8:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text273" Top="27.9" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals8.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text274" Top="68.15" Width="264.6" Height="20.79" Text="Goal # [Goals8.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text275" Top="89.05" Width="774.9" Height="28.35" CanGrow="true" Text="[Goals8.Name]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text276" Top="120.4" Width="128.52" Height="20.79" Text="Date Goal Opened:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text277" Left="359.1" Top="120.4" Width="128.52" Height="20.79" Text="Target Date:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text278" Left="123.3" Top="120.4" Width="141.75" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text279" Left="487.4" Top="120.4" Width="113.4" Height="18.9" Text="[Objetives8.DateTarget]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text280" Top="154.75" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text281" Left="64.15" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text282" Left="245.7" Top="154.75" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text283" Left="309.85" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text284" Left="500.85" Top="154.75" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text285" Left="593.35" Top="154.75" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text286" Top="183.1" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text287" Left="64.15" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text288" Left="245.7" Top="183.1" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text289" Left="309.85" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text290" Left="500.85" Top="183.1" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text291" Left="593.35" Top="183.1" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data19" Top="3888.4" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives7">
+      <TableObject Name="Table29" Width="777.78" Height="171.99">
+        <TableColumn Name="Column105" Width="128.52"/>
+        <TableColumn Name="Column106" Width="267.48"/>
+        <TableColumn Name="Column107" Width="92.61"/>
+        <TableColumn Name="Column108" Width="120.96"/>
+        <TableColumn Name="Column109" Width="168.21"/>
+        <TableRow Name="Row78" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell334" Text="&#13;&#10;&lt;b&gt;Objective [Objetives8.Objetive]:&lt;/b&gt;&#13;&#10;[Objetives8.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell335" Font="Arial, 10pt"/>
+          <TableCell Name="Cell336" Font="Arial, 10pt"/>
+          <TableCell Name="Cell337" Font="Arial, 10pt"/>
+          <TableCell Name="Cell338" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row79" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell339" Text="&#13;&#10;&lt;b&gt;Clinical Interventions (treatment strategies): &lt;/b&gt;&#13;&#10;[Objetives8.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell340" Font="Arial, 10pt"/>
+          <TableCell Name="Cell341" Font="Arial, 10pt"/>
+          <TableCell Name="Cell342" Font="Arial, 10pt"/>
+          <TableCell Name="Cell343" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row80">
+          <TableCell Name="Cell344" Text="Date Goal Opened: " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell345" Text="&lt;u&gt;[Objetives8.DateOpened]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell346" Text="Target Date:" Format="Date" Format.Format="d" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell347" Text=" &lt;u&gt;[Objetives8.DateTarget]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="2"/>
+          <TableCell Name="Cell348" HorzAlign="Justify" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row81" Height="28.35">
+          <TableCell Name="Cell349" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell350" Font="Arial, 10pt"/>
+          <TableCell Name="Cell351" Font="Arial, 10pt"/>
+          <TableCell Name="Cell352" Font="Arial, 10pt"/>
+          <TableCell Name="Cell353" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row82" Height="30.24">
+          <TableCell Name="Cell354" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell355" Font="Arial, 10pt"/>
+          <TableCell Name="Cell356" Font="Arial, 10pt"/>
+          <TableCell Name="Cell357" Font="Arial, 10pt"/>
+          <TableCell Name="Cell358" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader9" Top="3884.4" Width="778.3"/>
+    </DataBand>
+    <DataBand Name="Data20" Top="4073.84" Width="778.3" Height="204.34" CanGrow="true" CanShrink="true" DataSource="Goals8">
+      <TextObject Name="Text292" Top="6.45" Width="132.3" Height="20.79" Text="Area of Focus 9:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text293" Top="28.35" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals9.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text294" Top="68.6" Width="264.6" Height="20.79" Text="Goal # [Goals9.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text295" Top="90.5" Width="774.9" Height="28.35" CanGrow="true" Text="[Goals9.Name]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text296" Top="120.85" Width="128.52" Height="20.79" Text="Date Goal Opened:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text297" Left="359.1" Top="120.85" Width="128.52" Height="20.79" Text="Target Date:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text298" Left="123.3" Top="120.85" Width="141.75" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text299" Left="487.4" Top="120.85" Width="113.4" Height="18.9" Text="[Objetives9.DateTarget]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text300" Top="155.2" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text301" Left="64.15" Top="155.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text302" Left="245.7" Top="155.2" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text303" Left="309.85" Top="155.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text304" Left="500.85" Top="155.2" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text305" Left="593.35" Top="155.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text306" Top="183.55" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text307" Left="64.15" Top="183.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text308" Left="245.7" Top="183.55" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text309" Left="309.85" Top="183.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text310" Left="500.85" Top="183.55" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text311" Left="593.35" Top="183.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data21" Top="4286.18" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives8">
+      <TableObject Name="Table30" Width="777.78" Height="171.99">
+        <TableColumn Name="Column110" Width="128.52"/>
+        <TableColumn Name="Column111" Width="267.48"/>
+        <TableColumn Name="Column112" Width="92.61"/>
+        <TableColumn Name="Column113" Width="120.96"/>
+        <TableColumn Name="Column114" Width="168.21"/>
+        <TableRow Name="Row83" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell359" Text="&#13;&#10;&lt;b&gt;Objective [Objetives9.Objetive]:&lt;/b&gt;&#13;&#10;[Objetives9.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell360" Font="Arial, 10pt"/>
+          <TableCell Name="Cell361" Font="Arial, 10pt"/>
+          <TableCell Name="Cell362" Font="Arial, 10pt"/>
+          <TableCell Name="Cell363" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row84" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell364" Text="&#13;&#10;&lt;b&gt;Clinical Interventions (treatment strategies): &lt;/b&gt;&#13;&#10;[Objetives9.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell365" Font="Arial, 10pt"/>
+          <TableCell Name="Cell366" Font="Arial, 10pt"/>
+          <TableCell Name="Cell367" Font="Arial, 10pt"/>
+          <TableCell Name="Cell368" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row85">
+          <TableCell Name="Cell369" Text="Date Goal Opened: " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell370" Text="&lt;u&gt;[Objetives9.DateOpened]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell371" Text="Target Date:" Format="Date" Format.Format="d" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell372" Text=" &lt;u&gt;[Objetives9.DateTarget]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="2"/>
+          <TableCell Name="Cell373" HorzAlign="Justify" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row86" Height="28.35">
+          <TableCell Name="Cell374" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell375" Font="Arial, 10pt"/>
+          <TableCell Name="Cell376" Font="Arial, 10pt"/>
+          <TableCell Name="Cell377" Font="Arial, 10pt"/>
+          <TableCell Name="Cell378" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row87" Height="30.24">
+          <TableCell Name="Cell379" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell380" Font="Arial, 10pt"/>
+          <TableCell Name="Cell381" Font="Arial, 10pt"/>
+          <TableCell Name="Cell382" Font="Arial, 10pt"/>
+          <TableCell Name="Cell383" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader10" Top="4282.18" Width="778.3"/>
+    </DataBand>
+    <DataBand Name="Data22" Top="4471.62" Width="778.3" Height="203.74" CanGrow="true" CanShrink="true" DataSource="Goals9">
+      <TextObject Name="Text313" Top="27.35" Width="774.9" Height="37.8" CanGrow="true" Text="[Goals10.AreaOfFocus]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text314" Top="67.6" Width="264.6" Height="20.79" Text="Goal # [Goals10.Number]" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text315" Top="89.5" Width="774.9" Height="28.35" CanGrow="true" Text="[Goals10.Name]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text316" Top="119.85" Width="128.52" Height="20.79" Text="Date Goal Opened:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text317" Left="359.1" Top="119.85" Width="128.52" Height="20.79" Text="Target Date:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text318" Left="123.3" Top="119.85" Width="141.75" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text319" Left="487.4" Top="119.85" Width="113.4" Height="18.9" Text="[Objetives10.DateTarget]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text320" Top="154.2" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text321" Left="64.15" Top="154.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text322" Left="245.7" Top="154.2" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text323" Left="309.85" Top="154.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text324" Left="500.85" Top="154.2" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text325" Left="593.35" Top="154.2" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text326" Top="182.55" Width="62.37" Height="20.79" Text="Review:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text327" Left="64.15" Top="182.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text328" Left="245.7" Top="182.55" Width="62.37" Height="20.79" Text="Target:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text329" Left="309.85" Top="182.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text330" Left="500.85" Top="182.55" Width="90.72" Height="20.79" Text="Goal status:" HorzAlign="Right" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text331" Left="593.35" Top="182.55" Width="151.2" Height="18.9" Text="_______________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text312" Top="5.45" Width="132.3" Height="20.79" Text="Area of Focus 10:" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+    </DataBand>
+    <DataBand Name="Data23" Top="4683.36" Width="778.3" Height="181.44" CanGrow="true" CanShrink="true" DataSource="Objetives9">
+      <TableObject Name="Table31" Width="777.78" Height="171.99">
+        <TableColumn Name="Column115" Width="128.52"/>
+        <TableColumn Name="Column116" Width="267.48"/>
+        <TableColumn Name="Column117" Width="92.61"/>
+        <TableColumn Name="Column118" Width="120.96"/>
+        <TableColumn Name="Column119" Width="168.21"/>
+        <TableRow Name="Row88" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell384" Text="&#13;&#10;&lt;b&gt;Objective [Objetives10.Objetive]:&lt;/b&gt;&#13;&#10;[Objetives10.Description]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell385" Font="Arial, 10pt"/>
+          <TableCell Name="Cell386" Font="Arial, 10pt"/>
+          <TableCell Name="Cell387" Font="Arial, 10pt"/>
+          <TableCell Name="Cell388" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row89" Height="47.25" AutoSize="true">
+          <TableCell Name="Cell389" Text="&#13;&#10;&lt;b&gt;Clinical Interventions (treatment strategies): &lt;/b&gt;&#13;&#10;[Objetives10.Intervention]" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell390" Font="Arial, 10pt"/>
+          <TableCell Name="Cell391" Font="Arial, 10pt"/>
+          <TableCell Name="Cell392" Font="Arial, 10pt"/>
+          <TableCell Name="Cell393" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row90">
+          <TableCell Name="Cell394" Text="Date Goal Opened: " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell395" Text="&lt;u&gt;[Objetives10.DateOpened]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell396" Text="Target Date:" Format="Date" Format.Format="d" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell397" Text=" &lt;u&gt;[Objetives10.DateTarget]&lt;/u&gt;" Format="Date" Format.Format="d" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="2"/>
+          <TableCell Name="Cell398" HorzAlign="Justify" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row91" Height="28.35">
+          <TableCell Name="Cell399" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell400" Font="Arial, 10pt"/>
+          <TableCell Name="Cell401" Font="Arial, 10pt"/>
+          <TableCell Name="Cell402" Font="Arial, 10pt"/>
+          <TableCell Name="Cell403" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row92" Height="30.24">
+          <TableCell Name="Cell404" Text="  Review: ____________________ 	    Target: ____________________	      Goal status: ____________________" HorzAlign="Justify" VertAlign="Bottom" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell405" Font="Arial, 10pt"/>
+          <TableCell Name="Cell406" Font="Arial, 10pt"/>
+          <TableCell Name="Cell407" Font="Arial, 10pt"/>
+          <TableCell Name="Cell408" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader11" Top="4679.36" Width="778.3"/>
+    </DataBand>
+    <DataBand Name="Data14" Top="4868.8" Width="778.3" Height="529.2" DataSource="DocumentsAssistant">
       <TextObject Name="Text57" Left="-2.55" Top="28.35" Width="274.05" Height="18.9" Text="ANTICIPATED LENGTH OF TREATMENT:" HorzAlign="Right" Font="Arial, 10pt, style=Bold, Underline"/>
       <CheckBoxObject Name="CheckBox5" Left="277.5" Top="30.35" Width="13.23" Height="13.23" Border.Lines="All" Checked="false" CheckedSymbol="Cross" Expression="IIf([MTPs.NumberOfMonths] == 1,true,false)" CheckWidthRatio="2"/>
       <TextObject Name="Text59" Left="291.4" Top="29.35" Width="47.25" Height="18.9" Text="1 mo" Font="Arial, 9pt"/>

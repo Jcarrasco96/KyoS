@@ -1054,6 +1054,16 @@ namespace KyoS.Web.Helpers
             List<ObjetiveEntity> objetives4 = new List<ObjetiveEntity>();
             List<GoalEntity> goals5 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives5 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals6 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives6 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals7 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives7 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals8 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives8 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals9 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives9 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals10 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives10 = new List<ObjetiveEntity>();
 
             int i = 0;
 
@@ -1099,6 +1109,46 @@ namespace KyoS.Web.Helpers
                         objetives5 = item.Objetives.ToList();
                     }
                 }
+                if (i == 5)
+                {
+                    goals6 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives6 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 6)
+                {
+                    goals7 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives7 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 7)
+                {
+                    goals8 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives8 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 8)
+                {
+                    goals9 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives9 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 9)
+                {
+                    goals10 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives10 = item.Objetives.ToList();
+                    }
+                }
                 i = ++i;
             }
 
@@ -1141,6 +1191,46 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetObjetivesListDS(objetives5));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives5");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals10");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives10");
 
             //signatures images 
             byte[] stream1 = null;
@@ -1593,6 +1683,16 @@ namespace KyoS.Web.Helpers
             List<ObjetiveEntity> objetives4 = new List<ObjetiveEntity>();
             List<GoalEntity> goals5 = new List<GoalEntity>();
             List<ObjetiveEntity> objetives5 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals6 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives6 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals7 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives7 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals8 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives8 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals9 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives9 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals10 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives10 = new List<ObjetiveEntity>();
 
             int i = 0;
 
@@ -1638,6 +1738,46 @@ namespace KyoS.Web.Helpers
                         objetives5 = item.Objetives.ToList();
                     }
                 }
+                if (i == 5)
+                {
+                    goals6 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives6 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 6)
+                {
+                    goals7 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives7 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 7)
+                {
+                    goals8 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives8 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 8)
+                {
+                    goals9 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives9 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 9)
+                {
+                    goals10 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives10 = item.Objetives.ToList();
+                    }
+                }
                 i = ++i;
             }
 
@@ -1680,6 +1820,46 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetObjetivesListDS(objetives5));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives5");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals10");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives10");
 
             //signatures images 
             byte[] stream1 = null;
