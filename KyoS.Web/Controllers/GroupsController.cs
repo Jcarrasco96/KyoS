@@ -264,7 +264,9 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = client.Group.SharedSession
+                                        SharedSession = client.Group.SharedSession,
+                                        CodeBill = user_logged.Clinic.CodePSRTherapy,
+                                        Schedule = client.Group.Schedule
                                     });                                    
                                 }                                
                             }
@@ -312,6 +314,7 @@ namespace KyoS.Web.Controllers
             }
 
             GroupEntity groupEntity = await _context.Groups.Include(g => g.Facilitator)
+                                                           .Include(g => g.Schedule)
                                                            .Include(g => g.Clients).FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
@@ -483,7 +486,9 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = client.Group.SharedSession
+                                        SharedSession = client.Group.SharedSession,
+                                        CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                        Schedule = client.Group.Schedule
                                     });                                    
                                 }                                
                             }
