@@ -717,7 +717,7 @@ namespace KyoS.Web.Helpers
                 Pm = groupEntity.Pm,
                 Clients = groupEntity.Clients,
                 SharedSession = groupEntity.SharedSession,
-                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id)
+                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id, groupEntity.Service)
             };
             if (groupEntity.Schedule != null)
             {

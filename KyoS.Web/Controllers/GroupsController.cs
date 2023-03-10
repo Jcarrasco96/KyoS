@@ -142,7 +142,7 @@ namespace KyoS.Web.Controllers
                 model = new GroupViewModel
                 {
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
-                    Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
+                    Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.PSR)
                 };
 
                 clients = await _context.Clients
@@ -297,7 +297,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.Facilitators = _combosHelper.GetComboFacilitators();
-            model.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
+            model.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.PSR);
 
             MultiSelectList client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
             ViewData["clients"] = client_list;
@@ -641,7 +641,7 @@ namespace KyoS.Web.Controllers
             model = new GroupViewModel
             {
                 Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
-                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Group)
             };
 
             clients = await _context.Clients
@@ -864,7 +864,7 @@ namespace KyoS.Web.Controllers
             }
             
             groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Group);
 
             clients = await _context.Clients
 
@@ -1208,7 +1208,7 @@ namespace KyoS.Web.Controllers
             model = new GroupViewModel
             {
                 Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
-                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id)
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Individual)
             };
            
             return View(model);
@@ -1303,7 +1303,7 @@ namespace KyoS.Web.Controllers
             }
 
             groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Individual);
 
             return View(groupViewModel);
         }

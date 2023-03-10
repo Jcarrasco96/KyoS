@@ -1613,9 +1613,9 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic)
+        public IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic, ServiceType service)
         {
-            List<SelectListItem> list = _context.Schedule.Where(n => n.Clinic.Id == idClinic).OrderBy(f => f.Service).Select(f => new SelectListItem
+            List<SelectListItem> list = _context.Schedule.Where(n => n.Clinic.Id == idClinic && n.Service == service).OrderBy(f => f.InitialTime).Select(f => new SelectListItem
             {
                 Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
                 Value = $"{f.Id}"

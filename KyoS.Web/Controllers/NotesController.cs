@@ -717,7 +717,15 @@ namespace KyoS.Web.Controllers
 
                     _context.Add(noteEntity);
 
-                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    bool bandera = false;
+                    int idSchedule = 0;
+                    if (workday_Client.Schedule != null)
+                    {
+                        bandera = true;
+                        idSchedule = workday_Client.Schedule.Id;
+                    }
+
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToListAsync();
 
                     note_Activity = new Note_Activity
                     {
@@ -726,7 +734,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = model.AnswerClient1.Trim(),
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
-                        SubSchedule = subSchedules.ElementAtOrDefault(0)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -736,7 +744,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
-                        SubSchedule = subSchedules.ElementAtOrDefault(1)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -746,7 +754,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient3 != null) ? model.AnswerClient3.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Trim().Last() == '.') ? model.AnswerFacilitator3.Trim() : $"{model.AnswerFacilitator3.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
-                        SubSchedule = subSchedules.ElementAtOrDefault(2)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -756,7 +764,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient4 != null) ? model.AnswerClient4.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Trim().Last() == '.') ? model.AnswerFacilitator4.Trim() : $"{model.AnswerFacilitator4.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
-                        SubSchedule = subSchedules.ElementAtOrDefault(3)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null
                     };
                     _context.Add(note_Activity);
 
@@ -846,7 +854,15 @@ namespace KyoS.Web.Controllers
                         _context.Remove(item);
                     }
 
-                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    bool bandera = false;
+                    int idSchedule = 0;
+                    if (workday_Client.Schedule != null)
+                    {
+                        bandera = true;
+                        idSchedule = workday_Client.Schedule.Id;
+                    }
+
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToListAsync();
 
                     note_Activity = new Note_Activity
                     {
@@ -855,7 +871,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = model.AnswerClient1.Trim(),
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
-                        SubSchedule = subSchedules.ElementAtOrDefault(0)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null
                     };
                     _context.Add(note_Activity);                    
                     await _context.SaveChangesAsync();
@@ -867,7 +883,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient2 != null) ? model.AnswerClient2.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
-                        SubSchedule = subSchedules.ElementAtOrDefault(1)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -879,7 +895,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient3 != null) ? model.AnswerClient3.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Trim().Last() == '.') ? model.AnswerFacilitator3.Trim() : $"{model.AnswerFacilitator3.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
-                        SubSchedule = subSchedules.ElementAtOrDefault(2)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -891,7 +907,7 @@ namespace KyoS.Web.Controllers
                         AnswerClient = (model.AnswerClient4 != null) ? model.AnswerClient4.Trim() : string.Empty,
                         AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Trim().Last() == '.') ? model.AnswerFacilitator4.Trim() : $"{model.AnswerFacilitator4.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
-                        SubSchedule = subSchedules.ElementAtOrDefault(3)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null
                     };
                     _context.Add(note_Activity);
 
@@ -1494,6 +1510,8 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.MTPs)
 
                                                                            .Include(wc => wc.Facilitator)
+                                                                           .Include(wc => wc.Schedule)
+                                                                           .ThenInclude(c => c.SubSchedules)
 
                                                                            .FirstOrDefaultAsync(wc => wc.Id == model.Id);
             if (workday_Client == null)
@@ -1561,8 +1579,16 @@ namespace KyoS.Web.Controllers
 
                     _context.Add(noteEntity);
 
-                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    bool bandera = false;
+                    int idSchedule = 0;
+                    if (workday_Client.Schedule != null)
+                    {
+                        bandera = true;
+                        idSchedule = workday_Client.Schedule.Id;
+                    }
 
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToListAsync();
+                    
                     note_Activity = new NoteP_Activity
                     {
                         NoteP = noteEntity,
@@ -1581,7 +1607,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present1) ? model.Aggresive1 : false,
                         Resistant = (model.Present1) ? model.Resistant1 : false,
                         Other = (model.Present1) ? model.Other1 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(0)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
@@ -1602,7 +1628,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present2) ? model.Aggresive2 : false,
                         Resistant = (model.Present2) ? model.Resistant2 : false,
                         Other = (model.Present2) ? model.Other2 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(1)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
@@ -1623,7 +1649,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present3) ? model.Aggresive3 : false,
                         Resistant = (model.Present3) ? model.Resistant3 : false,
                         Other = (model.Present3) ? model.Other3 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(2)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null
                     };
                     _context.Add(note_Activity);
                     note_Activity = new NoteP_Activity
@@ -1644,7 +1670,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present4) ? model.Aggresive4 : false,
                         Resistant = (model.Present4) ? model.Resistant4 : false,
                         Other = (model.Present4) ? model.Other4 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(3)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null
                     };
                     _context.Add(note_Activity);
 
@@ -1788,8 +1814,17 @@ namespace KyoS.Web.Controllers
                                                                              .Where(na => na.NoteP.Id == note.Id)
                                                                              .ToListAsync();
                     _context.RemoveRange(noteActivities_list);
-
-                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == workday_Client.Schedule.Id).OrderBy(n => n.InitialTime).ToListAsync();
+                    
+                    bool bandera = false;
+                    int idSchedule = 0;
+                    if (workday_Client.Schedule != null)
+                    {
+                        bandera = true;
+                        idSchedule = workday_Client.Schedule.Id;
+                    }
+                    
+                    List<SubScheduleEntity> subSchedules = await _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToListAsync();
+                    
 
                     note_Activity = new NoteP_Activity
                     {
@@ -1809,7 +1844,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present1) ? model.Aggresive1 : false,
                         Resistant = (model.Present1) ? model.Resistant1 : false,
                         Other = (model.Present1) ? model.Other1 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(0)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1832,7 +1867,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present2) ? model.Aggresive2 : false,
                         Resistant = (model.Present2) ? model.Resistant2 : false,
                         Other = (model.Present2) ? model.Other2 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(1)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1855,7 +1890,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present3) ? model.Aggresive3 : false,
                         Resistant = (model.Present3) ? model.Resistant3 : false,
                         Other = (model.Present3) ? model.Other3 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(2)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1878,7 +1913,7 @@ namespace KyoS.Web.Controllers
                         Aggresive = (model.Present4) ? model.Aggresive4 : false,
                         Resistant = (model.Present4) ? model.Resistant4 : false,
                         Other = (model.Present4) ? model.Other4 : false,
-                        SubSchedule = subSchedules.ElementAtOrDefault(3)
+                        SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null
                     };
                     _context.Add(note_Activity);
 
@@ -2251,8 +2286,15 @@ namespace KyoS.Web.Controllers
                                                                   .FirstOrDefaultAsync(wd => wd.Id == model.Id);
                     workday_client.Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient);
 
-                    individualNoteEntity.SubSchedule = subScheduleEntity;
-
+                    if (subScheduleEntity.Id == 0)
+                    {
+                        individualNoteEntity.SubSchedule = null;
+                    }
+                    else 
+                    {
+                        individualNoteEntity.SubSchedule = subScheduleEntity;
+                    }
+                    
                     if (workday_client.CodeBill != model.CodeBill)
                     {
                         workday_client.CodeBill = model.CodeBill;
