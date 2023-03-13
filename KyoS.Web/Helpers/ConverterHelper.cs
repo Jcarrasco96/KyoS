@@ -356,9 +356,9 @@ namespace KyoS.Web.Helpers
                 Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(userId),
                 IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
-                DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName),
-                ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName),
-                DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName),
+                DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
+                ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == clientEntity.Id),
+                DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 IdService = Convert.ToInt32(clientEntity.Service), 
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
@@ -371,7 +371,7 @@ namespace KyoS.Web.Helpers
                 DateOfClose = clientEntity.DateOfClose,
                 Documents = clientEntity.Documents,
                 OnlyTCM = clientEntity.OnlyTCM,
-                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName)
+                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id)
             };
         }
 

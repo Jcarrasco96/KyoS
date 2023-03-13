@@ -26,5 +26,7 @@ namespace KyoS.Web.Data.Entities
         public bool Active { get; set; }
 
         public string UserName { get; set; }
+
+        public int IdClient { get; set; }
     }
 }

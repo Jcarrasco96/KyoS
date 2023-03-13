@@ -187,15 +187,15 @@ namespace KyoS.Web.Controllers
                         Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(user_logged.Id),
                         IdLegalGuardian = 0,
                         LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
-                        DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName),
-                        ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName),
-                        DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName),
+                        DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
+                        ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == 0),
+                        DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
                         OtherLanguage_Read = false,
                         OtherLanguage_Speak = false,
                         OtherLanguage_Understand = false,
                         MedicareId = "",
                         OnlyTCM = false,
-                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName)
+                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0)
                     };
                     return View(model);
                 }
@@ -240,7 +240,8 @@ namespace KyoS.Web.Controllers
 
                 //----------update Client_Diagnostic table-------------//
                 IQueryable<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp
-                                                                          .Where(d => d.UserName == user_logged.UserName);
+                                                                          .Where(d => d.UserName == user_logged.UserName
+                                                                             && d.IdClient == 0);
                 Client_Diagnostic clientDiagnostic;
                 foreach (DiagnosticTempEntity item in list_to_delete)
                 {
@@ -256,7 +257,8 @@ namespace KyoS.Web.Controllers
 
                 //----------update Documents table---------------------//
                 IQueryable<DocumentTempEntity> list_to_delete_doc = _context.DocumentsTemp
-                                                                            .Where(d => d.UserName == user_logged.UserName); 
+                                                                            .Where(d => d.UserName == user_logged.UserName
+                                                                               && d.IdClient == 0); 
                 DocumentEntity document;
                 foreach (DocumentTempEntity item in list_to_delete_doc)
                 {
@@ -275,7 +277,8 @@ namespace KyoS.Web.Controllers
 
                 //update Client_Referred table with the news ReferredTemp
                 IQueryable<ReferredTempEntity> list_to_delete_referred = _context.ReferredsTemp
-                                                                                 .Where(n => n.CreatedBy == user_logged.UserName);
+                                                                                 .Where(n => n.CreatedBy == user_logged.UserName
+                                                                                    && n.IdClient == 0);
                 Client_Referred clientReferred;
                 foreach (ReferredTempEntity item in list_to_delete_referred)
                 {
@@ -292,7 +295,8 @@ namespace KyoS.Web.Controllers
 
                 //----------update Client_HealthInsurance table-------------//
                 IQueryable<HealthInsuranceTempEntity> listHealthInsurance_to_delete = _context.HealthInsuranceTemp
-                                                                                              .Where(d => d.UserName == user_logged.UserName);
+                                                                                              .Where(d => d.UserName == user_logged.UserName
+                                                                                                && d.IdClient == 0);
                 Client_HealthInsurance clientHealthInsurance;
                 foreach (HealthInsuranceTempEntity item in listHealthInsurance_to_delete)
                 {
@@ -391,10 +395,10 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            this.DeleteDiagnosticsTemp();
-            this.DeleteDocumentsTemp();
-            this.DeleteReferredsTemp();
-            this.DeleteHealthInsuranceTemp();
+            this.DeleteDiagnosticsTemp(clientEntity);
+            this.DeleteDocumentsTemp(clientEntity);
+            this.DeleteReferredsTemp(clientEntity);
+            this.DeleteHealthInsuranceTemp(clientEntity);
 
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
@@ -464,7 +468,8 @@ namespace KyoS.Web.Controllers
 
                 //update Client_Diagnostic table with the news DiagnosticsTemp
                 IQueryable<DiagnosticTempEntity> listDiagnosticTemp = _context.DiagnosticsTemp
-                                                                              .Where(d => d.UserName == user_logged.UserName);
+                                                                              .Where(d => d.UserName == user_logged.UserName
+                                                                                && d.IdClient == clientEntity.Id);
                 Client_Diagnostic clientDiagnostic;
                 foreach (DiagnosticTempEntity item in listDiagnosticTemp)
                 {
@@ -486,7 +491,8 @@ namespace KyoS.Web.Controllers
 
                 //update Client_Referred table with the news ReferredTemp
                 IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp
-                                                                          .Where(d => d.CreatedBy == user_logged.UserName); 
+                                                                          .Where(d => d.CreatedBy == user_logged.UserName
+                                                                            && d.IdClient == clientEntity.Id); 
                 Client_Referred clientReferred;
                 foreach (ReferredTempEntity item1 in listReferredTemp)
                 {
@@ -501,15 +507,23 @@ namespace KyoS.Web.Controllers
                     _context.ReferredsTemp.Remove(item1);
                 }
 
+                //delete all client Documents of this client
+                IEnumerable<DocumentEntity> documents_to_delete = await _context.Documents
+                                                                                .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                .ToListAsync();
+
+                _context.Documents.RemoveRange(documents_to_delete);
+
                 //update Documents table with the news DocumentsTemp
                 IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp
-                                                                          .Where(d => d.UserName == user_logged.UserName);
+                                                                          .Where(d => d.UserName == user_logged.UserName
+                                                                            && d.IdClient == clientViewModel.Id);
                 DocumentEntity document;
                 foreach (DocumentTempEntity item in listDocumentTemp)
                 {
-                    document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == item.DocumentPath);
-                    if (document == null)
-                    {
+                    //document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == item.DocumentPath);
+                    //if (document == null)
+                   // {
                         document = new DocumentEntity
                         {
                             Client = clientEntity,
@@ -520,7 +534,7 @@ namespace KyoS.Web.Controllers
                             CreatedOn = DateTime.Now
                         };
                         _context.Add(document);
-                    }                    
+                   // }                    
                     _context.DocumentsTemp.Remove(item);
                 }
 
@@ -532,7 +546,8 @@ namespace KyoS.Web.Controllers
 
                 //update Client_HealthInsurance table with the news HealthInsuranceTemp
                 IQueryable <HealthInsuranceTempEntity> listHealthInsuranceTemp = _context.HealthInsuranceTemp
-                                                                                         .Where(d => d.UserName == user_logged.UserName);
+                                                                                         .Where(d => d.UserName == user_logged.UserName
+                                                                                            && d.IdClient == clientEntity.Id);
                 Client_HealthInsurance clientHealthInsurance ;
                 foreach (HealthInsuranceTempEntity item in listHealthInsuranceTemp)
                 {
@@ -700,7 +715,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public IActionResult AddDiagnostic(int id = 0)
+        public IActionResult AddDiagnostic(int id = 0, int idClient = 0)
         {
             if (id == 0)
             {
@@ -711,7 +726,8 @@ namespace KyoS.Web.Controllers
                 {
                     IdDiagnostic = 0,
                     Diagnostics = _combosHelper.GetComboDiagnosticsByClinic(user_logged.Id),
-                    UserName = user_logged.UserName
+                    UserName = user_logged.UserName,
+                    IdClient = idClient
                 };
                 return View(model);
             }
@@ -741,25 +757,27 @@ namespace KyoS.Web.Controllers
                         Code = diagnostic.Code,
                         Description = diagnostic.Description,
                         Principal = diagnosticTempViewModel.Principal,
-                        UserName = diagnosticTempViewModel.UserName
+                        UserName = diagnosticTempViewModel.UserName,
+                        IdClient = diagnosticTempViewModel.IdClient
                     }; 
                     _context.Add(diagnosticTemp);
                     await _context.SaveChangesAsync();
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == diagnosticTempViewModel.IdClient).ToList()) });
             }
             
             DiagnosticTempViewModel model = new DiagnosticTempViewModel
             {
                 IdDiagnostic = 0,
                 Diagnostics = _combosHelper.GetComboDiagnosticsByClinic(user_logged.Id),
-                UserName = diagnosticTempViewModel.UserName
+                UserName = diagnosticTempViewModel.UserName,
+                IdClient = diagnosticTempViewModel.IdClient
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", model) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public IActionResult AddDocument(int id = 0)
+        public IActionResult AddDocument(int id = 0, int idClient = 0)
         {
             if (id == 0)
             {
@@ -769,7 +787,8 @@ namespace KyoS.Web.Controllers
                 {
                     IdDescription = 0,
                     Descriptions = _combosHelper.GetComboDocumentDescriptions(),
-                    UserName = user_logged.UserName
+                    UserName = user_logged.UserName,
+                    IdClient = idClient
                 };
                 return View(entity);
             }
@@ -804,18 +823,20 @@ namespace KyoS.Web.Controllers
                         DocumentName = documentTempViewModel.DocumentFile.FileName,
                         Description = DocumentUtils.GetDocumentByIndex(documentTempViewModel.IdDescription),
                         CreatedOn = DateTime.Now,
-                        UserName = documentTempViewModel.UserName
+                        UserName = documentTempViewModel.UserName,
+                        IdClient = documentTempViewModel.IdClient
                     };
                     _context.Add(documentTemp);
                     await _context.SaveChangesAsync();
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName).OrderByDescending(d => d.CreatedOn).ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == documentTempViewModel.IdClient).OrderByDescending(d => d.CreatedOn).ToList()) });
             }
             DocumentTempViewModel salida = new DocumentTempViewModel()
             {
                 IdDescription = 0,
                 Descriptions = _combosHelper.GetComboDocumentDescriptions(),
-                UserName = documentTempViewModel.UserName
+                UserName = documentTempViewModel.UserName,
+                IdClient = documentTempViewModel.IdClient
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", salida) });
 
@@ -842,7 +863,7 @@ namespace KyoS.Web.Controllers
             _context.DiagnosticsTemp.Remove(diagnostic);
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == diagnostic.IdClient).ToList()) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
@@ -871,7 +892,7 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName).OrderByDescending(d => d.CreatedOn).ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == documentTemp.IdClient).OrderByDescending(d => d.CreatedOn).ToList()) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
@@ -895,7 +916,7 @@ namespace KyoS.Web.Controllers
             _context.ReferredsTemp.Remove(referred);
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(d => d.CreatedBy == user_logged.UserName).ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(d => d.CreatedBy == user_logged.UserName && d.IdClient == referred.IdClient).ToList()) });
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
@@ -912,40 +933,83 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void DeleteDiagnosticsTemp()
+        public void DeleteDiagnosticsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            List<DiagnosticTempEntity> list_to_delete = new List<DiagnosticTempEntity>();
             //delete all DiagnosticsTemp by UserName
-            List<DiagnosticTempEntity> list_to_delete = _context.DiagnosticsTemp
-                                                                .Where(d => d.UserName == user_logged.UserName)
-                                                                .ToList();
+            if (client == null)
+            {
+                list_to_delete = _context.DiagnosticsTemp
+                                         .Where(d => d.UserName == user_logged.UserName
+                                            && d.IdClient == 0)
+                                         .ToList();
+
+            }
+            else
+            {
+                list_to_delete = _context.DiagnosticsTemp
+                                         .Where(d => d.UserName == user_logged.UserName 
+                                           && d.IdClient == client.Id)
+                                         .ToList();
+
+            }
             _context.DiagnosticsTemp.RemoveRange(list_to_delete);
             _context.SaveChanges();
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void DeleteDocumentsTemp()
+        public void DeleteDocumentsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            
+            List<DocumentTempEntity> list_to_delete = new List<DocumentTempEntity>();
+
             //delete all DocumentsTemp by UserName
-            List<DocumentTempEntity> list_to_delete = _context.DocumentsTemp
-                                                              .Where(d => d.UserName == user_logged.UserName)
-                                                              .ToList();
+            if (client == null)
+            {
+                list_to_delete = _context.DocumentsTemp
+                                         .Where(d => d.UserName == user_logged.UserName
+                                            && d.IdClient == 0)
+                                         .ToList();
+
+            }
+            else
+            {
+                list_to_delete = _context.DocumentsTemp
+                                         .Where(d => d.UserName == user_logged.UserName
+                                             && d.IdClient == client.Id)
+                                         .ToList();
+
+            }
             _context.DocumentsTemp.RemoveRange(list_to_delete);
             _context.SaveChanges();
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public void DeleteReferredsTemp()
+        public void DeleteReferredsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+           
+            List<ReferredTempEntity> list_to_delete = new List<ReferredTempEntity>();
             //delete all ReferredsTemp by UserName
-            List<ReferredTempEntity> list_to_delete = _context.ReferredsTemp
-                                                              .Where(d => d.CreatedBy == user_logged.UserName)
-                                                              .ToList();
+            if (client == null)
+            {
+                list_to_delete = _context.ReferredsTemp
+                                         .Where(d => d.CreatedBy == user_logged.UserName
+                                            && d.IdClient == 0)
+                                         .ToList();
+            }
+            else
+            {
+                list_to_delete = _context.ReferredsTemp
+                                         .Where(d => d.CreatedBy == user_logged.UserName
+                                             && d.IdClient == client.Id)
+                                         .ToList();
+            }
             _context.ReferredsTemp.RemoveRange(list_to_delete);
             _context.SaveChanges();
         }
@@ -969,7 +1033,8 @@ namespace KyoS.Web.Controllers
                         Code = item.Diagnostic.Code,
                         Description = item.Diagnostic.Description,
                         Principal = item.Principal,
-                        UserName = user_logged.UserName
+                        UserName = user_logged.UserName,
+                        IdClient = client.Id
                     };
                     _context.Add(diagnostic);
                 }
@@ -997,7 +1062,8 @@ namespace KyoS.Web.Controllers
                         DocumentPath = item.FileUrl,
                         DocumentName = item.FileName,
                         CreatedOn = item.CreatedOn,
-                        UserName = user_logged.UserName
+                        UserName = user_logged.UserName,
+                        IdClient = client.Id
                     };
                     _context.Add(document);
                 }
@@ -1029,7 +1095,8 @@ namespace KyoS.Web.Controllers
                         ReferredNote = item.ReferredNote,
                         Telephone = item.Referred.Telephone,
                         IdReferred = item.Referred.Id,
-                        CreatedBy = user_logged.UserName
+                        CreatedBy = user_logged.UserName,
+                        IdClient = client.Id
                     };
                     _context.Add(referred);
                 }
@@ -1213,7 +1280,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public IActionResult AddReferred(int id = 0)
+        public IActionResult AddReferred(int id = 0, int idClient = 0)
         {
             if (id == 0)
             {
@@ -1227,7 +1294,8 @@ namespace KyoS.Web.Controllers
                     IdServiceAgency = 0,
                     ServiceAgency = _combosHelper.GetComboServiceAgency(),
                     CreatedBy = user_logged.UserName,
-                    CreatedOn = DateTime.Now
+                    CreatedOn = DateTime.Now,
+                    IdClient = idClient
 
                 };
                 return View(model);
@@ -1264,14 +1332,15 @@ namespace KyoS.Web.Controllers
                         Telephone = referred.Telephone,
                         IdReferred = referred.Id,
                         CreatedBy = referredTempViewModel.CreatedBy,
-                        CreatedOn = referredTempViewModel.CreatedOn
+                        CreatedOn = referredTempViewModel.CreatedOn,
+                        IdClient = referredTempViewModel.IdClient
 
                     };
                     _context.Add(referredTemp);
                     await _context.SaveChangesAsync();
                 }
                 
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(r => r.CreatedBy == user_logged.UserName).ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(r => r.CreatedBy == user_logged.UserName && r.IdClient == referredTempViewModel.IdClient).ToList()) });
             }
                        
             ReferredTempViewModel model = new ReferredTempViewModel
@@ -1281,7 +1350,8 @@ namespace KyoS.Web.Controllers
                 IdServiceAgency = 0,
                 ServiceAgency = _combosHelper.GetComboServiceAgency(),
                 CreatedOn = referredTempViewModel.CreatedOn,
-                CreatedBy = referredTempViewModel.CreatedBy
+                CreatedBy = referredTempViewModel.CreatedBy,
+                IdClient = referredTempViewModel.IdClient
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
         }        
@@ -2100,14 +2170,29 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor")]
-        public void DeleteHealthInsuranceTemp()
+        public void DeleteHealthInsuranceTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<HealthInsuranceTempEntity> list_to_delete = new List<HealthInsuranceTempEntity>();
+
             //delete all HealthInsuranceTemp by UserName
-            List<HealthInsuranceTempEntity> list_to_delete = _context.HealthInsuranceTemp
-                                                                .Where(d => d.UserName == user_logged.UserName)
-                                                                .ToList();
+            if (client == null)
+            {
+                list_to_delete = _context.HealthInsuranceTemp
+                                         .Where(d => d.UserName == user_logged.UserName
+                                            && d.IdClient == 0)
+                                         .ToList();
+            }
+            else
+            {
+                list_to_delete = _context.HealthInsuranceTemp
+                                         .Where(d => d.UserName == user_logged.UserName
+                                            && d.IdClient == client.Id)
+                                         .ToList();
+            }
+            
             _context.HealthInsuranceTemp.RemoveRange(list_to_delete);
             _context.SaveChanges();
         }
@@ -2134,7 +2219,8 @@ namespace KyoS.Web.Controllers
                         MemberId = item.MemberId,
                         Units = item.Units,
                         Name = item.HealthInsurance.Name,
-                        UserName = user_logged.UserName
+                        UserName = user_logged.UserName,
+                        IdClient = client.Id
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -2164,7 +2250,7 @@ namespace KyoS.Web.Controllers
             _context.HealthInsuranceTemp.Remove(healthInsurance);
             await _context.SaveChangesAsync();
 
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == healthInsurance.IdClient).ToList()) });
         }
 
         public async Task<IActionResult> AddHealthInsuranceClient(int idClient = 0)
@@ -2186,7 +2272,8 @@ namespace KyoS.Web.Controllers
                     HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                     ClientName = client.Name,
                     MemberId = "",
-                    Units = 0
+                    Units = 0,
+                    IdClient = idClient
                 };
                 return View(entity);
             }
@@ -2200,7 +2287,8 @@ namespace KyoS.Web.Controllers
                     HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                     ClientName ="",
                     MemberId = "",
-                    Units = 0
+                    Units = 0,
+                    IdClient = idClient
                 };
                 return View(entity);
             }
@@ -2220,7 +2308,9 @@ namespace KyoS.Web.Controllers
                 if (id == 0)
                 {
                     List<HealthInsuranceTempEntity> healthInsuranceTempList = await _context.HealthInsuranceTemp
-                                                                                            .Where(n => n.UserName == user_logged.UserName).ToListAsync();
+                                                                                            .Where(n => n.UserName == user_logged.UserName
+                                                                                                && n.IdClient == HealthInsuranceModel.IdClient)
+                                                                                            .ToListAsync();
 
                     foreach (var item in healthInsuranceTempList)
                     {
@@ -2238,7 +2328,8 @@ namespace KyoS.Web.Controllers
                         DurationTime = HealthInsuranceModel.DurationTime,
                         MemberId = HealthInsuranceModel.MemberId,
                         Units = HealthInsuranceModel.Units,
-                        Name = healthInsurance.Name
+                        Name = healthInsurance.Name,
+                        IdClient = HealthInsuranceModel.IdClient
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -2254,7 +2345,8 @@ namespace KyoS.Web.Controllers
                 HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                 ClientName = HealthInsuranceModel.Name,
                 MemberId = "",
-                Units = 0
+                Units = 0,
+                IdClient = HealthInsuranceModel.IdClient
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }

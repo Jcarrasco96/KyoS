@@ -19,5 +19,7 @@ namespace KyoS.Web.Data.Entities
         public DateTime CreatedOn { get; set; }
 
         public string UserName { get; set; }
+
+        public int IdClient { get; set; }
     }
 }
