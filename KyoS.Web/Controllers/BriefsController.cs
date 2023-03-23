@@ -1603,5 +1603,33 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, BioStatus aStatus = BioStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BriefEntity briefEntity = await _context.Brief.FirstOrDefaultAsync(s => s.Id == id);
+            if (briefEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                briefEntity.Status = aStatus;
+                _context.Brief.Update(briefEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
     }
 }

@@ -50,6 +50,20 @@
             <div class="col-md-push-12">
                 <div class="">
                     <div id="view-farsForClient">
+                        @if (Model.Bio != null)
+                        {
+                            @await Html.PartialAsync("_ViewBIOForClient", Model.Bio)
+                        }
+                        @if (Model.Brief != null)
+                        {
+                            @await Html.PartialAsync("_ViewBriefForClient", Model.Brief)
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-push-12">
+                <div class="">
+                    <div id="view-farsForClient">
                         @if (Model.MTPs.Count() > 0)
                         {
                             @await Html.PartialAsync("_ViewMtpListForClient", Model.MTPs.ToList())
