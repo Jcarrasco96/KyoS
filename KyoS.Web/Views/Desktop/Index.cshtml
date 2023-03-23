@@ -1109,6 +1109,105 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <!--New line-->
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
+                        <!--New line-->
+                        <div class="col-sm-3 col-md-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.IntakeMissing == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Intake</h4>
+                                    <span class="message-counter-cero">@ViewBag.IntakeMissing</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Intakes" asp-action="ClientswithoutIntake" asp-route-origin="1" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Intake</h4>
+                                        <span class="message-counter">@ViewBag.IntakeMissing</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.PendingBIO == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO or BRIEF</h4>
+                                    <span class="message-counter-cero">@ViewBag.PendingBIO</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Bios" asp-action="ClientswithoutBIO" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BIO or BRIEF</h4>
+                                        <span class="message-counter">@ViewBag.PendingBIO</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.PendingInitialFars == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial FARS</h4>
+                                    <span class="message-counter-cero">@ViewBag.PendingInitialFars</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="ClientswithoutInitialFARS" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial FARS</h4>
+                                        <span class="message-counter">@ViewBag.PendingInitialFars</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.FarsMissing == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
+                                    <span class="message-counter-cero">@ViewBag.FarsMissing</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="FARSMissingForClient" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
+                                        <span class="message-counter">@ViewBag.FarsMissing</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.MedicalHistoryMissing == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medical History</h4>
+                                    <span class="message-counter-cero">@ViewBag.MedicalHistoryMissing</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Intakes" asp-action="ClientswithoutMedicalHistory" asp-route-origin="1" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medical History</h4>
+                                        <span class="message-counter">@ViewBag.MedicalHistoryMissing</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+
                     </div>
                 }
                 @if (setting != null && setting.TCMClinic)

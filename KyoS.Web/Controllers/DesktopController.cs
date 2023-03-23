@@ -410,6 +410,43 @@ namespace KyoS.Web.Controllers
                     }
 
                     ViewBag.ExpiredMTPs = count;
+
+                    ViewBag.PendingBIO = _context.Clients
+                                            .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                       && (wc.Bio == null && wc.Brief == null)
+                                                       && wc.OnlyTCM == false)).ToString();
+
+                    ViewBag.PendingInitialFars = _context.Clients
+                                                         .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                    && wc.FarsFormList.Count == 0
+                                                                    && wc.OnlyTCM == false)).ToString();
+
+                    ViewBag.MedicalHistoryMissing = _context.Clients
+                                                            .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                       && wc.IntakeMedicalHistory == null
+                                                                       && wc.OnlyTCM == false)).ToString();
+
+                    ViewBag.IntakeMissing = _context.Clients
+                                                            .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                       && wc.IntakeScreening == null
+                                                                       && wc.IntakeConsentForTreatment == null 
+                                                                       && wc.IntakeConsentForRelease == null
+                                                                       && wc.IntakeConsumerRights == null 
+                                                                       && wc.IntakeAcknowledgementHipa == null 
+                                                                       && wc.IntakeAccessToServices == null
+                                                                       && wc.IntakeOrientationChecklist == null
+                                                                       && wc.IntakeTransportation == null
+                                                                       && wc.IntakeConsentPhotograph == null 
+                                                                       && wc.IntakeFeeAgreement == null 
+                                                                       && wc.IntakeTuberculosis == null
+                                                                       && wc.OnlyTCM == false)).ToString();
+
+                    ViewBag.FarsMissing = _context.Clients
+                                                           .Count(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                 && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                                 && n.OnlyTCM == false).ToString();
                 }          
 
                 //TCM Dashboard

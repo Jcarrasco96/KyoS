@@ -910,5 +910,189 @@ namespace KyoS.Web.Controllers
 
 
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> FARSMissingForClient()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            
+            if (User.IsInRole("Manager"))
+            {
+
+                List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.FarsFormList)
+                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                 && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                                 && n.OnlyTCM == false)
+                                                          .ToListAsync();
+
+                return View(ClientList);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> AuditFARSforId(int id = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditFARS> auditClient_List = new List<AuditFARS>();
+            AuditFARS auditClient = new AuditFARS();
+
+            ClientEntity client = new ClientEntity();
+
+            if (User.IsInRole("Manager"))
+            {
+                client = await _context.Clients
+                                       .Include(m => m.MTPs)
+                                       .ThenInclude(m => m.MtpReviewList)
+                                       .Include(m => m.MTPs)
+                                       .ThenInclude(m => m.AdendumList)
+                                       .Include(m => m.FarsFormList)
+                                       .Include(m => m.DischargeList)
+                                       .Include(m => m.IndividualTherapyFacilitator)
+                                       .Include(m => m.Workdays_Clients)
+                                       .ThenInclude(m => m.Workday)
+                                       .FirstOrDefaultAsync(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && n.MTPs.Count() > 0
+                                            && n.Id == id);
+
+            }
+           
+
+            MTPEntity mtp = new MTPEntity();
+            List<MTPReviewEntity> review = new List<MTPReviewEntity>();
+            int individualTherapy = 0;
+            bool initialFars = false;
+            bool reviewFars = false;
+            bool individualFars = false;
+            bool PSRFars = false;
+            bool GroupFars = false;
+            int admission = 1;
+            int close = 1;
+            int resto = 0;
+
+            if (client.IndividualTherapyFacilitator != null)
+            {
+                individualTherapy = 1;
+            }
+           
+            mtp = client.MTPs.FirstOrDefault(n => n.Active == true);
+            review = mtp.MtpReviewList;
+
+            if (client.FarsFormList.Count() > 0)
+            {
+                foreach (var item in client.FarsFormList)
+                {
+                    if (item.Type == FARSType.Initial)
+                    {
+                        initialFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_Ind)
+                    {
+                        individualFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_PSR)
+                    {
+                        PSRFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_Group)
+                    {
+                        GroupFars = true;
+                    }
+                }
+
+            }
+
+            if (review.Count() == client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
+            {
+                reviewFars = true;
+            }
+
+            if (initialFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing Initial FARS";
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (reviewFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS MTPR";
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (individualTherapy > 0 && individualFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_Ind";
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (client.Status == StatusType.Close)
+            {
+                if (client.Workdays_Clients.Count(n => n.Workday.Service == ServiceType.PSR) > 0 && PSRFars == false)
+                {
+                    auditClient.NameClient = client.Name;
+                    auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing FARS Discharge_PSR";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditFARS();
+                }
+
+                if (client.Workdays_Clients.Count(n => n.Workday.Service == ServiceType.Group) > 0 && GroupFars == false)
+                {
+                    auditClient.NameClient = client.Name;
+                    auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "Missing FARS Discharge_Group";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditFARS();
+                }
+               
+            }
+
+            return View(auditClient_List);
+        }
     }
 }

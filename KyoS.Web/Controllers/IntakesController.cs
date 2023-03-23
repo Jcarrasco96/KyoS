@@ -2160,5 +2160,40 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientswithoutIntake(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<ClientEntity> ClientList = await _context.Clients
+                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                             && n.IntakeScreening == null
+                                                             && n.IntakeConsentForTreatment == null
+                                                             && n.IntakeConsentForRelease == null
+                                                             && n.IntakeConsumerRights == null
+                                                             && n.IntakeAcknowledgementHipa == null
+                                                             && n.IntakeAccessToServices == null
+                                                             && n.IntakeOrientationChecklist == null
+                                                             && n.IntakeTransportation == null
+                                                             && n.IntakeConsentPhotograph == null
+                                                             && n.IntakeFeeAgreement == null
+                                                             && n.IntakeTuberculosis == null
+                                                             && n.OnlyTCM == false)
+                                                          .ToListAsync();
+
+            return View(ClientList);
+
+        }
+
     }
 }
