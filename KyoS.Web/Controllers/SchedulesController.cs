@@ -322,7 +322,7 @@ namespace KyoS.Web.Controllers
 
                 SubScheduleEntity subScheduleEntity = _converterHelper.ToSubScheduleEntity(subScheduleViewModel, true, user_logged);
 
-                if (this.VerifySubScheduleTime(subScheduleViewModel.IdSchedule, 0, subScheduleViewModel.InitialTime, subScheduleViewModel.EndTime))
+                if (this.VerifySubScheduleTime(subScheduleViewModel.InitialTime, subScheduleViewModel.EndTime, subScheduleViewModel.IdSchedule, 0))
                 {
                     ViewData["error"] = 1;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSubSchedule", subScheduleViewModel) });
@@ -510,7 +510,7 @@ namespace KyoS.Web.Controllers
         }
 
         #region Utils funtions
-        private bool VerifySubScheduleTime(int idSchedule = 0, int idSubSchedule = 0, DateTime initialTime = new DateTime(), DateTime endTime = new DateTime())
+        private bool VerifySubScheduleTime(DateTime initialTime, DateTime endTime, int idSchedule = 0, int idSubSchedule = 0)
         {
             ScheduleEntity schedule = _context.Schedule
                                               .Include(n => n.SubSchedules)
@@ -519,24 +519,34 @@ namespace KyoS.Web.Controllers
             {
                 return true;
             }
-            if (initialTime >= schedule.InitialTime && initialTime < schedule.EndTime && endTime > schedule.InitialTime && endTime <= schedule.EndTime)
+            DateTime inicio = schedule.InitialTime;
+            DateTime final = schedule.EndTime;
+            if (schedule != null)
             {
-                if (schedule.SubSchedules.Count() > 0)
+                if (initialTime.TimeOfDay >= inicio.TimeOfDay && initialTime.TimeOfDay < final.TimeOfDay
+                    && endTime.TimeOfDay > inicio.TimeOfDay && endTime.TimeOfDay <= final.TimeOfDay)
                 {
-                    foreach (var item in schedule.SubSchedules)
+                    if (schedule.SubSchedules.Count() > 0)
                     {
-                        if (item.Id != idSubSchedule)
+                        foreach (var item in schedule.SubSchedules)
                         {
-                            if ((initialTime >= item.InitialTime && initialTime <= item.EndTime) || (endTime >= item.InitialTime && endTime <= item.EndTime))
+                            if (item.Id != idSubSchedule)
                             {
-                                return true;
+                                if ((initialTime.TimeOfDay >= item.InitialTime.TimeOfDay && initialTime.TimeOfDay <= item.EndTime.TimeOfDay)
+                                    || (endTime.TimeOfDay >= item.InitialTime.TimeOfDay && endTime.TimeOfDay <= item.EndTime.TimeOfDay))
+                                {
+                                    return true;
+                                }
                             }
+
                         }
-                        
                     }
+                    return false;
                 }
-                return false;
+                else
+                    return true;
             }
+            
            
             return true;
         }
