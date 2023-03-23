@@ -6537,5 +6537,35 @@ namespace KyoS.Web.Helpers
             return subSchedule;
         }
 
+        public async Task<ManagerEntity> ToManagerEntity(ManagerViewModel model, string signaturePath, bool isNew)
+        {
+            return new ManagerEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.Name,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                SignaturePath = signaturePath
+                
+            };
+        }
+
+        public ManagerViewModel ToManagerViewModel(ManagerEntity managerEntity)
+        {
+            return new ManagerViewModel
+            {
+                Id = managerEntity.Id,
+                Name = managerEntity.Name,
+                IdClinic = managerEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = (managerEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdUser = _userHelper.GetIdByUserName(managerEntity.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager,0),
+                SignaturePath = managerEntity.SignaturePath
+               
+            };
+        }
     }
 }

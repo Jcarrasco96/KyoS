@@ -132,6 +132,7 @@ namespace KyoS.Web.Data
         public DbSet<GroupNote2_Activity> GroupNotes2_Activities { get; set; }
         public DbSet<ScheduleEntity> Schedule { get; set; }
         public DbSet<SubScheduleEntity> SubSchedule { get; set; }
+        public DbSet<ManagerEntity> Manager { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
