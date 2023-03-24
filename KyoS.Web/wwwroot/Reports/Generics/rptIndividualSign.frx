@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/14/2023 14:01:33" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/23/2023 15:33:51" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3HLYC14PRSQ1tbRW1v20tBw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cd5hbmoPjhjER/0UUeLjWA==">
       <TableDataSource Name="Table" Alias="WorkdaysItems" DataType="System.Int32" Enabled="true">
         <Column Name="DayOfWeek" DataType="System.String"/>
         <Column Name="Date" DataType="System.DateTime"/>
@@ -9,7 +9,7 @@
         <Column Name="Session" DataType="System.String" PropName="Column"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ajjqTYGnhxfe0nhBidaNeA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GDhfh0vuQrOk8iYA7Brmhw==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -60,17 +60,19 @@
       <TextObject Name="Text36" Left="141.75" Top="32.35" Width="349.65" Height="18.9" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text37" Left="32.8" Top="75.6" Width="383.9" Height="22" CanGrow="true" Text="PSR INDIVIDUAL SIGN IN SHEET" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="230.91" Width="778.3" Height="28.35" Guides="0" DataSource="Table">
-      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="708.76" Height="28.35">
+    <DataBand Name="Data1" Top="230.91" Width="778.3" Height="66.15" Guides="0" DataSource="Table">
+      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="708.76" Height="66.15">
         <TableColumn Name="Column1" Width="141.75"/>
         <TableColumn Name="Column2" Width="141.76"/>
         <TableColumn Name="Column12" Width="85.05"/>
         <TableColumn Name="Column10" Width="340.2"/>
-        <TableRow Name="Row1" Height="28.35">
+        <TableRow Name="Row1" Height="66.15">
           <TableCell Name="Cell1" Border.Lines="All" Text="[WorkdaysItems.DayOfWeek]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell2" Border.Lines="All" Text="[WorkdaysItems.Date]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell12" Border.Lines="All" Text="[WorkdaysItems.Session]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
-          <TableCell Name="Cell10" Border.Lines="All" Text="[IIf([WorkdaysItems.Present] == false,&quot;Absent&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell10" Border.Lines="All" Text="[IIf([WorkdaysItems.Present] == false,&quot; Absent&quot;,&quot;&quot;)]" VertAlign="Center" Font="Arial, 10pt, style=Bold">
+            <PictureObject Name="Picture6" Left="123.4" Top="1.45" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+          </TableCell>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader1" Top="200.78" Width="778.3" Height="26.13">
@@ -88,12 +90,12 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="263.26" Width="778.3" Height="94.5">
+    <PageFooterBand Name="PageFooter1" Top="301.06" Width="778.3" Height="94.5">
       <LineObject Name="Line9" Left="773.45" Top="69.05" Width="-776"/>
       <TextObject Name="Text28" Left="10" Top="72.05" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text30" Left="527.75" Top="72.6" Width="245.7" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text11" Left="527.75" Top="50.25" Width="245.7" Height="18.9" Text="[Facilitators.Name]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <PictureObject Name="Picture5" Left="56.7" Top="9.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture5" Left="66.15" Top="9.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </PageFooterBand>
   </ReportPage>
 </Report>

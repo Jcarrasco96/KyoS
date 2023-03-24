@@ -238,6 +238,13 @@ namespace KyoS.Web.Helpers
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
+
+            if ((workdayClientList.First().Client != null) && (!string.IsNullOrEmpty(workdayClientList.First().Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
             if ((workdayClientList.First().Facilitator != null) && (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.SignaturePath)}");
@@ -435,6 +442,13 @@ namespace KyoS.Web.Helpers
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
+
+            if ((workdayClientList.First().Client != null) && (!string.IsNullOrEmpty(workdayClientList.First().Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
             if ((workdayClientList.First().Facilitator != null) && (!string.IsNullOrEmpty(workdayClientList.First().Facilitator.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClientList.First().Facilitator.SignaturePath)}");
@@ -648,6 +662,21 @@ namespace KyoS.Web.Helpers
             WebReport.Report.SetParameterValue("dateNote", date);
             WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
 
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if ((workdayClient.Facilitator != null) && (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -680,6 +709,21 @@ namespace KyoS.Web.Helpers
             string dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             WebReport.Report.SetParameterValue("dateNote", date);
             WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            
+            if ((workdayClient.Facilitator != null) && (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
@@ -4225,6 +4269,28 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
 
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
             WebReport.Report.Prepare();
 
             Stream stream = new MemoryStream();
@@ -4310,6 +4376,28 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
 
             WebReport.Report.Prepare();
 
