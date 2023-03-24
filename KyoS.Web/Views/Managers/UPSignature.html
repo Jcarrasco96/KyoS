@@ -1,0 +1,31 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto canvas</title>
+    <link rel="stylesheet" href="../Managers/assets/styles.css">
+</head>
+<body>
+    <main class="main-container">
+        <canvas id="main-canvas" width="1400" height="650" ></canvas>
+    </main>
+    <script src="../Managers/assets/UPSignature.js"></script>
+</body>
+</html>
+
+<div class="row">
+    <div>
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-lg-offset-9">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
