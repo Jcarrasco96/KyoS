@@ -1947,5 +1947,34 @@ namespace KyoS.Web.Controllers
             
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, BioStatus aStatus = BioStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BioEntity bioEntity = await _context.Bio.FirstOrDefaultAsync(s => s.Id == id);
+            if (bioEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                bioEntity.Status = aStatus;
+                _context.Bio.Update(bioEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+
     }
 }
