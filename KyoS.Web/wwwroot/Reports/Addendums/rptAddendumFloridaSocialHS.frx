@@ -1,28 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/10/2022 12:34:05" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/24/2023 12:43:28" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3V6AF3UrWfciMMoYmGYq3TQ==">
-      <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Name" DataType="System.String"/>
-        <Column Name="AreaOfFocus" DataType="System.String"/>
-        <Column Name="MTPId" DataType="System.Int32"/>
-        <Column Name="Number" DataType="System.Int32"/>
-        <Column Name="Service" DataType="System.Int32"/>
-        <Column Name="AdendumId" DataType="System.Int32"/>
-      </TableDataSource>
-      <TableDataSource Name="Objetives1" Alias="Objetives2" DataType="System.Int32" Enabled="true" TableName="Objetives">
-        <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Objetive" DataType="System.String"/>
-        <Column Name="Description" DataType="System.String"/>
-        <Column Name="DateOpened" DataType="System.DateTime"/>
-        <Column Name="DateTarget" DataType="System.DateTime"/>
-        <Column Name="DateResolved" DataType="System.DateTime"/>
-        <Column Name="Intervention" DataType="System.String"/>
-        <Column Name="GoalId" DataType="System.Int32"/>
-      </TableDataSource>
-    </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u366+E9/f9Q8seuLLgWOTGgg==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3yREyFn22P2EHhFdaMMgVcQ==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -43,7 +22,7 @@
         <Column Name="GoalId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33yJ9kwhFX9gWI2wv3/qFuQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3V51cr2crcH2cYXzsOtm+lw==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -194,6 +173,31 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ORaC+onf73SDvQYjGL+xbg==">
+      <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="AreaOfFocus" DataType="System.String"/>
+        <Column Name="MTPId" DataType="System.Int32"/>
+        <Column Name="Number" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="AdendumId" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Objetives1" Alias="Objetives2" DataType="System.Int32" Enabled="true" TableName="Objetives">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Objetive" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="DateOpened" DataType="System.DateTime"/>
+        <Column Name="DateTarget" DataType="System.DateTime"/>
+        <Column Name="DateResolved" DataType="System.DateTime"/>
+        <Column Name="Intervention" DataType="System.String"/>
+        <Column Name="GoalId" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
@@ -374,8 +378,9 @@
       <TextObject Name="Text795" Left="392.74" Top="147.2" Width="236.25" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text796" Left="393" Top="161.45" Width="236.25" Height="18.9" Text="Clinical Supervisor Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text797" Left="394.45" Top="141.75" Width="236.25" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture5" Left="263.15" Top="100.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture6" Left="659.5" Top="100.5" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture5" Left="263.15" Top="103.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture6" Left="659.5" Top="103.5" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture7" Left="263.09" Top="23.9" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
   </ReportPage>
 </Report>
