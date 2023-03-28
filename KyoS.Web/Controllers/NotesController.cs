@@ -4462,9 +4462,18 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public JsonResult GetObjetiveList(int idGoal)
+        public JsonResult GetObjetiveList(int idGoal, int idNote)
         {
-            List<ObjetiveEntity> objetives = _context.Objetives.Where(o => (o.Goal.Id == idGoal && o.Compliment == false)).ToList();
+            Workday_Client workdate_Client = _context.Workdays_Clients
+                                                     .Include(w => w.Workday)
+                                                     .FirstOrDefault(n => n.Id == idNote);
+ 
+            List<ObjetiveEntity> objetives = _context.Objetives
+                                                     .Where(o => (o.Goal.Id == idGoal 
+                                                          && o.Compliment == false
+                                                          && o.DateResolved >= workdate_Client.Workday.Date
+                                                          && o.DateOpened <= workdate_Client.Workday.Date))
+                                                     .ToList();
             if (objetives.Count == 0)
             {
                 objetives.Insert(0, new ObjetiveEntity
