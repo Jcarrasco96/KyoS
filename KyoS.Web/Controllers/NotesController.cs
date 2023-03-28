@@ -4471,7 +4471,6 @@ namespace KyoS.Web.Controllers
             List<ObjetiveEntity> objetives = _context.Objetives
                                                      .Where(o => (o.Goal.Id == idGoal 
                                                           && o.Compliment == false
-                                                          && o.DateResolved >= workdate_Client.Workday.Date
                                                           && o.DateOpened <= workdate_Client.Workday.Date))
                                                      .ToList();
             if (objetives.Count == 0)
