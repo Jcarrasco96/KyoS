@@ -25,7 +25,7 @@
                     <tbody>
                         @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date))
                         {
-                            @if (day_client.Note != null || day_client.NoteP != null || day_client.IndividualNote != null || day_client.GroupNote != null)
+                            @if (day_client.Note != null || day_client.NoteP != null || day_client.IndividualNote != null || day_client.GroupNote != null || day_client.GroupNote2 != null)
                             {
                                 <tr>
                                     <td align="center">
@@ -115,25 +115,54 @@
                                         }
                                         @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                         {
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            @if (day_client.GroupNote != null)
                                             {
-                                                <span class="label label-warning">
-                                                    Edition
-                                                </span>
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approved
+                                                    </span>
+                                                }
                                             }
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            else
                                             {
-                                                <span class="label label-info">
-                                                    Pending
-                                                </span>
-                                            }
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                            {
-                                                <span class="label label-success">
-                                                    Approved
-                                                </span>
+                                                @if (day_client.GroupNote2 != null)
+                                                {
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                    {
+                                                        <span class="label label-warning">
+                                                            Edition
+                                                        </span>
+                                                    }
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                    {
+                                                        <span class="label label-info">
+                                                            Pending
+                                                        </span>
+                                                    }
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                    {
+                                                        <span class="label label-success">
+                                                            Approved
+                                                        </span>
+                                                    }
+                                                }
                                             }
                                         }
+
+
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
@@ -211,7 +240,7 @@
                                                         <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
                                                     else
-                                                    { 
+                                                    {
                                                         <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
 
@@ -225,7 +254,7 @@
                                             }
                                             else
                                             {
-                                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group && day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                 {
                                                     @if (User.IsInRole("Manager"))
                                                     {
@@ -235,15 +264,33 @@
                                                     {
                                                         <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
-                                                    @if (day_client.Hold == false)
+                                                    @if (day_client.GroupNote != null)
                                                     {
-                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>  
+                                                        @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
+                                                        {
+                                                            <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+
                                                     }
                                                     else
-                                                    { 
-                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }
+                                                    {
+                                                        @if (day_client.GroupNote2 != null)
+                                                        {
+                                                            @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
+                                                            {
+                                                                <a asp-action="PrintGroupNote2" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="PrintGroupNote2" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
 
+                                                        }
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -343,7 +390,7 @@
                                                 {
                                                     @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                     {
-                                                        <a asp-action="PrintAbsenceIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="PrintAbsence" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
                                                     else
                                                     {

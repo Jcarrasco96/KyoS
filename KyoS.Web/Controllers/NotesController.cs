@@ -13763,6 +13763,15 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
             }
+            else
+            {
+                GroupNote2Entity noteGroup2Entity = await _context.GroupNotes2
+                                                                  .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+                if (noteGroup2Entity == null)
+                {
+                    return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+                }
+            }
 
             try
             {
