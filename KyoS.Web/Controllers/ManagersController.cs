@@ -285,12 +285,7 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
         }
 
-        public IActionResult UPSignature()
-        {
-            
-            return View();
-            
-        }
+      
     }
 
 }
