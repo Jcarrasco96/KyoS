@@ -2352,7 +2352,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> AuditClientNotUsed()
+        public IActionResult AuditClientNotUsed()
         {
             UserEntity user_logged = _context.Users
 
@@ -2491,5 +2491,78 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_CLIENTS.xlsx");
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            
+            return View(await _context.Clients
+
+                                      .Include(c => c.Clinic)
+                                      .Include(c => c.IndividualTherapyFacilitator)
+                                      .Include(c => c.Clients_HealthInsurances)
+                                        .ThenInclude(c => c.HealthInsurance)
+
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name).ToListAsync());       
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ClientEntity clientEntity = await _context.Clients
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (clientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);            
+
+            ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
+
+            return View(clientViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> SaveClientSignature(string id, string dataUrl)
+        {
+            var encodedImage = dataUrl.Split(',')[1];
+            var decodedImage = Convert.FromBase64String(encodedImage);
+
+            string guid = Guid.NewGuid().ToString();
+            string file = $"{guid}.png";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Clients", file);
+
+            System.IO.File.WriteAllBytes(path, decodedImage);           
+
+            ClientEntity client = await _context.Clients
+                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (client != null)
+            {
+                client.SignPath = $"~/images/Clients/{file}";
+                _context.Update(client);
+                await _context.SaveChangesAsync();
+            }
+                        
+            return RedirectToAction("Index");                  
+        }
     }
 }
