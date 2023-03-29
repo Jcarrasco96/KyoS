@@ -2541,6 +2541,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
+        [HttpPost]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SaveClientSignature(string id, string dataUrl)
         {
@@ -2561,8 +2562,8 @@ namespace KyoS.Web.Controllers
                 _context.Update(client);
                 await _context.SaveChangesAsync();
             }
-                        
-            return RedirectToAction("Index");                  
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
         }
     }
 }
