@@ -81,5 +81,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBio_Type();
         IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic, ServiceType service);
         IEnumerable<SelectListItem> GetComboSession();
+        IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday);
     }
 }

@@ -43,7 +43,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1" style="text-align:center;">
+                                Sign
+                            </th>
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -68,9 +71,12 @@
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
-                                        @if (item.Clients_HealthInsurances.Count > 0)
+                                        @if (item.Clients_HealthInsurances.Count() > 0)
                                         {
-                                            @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                            }
                                         }
                                     </td>
                                     <td align="center">
@@ -98,9 +104,23 @@
                                                 Close
                                             </span>
                                         }
-                                    </td>                                    
+                                    </td>   
+                                     <td align="center">
+                                        @if (item.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
                                     <td align="right">
-                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-pencil"></i></a>                                        
+                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>                                        
                                     </td>                                    
                                 </tr>
                             }
@@ -156,8 +176,22 @@
                                             </span>
                                         }
                                     </td>
+                                    <td align="center">
+                                        @if (item.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
                                     <td align="right">
-                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-pencil"></i> Update Signature</a>                                        
+                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>                                        
                                     </td>  
                                 </tr>
                             }

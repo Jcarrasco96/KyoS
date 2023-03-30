@@ -1643,5 +1643,30 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday)
+        {
+            List<ScheduleEntity> listSchedules = _context.Workdays_Clients.Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday && n.Schedule != null).Select(m => m.Schedule).Distinct().ToList();
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (listSchedules.Count() > 0)
+            {
+                list = listSchedules.Select(f => new SelectListItem
+                {
+                    Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                    Value = $"{f.Id}"
+                }).ToList();
+
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+
+
+            return list;
+        }
+
     }
 }
