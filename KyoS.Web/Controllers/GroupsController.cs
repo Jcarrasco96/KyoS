@@ -1148,6 +1148,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(n => n.ClientsFromIndividualTherapy)
                                                         .Include(g => g.Clients)
                                                         .Include(g => g.Schedule)
+                                                        .ThenInclude(g => g.SubSchedules)
 
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                             && g.Service == ServiceType.Individual))
@@ -1163,6 +1164,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(n => n.ClientsFromIndividualTherapy)
                                                         .Include(g => g.Clients)
                                                         .Include(g => g.Schedule)
+                                                        .ThenInclude(g => g.SubSchedules)
 
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                             && g.Service == ServiceType.Individual

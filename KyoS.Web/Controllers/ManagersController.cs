@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -285,7 +286,61 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
         }
 
-      
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Signatures()
+        {
+          
+            return View(await _context.Manager
+                                      .Include(f => f.Clinic)
+                                      .OrderBy(f => f.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ManagerEntity managerEntity = await _context.Manager
+                                                        .Include(n => n.Clinic)
+                                                        .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (managerEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ManagerViewModel managerViewModel = _converterHelper.ToManagerViewModel(managerEntity);
+
+            return View(managerViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SaveManagerSignature(string id, string dataUrl)
+        {
+            var encodedImage = dataUrl.Split(',')[1];
+            var decodedImage = Convert.FromBase64String(encodedImage);
+
+            string guid = Guid.NewGuid().ToString();
+            string file = $"{guid}.png";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Managers", file);
+
+            System.IO.File.WriteAllBytes(path, decodedImage);
+
+            ManagerEntity manager = await _context.Manager
+                                                  .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (manager != null)
+            {
+                manager.SignaturePath = $"~/images/Managers/{file}";
+                _context.Update(manager);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Managers") });
+        }
     }
 
 }
