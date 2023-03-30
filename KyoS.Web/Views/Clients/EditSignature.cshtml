@@ -57,38 +57,20 @@
             }
             else
             {
-                const dataURL = signaturePad.toDataURL();
-                const filename = $("#name").text() + '.png';
-                download(dataURL, filename);
+                const dataURL = signaturePad.toDataURL();                
 
-                var wwwUrlPath = window.document.location.href;
-                var pathName = window.document.location.pathname;
-                var pos = wwwUrlPath.indexOf(pathName);
-                var localhostPath = wwwUrlPath.substring(0, pos);
-                var url = 'Clients/Signatures';
-                window.location.href = localhostPath + '/' + url;
-
-                //const contentType = dataURL.split(",")[1];
-                //alert(contentType);
-
-                //const dataURL = "juan de la pinga";
-                @*var url = "@Url.Action("SaveClientSignature", "Clients")";
-                $.get(url, { id: @Model.Id.ToString(), dataUrl: dataURL }, function (data) {
-
-                });*@
-
-                @*var wwwUrlPath = window.document.location.href;
-                alert(wwwUrlPath);
-                var pathName = window.document.location.pathname;
-                alert(pathName);
-                var pos = wwwUrlPath.indexOf(pathName);
-                alert(pos);
-                var localhostPath = wwwUrlPath.substring(0, pos);
-                alert(localhostPath);
-                var url = 'Clients/SaveClientSignature';
-                alert('e');
-                alert(localhostPath + '/' + url + '?id=1?dataUrl=aaaaa');
-                window.location.href = localhostPath + '/' + url + '?id=' + @Model.Id.ToString() + '?dataUrl=' + dataURL;*@
+                $.ajax({
+                    
+                    url: '@Url.Action("SaveClientSignature", "Clients", null, Context.Request.Scheme)',                    
+                    data: {
+                        id: @Model.Id.ToString(),
+                        dataUrl: dataURL
+                    },                    
+                    type: 'POST',
+                    success: function (response) {                        
+                        window.location.href = response.redirectToUrl;
+                    }
+                });                
             }
         });
 
