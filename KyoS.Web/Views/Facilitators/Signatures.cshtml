@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.FacilitatorEntity>
 @{
-    ViewData["Title"] = "Facilitators";
+    ViewData["Title"] = "Update Signatures";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,32 +9,13 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @Html.ActionLink("Facilitators", "Index", "Facilitators")
         </li>
-        <li class="active">Facilitators</li>
+        <li class="active">Update Signatures</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>
-    <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Facilitators' Signatures</a>
-    <a asp-action="EXCEL" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Facilitators</a>
-</p>
-
-<div class="row">
-    <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the facilitator
-                </strong>
-            </div>
-        }
-    </div>
+<div class="row">    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -44,7 +25,7 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -55,6 +36,9 @@
                             </th>
                             <th class="col-md-3" style="text-align:center;">
                                 Clinic
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Sign
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -89,10 +73,23 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Clinic.Name)
                                     </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                     <td align="center">
+                                        @if (item.SignaturePath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
                                     </td>
+                                     <td align="right">
+                                         <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                     </td>
                                 </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -121,10 +118,23 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Clinic.Name)
                                     </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                     <td align="center">
+                                        @if (item.SignaturePath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
                                     </td>
+                                     <td align="right">
+                                         <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                     </td>
                                 </tr>
                             }
                         }
@@ -135,6 +145,7 @@
     </div>
 </div>
 
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
@@ -143,7 +154,10 @@
 
     <script type="text/javascript">
                         $(document).ready(function () {
-                            $('#MyTable').DataTable();
+                            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
 
                             // Delete item
                             var item_to_delete;
@@ -153,11 +167,12 @@
                             });
 
                             $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "Facilitators")";
-                                window.location.href = url + '/' + item_to_delete;                                
+                                var url = "@Url.Action("Delete", "Clients")";
+                                window.location.href = url + '/' + item_to_delete;
                             });
                         });
     </script>
 }
+
 
 
