@@ -2289,7 +2289,7 @@ namespace KyoS.Web.Controllers
                                          .ThenInclude(c => c.Clinic)
                                          .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && m.Active == true && m.Client.Status == StatusType.Open
-                                                && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                && m.Client.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 }
                 else
                 {

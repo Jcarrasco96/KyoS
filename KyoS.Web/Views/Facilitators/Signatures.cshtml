@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.FacilitatorEntity>
 @{
     ViewData["Title"] = "Update Signatures";
 }
@@ -9,7 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Clients", "Index", "Clients")
+            @Html.ActionLink("Facilitators", "Index", "Facilitators")
         </li>
         <li class="active">Update Signatures</li>
     </ul><!--.breadcrumb-->
@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Clients</h3>
+                <h3 class="panel-title">Facilitators</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -29,24 +29,18 @@
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Health Insurance
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Therapy
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Admission
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Individual Therapy
+                                @Html.DisplayNameFor(model => model.Codigo)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
+                            <th class="col-md-3" style="text-align:center;">
+                                Clinic
+                            </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Sign
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -57,39 +51,10 @@
                             {
                                 <tr style="color: darkgrey;">
                                     <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
+                                        @Html.DisplayFor(modelItem => item.Codigo)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -104,9 +69,12 @@
                                                 Close
                                             </span>
                                         }
-                                    </td>   
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                    </td>
                                      <td align="center">
-                                        @if (item.SignPath == null)
+                                        @if (item.SignaturePath == null)
                                         {
                                             <span class="label label-danger">
                                                 No
@@ -119,48 +87,19 @@
                                             </span>
                                         }
                                     </td>
-                                    <td align="right">
-                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>                                        
-                                    </td>                                    
+                                     <td align="right">
+                                         <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                     </td>
                                 </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                             {
                                 <tr>
                                     <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
                                         @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
                                     </td>
                                     <td align="center">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
+                                        @Html.DisplayFor(modelItem => item.Codigo)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -177,7 +116,10 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.SignPath == null)
+                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                    </td>
+                                     <td align="center">
+                                        @if (item.SignaturePath == null)
                                         {
                                             <span class="label label-danger">
                                                 No
@@ -190,9 +132,9 @@
                                             </span>
                                         }
                                     </td>
-                                    <td align="right">
-                                        <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>                                        
-                                    </td>  
+                                     <td align="right">
+                                         <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                     </td>
                                 </tr>
                             }
                         }

@@ -165,7 +165,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             $("#cbTopic1").change(function () {
                 var url = "@Url.Action("GetActivityList", "Notes")";
@@ -205,22 +205,22 @@
             })
             $("#cbGoal1").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    });    
+                    });
 
                     //actualizo el label con la intervention que corresponde al obj seleccionado
                     url = "@Url.Action("GetIntervention", "Notes")";
-                    $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {                    
-                        $("#lbIntervention1").text(data);                         
+                    $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                        $("#lbIntervention1").text(data);
                     });
-                });                
+                });
             })
             $("#cbGoal2").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal2").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal2").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive2").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -228,14 +228,14 @@
 
                     //actualizo el label con la intervention que corresponde al obj seleccionado
                     url = "@Url.Action("GetIntervention", "Notes")";
-                    $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {                    
-                        $("#lbIntervention2").text(data);  
+                    $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
+                        $("#lbIntervention2").text(data);
                     });
-                });                
+                });
             })
             $("#cbGoal3").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal3").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal3").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive3").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -243,14 +243,14 @@
 
                     //actualizo el label con la intervention que corresponde al obj seleccionado
                     url = "@Url.Action("GetIntervention", "Notes")";
-                    $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {                    
-                        $("#lbIntervention3").text(data);  
+                    $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {
+                        $("#lbIntervention3").text(data);
                     });
-                });                
+                });
             })
             $("#cbGoal4").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal4").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal4").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive4").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -258,91 +258,91 @@
 
                     //actualizo el label con la intervention que corresponde al obj seleccionado
                     url = "@Url.Action("GetIntervention", "Notes")";
-                    $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {                    
-                        $("#lbIntervention4").text(data);  
+                    $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {
+                        $("#lbIntervention4").text(data);
                     });
-                });                
+                });
             })
             $("#cbObjetive1").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {                    
-                    $("#lbIntervention1").text(data);                         
+                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                    $("#lbIntervention1").text(data);
                 });
             })
             $("#cbObjetive2").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {                    
-                    $("#lbIntervention2").text(data);                         
+                $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
+                    $("#lbIntervention2").text(data);
                 });
             })
             $("#cbObjetive3").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {                    
-                    $("#lbIntervention3").text(data);                         
+                $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {
+                    $("#lbIntervention3").text(data);
                 });
             })
             $("#cbObjetive4").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {                    
-                    $("#lbIntervention4").text(data);                         
+                $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {
+                    $("#lbIntervention4").text(data);
                 });
             })
             $("#EnglishAnswerClient1").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerClient1").val() }, function (data) {
-                    $("#AnswerClient1").val(data);                    
+                    $("#AnswerClient1").val(data);
                 });
             })
             $("#EnglishAnswerFacilitator1").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerFacilitator1").val() }, function (data) {
-                    $("#AnswerFacilitator1").val(data);                    
+                    $("#AnswerFacilitator1").val(data);
                 });
             })
             $("#EnglishAnswerClient2").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerClient2").val() }, function (data) {
-                    $("#AnswerClient2").val(data);                    
+                    $("#AnswerClient2").val(data);
                 });
             })
             $("#EnglishAnswerFacilitator2").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerFacilitator2").val() }, function (data) {
-                    $("#AnswerFacilitator2").val(data);                    
+                    $("#AnswerFacilitator2").val(data);
                 });
             })
             $("#EnglishAnswerClient3").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerClient3").val() }, function (data) {
-                    $("#AnswerClient3").val(data);                    
+                    $("#AnswerClient3").val(data);
                 });
             })
             $("#EnglishAnswerFacilitator3").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerFacilitator3").val() }, function (data) {
-                    $("#AnswerFacilitator3").val(data);                    
+                    $("#AnswerFacilitator3").val(data);
                 });
             })
             $("#EnglishAnswerClient4").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerClient4").val() }, function (data) {
-                    $("#AnswerClient4").val(data);                    
+                    $("#AnswerClient4").val(data);
                 });
             })
             $("#EnglishAnswerFacilitator4").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#AnswerFacilitator4").val() }, function (data) {
-                    $("#AnswerFacilitator4").val(data);                    
+                    $("#AnswerFacilitator4").val(data);
                 });
             })
             $("#EnglishPlanNote").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#PlanNote").val() }, function (data) {
-                    $("#PlanNote").val(data);                    
+                    $("#PlanNote").val(data);
                 });
             })
         });
-    </script>
+</script>
 }
 
 

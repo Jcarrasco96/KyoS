@@ -1456,6 +1456,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.GroupNote)
 
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote2)
+
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
@@ -1507,6 +1510,9 @@ namespace KyoS.Web.Controllers
 
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.GroupNote)
+
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.GroupNote2)
 
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));

@@ -175,7 +175,7 @@ namespace KyoS.Web.Controllers
                                                      .Include(n => n.MtpReviewList)                                                       
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                               && m.Active == true && m.Client.Status == StatusType.Open
-                                                              && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                                              && m.Client.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 int count = 0;
                 int month = 0;
                 foreach (var item in mtps)

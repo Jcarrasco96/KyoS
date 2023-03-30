@@ -162,11 +162,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             $("#cbGoal1").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -181,7 +181,7 @@
             })
             $("#cbGoal2").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal2").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal2").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive2").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -196,7 +196,7 @@
             })
             $("#cbGoal3").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal3").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal3").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive3").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -211,7 +211,7 @@
             })
             $("#cbGoal4").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal4").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal4").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive4").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -248,7 +248,7 @@
                     $("#lbIntervention4").text(data);
                 });
             })
-            
+
             $("#EnglishPlanNote").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#PlanNote").val() }, function (data) {
@@ -256,7 +256,7 @@
                 });
             })
         });
-    </script>
+</script>
 }
 
 

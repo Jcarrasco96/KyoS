@@ -136,16 +136,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
-            
+
             $("#cbClient").change(function () {
                 var url = "@Url.Action("GetGoalsIndList", "Notes")";
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
                     $("#cbGoal1").empty();
                     $.each(data, function (index, row) {
                         $("#cbGoal1").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    }); 
+                    });
 
                     //actualizo el combobox y el label con la intervention que corresponde al obj seleccionado
                     $("#cbObjetive1").empty();
@@ -153,10 +153,10 @@
 
                     $("#lbIntervention1").text('Select goal and objective');
                 });
-            })      
+            })
             $("#cbGoal1").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -168,39 +168,39 @@
                         $("#lbIntervention1").text(data);
                     });
                 });
-            })        
+            })
             $("#cbObjetive1").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
                 $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
                     $("#lbIntervention1").text(data);
                 });
-            })            
+            })
             $("#EnglishSubjectiveData").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#subjectiveData").val() }, function (data) {
                     $("#subjectiveData").val(data);
                 });
-            })         
+            })
             $("#EnglishObjectiveData").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#objectiveData").val() }, function (data) {
                     $("#objectiveData").val(data);
                 });
-            }) 
+            })
             $("#EnglishAssessment").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#assessment").val() }, function (data) {
                     $("#assessment").val(data);
                 });
-            }) 
+            })
             $("#EnglishPlanNote").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#PlanNote").val() }, function (data) {
-                    $("#PlanNote").val(data);                    
+                    $("#PlanNote").val(data);
                 });
             })
         });
-    </script>
+</script>
 }
 
 

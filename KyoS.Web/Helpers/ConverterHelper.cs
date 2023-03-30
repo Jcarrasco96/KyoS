@@ -955,7 +955,9 @@ namespace KyoS.Web.Helpers
 
         public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model)
         {
-            return new Workday_ClientViewModel
+            Workday_ClientViewModel salida = new Workday_ClientViewModel();
+            
+            salida = new Workday_ClientViewModel
             {
                 Id = model.Id,
                 Workday = model.Workday,
@@ -966,6 +968,18 @@ namespace KyoS.Web.Helpers
                 Note = model.Note,
                 IndividualNote = model.IndividualNote
             };
+
+            if (model.Schedule == null)
+            {
+                salida.IdSchedule = 0;
+                salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+            }
+            else
+            {
+                salida.IdSchedule = model.Schedule.Id;
+                salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+            }
+            return salida;
         }
 
         public async Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew)
