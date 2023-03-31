@@ -65,8 +65,8 @@
                                                         <td align="center">
                                                             @if (User.IsInRole("Manager"))
                                                             {
-                                                                <a onclick="showInPopup('@Url.Action("EditSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning" title="Edit SubSchedule"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                <a onclick="showInPopup('@Url.Action("DeleteSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Delete SubSchedule')" class="btn btn-danger" title="Delete SubSchedule"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("EditSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning disabled" title="Edit SubSchedule"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("DeleteSubSchedule", "Schedules", new { id = product1.Id}, Context.Request.Scheme)','Delete SubSchedule')" class="btn btn-danger disabled" title="Delete SubSchedule"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
@@ -120,9 +120,9 @@
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
                                     <td align="right">
-                                        <a onclick="showInPopup('@Url.Action("Edit", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning" title="Edit Schedule"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("Edit", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning disabled" title="Edit Schedule"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <a onclick="showInPopup('@Url.Action("CreateSubSchedule", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Create Schedule')" class="btn btn-primary" title="Create SubSchedule"><i class="glyphicon glyphicon-plus"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("Delete", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Delete Schedule')" class="btn btn-danger" title="Delete Schedule"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("Delete", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Delete Schedule')" class="btn btn-danger disabled" title="Delete Schedule"><i class="glyphicon glyphicon-trash"></i></a>
                                     </td>
                                 </tr>
                             }

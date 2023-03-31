@@ -38,8 +38,11 @@
                                 <th class="col-md-1" style="text-align:center;">
                                     Clients
                                 </th>
-                                <th class="col-md-3" style="text-align:center;">
+                                <th class="col-md-2" style="text-align:center;">
                                     Schedule
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Sub
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
 
@@ -90,6 +93,12 @@
                                         @if (item.Schedule != null)
                                         {
                                             <label> @item.Schedule.InitialTime.ToShortTimeString() to @item.Schedule.EndTime.ToShortTimeString()</label>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Schedule != null)
+                                        {
+                                            <label> @item.Schedule.SubSchedules.Count()</label>
                                         }
                                     </td>
                                     <td align="right">

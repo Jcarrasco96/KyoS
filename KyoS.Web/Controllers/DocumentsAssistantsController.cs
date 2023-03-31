@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KyoS.Common.Enums;
@@ -258,6 +259,73 @@ namespace KyoS.Web.Controllers
                 }
             }
             return View(documentsAssistantViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+
+            return View(await _context.DocumentsAssistant
+                                          .Include(f => f.Clinic)
+                                          .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DocumentsAssistantEntity assistantEntity = await _context.DocumentsAssistant
+                                                                     .Include(n => n.Clinic)
+                                                                     .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (assistantEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DocumentsAssistantViewModel documentViewModel = _converterHelper.ToDocumentsAssistantViewModel(assistantEntity, assistantEntity.Clinic.Id);
+
+            return View(documentViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> SaveDocumentAssistantSignature(string id, string dataUrl)
+        {
+            var encodedImage = dataUrl.Split(',')[1];
+            var decodedImage = Convert.FromBase64String(encodedImage);
+
+            string guid = Guid.NewGuid().ToString();
+            string file = $"{guid}.png";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Assistants", file);
+
+            System.IO.File.WriteAllBytes(path, decodedImage);
+
+            DocumentsAssistantEntity assistant = await _context.DocumentsAssistant
+                                                               .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (assistant != null)
+            {
+                assistant.SignaturePath = $"~/images/Assistants/{file}";
+                _context.Update(assistant);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "DocumentsAssistants") });
         }
     }
 }

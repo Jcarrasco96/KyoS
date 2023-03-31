@@ -15169,6 +15169,7 @@ namespace KyoS.Web.Controllers
                                                               .ToListAsync();*/
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "GroupNotes", new { id = 0}) });
+                        //return Json(new { redirectToUrl = Url.Action("GroupNotes", "Notes", new { id = 0}) });
                     }
                     if (User.IsInRole("Manager"))
                     {
