@@ -2547,9 +2547,8 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> SaveClientSignature(string id, string dataUrl)
+        public async Task<JsonResult> SaveClientSignature(string id, string dataUrl)
         {
             var encodedImage = dataUrl.Split(',')[1];
             var decodedImage = Convert.FromBase64String(encodedImage);
