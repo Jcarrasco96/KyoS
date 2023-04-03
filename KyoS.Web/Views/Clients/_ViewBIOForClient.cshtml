@@ -116,7 +116,14 @@
                                     else
                                     {
                                         <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.Client_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="PrintBio" asp-controller="Bios" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        @if (Model.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                        {
+                                            <a asp-action="PrintBio" asp-controller="Bios" asp-route-id="@Model.Id" class="btn btn-success" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintBio" asp-controller="Bios" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print BIO" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                         <a asp-action="Delete" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.Client_FK" class="btn btn-danger disabled" title="Delete BIO"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>

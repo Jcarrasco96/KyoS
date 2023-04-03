@@ -103,7 +103,7 @@
                                                             }
                                                             else
                                                             {
-                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                                 {
                                                                     <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                     <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
@@ -120,7 +120,15 @@
                                                         else
                                                         {
                                                             <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                            <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                            {
+                                                                <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+
                                                             <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                         }
                                                     </td>
@@ -196,7 +204,7 @@
                                                         }
                                                         else
                                                         {
-                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                             {
                                                                 <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                 <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
@@ -213,7 +221,14 @@
                                                     else
                                                     {
                                                         <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                        <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                        {
+                                                            <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
                                                         <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                                     }
                                                 </td>
