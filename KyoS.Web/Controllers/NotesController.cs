@@ -1538,10 +1538,22 @@ namespace KyoS.Web.Controllers
                 if (note == null)   //the note has not been created
                 {
                     //Verify the client is not present in other services of notes at the same time
-                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Id))
+                    if (workday_Client.Schedule != null)
                     {
-                        return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
+                        if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Schedule.InitialTime, workday_Client.Schedule.EndTime, workday_Client.Id))
+                        {
+                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
+                        }
                     }
+                    else
+                    {
+                        if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Id))
+                        {
+                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
+                        }
+                    }
+                    //Verify the client is not present in other services of notes at the same time
+                   
 
                     noteEntity = await _converterHelper.ToNotePEntity(model, true);
                     noteEntity.Setting = form["Setting"].ToString();
@@ -12834,26 +12846,88 @@ namespace KyoS.Web.Controllers
                     //PSR notes
                     if (session == "AM")
                     {
-                        if (_context.Workdays_Clients
-                                    .Where(wc => (wc.Client.Id == idClient 
-                                        && wc.Session.Contains("AM") == true 
-                                        && wc.Workday.Date == date
-                                        && wc.Id != idWordayClient))
-                                    .Count() > 0)
-                            return true;
+                        if (wordayClient.Schedule != null)
+                        {
+                            if (_context.Workdays_Clients
+                                        .Where(wc => (wc.Client.Id == idClient
+                                            && wc.Session.Contains("AM") == true
+                                            && wc.Workday.Date == date
+                                            && wc.Id != idWordayClient
+                                            && ((wc.Schedule.InitialTime >= initialTime
+                                                && wc.Schedule.InitialTime <= endTime)
+                                                ||
+                                                (wc.Schedule.EndTime >= initialTime
+                                                && wc.Schedule.EndTime <= endTime))))
+                                        .Count() > 0)
+                                return true;
+
+                        }
+                        else
+                        {
+                            if (_context.Workdays_Clients
+                                           .Where(wc => (wc.Client.Id == idClient
+                                               && wc.Session.Contains("AM") == true
+                                               && wc.Workday.Date == date
+                                               && wc.Id != idWordayClient))
+                                           .Count() > 0)
+                            {
+                                DateTime initial = new DateTime().AddHours(8.0);
+                                DateTime end = new DateTime().AddHours(12.30);
+
+                                if ((initialTime.TimeOfDay < initial.TimeOfDay && endTime.TimeOfDay < initial.TimeOfDay)
+                                     || (initialTime.TimeOfDay > end.TimeOfDay && endTime.TimeOfDay > end.TimeOfDay))
+                                {
+                                    return false;
+                                }
+                                return true;
+
+                            }
+                                return false;
+                        }
                         return false;
                     }
                     else
                     {
                         if (session == "PM")
                         {
-                            if (_context.Workdays_Clients
-                                        .Where(wc => (wc.Client.Id == idClient 
-                                            && wc.Session.Contains("PM") == true 
-                                            && wc.Workday.Date == date
-                                            && wc.Id != idWordayClient))
-                                        .Count() > 0)
-                                return true;
+                            if (wordayClient.Schedule != null)
+                            {
+                                if (_context.Workdays_Clients
+                                            .Where(wc => (wc.Client.Id == idClient
+                                                && wc.Session.Contains("PM") == true
+                                                && wc.Workday.Date == date
+                                                && wc.Id != idWordayClient
+                                                && ((wc.Schedule.InitialTime >= initialTime
+                                                    && wc.Schedule.InitialTime <= endTime)
+                                                    ||
+                                                    (wc.Schedule.EndTime >= initialTime
+                                                    && wc.Schedule.EndTime <= endTime))))
+                                            .Count() > 0)
+                                    return true;
+
+                            }
+                            else
+                            {
+                                if (_context.Workdays_Clients
+                                               .Where(wc => (wc.Client.Id == idClient
+                                                   && wc.Session.Contains("PM") == true
+                                                   && wc.Workday.Date == date
+                                                   && wc.Id != idWordayClient))
+                                               .Count() > 0)
+                                {
+                                    DateTime initial = new DateTime().AddHours(12.30);
+                                    DateTime end = new DateTime().AddHours(05.30);
+
+                                    if ((initialTime.TimeOfDay < initial.TimeOfDay && endTime.TimeOfDay < initial.TimeOfDay)
+                                         || (initialTime.TimeOfDay > end.TimeOfDay && endTime.TimeOfDay > end.TimeOfDay))
+                                    {
+                                        return false;
+                                    }
+                                    return true;
+
+                                }
+                                return false;
+                            }
                             return false;
                         }
                         else
