@@ -33,7 +33,7 @@
                                 @Html.DisplayNameFor(model => model.Id)
                             </th>
                             <th class="col-md-4">
-                                Theme
+                                Id | Theme
                             </th>
                             <th class="col-md-4" style="text-align:center;">
                                 Facilitator’s Intervention
@@ -53,6 +53,8 @@
                                     @Html.DisplayFor(modelItem => item.Id)
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.Theme.Id)
+                                    |
                                     @Html.DisplayFor(modelItem => item.Theme.Name)
                                 </td>
                                 <td>
