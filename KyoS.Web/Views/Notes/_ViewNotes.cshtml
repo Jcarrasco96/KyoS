@@ -114,14 +114,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.BilledDate == null)
+                                                                              <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                @*@if (day_client.BilledDate == null)
                                                                                 {
                                                                                     <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                }
+                                                                                }*@
                                                                             </td>
                                                                             <td align="right">
                                                                                 @if (day_client.Note == null && day_client.NoteP == null)
@@ -209,14 +210,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.BilledDate == null)
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                               @* @if (day_client.BilledDate == null)
                                                                                 {
                                                                                     <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                }
+                                                                                }*@
                                                                             </td>
                                                                             <td align="right">
                                                                                 <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
