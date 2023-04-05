@@ -371,7 +371,8 @@ namespace KyoS.Web.Helpers
                 DateOfClose = clientEntity.DateOfClose,
                 Documents = clientEntity.Documents,
                 OnlyTCM = clientEntity.OnlyTCM,
-                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id)
+                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
+                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances
             };
         }
 

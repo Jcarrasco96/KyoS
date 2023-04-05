@@ -383,7 +383,9 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(c => c.EmergencyContact)
 
-                                                      .Include(c => c.IndividualTherapyFacilitator)                                                      
+                                                      .Include(c => c.IndividualTherapyFacilitator)
+
+                                                      .Include(c => c.Clients_HealthInsurances)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2339,8 +2341,14 @@ namespace KyoS.Web.Controllers
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
+
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp.Where(n => n.IdClient == HealthInsuranceModel.IdClient)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list )});
+
                 }
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(d => d.UserName == user_logged.UserName).ToList()) });
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(m => m.IdClient == id).ToList()) });
             }
 
             HealthInsuranceTempViewModel model = new HealthInsuranceTempViewModel

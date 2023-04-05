@@ -38,7 +38,7 @@
     &nbsp;
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="PhotoFile" class="control-label"></label>
         <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" />
         <span asp-validation-for="PhotoFile" class="text-danger"></span>
@@ -48,6 +48,27 @@
         <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
         <span asp-validation-for="SignFile" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        <label asp-for="Code" class="control-label">Case Number</label>
+        <input asp-for="Code" class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    @if (Model.Clients_HealthInsurances.Count() == 0)
+    {
+        <div class="form-group col-md-2">
+            <label class="control-label">Health Insurance</label>
+            <input class="form-control" disabled/>
+            
+        </div>
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="Clients_HealthInsurances.First(n => n.Active == true).MemberId" class="control-label">Health Insurance</label>
+            <input asp-for="Clients_HealthInsurances.First(n => n.Active == true).MemberId" class="form-control" disabled/>
+            <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).MemberId" class="text-danger"></span>
+        </div>
+    }
     <div class="form-group col-md-2">
         <label asp-for="MedicaidID" class="control-label"></label>
         <input asp-for="MedicaidID" class="form-control" />
@@ -63,11 +84,7 @@
         <input asp-for="SSN" class="form-control" />
         <span asp-validation-for="SSN" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Code" class="control-label"></label>
-        <input asp-for="Code" class="form-control" />
-        <span asp-validation-for="Code" class="text-danger"></span>
-    </div>
+
 </div>
 <div class="col-md-push-12">
     &nbsp;
@@ -97,9 +114,7 @@
             }
         </div>
     </div>
-    <div class="form-group col-md-1">
-        &nbsp;
-    </div>
+   
     <div class="form-group col-md-2">
         <div id="imgPreviewSign" class="thumbnail">
             @if (!string.IsNullOrEmpty(Model.SignPath))

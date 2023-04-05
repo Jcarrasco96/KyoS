@@ -11968,6 +11968,10 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
                                                                  .ThenInclude(cd => cd.Diagnostic)
 
+                                                                 .Include(wc => wc.Client)
+                                                                 .ThenInclude(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
+
                                                                  .Include(wc => wc.Workday)
                                                                  .ThenInclude(w => w.Week)
 
@@ -12057,6 +12061,10 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                 .Include(wc => wc.Client)
+                                                                 .ThenInclude(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
 
                                                                  .Include(wc => wc.Workday)
                                                                  .ThenInclude(w => w.Week)
@@ -14204,9 +14212,11 @@ namespace KyoS.Web.Controllers
             int money = 0;
             string clientName = client.Name;
             string code = client.Code;
-            string diagnostics = client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic.Code;
+            string diagnostics = string.Empty;
             string medicaidId = client.MedicaidID;
             string birthdate = client.DateOfBirth.ToShortDateString();
+            string healthInsurance = string.Empty;
+            string memberID = string.Empty;
 
             if (billed == 0)
             {
@@ -14222,6 +14232,10 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                 .Include(wc => wc.Client)
+                                                                 .ThenInclude(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
 
                                                                  .Include(wc => wc.Facilitator)
                                                                  .Include(wc => wc.Workday)
@@ -14251,6 +14265,17 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         diagnostics = item.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code;
+                    }
+
+                    if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() == 0)
+                    {
+                        healthInsurance = "";
+                        memberID = "";
+                    }
+                    else
+                    {
+                        healthInsurance = item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                        memberID = item.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                     }
 
                     medicaidId = item.Client.MedicaidID;
@@ -14308,6 +14333,8 @@ namespace KyoS.Web.Controllers
                 ViewData["Diagnostics"] = diagnostics;
                 ViewData["MedicaidId"] = medicaidId;
                 ViewData["BirthDate"] = birthdate;
+                ViewData["HealthInsurance"] = healthInsurance;
+                ViewData["MemberID"] = memberID;
 
                 return View(work_client);
             }
@@ -14325,6 +14352,10 @@ namespace KyoS.Web.Controllers
                                                                  .Include(wc => wc.Client)
                                                                  .ThenInclude(c => c.Clients_Diagnostics)
                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                 .Include(wc => wc.Client)
+                                                                 .ThenInclude(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
 
                                                                  .Include(wc => wc.Workday)
                                                                  .ThenInclude(wc => wc.Week)
@@ -14357,6 +14388,17 @@ namespace KyoS.Web.Controllers
                         diagnostics = item.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code;
                     }
 
+                    if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() == 0)
+                    {
+                        healthInsurance = "";
+                        memberID = "";
+                    }
+                    else
+                    {
+                        healthInsurance = item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                        memberID = item.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
+                    }
+
                     medicaidId = item.Client.MedicaidID;
                     birthdate = item.Client.DateOfBirth.ToShortDateString().ToString();
 
@@ -14412,6 +14454,8 @@ namespace KyoS.Web.Controllers
                 ViewData["Diagnostics"] = diagnostics;
                 ViewData["MedicaidId"] = medicaidId;
                 ViewData["BirthDate"] = birthdate;
+                ViewData["HealthInsurance"] = healthInsurance;
+                ViewData["MemberID"] = memberID;
 
                 return View(work_client);
             }

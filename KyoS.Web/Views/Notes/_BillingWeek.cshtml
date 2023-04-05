@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                             <th class="col-md-1"></th>
-                            <th class="col-md-3">Client Name</th>
+                            <th class="col-md-3">Client Name | Case Number</th>
                             <th class="col-md-1" style="text-align:center;">Notes</th>
                             <th class="col-md-2" style="text-align:center;">Birth Date</th>
                             <th class="col-md-2" style="text-align:center;">Medical ID</th>
@@ -44,7 +44,7 @@
                                     <div style="display:none">
                                         <table class="table table-striped table-bordered" id="MyTableDetails">
                                             <tr>
-                                                <th class="col-md-3">Client Name</th>
+                                                <th class="col-md-3">Health Insurance | Member ID</th>
                                                 <th class="col-md-2">Therapist</th>
                                                 <th class="col-md-1" style="text-align:center;">Therapy</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
@@ -57,9 +57,17 @@
                                             {
                                                 <tr>
                                                     <td>
-                                                        @Html.DisplayFor(modelItem => element.Client.Name)
-                                                        |
-                                                        @Html.DisplayFor(modelItem => element.Client.Code)
+                                                        @if (element.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                        {
+                                                            @element.Client.Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name
+                                                             <a> | </a>   
+                                                            @element.Client.Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId
+                                                        }
+                                                        else
+                                                        {
+                                                           
+                                                           
+                                                        }
                                                     </td>
                                                      <td>
                                                         @Html.DisplayFor(modelItem => element.Facilitator.Name)
@@ -145,29 +153,123 @@
                                                     <td align="center">
                                                         @if (element.NoteP != null)
                                                         {
-                                                            @Html.DisplayFor(modelItem => element.NoteP.Status)
+                                                            if (element.NoteP.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Approved
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (element.NoteP.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                {
+                                                                    <span class="label label-info">
+                                                                        Pending
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (element.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                    {
+                                                                        <span class="label label-warning">
+                                                                            Edition
+                                                                        </span>
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             @if (element.Note != null)
                                                             {
-                                                                @Html.DisplayFor(modelItem => element.Note.Status)
+                                                                if (element.Note.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                                {
+                                                                    <span class="label label-success">
+                                                                        Approved
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (element.Note.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                    {
+                                                                        <span class="label label-info">
+                                                                            Pending
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                        {
+                                                                            <span class="label label-warning">
+                                                                                Edition
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
                                                             else
                                                             {
                                                                 @if (element.IndividualNote != null)
                                                                 {
-                                                                    @Html.DisplayFor(modelItem => element.IndividualNote.Status)
+                                                                    @if (element.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                                    {
+                                                                        <span class="label label-success">
+                                                                            Approved
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                        {
+                                                                            <span class="label label-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (element.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                            {
+                                                                                <span class="label label-warning">
+                                                                                    Edition
+                                                                                </span>
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
                                                                     @if (element.GroupNote != null)
                                                                     {
-                                                                        @Html.DisplayFor(modelItem => element.GroupNote.Status)
+                                                                        @if (element.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                                        {
+                                                                            <span class="label label-success">
+                                                                                Approved
+                                                                            </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (element.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                            {
+                                                                                <span class="label label-info">
+                                                                                    Pending
+                                                                                </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (element.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                {
+                                                                                    <span class="label label-warning">
+                                                                                        Edition
+                                                                                    </span>
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        <p>Not Started</p>
+                                                                        <span class="label label-danger">
+                                                                            Not Started
+                                                                        </span>
                                                                     }
                                                                 }
                                                             }
