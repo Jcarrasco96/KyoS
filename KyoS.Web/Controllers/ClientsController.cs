@@ -1641,23 +1641,36 @@ namespace KyoS.Web.Controllers
             problem.Add(tempProblem);
             tempProblem = new Problem();
 
-            //FARS
+            //FARS initial
             if (client.FarsFormList.Count() > 0 && client.Bio != null )
             {
-                if (client.FarsFormList.Where(n => n.EvaluationDate == client.Bio.DateBio ).Count() == 0)
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0)
                 {
                     tempProblem.Name = "Initial FARS";
-                    tempProblem.Description = "Initial FARS date doesn't match with the BIO document";
+                    tempProblem.Description = "Initial FARS not exists";
                     tempProblem.Active = 0;
+
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
                 }
                 else
                 {
-                    tempProblem.Name = "Initial FARS";
-                    tempProblem.Description = "Initial FARS date match with the BIO document";
-                    tempProblem.Active = 2;
+                    if (client.FarsFormList.Where(n => n.EvaluationDate == client.Bio.DateBio && n.Type == FARSType.Initial).Count() == 0)
+                    {
+                        tempProblem.Name = "Initial FARS";
+                        tempProblem.Description = "Initial FARS date doesn't match with the BIO document";
+                        tempProblem.Active = 0;
+                    }
+                    else
+                    {
+                        tempProblem.Name = "Initial FARS";
+                        tempProblem.Description = "Initial FARS date match with the BIO document";
+                        tempProblem.Active = 2;
+                    }
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
                 }
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+              
             }
 
             //MTP
@@ -1754,16 +1767,19 @@ namespace KyoS.Web.Controllers
                 {
                     cant_Discharge++;
                     dischage_psr = true;
+                    cant_Fars++;
                 }
                 if (client.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
                 {
                     cant_Discharge++;
                     dischage_ind = true;
+                    cant_Fars++;
                 }
-                if (client.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+                if (client.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0 || client.Workdays_Clients.Where(n => n.GroupNote2 != null).Count() > 0)
                 {
                     cant_Discharge++;
                     dischage_group = true;
+                    cant_Fars++;
                 }
 
                 if (client.DischargeList.Count() != cant_Discharge)
@@ -1825,8 +1841,6 @@ namespace KyoS.Web.Controllers
                     }
                 }
                
-                cant_Fars++;
-
             }
 
             bool dischargeEdition = false;

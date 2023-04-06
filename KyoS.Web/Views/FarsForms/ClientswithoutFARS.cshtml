@@ -72,8 +72,8 @@
                                 @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                  {
                                      <span class="label label-success">
-                                    Open
-                                </span>
+                                        Open
+                                     </span>
                                  }
                                 @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                  {
@@ -83,9 +83,10 @@
                                  }
                             </td>
                             <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
+                                <a onclick="showInPopupLg('@Url.Action("AuditFARSforId", "FarsForms", new { id = @item.Id }, Context.Request.Scheme)','Audit FARS')" class="btn btn-info" title="Audit FARS"><i class="glyphicon glyphicon-search"></i></a>
                             </td>
                             <td align="right">
+
                                 @if (User.IsInRole("Facilitator"))
                                 {
                                     <a asp-action="Create" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-primary" title="Create FARS"><i class="glyphicon glyphicon-plus"></i></a>
@@ -104,6 +105,7 @@
 </div>
 
 }
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

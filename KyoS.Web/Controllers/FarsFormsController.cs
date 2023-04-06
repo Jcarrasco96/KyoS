@@ -833,7 +833,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Missing FARS PSR (" + resto + ")";
+                        auditClient.Description = "Missing FARS (" + resto + "), the client is Open";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -848,7 +848,7 @@ namespace KyoS.Web.Controllers
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Missing FARS Ind. (" + resto + ")";
+                        auditClient.Description = "Missing FARS (" + resto + "), the client is Close";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -945,7 +945,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> AuditFARSforId(int id = 0)
         {
             UserEntity user_logged = _context.Users
@@ -965,7 +965,7 @@ namespace KyoS.Web.Controllers
 
             ClientEntity client = new ClientEntity();
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Facilitator"))
             {
                 client = await _context.Clients
                                        .Include(m => m.MTPs)
