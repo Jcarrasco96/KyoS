@@ -83,7 +83,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.FarsFormList)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -482,7 +482,8 @@ namespace KyoS.Web.Controllers
                                                               .Where(n => n.FarsFormList.Count == 0 
                                                                  && n.Clinic.Id == user_logged.Clinic.Id
                                                                  && (n.IdFacilitatorPSR == facilitator.Id 
-                                                                    || n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                                    || n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                                    || n.IdFacilitatorGroup == facilitator.Id)
                                                                  && n.OnlyTCM == false)
                                                               .ToListAsync();
 
@@ -662,7 +663,7 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Client.Id == idClient
-                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id || n.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
                 }
@@ -798,7 +799,7 @@ namespace KyoS.Web.Controllers
                                           .Include(m => m.DischargeList)
                                           .Include(m => m.IndividualTherapyFacilitator)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                           .ToList();
 
                 }
@@ -885,8 +886,9 @@ namespace KyoS.Web.Controllers
                                                               .Include(n => n.MTPs)
                                                               .ThenInclude(n => n.MtpReviewList)
                                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                                 && ((n.IdFacilitatorPSR == facilitator.Id && n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                 && (((n.IdFacilitatorPSR == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id) && n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                                                   || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.IdFacilitatorGroup == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
                                                                   || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
                                                                  && n.OnlyTCM == false)
                                                               .ToListAsync();

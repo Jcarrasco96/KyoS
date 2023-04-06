@@ -1521,7 +1521,7 @@ namespace KyoS.Web.Controllers
                                          
                                           .Include(m => m.IndividualTherapyFacilitator)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                           .ToList();
 
                 }

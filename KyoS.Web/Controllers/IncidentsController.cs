@@ -121,7 +121,7 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Facilitator"))
             {
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                list = _context.Clients.Where(n => n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id).OrderBy(n => n.Name).Select(c => new SelectListItem
+                list = _context.Clients.Where(n => n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id).OrderBy(n => n.Name).Select(c => new SelectListItem
                 {
                     Text = $"{c.Name + " | " + c.AdmisionDate.ToShortDateString()}",
                     Value = $"{c.Id}"

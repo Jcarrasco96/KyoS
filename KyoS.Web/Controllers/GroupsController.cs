@@ -228,6 +228,8 @@ namespace KyoS.Web.Controllers
                         if (client != null)
                         {
                             client.Group = group;
+                            client.IdFacilitatorPSR = group.Facilitator.Id;
+                           
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -451,6 +453,7 @@ namespace KyoS.Web.Controllers
                         {
                             client.Group = group;
                             client.IdFacilitatorPSR = group.Facilitator.Id;
+                           
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -708,6 +711,8 @@ namespace KyoS.Web.Controllers
                         if (client != null)
                         {                            
                             client.Group = group;
+                            client.IdFacilitatorGroup = group.Facilitator.Id;
+                         
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -945,6 +950,7 @@ namespace KyoS.Web.Controllers
                         if (client != null)
                         {
                             client.Group = group;
+                            client.IdFacilitatorGroup = group.Facilitator.Id;
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas

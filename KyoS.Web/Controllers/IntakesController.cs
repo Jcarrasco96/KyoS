@@ -2026,7 +2026,7 @@ namespace KyoS.Web.Controllers
                                        .Include(m => m.IntakeTransportation)
                                        .Include(m => m.IntakeTuberculosis)
                                        .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
-                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id)))
                                        .ToList();
             }
            

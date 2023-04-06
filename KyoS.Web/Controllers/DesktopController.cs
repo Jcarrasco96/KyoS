@@ -175,7 +175,7 @@ namespace KyoS.Web.Controllers
                                                      .Include(n => n.MtpReviewList)                                                       
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                               && m.Active == true && m.Client.Status == StatusType.Open
-                                                              && m.Client.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                                                              && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id))).ToListAsync();
                 int count = 0;
                 int month = 0;
                 foreach (var item in mtps)
@@ -205,8 +205,12 @@ namespace KyoS.Web.Controllers
                                                                  .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
                                                                             && m.Clinic.Id == user_logged.Clinic.Id
                                                                             && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
-                
-                ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count()).ToString();
+                List<ClientEntity> clientListGroup = await _context.Clients
+                                                                  .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Group).ToList().Count == 0)
+                                                                             && m.Clinic.Id == user_logged.Clinic.Id
+                                                                             && m.Status == StatusType.Close && m.IdFacilitatorGroup == facilitator.Id)).ToListAsync();
+
+                ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
 
                 ViewBag.DischargeEdition = _context.Discharge
                                                    .Count(n => (n.Status == DischargeStatus.Edition
@@ -230,8 +234,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.ClientWithoutFARS = _context.Clients
                                                     
                                                     .Count(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                       && ((n.IdFacilitatorPSR == facilitator.Id && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                       && (((n.IdFacilitatorPSR == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id) && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                                             || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                            || (n.IdFacilitatorGroup == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
                                                             || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
                                                        && n.OnlyTCM == false).ToString();
 

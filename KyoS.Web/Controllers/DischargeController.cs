@@ -76,10 +76,10 @@ namespace KyoS.Web.Controllers
                                                                   .Include(f => f.Clients_Diagnostics)
 
                                                                   .Where(n => (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Close
-                                                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                                                         || (n.Clinic.Id == user_logged.Clinic.Id && n.Status == StatusType.Open
                                                                         && (n.DischargeList.Count() > 0)
-                                                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id)))
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
                                                                  
@@ -529,6 +529,13 @@ namespace KyoS.Web.Controllers
                                                               .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                List<ClientEntity> clientListGroup = await _context.Clients
+                                                               .Include(m => m.DischargeList)
+
+                                                               .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Group).ToList().Count == 0)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Close && m.IdFacilitatorGroup == facilitator.Id)).ToListAsync();
+
                 List<ClientEntity> clientList = new List<ClientEntity>();
 
                 foreach (var item in clientListPSR)
@@ -536,6 +543,13 @@ namespace KyoS.Web.Controllers
                     item.Service = ServiceType.PSR;
                     clientList.Add(item);
                 }
+
+                foreach (var item in clientListGroup)
+                {
+                    item.Service = ServiceType.Group;
+                    clientList.Add(item);
+                }
+
                 ClientEntity client = new ClientEntity();
 
                 foreach (var item in clientListIND)
@@ -679,7 +693,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(d => (d.Client.Clinic.Id == clinic.Id)
                                                             && d.Status == DischargeStatus.Pending
-                                                            && (d.Client.IdFacilitatorPSR == facilitator.Id || d.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                            && (d.Client.IdFacilitatorPSR == facilitator.Id || d.Client.IndividualTherapyFacilitator.Id == facilitator.Id || d.Client.IdFacilitatorGroup == facilitator.Id))
                                                   .OrderBy(d => d.Client.Clinic.Name).ToListAsync());
                     }
 
@@ -780,17 +794,25 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
                 List<ClientEntity> clientListPSR = await _context.Clients
-                                                               .Include(m => m.DischargeList)
+                                                                 .Include(m => m.DischargeList)
 
-                                                               .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.PSR).ToList().Count == 0)
+                                                                 .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.PSR).ToList().Count == 0)
                                                                      && m.Clinic.Id == user_logged.Clinic.Id
                                                                      && m.Status == StatusType.Open && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
                 List<ClientEntity> clientListIND = await _context.Clients
-                                                              .Include(m => m.DischargeList)
-                                                              .Include(m => m.IndividualTherapyFacilitator)
-                                                              .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
+                                                                 .Include(m => m.DischargeList)
+                                                                 .Include(m => m.IndividualTherapyFacilitator)
+                                                                 .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
                                                                     && m.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == StatusType.Open && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                List<ClientEntity> clientListGroup = await _context.Clients
+                                                                   .Include(m => m.DischargeList)
+
+                                                                   .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Group).ToList().Count == 0)
+                                                                     && m.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Status == StatusType.Open && m.IdFacilitatorGroup == facilitator.Id)).ToListAsync();
+
+
                 List<ClientEntity> clientList = new List<ClientEntity>();
 
                 foreach (var item in clientListPSR)
@@ -798,6 +820,13 @@ namespace KyoS.Web.Controllers
                     item.Service = ServiceType.PSR;
                     clientList.Add(item);
                 }
+
+                foreach (var item in clientListGroup)
+                {
+                    item.Service = ServiceType.Group;
+                    clientList.Add(item);
+                }
+
                 ClientEntity client = new ClientEntity();
 
                 foreach (var item in clientListIND)
@@ -906,7 +935,7 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Client.Id == idClient
-                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id || n.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
                 }
@@ -984,7 +1013,7 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(m => m.Workday)
                                       .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                          && n.Status == StatusType.Close
-                                         && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                         && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id)))
                                       .ToList();
 
             }
