@@ -2033,12 +2033,16 @@ namespace KyoS.Web.Controllers
 
             List<Workday_Client> not_started_list;
             not_started_list = await _context.Workdays_Clients
-                                                    .Include(wc => wc.Note)
-                                                    .Include(wc => wc.NoteP)
-                                                    .Where(wc => (wc.Client.Id == idClient
-                                                               && wc.Present == true
-                                                               && wc.Workday.Service == ServiceType.PSR)).ToListAsync();
-            not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.NoteP == null)).ToList();
+                                             .Include(wc => wc.Note)
+                                             .Include(wc => wc.NoteP)
+                                             .Include(wc => wc.GroupNote)
+                                             .Include(wc => wc.GroupNote2)
+                                             .Where(wc => (wc.Client.Id == idClient
+                                                 && wc.Present == true
+                                                 && (wc.Workday.Service == ServiceType.PSR
+                                                    || wc.Workday.Service == ServiceType.Group)))
+                                             .ToListAsync();
+            not_started_list = not_started_list.Where(wc => (wc.Note == null && wc.NoteP == null) || (wc.GroupNote == null && wc.GroupNote2 == null)).ToList();
 
             if (not_started_list.Count() > 0)
             {
@@ -2094,6 +2098,14 @@ namespace KyoS.Web.Controllers
                         editionCountNote++;
                     }
                 }
+                if (item.GroupNote2 != null)
+                {
+                    if (item.GroupNote2.Status == NoteStatus.Edition)
+                    {
+                        noteEdition = true;
+                        editionCountNote++;
+                    }
+                }
 
                 if (item.Note != null)
                 {
@@ -2122,6 +2134,14 @@ namespace KyoS.Web.Controllers
                 if (item.GroupNote != null)
                 {
                     if (item.GroupNote.Status == NoteStatus.Pending)
+                    {
+                        notePending = true;
+                        pendingCountNote++;
+                    }
+                }
+                if (item.GroupNote2 != null)
+                {
+                    if (item.GroupNote2.Status == NoteStatus.Pending)
                     {
                         notePending = true;
                         pendingCountNote++;
