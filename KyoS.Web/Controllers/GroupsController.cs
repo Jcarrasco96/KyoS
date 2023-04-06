@@ -224,6 +224,8 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                        List<Workday_Client> workday_Client_group;
                         List<Workday_Client> workday_client = new List<Workday_Client>();                        
                         if (client != null)
                         {
@@ -241,14 +243,31 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
+                            workday_Client_group = await _context.Workdays_Clients
+                                                                .Include(w => w.Workday)
 
+                                                                .Where(w => (w.Workday.Date >= developed_date
+                                                                       && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                       && w.Workday.Service == Common.Enums.ServiceType.Group
+                                                                       && w.Client.Id == client.Id))
+                                                                .ToListAsync();
+                            foreach (var item in workday_Client_group)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+                            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule);
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, schedule.InitialTime, schedule.EndTime, ServiceType.PSR))
                                     {
                                         return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
                                     }
@@ -429,6 +448,7 @@ namespace KyoS.Web.Controllers
 
                 GroupEntity original_group = await _context.Groups
                                                            .Include(g => g.Clients)
+                                                           .Include(g => g.Schedule)
                                                            .FirstOrDefaultAsync(g => g.Id == model.Id);
 
                 foreach (ClientEntity value in original_group.Clients)
@@ -443,6 +463,8 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
+                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                    List<Workday_Client> workday_Client_group;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
@@ -465,13 +487,31 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
+                            workday_Client_group = await _context.Workdays_Clients
+                                                                 .Include(w => w.Workday)
+                                                           
+                                                                 .Where(w => (w.Workday.Date >= developed_date
+                                                                        && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                        && w.Workday.Service == Common.Enums.ServiceType.Group
+                                                                        && w.Client.Id == client.Id))
+                                                                 .ToListAsync();
+                            foreach (var item in workday_Client_group)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.PSR))
                                     {
                                         return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
                                     }
@@ -492,7 +532,8 @@ namespace KyoS.Web.Controllers
                                         SharedSession = client.Group.SharedSession,
                                         CodeBill = user_logged.Clinic.CodeGroupTherapy,
                                         Schedule = client.Group.Schedule
-                                    });                                    
+                                    }); 
+                                   
                                 }                                
                             }
                             if (workday_client.Count() > 0)
@@ -707,6 +748,8 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                        List<Workday_Client> workday_Client_PSR;
                         List<Workday_Client> workday_client = new List<Workday_Client>();
                         if (client != null)
                         {                            
@@ -727,14 +770,32 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
+                            workday_Client_PSR = await _context.Workdays_Clients
+                                                                .Include(w => w.Workday)
 
+                                                                .Where(w => (w.Workday.Date >= developed_date
+                                                                       && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                       && w.Workday.Service == Common.Enums.ServiceType.PSR
+                                                                       && w.Client.Id == client.Id))
+                                                                .ToListAsync();
+                            foreach (var item in workday_Client_PSR)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+                            
+                            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule);
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
-                                    /* //Verify the client is not present in other services of notes at the same time
-                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                    //Verify the client is not present in other services of notes at the same time
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, schedule.InitialTime, schedule.EndTime, ServiceType.Group))
                                      {
                                          return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
                                      }
@@ -755,8 +816,8 @@ namespace KyoS.Web.Controllers
                                          SharedSession = false,
                                          CodeBill = user_logged.Clinic.CodeGroupTherapy,
                                          Schedule = client.Group.Schedule
-                                     });*/
-                                    if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                     });
+                                   /* if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
                                         && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
                                         workday_client.Add(new Workday_Client
@@ -770,7 +831,7 @@ namespace KyoS.Web.Controllers
                                             CodeBill = user_logged.Clinic.CodeGroupTherapy,
                                             Schedule = client.Group.Schedule
                                         });
-                                    }
+                                    }*/
                                 }                                
                             }
 
@@ -927,6 +988,7 @@ namespace KyoS.Web.Controllers
 
                 GroupEntity original_group = await _context.Groups
                                                            .Include(g => g.Clients)
+                                                           .Include(g => g.Schedule)
                                                            .FirstOrDefaultAsync(g => g.Id == model.Id);
 
                 foreach (ClientEntity value in original_group.Clients)
@@ -941,6 +1003,8 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
+                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                    List<Workday_Client> workday_Client_PSR;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
@@ -965,14 +1029,30 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
+                            workday_Client_PSR = await _context.Workdays_Clients
+                                                               .Include(w => w.Workday)
 
+                                                               .Where(w => (w.Workday.Date >= developed_date
+                                                                      && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                      && w.Workday.Service == Common.Enums.ServiceType.PSR
+                                                                      && w.Client.Id == client.Id))
+                                                               .ToListAsync();
+                            foreach (var item in workday_Client_PSR)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
-                                    /* //Verify the client is not present in other services of notes at the same time
-                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                    //Verify the client is not present in other services of notes at the same time
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.Group))
                                      {
                                          return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
                                      }
@@ -992,8 +1072,8 @@ namespace KyoS.Web.Controllers
                                          Present = true,
                                          SharedSession = false,
                                          Schedule = client.Group.Schedule
-                                     });     */
-                                    if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                     });     
+                                    /*if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
                                         && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
                                         workday_client.Add(new Workday_Client
@@ -1007,7 +1087,7 @@ namespace KyoS.Web.Controllers
                                             CodeBill = user_logged.Clinic.CodeGroupTherapy,
                                             Schedule = client.Group.Schedule
                                         });
-                                    }
+                                    }*/
                                 }                                
                             }
 
@@ -1544,7 +1624,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, ServiceType service)
+        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, DateTime initialTime, DateTime endTime, ServiceType service)
         {
             //Individual notes
             if (session == "8.00 - 9.00 AM" || session == "9.05 - 10.05 AM" || session == "10.15 - 11.15 AM" || session == "11.20 - 12.20 PM")
@@ -1556,14 +1636,18 @@ namespace KyoS.Web.Controllers
                 return false;
 
             }
-            if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+            else
             {
-                if (_context.Workdays_Clients
-                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
-                            .Count() > 0)
-                    return true;
-                return false;
+                if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+                {
+                    if (_context.Workdays_Clients
+                                .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
+                                .Count() > 0)
+                        return true;
+                    return false;
+                }
             }
+            
 
             //PSR notes
             if (session == "AM" && service == ServiceType.PSR)
@@ -1581,7 +1665,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "AM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient 
+                                    && wc.Workday.Date == date 
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime < initialTime && wc.Schedule.EndTime > initialTime
+                                        || wc.Schedule.InitialTime < endTime && wc.Schedule.EndTime > endTime))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1601,7 +1692,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime < initialTime && wc.Schedule.EndTime > initialTime
+                                        || wc.Schedule.InitialTime < endTime && wc.Schedule.EndTime > endTime))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1623,7 +1721,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "AM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Count() > 0
+                        || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime < initialTime && wc.Schedule.EndTime > initialTime
+                                        || wc.Schedule.InitialTime < endTime && wc.Schedule.EndTime > endTime))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1643,7 +1748,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime < initialTime && wc.Schedule.EndTime > initialTime
+                                        || wc.Schedule.InitialTime < endTime && wc.Schedule.EndTime > endTime))))
                                   .Count() > 0)
                     return true;
                 return false;
