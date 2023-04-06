@@ -166,6 +166,10 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.GroupNote)
 
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Schedule)
+
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.Group && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))                                               
                                             
@@ -453,7 +457,7 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = workday_Client.Client.Clinic.CodePSRTherapy,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -1195,7 +1199,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
                     Setting = "53",
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = workday_Client.Client.Clinic.CodePSRTherapy,
 
                     Present1 = true,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -2149,7 +2153,7 @@ namespace KyoS.Web.Controllers
                     Assessment = note.Assessment,
                     PlanNote = note.PlanNote,
                     Status = note.Status,
-                    CodeBill = user_logged.Clinic.CodeIndTherapy,
+                    CodeBill = workday_Client.CodeBill,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -2635,7 +2639,7 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,      
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3158,7 +3162,7 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
@@ -3488,6 +3492,7 @@ namespace KyoS.Web.Controllers
                     note.Hostile = model.Hostile;
                     note.Schema = model.Schema;
                     
+                    
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
                     if (mtp != null)
@@ -3720,7 +3725,7 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
-                    CodeBill = workday_Client.CodeBill,
+                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
@@ -4769,6 +4774,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Origin = origin,
                     Schema = note.Schema,
+                    CodeBill = workday_Client.CodeBill,
 
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
@@ -4839,6 +4845,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Origin = origin,
                     Schema = note.Schema,
+                    CodeBill = workday_Client.CodeBill,
 
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
@@ -5008,6 +5015,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = note.Schema,
                     Setting = note.Setting,
+                    CodeBill = note.Workday_Cient.CodeBill,
 
                     Title = note.Title,
 
@@ -5250,6 +5258,7 @@ namespace KyoS.Web.Controllers
                 Assessment = note.Assessment,
                 PlanNote = note.PlanNote,
                 Origin = origin,
+                CodeBill = workday_Client.CodeBill,
 
                 Groomed = note.Groomed,
                 Unkempt = note.Unkempt,
@@ -5396,6 +5405,7 @@ namespace KyoS.Web.Controllers
                 Workday_Cient = workday_Client,
                 PlanNote = note.PlanNote,
                 Origin = origin,
+                CodeBill = workday_Client.CodeBill,
 
                 Groomed = note.Groomed,
                 Unkempt = note.Unkempt,
