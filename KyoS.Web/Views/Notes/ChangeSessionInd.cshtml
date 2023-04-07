@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="ChangeSessionGroup" onsubmit="return jQueryAjaxPostChangeNote(this);">
+        <form asp-action="ChangeSessionInd" onsubmit="return jQueryAjaxPostChangeNote(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
@@ -36,35 +36,10 @@
                 </div>
             </div>
             <div>
-                 <div class=" col-md-8 form-group">
+                <div class=" col-md-12 form-group">
                     <label asp-for="IdSchedule" class="control-label"></label>
                     <select asp-for="IdSchedule" asp-items="Model.Schedules" class="form-control"></select>
                     <span asp-validation-for="IdSchedule" class="text-danger"></span>
-                </div>
-                <div class=" col-md-4 form-group">
-                    <label asp-for="Session" class="control-label"></label>
-                    @*<input asp-for="Session" class="form-control"readonly />
-                    <span asp-validation-for="Session" class="text-danger"></span>*@
-                    <br />
-                    @if (ViewData["am"].ToString() == "true")
-                    {
-                        <input type="radio" name="Meridian" value="Am" checked="checked" />
-                    }
-                    else
-                    {
-                        <input type="radio" name="Meridian" value="Am" />
-                    }
-                    AM
-                    &nbsp;&nbsp;
-                    @if (ViewData["am"].ToString() == "true")
-                    {
-                        <input type="radio" name="Meridian" value="Pm" />
-                    }
-                    else
-                    {
-                        <input type="radio" name="Meridian" value="Pm" checked="checked" />
-                    }
-                    PM
                 </div>
             </div>
             <div class="form-group col-md-12"></div>

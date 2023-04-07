@@ -956,7 +956,7 @@ namespace KyoS.Web.Helpers
             };
         }        
 
-        public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model)
+        public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model, bool indTherapy = false)
         {
             Workday_ClientViewModel salida = new Workday_ClientViewModel();
             
@@ -974,13 +974,26 @@ namespace KyoS.Web.Helpers
 
             if (model.Schedule == null)
             {
-                salida.IdSchedule = 0;
-                salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                if (indTherapy == false)
+                {
+                    salida.IdSchedule = 0;
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                }
+               
             }
             else
             {
-                salida.IdSchedule = model.Schedule.Id;
-                salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                if (indTherapy == false)
+                {
+                    salida.IdSchedule = model.Schedule.Id;
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                }
+                else
+                {
+                    salida.IdSchedule = model.Schedule.Id;
+                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id,model.Id);
+                }
+                
             }
             return salida;
         }

@@ -38,7 +38,7 @@ namespace KyoS.Web.Helpers
         NotePViewModel ToNotePViewModel(NotePEntity model);
         Task<IndividualNoteEntity> ToIndividualNoteEntity(IndividualNoteViewModel model, bool isNew);
         Task<GroupNoteEntity> ToGroupNoteEntity(GroupNoteViewModel model, bool isNew);       
-        Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model);
+        Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model, bool indTherapy);
         Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew);
         DoctorEntity ToDoctorEntity(DoctorViewModel model, bool isNew, string userId);
         PsychiatristEntity ToPsychiatristEntity(PsychiatristViewModel model, bool isNew, string userId);

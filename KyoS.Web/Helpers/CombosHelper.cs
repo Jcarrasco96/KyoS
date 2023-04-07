@@ -1668,5 +1668,59 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient)
+        {
+            List<SubScheduleEntity> listSubSchedules = _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).ToList();
+            List<IndividualNoteEntity> listNotes = _context.IndividualNotes
+                                                           .Include(n => n.SubSchedule)
+                                                           .ThenInclude(n => n.Schedule)
+                                                           .Where(n => n.Workday_Cient.Facilitator.Id == idFacilitator 
+                                                                && n.Workday_Cient.Workday.Id == idWorkday)
+                                                           .ToList();
+
+            foreach (var item in listNotes)
+            {
+                listSubSchedules.Remove(item.SubSchedule);
+            }
+
+            List<Workday_Client> allNotes = _context.Workdays_Clients
+                                                    .Include(n => n.Schedule)
+                                                    .Where(n => n.Workday.Id == idWorkday
+                                                        && n.Client.Id == idClient
+                                                        && n.Id != idWorkdayClient)
+                                                    .ToList();
+            if (allNotes.Count() > 0)
+            {
+                foreach (var item in listSubSchedules)
+                {
+                    if (allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime)))
+                    {
+                        listSubSchedules.Remove(item);
+                    }
+                }
+            }
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (listSubSchedules.Count() > 0)
+            {
+                list = listSubSchedules.Select(f => new SelectListItem
+                {
+                    Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                    Value = $"{f.Id}"
+                }).ToList();
+
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+
+
+            return list;
+        }
+
     }
 }
