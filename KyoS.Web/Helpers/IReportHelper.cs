@@ -21,6 +21,7 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSAbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic1AbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic2AbsenceNoteReport(Workday_Client workdayClient);
+        Stream CommunityHTCAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -29,12 +30,15 @@ namespace KyoS.Web.Helpers
         Stream DavilaNoteReportSchema4(Workday_Client workdayClient);
         Stream DreamsMentalHealthNoteReportSchema3(Workday_Client workdayClient);
         Stream DreamsMentalHealthNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream CommunityHTCNoteReportSchema3(Workday_Client workdayClient);
+        Stream CommunityHTCNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
         Stream DavilaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
         Stream DreamsMentalHealthIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream CommunityHTCIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -43,8 +47,10 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthGroupNoteReportSchema1(Workday_Client workdayClient);
         Stream FloridaSocialHSGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream CommunityHTCGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream FloridaSocialHSGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream CommunityHTCGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
@@ -57,6 +63,7 @@ namespace KyoS.Web.Helpers
         Stream DavilaMTPReport(MTPEntity mtp);
         Stream DemoClinic1MTPReport(MTPEntity mtp);
         Stream DemoClinic2MTPReport(MTPEntity mtp);
+        Stream CommunityHTCMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR general reports
@@ -69,6 +76,7 @@ namespace KyoS.Web.Helpers
         #region Intake reports
         Stream FloridaSocialHSIntakeReport(IntakeScreeningEntity intake);
         Stream DreamsMentalHealthIntakeReport(IntakeScreeningEntity intake);
+        Stream CommunityHTCIntakeReport(IntakeScreeningEntity intake);
         #endregion
 
         #region Fars reports
