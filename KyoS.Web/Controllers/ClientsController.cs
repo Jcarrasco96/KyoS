@@ -599,7 +599,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)
@@ -611,10 +611,11 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Clinic)
                                                       .Include(c => c.Doctor)
                                                       .Include(c => c.Psychiatrist)
-                                                      .Include(c => c.Client_Referred)
+                                                      //.Include(c => c.Client_Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
                                                       .Include(c => c.IndividualTherapyFacilitator)
+                                                      .Include(c => c.Clients_HealthInsurances)
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -625,13 +626,15 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            this.DeleteDiagnosticsTemp();
-            this.DeleteDocumentsTemp();
-            this.DeleteReferredsTemp();
+            this.DeleteDiagnosticsTemp(clientEntity);
+            this.DeleteDocumentsTemp(clientEntity);
+            this.DeleteReferredsTemp(clientEntity);
+            this.DeleteHealthInsuranceTemp(clientEntity);
 
             this.SetDiagnosticsTemp(clientEntity);
             this.SetDocumentsTemp(clientEntity);
             this.SetReferredsTemp(clientEntity);
+            this.SetHealthInsuranceTemp(clientEntity);
 
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
                         

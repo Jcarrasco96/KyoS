@@ -50,8 +50,11 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Units)
                                     </td>
-                                     <td align="right">
-                                        <button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <td align="right">
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        {
+                                            <button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
                                     </td>
                                 </tr>
                             }

@@ -39,7 +39,10 @@
                                         @Html.DisplayFor(modelItem => item.Principal)
                                     </td>
                                     <td align="right">
-                                        <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        {
+                                            <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
                                     </td>
                                 </tr>
                             }

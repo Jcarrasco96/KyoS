@@ -37,6 +37,7 @@
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
                     <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
                     <li role="presentation"><a href="#referreds" aria-controls="referreds" role="tab" data-toggle="tab">Referreds</a></li>
+                    <li role="presentation"><a href="#healthInsurance" aria-controls="healthInsurance" role="tab" data-toggle="tab">Health Insurance</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -48,6 +49,7 @@
                         <input type="hidden" asp-for="CreatedBy" />
                         <input type="hidden" asp-for="CreatedOn" />
                         <input type="hidden" asp-for="Origin" />
+                        <input type="hidden" asp-for="IdFacilitatorPSR" />
                         <partial name="_ClientsReadOnly" />
                         <div class="form-group col-md-12">
                             @if (Model.Origin == 0) //viene de la pagina Index de los clientes
@@ -71,6 +73,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="referreds">
                         <partial name="_ClientsReferredsReadOnly" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="healthInsurance">
+                        <partial name="_ClientsHealthInsuranceReadOnly" />
                     </div>
                 </div>
             </div>
