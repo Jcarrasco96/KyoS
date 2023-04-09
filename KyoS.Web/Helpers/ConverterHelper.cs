@@ -977,7 +977,7 @@ namespace KyoS.Web.Helpers
                 if (indTherapy == false)
                 {
                     salida.IdSchedule = 0;
-                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
                 }
                
             }
@@ -986,7 +986,7 @@ namespace KyoS.Web.Helpers
                 if (indTherapy == false)
                 {
                     salida.IdSchedule = model.Schedule.Id;
-                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id);
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id,model.Id);
                 }
                 else
                 {

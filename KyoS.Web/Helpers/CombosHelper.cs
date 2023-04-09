@@ -1643,14 +1643,44 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday)
+        public IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idClient, int idWorkdayClient)
         {
             List<ScheduleEntity> listSchedules = _context.Workdays_Clients.Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday && n.Schedule != null).Select(m => m.Schedule).Distinct().ToList();
+            WorkdayEntity worday = _context.Workdays.FirstOrDefault(n => n.Id == idWorkday);
+
+            List<Workday_Client> allNotes = _context.Workdays_Clients
+                                                    .Include(n => n.Schedule)
+                                                    .ThenInclude(n => n.SubSchedules)
+                                                    .Include(n => n.Workday)
+                                                    .Include(n => n.IndividualNote)
+                                                    .ThenInclude(n => n.SubSchedule)
+                                                    .Where(n => n.Workday.Date == worday.Date
+                                                        && n.Client.Id == idClient
+                                                        && n.Id != idWorkdayClient)
+                                                    .ToList();
+           
+            List<ScheduleEntity> listSchedulesSalida = new List<ScheduleEntity>();
+            if (allNotes.Count() > 0)
+            {
+                foreach (var item in listSchedules)
+                {
+                    if (!allNotes.Exists(n => (n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay || n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay))
+                        && !allNotes.Exists(n => (n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
+                    {
+                        listSchedulesSalida.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                listSchedulesSalida = listSchedules;
+            }
+
             List<SelectListItem> list = new List<SelectListItem>();
 
-            if (listSchedules.Count() > 0)
+            if (listSchedulesSalida.Count() > 0)
             {
-                list = listSchedules.Select(f => new SelectListItem
+                list = listSchedulesSalida.Select(f => new SelectListItem
                 {
                     Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
                     Value = $"{f.Id}"
@@ -1683,28 +1713,37 @@ namespace KyoS.Web.Helpers
                 listSubSchedules.Remove(item.SubSchedule);
             }
 
+            WorkdayEntity worday = _context.Workdays.FirstOrDefault(n => n.Id == idWorkday);
+
             List<Workday_Client> allNotes = _context.Workdays_Clients
                                                     .Include(n => n.Schedule)
-                                                    .Where(n => n.Workday.Id == idWorkday
+                                                    .Where(n => n.Workday.Date == worday.Date
                                                         && n.Client.Id == idClient
                                                         && n.Id != idWorkdayClient)
                                                     .ToList();
+
+            List<SubScheduleEntity> listSubSchedulesSalida = new List<SubScheduleEntity>();
             if (allNotes.Count() > 0)
             {
                 foreach (var item in listSubSchedules)
                 {
-                    if (allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime)))
+                    if (!allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime))
+                        && !allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
                     {
-                        listSubSchedules.Remove(item);
+                        listSubSchedulesSalida.Add(item);
                     }
                 }
+            }
+            else
+            {
+                listSubSchedulesSalida = listSubSchedules;
             }
             
             List<SelectListItem> list = new List<SelectListItem>();
 
-            if (listSubSchedules.Count() > 0)
+            if (listSubSchedulesSalida.Count() > 0)
             {
-                list = listSubSchedules.Select(f => new SelectListItem
+                list = listSubSchedulesSalida.Select(f => new SelectListItem
                 {
                     Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
                     Value = $"{f.Id}"

@@ -15320,7 +15320,7 @@ namespace KyoS.Web.Controllers
 
                     if (User.IsInRole("Facilitator"))
                     {
-                       /* List<WeekEntity> week = await _context.Weeks
+                        List<WeekEntity> week = await _context.Weeks
 
                                                               .Include(w => w.Days)
                                                               .ThenInclude(d => d.Workdays_Clients)
@@ -15338,12 +15338,16 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(d => d.Workdays_Clients)
                                                               .ThenInclude(wc => wc.GroupNote2)
 
+                                                              .Include(w => w.Days)
+                                                              .ThenInclude(d => d.Workdays_Clients)
+                                                              .ThenInclude(wc => wc.Schedule)
+
                                                               .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                         && w.Days.Where(d => (d.Service == ServiceType.Group && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
-                                                              .ToListAsync();*/
+                                                              .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "GroupNotes", new { id = 0}) });
-                        //return Json(new { redirectToUrl = Url.Action("GroupNotes", "Notes", new { id = 0}) });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesGroup", week) });
+                        
                     }
                     if (User.IsInRole("Manager"))
                     {
