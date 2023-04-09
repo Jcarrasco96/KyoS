@@ -204,6 +204,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(c => c.Group)
                                                 .ThenInclude(g => g.Facilitator)
 
+                                                .Include(c => c.Group)
+                                                .ThenInclude(g => g.Schedule)
+
                                                 .Include(c => c.MTPs)
 
                                                 .Where(c => (c.Group.Facilitator.Clinic.Id == user_logged.Clinic.Id

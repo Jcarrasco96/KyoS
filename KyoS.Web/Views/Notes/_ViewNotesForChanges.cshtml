@@ -56,8 +56,9 @@
                                                         <div style="display:none">
                                                             <table class="table table-striped">
                                                                 <tr>
-                                                                    <th class="col-md-3">Facilitator</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-2">Facilitator</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Schedule</th>
                                                                     <th class="col-md-3">Name</th>
                                                                     <th class="col-md-1" style="text-align:center;">Present</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
@@ -75,8 +76,18 @@
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Session)
                                                                             </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
+                                                                            </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                                <a>|</a>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Code)
                                                                             </td>
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)
@@ -163,8 +174,18 @@
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Session)
                                                                             </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
+                                                                            </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                                <a>|</a>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Code)
                                                                             </td>
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)

@@ -88,6 +88,10 @@ namespace KyoS.Web.Controllers
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.NoteP)
 
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.Schedule)
+
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());            
@@ -13065,6 +13069,10 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.NoteP)
 
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Schedule)
+
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                  && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
                                                                  && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));                                                
@@ -13100,6 +13108,10 @@ namespace KyoS.Web.Controllers
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.NoteP)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                  && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
@@ -13234,6 +13246,10 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(d => d.Workdays_Clients)
                                                           .ThenInclude(wc => wc.NoteP)
 
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Schedule)
+
                                                           .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                     && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                                           .ToListAsync();
@@ -13260,6 +13276,10 @@ namespace KyoS.Web.Controllers
                                                           .Include(w => w.Days)
                                                           .ThenInclude(d => d.Workdays_Clients)
                                                           .ThenInclude(wc => wc.NoteP)
+
+                                                          .Include(w => w.Days)
+                                                          .ThenInclude(d => d.Workdays_Clients)
+                                                          .ThenInclude(wc => wc.Schedule)
 
                                                           .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                     && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
