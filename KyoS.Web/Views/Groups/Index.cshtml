@@ -63,7 +63,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Shared session
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Schedule
                             </th>
                             <th class="col-md-1">
@@ -157,9 +157,9 @@
                                 <td align="center">
                                     @if (item.Schedule != null)
                                     {
-                                        @item.Schedule.InitialTime
+                                        @item.Schedule.InitialTime.ToShortTimeString()
                                         <a> - </a>
-                                        @item.Schedule.EndTime
+                                        @item.Schedule.EndTime.ToShortTimeString()
                                     }
                                 </td>
                                 <td align="right">

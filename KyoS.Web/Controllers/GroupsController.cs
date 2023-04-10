@@ -67,6 +67,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(g => g.Clients)
                                                         .ThenInclude(g => g.Clients_Diagnostics)
                                                         .ThenInclude(g => g.Diagnostic)
+                                                        .Include(g => g.Schedule)
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
                                                         .OrderBy(g => g.Facilitator.Name)
                                                         .ToListAsync();
@@ -82,6 +83,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(g => g.Clients)
                                                         .ThenInclude(g => g.Clients_Diagnostics)
                                                         .ThenInclude(g => g.Diagnostic)
+                                                        .Include(g => g.Schedule)
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
                                                              && g.Service == Common.Enums.ServiceType.PSR)
                                                              && g.Facilitator.LinkedUser == user_logged.UserName)
