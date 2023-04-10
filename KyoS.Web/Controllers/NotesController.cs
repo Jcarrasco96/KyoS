@@ -187,10 +187,24 @@ namespace KyoS.Web.Controllers
                                                          .Include(wc => wc.Workday)
                                                          .Include(wc => wc.Client)
                                                          .ThenInclude(c => c.Group)
-
+                                                         .Include(wc => wc.Schedule)
                                                          .Include(g => g.Facilitator)
                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
-            Workday_ClientViewModel model = _converterHelper.ToWorkdayClientViewModel(workdayClient, false);
+           
+            Workday_ClientViewModel model = new Workday_ClientViewModel();
+
+            model = new Workday_ClientViewModel
+            {
+                Id = workdayClient.Id,
+                Workday = workdayClient.Workday,
+                Client = (workdayClient.Client != null) ? workdayClient.Client : null,
+                Facilitator = workdayClient.Facilitator,
+                Session = workdayClient.Session,
+                Present = workdayClient.Present,
+                Note = workdayClient.Note,
+                IndividualNote = workdayClient.IndividualNote
+            };
+
             model.Origin = origin;
             model.CauseOfNotPresent = (string.IsNullOrEmpty(workdayClient.CauseOfNotPresent)) ?
                                             "The client was absent to PSR session today, because of a personal matter." : workdayClient.CauseOfNotPresent;
