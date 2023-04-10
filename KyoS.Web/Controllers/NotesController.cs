@@ -13823,23 +13823,25 @@ namespace KyoS.Web.Controllers
 
             IndividualNoteEntity indNotes = _context.IndividualNotes
                                                     .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(n => n.Client)
                                                     .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
-
+            int idClient = 0;
             if (indNotes != null)
             {
+                idClient = indNotes.Workday_Cient.Client.Id;
                 _context.Remove(indNotes);
                 workday_Client.Client = null;
                 _context.Update(workday_Client);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("ClientHistory", "Clients", new { idClient = idWorkday_client });
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
             }
 
-
+            idClient = workday_Client.Client.Id;
             _context.Workdays_Clients.Remove(workday_Client);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ClientHistory", "Clients", new { idClient = workday_Client.Client.Id });
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
         }
 
         [Authorize(Roles = "Manager")]
