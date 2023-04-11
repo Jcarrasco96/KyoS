@@ -65,9 +65,9 @@
         @if (@Model.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
         {
             <div class=" form-group col-md-2">
-                <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="control-label">Health Insurance</label>
-                <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="form-control" disabled />
-                <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).MemberId" class="text-danger"></span>
+                <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="control-label">Health Insurance</label>
+                <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="form-control" disabled />
+                <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name" class="text-danger"></span>
             </div>
         }
         else
