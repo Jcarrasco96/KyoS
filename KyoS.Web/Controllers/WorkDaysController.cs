@@ -481,8 +481,10 @@ namespace KyoS.Web.Controllers
                                             {
                                                 if (element.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
                                                 {
-                                                    if (subSchedulesActuales.Exists(n => (n.InitialTime.TimeOfDay > element.InitialTime.TimeOfDay && n.InitialTime.TimeOfDay < element.EndTime.TimeOfDay)
-                                                     || (n.EndTime.TimeOfDay > element.InitialTime.TimeOfDay && n.EndTime.TimeOfDay < element.EndTime.TimeOfDay)) == true)
+                                                    if (subSchedulesActuales.Exists(n => (n.InitialTime.TimeOfDay >= element.InitialTime.TimeOfDay && n.InitialTime.TimeOfDay <= element.EndTime.TimeOfDay)
+                                                     || (n.EndTime.TimeOfDay >= element.InitialTime.TimeOfDay && n.EndTime.TimeOfDay <= element.EndTime.TimeOfDay)
+                                                     || (n.InitialTime.TimeOfDay <= element.InitialTime.TimeOfDay && n.EndTime.TimeOfDay >= element.InitialTime.TimeOfDay)
+                                                     || (n.InitialTime.TimeOfDay <= element.EndTime.TimeOfDay && n.EndTime.TimeOfDay >= element.EndTime.TimeOfDay)) == true)
                                                     {
                                                         return RedirectToAction(nameof(CreateIndividual), new { error = 3, idFacilitator = Convert.ToInt32(item) });
                                                     }
