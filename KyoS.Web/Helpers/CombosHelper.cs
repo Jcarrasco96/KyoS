@@ -1700,13 +1700,35 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient)
         {
-            List<SubScheduleEntity> listSubSchedules = _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).ToList();
+            List<SubScheduleEntity> listSubSchedules = new List<SubScheduleEntity>();
             List<IndividualNoteEntity> listNotes = _context.IndividualNotes
                                                            .Include(n => n.SubSchedule)
                                                            .ThenInclude(n => n.Schedule)
                                                            .Where(n => n.Workday_Cient.Facilitator.Id == idFacilitator 
                                                                 && n.Workday_Cient.Workday.Id == idWorkday)
                                                            .ToList();
+
+            List<Workday_Client> workday_Clients = _context.Workdays_Clients
+                                                           .Include(n => n.Schedule)
+                                                           .ThenInclude(n => n.SubSchedules)
+                                                           .Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday).ToList();
+
+            foreach (var item in workday_Clients)
+            {
+                if (item.Schedule != null)
+                {
+                    string time = item.Session.Substring(0, 7);
+                    foreach (var value in item.Schedule.SubSchedules)
+                    {
+                        if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                        {
+                            listSubSchedules.Add(value);
+                            break;
+                        }
+                    }
+
+                }
+            }
 
             foreach (var item in listNotes)
             {

@@ -453,7 +453,45 @@ namespace KyoS.Web.Controllers
                                                                     && wc.Facilitator.Id == Convert.ToInt32(item))
                                                          .Count() > 0)
                             {
-                                return RedirectToAction(nameof(CreateIndividual), new { error = 3, idFacilitator = Convert.ToInt32(item) });
+                                List<Workday_Client> listWorkdayClient = _context.Workdays_Clients
+                                                                                 .Include(n => n.Schedule)
+                                                                                 .ThenInclude(n => n.SubSchedules)
+                                                                                 .Where(wc => (wc.Workday.Date == Convert.ToDateTime(value)
+                                                                                                    && wc.Workday.Service == ServiceType.Individual)
+                                                                                                    && wc.Facilitator.Id == Convert.ToInt32(item))
+                                                                                                  .ToList();
+                                GroupEntity groupActual = _context.Groups
+                                                                  .Include(n => n.Schedule)
+                                                                  .ThenInclude(n => n.SubSchedules)
+                                                                  .FirstOrDefault(n => n.Service == ServiceType.Individual
+                                                                   && n.Facilitator.Id == Convert.ToInt32(item));
+                                if (groupActual != null)
+                                {
+                                    List<SubScheduleEntity> subSchedulesActuales = groupActual.Schedule.SubSchedules.ToList();
+
+                                    if (listWorkdayClient.Count() > 0)
+                                    {
+                                        string time;
+                                        List<SubScheduleEntity> subScheduleList = new List<SubScheduleEntity>();
+                                        foreach (var product in listWorkdayClient)
+                                        {
+                                            subScheduleList = product.Schedule.SubSchedules.ToList();
+                                            time = product.Session.Substring(0, 7);
+                                            foreach (var element in subScheduleList)
+                                            {
+                                                if (element.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                                                {
+                                                    if (subSchedulesActuales.Exists(n => (n.InitialTime.TimeOfDay > element.InitialTime.TimeOfDay && n.InitialTime.TimeOfDay < element.EndTime.TimeOfDay)
+                                                     || (n.EndTime.TimeOfDay > element.InitialTime.TimeOfDay && n.EndTime.TimeOfDay < element.EndTime.TimeOfDay)) == true)
+                                                    {
+                                                        return RedirectToAction(nameof(CreateIndividual), new { error = 3, idFacilitator = Convert.ToInt32(item) });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
                             }
                         }                        
 
