@@ -14261,6 +14261,7 @@ namespace KyoS.Web.Controllers
                 goal_temp.Name = goal.Name;
                 goal_temp.AreaFocus = goal.AreaOfFocus;
                 goal_temp.Service = goal.Service;
+                goal_temp.Compliment = goal.Compliment;
                 goal_temp.AllObjectives = new List<AllObjectives>();
 
                 foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))

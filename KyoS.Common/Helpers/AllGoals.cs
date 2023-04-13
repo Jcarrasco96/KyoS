@@ -11,5 +11,6 @@ namespace KyoS.Common.Helpers
         public string AreaFocus { get; set; }
         public ServiceType Service { get; set; }
         public List<AllObjectives> AllObjectives { get; set; }
+        public bool Compliment { get; set; }
     }
 }
