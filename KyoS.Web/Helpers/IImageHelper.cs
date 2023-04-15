@@ -8,5 +8,6 @@ namespace KyoS.Web.Helpers
         Task<string> UploadFileAsync(IFormFile file, string folder);
         byte[] ImageToByteArray(string imagePath);
         string TrimPath(string path);
+        Task<string> UploadSignatureAsync(string dataUrl, string folder);
     }
 }

@@ -307,20 +307,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SaveSupervisorSignature(string id, string dataUrl)
         {
-            var encodedImage = dataUrl.Split(',')[1];
-            var decodedImage = Convert.FromBase64String(encodedImage);
-
-            string guid = Guid.NewGuid().ToString();
-            string file = $"{guid}.png";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Supervisors", file);
-
-            System.IO.File.WriteAllBytes(path, decodedImage);
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Supervisors");
 
             SupervisorEntity supervisor = await _context.Supervisors
                                                         .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
             if (supervisor != null)
             {
-                supervisor.SignaturePath = $"~/images/Supervisors/{file}";
+                supervisor.SignaturePath = signPath;
                 _context.Update(supervisor);
                 await _context.SaveChangesAsync();
             }
