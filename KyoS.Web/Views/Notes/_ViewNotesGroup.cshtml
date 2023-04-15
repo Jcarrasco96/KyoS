@@ -301,7 +301,16 @@
                                                     <td align="right">
                                                         @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() > 0))
                                                         {
-                                                            <a asp-action="PrintWorkdaysGroupNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                            //schema 1
+                                                            if ((day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count()) == day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count())
+                                                            {
+                                                                <a asp-action="PrintWorkdaysGroupNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                            //schema 3
+                                                            if ((day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote2 != null)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count()) == day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count())
+                                                            {
+                                                                <a asp-action="PrintWorkdaysGroupNotes2" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
                                                         }
                                                         @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) || (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() == 0))
                                                         {
