@@ -130,5 +130,17 @@ namespace KyoS.Web.Data.Entities
         public MTPStatus Status { get; set; }
 
         public IEnumerable<MessageEntity> Messages { get; set; }
+
+        public string CodeBill { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? BilledDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PaymentDate { get; set; }
+
+        public bool DeniedBill { get; set; }
+
+        public int Units { get; set; }
     }
 }

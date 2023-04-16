@@ -183,7 +183,8 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(cd => cd.Diagnostic)
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
-                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList()
+                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
+                            CodeBill = user_logged.Clinic.CodeMTP                            
 
                     };
                     }
@@ -270,7 +271,8 @@ namespace KyoS.Web.Controllers
                             InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
                             Setting = form["Setting"].ToString(),
                             Review = mtpViewModel.Review,
-                            AdmissionedFor = user_logged.FullNameWithDocument
+                            AdmissionedFor = user_logged.FullNameWithDocument,
+                            CodeBill = mtpViewModel.CodeBill
                            
                         };
                         return View(model);
@@ -281,8 +283,20 @@ namespace KyoS.Web.Controllers
                 if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
                 {
                     mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
-                }                
+                }
+                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes/15;
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15 > 7)
+                {
+                    units++;
+                    mtpViewModel.Units = units;
 
+                }
+                else
+                {
+                    mtpViewModel.Units = units;
+                }
+
+                mtpViewModel.Units = 0;
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 mtpEntity.Setting = form["Setting"].ToString();
 
@@ -483,6 +497,18 @@ namespace KyoS.Web.Controllers
                 if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
                 {
                     mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
+                }
+
+                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15 > 7)
+                {
+                    units++;
+                    mtpViewModel.Units = units;
+
+                }
+                else
+                {
+                    mtpViewModel.Units = units;
                 }
 
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
@@ -4680,6 +4706,166 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillMTPToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (week > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtp.BilledDate = DateTime.Now;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { id = mtp.Client.Id });
+                }
+            }
+
+           
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBill(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtp.BilledDate = null;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+                
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { id = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillToday(int idMtp = 0, int week = 0, int origin = 0)
+        {
+            if (idMtp >= 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == idMtp);
+
+                mtp.DeniedBill = true;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBill(int idMtp = 0, int client = 0, int week = 0)
+        {
+            if (idMtp > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .FirstOrDefaultAsync(wc => wc.Id == idMtp);
+
+                mtp.DeniedBill = false;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (client == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = client, billed = 1 });
+                }
+
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedMTP(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtp.PaymentDate = null;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+               
+            }
+
+            if (origin == 0)
+            {
+                return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+            }
+            else
+            {
+                return RedirectToAction("BillingClient", "Notes", new { idClient = id, billed = 1 });
+            }
+            
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayMTP(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtp.PaymentDate = DateTime.Now;
+                mtp.DeniedBill = false;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+            }
+
+            if (origin == 0)
+            {
+                return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+            }
+            else
+            {
+                return RedirectToAction("BillingClient", "Notes", new { idClient = id, billed = 1 });
+            }
+            
+        }
 
     }
 }
