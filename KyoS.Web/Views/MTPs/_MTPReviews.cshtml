@@ -3,10 +3,9 @@
     <div class="form-group col-md-3">
         <label asp-for="Mtp.Client.Name" class="control-label"></label>
         <input asp-for="Mtp.Client.Name" class="form-control" readonly />
-        <span asp-validation-for="Mtp.Client.Name" class="text-danger"></span>
-        
+        <span asp-validation-for="Mtp.Client.Name" class="text-danger"></span>        
     </div>
-    <div class="form-group col-md-1">
+    <div class="form-group col-md-2">
         <label asp-for="Mtp.Client.Code" class="control-label"></label>
         <input asp-for="Mtp.Client.Code" class="form-control" readonly />
         <span asp-validation-for="Mtp.Client.Code" class="text-danger"></span>
@@ -16,7 +15,7 @@
         <input asp-for="DataOfService" class="form-control" />
         <span asp-validation-for="DataOfService" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="ReviewedOn" class="control-label">Reviewed On (Extended until)</label>
         <input asp-for="ReviewedOn" class="form-control" />
         <span asp-validation-for="ReviewedOn" class="text-danger"></span>
@@ -25,14 +24,14 @@
         <label asp-for="ProviderNumber" class="control-label">Provider Number</label>
         <input asp-for="ProviderNumber" class="form-control" />
         <span asp-validation-for="ProviderNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
+    </div>    
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
         <label asp-for="ServiceCode" class="control-label">Service Code</label>
         <input asp-for="ServiceCode" class="form-control" />
         <span asp-validation-for="ServiceCode" class="text-danger"></span>
     </div>
-</div>
-<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="StartTime" class="control-label"></label>
         <input asp-for="StartTime" class="form-control" />
@@ -43,16 +42,18 @@
         <input asp-for="EndTime" class="form-control" />
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Frecuency" class="control-label"></label>
+        <input asp-for="Frecuency" class="form-control" />
+        <span asp-validation-for="Frecuency" class="text-danger"></span>
+    </div>
     <div class="form-group col-md-2">
         <label asp-for="MonthOfTreatment" class="control-label">Month of treatment</label>
         <input asp-for="MonthOfTreatment" class="form-control" />
         <span asp-validation-for="MonthOfTreatment" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Frecuency" class="control-label"></label>
-        <input asp-for="Frecuency" class="form-control" />
-        <span asp-validation-for="Frecuency" class="text-danger"></span>
-    </div>
+</div>
+<div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="NumberUnit" class="control-label">Number of Unit</label>
         <input asp-for="NumberUnit" class="form-control" />
@@ -62,6 +63,9 @@
         <label asp-for="Setting" class="control-label"></label>
         <input asp-for="Setting" class="form-control" />
         <span asp-validation-for="Setting" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+
     </div>
 </div>
 <div class="col-md-push-12">

@@ -34,8 +34,9 @@ namespace KyoS.Web.Controllers
         private readonly IReportHelper _reportHelper;
         private readonly IRenderHelper _renderHelper;
         private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IFileHelper _fileHelper;
 
-        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IExportExcellHelper exportExcelHelper)
+        public NotesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IDateHelper dateHelper, ITranslateHelper translateHelper, IWebHostEnvironment webHostEnvironment, IImageHelper imageHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -48,6 +49,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             _exportExcelHelper = exportExcelHelper;
+            _fileHelper = fileHelper;
         }
         
         [Authorize(Roles = "Facilitator")]
@@ -5892,19 +5894,7 @@ namespace KyoS.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, "There are not a approved notes on that date");
             }
-
-            //WorkdayEntity workday = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
-
-            //if (workday == null)
-            //{
-            //    return RedirectToAction("Home/Error404");
-            //}
-
-            //PrintNotesViewModel noteViewModel = new PrintNotesViewModel
-            //{
-            //    DateOfPrint = workday.Date
-            //};
-
+            
             return View(model);
         }
 
@@ -6015,8 +6005,8 @@ namespace KyoS.Web.Controllers
                     }
                 }                
             }
-
-            return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
+            
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -6026,32 +6016,25 @@ namespace KyoS.Web.Controllers
 
                                                                           .Include(wc => wc.Facilitator)
 
-                                                                          .Include(wc => wc.Client)
-                                                                          /*.ThenInclude(c => c.MTPs)
-                                                                          .ThenInclude(m => m.Goals)
-                                                                          .ThenInclude(g => g.Objetives)*/
-
-                                                                          /*.Include(wc => wc.Client)
-                                                                          .ThenInclude(c => c.Clients_Diagnostics)
-                                                                          .ThenInclude(cd => cd.Diagnostic)*/
+                                                                          .Include(wc => wc.Client)                                                                          
 
                                                                           .Include(wc => wc.NoteP)
-                                                                          .ThenInclude(n => n.Supervisor)
-                                                                          .ThenInclude(s => s.Clinic)
+                                                                            .ThenInclude(n => n.Supervisor)
+                                                                            .ThenInclude(s => s.Clinic)
 
                                                                           .Include(wc => wc.NoteP)
-                                                                          .ThenInclude(n => n.NotesP_Activities)
-                                                                          .ThenInclude(na => na.Activity)
-                                                                          .ThenInclude(a => a.Theme)
+                                                                            .ThenInclude(n => n.NotesP_Activities)
+                                                                            .ThenInclude(na => na.Activity)
+                                                                            .ThenInclude(a => a.Theme)
 
                                                                           .Include(wc => wc.NoteP)
-                                                                          .ThenInclude(n => n.NotesP_Activities)
-                                                                          .ThenInclude(na => na.Objetive)
-                                                                          .ThenInclude(o => o.Goal)
+                                                                            .ThenInclude(n => n.NotesP_Activities)
+                                                                            .ThenInclude(na => na.Objetive)
+                                                                            .ThenInclude(o => o.Goal)
 
                                                                           .Include(wc => wc.Workday)
-                                                                          .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                                          .ThenInclude(waf => waf.Facilitator)
+                                                                            .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                                            .ThenInclude(waf => waf.Facilitator)
 
                                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                                         && wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved
@@ -6080,10 +6063,18 @@ namespace KyoS.Web.Controllers
                         Stream stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(item);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{item.Client.Name}.pdf"));
                     }
-                }                
+                }
+                if (item.NoteP.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                {
+                    if (item.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                    {
+                        Stream stream = _reportHelper.CommunityHTCNoteReportSchema3(item);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{item.Client.Name}.pdf"));
+                    }
+                }
             }
-
-            return this.ZipFile(fileContentList, $"{workdayClientList.First().Workday.Date.ToShortDateString()}.zip");            
+            
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workdayClientList.First().Workday.Date.ToShortDateString()}.zip");
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -6149,10 +6140,15 @@ namespace KyoS.Web.Controllers
                         Stream stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
                     }
+                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                    {
+                        Stream stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
                 }
             }
-
-            return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
+            
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -6221,11 +6217,86 @@ namespace KyoS.Web.Controllers
                     {
                         Stream stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }                    
+                }
+            }
+                        
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintWorkdaysGroupNotes2(int id)
+        {
+            WorkdayEntity workday = await _context.Workdays
+
+                                                  .Include(w => w.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Facilitator)
+
+                                                  .FirstOrDefaultAsync(w => w.Id == id);
+
+            if (workday == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            IEnumerable<Workday_Client> workdayClientList = workday.Workdays_Clients
+                                                                   .Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name
+                                                                             && wc.Workday.Id == workday.Id);
+
+            Workday_Client workdayClient;
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            foreach (var item in workdayClientList)
+            {
+                workdayClient = _context.Workdays_Clients
+
+                                        .Include(wc => wc.Facilitator)
+
+                                        .Include(wc => wc.Client)
+                                        .ThenInclude(c => c.MTPs)
+                                        .ThenInclude(m => m.Goals)
+                                        .ThenInclude(g => g.Objetives)
+
+                                        .Include(wc => wc.GroupNote2)
+                                        .ThenInclude(n => n.Supervisor)
+                                        .ThenInclude(s => s.Clinic)
+
+                                        .Include(wc => wc.GroupNote2)
+                                        .ThenInclude(n => n.GroupNotes2_Activities)
+                                        .ThenInclude(na => na.Activity)
+                                        .ThenInclude(a => a.Theme)
+
+                                        .Include(wc => wc.GroupNote2)
+                                        .ThenInclude(n => n.GroupNotes2_Activities)
+                                        .ThenInclude(na => na.Objetive)
+                                        .ThenInclude(o => o.Goal)
+
+                                        .Include(wc => wc.Workday)
+
+                                        .Include(wc => wc.Schedule)
+
+                                        .FirstOrDefault(wc => (wc.Id == item.Id));
+
+                if ((workdayClient.GroupNote2 != null) && (workdayClient.GroupNote2.Status == NoteStatus.Approved))
+                {
+                    if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    {
+                        Stream stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
+                    if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    {
+                        Stream stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
+                    }
+                    if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                    {
+                        Stream stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));
                     }
                 }
             }
 
-            return this.ZipFile(fileContentList, $"{workday.Date.ToShortDateString()}.zip");
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
         [Authorize(Roles = "Facilitator, Manager")]        
@@ -13052,26 +13123,7 @@ namespace KyoS.Web.Controllers
                 return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her.") || text.Contains(" her ") || text.Contains(" Her ") ||
                        text.Contains("herself") || text.Contains("Herself") || text.Contains(" oldwoman") || text.Contains(" husband");
             }
-        }
-
-        public FileResult ZipFile(List<FileContentResult> fileContentList, string zipName)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, true))
-                {
-                    foreach (FileContentResult file in fileContentList)
-                    {
-                        var entry = archive.CreateEntry(file.FileDownloadName, CompressionLevel.Fastest);
-                        using (var zipStream = entry.Open())
-                        {
-                            zipStream.Write(file.FileContents, 0, file.FileContents.Length);
-                        }
-                    }
-                }
-                return File(ms.ToArray(), "application/zip", zipName);
-            }
-        }
+        }        
 
         private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, DateTime initialTime = new DateTime(), DateTime endTime = new DateTime(), int idWordayClient = 0)
         {
@@ -15684,7 +15736,6 @@ namespace KyoS.Web.Controllers
 
             return View(wordayClientViewModel);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Manager, Facilitator")]

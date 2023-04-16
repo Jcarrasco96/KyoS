@@ -2936,6 +2936,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.DreamsMentalHealthAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Mtp.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -3443,6 +3448,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

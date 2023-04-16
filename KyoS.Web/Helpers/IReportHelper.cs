@@ -82,36 +82,43 @@ namespace KyoS.Web.Helpers
         #region Fars reports
         Stream FloridaSocialHSFarsReport(FarsFormEntity intake);
         Stream DreamsMentalHealthFarsReport(FarsFormEntity intake);
+        Stream CommunityHTCFarsReport(FarsFormEntity intake);
         #endregion
 
         #region Discharge reports
         Stream FloridaSocialHSDischargeReport(DischargeEntity intake);
         Stream DreamsMentalHealthDischargeReport(DischargeEntity intake);
+        Stream CommunityHTCDischargeReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
         Stream FloridaSocialHSBioReport(BioEntity bio);
         Stream DreamsMentalHealthBioReport(BioEntity bio);
+        Stream CommunityHTCBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
         Stream FloridaSocialHSAddendumReport(AdendumEntity addendum);
         Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
+        Stream CommunityHTCAddendumReport(AdendumEntity addendum);
         #endregion
 
         #region MTP Review reports
         Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review);
         Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
+        Stream CommunityHTCMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Medical History
         Stream FloridaSocialHSMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream DreamsMentalHealthMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream CommunityHTCMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
         #region Brief reports
         Stream FloridaSocialHSBriefReport(BriefEntity brief);
         Stream DreamsMentalHealthBriefReport(BriefEntity brief);
+        Stream CommunityHTCBriefReport(BriefEntity brief);
         #endregion
 
         #region Utils functions

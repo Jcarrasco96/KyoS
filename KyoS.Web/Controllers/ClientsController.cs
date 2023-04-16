@@ -2599,20 +2599,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<JsonResult> SaveClientSignature(string id, string dataUrl)
         {
-            var encodedImage = dataUrl.Split(',')[1];
-            var decodedImage = Convert.FromBase64String(encodedImage);
-
-            string guid = Guid.NewGuid().ToString();
-            string file = $"{guid}.png";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Clients", file);
-
-            System.IO.File.WriteAllBytes(path, decodedImage);           
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Clients"); 
 
             ClientEntity client = await _context.Clients
                                                 .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
             if (client != null)
             {
-                client.SignPath = $"~/images/Clients/{file}";
+                client.SignPath = signPath;
                 _context.Update(client);
                 await _context.SaveChangesAsync();
             }

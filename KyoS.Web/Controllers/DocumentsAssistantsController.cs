@@ -307,20 +307,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SaveDocumentAssistantSignature(string id, string dataUrl)
         {
-            var encodedImage = dataUrl.Split(',')[1];
-            var decodedImage = Convert.FromBase64String(encodedImage);
-
-            string guid = Guid.NewGuid().ToString();
-            string file = $"{guid}.png";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Assistants", file);
-
-            System.IO.File.WriteAllBytes(path, decodedImage);
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Assistants");
 
             DocumentsAssistantEntity assistant = await _context.DocumentsAssistant
                                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
             if (assistant != null)
             {
-                assistant.SignaturePath = $"~/images/Assistants/{file}";
+                assistant.SignaturePath = signPath;
                 _context.Update(assistant);
                 await _context.SaveChangesAsync();
             }

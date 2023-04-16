@@ -358,20 +358,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SaveFacilitatorSignature(string id, string dataUrl)
         {
-            var encodedImage = dataUrl.Split(',')[1];
-            var decodedImage = Convert.FromBase64String(encodedImage);
-
-            string guid = Guid.NewGuid().ToString();
-            string file = $"{guid}.png";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Facilitators", file);
-
-            System.IO.File.WriteAllBytes(path, decodedImage);
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Facilitators");
 
             FacilitatorEntity facilitator = await _context.Facilitators
                                                           .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
             if (facilitator != null)
             {
-                facilitator.SignaturePath = $"~/images/Facilitators/{file}";
+                facilitator.SignaturePath = signPath;
                 _context.Update(facilitator);
                 await _context.SaveChangesAsync();
             }

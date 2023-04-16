@@ -439,12 +439,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSFarsReport(entity);
@@ -453,6 +447,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

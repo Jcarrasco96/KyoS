@@ -321,20 +321,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SaveManagerSignature(string id, string dataUrl)
         {
-            var encodedImage = dataUrl.Split(',')[1];
-            var decodedImage = Convert.FromBase64String(encodedImage);
-
-            string guid = Guid.NewGuid().ToString();
-            string file = $"{guid}.png";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\Managers", file);
-
-            System.IO.File.WriteAllBytes(path, decodedImage);
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Managers"); 
 
             ManagerEntity manager = await _context.Manager
                                                   .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
             if (manager != null)
             {
-                manager.SignaturePath = $"~/images/Managers/{file}";
+                manager.SignaturePath = signPath;
                 _context.Update(manager);
                 await _context.SaveChangesAsync();
             }
