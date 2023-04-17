@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Clients";
+    ViewData["Title"] = "Clients' Doc";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,37 +9,11 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @Html.ActionLink("Clients", "Index", "Clients")
         </li>
-        <li class="active">Clients</li>
+        <li class="active">Clients' CMH Documentation</li>
     </ul><!--.breadcrumb-->
 </div>
-
-@if (User.IsInRole("Manager"))
-{
-<p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Client</a>
-    <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Clients' Signatures</a>
-    @if ((Model.Count() > 0) && (Model.ElementAt(0).Clinic.Setting.MentalHealthClinic == true))
-    {
-        <a asp-action="Documentation" class="btn btn-warning"><i class="glyphicon glyphicon-folder-open"></i> CMH Clients Doc.</a>
-    }
-    else
-    {
-        <a class="btn btn-warning disabled"><i class="glyphicon glyphicon-folder-open"></i> CMH Clients Doc.</a>
-    }
-    &nbsp;|&nbsp;
-    @if ((Model.Count() > 0) && (Model.ElementAt(0).Clinic.Setting.MentalHealthClinic == true) && (Model.ElementAt(0).Clinic.Setting.MHProblems == true))
-    {
-        <a onclick="showInPopupLg('@Url.Action("AuditClientNotUsed", "Clients", null, Context.Request.Scheme)','Audit Clients')" class="btn btn-danger" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Clients</a>
-    }
-    else
-    {
-        <a class="btn btn-danger disabled" title="Audit Clients"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Clients</a>
-    }
-    <a asp-action="EXCELallClient" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Clients</a>
-</p>
-}
 
 <div class="row">
     <div class="col-md-12">
@@ -67,7 +41,7 @@
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-3" style="text-align:center;">
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -82,7 +56,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -140,22 +114,10 @@
                                                 Close
                                             </span>
                                         }
-                                    </td>
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        <td align="right">
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Client"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
-                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td align="right">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
-                                        </td>
-                                    }
+                                    </td>                                    
+                                    <td align="right">
+                                        <a  onclick="ShowAlert(@item.Id)" class="btn btn-default" title="Download Documentation"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    </td>                                    
                                 </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -210,22 +172,9 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        <td align="right">
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Client"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
-                                            @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
-                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td align="right">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                            <a asp-action="ClientHistory" asp-route-idClient="@item.Id" class="btn btn-info" title="Client History"><i class="glyphicon glyphicon-list-alt"></i></a>
-                                        </td>
-                                    }
+                                    <td align="right">
+                                        <a onclick="ShowAlert(@item.Id)" class="btn btn-default" title="Download Documentation"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                    </td>
                                 </tr>
                             }
                         }
@@ -251,18 +200,18 @@
             });            
         });
 
-        function ConfirmDelete(e) {
+        function ShowAlert(e) {
             Swal.fire({
-                title: 'Do you want to delete?',
-                text: "Note: All data related to this element will be deleted.",
-                icon: 'warning',
+                title: 'Do you want to do this?',
+                text: " Download client's documentation will take a few minutes.",
+                icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, I do'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "Clients")";
+                    var url = "@Url.Action("DownloadDocumentation", "Clients")";
                     window.location.href = url + '/' + e;
                 }
             });

@@ -1970,7 +1970,7 @@ namespace KyoS.Web.Helpers
             byte[] stream1 = null;
             byte[] stream2 = null;
             string path;
-            if (!string.IsNullOrEmpty(mtp.Supervisor.SignaturePath))
+            if ((mtp.Supervisor != null) && (!string.IsNullOrEmpty(mtp.Supervisor.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(mtp.Supervisor.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);

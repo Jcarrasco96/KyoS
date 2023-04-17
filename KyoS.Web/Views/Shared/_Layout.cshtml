@@ -130,7 +130,14 @@
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Create">Create Client</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Signatures">Clients' Signatures</a></li>
+                                        </ul>
+                                    </li>                                    
                                 }
                                 else
                                 {
@@ -213,6 +220,12 @@
                                             <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                             <li><a asp-area="" asp-controller="Facilitators" asp-action="Index">Facilitators</a></li>
                                             <li><a asp-area="" asp-controller="DocumentsAssistants" asp-action="Index">Documents Assistants</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Documentation">Clients' Documentation</a></li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -1418,6 +1431,7 @@
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
