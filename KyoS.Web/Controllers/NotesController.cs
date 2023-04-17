@@ -12102,38 +12102,12 @@ namespace KyoS.Web.Controllers
             if (billed == 0)
             {
                 List<ClientEntity> clients = await _context.Clients
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Note)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.NoteP)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.IndividualNote)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.GroupNote)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.GroupNote2)
-                                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
-
+                                                           
                                                            .Include(c => c.Clients_Diagnostics)
                                                            .ThenInclude(cd => cd.Diagnostic)
 
                                                            .Include(c => c.Clients_HealthInsurances)
                                                            .ThenInclude(c => c.HealthInsurance)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Workday)
-                                                           .ThenInclude(w => w.Week)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Facilitator)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Schedule)
-                                                           .ThenInclude(wc => wc.SubSchedules)
 
                                                            .Include(wc => wc.MTPs)
 
@@ -12170,6 +12144,36 @@ namespace KyoS.Web.Controllers
                         temp = 0;
                         document++;
                     }
+
+                   
+                    clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+                                                          
+                                                          .Include(wc => wc.IndividualNote)
+                                                             
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+                                                              
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate == null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
+                   
+                       
+
                 }
 
                 foreach (var client in clients)
@@ -12238,38 +12242,12 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> clients = await _context.Clients
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Note)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.NoteP)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.IndividualNote)
                                                            
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.GroupNote)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.GroupNote2)
-                                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
-
                                                            .Include(c => c.Clients_Diagnostics)
                                                            .ThenInclude(cd => cd.Diagnostic)
 
                                                            .Include(c => c.Clients_HealthInsurances)
                                                            .ThenInclude(c => c.HealthInsurance)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Workday)
-                                                           .ThenInclude(w => w.Week)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Facilitator)
-
-                                                           .Include(wc => wc.Workdays_Clients)
-                                                           .ThenInclude(wc => wc.Schedule)
-                                                           .ThenInclude(wc => wc.SubSchedules)
 
                                                            .Include(wc => wc.MTPs)
 
@@ -12306,6 +12284,33 @@ namespace KyoS.Web.Controllers
                         temp = 0;
                         document++;
                     }
+                    
+                    clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+
+                                                          .Include(wc => wc.IndividualNote)
+
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate != null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
+                   
                 }
 
                 foreach (var client in clients)
@@ -15901,38 +15906,12 @@ namespace KyoS.Web.Controllers
                 if (abilled == 0)
                 {
                     clients = await _context.Clients
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Note)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.NoteP)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.IndividualNote)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.GroupNote)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.GroupNote2)
-                                            .ThenInclude(wc => wc.GroupNotes2_Activities)
-
+                                            
                                             .Include(c => c.Clients_Diagnostics)
                                             .ThenInclude(cd => cd.Diagnostic)
 
                                             .Include(c => c.Clients_HealthInsurances)
                                             .ThenInclude(c => c.HealthInsurance)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Workday)
-                                            .ThenInclude(w => w.Week)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Facilitator)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Schedule)
-                                            .ThenInclude(wc => wc.SubSchedules)
 
                                             .Include(wc => wc.MTPs)
 
@@ -15953,44 +15932,43 @@ namespace KyoS.Web.Controllers
                             clients[i].MTPs = null;
                         }
 
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+
+                                                          .Include(wc => wc.IndividualNote)
+
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate == null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == week.Id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
                     }
 
                 }
                 else
                 {
                     clients = await _context.Clients
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Note)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.NoteP)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.IndividualNote)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.GroupNote)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.GroupNote2)
-                                            .ThenInclude(wc => wc.GroupNotes2_Activities)
-
+                                            
                                             .Include(c => c.Clients_Diagnostics)
                                             .ThenInclude(cd => cd.Diagnostic)
 
                                             .Include(c => c.Clients_HealthInsurances)
                                             .ThenInclude(c => c.HealthInsurance)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Workday)
-                                            .ThenInclude(w => w.Week)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Facilitator)
-
-                                            .Include(wc => wc.Workdays_Clients)
-                                            .ThenInclude(wc => wc.Schedule)
-                                            .ThenInclude(wc => wc.SubSchedules)
 
                                             .Include(wc => wc.MTPs)
 
@@ -16003,6 +15981,40 @@ namespace KyoS.Web.Controllers
                                                                            && n.AdmissionDateMTP <= week.FinalDate
                                                                            && n.BilledDate != null).Count() > 0))))
                                             .ToListAsync();
+
+                    for (int i = 0; i < clients.Count(); i++)
+                    {
+                        if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate && n.AdmissionDateMTP <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].MTPs = null;
+                        }
+
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+
+                                                          .Include(wc => wc.IndividualNote)
+
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate != null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == week.Id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
+                    }
 
                 }
 
@@ -16049,50 +16061,24 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     clients = await _context.Clients
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Note)
+                                           
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.NoteP)
+                                            .Include(c => c.Clients_HealthInsurances)
+                                            .ThenInclude(c => c.HealthInsurance)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.IndividualNote)
+                                            .Include(wc => wc.MTPs)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.GroupNote)
-
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.GroupNote2)
-                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
-
-                                           .Include(c => c.Clients_Diagnostics)
-                                           .ThenInclude(cd => cd.Diagnostic)
-
-                                           .Include(c => c.Clients_HealthInsurances)
-                                           .ThenInclude(c => c.HealthInsurance)
-
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Workday)
-                                           .ThenInclude(w => w.Week)
-
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Facilitator)
-
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Schedule)
-                                           .ThenInclude(wc => wc.SubSchedules)
-
-                                           .Include(wc => wc.MTPs)
-
-                                           .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
-                                                                                && wc.BilledDate != null
-                                                                                && wc.Hold == false
-                                                                                && wc.Workday.Week.Id == idWeek).Count() > 0)
-                                                      || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
-                                                                          && n.AdmissionDateMTP <= week.FinalDate
-                                                                          && n.BilledDate != null).Count() > 0))))
-                                              .ToListAsync();
+                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                 && wc.BilledDate != null
+                                                                                 && wc.Hold == false
+                                                                                 && wc.Workday.Week.Id == idWeek).Count() > 0)
+                                                       || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
+                                                                           && n.AdmissionDateMTP <= week.FinalDate
+                                                                           && n.BilledDate != null).Count() > 0))))
+                                            .ToListAsync();
 
                     for (int i = 0; i < clients.Count(); i++)
                     {
@@ -16101,6 +16087,31 @@ namespace KyoS.Web.Controllers
                             clients[i].MTPs = null;
                         }
                         
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                              .Include(wc => wc.Note)
+
+                                                              .Include(wc => wc.NoteP)
+
+                                                              .Include(wc => wc.IndividualNote)
+
+                                                              .Include(wc => wc.GroupNote)
+
+                                                              .Include(wc => wc.GroupNote2)
+                                                              .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                              .Include(wc => wc.Workday)
+                                                              .ThenInclude(w => w.Week)
+
+                                                              .Include(wc => wc.Facilitator)
+
+                                                              .Include(wc => wc.Schedule)
+                                                              .ThenInclude(wc => wc.SubSchedules)
+
+                                                              .Where(wc => wc.Present == true
+                                                                        && wc.BilledDate != null
+                                                                        && wc.Hold == false
+                                                                        && wc.Workday.Week.Id == week.Id
+                                                                        && wc.Client.Id == clients[i].Id).ToList();
                     }
 
                     ViewData["Billed"] = "1";
@@ -16271,42 +16282,42 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity client;
                 client = await _context.Clients
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Note)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Note)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.NoteP)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.NoteP)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.IndividualNote)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.IndividualNote)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.GroupNote)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.GroupNote)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.GroupNote2)
-                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.GroupNote2)
+                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
 
-                                           .Include(c => c.Clients_Diagnostics)
-                                           .ThenInclude(cd => cd.Diagnostic)
+                                       .Include(c => c.Clients_Diagnostics)
+                                       .ThenInclude(cd => cd.Diagnostic)
 
-                                           .Include(c => c.Clients_HealthInsurances)
-                                           .ThenInclude(c => c.HealthInsurance)
+                                       .Include(c => c.Clients_HealthInsurances)
+                                       .ThenInclude(c => c.HealthInsurance)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Workday)
-                                           .ThenInclude(w => w.Week)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Workday)
+                                       .ThenInclude(w => w.Week)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Facilitator)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Facilitator)
 
-                                           .Include(wc => wc.Workdays_Clients)
-                                           .ThenInclude(wc => wc.Schedule)
-                                           .ThenInclude(wc => wc.SubSchedules)
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Schedule)
+                                       .ThenInclude(wc => wc.SubSchedules)
 
-                                           .Include(wc => wc.MTPs)
+                                       .Include(wc => wc.MTPs)
 
-                                           .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                       .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                     && wc.Id == model.Id
                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
                                                                                 && wc.BilledDate != null
