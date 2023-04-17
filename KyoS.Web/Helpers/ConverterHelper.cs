@@ -42,7 +42,8 @@ namespace KyoS.Web.Helpers
                 SignaturePath = pathSignatureClinical,
                 CodeGroupTherapy = model.CodeGroupTherapy,
                 CodeIndTherapy = model.CodeIndTherapy,
-                CodePSRTherapy = model.CodePSRTherapy
+                CodePSRTherapy = model.CodePSRTherapy,
+                CodeMTP = model.CodeMTP
 
             };
         }
@@ -67,8 +68,9 @@ namespace KyoS.Web.Helpers
                 SignaturePath = clinicEntity.SignaturePath,
                 CodeGroupTherapy = clinicEntity.CodeGroupTherapy,
                 CodeIndTherapy = clinicEntity.CodeIndTherapy,
-                CodePSRTherapy = clinicEntity.CodePSRTherapy
-
+                CodePSRTherapy = clinicEntity.CodePSRTherapy,
+                CodeMTP = clinicEntity.CodeMTP
+                
             };
         }
 
@@ -513,7 +515,9 @@ namespace KyoS.Web.Helpers
                                       .ToList(),
                 Status = model.Status,
                 SupervisorDate = model.SupervisorDate,
-                DocumentAssistant = await _context.DocumentsAssistant.FindAsync(model.IdDocumentAssistant)
+                DocumentAssistant = await _context.DocumentsAssistant.FindAsync(model.IdDocumentAssistant),
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
         }
@@ -584,7 +588,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = mtpEntity.LastModifiedBy,
                 LastModifiedOn = mtpEntity.LastModifiedOn,
                 Status = mtpEntity.Status,
-                AdmissionedFor = mtpEntity.AdmissionedFor
+                AdmissionedFor = mtpEntity.AdmissionedFor,
+                CodeBill = mtpEntity.CodeBill,
+                Units = mtpEntity.Units
                 
             };
 

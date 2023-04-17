@@ -1,7 +1,7 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
+﻿@model KyoS.Web.Data.Entities.ClientEntity
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
-@if (Model.Count() > 0)
+@if (Model != null)
 {
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -20,160 +20,508 @@
                     <thead>
                         <tr>
                             <th class="col-md-2" style="text-align:center;">Date</th>
-                            <th class="col-md-2" style="text-align:center;">Therapist</th>
-                            <th class="col-md-2" style="text-align:center;">Therapy</th>
+                            <th class="col-md-1" style="text-align:center;">Bill Code</th>
+                            <th class="col-md-3" style="text-align:center;">Admission for</th>
+                            <th class="col-md-1" style="text-align:center;">Documents</th>
                             <th class="col-md-2" style="text-align:center;">Billed</th>
-                            <th class="col-md-2" style="text-align:center;">Payment</th>
+                            <th class="col-md-1" style="text-align:center;">Payment</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @if (ViewData["Billed"].ToString() == "0")
                         {
-                            <tr>
-                                <td align="center">
-                                    <p>@item.Workday.Date.ToShortDateString()</p>
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                                </td>
-                                <td align="center">
-                                    @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
-                                    {
-                                        @Html.DisplayFor(modelItem => item.Workday.Service)
-                                    }
-                                    else
-                                    {
+                            @foreach (var item in Model.MTPs.Where(n => n.BilledDate == null))
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <p>@item.AdmissionDateMTP.ToShortDateString()</p>
+                                    </td>
+                                    <td align="center">
+                                        <p>@Model.Clinic.CodeMTP</p>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                    </td>
+                                    <td align="center">
+                                        <label>MTP</label>
+                                        |
+                                        @item.Units
+                                    </td>
+                                    <td align="center">
+                                        @if (item.BilledDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.BilledDate)
+                                        }
+                                        else
+                                        {
+                                            <p> - </p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.PaymentDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                        else
+                                        {
+                                            @if (item.BilledDate == null)
+                                            {
+                                                <p> - </p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.DeniedBill == true)
+                                                {
+                                                    <a asp-action="NotDeniedBill" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-client="0" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="DeniedBillToday" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+
+                                            }
+
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (ViewData["Billed"].ToString() == "0")
+                                        {
+                                            <a asp-action="BillMTPToday" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                        }
+                                        @if (ViewData["Billed"].ToString() == "1")
+                                        {
+                                            <a asp-action="NotBill" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMTP="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            @if (item.PaymentDate == null)
+                                            {
+                                                <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="NotPaymentReceivedMTP" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMtp="@ViewData["idMtp"]" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.MTPs.Where(n => n.BilledDate != null))
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <p>@item.AdmissionDateMTP.ToShortDateString()</p>
+                                    </td>
+                                    <td align="center">
+                                        <p>@Model.Clinic.CodeMTP</p>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                    </td>
+                                    <td align="center">
+                                        <label>MTP</label>
+                                        |
+                                        @item.Units
+                                    </td>
+                                    <td align="center">
+                                        @if (item.BilledDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.BilledDate)
+                                        }
+                                        else
+                                        {
+                                            <p> - </p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.PaymentDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                        else
+                                        {
+                                            @if (item.BilledDate == null)
+                                            {
+                                                <p> - </p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.DeniedBill == true)
+                                                {
+                                                    <a asp-action="NotDeniedBill" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-client="0" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="DeniedBillToday" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+
+                                            }
+
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (ViewData["Billed"].ToString() == "0")
+                                        {
+                                            <a asp-action="BillMTPToday" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedMTP", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                        }
+                                        @if (ViewData["Billed"].ToString() == "1")
+                                        {
+                                            <a asp-action="NotBill" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMTP="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            @if (item.PaymentDate == null)
+                                            {
+                                                <a asp-action="PaymentReceivedTodayMTP" asp-controller="MTPs" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="NotPaymentReceivedMTP" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        @if (ViewData["Billed"].ToString() == "0")
+                        {
+                            @foreach (var item in Model.Workdays_Clients.Where(w => w.BilledDate == null))
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <p>@item.Workday.Date.ToShortDateString()</p>
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                        {
+                                            <p>@item.Client.Clinic.CodePSRTherapy</p>
+                                        }
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        {
+                                            <p>@item.Client.Clinic.CodeIndTherapy</p>
+                                        }
                                         @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                        {
+                                            <p>@item.Client.Clinic.CodeGroupTherapy</p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
                                         {
                                             @Html.DisplayFor(modelItem => item.Workday.Service)
                                         }
                                         else
                                         {
-                                            <label>Ind</label>
-                                        }
-                                    }
-                                    |
-                                    @if (item.Note != null)
-                                    {
-                                        if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
-                                        {
-                                            <label>16</label>
-                                        }
-                                        if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                        {
-                                            <label>12</label>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @if (item.NoteP != null)
-                                        {
-                                            if (item.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                            @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                             {
-                                                <label>@item.NoteP.RealUnits</label>
+                                                @Html.DisplayFor(modelItem => item.Workday.Service)
+                                            }
+                                            else
+                                            {
+                                                <label>Ind</label>
+                                            }
+                                        }
+                                        |
+                                        @if (item.Note != null)
+                                        {
+                                            if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
+                                            {
+                                                <label>16</label>
+                                            }
+                                            if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                            {
+                                                <label>12</label>
                                             }
                                         }
                                         else
                                         {
-                                            if ((item.IndividualNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                            @if (item.NoteP != null)
                                             {
-                                                <label>4</label>
+                                                if (item.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                {
+                                                    <label>@item.NoteP.RealUnits</label>
+                                                }
                                             }
                                             else
                                             {
-                                                if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                if ((item.IndividualNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
                                                 {
-                                                    if (item.GroupNote2 != null)
-                                                    {
-                                                        var value = @item.GroupNote2.GroupNotes2_Activities.Count() * 4;
-                                                        <label>@value</label>
-                                                        value = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        var value = @item.Schedule.SubSchedules.Count() * 4;
-                                                        <label>@value</label>
-                                                        value = 0;
-                                                    }
+                                                    <label>4</label>
                                                 }
                                                 else
                                                 {
-                                                    if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                    if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                     {
-                                                        <label>16</label>
+                                                        if (item.GroupNote2 != null)
+                                                        {
+                                                            var value = @item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                            <label>@value</label>
+                                                            value = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            var value = @item.Schedule.SubSchedules.Count() * 4;
+                                                            <label>@value</label>
+                                                            value = 0;
+                                                        }
                                                     }
-                                                    if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                    else
                                                     {
-                                                        <label>12</label>
+                                                        if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                        {
+                                                            <label>16</label>
+                                                        }
+                                                        if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                        {
+                                                            <label>12</label>
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.BilledDate != null)
-                                    {
-                                        @Html.DisplayFor(modelItem => item.BilledDate)
-                                    }
-                                    else
-                                    {
-                                       <p> - </p>                                   
-                                    }
-                                </td>
-                                <td align="center">
-                                    @if (item.PaymentDate != null)
-                                    {
-                                        @Html.DisplayFor(modelItem => item.PaymentDate)
-                                    }
-                                    else
-                                    {
-                                        @if (item.BilledDate == null)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.BilledDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.BilledDate)
+                                        }
+                                        else
                                         {
                                             <p> - </p>
                                         }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.PaymentDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
                                         else
                                         {
-                                            @if (item.DeniedBill == true)
+                                            @if (item.BilledDate == null)
                                             {
-                                                <a asp-action="NotDeniedBill" asp-route-idWorkclient="@item.Id" asp-route-client="1" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                <p> - </p>
                                             }
                                             else
                                             {
-                                                <a asp-action="DeniedBillClient" asp-route-idWorkclient="@item.Id" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                @if (item.DeniedBill == true)
+                                                {
+                                                    <a asp-action="NotDeniedBill" asp-route-idWorkclient="@item.Id" asp-route-client="1" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="DeniedBillClient" asp-route-idWorkclient="@item.Id" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+
                                             }
 
                                         }
-
-                                    }
-                                </td>
-                                <td align="right">
-                                    @if (ViewData["Billed"].ToString() == "0")
-                                    {
-                                        <a asp-action="BillNoteTodayClient" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                        <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                        @if (item.PaymentDate != null)
+                                    </td>
+                                    <td align="right">
+                                        @if (ViewData["Billed"].ToString() == "0")
                                         {
-                                            <a asp-action="NotClientPayment" asp-route-id="@item.Id" class="btn btn-danger " title="Return not payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="BillNoteTodayClient" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            @if (item.PaymentDate != null)
+                                            {
+                                                <a asp-action="NotClientPayment" asp-route-id="@item.Id" class="btn btn-danger " title="Return not payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                         }
 
-                                        <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-                                    }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Workdays_Clients.Where(w => w.BilledDate != null))
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <p>@item.Workday.Date.ToShortDateString()</p>
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                        {
+                                            <p>@item.Client.Clinic.CodePSRTherapy</p>
+                                        }
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        {
+                                            <p>@item.Client.Clinic.CodeIndTherapy</p>
+                                        }
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                        {
+                                            <p>@item.Client.Clinic.CodeGroupTherapy</p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.PSR)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Workday.Service)
+                                        }
+                                        else
+                                        {
+                                            @if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Workday.Service)
+                                            }
+                                            else
+                                            {
+                                                <label>Ind</label>
+                                            }
+                                        }
+                                        |
+                                        @if (item.Note != null)
+                                        {
+                                            if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
+                                            {
+                                                <label>16</label>
+                                            }
+                                            if ((item.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                            {
+                                                <label>12</label>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @if (item.NoteP != null)
+                                            {
+                                                if (item.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                {
+                                                    <label>@item.NoteP.RealUnits</label>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if ((item.IndividualNote != null) || (item.Workday.Service == KyoS.Common.Enums.ServiceType.Individual))
+                                                {
+                                                    <label>4</label>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                    {
+                                                        if (item.GroupNote2 != null)
+                                                        {
+                                                            var value = @item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                            <label>@value</label>
+                                                            value = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            var value = @item.Schedule.SubSchedules.Count() * 4;
+                                                            <label>@value</label>
+                                                            value = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                        {
+                                                            <label>16</label>
+                                                        }
+                                                        if ((item.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                        {
+                                                            <label>12</label>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.BilledDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.BilledDate)
+                                        }
+                                        else
+                                        {
+                                            <p> - </p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.PaymentDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                        else
+                                        {
+                                            @if (item.BilledDate == null)
+                                            {
+                                                <p> - </p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.DeniedBill == true)
+                                                {
+                                                    <a asp-action="NotDeniedBill" asp-route-idWorkclient="@item.Id" asp-route-client="1" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="DeniedBillClient" asp-route-idWorkclient="@item.Id" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
 
-                                </td>
-                            </tr>
+                                            }
+
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (ViewData["Billed"].ToString() == "0")
+                                        {
+                                            <a asp-action="BillNoteTodayClient" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            @if (item.PaymentDate != null)
+                                            {
+                                                <a asp-action="NotClientPayment" asp-route-id="@item.Id" class="btn btn-danger " title="Return not payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

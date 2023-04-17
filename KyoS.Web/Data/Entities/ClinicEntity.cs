@@ -66,5 +66,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of PSR Therapy")]
         public string CodePSRTherapy { get; set; }
+
+        [Display(Name = "Bill code of MTP")]
+        public string CodeMTP { get; set; }
     }
 }

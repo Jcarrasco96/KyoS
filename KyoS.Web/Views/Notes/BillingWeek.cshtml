@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
     @if (ViewData["Billed"].ToString() == "0")
     {
@@ -18,7 +18,7 @@
             <i class="icon-home"></i>
             @if (Model.Count() > 0)
             {
-                @Html.ActionLink("Billing Report", "BillingReport1", "Notes", new { idWeek = Model.ElementAt(0).Workday.Week.Id })
+                @Html.ActionLink("Billing Report", "BillingReport1", "Notes", new { idWeek = @ViewData["idWeek"] })
             }
             else
             {
@@ -28,11 +28,11 @@
         </li>
         @if (ViewData["Billed"].ToString() == "0")
         {
-            <li class="active">Unbilled Clients</li>
+            <li class="active">Unbilled Documents</li>
         }
         else
         {
-            <li class="active">Billed Clients</li>
+            <li class="active">Billed Documents</li>
         }
 
     </ul><!--.breadcrumb-->
@@ -62,13 +62,13 @@
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-danger">
                 <p style="text-align:center">Clients</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Distinct().GroupBy(n => n.ClientName).Count()</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
             </div>
         </div>
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-danger">
-                <p style="text-align:center">Notes</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
+                <p style="text-align:center">Documents</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Sum(n => n.Workdays_Clients.Count())</h4>
             </div>
         </div>
         <div class="col-md-1">
@@ -83,13 +83,13 @@
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-success">
                 <p style="text-align:center">Clients</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Distinct().GroupBy(n => n.ClientName).Count()</h4>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
             </div>
         </div>
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-success">
-                <p style="text-align:center">Notes</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Count()</h4>
+                <p style="text-align:center">Documents</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewData["Document"]</h4>
             </div>
         </div>
         <div class="col-md-1">
