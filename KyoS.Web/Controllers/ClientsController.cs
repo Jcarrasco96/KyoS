@@ -26,8 +26,10 @@ namespace KyoS.Web.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IMimeType _mimeType;
         private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IFileHelper _fileHelper;
+        private readonly IReportHelper _reportHelper;
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -36,6 +38,8 @@ namespace KyoS.Web.Controllers
             _imageHelper = imageHelper;
             _mimeType = mimeType;
             _exportExcelHelper = exportExcelHelper;
+            _fileHelper = fileHelper;
+            _reportHelper = reportHelper;
         }
         
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
@@ -356,7 +360,6 @@ namespace KyoS.Web.Controllers
             }
             catch (Exception)
             {
-
                 return RedirectToAction("Index", new { idError = 1 });
             }
            
@@ -2612,5 +2615,312 @@ namespace KyoS.Web.Controllers
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Documentation()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                        .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            
+            return View(await _context.Clients
+                
+                                      .Include(c => c.IndividualTherapyFacilitator)
+                                      .Include(c => c.Clients_HealthInsurances)
+                                          .ThenInclude(c => c.HealthInsurance)
+
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name).ToListAsync());                     
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DownloadDocumentation(int id)
+        {
+            ClientEntity client = await _context.Clients
+
+                                                .Include(c => c.Clinic)
+
+                                                .Include(c => c.EmergencyContact)                                                  
+
+                                                .Include(c => c.LegalGuardian)                                                   
+
+                                                .Include(c => c.IntakeScreening)
+                                                .Include(c => c.IntakeConsentForTreatment)
+                                                .Include(c => c.IntakeConsentForRelease)
+                                                .Include(c => c.IntakeConsumerRights)
+                                                .Include(c => c.IntakeAcknowledgementHipa)
+                                                .Include(c => c.IntakeAccessToServices)
+                                                .Include(c => c.IntakeOrientationChecklist)
+                                                .Include(c => c.IntakeTransportation)
+                                                .Include(c => c.IntakeConsentPhotograph)
+                                                .Include(c => c.IntakeFeeAgreement)
+                                                .Include(c => c.IntakeTuberculosis)
+
+                                                .Include(c => c.IntakeMedicalHistory)
+
+                                                .Include(c => c.Bio)
+                                                .Include(c => c.Brief)
+
+                                                .Include(c => c.FarsFormList)
+
+                                                .Include(c => c.MTPs)
+                                                    .ThenInclude(m => m.MtpReviewList)
+
+                                                .Include(c => c.MTPs)
+                                                    .ThenInclude(m => m.AdendumList)
+
+                                                .Include(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
+
+                                                .Include(c => c.MTPs)
+                                                    .ThenInclude(m => m.Supervisor)
+
+                                                .Include(c => c.MTPs)
+                                                    .ThenInclude(m => m.DocumentAssistant)
+
+                                                .Include(c => c.DischargeList)
+
+                                                .Include(c => c.IntakeMedicalHistory)
+
+                                                .Include(c => c.MedicationList)
+
+                                                .Include(c => c.List_BehavioralHistory)
+
+                                                .Include(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                                .Include(c => c.Client_Referred)
+                                                    .ThenInclude(cr => cr.Referred)
+                                                             
+                                                .FirstOrDefaultAsync(c => (c.Id == id));                                                                                       
+                                                                          
+            if (client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            //Intake
+            if (ExistIntake(client))
+            {
+                if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                   stream = _reportHelper.FloridaSocialHSIntakeReport(client.IntakeScreening);                              
+                
+                if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                   stream = _reportHelper.DreamsMentalHealthIntakeReport(client.IntakeScreening);                   
+                
+                if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                   stream = _reportHelper.CommunityHTCIntakeReport(client.IntakeScreening);                    
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake.pdf"));
+            }
+
+            //Bio
+            if (ExistBio(client))
+            {
+                if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                    stream = _reportHelper.FloridaSocialHSBioReport(client.Bio);
+                
+                if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                    stream = _reportHelper.DreamsMentalHealthBioReport(client.Bio);
+                
+                if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                    stream = _reportHelper.CommunityHTCBioReport(client.Bio);
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Bio-Psychosocial Assesssment.pdf"));
+            }
+
+            //Brief
+            if (ExistBrief(client))
+            {
+                if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                    stream = _reportHelper.FloridaSocialHSBriefReport(client.Brief);
+                
+                if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                    stream = _reportHelper.DreamsMentalHealthBriefReport(client.Brief);
+                
+                if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                    stream = _reportHelper.CommunityHTCBriefReport(client.Brief);
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Brief Behavioral Health Status Examination.pdf"));
+            }
+
+            //Medical History
+            if (ExistMedicalHistory(client))
+            {
+                if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                    stream = _reportHelper.FloridaSocialHSMedicalHistoryReport(client.IntakeMedicalHistory);
+                
+                if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                    stream = _reportHelper.DreamsMentalHealthMedicalHistoryReport(client.IntakeMedicalHistory);
+                
+                if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                    stream = _reportHelper.CommunityHTCMedicalHistoryReport(client.IntakeMedicalHistory);
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Medical History.pdf"));
+            }
+
+            //Fars Form list
+            if (ExistFars(client))
+            {
+                foreach (var fars in client.FarsFormList)
+                {
+                    if (fars.Status == FarsStatus.Approved)
+                    {
+                        if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                        
+                            stream = _reportHelper.FloridaSocialHSFarsReport(fars);
+                        
+                        if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                        
+                            stream = _reportHelper.DreamsMentalHealthFarsReport(fars);
+                        
+                        if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                        
+                            stream = _reportHelper.CommunityHTCFarsReport(fars);
+                        
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Fars_{fars.Type.ToString()}_{fars.Id}.pdf"));
+                    }                    
+                }
+            }
+
+            //Discharge list
+            if (ExistDischarges(client))
+            {
+                foreach (var discharge in client.DischargeList)
+                {
+                    if (discharge.Status == DischargeStatus.Approved)
+                    {
+                        if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                        
+                            stream = _reportHelper.FloridaSocialHSDischargeReport(discharge);
+                        
+                        if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                        
+                            stream = _reportHelper.DreamsMentalHealthDischargeReport(discharge);
+                        
+                        if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                        
+                            stream = _reportHelper.CommunityHTCDischargeReport(discharge);
+                        
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Discharge_{discharge.TypeService.ToString()}_{discharge.Id}.pdf"));
+                    }                    
+                }
+            }
+
+            //MTP, Review, Addendum
+            if (ExistMTP(client))
+            {
+                foreach (var mtp in client.MTPs)
+                {
+                    if (mtp.Status == MTPStatus.Approved)
+                    {
+                        if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                        {
+                            stream = _reportHelper.FloridaSocialHSMTPReport(mtp);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Mtp_{mtp.Id}.pdf"));
+                            foreach (var review in mtp.MtpReviewList)
+                            {
+                                if (review.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.FloridaSocialHSMTPReviewReport(review);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"MtpReview_of_MTP{mtp.Id}_{review.Id}.pdf"));
+                                }                                
+                            }
+                            foreach (var adendum in mtp.AdendumList)
+                            {
+                                if (adendum.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.FloridaSocialHSAddendumReport(adendum);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
+                                }                                
+                            }
+                        }
+                        if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                        {
+                            stream = _reportHelper.DreamsMentalHealthMTPReport(mtp);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Mtp_{mtp.Id}.pdf"));
+                            foreach (var review in mtp.MtpReviewList)
+                            {
+                                if (review.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.DreamsMentalHealthMTPReviewReport(review);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"MtpReview_of_MTP{mtp.Id}_{review.Id}.pdf"));
+                                }                                
+                            }
+                            foreach (var adendum in mtp.AdendumList)
+                            {
+                                if (adendum.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.DreamsMentalHealthAddendumReport(adendum);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
+                                }                                
+                            }
+                        }
+                        if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                        {
+                            stream = _reportHelper.CommunityHTCMTPReport(mtp);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Mtp_{mtp.Id}.pdf"));
+                            foreach (var review in mtp.MtpReviewList)
+                            {
+                                if (review.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.CommunityHTCMTPReviewReport(review);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"MtpReview_of_MTP{mtp.Id}_{review.Id}.pdf"));
+                                }                                
+                            }
+                            foreach (var adendum in mtp.AdendumList)
+                            {
+                                if (adendum.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.CommunityHTCAddendumReport(adendum);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
+                                }                                
+                            }
+                        }
+                    }                                     
+                }
+            }
+
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}.zip");
+        }
+
+        #region Utils
+        private bool ExistIntake(ClientEntity client)
+        {
+            return (client.IntakeScreening != null && client.IntakeConsentForTreatment != null && client.IntakeConsentForRelease != null &&
+                        client.IntakeConsumerRights != null && client.IntakeAcknowledgementHipa != null && client.IntakeAccessToServices != null &&
+                            client.IntakeOrientationChecklist != null && client.IntakeTransportation != null && client.IntakeConsentPhotograph != null &&
+                                client.IntakeFeeAgreement != null && client.IntakeTuberculosis != null);                                      
+        }
+        private bool ExistBio(ClientEntity client)
+        {
+            return ((client.Bio != null) && (client.Bio.Status == BioStatus.Approved));
+        }
+        private bool ExistBrief(ClientEntity client)
+        {
+            return ((client.Brief != null) && (client.Brief.Status == BioStatus.Approved));
+        }
+        private bool ExistMTP(ClientEntity client)
+        {
+            return (client.MTPs.Count > 0);
+        }
+        private bool ExistFars(ClientEntity client)
+        {
+            return (client.FarsFormList.Count() > 0);
+        }
+        private bool ExistDischarges(ClientEntity client)
+        {
+            return (client.DischargeList.Count() > 0);
+        }
+        private bool ExistMedicalHistory(ClientEntity client)
+        {
+            return (client.IntakeMedicalHistory != null);
+        }
+        #endregion
     }
 }
