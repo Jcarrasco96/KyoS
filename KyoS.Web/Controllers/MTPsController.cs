@@ -284,12 +284,13 @@ namespace KyoS.Web.Controllers
                 {
                     mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
                 }
+
+                //calcular las unidades a partir del tiempo de desarrollo del MTP
                 int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes/15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15 > 7)
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;
-
                 }
                 else
                 {
@@ -499,12 +500,12 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
                 }
 
+                //calcular las unidades a partir del tiempo de desarrollo del MTP
                 int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15 > 7)
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;
-
                 }
                 else
                 {
@@ -4716,10 +4717,11 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
         }
 
+        #region Bill week
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> BillMTPToday(int id = 0, int week = 0, int origin = 0)
         {
-            if (week > 0)
+            if (id > 0)
             {
                 MTPEntity mtp = await _context.MTPs
                                               .Include(n => n.Client)
@@ -4735,7 +4737,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillingClient", "Notes", new { id = mtp.Client.Id });
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id });
                 }
             }
 
@@ -4762,7 +4764,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillingClient", "Notes", new { id = mtp.Client.Id, billed = 1 });
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
                 }
             }
 
@@ -4802,21 +4804,21 @@ namespace KyoS.Web.Controllers
             if (idMtp > 0)
             {
                 MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
                                               .FirstOrDefaultAsync(wc => wc.Id == idMtp);
 
                 mtp.DeniedBill = false;
                 _context.Update(mtp);
                 await _context.SaveChangesAsync();
 
-                if (client == 0)
+                if (client == 0 && week > 0)
                 {
                     return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("BillingClient", "Notes", new { idClient = client, billed = 1 });
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
                 }
-
 
             }
 
@@ -4837,18 +4839,18 @@ namespace KyoS.Web.Controllers
                 _context.Update(mtp);
                 await _context.SaveChangesAsync();
 
-               
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
             }
 
-            if (origin == 0)
-            {
-                return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
-            }
-            else
-            {
-                return RedirectToAction("BillingClient", "Notes", new { idClient = id, billed = 1 });
-            }
-            
+            return RedirectToAction("NotAuthorized", "Account");
+
         }
 
         [Authorize(Roles = "Manager")]
@@ -4857,6 +4859,7 @@ namespace KyoS.Web.Controllers
             if (id > 0)
             {
                 MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
                                               .FirstOrDefaultAsync(wc => wc.Id == id);
 
                 mtp.PaymentDate = DateTime.Now;
@@ -4864,18 +4867,18 @@ namespace KyoS.Web.Controllers
                 _context.Update(mtp);
                 await _context.SaveChangesAsync();
 
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
             }
 
-            if (origin == 0)
-            {
-                return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
-            }
-            else
-            {
-                return RedirectToAction("BillingClient", "Notes", new { idClient = id, billed = 1 });
-            }
-            
+            return RedirectToAction("NotAuthorized", "Account");
         }
-
+        #endregion
     }
 }

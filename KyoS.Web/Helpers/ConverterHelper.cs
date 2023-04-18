@@ -43,7 +43,8 @@ namespace KyoS.Web.Helpers
                 CodeGroupTherapy = model.CodeGroupTherapy,
                 CodeIndTherapy = model.CodeIndTherapy,
                 CodePSRTherapy = model.CodePSRTherapy,
-                CodeMTP = model.CodeMTP
+                CodeMTP = model.CodeMTP,
+                CodeBIO = model.CodeBIO
 
             };
         }
@@ -69,8 +70,9 @@ namespace KyoS.Web.Helpers
                 CodeGroupTherapy = clinicEntity.CodeGroupTherapy,
                 CodeIndTherapy = clinicEntity.CodeIndTherapy,
                 CodePSRTherapy = clinicEntity.CodePSRTherapy,
-                CodeMTP = clinicEntity.CodeMTP
-                
+                CodeMTP = clinicEntity.CodeMTP,
+                CodeBIO = clinicEntity.CodeBIO
+
             };
         }
 
@@ -3217,7 +3219,9 @@ namespace KyoS.Web.Helpers
                 Messages = _context.Messages
                                    .Where(n => n.Bio.Id == model.Id)
                                    .ToList(),
-                Status = model.Status
+                Status = model.Status,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
         }
@@ -3427,7 +3431,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 AdmissionedFor = model.AdmissionedFor,
-                Status = model.Status
+                Status = model.Status,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
 

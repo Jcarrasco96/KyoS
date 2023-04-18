@@ -31,6 +31,61 @@
                     <tbody>
                         @if (ViewData["Billed"].ToString() == "0")
                         {
+                            @if (Model.Bio != null)
+                            {
+                                @if (Model.Bio.BilledDate == null)
+                                {
+                                    var item = Model.Bio;
+                                    <tr>
+                                        <td align="center">
+                                            <p>@item.DateBio.ToShortDateString()</p>
+                                        </td>
+                                        <td align="center">
+                                            <p>@item.CodeBill</p>
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                        </td>
+                                        <td align="center">
+                                            <label>BIO</label>
+                                            |
+                                            @item.Units
+                                        </td>
+                                        <td align="center">
+                                            @if (item.BilledDate != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.BilledDate)
+                                            }
+                                            else
+                                            {
+                                                <p> - </p>
+                                            }
+                                        </td>
+                                        <td align="center">
+                                            @if (item.PaymentDate != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.PaymentDate)
+                                            }
+                                            else
+                                            {
+                                                <p> - </p>
+                                            }
+                                        </td>
+                                        <td align="right">
+                                            @if (ViewData["Billed"].ToString() == "0")
+                                            {
+                                                <a asp-action="BillBIOToday" asp-controller="Bios" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a onclick="showInPopup('@Url.Action("BillBIOClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idBio = item.Id }, Context.Request.Scheme)','Bill this BIO')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                <a asp-action="PaymentReceivedTodayBIO" asp-route-id="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a onclick="showInPopup('@Url.Action("PaymentReceivedClientBIO", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                            }
+                                           
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
                             @foreach (var item in Model.MTPs.Where(n => n.BilledDate == null))
                             {
                                 <tr>
@@ -65,138 +120,22 @@
                                         }
                                         else
                                         {
-                                            @if (item.BilledDate == null)
-                                            {
-                                                <p> - </p>
-                                            }
-                                            else
-                                            {
-                                                @if (item.DeniedBill == true)
-                                                {
-                                                    <a asp-action="NotDeniedBill" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-client="0" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a asp-action="DeniedBillToday" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
-
-                                            }
-
+                                           <p> - </p>
                                         }
                                     </td>
                                     <td align="right">
                                         @if (ViewData["Billed"].ToString() == "0")
                                         {
-                                            <a asp-action="BillMTPToday" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="BillMTPToday" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
                                             <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
                                             <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
                                             <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
 
                                         }
-                                        @if (ViewData["Billed"].ToString() == "1")
-                                        {
-                                            <a asp-action="NotBill" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMTP="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                            @if (item.PaymentDate == null)
-                                            {
-                                                <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="NotPaymentReceivedMTP" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMtp="@ViewData["idMtp"]" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            }
-                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-
-                                        }
                                     </td>
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            @foreach (var item in Model.MTPs.Where(n => n.BilledDate != null))
-                            {
-                                <tr>
-                                    <td align="center">
-                                        <p>@item.AdmissionDateMTP.ToShortDateString()</p>
-                                    </td>
-                                    <td align="center">
-                                        <p>@Model.Clinic.CodeMTP</p>
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmissionedFor)
-                                    </td>
-                                    <td align="center">
-                                        <label>MTP</label>
-                                        |
-                                        @item.Units
-                                    </td>
-                                    <td align="center">
-                                        @if (item.BilledDate != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.BilledDate)
-                                        }
-                                        else
-                                        {
-                                            <p> - </p>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.PaymentDate != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.PaymentDate)
-                                        }
-                                        else
-                                        {
-                                            @if (item.BilledDate == null)
-                                            {
-                                                <p> - </p>
-                                            }
-                                            else
-                                            {
-                                                @if (item.DeniedBill == true)
-                                                {
-                                                    <a asp-action="NotDeniedBill" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-client="0" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a asp-action="DeniedBillToday" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
 
-                                            }
-
-                                        }
-                                    </td>
-                                    <td align="right">
-                                        @if (ViewData["Billed"].ToString() == "0")
-                                        {
-                                            <a asp-action="BillMTPToday" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                            <a asp-action="PaymentReceivedTodayMTP" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedMTP", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-
-                                        }
-                                        @if (ViewData["Billed"].ToString() == "1")
-                                        {
-                                            <a asp-action="NotBill" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMTP="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                            @if (item.PaymentDate == null)
-                                            {
-                                                <a asp-action="PaymentReceivedTodayMTP" asp-controller="MTPs" asp-route-week="@ViewData["idWeek"]" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="NotPaymentReceivedMTP" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-week="@ViewData["idWeek"]" asp-route-origin="1" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            }
-                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        @if (ViewData["Billed"].ToString() == "0")
-                        {
                             @foreach (var item in Model.Workdays_Clients.Where(w => w.BilledDate == null))
                             {
                                 <tr>
@@ -312,23 +251,7 @@
                                         }
                                         else
                                         {
-                                            @if (item.BilledDate == null)
-                                            {
-                                                <p> - </p>
-                                            }
-                                            else
-                                            {
-                                                @if (item.DeniedBill == true)
-                                                {
-                                                    <a asp-action="NotDeniedBill" asp-route-idWorkclient="@item.Id" asp-route-client="1" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a asp-action="DeniedBillClient" asp-route-idWorkclient="@item.Id" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
-                                                }
-
-                                            }
-
+                                            <p> - </p>
                                         }
                                     </td>
                                     <td align="right">
@@ -339,28 +262,159 @@
                                             <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
                                             <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
                                         }
-                                        else
-                                        {
-                                            <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                            @if (item.PaymentDate != null)
-                                            {
-                                                <a asp-action="NotClientPayment" asp-route-id="@item.Id" class="btn btn-danger " title="Return not payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            }
-
-                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-                                        }
-
                                     </td>
                                 </tr>
                             }
                         }
                         else
                         {
+                            @if (Model.Bio != null)
+                            {
+                                @if (Model.Bio.BilledDate != null)
+                                {
+                                    var item = Model.Bio;
+                                    <tr>
+                                        <td align="center">
+                                            <p>@item.DateBio.ToShortDateString()</p>
+                                        </td>
+                                        <td align="center">
+                                            <p>@Model.Bio.CodeBill</p>
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                        </td>
+                                        <td align="center">
+                                            <label>BIO</label>
+                                            |
+                                            @item.Units
+                                        </td>
+                                        <td align="center">
+                                            @if (item.BilledDate != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.BilledDate)
+                                            }
+                                            else
+                                            {
+                                                <p> - </p>
+                                            }
+                                        </td>
+                                        <td align="center">
+                                            @if (item.PaymentDate != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.PaymentDate)
+                                            }
+                                            else
+                                            {
+                                                @if (item.BilledDate == null)
+                                                {
+                                                    <p> - </p>
+                                                }
+                                                else
+                                                {
+                                                    @if (item.DeniedBill == true)
+                                                    {
+                                                        <a asp-action="NotDeniedBill" asp-controller="Bios" asp-route-idBio="@item.Id" asp-route-client="@Model.Id" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="DeniedBillToday" asp-controller="Bios" asp-route-idBio="@item.Id" asp-route-origin="1" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                    }
+
+                                                }
+
+                                            }
+                                        </td>
+                                        <td align="right">
+                                            @if (ViewData["Billed"].ToString() == "1")
+                                            {
+                                                <a asp-action="NotBill" asp-controller="Bios" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a onclick="showInPopup('@Url.Action("BillBIOClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idBio = item.Id }, Context.Request.Scheme)','Bill this BIO')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                @if (item.PaymentDate == null)
+                                                {
+                                                    <a asp-action="PaymentReceivedTodayBIO" asp-controller="Bios" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="NotPaymentReceivedBIO" asp-controller="Bios" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                }
+                                                <a onclick="showInPopup('@Url.Action("PaymentReceivedClientBIO", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this BIO')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                            @foreach (var item in Model.MTPs.Where(n => n.BilledDate != null))
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <p>@item.AdmissionDateMTP.ToShortDateString()</p>
+                                    </td>
+                                    <td align="center">
+                                        <p>@Model.Clinic.CodeMTP</p>
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmissionedFor)
+                                    </td>
+                                    <td align="center">
+                                        <label>MTP</label>
+                                        |
+                                        @item.Units
+                                    </td>
+                                    <td align="center">
+                                        @if (item.BilledDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.BilledDate)
+                                        }
+                                        else
+                                        {
+                                            <p> - </p>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.PaymentDate != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                        else
+                                        {
+                                            @if (item.BilledDate == null)
+                                            {
+                                                <p> - </p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.DeniedBill == true)
+                                                {
+                                                    <a asp-action="NotDeniedBill" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-client="@Model.Id" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="DeniedBillToday" asp-controller="MTPs" asp-route-idMtp="@item.Id" asp-route-origin="1" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                }
+
+                                            }
+
+                                        }
+                                    </td>
+                                    <td align="right">
+                                       @if (ViewData["Billed"].ToString() == "1")
+                                        {
+                                            <a asp-action="NotBill" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-idMTP="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("BillMTPClient", "Notes", new { idClient = Model.Id, abilled = ViewData["Billed"], idMtp = item.Id }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
+                                            @if (item.PaymentDate == null)
+                                            {
+                                                <a asp-action="PaymentReceivedTodayMTP" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="NotPaymentReceivedMTP" asp-controller="MTPs" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            }
+                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClientMTP", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                             @foreach (var item in Model.Workdays_Clients.Where(w => w.BilledDate != null))
                             {
                                 <tr>
@@ -496,14 +550,7 @@
                                         }
                                     </td>
                                     <td align="right">
-                                        @if (ViewData["Billed"].ToString() == "0")
-                                        {
-                                            <a asp-action="BillNoteTodayClient" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
-                                            <a asp-action="PaymentReceivedTodayClient" asp-route-idWorkclient="@item.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("PaymentReceivedClient", "Notes", new { id = item.Id}, Context.Request.Scheme)','Payment received of this note')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
-                                        }
-                                        else
+                                       @if (ViewData["Billed"].ToString() == "1")
                                         {
                                             <a asp-action="NotClientBill" asp-route-id="@item.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a onclick="showInPopup('@Url.Action("BillNoteClient", "Notes", new { idWorkday = item.Id, abilled = ViewData["Billed"] }, Context.Request.Scheme)','Bill this note')" class="btn btn-warning" title="Billing note"><i class="glyphicon glyphicon-calendar"></i></a>
@@ -523,6 +570,7 @@
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
