@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KyoS.Web.Data.Contracts;
 using KyoS.Common.Helpers;
+using AspNetCore.Reporting;
+using System.Reflection;
+using Microsoft.AspNetCore.Hosting;
 
 namespace KyoS.Web.Controllers
 {
@@ -28,8 +31,9 @@ namespace KyoS.Web.Controllers
         private readonly IExportExcellHelper _exportExcelHelper;
         private readonly IFileHelper _fileHelper;
         private readonly IReportHelper _reportHelper;
+        private readonly IWebHostEnvironment _webhostEnvironment;
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper, IReportHelper reportHelper)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper, IReportHelper reportHelper, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -40,6 +44,7 @@ namespace KyoS.Web.Controllers
             _exportExcelHelper = exportExcelHelper;
             _fileHelper = fileHelper;
             _reportHelper = reportHelper;
+            _webhostEnvironment = webHostEnvironment;
         }
         
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
@@ -2886,7 +2891,273 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}.zip");
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Doc.zip");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DownloadApprovedNotes(int id)
+        {
+            ClientEntity client = await _context.Clients
+                                                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //PSR schema 1, 2 y 4
+            List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+                                                                        .ThenInclude(c => c.MTPs)
+                                                                            .ThenInclude(m => m.Goals)
+                                                                                .ThenInclude(g => g.Objetives)
+
+                                                                   .Include(wc => wc.Client)
+                                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Supervisor)
+                                                                            .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Notes_Activities)
+                                                                            .ThenInclude(na => na.Activity)
+                                                                                .ThenInclude(a => a.Theme)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Notes_Activities)
+                                                                            .ThenInclude(na => na.Objetive)
+                                                                                .ThenInclude(o => o.Goal)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Where(wc => (wc.Client.Id == id && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
+                {
+                    if (workdayClient.Note.Schema == SchemaType.Schema1)
+                    {
+                        fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
+                    }
+                    if (workdayClient.Note.Schema == SchemaType.Schema4)
+                    {
+                        stream = _reportHelper.DavilaNoteReportSchema4(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }                    
+                }
+                if (workdayClient.Note.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                {
+                    fileContentList.Add(FloridaSocialHSNoteReportFCRSchema2(workdayClient));
+                }
+            }
+
+            //PSR schema 3
+            workdayClientList = await _context.Workdays_Clients
+
+                                              .Include(wc => wc.Facilitator)
+
+                                              .Include(wc => wc.Client)
+
+                                              .Include(wc => wc.NoteP)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
+
+                                              .Include(wc => wc.NoteP)
+                                                .ThenInclude(n => n.NotesP_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
+
+                                              .Include(wc => wc.NoteP)
+                                                .ThenInclude(n => n.NotesP_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
+
+                                              .Include(wc => wc.Workday)
+                                                .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                    .ThenInclude(waf => waf.Facilitator)
+
+                                              .Where(wc => (wc.Client.Id == id && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
+                                              .ToListAsync();
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {                        
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+            }
+
+            //Group schema 1
+            workdayClientList = await _context.Workdays_Clients
+
+                                              .Include(wc => wc.Facilitator)
+
+                                              .Include(wc => wc.Client)
+                                                  .ThenInclude(c => c.MTPs)
+                                                      .ThenInclude(m => m.Goals)
+                                                          .ThenInclude(g => g.Objetives)
+
+                                              .Include(wc => wc.GroupNote)
+                                                  .ThenInclude(n => n.Supervisor)
+                                                      .ThenInclude(s => s.Clinic)
+
+                                              .Include(wc => wc.GroupNote)
+                                                  .ThenInclude(n => n.GroupNotes_Activities)
+                                                      .ThenInclude(na => na.Activity)
+                                                          .ThenInclude(a => a.Theme)
+
+                                              .Include(wc => wc.GroupNote)
+                                                  .ThenInclude(n => n.GroupNotes_Activities)
+                                                      .ThenInclude(na => na.Objetive)
+                                                          .ThenInclude(o => o.Goal)
+
+                                              .Include(wc => wc.Workday)
+
+                                              .Where(wc => (wc.Client.Id == id && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
+                                              .ToListAsync();
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")                
+                    stream = _reportHelper.DavilaGroupNoteReportSchema1(workdayClient);                    
+                
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);                    
+                
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);                    
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+
+            //Group schema 2
+            workdayClientList = await _context.Workdays_Clients
+
+                                              .Include(wc => wc.Facilitator)
+
+                                              .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
+
+                                              .Include(wc => wc.GroupNote2)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
+
+                                              .Include(wc => wc.GroupNote2)
+                                                .ThenInclude(n => n.GroupNotes2_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
+
+                                              .Include(wc => wc.GroupNote2)
+                                                .ThenInclude(n => n.GroupNotes2_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
+
+                                              .Include(wc => wc.Workday)
+
+                                              .Include(wc => wc.Schedule)
+
+                                              .Where(wc => (wc.Client.Id == id && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
+                                              .ToListAsync();
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                    stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);                  
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+
+            //Individual schema 1
+            workdayClientList = await _context.Workdays_Clients
+
+                                              .Include(wc => wc.Facilitator)
+
+                                              .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
+
+                                              .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                              .Include(wc => wc.IndividualNote)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
+
+                                              .Include(wc => wc.IndividualNote)
+                                                .ThenInclude(n => n.Objective)
+
+                                              .Include(wc => wc.Workday)
+
+                                              .Where(wc => (wc.Client.Id == id && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
+                                              .ToListAsync();
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")                
+                    stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);                    
+                
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+                    stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);                    
+                
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+                    stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);                   
+                
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+                    stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);                    
+                
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Individual/Ind_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Notes.zip");
         }
 
         #region Utils
@@ -2920,6 +3191,817 @@ namespace KyoS.Web.Controllers
         private bool ExistMedicalHistory(ClientEntity client)
         {
             return (client.IntakeMedicalHistory != null);
+        }
+        #endregion
+
+        #region Davila RDLC reports
+        private IActionResult DavilaNoteReportSchema1(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteDAVILA0");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.Note.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Note.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
+
+            List<Note_Activity> notesactivities1 = new List<Note_Activity>();
+            List<ActivityEntity> activities1 = new List<ActivityEntity>();
+            List<ThemeEntity> themes1 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities2 = new List<Note_Activity>();
+            List<ActivityEntity> activities2 = new List<ActivityEntity>();
+            List<ThemeEntity> themes2 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities3 = new List<Note_Activity>();
+            List<ActivityEntity> activities3 = new List<ActivityEntity>();
+            List<ThemeEntity> themes3 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities4 = new List<Note_Activity>();
+            List<ActivityEntity> activities4 = new List<ActivityEntity>();
+            List<ThemeEntity> themes4 = new List<ThemeEntity>();
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
+            {
+                if (i == 0)
+                {
+                    notesactivities1 = new List<Note_Activity> { item };
+                    activities1 = new List<ActivityEntity> { item.Activity };
+                    themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    notesactivities2 = new List<Note_Activity> { item };
+                    activities2 = new List<ActivityEntity> { item.Activity };
+                    themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 2)
+                {
+                    notesactivities3 = new List<Note_Activity> { item };
+                    activities3 = new List<ActivityEntity> { item.Activity };
+                    themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 3)
+                {
+                    notesactivities4 = new List<Note_Activity> { item };
+                    activities4 = new List<ActivityEntity> { item.Activity };
+                    themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsNotes", notes);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", supervisors);
+            report.AddDataSource("dsNotesActivities1", notesactivities1);
+            report.AddDataSource("dsActivities1", activities1);
+            report.AddDataSource("dsThemes1", themes1);
+            report.AddDataSource("dsNotesActivities2", notesactivities2);
+            report.AddDataSource("dsActivities2", activities2);
+            report.AddDataSource("dsThemes2", themes2);
+            report.AddDataSource("dsNotesActivities3", notesactivities3);
+            report.AddDataSource("dsActivities3", activities3);
+            report.AddDataSource("dsThemes3", themes3);
+            report.AddDataSource("dsNotesActivities4", notesactivities4);
+            report.AddDataSource("dsActivities4", activities4);
+            report.AddDataSource("dsThemes4", themes4);
+            report.AddDataSource("dsImages", images);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+            parameters.Add("dateSupervisor", dateSupervisor);
+            parameters.Add("num_of_goal", num_of_goal);
+            parameters.Add("goal_text", goal_text);
+            parameters.Add("num_of_obj", num_of_obj);
+            parameters.Add("obj_text", obj_text);
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, "application/pdf"/*,
+                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
+        }
+        private FileContentResult DavilaNoteReportFCRSchema1(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteDAVILA0");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.Note.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Note.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
+
+            List<Note_Activity> notesactivities1 = new List<Note_Activity>();
+            List<ActivityEntity> activities1 = new List<ActivityEntity>();
+            List<ThemeEntity> themes1 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities2 = new List<Note_Activity>();
+            List<ActivityEntity> activities2 = new List<ActivityEntity>();
+            List<ThemeEntity> themes2 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities3 = new List<Note_Activity>();
+            List<ActivityEntity> activities3 = new List<ActivityEntity>();
+            List<ThemeEntity> themes3 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities4 = new List<Note_Activity>();
+            List<ActivityEntity> activities4 = new List<ActivityEntity>();
+            List<ThemeEntity> themes4 = new List<ThemeEntity>();
+
+            int i = 0;
+            var num_of_goal = string.Empty;
+            var goal_text = string.Empty;
+            var num_of_obj = string.Empty;
+            var obj_text = string.Empty;
+            foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
+            {
+                if (i == 0)
+                {
+                    notesactivities1 = new List<Note_Activity> { item };
+                    activities1 = new List<ActivityEntity> { item.Activity };
+                    themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text = item.Objetive.Goal.Name;
+                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text = item.Objetive.Description;
+                    }
+                }
+                if (i == 1)
+                {
+                    notesactivities2 = new List<Note_Activity> { item };
+                    activities2 = new List<ActivityEntity> { item.Activity };
+                    themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 2)
+                {
+                    notesactivities3 = new List<Note_Activity> { item };
+                    activities3 = new List<ActivityEntity> { item.Activity };
+                    themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                if (i == 3)
+                {
+                    notesactivities4 = new List<Note_Activity> { item };
+                    activities4 = new List<ActivityEntity> { item.Activity };
+                    themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (num_of_goal == string.Empty)
+                    {
+                        if (item.Objetive != null)
+                        {
+                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
+                            goal_text = item.Objetive.Goal.Name;
+                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
+                            obj_text = item.Objetive.Description;
+                        }
+                    }
+                }
+                i = ++i;
+            }
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsNotes", notes);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", supervisors);
+            report.AddDataSource("dsNotesActivities1", notesactivities1);
+            report.AddDataSource("dsActivities1", activities1);
+            report.AddDataSource("dsThemes1", themes1);
+            report.AddDataSource("dsNotesActivities2", notesactivities2);
+            report.AddDataSource("dsActivities2", activities2);
+            report.AddDataSource("dsThemes2", themes2);
+            report.AddDataSource("dsNotesActivities3", notesactivities3);
+            report.AddDataSource("dsActivities3", activities3);
+            report.AddDataSource("dsThemes3", themes3);
+            report.AddDataSource("dsNotesActivities4", notesactivities4);
+            report.AddDataSource("dsActivities4", activities4);
+            report.AddDataSource("dsThemes4", themes4);
+            report.AddDataSource("dsImages", images);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+            parameters.Add("dateSupervisor", dateSupervisor);
+            parameters.Add("num_of_goal", num_of_goal);
+            parameters.Add("goal_text", goal_text);
+            parameters.Add("num_of_obj", num_of_obj);
+            parameters.Add("obj_text", obj_text);
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf");
+        }
+        #endregion
+
+        #region Florida Social Health Solution RDLC reports        
+        private IActionResult FloridaSocialHSNoteReportSchema2(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteFloridaSocialHS1");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.Note.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Note.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
+
+            List<Note_Activity> notesactivities1 = new List<Note_Activity>();
+            List<ActivityEntity> activities1 = new List<ActivityEntity>();
+            List<ThemeEntity> themes1 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities2 = new List<Note_Activity>();
+            List<ActivityEntity> activities2 = new List<ActivityEntity>();
+            List<ThemeEntity> themes2 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities3 = new List<Note_Activity>();
+            List<ActivityEntity> activities3 = new List<ActivityEntity>();
+            List<ThemeEntity> themes3 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities4 = new List<Note_Activity>();
+            List<ActivityEntity> activities4 = new List<ActivityEntity>();
+            List<ThemeEntity> themes4 = new List<ThemeEntity>();
+
+            int i = 0;
+            var num_of_goal1 = string.Empty;
+            var goal_text1 = string.Empty;
+            bool goal1 = false;
+            var num_of_goal2 = string.Empty;
+            var goal_text2 = string.Empty;
+            bool goal2 = false;
+            var num_of_goal3 = string.Empty;
+            var goal_text3 = string.Empty;
+            bool goal3 = false;
+            var num_of_goal4 = string.Empty;
+            var goal_text4 = string.Empty;
+            bool goal4 = false;
+            var num_of_goal5 = string.Empty;
+            var goal_text5 = string.Empty;
+            bool goal5 = false;
+            var goal_obj_activity1 = string.Empty;
+            var goal_obj_activity2 = string.Empty;
+            var goal_obj_activity3 = string.Empty;
+            var goal_obj_activity4 = string.Empty;
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+                mtp = workdayClient.Client.MTPs.FirstOrDefault();
+            else                                    //la nota tiene mtp relacionado    
+                mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
+            {
+                if (i == 0)
+                {
+                    num_of_goal1 = $"GOAL #{item.Number}:";
+                    goal_text1 = item.Name;
+                }
+                if (i == 1)
+                {
+                    num_of_goal2 = $"GOAL #{item.Number}:";
+                    goal_text2 = item.Name;
+                }
+                if (i == 2)
+                {
+                    num_of_goal3 = $"GOAL #{item.Number}:";
+                    goal_text3 = item.Name;
+                }
+                if (i == 3)
+                {
+                    num_of_goal4 = $"GOAL #{item.Number}:";
+                    goal_text4 = item.Name;
+                }
+                if (i == 4)
+                {
+                    num_of_goal5 = $"GOAL #{item.Number}:";
+                    goal_text5 = item.Name;
+                }
+                i = ++i;
+            }
+
+            i = 0;
+            foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
+            {
+                if (i == 0)
+                {
+                    notesactivities1 = new List<Note_Activity> { item };
+                    activities1 = new List<ActivityEntity> { item.Activity };
+                    themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity1 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 1)
+                {
+                    notesactivities2 = new List<Note_Activity> { item };
+                    activities2 = new List<ActivityEntity> { item.Activity };
+                    themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity2 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 2)
+                {
+                    notesactivities3 = new List<Note_Activity> { item };
+                    activities3 = new List<ActivityEntity> { item.Activity };
+                    themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity3 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 3)
+                {
+                    notesactivities4 = new List<Note_Activity> { item };
+                    activities4 = new List<ActivityEntity> { item.Activity };
+                    themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity4 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                i = ++i;
+            }
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsNotes", notes);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", supervisors);
+            report.AddDataSource("dsNotesActivities1", notesactivities1);
+            report.AddDataSource("dsActivities1", activities1);
+            report.AddDataSource("dsThemes1", themes1);
+            report.AddDataSource("dsNotesActivities2", notesactivities2);
+            report.AddDataSource("dsActivities2", activities2);
+            report.AddDataSource("dsThemes2", themes2);
+            report.AddDataSource("dsNotesActivities3", notesactivities3);
+            report.AddDataSource("dsActivities3", activities3);
+            report.AddDataSource("dsThemes3", themes3);
+            report.AddDataSource("dsNotesActivities4", notesactivities4);
+            report.AddDataSource("dsActivities4", activities4);
+            report.AddDataSource("dsThemes4", themes4);
+            report.AddDataSource("dsImages", images);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
+
+            i = 0;
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
+            {
+                if (i == 0)
+                    diagnostic = item.Diagnostic.Code;
+                else
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
+                i = ++i;
+            }
+
+            var setting = $"Setting: {workdayClient.Note.Setting}";
+
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+            parameters.Add("dateSupervisor", dateSupervisor);
+            parameters.Add("diagnosis", diagnostic);
+            parameters.Add("num_of_goal1", num_of_goal1);
+            parameters.Add("goal_text1", goal_text1);
+            parameters.Add("goal1", goal1.ToString());
+            parameters.Add("goal_obj_activity1", goal_obj_activity1);
+            parameters.Add("num_of_goal2", num_of_goal2);
+            parameters.Add("goal_text2", goal_text2);
+            parameters.Add("goal2", goal2.ToString());
+            parameters.Add("goal_obj_activity2", goal_obj_activity2);
+            parameters.Add("num_of_goal3", num_of_goal3);
+            parameters.Add("goal_text3", goal_text3);
+            parameters.Add("goal3", goal3.ToString());
+            parameters.Add("goal_obj_activity3", goal_obj_activity3);
+            parameters.Add("num_of_goal4", num_of_goal4);
+            parameters.Add("goal_text4", goal_text4);
+            parameters.Add("goal4", goal4.ToString());
+            parameters.Add("goal_obj_activity4", goal_obj_activity4);
+            parameters.Add("num_of_goal5", num_of_goal5);
+            parameters.Add("goal_text5", goal_text5);
+            parameters.Add("goal5", goal5.ToString());
+            parameters.Add("setting", setting);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, "application/pdf");
+        }
+        private FileContentResult FloridaSocialHSNoteReportFCRSchema2(Workday_Client workdayClient)
+        {
+            //report
+            string mimetype = "";
+            string fileDirPath = Assembly.GetExecutingAssembly().Location.Replace("KyoS.Web.dll", string.Empty);
+            string rdlcFilePath = string.Format("{0}Reports\\Notes\\{1}.rdlc", fileDirPath, $"rptNoteFloridaSocialHS1");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            LocalReport report = new LocalReport(rdlcFilePath);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(workdayClient.Note.Supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Note.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            //datasource
+            List<Workday_Client> workdaysclients = new List<Workday_Client> { workdayClient };
+            List<ClientEntity> clients = new List<ClientEntity> { workdayClient.Client };
+            List<NoteEntity> notes = new List<NoteEntity> { workdayClient.Note };
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity> { workdayClient.Facilitator };
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity> { workdayClient.Note.Supervisor };
+            List<ImageArray> images = new List<ImageArray> { new ImageArray { ImageStream1 = stream1, ImageStream2 = stream2 } };
+
+            List<Note_Activity> notesactivities1 = new List<Note_Activity>();
+            List<ActivityEntity> activities1 = new List<ActivityEntity>();
+            List<ThemeEntity> themes1 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities2 = new List<Note_Activity>();
+            List<ActivityEntity> activities2 = new List<ActivityEntity>();
+            List<ThemeEntity> themes2 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities3 = new List<Note_Activity>();
+            List<ActivityEntity> activities3 = new List<ActivityEntity>();
+            List<ThemeEntity> themes3 = new List<ThemeEntity>();
+            List<Note_Activity> notesactivities4 = new List<Note_Activity>();
+            List<ActivityEntity> activities4 = new List<ActivityEntity>();
+            List<ThemeEntity> themes4 = new List<ThemeEntity>();
+
+            int i = 0;
+            var num_of_goal1 = string.Empty;
+            var goal_text1 = string.Empty;
+            bool goal1 = false;
+            var num_of_goal2 = string.Empty;
+            var goal_text2 = string.Empty;
+            bool goal2 = false;
+            var num_of_goal3 = string.Empty;
+            var goal_text3 = string.Empty;
+            bool goal3 = false;
+            var num_of_goal4 = string.Empty;
+            var goal_text4 = string.Empty;
+            bool goal4 = false;
+            var num_of_goal5 = string.Empty;
+            var goal_text5 = string.Empty;
+            bool goal5 = false;
+            var goal_obj_activity1 = string.Empty;
+            var goal_obj_activity2 = string.Empty;
+            var goal_obj_activity3 = string.Empty;
+            var goal_obj_activity4 = string.Empty;
+
+            MTPEntity mtp;
+            if (workdayClient.Note.MTPId == null)   //la nota no tiene mtp relacionado, entonces se usa el primero que esté
+                mtp = workdayClient.Client.MTPs.FirstOrDefault();
+            else                                    //la nota tiene mtp relacionado    
+                mtp = _context.MTPs.FirstOrDefault(m => m.Id == workdayClient.Note.MTPId);
+
+            foreach (GoalEntity item in mtp.Goals.OrderBy(g => g.Number))
+            {
+                if (i == 0)
+                {
+                    num_of_goal1 = $"GOAL #{item.Number}:";
+                    goal_text1 = item.Name;
+                }
+                if (i == 1)
+                {
+                    num_of_goal2 = $"GOAL #{item.Number}:";
+                    goal_text2 = item.Name;
+                }
+                if (i == 2)
+                {
+                    num_of_goal3 = $"GOAL #{item.Number}:";
+                    goal_text3 = item.Name;
+                }
+                if (i == 3)
+                {
+                    num_of_goal4 = $"GOAL #{item.Number}:";
+                    goal_text4 = item.Name;
+                }
+                if (i == 4)
+                {
+                    num_of_goal5 = $"GOAL #{item.Number}:";
+                    goal_text5 = item.Name;
+                }
+                i = ++i;
+            }
+
+            i = 0;
+            foreach (Note_Activity item in workdayClient.Note.Notes_Activities)
+            {
+                if (i == 0)
+                {
+                    notesactivities1 = new List<Note_Activity> { item };
+                    activities1 = new List<ActivityEntity> { item.Activity };
+                    themes1 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity1 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 1)
+                {
+                    notesactivities2 = new List<Note_Activity> { item };
+                    activities2 = new List<ActivityEntity> { item.Activity };
+                    themes2 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity2 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 2)
+                {
+                    notesactivities3 = new List<Note_Activity> { item };
+                    activities3 = new List<ActivityEntity> { item.Activity };
+                    themes3 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity3 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                if (i == 3)
+                {
+                    notesactivities4 = new List<Note_Activity> { item };
+                    activities4 = new List<ActivityEntity> { item.Activity };
+                    themes4 = new List<ThemeEntity> { item.Activity.Theme };
+                    if (item.Objetive != null)
+                    {
+                        if (item.Objetive.Goal.Number == 1)
+                            goal1 = true;
+                        if (item.Objetive.Goal.Number == 2)
+                            goal2 = true;
+                        if (item.Objetive.Goal.Number == 3)
+                            goal3 = true;
+                        if (item.Objetive.Goal.Number == 4)
+                            goal4 = true;
+                        if (item.Objetive.Goal.Number == 5)
+                            goal5 = true;
+                        goal_obj_activity4 = $"(Goal #{item.Objetive.Goal.Number}, Obj#{item.Objetive.Objetive}) ";
+                    }
+                }
+                i = ++i;
+            }
+
+            report.AddDataSource("dsWorkdays_Clients", workdaysclients);
+            report.AddDataSource("dsClients", clients);
+            report.AddDataSource("dsNotes", notes);
+            report.AddDataSource("dsFacilitators", facilitators);
+            report.AddDataSource("dsSupervisors", supervisors);
+            report.AddDataSource("dsNotesActivities1", notesactivities1);
+            report.AddDataSource("dsActivities1", activities1);
+            report.AddDataSource("dsThemes1", themes1);
+            report.AddDataSource("dsNotesActivities2", notesactivities2);
+            report.AddDataSource("dsActivities2", activities2);
+            report.AddDataSource("dsThemes2", themes2);
+            report.AddDataSource("dsNotesActivities3", notesactivities3);
+            report.AddDataSource("dsActivities3", activities3);
+            report.AddDataSource("dsThemes3", themes3);
+            report.AddDataSource("dsNotesActivities4", notesactivities4);
+            report.AddDataSource("dsActivities4", activities4);
+            report.AddDataSource("dsThemes4", themes4);
+            report.AddDataSource("dsImages", images);
+
+            var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            var dateSupervisor = workdayClient.Note.DateOfApprove.Value.ToShortDateString();
+
+            i = 0;
+            var diagnostic = string.Empty;
+            foreach (var item in workdayClient.Client.Clients_Diagnostics)
+            {
+                if (i == 0)
+                    diagnostic = item.Diagnostic.Code;
+                else
+                    diagnostic = $"{diagnostic}, {item.Diagnostic.Code}";
+                i = ++i;
+            }
+
+            var setting = $"Setting: {workdayClient.Note.Setting}";
+
+            parameters.Add("date", date);
+            parameters.Add("dateFacilitator", dateFacilitator);
+            parameters.Add("dateSupervisor", dateSupervisor);
+            parameters.Add("diagnosis", diagnostic);
+            parameters.Add("num_of_goal1", num_of_goal1);
+            parameters.Add("goal_text1", goal_text1);
+            parameters.Add("goal1", goal1.ToString());
+            parameters.Add("goal_obj_activity1", goal_obj_activity1);
+            parameters.Add("num_of_goal2", num_of_goal2);
+            parameters.Add("goal_text2", goal_text2);
+            parameters.Add("goal2", goal2.ToString());
+            parameters.Add("goal_obj_activity2", goal_obj_activity2);
+            parameters.Add("num_of_goal3", num_of_goal3);
+            parameters.Add("goal_text3", goal_text3);
+            parameters.Add("goal3", goal3.ToString());
+            parameters.Add("goal_obj_activity3", goal_obj_activity3);
+            parameters.Add("num_of_goal4", num_of_goal4);
+            parameters.Add("goal_text4", goal_text4);
+            parameters.Add("goal4", goal4.ToString());
+            parameters.Add("goal_obj_activity4", goal_obj_activity4);
+            parameters.Add("num_of_goal5", num_of_goal5);
+            parameters.Add("goal_text5", goal_text5);
+            parameters.Add("goal5", goal5.ToString());
+            parameters.Add("setting", setting);
+
+            var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
+            return File(result.MainStream, "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf");
         }
         #endregion
     }

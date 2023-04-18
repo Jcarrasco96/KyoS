@@ -11304,7 +11304,7 @@ namespace KyoS.Web.Helpers
                                             theme.Id,
                                             theme.Name,
                                             theme.Day,
-                                            theme.Clinic.Id
+                                            0
                                         });
             }
             else

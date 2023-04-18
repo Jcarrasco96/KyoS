@@ -6052,15 +6052,23 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.NoteP.Schema == Common.Enums.SchemaType.Schema3)
                     {
-                        Stream stream = _reportHelper.FloridaSocialHSNoteReportSchema3(item);
+                        Stream stream;
+                        if (!item.SharedSession)
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3(item);
+                        else
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(item);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{item.Client.Name}.pdf"));
-                    }
+                    }                    
                 }
                 if (item.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
                 {
                     if (item.NoteP.Schema == Common.Enums.SchemaType.Schema3)
                     {
-                        Stream stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(item);
+                        Stream stream;
+                        if (!item.SharedSession)
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(item);
+                        else
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(item);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{item.Client.Name}.pdf"));
                     }
                 }
@@ -6068,7 +6076,11 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.NoteP.Schema == Common.Enums.SchemaType.Schema3)
                     {
-                        Stream stream = _reportHelper.CommunityHTCNoteReportSchema3(item);
+                        Stream stream;
+                        if (!item.SharedSession)
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3(item);
+                        else
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3SS(item);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{item.Client.Name}.pdf"));
                     }
                 }
