@@ -4,7 +4,7 @@
 }
 
 <div class="row">
-    <form asp-action="PaymentReceivedClientMTP" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPaymentReceived(this);">
+    <form asp-action="PaymentReceivedClientBIO" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPaymentReceived(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="col-md-7">
