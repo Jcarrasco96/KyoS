@@ -320,7 +320,8 @@ namespace KyoS.Web.Controllers
                         ForHowLong = "",
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
-                        AdmissionedFor = user_logged.FullName
+                        AdmissionedFor = user_logged.FullName,
+                        CodeBill = user_logged.Clinic.CodeBIO
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
