@@ -14310,28 +14310,40 @@ namespace KyoS.Web.Controllers
                                                                .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
             if (noteGroupEntity == null)
             {
-                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
-            }
-            else
-            {
                 GroupNote2Entity noteGroup2Entity = await _context.GroupNotes2
-                                                                   .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
+                                                                  .FirstOrDefaultAsync(t => t.Workday_Client_FK == id);
                 if (noteGroup2Entity == null)
                 {
                     return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
                 }
+                else
+                {
+                    try
+                    {
+                        noteGroup2Entity.Status = aStatus;
+                        _context.GroupNotes2.Update(noteGroup2Entity);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+                    }
+                }
             }
-
-            try
+            else
             {
-                noteGroupEntity.Status = aStatus;
-                _context.GroupNotes.Update(noteGroupEntity);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    noteGroupEntity.Status = aStatus;
+                    _context.GroupNotes.Update(noteGroupEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+                }
             }
-            catch (Exception)
-            {
-                return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
-            }
+            
 
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
