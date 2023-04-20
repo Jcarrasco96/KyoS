@@ -174,6 +174,10 @@ namespace KyoS.Web.Controllers
 
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
+                                      .ThenInclude(wc => wc.GroupNote2)
+
+                                      .Include(w => w.Days)
+                                      .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Schedule)
 
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
