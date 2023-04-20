@@ -992,10 +992,7 @@ namespace KyoS.Web.Controllers
             bool reviewFars = false;
             bool individualFars = false;
             bool PSRFars = false;
-            bool GroupFars = false;
-            int admission = 1;
-            int close = 1;
-            int resto = 0;
+            bool GroupFars = false;            
 
             if (client.IndividualTherapyFacilitator != null)
             {

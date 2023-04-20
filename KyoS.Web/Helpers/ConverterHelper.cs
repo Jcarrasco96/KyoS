@@ -738,15 +738,7 @@ namespace KyoS.Web.Helpers
             }
             return model;
         }
-
-        public async Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew)
-        {
-            return new PlanEntity
-            {
-
-            };
-        }
-
+       
         public PlanViewModel ToPlanViewModel(PlanEntity planEntity)
         {
             return new PlanViewModel
@@ -1474,7 +1466,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
+        public TCMClientEntity ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
         {
             return new TCMClientEntity
             {
@@ -1490,7 +1482,6 @@ namespace KyoS.Web.Helpers
                 DataClose = model.DataClose,
                 Period = model.Period,
                 Client = model.Client
-
             };
         }
 
@@ -1580,7 +1571,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
+        public TCMDomainEntity ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
            
             return new TCMDomainEntity
@@ -1654,7 +1645,7 @@ namespace KyoS.Web.Helpers
            
         }
 
-        public async Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
+        public IntakeConsentForTreatmentEntity ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
         {
             return new IntakeConsentForTreatmentEntity
             {
@@ -1704,7 +1695,7 @@ namespace KyoS.Web.Helpers
             
         }
 
-        public async Task<IntakeConsentForReleaseEntity> ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
+        public IntakeConsentForReleaseEntity ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
         {
             return new IntakeConsentForReleaseEntity
             {
@@ -1774,7 +1765,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
+        public IntakeConsumerRightsEntity ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
         {
             return new IntakeConsumerRightsEntity
             {
@@ -1810,7 +1801,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
+        public IntakeAcknowledgementHippaEntity ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
         {
             return new IntakeAcknowledgementHippaEntity
             {
@@ -1844,7 +1835,7 @@ namespace KyoS.Web.Helpers
 
         }
         
-        public async Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
+        public IntakeAccessToServicesEntity ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
         {
             return new IntakeAccessToServicesEntity
             {
@@ -1878,7 +1869,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
+        public IntakeOrientationChecklistEntity ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
         {
             return new IntakeOrientationChecklistEntity
             {
@@ -2033,7 +2024,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew)
+        public IntakeTransportationEntity ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew)
         {
             return new IntakeTransportationEntity
             {
@@ -2067,7 +2058,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
+        public IntakeConsentPhotographEntity ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
         {
             return new IntakeConsentPhotographEntity
             {
@@ -2089,7 +2080,6 @@ namespace KyoS.Web.Helpers
                 Markrting = model.Markrting,
                 ByTODocument = model.ByTODocument,
                 AdmissionedFor = model.AdmissionedFor
-
             };
         }
 
@@ -2198,7 +2188,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
+        public TCMServicePlanReviewDomainEntity ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanReviewDomainEntity
             {
@@ -2314,7 +2304,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeFeeAgreementEntity> ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew)
+        public IntakeFeeAgreementEntity ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew)
         {
             return new IntakeFeeAgreementEntity
             {
@@ -2349,7 +2339,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
+        public IntakeTuberculosisEntity ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
         {
             return new IntakeTuberculosisEntity
             {
@@ -2437,7 +2427,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
+        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
         {
             return new IntakeMedicalHistoryEntity
             {
@@ -3756,7 +3746,7 @@ namespace KyoS.Web.Helpers
                 StausCitizen = model.StausCitizen,
                 YearEnterUsa = model.YearEnterUsa,
                 IdResidentialStatus = Convert.ToInt32(model.ResidentialStatus),
-                ResidentialStatus = _combosHelper.GetComboResidential(),
+                ResidentialStatusList = _combosHelper.GetComboResidential(),
                 PCP_Name = model.PCP_Name,
                 PCP_Address = model.PCP_Address,
                 PCP_Phone = model.PCP_Phone,
@@ -3767,11 +3757,10 @@ namespace KyoS.Web.Helpers
                 Psychiatrist_Address = model.Psychiatrist_Address,
                 Psychiatrist_Phone = model.Psychiatrist_Phone,
                 Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
-
             };
         }
 
-        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
+        public TCMIntakeConsentForTreatmentEntity ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForTreatmentEntity
             {
@@ -3794,7 +3783,6 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 Underestand = model.Underestand,
                 AdmissionedFor = model.AdmissionedFor
-
             };
         }
 
@@ -3910,12 +3898,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
+        public TCMIntakeConsumerRightsEntity ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsumerRightsEntity
             {
@@ -3960,7 +3946,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
+        public TCMIntakeAcknowledgementHippaEntity ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAcknowledgementHippaEntity
             {
@@ -3997,12 +3983,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
+        public TCMIntakeOrientationChecklistEntity ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeOrientationChecklistEntity
             {
@@ -4085,12 +4069,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
+        public TCMIntakeAdvancedDirectiveEntity ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAdvancedDirectiveEntity
             {
@@ -4135,7 +4117,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
+        public TCMIntakeForeignLanguageEntity ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeForeignLanguageEntity
             {
@@ -4172,12 +4154,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
+        public TCMIntakeWelcomeEntity ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeWelcomeEntity
             {
@@ -4190,7 +4170,6 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date
-
             };
         }
 
@@ -4208,12 +4187,11 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
 
-        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
+        public TCMIntakeNonClinicalLogEntity ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeNonClinicalLogEntity
             {
@@ -4227,7 +4205,6 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
                 DateActivity = model.DateActivity
-
             };
         }
 
@@ -4246,12 +4223,11 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
 
-        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
+        public TCMIntakeMiniMentalEntity ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeMiniMentalEntity
             {
@@ -4277,7 +4253,6 @@ namespace KyoS.Web.Helpers
                 RegistrationName = model.RegistrationName,
                 TotalScore = model.TotalScore,
                 Trials = model.Trials
-
             };
         }
 
@@ -4309,10 +4284,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-
         }
 
-        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
+        public TCMIntakeCoordinationCareEntity ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeCoordinationCareEntity
             {
@@ -4342,7 +4316,6 @@ namespace KyoS.Web.Helpers
                 PCP = model.PCP,
                 Specialist = model.Specialist,
                 SpecialistText = model.SpecialistText
-
             };
         }
 
@@ -4377,7 +4350,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
@@ -4421,7 +4393,6 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-
         }
 
         public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew, string userId)
@@ -4446,7 +4417,6 @@ namespace KyoS.Web.Helpers
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
                 TcmSupervisor = model.TcmSupervisor
-
             };
 
             return salida;
@@ -4478,7 +4448,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
+        public TCMIntakeInterventionLogEntity ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
         {
             TCMIntakeInterventionLogEntity salida;
             salida = new TCMIntakeInterventionLogEntity
@@ -4489,8 +4459,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient_FK = model.TcmClient_FK,
-                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
-                
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()                
             };
 
             return salida;
@@ -4544,7 +4513,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
@@ -6016,7 +5984,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<GoalsTempEntity> ToGoalTempEntity(GoalsTempViewModel model, bool isNew)
+        public GoalsTempEntity ToGoalTempEntity(GoalsTempViewModel model, bool isNew)
         {
             return new GoalsTempEntity
             {

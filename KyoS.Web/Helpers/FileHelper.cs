@@ -25,5 +25,11 @@ namespace KyoS.Web.Helpers
                 return ms.ToArray();
             }
         }
+
+        public byte[] FileToByteArray(string filePath)
+        {
+            byte[] fileByteArray = File.ReadAllBytes(filePath);
+            return fileByteArray;
+        }
     }
 }

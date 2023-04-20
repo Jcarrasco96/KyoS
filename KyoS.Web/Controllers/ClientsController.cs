@@ -2891,7 +2891,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Doc.zip");
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Documents.zip");
         }
 
         [Authorize(Roles = "Manager")]
@@ -3158,6 +3158,34 @@ namespace KyoS.Web.Controllers
             }
 
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Notes.zip");
+        }
+
+        public async Task<IActionResult> DownloadDocumentationUploadedByUser(int id)
+        {
+            ClientEntity client = await _context.Clients
+
+                                                .Include(c => c.Documents)                                       
+
+                                                .FirstOrDefaultAsync(c => (c.Id == id));
+
+            if (client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            string path;
+            foreach (var document in client.Documents)
+            {
+                try
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(document.FileUrl)}");
+                    fileContentList.Add(File(_fileHelper.FileToByteArray(path), _mimeType.GetMimeType(document.FileName), document.FileName));
+                }
+                finally { }
+            }            
+            
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Documents uploaded by user.zip");
         }
 
         #region Utils

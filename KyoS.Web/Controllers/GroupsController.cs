@@ -1266,7 +1266,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> CreateIndividualGroup(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
+        public IActionResult CreateIndividualGroup(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
         {
             if (id == 1)
             {

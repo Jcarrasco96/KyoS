@@ -450,7 +450,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
+                IntakeConsentForTreatmentEntity IntakeConsentEntity = _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
                 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -570,7 +570,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForReleaseEntity(IntakeViewModel, false);
+                IntakeConsentForReleaseEntity IntakeConsentEntity = _converterHelper.ToIntakeConsentForReleaseEntity(IntakeViewModel, false);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -672,7 +672,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToIntakeConsumerRightsEntity(IntakeViewModel, false);
+                IntakeConsumerRightsEntity IntakeConsumerEntity = _converterHelper.ToIntakeConsumerRightsEntity(IntakeViewModel, false);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -886,7 +886,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
 
                 if (IntakeAckNowEntity.Id == 0)
                 {
@@ -988,7 +988,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeAccessToServicesEntity IntakeAccessEntity = await _converterHelper.ToIntakeAccessToServicesEntity(IntakeViewModel, false);
+                IntakeAccessToServicesEntity IntakeAccessEntity = _converterHelper.ToIntakeAccessToServicesEntity(IntakeViewModel, false);
 
                 if (IntakeAccessEntity.Id == 0)
                 {
@@ -1110,7 +1110,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToIntakeOrientationChecklistEntity(IntakeViewModel, false);
+                IntakeOrientationChecklistEntity IntakeOrientationEntity = _converterHelper.ToIntakeOrientationChecklistEntity(IntakeViewModel, false);
 
                 if (IntakeOrientationEntity.Id == 0)
                 {
@@ -1210,7 +1210,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeTransportationEntity IntakeTransportationEntity = await _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
+                IntakeTransportationEntity IntakeTransportationEntity = _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
 
                 if (IntakeTransportationEntity.Id == 0)
                 {
@@ -1321,7 +1321,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentPhotographEntity IntakeConsentPhotographEntity = await _converterHelper.ToIntakeConsentPhotographEntity(IntakeViewModel, false);
+                IntakeConsentPhotographEntity IntakeConsentPhotographEntity = _converterHelper.ToIntakeConsentPhotographEntity(IntakeViewModel, false);
 
                 if (IntakeConsentPhotographEntity.Id == 0)
                 {
@@ -1421,7 +1421,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeFeeAgreementEntity IntakefeeAgreementEntity = await _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
+                IntakeFeeAgreementEntity IntakefeeAgreementEntity = _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
 
                 if (IntakefeeAgreementEntity.Id == 0)
                 {
@@ -1548,7 +1548,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeTuberculosisEntity IntakeTuberculosisEntity = await _converterHelper.ToIntakeTuberculosisEntity(IntakeViewModel, false);
+                IntakeTuberculosisEntity IntakeTuberculosisEntity = _converterHelper.ToIntakeTuberculosisEntity(IntakeViewModel, false);
 
                 if (IntakeTuberculosisEntity.Id == 0)
                 {
@@ -1794,7 +1794,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = await _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
 
                 if (IntakeMedicalHistoryEntity.Id == 0)
                 {

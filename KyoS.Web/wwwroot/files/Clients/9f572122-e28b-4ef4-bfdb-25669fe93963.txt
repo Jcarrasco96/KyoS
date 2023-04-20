@@ -1,0 +1,2 @@
+[http]
+	proxy = http://oscarh:Cedai+2022*@proxy.cedai.com.cu:8080

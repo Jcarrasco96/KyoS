@@ -1157,9 +1157,7 @@ namespace KyoS.Web.Controllers
                 }
                
 
-            }
-
-            return true;
+            }            
         }
         #endregion
     }
