@@ -5,6 +5,7 @@ namespace KyoS.Web.Helpers
 {
     public interface IFileHelper
     {
-        public byte[] Zip(List<FileContentResult> fileContentList);        
+        public byte[] Zip(List<FileContentResult> fileContentList);
+        public byte[] FileToByteArray(string filePath);
     }
 }

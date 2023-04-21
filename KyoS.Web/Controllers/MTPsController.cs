@@ -2001,8 +2001,7 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
                     model.Goal = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });
-                    return View(model);
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });                    
                 }
 
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
@@ -4061,7 +4060,7 @@ namespace KyoS.Web.Controllers
                     //return View(model);
                 }
                
-                GoalsTempEntity goalTempEntity = await _converterHelper.ToGoalTempEntity(model, true);
+                GoalsTempEntity goalTempEntity = _converterHelper.ToGoalTempEntity(model, true);
                 _context.Add(goalTempEntity);
                 try
                 {
@@ -4163,7 +4162,7 @@ namespace KyoS.Web.Controllers
                     //return View(model);
                 }
 
-                GoalsTempEntity goalEntity = await _converterHelper.ToGoalTempEntity(model, false);
+                GoalsTempEntity goalEntity = _converterHelper.ToGoalTempEntity(model, false);
                 _context.Update(goalEntity);
                 try
                 {
@@ -4573,7 +4572,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> AuditMtp()
+        public IActionResult AuditMtp()
         {
             UserEntity user_logged = _context.Users
 

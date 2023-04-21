@@ -77,7 +77,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
-        public async Task<IActionResult> Create(int id = 0)
+        public IActionResult Create(int id = 0)
         {
             if (id == 1)
             {
@@ -141,7 +141,7 @@ namespace KyoS.Web.Controllers
                     if (tcmClient == null)
                     {
                         model.DataClose = model.DataOpen.AddMonths(model.Period);
-                        tcmClient = await _converterHelper.ToTCMClientEntity(model, true, user_logged.UserName);
+                        tcmClient = _converterHelper.ToTCMClientEntity(model, true, user_logged.UserName);
                         _context.Add(tcmClient);
                         try
                         {
@@ -304,7 +304,7 @@ namespace KyoS.Web.Controllers
                         else
                             model.DataClose = model.DataOpen.AddMonths(model.Period);
 
-                        TCMClientEntity tcmClient = await _converterHelper.ToTCMClientEntity(model, false, user_logged.UserName);
+                        TCMClientEntity tcmClient = _converterHelper.ToTCMClientEntity(model, false, user_logged.UserName);
                         _context.TCMClient.Update(tcmClient);
                         try
                         {

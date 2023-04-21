@@ -201,7 +201,7 @@ namespace KyoS.Web.Controllers
                         Other_Phone = "",
                         PrimarySourceIncome = "",
                         IdResidentialStatus = 0,
-                        ResidentialStatus = _combosHelper.GetComboResidential(),
+                        ResidentialStatusList = _combosHelper.GetComboResidential(),
                         School = "",
                         School_EBD = false,
                         School_ESE = false,
@@ -316,7 +316,7 @@ namespace KyoS.Web.Controllers
                 Other_Phone = "",
                 PrimarySourceIncome = "",
                 IdResidentialStatus = 0,
-                ResidentialStatus = _combosHelper.GetComboResidential(),
+                ResidentialStatusList = _combosHelper.GetComboResidential(),
                 School = "",
                 School_EBD = false,
                 School_ESE = false,
@@ -965,7 +965,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeConsentForTreatmentEntity IntakeConsentEntity = _converterHelper.ToTCMIntakeConsentForTreatmentEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -1189,7 +1189,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeConsumerRightsEntity IntakeConsumerEntity = _converterHelper.ToTCMIntakeConsumerRightsEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -1298,7 +1298,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeAcknowledgementHippaEntity IntakeAckNowEntity = _converterHelper.ToTCMIntakeAcknoewledgementHippaEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeAckNowEntity.Id == 0)
                 {
@@ -1427,7 +1427,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeOrientationChecklistEntity IntakeOrientationEntity = _converterHelper.ToTCMIntakeOrientationChecklistEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeOrientationEntity.Id == 0)
                 {
@@ -1547,7 +1547,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeAdvancedDirectiveEntity IntakeAdvancedDirectiveEntity = await _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeAdvancedDirectiveEntity IntakeAdvancedDirectiveEntity = _converterHelper.ToTCMIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeAdvancedDirectiveEntity.Id == 0)
                 {
@@ -1785,7 +1785,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeForeignLanguageEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeForeignLanguageEntity IntakeForeignEntity = _converterHelper.ToTCMIntakeForeignLanguageEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -1896,7 +1896,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeWelcomeEntity IntakeForeignEntity = await _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeWelcomeEntity IntakeForeignEntity = _converterHelper.ToTCMIntakeWelcomeEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeForeignEntity.Id == 0)
                 {
@@ -2125,7 +2125,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeFeeAgreementEntity IntakefeeAgreementEntity = await _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
+                IntakeFeeAgreementEntity IntakefeeAgreementEntity = _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
 
                 if (IntakefeeAgreementEntity.Id == 0)
                 {
@@ -2235,7 +2235,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = await _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeNonClinicalLogEntity IntakeNonClinicalEntity = _converterHelper.ToTCMIntakeNonClinicalLogEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeNonClinicalEntity.Id == 0)
                 {
@@ -2345,7 +2345,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = await _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeMiniMentalEntity IntakeMiniMenatalEntity = _converterHelper.ToTCMIntakeMiniMenatalEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeMiniMenatalEntity.Id == 0)
                 {
@@ -2597,7 +2597,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = await _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
 
                 if (IntakeMedicalHistoryEntity.Id == 0)
                 {
@@ -2957,7 +2957,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeCoordinationCareEntity IntakeCoordination = await _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeCoordinationCareEntity IntakeCoordination = _converterHelper.ToTCMIntakeCoordinationCareEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (intake != null)
                 {
@@ -3324,7 +3324,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeInterventionLogEntity InterventionLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true, user_logged.UserName);
+                TCMIntakeInterventionLogEntity InterventionLogEntity = _converterHelper.ToTCMIntakeInterventionLogEntity(interventionLogViewModel, true, user_logged.UserName);
 
                 _context.TCMIntakeInterventionLog.Add(InterventionLogEntity);
                 try
@@ -3394,7 +3394,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMIntakeInterventionLogEntity tcmInterLogEntity = await _converterHelper.ToTCMIntakeInterventionLogEntity(tcmInterLogViewModel, false, user_logged.UserName);
+                TCMIntakeInterventionLogEntity tcmInterLogEntity = _converterHelper.ToTCMIntakeInterventionLogEntity(tcmInterLogViewModel, false, user_logged.UserName);
                 _context.TCMIntakeInterventionLog.Update(tcmInterLogEntity);
                 try
                 {

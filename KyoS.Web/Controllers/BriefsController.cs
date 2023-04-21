@@ -102,8 +102,7 @@ namespace KyoS.Web.Controllers
                                            .ToListAsync();
                 }
                 return View(client);
-            }
-            return RedirectToAction("NotAuthorized", "Account");
+            }            
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]

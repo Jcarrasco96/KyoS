@@ -4370,16 +4370,13 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(FinishEditingGroup2), new { id = id, origin = origin });
             }
 
-            bool exist = false;
-            bool complete = true;
+            bool exist = false;            
             string gender_problems = string.Empty;
             int index = 1;
             foreach (GroupNote_Activity item in note.GroupNotes_Activities)
             {
                 if (item.Objetive != null)
                     exist = true;
-                if (string.IsNullOrEmpty(item.AnswerClient) || string.IsNullOrEmpty(item.AnswerFacilitator))
-                    complete = false;
                 if (!string.IsNullOrEmpty(item.AnswerClient))
                 {
                     if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
@@ -4444,16 +4441,13 @@ namespace KyoS.Web.Controllers
 
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            bool exist = false;
-            bool complete = true;
+            bool exist = false;            
             string gender_problems = string.Empty;
             int index = 1;
             foreach (GroupNote2_Activity item in note.GroupNotes2_Activities)
             {
                 if (item.Objetive != null)
-                    exist = true;
-                if (string.IsNullOrEmpty(item.AnswerClient) || string.IsNullOrEmpty(item.AnswerFacilitator))
-                    complete = false;
+                    exist = true;                
                 if (!string.IsNullOrEmpty(item.AnswerClient))
                 {
                     if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
@@ -4986,17 +4980,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            bool am = false;
-            bool pm = false;
+            bool am = false;            
 
             if (note.Workday_Cient.Session == "AM")
             {
                 am = true;
-            }
-            else
-            {
-                pm = true;
-            }
+            }           
 
             NotePViewModel noteViewModel = null;
 
@@ -13423,9 +13412,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-            }
-
-            return true;
+            }           
         }
         #endregion
 
@@ -14367,7 +14354,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            DateTime date = new DateTime();
             List<AuditGroups> auditGroup = new List<AuditGroups>();
             AuditGroups auditGroup_Temp = new AuditGroups();
 
@@ -14616,7 +14602,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> ViewAllGoals(int idMtp = 0)
+        public IActionResult ViewAllGoals(int idMtp = 0)
         {
             UserEntity user_logged = _context.Users
 

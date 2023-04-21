@@ -48,7 +48,7 @@ namespace KyoS.Web.Models
 
         [Display(Name = "Residential Status")]
         public int IdResidentialStatus { get; set; }
-        public IEnumerable<SelectListItem> ResidentialStatus { get; set; }
+        public IEnumerable<SelectListItem> ResidentialStatusList { get; set; }
 
         [Display(Name = "Employed Status")]
         public int IdEmployedStatus { get; set; }
