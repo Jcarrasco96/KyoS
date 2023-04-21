@@ -198,17 +198,26 @@ namespace KyoS.Web.Controllers
                 ViewBag.ExpiredMTPsFacilitator = count.ToString();
 
                 List<ClientEntity> clientListPSR = await _context.Clients
-                                                                  .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.PSR).ToList().Count == 0) 
-                                                                             && m.Clinic.Id == user_logged.Clinic.Id
-                                                                             && m.Status == StatusType.Close && m.IdFacilitatorPSR == facilitator.Id)).ToListAsync();
+                                                                  .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                            && m.Status == StatusType.Close
+                                                                            && m.IdFacilitatorPSR == facilitator.Id
+                                                                            && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
+                                                                            && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0))
+                                                                 .ToListAsync();
                 List<ClientEntity> clientListIND = await _context.Clients
-                                                                 .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Individual).ToList().Count == 0)
-                                                                            && m.Clinic.Id == user_logged.Clinic.Id
-                                                                            && m.Status == StatusType.Close && m.IndividualTherapyFacilitator.Id == facilitator.Id)).ToListAsync();
+                                                                 .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                           && m.Status == StatusType.Close
+                                                                           && m.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                                           && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0
+                                                                           && m.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0))
+                                                                 .ToListAsync();
                 List<ClientEntity> clientListGroup = await _context.Clients
-                                                                  .Where(m => ((m.DischargeList.Count() == 0 || m.DischargeList.Where(n => n.TypeService == ServiceType.Group).ToList().Count == 0)
-                                                                             && m.Clinic.Id == user_logged.Clinic.Id
-                                                                             && m.Status == StatusType.Close && m.IdFacilitatorGroup == facilitator.Id)).ToListAsync();
+                                                                  .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                             && m.Status == StatusType.Close
+                                                                             && m.IdFacilitatorGroup == facilitator.Id
+                                                                             && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0
+                                                                             && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0))
+                                                                   .ToListAsync();
 
                 ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
 
