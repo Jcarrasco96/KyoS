@@ -987,17 +987,11 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtp = new MTPEntity();
             List<MTPReviewEntity> review = new List<MTPReviewEntity>();
-            int individualTherapy = 0;
             bool initialFars = false;
             bool reviewFars = false;
             bool individualFars = false;
             bool PSRFars = false;
             bool GroupFars = false;            
-
-            if (client.IndividualTherapyFacilitator != null)
-            {
-                individualTherapy = 1;
-            }
            
             mtp = client.MTPs.FirstOrDefault(n => n.Active == true);
             review = mtp.MtpReviewList;
@@ -1026,7 +1020,7 @@ namespace KyoS.Web.Controllers
 
             }
 
-            if (review.Count() == client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
+            if (review.Count() <= client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
             {
                 reviewFars = true;
             }
@@ -1047,48 +1041,49 @@ namespace KyoS.Web.Controllers
                 auditClient.NameClient = client.Name;
                 auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
                 auditClient.Description = "Missing FARS MTPR";
+                auditClient.Responsible = _context.MTPReviews.FirstOrDefault(n => n.Mtp.Client.Id == id).Therapist;
                 auditClient.Active = 0;
 
                 auditClient_List.Add(auditClient);
                 auditClient = new AuditFARS();
             }
 
-            if (individualTherapy > 0 && individualFars == false)
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.Individual) > 0 && individualFars == false)
             {
                 auditClient.NameClient = client.Name;
                 auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
                 auditClient.Description = "Missing FARS Discharge_Ind";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.Individual && n.Client.Id == id).AdmissionedFor;
                 auditClient.Active = 0;
 
                 auditClient_List.Add(auditClient);
                 auditClient = new AuditFARS();
             }
 
-            if (client.Status == StatusType.Close)
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.PSR) > 0 && PSRFars == false)
             {
-                if (client.Workdays_Clients.Count(n => n.Workday.Service == ServiceType.PSR) > 0 && PSRFars == false)
-                {
-                    auditClient.NameClient = client.Name;
-                    auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
-                    auditClient.Description = "Missing FARS Discharge_PSR";
-                    auditClient.Active = 0;
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_PSR";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.PSR && n.Client.Id == id).AdmissionedFor;
+                auditClient.Active = 0;
 
-                    auditClient_List.Add(auditClient);
-                    auditClient = new AuditFARS();
-                }
-
-                if (client.Workdays_Clients.Count(n => n.Workday.Service == ServiceType.Group) > 0 && GroupFars == false)
-                {
-                    auditClient.NameClient = client.Name;
-                    auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
-                    auditClient.Description = "Missing FARS Discharge_Group";
-                    auditClient.Active = 0;
-
-                    auditClient_List.Add(auditClient);
-                    auditClient = new AuditFARS();
-                }
-               
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
             }
+
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.Group) > 0 && GroupFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_Group";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.Group && n.Client.Id == id).AdmissionedFor;
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
 
             return View(auditClient_List);
         }
