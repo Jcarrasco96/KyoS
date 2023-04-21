@@ -461,6 +461,27 @@ namespace KyoS.Web.Controllers
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
                                                                  && n.OnlyTCM == false).ToString();
+
+                    List<ClientEntity> clientListPSR = await _context.Clients
+                                                                 .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                           && m.Status == StatusType.Close
+                                                                           && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
+                                                                           && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0))
+                                                                .ToListAsync();
+                    List<ClientEntity> clientListIND = await _context.Clients
+                                                                     .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                               && m.Status == StatusType.Close
+                                                                               && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0
+                                                                               && m.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0))
+                                                                     .ToListAsync();
+                    List<ClientEntity> clientListGroup = await _context.Clients
+                                                                      .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                                 && m.Status == StatusType.Close
+                                                                                 && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0
+                                                                                 && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0))
+                                                                       .ToListAsync();
+
+                    ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
                 }          
 
                 //TCM Dashboard
