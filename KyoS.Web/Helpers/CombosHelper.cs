@@ -279,7 +279,7 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator)
+        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday)
         {
             List<ClientEntity> clients = _context.Clients
                                                  .Include(n => n.DischargeList)
@@ -295,6 +295,10 @@ namespace KyoS.Web.Helpers
                                                             .Where(wc => (wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Individual))
                                                             .ToList();
 
+            Workday_Client workday_client = _context.Workdays_Clients
+                                                    .Include(n => n.Workday)
+                                                    .FirstOrDefault(n => n.Id == idWorkday);
+
             foreach (var item in workdays_clients)
             {
                 if (item.Client != null)
@@ -305,7 +309,12 @@ namespace KyoS.Web.Helpers
                 }
             }
 
-            clients = clients.Where(n => n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0).OrderBy(n => n.Name).ToList();
+            clients = clients.Where(n => (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual
+                                                                 && d.DateDischarge > workday_client.Workday.Date).Count() > 0
+                                      || n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0)
+                                      && n.AdmisionDate < workday_client.Workday.Date)
+                             .OrderBy(n => n.Name)
+                             .ToList();
 
             List<SelectListItem> list = clients.Select(c => new SelectListItem
                                                 {

@@ -2150,7 +2150,7 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
                     Workday_Cient = workday_Client,
-                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id),
+                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id),
                     IdClient = 0,
                     MTPId = 0,
                     CodeBill = user_logged.Clinic.CodeIndTherapy
