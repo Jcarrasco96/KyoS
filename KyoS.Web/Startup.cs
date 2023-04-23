@@ -51,7 +51,7 @@ namespace KyoS.Web
             //db connection
             services.AddDbContext<DataContext>(cfg =>
             {
-                cfg.UseSqlServer(Configuration.GetConnectionString("KyoSConnection"));
+                cfg.UseSqlServer(Configuration.GetConnectionString("KyoSConnection"));                
             });
 
             //session variables

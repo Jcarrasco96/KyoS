@@ -96,7 +96,8 @@
                                     </td>                                    
                                     <td align="right">
                                         <a onclick="ShowAlert(@item.Id)" class="btn btn-warning" title="Download documents generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Doc. </a>
-                                        <a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
+                                        @*<a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>*@
+                                        <a onclick="ShowAlert4(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
                                         <a onclick="ShowAlert3(@item.Id)" class="btn btn-default" title="Download documents uploaded by the user to the system"><i class="glyphicon glyphicon-download-alt"></i> User Doc.</a>
                                     </td>                                    
                                 </tr>
@@ -146,7 +147,8 @@
                                     </td>
                                     <td align="right">
                                         <a onclick="ShowAlert(@item.Id)" class="btn btn-warning" title="Download documents generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Doc.</a>
-                                        <a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
+                                        @*<a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>*@
+                                        <a onclick="ShowAlert4(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
                                         <a onclick="ShowAlert3(@item.Id)" class="btn btn-default" title="Download documents uploaded by the user to the system"><i class="glyphicon glyphicon-download-alt"></i> User Doc.</a>
                                     </td>
                                 </tr>
@@ -220,6 +222,23 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var url = "@Url.Action("DownloadDocumentationUploadedByUser", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ShowAlert4(e) {
+            Swal.fire({
+                title: 'Do you want to do this?',
+                text: " Download client's approved notes will take a few minutes.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#5cb85c',
+                confirmButtonText: 'Yes, I do!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DownloadApprovedNotesSimultaneous", "Clients")";
                     window.location.href = url + '/' + e;
                 }
             });

@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using KyoS.Web.Data.Contracts;
 using KyoS.Common.Helpers;
 using AspNetCore.Reporting;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace KyoS.Web.Controllers
 {
@@ -32,8 +32,10 @@ namespace KyoS.Web.Controllers
         private readonly IFileHelper _fileHelper;
         private readonly IReportHelper _reportHelper;
         private readonly IWebHostEnvironment _webhostEnvironment;
+        
+        public IConfiguration Configuration { get; }
 
-        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper, IReportHelper reportHelper, IWebHostEnvironment webHostEnvironment)
+        public ClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper, IReportHelper reportHelper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -45,6 +47,7 @@ namespace KyoS.Web.Controllers
             _fileHelper = fileHelper;
             _reportHelper = reportHelper;
             _webhostEnvironment = webHostEnvironment;
+            Configuration = configuration;
         }
         
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
@@ -2894,8 +2897,274 @@ namespace KyoS.Web.Controllers
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Documents.zip");
         }
 
+        //[Authorize(Roles = "Manager")]
+        //public async Task<IActionResult> DownloadApprovedNotes(int id)
+        //{
+        //    ClientEntity client = await _context.Clients
+        //                                        .FirstOrDefaultAsync(c => c.Id == id);
+
+        //    if (client == null)
+        //    {
+        //        return RedirectToAction("Home/Error404");
+        //    }
+
+        //    //PSR schema 1, 2 y 4
+        //    List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+
+        //                                                           .Include(wc => wc.Facilitator)
+
+        //                                                           .Include(wc => wc.Client)
+        //                                                                .ThenInclude(c => c.MTPs)
+        //                                                                    .ThenInclude(m => m.Goals)
+        //                                                                        .ThenInclude(g => g.Objetives)
+
+        //                                                           .Include(wc => wc.Client)
+        //                                                                .ThenInclude(c => c.Clients_Diagnostics)
+        //                                                                    .ThenInclude(cd => cd.Diagnostic)
+
+        //                                                           .Include(wc => wc.Note)
+        //                                                                .ThenInclude(n => n.Supervisor)
+        //                                                                    .ThenInclude(s => s.Clinic)
+
+        //                                                           .Include(wc => wc.Note)
+        //                                                                .ThenInclude(n => n.Notes_Activities)
+        //                                                                    .ThenInclude(na => na.Activity)
+        //                                                                        .ThenInclude(a => a.Theme)
+
+        //                                                           .Include(wc => wc.Note)
+        //                                                                .ThenInclude(n => n.Notes_Activities)
+        //                                                                    .ThenInclude(na => na.Objetive)
+        //                                                                        .ThenInclude(o => o.Goal)
+
+        //                                                           .Include(wc => wc.Workday)
+
+        //                                                           .Where(wc => (wc.Client.Id == id && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
+        //                                                           .ToListAsync();
+            
+        //    List<FileContentResult> fileContentList = new List<FileContentResult>();
+        //    Stream stream = null;
+
+        //    foreach (var workdayClient in workdayClientList)
+        //    {
+        //        if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
+        //        {
+        //            if (workdayClient.Note.Schema == SchemaType.Schema1)
+        //            {
+        //                fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
+        //            }
+        //            if (workdayClient.Note.Schema == SchemaType.Schema4)
+        //            {
+        //                stream = _reportHelper.DavilaNoteReportSchema4(workdayClient);
+        //                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //            }                    
+        //        }
+        //        if (workdayClient.Note.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+        //        {
+        //            fileContentList.Add(FloridaSocialHSNoteReportFCRSchema2(workdayClient));
+        //        }
+        //    }
+
+        //    //PSR schema 3
+        //    workdayClientList = await _context.Workdays_Clients
+
+        //                                      .Include(wc => wc.Facilitator)
+
+        //                                      .Include(wc => wc.Client)
+
+        //                                      .Include(wc => wc.NoteP)
+        //                                        .ThenInclude(n => n.Supervisor)
+        //                                            .ThenInclude(s => s.Clinic)
+
+        //                                      .Include(wc => wc.NoteP)
+        //                                        .ThenInclude(n => n.NotesP_Activities)
+        //                                            .ThenInclude(na => na.Activity)
+        //                                                .ThenInclude(a => a.Theme)
+
+        //                                      .Include(wc => wc.NoteP)
+        //                                        .ThenInclude(n => n.NotesP_Activities)
+        //                                            .ThenInclude(na => na.Objetive)
+        //                                                .ThenInclude(o => o.Goal)
+
+        //                                      .Include(wc => wc.Workday)
+        //                                        .ThenInclude(w => w.Workdays_Activities_Facilitators)
+        //                                            .ThenInclude(waf => waf.Facilitator)
+
+        //                                      .Where(wc => (wc.Client.Id == id && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
+        //                                      .ToListAsync();
+
+        //    foreach (var workdayClient in workdayClientList)
+        //    {
+        //        if (workdayClient.NoteP.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+        //        {
+        //            if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+        //            {                        
+        //                if (!workdayClient.SharedSession)
+        //                    stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
+        //                else
+        //                    stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(workdayClient);
+        //                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //            }
+        //        }
+        //        if (workdayClient.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+        //        {
+        //            if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+        //            {
+        //                if (!workdayClient.SharedSession)
+        //                    stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+        //                else
+        //                    stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(workdayClient);
+        //                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //            }
+        //        }
+        //        if (workdayClient.NoteP.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+        //        {
+        //            if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+        //            {
+        //                if (!workdayClient.SharedSession)
+        //                    stream = _reportHelper.CommunityHTCNoteReportSchema3(workdayClient);
+        //                else
+        //                    stream = _reportHelper.CommunityHTCNoteReportSchema3SS(workdayClient);
+        //                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //            }
+        //        }
+        //    }
+
+        //    //Group schema 1
+        //    workdayClientList = await _context.Workdays_Clients
+
+        //                                      .Include(wc => wc.Facilitator)
+
+        //                                      .Include(wc => wc.Client)
+        //                                          .ThenInclude(c => c.MTPs)
+        //                                              .ThenInclude(m => m.Goals)
+        //                                                  .ThenInclude(g => g.Objetives)
+
+        //                                      .Include(wc => wc.GroupNote)
+        //                                          .ThenInclude(n => n.Supervisor)
+        //                                              .ThenInclude(s => s.Clinic)
+
+        //                                      .Include(wc => wc.GroupNote)
+        //                                          .ThenInclude(n => n.GroupNotes_Activities)
+        //                                              .ThenInclude(na => na.Activity)
+        //                                                  .ThenInclude(a => a.Theme)
+
+        //                                      .Include(wc => wc.GroupNote)
+        //                                          .ThenInclude(n => n.GroupNotes_Activities)
+        //                                              .ThenInclude(na => na.Objetive)
+        //                                                  .ThenInclude(o => o.Goal)
+
+        //                                      .Include(wc => wc.Workday)
+
+        //                                      .Where(wc => (wc.Client.Id == id && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
+        //                                      .ToListAsync();
+
+        //    foreach (var workdayClient in workdayClientList)
+        //    {
+        //        if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")                
+        //            stream = _reportHelper.DavilaGroupNoteReportSchema1(workdayClient);                    
+                
+        //        if (workdayClient.GroupNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+        //            stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);                    
+                
+        //        if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+        //            stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);                    
+                
+        //        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //    }
+
+        //    //Group schema 2
+        //    workdayClientList = await _context.Workdays_Clients
+
+        //                                      .Include(wc => wc.Facilitator)
+
+        //                                      .Include(wc => wc.Client)
+        //                                        .ThenInclude(c => c.MTPs)
+        //                                            .ThenInclude(m => m.Goals)
+        //                                                .ThenInclude(g => g.Objetives)
+
+        //                                      .Include(wc => wc.GroupNote2)
+        //                                        .ThenInclude(n => n.Supervisor)
+        //                                            .ThenInclude(s => s.Clinic)
+
+        //                                      .Include(wc => wc.GroupNote2)
+        //                                        .ThenInclude(n => n.GroupNotes2_Activities)
+        //                                            .ThenInclude(na => na.Activity)
+        //                                                .ThenInclude(a => a.Theme)
+
+        //                                      .Include(wc => wc.GroupNote2)
+        //                                        .ThenInclude(n => n.GroupNotes2_Activities)
+        //                                            .ThenInclude(na => na.Objetive)
+        //                                                .ThenInclude(o => o.Goal)
+
+        //                                      .Include(wc => wc.Workday)
+
+        //                                      .Include(wc => wc.Schedule)
+
+        //                                      .Where(wc => (wc.Client.Id == id && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
+        //                                      .ToListAsync();
+
+        //    foreach (var workdayClient in workdayClientList)
+        //    {
+        //        if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+        //            stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+
+        //        if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+        //            stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+
+        //        if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+        //            stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);                  
+                
+        //        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //    }
+
+        //    //Individual schema 1
+        //    workdayClientList = await _context.Workdays_Clients
+
+        //                                      .Include(wc => wc.Facilitator)
+
+        //                                      .Include(wc => wc.Client)
+        //                                        .ThenInclude(c => c.MTPs)
+        //                                            .ThenInclude(m => m.Goals)
+        //                                                .ThenInclude(g => g.Objetives)
+
+        //                                      .Include(wc => wc.Client)
+        //                                        .ThenInclude(c => c.Clients_Diagnostics)
+        //                                            .ThenInclude(cd => cd.Diagnostic)
+
+        //                                      .Include(wc => wc.IndividualNote)
+        //                                        .ThenInclude(n => n.Supervisor)
+        //                                            .ThenInclude(s => s.Clinic)
+
+        //                                      .Include(wc => wc.IndividualNote)
+        //                                        .ThenInclude(n => n.Objective)
+
+        //                                      .Include(wc => wc.Workday)
+
+        //                                      .Where(wc => (wc.Client.Id == id && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
+        //                                      .ToListAsync();
+
+        //    foreach (var workdayClient in workdayClientList)
+        //    {
+        //        if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")                
+        //            stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);                    
+                
+        //        if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
+        //            stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);                    
+                
+        //        if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
+        //            stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);                   
+                
+        //        if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
+        //            stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);                    
+                
+        //        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Individual/Ind_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+        //    }
+
+        //    return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Notes.zip");
+        //}
+
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> DownloadApprovedNotes(int id)
+        public async Task<IActionResult> DownloadApprovedNotesSimultaneous(int id)
         {
             ClientEntity client = await _context.Clients
                                                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -2905,257 +3174,25 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            //PSR schema 1, 2 y 4
-            List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+            Task<List<FileContentResult>> fileContent1Task = Schemas124PSRNotes(id);
+            Task<List<FileContentResult>> fileContent2Task = Schema3PSRNotes(id);
+            Task<List<FileContentResult>> fileContent3Task = Schema1GroupNotes(id);
+            Task<List<FileContentResult>> fileContent4Task = Schema2GroupNotes(id);
+            Task<List<FileContentResult>> fileContent5Task = Schema1IndNotes(id);
 
-                                                                   .Include(wc => wc.Facilitator)
+            await Task.WhenAll(fileContent1Task, fileContent2Task, fileContent3Task, fileContent4Task, fileContent5Task);
+            var fileContent1 = await fileContent1Task;
+            var fileContent2 = await fileContent2Task;
+            var fileContent3 = await fileContent3Task;
+            var fileContent4 = await fileContent4Task;
+            var fileContent5 = await fileContent5Task;
 
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.MTPs)
-                                                                            .ThenInclude(m => m.Goals)
-                                                                                .ThenInclude(g => g.Objetives)
-
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.Clients_Diagnostics)
-                                                                            .ThenInclude(cd => cd.Diagnostic)
-
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Supervisor)
-                                                                            .ThenInclude(s => s.Clinic)
-
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Activity)
-                                                                                .ThenInclude(a => a.Theme)
-
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Objetive)
-                                                                                .ThenInclude(o => o.Goal)
-
-                                                                   .Include(wc => wc.Workday)
-
-                                                                   .Where(wc => (wc.Client.Id == id && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
-            
             List<FileContentResult> fileContentList = new List<FileContentResult>();
-            Stream stream = null;
-
-            foreach (var workdayClient in workdayClientList)
-            {
-                if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
-                {
-                    if (workdayClient.Note.Schema == SchemaType.Schema1)
-                    {
-                        fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
-                    }
-                    if (workdayClient.Note.Schema == SchemaType.Schema4)
-                    {
-                        stream = _reportHelper.DavilaNoteReportSchema4(workdayClient);
-                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-                    }                    
-                }
-                if (workdayClient.Note.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
-                {
-                    fileContentList.Add(FloridaSocialHSNoteReportFCRSchema2(workdayClient));
-                }
-            }
-
-            //PSR schema 3
-            workdayClientList = await _context.Workdays_Clients
-
-                                              .Include(wc => wc.Facilitator)
-
-                                              .Include(wc => wc.Client)
-
-                                              .Include(wc => wc.NoteP)
-                                                .ThenInclude(n => n.Supervisor)
-                                                    .ThenInclude(s => s.Clinic)
-
-                                              .Include(wc => wc.NoteP)
-                                                .ThenInclude(n => n.NotesP_Activities)
-                                                    .ThenInclude(na => na.Activity)
-                                                        .ThenInclude(a => a.Theme)
-
-                                              .Include(wc => wc.NoteP)
-                                                .ThenInclude(n => n.NotesP_Activities)
-                                                    .ThenInclude(na => na.Objetive)
-                                                        .ThenInclude(o => o.Goal)
-
-                                              .Include(wc => wc.Workday)
-                                                .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                    .ThenInclude(waf => waf.Facilitator)
-
-                                              .Where(wc => (wc.Client.Id == id && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
-                                              .ToListAsync();
-
-            foreach (var workdayClient in workdayClientList)
-            {
-                if (workdayClient.NoteP.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
-                {
-                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
-                    {                        
-                        if (!workdayClient.SharedSession)
-                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
-                        else
-                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(workdayClient);
-                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-                    }
-                }
-                if (workdayClient.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
-                {
-                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
-                    {
-                        if (!workdayClient.SharedSession)
-                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
-                        else
-                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(workdayClient);
-                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-                    }
-                }
-                if (workdayClient.NoteP.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
-                {
-                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
-                    {
-                        if (!workdayClient.SharedSession)
-                            stream = _reportHelper.CommunityHTCNoteReportSchema3(workdayClient);
-                        else
-                            stream = _reportHelper.CommunityHTCNoteReportSchema3SS(workdayClient);
-                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-                    }
-                }
-            }
-
-            //Group schema 1
-            workdayClientList = await _context.Workdays_Clients
-
-                                              .Include(wc => wc.Facilitator)
-
-                                              .Include(wc => wc.Client)
-                                                  .ThenInclude(c => c.MTPs)
-                                                      .ThenInclude(m => m.Goals)
-                                                          .ThenInclude(g => g.Objetives)
-
-                                              .Include(wc => wc.GroupNote)
-                                                  .ThenInclude(n => n.Supervisor)
-                                                      .ThenInclude(s => s.Clinic)
-
-                                              .Include(wc => wc.GroupNote)
-                                                  .ThenInclude(n => n.GroupNotes_Activities)
-                                                      .ThenInclude(na => na.Activity)
-                                                          .ThenInclude(a => a.Theme)
-
-                                              .Include(wc => wc.GroupNote)
-                                                  .ThenInclude(n => n.GroupNotes_Activities)
-                                                      .ThenInclude(na => na.Objetive)
-                                                          .ThenInclude(o => o.Goal)
-
-                                              .Include(wc => wc.Workday)
-
-                                              .Where(wc => (wc.Client.Id == id && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
-                                              .ToListAsync();
-
-            foreach (var workdayClient in workdayClientList)
-            {
-                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")                
-                    stream = _reportHelper.DavilaGroupNoteReportSchema1(workdayClient);                    
-                
-                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
-                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);                    
-                
-                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
-                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);                    
-                
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-            }
-
-            //Group schema 2
-            workdayClientList = await _context.Workdays_Clients
-
-                                              .Include(wc => wc.Facilitator)
-
-                                              .Include(wc => wc.Client)
-                                                .ThenInclude(c => c.MTPs)
-                                                    .ThenInclude(m => m.Goals)
-                                                        .ThenInclude(g => g.Objetives)
-
-                                              .Include(wc => wc.GroupNote2)
-                                                .ThenInclude(n => n.Supervisor)
-                                                    .ThenInclude(s => s.Clinic)
-
-                                              .Include(wc => wc.GroupNote2)
-                                                .ThenInclude(n => n.GroupNotes2_Activities)
-                                                    .ThenInclude(na => na.Activity)
-                                                        .ThenInclude(a => a.Theme)
-
-                                              .Include(wc => wc.GroupNote2)
-                                                .ThenInclude(n => n.GroupNotes2_Activities)
-                                                    .ThenInclude(na => na.Objetive)
-                                                        .ThenInclude(o => o.Goal)
-
-                                              .Include(wc => wc.Workday)
-
-                                              .Include(wc => wc.Schedule)
-
-                                              .Where(wc => (wc.Client.Id == id && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
-                                              .ToListAsync();
-
-            foreach (var workdayClient in workdayClientList)
-            {
-                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
-                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
-
-                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
-                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
-
-                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
-                    stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);                  
-                
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-            }
-
-            //Individual schema 1
-            workdayClientList = await _context.Workdays_Clients
-
-                                              .Include(wc => wc.Facilitator)
-
-                                              .Include(wc => wc.Client)
-                                                .ThenInclude(c => c.MTPs)
-                                                    .ThenInclude(m => m.Goals)
-                                                        .ThenInclude(g => g.Objetives)
-
-                                              .Include(wc => wc.Client)
-                                                .ThenInclude(c => c.Clients_Diagnostics)
-                                                    .ThenInclude(cd => cd.Diagnostic)
-
-                                              .Include(wc => wc.IndividualNote)
-                                                .ThenInclude(n => n.Supervisor)
-                                                    .ThenInclude(s => s.Clinic)
-
-                                              .Include(wc => wc.IndividualNote)
-                                                .ThenInclude(n => n.Objective)
-
-                                              .Include(wc => wc.Workday)
-
-                                              .Where(wc => (wc.Client.Id == id && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
-                                              .ToListAsync();
-
-            foreach (var workdayClient in workdayClientList)
-            {
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")                
-                    stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);                    
-                
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                
-                    stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);                    
-                
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")                
-                    stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);                   
-                
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                
-                    stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);                    
-                
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Individual/Ind_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
-            }
+            fileContentList.AddRange(fileContent1);
+            fileContentList.AddRange(fileContent2);
+            fileContentList.AddRange(fileContent3);
+            fileContentList.AddRange(fileContent4);
+            fileContentList.AddRange(fileContent5);
 
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Notes.zip");
         }
@@ -3219,6 +3256,306 @@ namespace KyoS.Web.Controllers
         private bool ExistMedicalHistory(ClientEntity client)
         {
             return (client.IntakeMedicalHistory != null);
+        }
+        private async Task<List<FileContentResult>> Schemas124PSRNotes(int idClient)
+        {
+            List<Workday_Client> workdayClientList = new List<Workday_Client>();
+            //PSR schema 1, 2 y 4
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                workdayClientList = await db.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+                                                                        .ThenInclude(c => c.MTPs)
+                                                                            .ThenInclude(m => m.Goals)
+                                                                                .ThenInclude(g => g.Objetives)
+
+                                                                   .Include(wc => wc.Client)
+                                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Supervisor)
+                                                                            .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Notes_Activities)
+                                                                            .ThenInclude(na => na.Activity)
+                                                                                .ThenInclude(a => a.Theme)
+
+                                                                   .Include(wc => wc.Note)
+                                                                        .ThenInclude(n => n.Notes_Activities)
+                                                                            .ThenInclude(na => na.Objetive)
+                                                                                .ThenInclude(o => o.Goal)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            }            
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.Note.Supervisor.Clinic.Name == "DAVILA")
+                {
+                    if (workdayClient.Note.Schema == SchemaType.Schema1)
+                    {
+                        fileContentList.Add(DavilaNoteReportFCRSchema1(workdayClient));
+                    }
+                    if (workdayClient.Note.Schema == SchemaType.Schema4)
+                    {
+                        stream = _reportHelper.DavilaNoteReportSchema4(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+                if (workdayClient.Note.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                {
+                    fileContentList.Add(FloridaSocialHSNoteReportFCRSchema2(workdayClient));
+                }
+            }
+
+            return fileContentList;
+        }
+        private async Task<List<FileContentResult>> Schema3PSRNotes(int idClient)
+        {
+            List<Workday_Client> workdayClientList = new List<Workday_Client>();
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                workdayClientList = await db.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+
+                                                                   .Include(wc => wc.NoteP)
+                                                                    .ThenInclude(n => n.Supervisor)
+                                                                        .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.NoteP)
+                                                                    .ThenInclude(n => n.NotesP_Activities)
+                                                                        .ThenInclude(na => na.Activity)
+                                                                            .ThenInclude(a => a.Theme)
+
+                                                                   .Include(wc => wc.NoteP)
+                                                                    .ThenInclude(n => n.NotesP_Activities)
+                                                                        .ThenInclude(na => na.Objetive)
+                                                                            .ThenInclude(o => o.Goal)
+
+                                                                   .Include(wc => wc.Workday)
+                                                                    .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                                        .ThenInclude(waf => waf.Facilitator)
+
+                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            }
+            
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.FloridaSocialHSNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.DreamsMentalHealthNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+                if (workdayClient.NoteP.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                {
+                    if (workdayClient.NoteP.Schema == SchemaType.Schema3)
+                    {
+                        if (!workdayClient.SharedSession)
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3(workdayClient);
+                        else
+                            stream = _reportHelper.CommunityHTCNoteReportSchema3SS(workdayClient);
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+                    }
+                }
+            }
+            return fileContentList;
+        }
+        private async Task<List<FileContentResult>> Schema1GroupNotes(int idClient)
+        {
+            List<Workday_Client> workdayClientList = new List<Workday_Client>();
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            //Group schema 1
+            using (DataContext db = new DataContext(options))
+            {
+                workdayClientList = await db.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+                                                                      .ThenInclude(c => c.MTPs)
+                                                                          .ThenInclude(m => m.Goals)
+                                                                              .ThenInclude(g => g.Objetives)
+
+                                                                   .Include(wc => wc.GroupNote)
+                                                                      .ThenInclude(n => n.Supervisor)
+                                                                          .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.GroupNote)
+                                                                      .ThenInclude(n => n.GroupNotes_Activities)
+                                                                          .ThenInclude(na => na.Activity)
+                                                                              .ThenInclude(a => a.Theme)
+
+                                                                   .Include(wc => wc.GroupNote)
+                                                                      .ThenInclude(n => n.GroupNotes_Activities)
+                                                                          .ThenInclude(na => na.Objetive)
+                                                                              .ThenInclude(o => o.Goal)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            }
+            
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DAVILA")
+                    stream = _reportHelper.DavilaGroupNoteReportSchema1(workdayClient);
+
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);
+
+                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
+
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+            return fileContentList;
+        }
+        private async Task<List<FileContentResult>> Schema2GroupNotes(int idClient)
+        {
+            List<Workday_Client> workdayClientList = new List<Workday_Client>();
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            //Group schema 2
+            using (DataContext db = new DataContext(options))
+            {
+                workdayClientList = await db.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+                                                                    .ThenInclude(c => c.MTPs)
+                                                                        .ThenInclude(m => m.Goals)
+                                                                            .ThenInclude(g => g.Objetives)
+
+                                                                   .Include(wc => wc.GroupNote2)
+                                                                    .ThenInclude(n => n.Supervisor)
+                                                                        .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.GroupNote2)
+                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
+                                                                        .ThenInclude(na => na.Activity)
+                                                                            .ThenInclude(a => a.Theme)
+
+                                                                   .Include(wc => wc.GroupNote2)
+                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
+                                                                        .ThenInclude(na => na.Objetive)
+                                                                            .ThenInclude(o => o.Goal)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Include(wc => wc.Schedule)
+
+                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            }
+            
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema3(workdayClient);
+
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema3(workdayClient);
+
+                if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                    stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);
+
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+            return fileContentList;
+        }
+        private async Task<List<FileContentResult>> Schema1IndNotes(int idClient)
+        {
+            List<Workday_Client> workdayClientList = new List<Workday_Client>();
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            //Individual schema 1
+            using (DataContext db = new DataContext(options))
+            {
+                workdayClientList = await db.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+
+                                                                   .Include(wc => wc.Client)
+                                                                    .ThenInclude(c => c.MTPs)
+                                                                        .ThenInclude(m => m.Goals)
+                                                                            .ThenInclude(g => g.Objetives)
+
+                                                                   .Include(wc => wc.Client)
+                                                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                                   .Include(wc => wc.IndividualNote)
+                                                                    .ThenInclude(n => n.Supervisor)
+                                                                        .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(wc => wc.IndividualNote)
+                                                                    .ThenInclude(n => n.Objective)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
+                                                                   .ToListAsync();
+            }
+            
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+            foreach (var workdayClient in workdayClientList)
+            {
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
+                    stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
+
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
+
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                    stream = _reportHelper.DreamsMentalHealthIndNoteReportSchema1(workdayClient);
+
+                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                    stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);
+
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Individual/Ind_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
+            }
+            return fileContentList;
         }
         #endregion
 
@@ -3370,8 +3707,7 @@ namespace KyoS.Web.Controllers
             parameters.Add("num_of_obj", num_of_obj);
             parameters.Add("obj_text", obj_text);
             var result = report.Execute(RenderType.Pdf, 1, parameters, mimetype);
-            return File(result.MainStream, "application/pdf"/*,
-                        $"NoteOf_{workdayClient.Client.Name}_{workdayClient.Workday.Date.ToShortDateString()}.pdf"*/);
+            return File(result.MainStream, "application/pdf");
         }
         private FileContentResult DavilaNoteReportFCRSchema1(Workday_Client workdayClient)
         {
