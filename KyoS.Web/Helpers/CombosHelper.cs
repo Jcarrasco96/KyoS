@@ -1558,7 +1558,7 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = FARSType.Discharge_PSR.ToString(), Value = "2"},
                 new SelectListItem { Text = FARSType.Discharge_Ind.ToString(), Value = "3"},
                 new SelectListItem { Text = FARSType.Discharge_Group.ToString(), Value = "4"},
-                new SelectListItem { Text = FARSType.Other.ToString(), Value = "5"}
+                new SelectListItem { Text = FARSType.Addendums.ToString(), Value = "5"}
             };
 
             return list;

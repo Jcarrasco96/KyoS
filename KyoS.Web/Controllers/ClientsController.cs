@@ -140,7 +140,14 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.Creado = "N";
+                    if (id == 3)
+                    {
+                        ViewBag.Creado = "C";
+                    }
+                    else
+                    {
+                        ViewBag.Creado = "N";
+                    }
                 }
             }
 
@@ -233,6 +240,10 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Clients.Where(n => n.Code == clientViewModel.Code).Count() > 0)
+                {
+                    return RedirectToAction("Create", new { id = 3 });
+                }
                 string photoPath = string.Empty;
                 string signPath = string.Empty;
 
@@ -1531,6 +1542,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.GroupNote2)
 
+                                                .Include(w => w.MTPs)
+                                                .ThenInclude(w => w.AdendumList)
+
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
@@ -1890,6 +1904,8 @@ namespace KyoS.Web.Controllers
             }
 
             //FARS continued
+            cant_Fars += client.MTPs.Sum(n => n.AdendumList.Count());
+
             if (client.FarsFormList.Count() != cant_Fars)
             {
                 tempProblem.Name = "Amount of FARS";
@@ -1959,6 +1975,33 @@ namespace KyoS.Web.Controllers
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
             }
+
+            if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
+            {
+                int cant_Addendums = client.MTPs.Sum(n => n.AdendumList.Count()) - client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count();
+                tempProblem.Name = "FARS";
+                tempProblem.Description = "The amount of FARS does not match with Addendums (" + cant_Addendums +")";
+                tempProblem.Active = 1;
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+
+                foreach (var item in client.MTPs)
+                {
+                    foreach (var element in item.AdendumList)
+                    {
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified) == false)
+                        {
+                            tempProblem.Name = "FARS";
+                            tempProblem.Description = "FARS with incompatible date (addendum)  created for ("+element.Facilitator.Name+")";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+
+                    }
+                }
+            }
+
             if (dischage_psr == true && fars_d_psr == false)
             {
                 tempProblem.Name = "FARS";

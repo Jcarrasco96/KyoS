@@ -11,7 +11,7 @@ namespace KyoS.Common.Enums
         Discharge_PSR,
         Discharge_Ind,
         Discharge_Group,
-        Other
+        Addendums
     }
     public class FARSUtils
     {
@@ -22,7 +22,7 @@ namespace KyoS.Common.Enums
                    (index == 2) ? FARSType.Discharge_PSR :
                    (index == 3) ? FARSType.Discharge_Ind :
                    (index == 4) ? FARSType.Discharge_Group :
-                   (index == 5) ? FARSType.Other : FARSType.Initial;
+                   (index == 5) ? FARSType.Addendums : FARSType.Initial;
         }
     }
 }

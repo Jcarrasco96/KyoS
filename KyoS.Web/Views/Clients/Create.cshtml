@@ -42,6 +42,18 @@
                 </strong>
             </div>
         }
+        @if (ViewBag.Creado == "C")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Code already exist
+                </strong>
+            </div>
+        }
     </div>
     <div>
         <form asp-action="Create" enctype="multipart/form-data">
