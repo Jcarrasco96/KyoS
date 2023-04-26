@@ -1760,8 +1760,11 @@ namespace KyoS.Web.Helpers
             {
                 foreach (var item in listSubSchedules)
                 {
-                    if (!allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime))
-                        && !allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
+                    if ((!allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime))
+                           && !allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
+                        ||
+                        (allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime) && n.Present == false)
+                        || allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay && n.Present == false))))
                     {
                         listSubSchedulesSalida.Add(item);
                     }

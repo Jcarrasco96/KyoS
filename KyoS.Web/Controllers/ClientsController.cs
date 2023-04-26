@@ -1969,12 +1969,33 @@ namespace KyoS.Web.Controllers
 
             if (mtpr == true && fars_mtpr == false)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (MTPR)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.MTPs.Sum(n => n.MtpReviewList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.MtpReview).Count())
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        foreach (var element in item.MtpReviewList)
+                        {
+                            if (client.FarsFormList.Exists(n => n.EvaluationDate == element.DataOfService && n.Type == FARSType.MtpReview) == true)
+                            {
+
+                            }
+                            else
+                            {
+                                tempProblem.Name = "FARS";
+                                tempProblem.Description = "FARS with incompatible date (MTPR)  created for (" + element.Therapist + ")";
+                                tempProblem.Active = 1;
+                                problem.Add(tempProblem);
+                                tempProblem = new Problem();
+
+                            }
+                        }
+                    }
+
+                }
+
             }
+
+           
 
             if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
             {
@@ -1989,10 +2010,21 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var element in item.AdendumList)
                     {
-                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified) == false)
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
+                        {
+
+                        }
+                        else
                         {
                             tempProblem.Name = "FARS";
-                            tempProblem.Description = "FARS with incompatible date (addendum)  created for ("+element.Facilitator.Name+")";
+                            if (element.Facilitator != null)
+                            {
+                                tempProblem.Description = "FARS with incompatible date (addendum)  created for (" + element.Facilitator.Name + ")";
+                            }
+                            else
+                            {
+                                tempProblem.Description = "FARS with incompatible date (addendum)  created for (" + element.CreatedBy + ")";
+                            }
                             tempProblem.Active = 1;
                             problem.Add(tempProblem);
                             tempProblem = new Problem();

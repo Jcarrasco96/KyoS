@@ -901,10 +901,10 @@ namespace KyoS.Web.Controllers
                                                               .Include(n => n.MTPs)
                                                               .ThenInclude(n => n.MtpReviewList)
                                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                                 && (((n.IdFacilitatorPSR == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id) && n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
-                                                                  || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                                  || (n.IdFacilitatorGroup == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                                 && ((n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                                   || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
                                                                  && n.OnlyTCM == false)
                                                               .ToListAsync();
@@ -1064,7 +1064,11 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var element in item.MtpReviewList)
                     {
-                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.DataOfService) == false)
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.DataOfService && n.Type == FARSType.MtpReview) == true)
+                        {
+
+                        }
+                        else
                         {
                             auditClient.NameClient = client.Name;
                             auditClient.AdmissionDate = element.DataOfService.ToShortDateString();
@@ -1086,12 +1090,24 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var element in item.AdendumList)
                     {
-                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified) == false)
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
+                        {
+
+                        }
+                        else
                         {
                             auditClient.NameClient = client.Name;
                             auditClient.AdmissionDate = element.Dateidentified.ToShortDateString();
                             auditClient.Description = "Missing FARS Addendums";
-                            auditClient.Responsible = element.Facilitator.Name;
+                            if (element.Facilitator != null)
+                            {
+                                auditClient.Responsible = element.Facilitator.Name;
+                            }
+                            else
+                            {
+                                auditClient.Responsible = element.CreatedBy;
+                            }
+
                             auditClient.Active = 0;
 
                             auditClient_List.Add(auditClient);
