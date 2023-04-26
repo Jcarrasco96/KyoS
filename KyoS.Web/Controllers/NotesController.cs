@@ -187,8 +187,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> Present(int id, int origin = 0)
+        public async Task<IActionResult> Present(int id, int origin = 0, int error = 0)
         {
+            if (error == 1)
+            {
+                ViewBag.Error = "1";
+                ViewBag.errorText = "The client have other therapy in this time";
+            }
+            
+
             Workday_Client workdayClient = await _context.Workdays_Clients
                                                          .Include(wc => wc.Workday)
                                                          .Include(wc => wc.Client)
@@ -227,6 +234,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(wc => wc.Client)
                                                   .ThenInclude(c => c.Group)
                                                   .Include(wc => wc.Facilitator)
+                                                  .Include(wc => wc.Schedule)
                                                   .FirstOrDefaultAsync(wc => wc.Id == model.Id);
 
             if (entity == null)
@@ -252,6 +260,14 @@ namespace KyoS.Web.Controllers
                     break;
             }
 
+            if (entity.Schedule != null && entity.Workday.Service == ServiceType.PSR && entity.Present == true)
+            {
+                if (this.VerifyNotesAtSameTime(entity.Client.Id, entity.Session, entity.Workday.Date, entity.Schedule.InitialTime, entity.Schedule.EndTime, entity.Id))
+                {
+                    return RedirectToAction(nameof(Present), new { id = model.Id, origin = model.Origin, error = 1 });
+                }
+            }
+            
             _context.Update(entity);
             try
             {
@@ -13396,7 +13412,8 @@ namespace KyoS.Web.Controllers
                                                                     || (n.Schedule.InitialTime <= endTime
                                                                        && n.Schedule.EndTime >= endTime))
                                                                && n.Id != idWordayClient
-                                                               && n.Client.Id == idClient)
+                                                               && n.Client.Id == idClient
+                                                               && n.Present == true)
                                                             .ToList();
 
 
