@@ -218,20 +218,32 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic)
+        public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank)
         {
             List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic /* && c.MTPs.Count == 0*/))
+                                                        .OrderBy(c => c.Name)
                                                         .Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",
                 Value = $"{c.Id}"
             }).ToList();
 
-            list.Insert(0, new SelectListItem
+            if (!blank)
             {
-                Text = "[Select client...]",
-                Value = "0"
-            });
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = string.Empty,
+                    Value = "0"
+                });
+            }
 
             return list;
         }

@@ -18,7 +18,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboFacilitators();
         IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboClients();
-        IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboActiveClientsPSRByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday);
