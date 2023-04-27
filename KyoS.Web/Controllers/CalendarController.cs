@@ -49,9 +49,9 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult Events(string start, string end, int idClient/*, int idFacilitator*/)
+        public IActionResult Events(string start, string end, int idClient)
         {
-            if (idClient != 0/* || idFacilitator != 0*/)
+            if (idClient != 0)
             {
                 DateTime initDate = Convert.ToDateTime(start);
                 DateTime finalDate = Convert.ToDateTime(end);
@@ -65,15 +65,13 @@ namespace KyoS.Web.Controllers
                 IQueryable<Workday_Client> query = _context.Workdays_Clients
 
                                                            .Include(wc => wc.Schedule)
-
                                                            .Include(wc => wc.Workday)
 
-                                                           .Where(wc => (wc.Workday.Date >= initDate && wc.Workday.Date <= finalDate && wc.Present == true));
+                                                           .Include(wc => wc.IndividualNote)
+                                                                .ThenInclude(i => i.SubSchedule)
 
-                if (idClient != 0)
-                    query = query.Where(wc => wc.Client.Id == idClient);
-                /*if (idFacilitator != 0)
-                    query = query.Where(wc => wc.Facilitator.Id == idFacilitator);*/
+                                                           .Where(wc => (wc.Workday.Date >= initDate && wc.Workday.Date <= finalDate && wc.Present == true &&
+                                                                         wc.Client.Id == idClient));
 
                 list = query.ToList();
                 
@@ -82,10 +80,20 @@ namespace KyoS.Web.Controllers
                                     title = (wc.Workday.Service == ServiceType.PSR) ? "PSR Therapy" :
                                                 (wc.Workday.Service == ServiceType.Group) ? "Group Therapy" :
                                                     (wc.Workday.Service == ServiceType.Individual) ? "Individual Therapy" : string.Empty,
-                                    start = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                    start = (wc.Workday.Service == ServiceType.Individual) ?
+                                            new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                                         (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, 0)
+                                                           .ToString("yyyy-MM-ddTHH:mm:ssK")
+                                            :
+                                            new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
                                                          (wc.Schedule) != null ? wc.Schedule.InitialTime.Hour : 0, (wc.Schedule) != null ? wc.Schedule.InitialTime.Minute : 0, 0)
                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                    end = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                    end = (wc.Workday.Service == ServiceType.Individual) ?
+                                            new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                                         (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, 0)
+                                                           .ToString("yyyy-MM-ddTHH:mm:ssK")
+                                            :
+                                            new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
                                                          (wc.Schedule) != null ? wc.Schedule.EndTime.Hour : 0, (wc.Schedule) != null ? wc.Schedule.EndTime.Minute : 0, 0)
                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
                                     backgroundColor = (wc.Workday.Service == ServiceType.PSR) ? "#fcf8e3" :

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/25/2023 18:41:49" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/27/2023 09:43:19" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3wHtqzW2t1amtsxNCCnClVw==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3pioHTq1txCYyPSnnUpc+pA==">
       <TableDataSource Name="Goals2" Alias="Goals3" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -32,7 +32,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3bjt13atGWz+GZGtzeHfKuw==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3z8McsyAUD3MNOxXuwx0a6A==">
       <TableDataSource Name="Goals3" Alias="Goals4" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -63,7 +63,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3WiSwfLQbGgnRqfB099lf1Q==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GJBydL+Xq3jlnJ21eQtotg==">
       <TableDataSource Name="Goals4" Alias="Goals5" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3yKdN+5cSciu85dZDPHg6mA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3F0h7/v+fOGxKqlDbFUxxqw==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -267,7 +267,7 @@
         <Column Name="RaterFMHCertification" DataType="System.String"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3VoDGhz+YCkLlTmeSUNa2hQ==">
+    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Eu5X1GxTO1/PP+xThgoMmg==">
       <TableDataSource Name="Goals5" Alias="Goals6" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -298,7 +298,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3XF2gi6ps4/fbwUCCaUOniA==">
+    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3z6rHpcThjUNAWuiL9ZiJcw==">
       <TableDataSource Name="Goals6" Alias="Goals7" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -329,7 +329,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38tFrauZRTOQBiKuS34bcaw==">
+    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RdA5A8g2zPmPpSGJvDRM0g==">
       <TableDataSource Name="Goals7" Alias="Goals8" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -360,7 +360,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3V6djzS2+W5F/q8FQ/U2euQ==">
+    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3BVtb2phAb1oDGHY8bc9KzA==">
       <TableDataSource Name="Goals8" Alias="Goals9" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -391,7 +391,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38unxS7OXtTCYQJSgxb1zdA==">
+    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SK9TOVCwLXIWUSfZ4fGmsw==">
       <TableDataSource Name="Goals9" Alias="Goals10" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -422,7 +422,7 @@
         <Column Name="IdMTPReview" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GMyM8bGV2w2Eh44dHF5qXA==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3qSt5G0XzCugxqvatP5Zm6w==">
       <TableDataSource Name="Goals1" Alias="Goals2" DataType="System.Int32" Enabled="true" TableName="Goals">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1319,7 +1319,7 @@
       <TextObject Name="Text61" Left="446.05" Top="29.8" Width="47.25" Height="18.9" Text="6 mo" Font="Arial, 9pt"/>
       <TextObject Name="Text62" Left="567" Top="29.35" Width="47.25" Height="18.9" Text="Other:" HorzAlign="Right" Font="Arial, 9pt"/>
       <TextObject Name="Text63" Left="610.25" Top="29.35" Width="103.95" Height="18.9" Text="[IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),[MTPs.NumberOfMonths],&quot;&quot;)] [IIf(([MTPs.NumberOfMonths] != 1 &amp;&amp; [MTPs.NumberOfMonths] != 3 &amp;&amp; [MTPs.NumberOfMonths] != 6),&quot;mo&quot;,&quot;&quot;)] " Font="Arial, 9pt, style=Underline"/>
-      <TextObject Name="Text64" Left="5.45" Top="62.7" Width="576.45" Height="18.9" Text="These services are medically necessary according to the needs and diagnoses of the client" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text64" Left="5.45" Top="66.53" Width="570.78" Height="18.9" Text="These services are medically necessary according to the needs and diagnoses of the client" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text67" Left="22.35" Top="241.9" Width="179.55" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text68" Left="24.9" Top="261.15" Width="168.21" Height="18.9" Text="Client Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text69" Left="264.6" Top="242.25" Width="255.15" Height="18.9" Text="____________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
@@ -1357,6 +1357,11 @@
       <TextObject Name="Text230" Left="576.45" Top="237.25" Width="189" Height="18.9" Text="[MTPs.AdmissionDateMTP]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text231" Left="576.45" Top="312.85" Width="189" Height="18.9" Text="[IIf([DocumentsAssistant.Id] != 0,[MTPs.MTPDevelopedDate],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture5" Left="60.7" Top="199" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
+      <PictureObject Name="Picture6" Left="557.55" Top="38.8" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text332" Left="558.65" Top="77.05" Width="103.95" Height="18.9" Text="_________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text333" Left="661.05" Top="76.89" Width="94.5" Height="18.9" Text="_______________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text334" Left="666.5" Top="91.4" Width="85.05" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text335" Left="663.5" Top="72.7" Width="88.83" Height="18.9" Text="[MTPs.SupervisorDate]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
 </Report>
