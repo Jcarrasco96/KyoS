@@ -457,13 +457,14 @@ namespace KyoS.Web.Controllers
                                                                        && wc.OnlyTCM == false)).ToString();
 
                     ViewBag.FarsMissing = _context.Clients
-                                                           .Count(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                  .Count(n => n.Clinic.Id == user_logged.Clinic.Id
                                                                  && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
-                                                                 && n.OnlyTCM == false).ToString();
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > 0).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()))
+                                                                 && n.OnlyTCM == false)
+                                                  .ToString();
 
                     List<ClientEntity> clientListPSR = await _context.Clients
                                                                  .Where(m => (m.Clinic.Id == user_logged.Clinic.Id

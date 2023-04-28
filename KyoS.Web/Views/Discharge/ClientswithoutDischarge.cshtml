@@ -65,7 +65,7 @@
                                     @Html.DisplayFor(modelItem => item.Code)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    @Html.DisplayFor(modelItem => item.AdmisionDate.ToShortDateString())
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open)
