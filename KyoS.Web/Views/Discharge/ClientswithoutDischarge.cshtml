@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Common.Helpers.ClientDischarge>
 @{
     ViewData["Title"] = "Clients without Discharge";
 }
@@ -38,7 +38,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Services
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-2" >
                                 Facilitator
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -84,8 +84,8 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Service)
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.LastModifiedBy)
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FacilitatorName)
                                 </td>
                                 <td align="right">
                                     @if (User.IsInRole("Facilitator"))

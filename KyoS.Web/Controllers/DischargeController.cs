@@ -512,6 +512,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
+            ClientDischarge clienDischarge = new ClientDischarge();
+
             if (User.IsInRole("Facilitator"))
             {
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
@@ -539,35 +541,50 @@ namespace KyoS.Web.Controllers
                                                                              && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0))
                                                                    .ToListAsync();
 
-                List<ClientEntity> clientList = new List<ClientEntity>();
+                List<ClientDischarge> clientList = new List<ClientDischarge>();
+                
 
                 foreach (var item in clientListPSR)
                 {
-                    item.Service = ServiceType.PSR;
-                    item.LastModifiedBy = facilitator.Name;
-                    clientList.Add(item);
+                    clienDischarge.Service = ServiceType.PSR;
+                    clienDischarge.FacilitatorName = facilitator.Name;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+                    clientList.Add(clienDischarge);
+                    clienDischarge = new ClientDischarge();
                 }
 
                 foreach (var item in clientListGroup)
                 {
-                    item.Service = ServiceType.Group;
-                    item.LastModifiedBy = facilitator.Name;
-                    clientList.Add(item);
+                    clienDischarge.Service = ServiceType.Group;
+                    clienDischarge.FacilitatorName = facilitator.Name;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+                    clientList.Add(clienDischarge);
+                    clienDischarge = new ClientDischarge();
                 }
-
-                ClientEntity client = new ClientEntity();
 
                 foreach (var item in clientListIND)
                 {
-                    client.Id = item.Id;
-                    client.Name = item.Name;
-                    client.Code = item.Code;
-                    client.AdmisionDate = item.AdmisionDate;
-                    client.Status = item.Status;
-                    client.Service = ServiceType.Individual;
-                    item.LastModifiedBy = facilitator.Name;
-                    clientList.Add(client);
-                    client = new ClientEntity();
+                    clienDischarge.Service = ServiceType.Individual;
+                    clienDischarge.FacilitatorName = facilitator.Name;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+                    clientList.Add(clienDischarge);
+                    clienDischarge = new ClientDischarge();
+
                 }
 
                 return View(clientList);
@@ -575,8 +592,8 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> clientListPSR = await _context.Clients
-
-                                                                 .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
+                                                                
+                                                                     .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
                                                                             && m.Status == StatusType.Close
                                                                             && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
                                                                             && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0))
@@ -597,50 +614,83 @@ namespace KyoS.Web.Controllers
                                                                              && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0))
                                                                    .ToListAsync();
 
-                List<ClientEntity> clientList = new List<ClientEntity>();
+                List<ClientDischarge> clientList = new List<ClientDischarge>();
                 FacilitatorEntity facilitator = new FacilitatorEntity();
                 foreach (var item in clientListPSR)
                 {
-                    item.Service = ServiceType.PSR;
+                    clienDischarge.Service = ServiceType.PSR;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+
                     facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == item.IdFacilitatorPSR);
                     if (facilitator != null)
                     {
-                        item.LastModifiedBy = facilitator.Name;
+                        clienDischarge.FacilitatorName = facilitator.Name;
                     }
-                    clientList.Add(item);
+                    else
+                    {
+                        clienDischarge.FacilitatorName = string.Empty;
+                    }
+
+                    clientList.Add(clienDischarge);
                     facilitator = new FacilitatorEntity();
+                    clienDischarge = new ClientDischarge();
                 }
 
                 foreach (var item in clientListGroup)
                 {
-                    item.Service = ServiceType.Group;
+                    clienDischarge.Service = ServiceType.Group;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+                    
                     facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == item.IdFacilitatorGroup);
+                    
                     if (facilitator != null)
                     {
-                        item.LastModifiedBy = facilitator.Name;
+                        clienDischarge.FacilitatorName = facilitator.Name;
                     }
-                    clientList.Add(item);
-                    facilitator = new FacilitatorEntity();
-                }
+                    else
+                    {
+                        clienDischarge.FacilitatorName = string.Empty;                              
+                    }
 
-                ClientEntity client = new ClientEntity();
+                    clientList.Add(clienDischarge);
+                    facilitator = new FacilitatorEntity();
+                    clienDischarge = new ClientDischarge();
+                }
 
                 foreach (var item in clientListIND)
                 {
-                    client.Id = item.Id;
-                    client.Name = item.Name;
-                    client.Code = item.Code;
-                    client.AdmisionDate = item.AdmisionDate;
-                    client.Status = item.Status;
-                    client.Service = ServiceType.Individual;
+                    clienDischarge.Service = ServiceType.Individual;
+                    clienDischarge.Id = item.Id;
+                    clienDischarge.Name = item.Name;
+                    clienDischarge.Code = item.Code;
+                    clienDischarge.AdmisionDate = item.AdmisionDate;
+                    clienDischarge.Gender = item.Gender;
+                    clienDischarge.Status = item.Status;
+                    
                     facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == item.IndividualTherapyFacilitator.Id);
+                    
                     if (facilitator != null)
                     {
-                        item.LastModifiedBy = facilitator.Name;
+                        clienDischarge.FacilitatorName = facilitator.Name;
                     }
-                    clientList.Add(client);
-                    client = new ClientEntity();
+                    else
+                    {
+                        clienDischarge.FacilitatorName = string.Empty;
+                    }
+                    clientList.Add(clienDischarge);
+                    
                     facilitator = new FacilitatorEntity();
+                    clienDischarge = new ClientDischarge();
                 }
 
                 return View(clientList);
