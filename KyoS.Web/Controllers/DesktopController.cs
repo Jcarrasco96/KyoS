@@ -486,6 +486,13 @@ namespace KyoS.Web.Controllers
                                                                        .ToListAsync();
 
                     ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
+
+                    ViewBag.ClientAuthorization = _context.Clients
+                                                          .Where(n => n.Clients_HealthInsurances == null 
+                                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                            && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
+                                                          .Count()
+                                                          .ToString();
                 }          
 
                 //TCM Dashboard

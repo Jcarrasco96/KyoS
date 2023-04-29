@@ -47,9 +47,10 @@
                                     <div style="display:none">
                                         <table class="table table-striped table-bordered" id="MyTableDetails">
                                             <tr>
-                                                <th class="col-md-1" style="text-align:center;">Birth Day</th>
+                                                <th class="col-md-1" style="text-align:center;">Birth Date</th>
                                                 <th class="col-md-1" style="text-align:center;">Bill Code</th>
-                                                <th class="col-md-3">Admission for</th>
+                                                <th class="col-md-1" style="text-align:center;">Authorization</th>
+                                                <th class="col-md-2">Admission for</th>
                                                 <th class="col-md-1" style="text-align:center;">Document</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
                                                 <th class="col-md-1" style="text-align:center;">Status</th>
@@ -80,6 +81,12 @@
                                                                 @if (element.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                 {
                                                                     @Html.DisplayFor(modelItem => item.Clinic.CodeGroupTherapy)
+                                                                }
+                                                            </td>
+                                                            <td align="center">
+                                                                @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                                {
+                                                                    @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
                                                                 }
                                                             </td>
                                                             <td>
@@ -377,6 +384,12 @@
                                                                         @Html.DisplayFor(modelItem => item.Clinic.CodeGroupTherapy)
                                                                     }
                                                                 </td>
+                                                                <td align="center">
+                                                                    @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                                    {
+                                                                        @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                                                    }
+                                                                </td>
                                                                 <td>
                                                                     @Html.DisplayFor(modelItem => element.Facilitator.Name)
                                                                 </td>
@@ -659,6 +672,12 @@
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => item.Bio.CodeBill)
                                                     </td>
+                                                    <td align="center">
+                                                        @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                        {
+                                                            @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                                        }
+                                                    </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.Bio.AdmissionedFor)
                                                     </td>
@@ -738,6 +757,12 @@
                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => mtp.CodeBill)
+                                                    </td>
+                                                    <td align="center">
+                                                        @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                        {
+                                                            @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                                        }
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => mtp.AdmissionedFor)

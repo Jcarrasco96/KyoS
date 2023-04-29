@@ -14786,11 +14786,14 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
-                    if (client_salida.Bio.BilledDate == null)
+                    if (client_salida.Bio != null)
                     {
-                        cantUnit += client_salida.Bio.Units;
-                        money += client_salida.Bio.Units * 15;
-                        documents++;
+                        if (client_salida.Bio.BilledDate == null)
+                        {
+                            cantUnit += client_salida.Bio.Units;
+                            money += client_salida.Bio.Units * 15;
+                            documents++;
+                        }
                     }
 
                     foreach (var item in client_salida.Workdays_Clients.Where(n => n.BilledDate == null))
@@ -14929,11 +14932,14 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
-                    if (client_salida.Bio.BilledDate != null)
+                    if (client_salida.Bio != null)
                     {
-                        cantUnit += client_salida.Bio.Units;
-                        money += client_salida.Bio.Units * 15;
-                        documents++;
+                        if (client_salida.Bio.BilledDate != null)
+                        {
+                            cantUnit += client_salida.Bio.Units;
+                            money += client_salida.Bio.Units * 15;
+                            documents++;
+                        }
                     }
 
                     foreach (var item in client_salida.Workdays_Clients.Where(n => n.BilledDate != null))

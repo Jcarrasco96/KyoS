@@ -1219,6 +1219,34 @@
                                 </a>
                             }
                         </div>
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
+                        <!--New line-->
+                         <div class="col-md-4">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.ClientAuthorization == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Authorization</h4>
+                                    <span class="message-counter-cero">@ViewBag.ClientAuthorization</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Clients" asp-action="AuthorizationClients" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Client <br>&nbsp;&nbsp;&nbsp;&nbsp; Authorizations</h4>
+                                        <span class="message-counter">@ViewBag.ClientAuthorization</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                         <div class="col-md-4">
+                            &nbsp;
+                        </div>                        
                     </div>
                 }
                 @if (setting != null && setting.TCMClinic)

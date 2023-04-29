@@ -28,5 +28,8 @@ namespace KyoS.Web.Data.Entities
         public string UserName { get; set; }
 
         public int IdClient { get; set; }
+
+        [Display(Name = "Authorization Number")]
+        public string AuthorizationNumber { get; set; }
     }
 }
