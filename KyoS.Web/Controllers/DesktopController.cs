@@ -493,6 +493,11 @@ namespace KyoS.Web.Controllers
                                                                             && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
                                                           .Count()
                                                           .ToString();
+                    
+                    ViewBag.ClientBirthday = _context.Clients
+                                                     .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
+                                                     .Count()
+                                                     .ToString();
                 }          
 
                 //TCM Dashboard
