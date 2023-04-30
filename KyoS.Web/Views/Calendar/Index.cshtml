@@ -19,12 +19,7 @@
         <label asp-for="IdClient" class="control-label">Select client</label>
         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
         <span asp-validation-for="IdClient" class="text-danger"></span>
-    </div>
-    @*<div class="col-md-3">
-        <label asp-for="IdFacilitator" class="control-label">Select facilitator</label>
-        <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control" id="cbFacilitator"></select>
-        <span asp-validation-for="IdClient" class="text-danger"></span>
-    </div>*@    
+    </div>    
     <div class="container-fluid">
         &nbsp;
     </div>
@@ -80,8 +75,7 @@
                             method: 'POST',
                             extraParams: function() {
                                 return {
-                                    idClient: $("#cbClient").val()//,
-                                    //idFacilitator: $("#cbFacilitator").val()
+                                    idClient: $("#cbClient").val()
                                 };
                             },
                             success: function() {
@@ -94,11 +88,7 @@
 
             $("#cbClient").change(function () {                
                 calendar.refetchEvents();
-            })
-
-            /*$("#cbFacilitator").change(function () {                
-                calendar.refetchEvents();
-            })*/
+            })            
         });
     </script>
 }
