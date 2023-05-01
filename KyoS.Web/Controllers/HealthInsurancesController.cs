@@ -299,7 +299,8 @@ namespace KyoS.Web.Controllers
                 IdHealthInsurance = 0,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                 IdClient = 0,
-                Clients = _combosHelper.GetComboActiveClientsPSRByClinic(user_logged.Clinic.Id)
+                Clients = _combosHelper.GetComboActiveClientsPSRByClinic(user_logged.Clinic.Id),
+                AuthorizationNumber = string.Empty
             };
             return View(entity);
         }
@@ -346,7 +347,9 @@ namespace KyoS.Web.Controllers
                         Client = item.Client,
                         HealthInsurance = item.HealthInsurance,
                         Expired = (item.ApprovedDate.AddMonths(item.DurationTime) < DateTime.Now) ? true : false,
-                        UsedUnits = await this.UsedUnitsPerClient(item.Id, item.Client.Id, item.HealthInsurance.Id)
+                        UsedUnits = await this.UsedUnitsPerClient(item.Id, item.Client.Id, item.HealthInsurance.Id),
+                        AuthorizationNumber = item.AuthorizationNumber
+                        
                     });
                 }
 
@@ -360,7 +363,8 @@ namespace KyoS.Web.Controllers
                 IdHealthInsurance = model.IdHealthInsurance,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                 IdClient = model.IdClient,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id)
+                Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
+                AuthorizationNumber = model.AuthorizationNumber
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateUnits", originalEntity) });
         }

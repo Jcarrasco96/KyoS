@@ -187,8 +187,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> Present(int id, int origin = 0)
+        public async Task<IActionResult> Present(int id, int origin = 0, int error = 0)
         {
+            if (error == 1)
+            {
+                ViewBag.Error = "1";
+                ViewBag.errorText = "The client have other therapy in this time";
+            }
+            
+
             Workday_Client workdayClient = await _context.Workdays_Clients
                                                          .Include(wc => wc.Workday)
                                                          .Include(wc => wc.Client)
@@ -227,6 +234,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(wc => wc.Client)
                                                   .ThenInclude(c => c.Group)
                                                   .Include(wc => wc.Facilitator)
+                                                  .Include(wc => wc.Schedule)
                                                   .FirstOrDefaultAsync(wc => wc.Id == model.Id);
 
             if (entity == null)
@@ -252,6 +260,14 @@ namespace KyoS.Web.Controllers
                     break;
             }
 
+            if (entity.Schedule != null && entity.Workday.Service == ServiceType.PSR && entity.Present == true)
+            {
+                if (this.VerifyNotesAtSameTime(entity.Client.Id, entity.Session, entity.Workday.Date, entity.Schedule.InitialTime, entity.Schedule.EndTime, entity.Id))
+                {
+                    return RedirectToAction(nameof(Present), new { id = model.Id, origin = model.Origin, error = 1 });
+                }
+            }
+            
             _context.Update(entity);
             try
             {
@@ -12012,9 +12028,12 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                int max = _context.Weeks
-                                  .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
-                                  .Max(m => m.Id);
+                int max = 0;
+                List<WeekEntity> week = _context.Weeks.Where(m => m.Clinic.Id == user_logged.Clinic.Id).ToList();
+                if ( week.Count() > 0)
+                {
+                    max = week.Max(m => m.Id);
+                }
 
                 IQueryable<WeekEntity> query = _context.Weeks
 
@@ -13396,7 +13415,8 @@ namespace KyoS.Web.Controllers
                                                                     || (n.Schedule.InitialTime <= endTime
                                                                        && n.Schedule.EndTime >= endTime))
                                                                && n.Id != idWordayClient
-                                                               && n.Client.Id == idClient)
+                                                               && n.Client.Id == idClient
+                                                               && n.Present == true)
                                                             .ToList();
 
 
@@ -14766,11 +14786,14 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
-                    if (client_salida.Bio.BilledDate == null)
+                    if (client_salida.Bio != null)
                     {
-                        cantUnit += client_salida.Bio.Units;
-                        money += client_salida.Bio.Units * 15;
-                        documents++;
+                        if (client_salida.Bio.BilledDate == null)
+                        {
+                            cantUnit += client_salida.Bio.Units;
+                            money += client_salida.Bio.Units * 15;
+                            documents++;
+                        }
                     }
 
                     foreach (var item in client_salida.Workdays_Clients.Where(n => n.BilledDate == null))
@@ -14909,11 +14932,14 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
-                    if (client_salida.Bio.BilledDate != null)
+                    if (client_salida.Bio != null)
                     {
-                        cantUnit += client_salida.Bio.Units;
-                        money += client_salida.Bio.Units * 15;
-                        documents++;
+                        if (client_salida.Bio.BilledDate != null)
+                        {
+                            cantUnit += client_salida.Bio.Units;
+                            money += client_salida.Bio.Units * 15;
+                            documents++;
+                        }
                     }
 
                     foreach (var item in client_salida.Workdays_Clients.Where(n => n.BilledDate != null))
@@ -15406,44 +15432,15 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workday_Client = new List<Workday_Client>();
 
             WeekEntity week = _context.Weeks.FirstOrDefault(w => w.Id == idWeek);
-            
-            string Periodo = "";
-            string ReportName = "SuperBill Report " + week.InitDate.ToShortDateString() + " To " + week.FinalDate.ToShortDateString() + ".xlsx";
-            string data = "";
-            if (all == 0)
+
+            if (week != null)
             {
-                workday_Client = _context.Workdays_Clients
-                                         .Include(f => f.Facilitator)
-                                         .Include(c => c.Client)
-                                         .Include(w => w.Workday)
-
-                                         .Include(w => w.Client)
-                                         .ThenInclude(w => w.Clients_Diagnostics)
-                                         .ThenInclude(w => w.Diagnostic)
-
-                                         .Include(w => w.Client)
-                                         .ThenInclude(w => w.Clients_HealthInsurances)
-                                         .ThenInclude(w => w.HealthInsurance)
-
-                                         .Include(w => w.Note)
-                                         .Include(w => w.NoteP)
-                                         .Include(w => w.IndividualNote)
-                                         .Include(w => w.GroupNote)
-
-                                         .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                               && n.Workday.Week.Id == idWeek
-                                               && n.Present == true
-                                               && n.Client != null
-                                               && n.BilledDate == null)
-                                         .OrderBy(n => n.Client.Name)
-                                         .ThenBy(n => n.Workday.Date)
-                                         .ToList();
-                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
-                data = "NOT BILLED";
-            }
-            else
-            {
-                workday_Client = _context.Workdays_Clients
+                string Periodo = "";
+                string ReportName = "SuperBill Report " + week.InitDate.ToShortDateString() + " To " + week.FinalDate.ToShortDateString() + ".xlsx";
+                string data = "";
+                if (all == 0)
+                {
+                    workday_Client = _context.Workdays_Clients
                                              .Include(f => f.Facilitator)
                                              .Include(c => c.Client)
                                              .Include(w => w.Workday)
@@ -15464,19 +15461,55 @@ namespace KyoS.Web.Controllers
                                              .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                    && n.Workday.Week.Id == idWeek
                                                    && n.Present == true
-                                                   && n.Client != null)
+                                                   && n.Client != null
+                                                   && n.BilledDate == null)
                                              .OrderBy(n => n.Client.Name)
-                                             .ThenBy( n => n.Workday.Date)
+                                             .ThenBy(n => n.Workday.Date)
                                              .ToList();
+                    Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                    data = "NOT BILLED";
+                }
+                else
+                {
+                    workday_Client = _context.Workdays_Clients
+                                                 .Include(f => f.Facilitator)
+                                                 .Include(c => c.Client)
+                                                 .Include(w => w.Workday)
 
-                Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
-                data = "ALL DATA";
+                                                 .Include(w => w.Client)
+                                                 .ThenInclude(w => w.Clients_Diagnostics)
+                                                 .ThenInclude(w => w.Diagnostic)
+
+                                                 .Include(w => w.Client)
+                                                 .ThenInclude(w => w.Clients_HealthInsurances)
+                                                 .ThenInclude(w => w.HealthInsurance)
+
+                                                 .Include(w => w.Note)
+                                                 .Include(w => w.NoteP)
+                                                 .Include(w => w.IndividualNote)
+                                                 .Include(w => w.GroupNote)
+
+                                                 .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Workday.Week.Id == idWeek
+                                                       && n.Present == true
+                                                       && n.Client != null)
+                                                 .OrderBy(n => n.Client.Name)
+                                                 .ThenBy(n => n.Workday.Date)
+                                                 .ToList();
+
+                    Periodo = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
+                    data = "ALL DATA";
+                }
+
+
+                byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, week.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
             }
-            
-
-            byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo,week.Clinic.Name, data);
-
-            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
         }
 
         [Authorize(Roles = "Manager")]

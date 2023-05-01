@@ -91,7 +91,14 @@
                                                     }
                                                     else
                                                     {
-                                                        <p>Other</p>
+                                                        @if (item.Type == KyoS.Common.Enums.FARSType.Addendums)
+                                                        {
+                                                            <p>Addendum</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Other</p>
+                                                        }
                                                     }
                                                 }
                                             }

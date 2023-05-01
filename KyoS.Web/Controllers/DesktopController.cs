@@ -243,10 +243,10 @@ namespace KyoS.Web.Controllers
                 ViewBag.ClientWithoutFARS = _context.Clients
                                                     
                                                     .Count(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                       && (((n.IdFacilitatorPSR == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id) && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
-                                                            || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                            || (n.IdFacilitatorGroup == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                            || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                       && (((n.IdFacilitatorPSR == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id) && n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                            || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                            || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                            || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                             || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
                                                        && n.OnlyTCM == false).ToString();
 
@@ -457,13 +457,14 @@ namespace KyoS.Web.Controllers
                                                                        && wc.OnlyTCM == false)).ToString();
 
                     ViewBag.FarsMissing = _context.Clients
-                                                           .Count(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                  .Count(n => n.Clinic.Id == user_logged.Clinic.Id
                                                                  && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
-                                                                 && n.OnlyTCM == false).ToString();
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > 0).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()))
+                                                                 && n.OnlyTCM == false)
+                                                  .ToString();
 
                     List<ClientEntity> clientListPSR = await _context.Clients
                                                                  .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
@@ -485,6 +486,24 @@ namespace KyoS.Web.Controllers
                                                                        .ToListAsync();
 
                     ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
+
+                    ViewBag.ClientAuthorization = _context.Clients
+                                                          .Where(n => n.Clients_HealthInsurances == null 
+                                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                            && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
+                                                          .Count()
+                                                          .ToString();
+                    
+                    ViewBag.ClientBirthday = _context.Clients
+                                                     .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
+                                                     .Count()
+                                                     .ToString();
+
+                    ViewBag.ClientEligibility = _context.Clients
+                                                        .Where(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
+                                                                 && n.Status == StatusType.Open)
+                                                        .Count()
+                                                        .ToString();
                 }          
 
                 //TCM Dashboard

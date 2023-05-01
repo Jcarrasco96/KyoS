@@ -1339,7 +1339,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                MemberId = model.MemberId
+                MemberId = model.MemberId,
+                AuthorizationNumber = model.AuthorizationNumber
             };
         }
 
@@ -1360,7 +1361,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                MemberId = model.MemberId
+                MemberId = model.MemberId,
+                AuthorizationNumber = model.AuthorizationNumber
             };
         }
 

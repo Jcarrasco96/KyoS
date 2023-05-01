@@ -332,7 +332,8 @@ namespace KyoS.Web.Controllers
                         ApprovedDate = item.ApprovedDate,
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
-                        Units = item.Units
+                        Units = item.Units,
+                        AuthorizationNumber = item.AuthorizationNumber
                     };
                     _context.Add(clientHealthInsurance);
                     _context.HealthInsuranceTemp.Remove(item);
@@ -584,7 +585,8 @@ namespace KyoS.Web.Controllers
                         ApprovedDate = item.ApprovedDate,
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
-                        Units = item.Units
+                        Units = item.Units,
+                        AuthorizationNumber = item.AuthorizationNumber
                     };
                     _context.Add(clientHealthInsurance);
                     _context.HealthInsuranceTemp.Remove(item);
@@ -1969,12 +1971,33 @@ namespace KyoS.Web.Controllers
 
             if (mtpr == true && fars_mtpr == false)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (MTPR)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.MTPs.Sum(n => n.MtpReviewList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.MtpReview).Count())
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        foreach (var element in item.MtpReviewList)
+                        {
+                            if (client.FarsFormList.Exists(n => n.EvaluationDate == element.DataOfService && n.Type == FARSType.MtpReview) == true)
+                            {
+
+                            }
+                            else
+                            {
+                                tempProblem.Name = "FARS";
+                                tempProblem.Description = "FARS with incompatible date (MTPR)  created for (" + element.Therapist + ")";
+                                tempProblem.Active = 1;
+                                problem.Add(tempProblem);
+                                tempProblem = new Problem();
+
+                            }
+                        }
+                    }
+
+                }
+
             }
+
+           
 
             if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
             {
@@ -1989,10 +2012,21 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var element in item.AdendumList)
                     {
-                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified) == false)
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
+                        {
+
+                        }
+                        else
                         {
                             tempProblem.Name = "FARS";
-                            tempProblem.Description = "FARS with incompatible date (addendum)  created for ("+element.Facilitator.Name+")";
+                            if (element.Facilitator != null)
+                            {
+                                tempProblem.Description = "FARS with incompatible date (addendum)  created for (" + element.Facilitator.Name + ")";
+                            }
+                            else
+                            {
+                                tempProblem.Description = "FARS with incompatible date (addendum)  created for (" + element.CreatedBy + ")";
+                            }
                             tempProblem.Active = 1;
                             problem.Add(tempProblem);
                             tempProblem = new Problem();
@@ -2323,7 +2357,8 @@ namespace KyoS.Web.Controllers
                         Units = item.Units,
                         Name = item.HealthInsurance.Name,
                         UserName = user_logged.UserName,
-                        IdClient = client.Id
+                        IdClient = client.Id,
+                        AuthorizationNumber = item.AuthorizationNumber
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -2374,9 +2409,10 @@ namespace KyoS.Web.Controllers
                     IdhealthInsurance = 0,
                     HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
                     ClientName = client.Name,
-                    MemberId = "",
+                    MemberId = string.Empty,
                     Units = 0,
-                    IdClient = idClient
+                    IdClient = idClient,
+                    AuthorizationNumber = string.Empty
                 };
                 return View(entity);
             }
@@ -2388,10 +2424,11 @@ namespace KyoS.Web.Controllers
                     DurationTime = 12,
                     IdhealthInsurance = 0,
                     HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
-                    ClientName ="",
-                    MemberId = "",
+                    ClientName = string.Empty,
+                    MemberId = string.Empty,
                     Units = 0,
-                    IdClient = idClient
+                    IdClient = idClient,
+                    AuthorizationNumber = string.Empty
                 };
                 return View(entity);
             }
@@ -2432,7 +2469,8 @@ namespace KyoS.Web.Controllers
                         MemberId = HealthInsuranceModel.MemberId,
                         Units = HealthInsuranceModel.Units,
                         Name = healthInsurance.Name,
-                        IdClient = HealthInsuranceModel.IdClient
+                        IdClient = HealthInsuranceModel.IdClient,
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -2455,7 +2493,8 @@ namespace KyoS.Web.Controllers
                 ClientName = HealthInsuranceModel.Name,
                 MemberId = "",
                 Units = 0,
-                IdClient = HealthInsuranceModel.IdClient
+                IdClient = HealthInsuranceModel.IdClient,
+                AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }
@@ -4411,5 +4450,303 @@ namespace KyoS.Web.Controllers
             return File(result.MainStream, "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf");
         }
         #endregion
+
+        public async Task<IActionResult> EditHealthInsuranceClient(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (id != 0)
+            {
+                HealthInsuranceTempEntity healthInsuranceTempEntity = await _context.HealthInsuranceTemp
+                                                                                    .FirstOrDefaultAsync(u => u.Id == id);
+
+                HealthInsuranceTempViewModel entity = new HealthInsuranceTempViewModel()
+                {
+                    ApprovedDate = healthInsuranceTempEntity.ApprovedDate,
+                    DurationTime = healthInsuranceTempEntity.DurationTime,
+                    IdhealthInsurance = _context.HealthInsurances.FirstOrDefault(n => n.Name == healthInsuranceTempEntity.Name).Id,
+                    HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                    ClientName = _context.Clients.FirstOrDefault(n => n.Id == healthInsuranceTempEntity.IdClient).Name,
+                    MemberId = healthInsuranceTempEntity.MemberId,
+                    Units = healthInsuranceTempEntity.Units,
+                    IdClient = healthInsuranceTempEntity.IdClient,
+                    AuthorizationNumber = healthInsuranceTempEntity.AuthorizationNumber,
+                    Id = id,
+                    Name = healthInsuranceTempEntity.Name,
+                    Active = healthInsuranceTempEntity.Active,
+                    UserName = user_logged.UserName
+                };
+                return View(entity);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditHealthInsuranceClient(int id, HealthInsuranceTempViewModel HealthInsuranceModel)
+        {
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (id != 0)
+                {
+                    
+                    HealthInsuranceTempEntity healthInsuranceTemp = new HealthInsuranceTempEntity
+                    {
+                        Id = HealthInsuranceModel.Id,
+                        UserName = HealthInsuranceModel.UserName,
+                        ApprovedDate = HealthInsuranceModel.ApprovedDate,
+                        Active = HealthInsuranceModel.Active,
+                        DurationTime = HealthInsuranceModel.DurationTime,
+                        MemberId = HealthInsuranceModel.MemberId,
+                        Units = HealthInsuranceModel.Units,
+                        Name = HealthInsuranceModel.Name,
+                        IdClient = HealthInsuranceModel.IdClient,
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                    };
+                    _context.Update(healthInsuranceTemp);
+                    await _context.SaveChangesAsync();
+
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp
+                                                                         .Where(n => n.IdClient == HealthInsuranceModel.IdClient
+                                                                            && n.UserName == HealthInsuranceModel.UserName)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list) });
+
+                }
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(m => m.IdClient == HealthInsuranceModel.IdClient && m.UserName == HealthInsuranceModel.UserName).ToList()) });
+            }
+
+            
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult DeleteHealthInsuranceTempModal(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteHealthInsuranceTempModal(DeleteViewModel HealthInsuranceModel)
+        {
+            if (ModelState.IsValid)
+            {
+                HealthInsuranceTempEntity healthInsurance = await _context.HealthInsuranceTemp
+                                                                          .FirstAsync(n => n.Id == HealthInsuranceModel.Id_Element);
+                try
+                {
+                    _context.HealthInsuranceTemp.Remove(healthInsurance);
+                    await _context.SaveChangesAsync();
+
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp
+                                                                        .Where(n => n.IdClient == healthInsurance.IdClient
+                                                                                 && n.UserName == healthInsurance.UserName)
+                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list) });
+                }
+                catch (Exception)
+                {
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp
+                                                                         .Where(n => n.IdClient == healthInsurance.IdClient
+                                                                                  && n.UserName == healthInsurance.UserName)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list) });
+                   
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> AuthorizationClients(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Manager") )
+            {
+                return View(await _context.Clients
+                                          .Include(n => n.Clients_HealthInsurances)
+                                          .ThenInclude(n => n.HealthInsurance)
+                                          .Where(n => n.Clients_HealthInsurances == null
+                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                             && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
+                                          .ToListAsync());
+            }
+
+            string mounth = string.Empty;
+            if (DateTime.Today.Month == 1)
+            {
+                mounth = "January";
+            }
+            if (DateTime.Today.Month == 2)
+            {
+                mounth = "February";
+            }
+            if (DateTime.Today.Month == 3)
+            {
+                mounth = "March";
+            }
+            if (DateTime.Today.Month == 4)
+            {
+                mounth = "April";
+            }
+            if (DateTime.Today.Month == 5)
+            {
+                mounth = "May";
+            }
+            if (DateTime.Today.Month == 6)
+            {
+                mounth = "June";
+            }
+            if (DateTime.Today.Month == 7)
+            {
+                mounth = "July";
+            }
+            if (DateTime.Today.Month == 8)
+            {
+                mounth = "August";
+            }
+            if (DateTime.Today.Month == 9)
+            {
+                mounth = "September";
+            }
+            if (DateTime.Today.Month == 10)
+            {
+                mounth = "October";
+            }
+            if (DateTime.Today.Month == 11)
+            {
+                mounth = "November";
+            }
+            if (DateTime.Today.Month == 12)
+            {
+                mounth = "December";
+            }
+            ViewData["mounth"] = mounth;
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BirthDayClients(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.Clients
+                                          .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
+                                          .ToListAsync());
+            }
+
+            string mounth = string.Empty;
+            if (DateTime.Today.Month == 1)
+            {
+                mounth = "January";
+            }
+            if (DateTime.Today.Month == 2)
+            {
+                mounth = "February";
+            }
+            if (DateTime.Today.Month == 3)
+            {
+                mounth = "March";
+            }
+            if (DateTime.Today.Month == 4)
+            {
+                mounth = "April";
+            }
+            if (DateTime.Today.Month == 5)
+            {
+                mounth = "May";
+            }
+            if (DateTime.Today.Month == 6)
+            {
+                mounth = "June";
+            }
+            if (DateTime.Today.Month == 7)
+            {
+                mounth = "July";
+            }
+            if (DateTime.Today.Month == 8)
+            {
+                mounth = "August";
+            }
+            if (DateTime.Today.Month == 9)
+            {
+                mounth = "September";
+            }
+            if (DateTime.Today.Month == 10)
+            {
+                mounth = "October";
+            }
+            if (DateTime.Today.Month == 11)
+            {
+                mounth = "November";
+            }
+            if (DateTime.Today.Month == 12)
+            {
+                mounth = "December";
+            }
+            ViewData["mounth"] = mounth;
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
     }
 }

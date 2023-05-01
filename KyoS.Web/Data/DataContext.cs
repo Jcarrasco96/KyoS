@@ -133,6 +133,7 @@ namespace KyoS.Web.Data
         public DbSet<ScheduleEntity> Schedule { get; set; }
         public DbSet<SubScheduleEntity> SubSchedule { get; set; }
         public DbSet<ManagerEntity> Manager { get; set; }
+        public DbSet<EligibilityEntity> Eligibilities { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
