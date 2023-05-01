@@ -498,6 +498,12 @@ namespace KyoS.Web.Controllers
                                                      .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
                                                      .Count()
                                                      .ToString();
+
+                    ViewBag.ClientEligibility = _context.Clients
+                                                        .Where(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
+                                                                 && n.Status == StatusType.Open)
+                                                        .Count()
+                                                        .ToString();
                 }          
 
                 //TCM Dashboard

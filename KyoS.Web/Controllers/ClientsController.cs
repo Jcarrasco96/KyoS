@@ -4616,8 +4616,58 @@ namespace KyoS.Web.Controllers
                                                              && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
                                           .ToListAsync());
             }
-           
-           
+
+            string mounth = string.Empty;
+            if (DateTime.Today.Month == 1)
+            {
+                mounth = "January";
+            }
+            if (DateTime.Today.Month == 2)
+            {
+                mounth = "February";
+            }
+            if (DateTime.Today.Month == 3)
+            {
+                mounth = "March";
+            }
+            if (DateTime.Today.Month == 4)
+            {
+                mounth = "April";
+            }
+            if (DateTime.Today.Month == 5)
+            {
+                mounth = "May";
+            }
+            if (DateTime.Today.Month == 6)
+            {
+                mounth = "June";
+            }
+            if (DateTime.Today.Month == 7)
+            {
+                mounth = "July";
+            }
+            if (DateTime.Today.Month == 8)
+            {
+                mounth = "August";
+            }
+            if (DateTime.Today.Month == 9)
+            {
+                mounth = "September";
+            }
+            if (DateTime.Today.Month == 10)
+            {
+                mounth = "October";
+            }
+            if (DateTime.Today.Month == 11)
+            {
+                mounth = "November";
+            }
+            if (DateTime.Today.Month == 12)
+            {
+                mounth = "December";
+            }
+            ViewData["mounth"] = mounth;
+
             return RedirectToAction("NotAuthorized", "Account");
         }
 
@@ -4645,6 +4695,56 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
+            string mounth = string.Empty;
+            if (DateTime.Today.Month == 1)
+            {
+                mounth = "January";
+            }
+            if (DateTime.Today.Month == 2)
+            {
+                mounth = "February";
+            }
+            if (DateTime.Today.Month == 3)
+            {
+                mounth = "March";
+            }
+            if (DateTime.Today.Month == 4)
+            {
+                mounth = "April";
+            }
+            if (DateTime.Today.Month == 5)
+            {
+                mounth = "May";
+            }
+            if (DateTime.Today.Month == 6)
+            {
+                mounth = "June";
+            }
+            if (DateTime.Today.Month == 7)
+            {
+                mounth = "July";
+            }
+            if (DateTime.Today.Month == 8)
+            {
+                mounth = "August";
+            }
+            if (DateTime.Today.Month == 9)
+            {
+                mounth = "September";
+            }
+            if (DateTime.Today.Month == 10)
+            {
+                mounth = "October";
+            }
+            if (DateTime.Today.Month == 11)
+            {
+                mounth = "November";
+            }
+            if (DateTime.Today.Month == 12)
+            {
+                mounth = "December";
+            }
+            ViewData["mounth"] = mounth;
 
             return RedirectToAction("NotAuthorized", "Account");
         }
