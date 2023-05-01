@@ -10,16 +10,16 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Client CMH Calendar</li>
+        <li class="active">Facilitator CMH Calendar</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <label asp-for="IdClient" class="control-label">Select client</label>
-        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
-        <span asp-validation-for="IdClient" class="text-danger"></span>
-    </div>    
+        <label asp-for="IdFacilitator" class="control-label">Select facilitator</label>
+        <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control" id="cbFacilitator"></select>
+        <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+    </div>
     <div class="container-fluid">
         &nbsp;
     </div>
@@ -71,24 +71,24 @@
                     meridiem: true
                 },
                 events: {
-                            url: '@Url.Action("Events", "Calendar")',
+                            url: '@Url.Action("EventsFacilitator", "Calendar")',
                             method: 'POST',
                             extraParams: function() {
                                 return {
-                                    idClient: $("#cbClient").val()
+                                    idFacilitator: $("#cbFacilitator").val()
                                 };
                             },
                             success: function() {
-                                
+
                             }
 
                 }
             });
             calendar.render();
 
-            $("#cbClient").change(function () {                
+            $("#cbFacilitator").change(function () {                
                 calendar.refetchEvents();
-            })            
+            })
         });
     </script>
 }
