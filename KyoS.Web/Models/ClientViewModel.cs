@@ -93,6 +93,11 @@ namespace KyoS.Web.Models
         public int IdFacilitatorIT { get; set; }
         public IEnumerable<SelectListItem> ITFacilitators { get; set; }
 
-        public int IdTCMClient { get; set; }        
+        public int IdTCMClient { get; set; }
+
+        public string FacilitatorPSR { get; set; }
+
+        public string FacilitatorGroup { get; set; }
+
     }
 }

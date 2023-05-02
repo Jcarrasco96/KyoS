@@ -488,9 +488,11 @@ namespace KyoS.Web.Controllers
                     ViewBag.ClientDischarge = (clientListPSR.Count() + clientListIND.Count() + +clientListGroup.Count()).ToString();
 
                     ViewBag.ClientAuthorization = _context.Clients
-                                                          .Where(n => n.Clients_HealthInsurances == null 
-                                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                                                            && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
+                                                          .Where(n => n.Status == StatusType.Open
+                                                                   && n.Clinic.Id == user_logged.Clinic.Id
+                                                                  && (n.Clients_HealthInsurances == null 
+                                                                  || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                            && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0))
                                                           .Count()
                                                           .ToString();
                     
@@ -501,7 +503,8 @@ namespace KyoS.Web.Controllers
 
                     ViewBag.ClientEligibility = _context.Clients
                                                         .Where(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
-                                                                 && n.Status == StatusType.Open)
+                                                                 && n.Status == StatusType.Open
+                                                                 && n.Clinic.Id == user_logged.Clinic.Id)
                                                         .Count()
                                                         .ToString();
                 }          
