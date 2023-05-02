@@ -20,14 +20,20 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
         private readonly IImageHelper _imageHelper;
+        private readonly IMimeType _mimeType;
+        private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IFileHelper _fileHelper;
 
-        public EligibilityController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
+        public EligibilityController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IMimeType mimeType, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
             _renderHelper = renderHelper;
+            _mimeType = mimeType;
+            _exportExcelHelper = exportExcelHelper;
+            _fileHelper = fileHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -64,18 +70,20 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult Create(int idClient = 0)
+        public IActionResult Create(int idClient = 0, int origin = 0)
         {
             if (idClient != 0)
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 EligibilityViewModel model = new EligibilityViewModel()
                 {
                     IdClient = idClient,
                     AdmissionedFor = user_logged.FullName,
                     EligibilityDate = DateTime.Today
                 };
+                ViewData["origin"] = origin;
                 return View(model);
             }
             else
@@ -87,7 +95,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager, Supervisor, CaseManager")]
-        public async Task<IActionResult> Create(int id, EligibilityViewModel eligibilityViewModel)
+        public async Task<IActionResult> Create(int id, EligibilityViewModel eligibilityViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -121,7 +129,33 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (origin == 0)
+                {
+                    List<ClientEntity> clients = await _context.Clients
+                                                               .Include(n => n.EligibilityList)
+                                                               .Include(n => n.Clients_HealthInsurances)
+                                                               .ThenInclude(n => n.HealthInsurance)
+                                                               .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
+                                                               .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndex", clients) });
+                }
+
+                if (origin == 1)
+                {
+                    List<ClientEntity> clients = await _context.Clients
+                                                               .Include(n => n.EligibilityList)
+                                                               .Include(n => n.Clients_HealthInsurances)
+                                                               .ThenInclude(n => n.HealthInsurance)
+                                                               .Where(m => m.Status == Common.Enums.StatusType.Open
+                                                                && m.Clinic.Id == user_logged.Clinic.Id
+                                                                && m.EligibilityList.Where(n => n.EligibilityDate.Month == DateTime.Today.Month
+                                                                                             && n.EligibilityDate.Year == DateTime.Today.Year).Count() == 0)
+                                                               .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewEligibilityClients", clients) });
+                }
+                
             }
             EligibilityViewModel salida = new EligibilityViewModel()
             {
@@ -132,96 +166,74 @@ namespace KyoS.Web.Controllers
 
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Roles = "Manager")]
+        public IActionResult Delete(int id = 0)
         {
-            if (id == null)
+            if (id > 0)
             {
-                return RedirectToAction("Home/Error404");
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
             }
-
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            else
             {
-                return RedirectToAction("NotAuthorized", "Account");
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
             }
-
-            DiagnosticEntity diagnosticEntity = await _context.Diagnostics.FirstOrDefaultAsync(c => c.Id == id);
-            if (diagnosticEntity == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            DiagnosticViewModel diagnosticViewModel = _converterHelper.ToDiagnosticViewModel(diagnosticEntity);
-
-            return View(diagnosticViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DiagnosticViewModel diagnosticViewModel)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(DeleteViewModel elegibilityModel)
         {
-            if (id != diagnosticViewModel.Id)
-            {
-                return RedirectToAction("Home/Error404");
-            }
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                DiagnosticEntity diagnosticEntity = _converterHelper.ToDiagnosticEntity(diagnosticViewModel, false, user_logged.Id);
-                _context.Update(diagnosticEntity);
+                EligibilityEntity eligibility = await _context.Eligibilities
+                                                              .FirstAsync(n => n.Id == elegibilityModel.Id_Element);
                 try
                 {
+                    _context.Eligibilities.Remove(eligibility);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
+                    List<ClientEntity> clients = await _context.Clients
+                                                               .Include(n => n.EligibilityList)
+                                                               .Include(n => n.Clients_HealthInsurances)
+                                                               .ThenInclude(n => n.HealthInsurance)
+                                                               .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
+                                                               .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndex", clients) });
                 }
-                catch (System.Exception ex)
+                catch (Exception)
                 {
-                    if (ex.InnerException.Message.Contains("duplicate"))
-                    {
-                        ModelState.AddModelError(string.Empty, $"Already exists the diagnostic: {diagnosticEntity.Code}");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
+                    List<ClientEntity> clients = await _context.Clients
+                                                               .Include(n => n.EligibilityList)
+                                                               .Include(n => n.Clients_HealthInsurances)
+                                                               .ThenInclude(n => n.HealthInsurance)
+                                                               .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
+                                                               .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndex", clients) });
+
                 }
+
             }
-            return View(diagnosticViewModel);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Index") });
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            DiagnosticEntity diagnosticEntity = await _context.Diagnostics.FirstOrDefaultAsync(c => c.Id == id);
-            if (diagnosticEntity == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            try
-            {
-                _context.Diagnostics.Remove(diagnosticEntity);
-                await _context.SaveChangesAsync();
-            }
-            catch (System.Exception)
-            {
-
-                return RedirectToAction("Index", new { idError = 1 });
-            }
-            
-            return RedirectToAction(nameof(Index));
-        }
 
         public async Task<IActionResult> EligibilityClients(int idError = 0)
         {
@@ -246,7 +258,8 @@ namespace KyoS.Web.Controllers
                                                            .Include(n => n.EligibilityList)
                                                            .Include(n => n.Clients_HealthInsurances)
                                                            .ThenInclude(n => n.HealthInsurance)
-                                                           .Where(m => m.Clinic.Id == user_logged.Clinic.Id 
+                                                           .Where(m => m.Status == Common.Enums.StatusType.Open
+                                                            && m.Clinic.Id == user_logged.Clinic.Id 
                                                             && m.EligibilityList.Where(n => n.EligibilityDate.Month == DateTime.Today.Month 
                                                                                          && n.EligibilityDate.Year == DateTime.Today.Year).Count() == 0)
                                                            .ToListAsync();
@@ -304,6 +317,19 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> OpenDocument(int id)
+        {
+            EligibilityEntity elegibility = await _context.Eligibilities
+                                                          .FirstOrDefaultAsync(d => d.Id == id);
+            if (elegibility == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            string mimeType = _mimeType.GetMimeType(elegibility.FileName);
+            return File(elegibility.FileUrl, mimeType);
         }
 
     }

@@ -447,6 +447,20 @@ namespace KyoS.Web.Controllers
                 }
             }
             clientViewModel.Origin = origin;
+            List<Workday_Client> worday_clients = _context.Workdays_Clients
+                                                         .Include(n => n.Facilitator)
+                                                         .Include(n => n.Workday)
+                                                         .Where(m => m.Client.Id == clientEntity.Id )
+                                                         .ToList();
+            if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
+            {
+                clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+            }
+            if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
+            {
+                clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+            }
+            
             return View(clientViewModel);
         }
 
@@ -4606,17 +4620,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-            if (User.IsInRole("Manager") )
-            {
-                return View(await _context.Clients
-                                          .Include(n => n.Clients_HealthInsurances)
-                                          .ThenInclude(n => n.HealthInsurance)
-                                          .Where(n => n.Clients_HealthInsurances == null
-                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                                             && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0)
-                                          .ToListAsync());
-            }
-
+           
             string mounth = string.Empty;
             if (DateTime.Today.Month == 1)
             {
@@ -4667,6 +4671,19 @@ namespace KyoS.Web.Controllers
                 mounth = "December";
             }
             ViewData["mounth"] = mounth;
+
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.Clients
+                                          .Include(n => n.Clients_HealthInsurances)
+                                          .ThenInclude(n => n.HealthInsurance)
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Status == StatusType.Open
+                                                  && (n.Clients_HealthInsurances == null
+                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                             && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0))
+                                          .ToListAsync());
+            }
 
             return RedirectToAction("NotAuthorized", "Account");
         }
@@ -4688,12 +4705,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-            if (User.IsInRole("Manager"))
-            {
-                return View(await _context.Clients
-                                          .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
-                                          .ToListAsync());
-            }
+           
 
             string mounth = string.Empty;
             if (DateTime.Today.Month == 1)
@@ -4745,6 +4757,13 @@ namespace KyoS.Web.Controllers
                 mounth = "December";
             }
             ViewData["mounth"] = mounth;
+
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.Clients
+                                          .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
+                                          .ToListAsync());
+            }
 
             return RedirectToAction("NotAuthorized", "Account");
         }
