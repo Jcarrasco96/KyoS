@@ -1029,10 +1029,7 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
-                        <!--New line-->
-                        <div class="col-sm-3 col-md-1">
-                            &nbsp;
-                        </div>
+                        <!--New line-->                       
                         <div class="col-md-2">
                             @if (ViewBag.MTPMissing == 0)
                             {
@@ -1103,8 +1100,23 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-sm-3 col-md-1">
-                            &nbsp;
+                        <div class="col-md-2">
+                            @if (ViewBag.ClientBirthday == "0")
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-calendar" style="padding-right: 10px !important;"></i>Clients <br>&nbsp;&nbsp;&nbsp;&nbsp; Birthday</h4>
+                                    <span class="message-counter-cero">@ViewBag.ClientBirthday</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Clients" asp-action="BirthDayClients" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-warning">
+                                        <h4 style="align-content:end;"><i class="icon-calendar" style="padding-right: 10px !important;"></i>Clients <br>&nbsp;&nbsp;&nbsp;&nbsp; Birthday</h4>
+                                        <span class="message-counter-warning">@ViewBag.ClientBirthday</span>
+                                    </div>
+                                </a>
+                            }
                         </div>
                         <!--New line-->
                         <div class="col-md-12">
@@ -1223,14 +1235,14 @@
                             &nbsp;
                         </div>
                         <!--New line-->
-                         <div class="col-md-3">
+                         <div class="col-md-4">
                             &nbsp;
                         </div>
                         <div class="col-md-2">
                             @if (ViewBag.ClientAuthorization == "0")
                             {
                                 <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;&nbsp; Authorization</h4>
+                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp; Authorization</h4>
                                     <span class="message-counter-cero">@ViewBag.ClientAuthorization</span>
                                 </div>
                             }
@@ -1238,7 +1250,7 @@
                             {
                                 <a style="text-decoration: none;" asp-controller="Clients" asp-action="AuthorizationClients" role="button">
                                     <div class="thumbnail list-group-item list-group-item-danger">
-                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;&nbsp; Authorizations</h4>
+                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp; Authorization</h4>
                                         <span class="message-counter">@ViewBag.ClientAuthorization</span>
                                     </div>
                                 </a>
@@ -1261,26 +1273,8 @@
                                     </div>
                                 </a>
                             }
-                         </div>
-                         <div class="col-md-2">
-                            @if (ViewBag.ClientBirthday == "0")
-                            {
-                                <div class="thumbnail list-group-item list-group-item-text">
-                                    <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>BirthDay</h4>
-                                    <span class="message-counter-cero">@ViewBag.ClientBirthday</span>
-                                </div>
-                            }
-                            else
-                            {
-                                <a style="text-decoration: none;" asp-controller="Clients" asp-action="BirthDayClients" role="button">
-                                    <div class="thumbnail list-group-item list-group-item-danger">
-                                        <h4 style="align-content:end;"><i class="icon-ban-circle" style="padding-right: 10px !important;"></i>Clients <br>&nbsp;&nbsp;&nbsp;&nbsp; BirthDay</h4>
-                                        <span class="message-counter">@ViewBag.ClientBirthday</span>
-                                    </div>
-                                </a>
-                            }
-                         </div>
-                         <div class="col-md-3">
+                         </div>                         
+                        <div class="col-md-4">
                             &nbsp;
                         </div>                        
                     </div>

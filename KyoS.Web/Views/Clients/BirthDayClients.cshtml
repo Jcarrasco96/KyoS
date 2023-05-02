@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Clients";
+    ViewData["Title"] = "Birthday Clients";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Clients</li>
+        <li class="active">Birthday Clients</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -32,22 +32,22 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">BirthDays </h3>
+                <h3 class="panel-title">Birthdays </h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                BirthDate
+                                Birth Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Admission
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Days
                             </th>
                             <th class="col-md-1" style="text-align:center;">
