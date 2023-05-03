@@ -5998,7 +5998,8 @@ namespace KyoS.Web.Helpers
                 IdClient = model.IdClient,
                 UserName = model.UserName,
                 numberMonths = model.numberMonths,
-                AdmissionDate = model.AdmissionDate
+                AdmissionDate = model.AdmissionDate,
+                TypeDocument = model.TypeDocument
             };
         }
 
@@ -6016,7 +6017,8 @@ namespace KyoS.Web.Helpers
                 IdClient = goalEntity.IdClient,
                 UserName = goalEntity.UserName,
                 numberMonths = goalEntity.numberMonths,
-                AdmissionDate = goalEntity.AdmissionDate
+                AdmissionDate = goalEntity.AdmissionDate,
+                TypeDocument = goalEntity.TypeDocument
             };
            
             return model;

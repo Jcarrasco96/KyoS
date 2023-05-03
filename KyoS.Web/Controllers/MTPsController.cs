@@ -251,7 +251,7 @@ namespace KyoS.Web.Controllers
                 DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
                 string gender_problems = string.Empty;
 
-                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                /*if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
                     if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
@@ -277,7 +277,7 @@ namespace KyoS.Web.Controllers
                         };
                         return View(model);
                     }
-                }
+                }*/
 
                 //esto es para cuando el MTP es de group no tener que cambiar mas nada
                 if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
@@ -317,7 +317,9 @@ namespace KyoS.Web.Controllers
                 //update Client_Referred table with the news ReferredTemp
                 IQueryable<GoalsTempEntity> list_to_delete_Goals = _context.GoalsTemp
                                                                            .Include(n => n.ObjetiveTempList)
-                                                                           .Where(n => n.IdClient == mtpViewModel.IdClient);
+                                                                           .Where(n => n.IdClient == mtpViewModel.IdClient
+                                                                                    && n.UserName == user_logged.UserName
+                                                                                    && n.TypeDocument == 0);
                 GoalEntity goal = new GoalEntity();
                 mtpEntity.Goals = new List<GoalEntity>();
                 ObjetiveEntity objective = new ObjetiveEntity();
@@ -513,7 +515,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
-
+                /*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
@@ -547,7 +549,7 @@ namespace KyoS.Web.Controllers
                         ViewData["origi"] = origi;
                         return View(model);
                     }
-                }
+                }*/
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
                 if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
@@ -812,7 +814,7 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
@@ -837,7 +839,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModal", model) });
                     //return View(model);
                 }
-
+                */
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -916,7 +918,7 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
@@ -941,7 +943,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
                     //return View(model);
                 }
-
+                */
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -1034,7 +1036,7 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
@@ -1058,7 +1060,7 @@ namespace KyoS.Web.Controllers
                     model.Services = _combosHelper.GetComboServices();
                     return View(model);
                 }
-
+                */
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1121,7 +1123,7 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
@@ -1146,7 +1148,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModal", model) });
                     //return View(model);
                 }
-
+                */
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1229,7 +1231,7 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
@@ -1254,7 +1256,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalMTPReviewModal", model) });
                     //return View(model);
                 }
-
+                */
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
 
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
@@ -1370,7 +1372,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(m => m.Client)
                                                 .Include(g => g.Objetives)
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
-                string gender_problems = string.Empty;
+                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -1403,7 +1405,7 @@ namespace KyoS.Web.Controllers
                     };
                     return View(newmodel);
                 }
-
+                */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1501,7 +1503,7 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-                string gender_problems = string.Empty;
+               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -1535,7 +1537,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModal", newmodel) });
                     //return View(newmodel);
                 }
-
+               */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1653,7 +1655,7 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-                string gender_problems = string.Empty;
+                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -1693,7 +1695,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
                     //return View(newmodel);
                 }
-
+                */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1869,7 +1871,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.Client)
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
@@ -1893,7 +1895,7 @@ namespace KyoS.Web.Controllers
                     model.Goal = goal;
                     return View(model);
                 }
-
+                */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -1979,7 +1981,7 @@ namespace KyoS.Web.Controllers
 
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {
+            {/*
                 string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
@@ -2003,7 +2005,7 @@ namespace KyoS.Web.Controllers
                     model.Goal = goal;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });                    
                 }
-
+                */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -2112,7 +2114,7 @@ namespace KyoS.Web.Controllers
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
+                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -2136,7 +2138,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveMTPReviewModal", model) });
                     //return View(model);
                 }
-
+                */
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
                 {
@@ -2564,8 +2566,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("IndexAdendum", "MTPs");
+                        return RedirectToAction("EditAdendum", "MTPs", new { id = _context.Adendums.FirstOrDefault(n => n.CreatedBy == adendumEntity.CreatedBy && n.CreatedOn == adendumEntity.CreatedOn).Id, origin = 0 });
                     }
                     catch (System.Exception ex)
                     {
@@ -3311,6 +3312,7 @@ namespace KyoS.Web.Controllers
                     Setting = "02",
                     DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Origin = origin
+                 
                 };
             }
             if (User.IsInRole("Facilitator"))
@@ -3348,7 +3350,7 @@ namespace KyoS.Web.Controllers
                     MonthOfTreatment = 3,
                     Setting = "02",
                     DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
-                    Origin = origin
+                    Origin = origin                    
                 };
 
             }
@@ -3986,8 +3988,8 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> CreateGoalModalTemp(DateTime admissionDate, int idClient = 0, int numberMonths = 0)
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
+        public async Task<IActionResult> CreateGoalModalTemp(DateTime admissionDate, int idClient = 0, int numberMonths = 0, int typeDocument = 0)
         {
             if (idClient == 0)
             {
@@ -4016,7 +4018,8 @@ namespace KyoS.Web.Controllers
                 IdClient = idClient,
                 UserName = user_logged.UserName,
                 numberMonths = numberMonths,
-                AdmissionDate = admissionDate
+                AdmissionDate = admissionDate,
+                TypeDocument = typeDocument
             };
 
             return View(model);
@@ -4024,7 +4027,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateGoalModalTemp(GoalsTempViewModel model)
         {
             UserEntity user_logged = await _context.Users
@@ -4035,7 +4038,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
+               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
                     model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
@@ -4059,7 +4062,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
                     //return View(model);
                 }
-               
+               */
                 GoalsTempEntity goalTempEntity = _converterHelper.ToGoalTempEntity(model, true);
                 _context.Add(goalTempEntity);
                 try
@@ -4083,7 +4086,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
         }
 
-        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        [Authorize(Roles = "Documents_Assistant, Supervisor, Facilitator")]
         public void DeleteGoalsTemp(int idClient = 0)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -4100,7 +4103,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditGoalModalTemp(int? id)
         {
             if (id == null)
@@ -4122,7 +4125,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditGoalModalTemp(int id, GoalsTempViewModel model)
         {
             if (id != model.Id)
@@ -4137,7 +4140,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
+               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
                     model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
@@ -4161,7 +4164,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
                     //return View(model);
                 }
-
+               */
                 GoalsTempEntity goalEntity = _converterHelper.ToGoalTempEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -4192,7 +4195,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateObjectiveModalTemp(int? idGoal, int idClient, string nameGoal, int numberGoal, int number, DateTime  admissisonDate)
         {
             if (idGoal == null)
@@ -4233,7 +4236,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
         {
             UserEntity user_logged = await _context.Users
@@ -4248,7 +4251,7 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = await _context.Clients
                                                     .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
 
-                string gender_problems = string.Empty;
+                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -4282,7 +4285,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModalTemp", newmodel) });
                     //return View(newmodel);
                 }
-
+                */
                 ObjectiveTempEntity objective = await _converterHelper.ToObjectiveTempEntity(model, true);
                 _context.Add(objective);
 
@@ -4349,7 +4352,7 @@ namespace KyoS.Web.Controllers
            
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditObjectiveModalTemp(int? id, string nameGoal, int numberGoal)
         {
             if (id == null)
@@ -4373,7 +4376,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
         {
             UserEntity user_logged = await _context.Users
@@ -4383,10 +4386,10 @@ namespace KyoS.Web.Controllers
             GoalsTempEntity goal = await _context.GoalsTemp
                                                  .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             ClientEntity client = await _context.Clients
-                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+                                                 .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
+               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
                     model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
@@ -4410,7 +4413,7 @@ namespace KyoS.Web.Controllers
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
                    
                 }
-
+               */
                 ObjectiveTempEntity objectiveTemp = await _converterHelper.ToObjectiveTempEntity(model, false);
                 _context.Update(objectiveTemp);
 
@@ -4444,7 +4447,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> DeleteObjectiveTemp(int? id, int origin = 0)
         {
             if (id == null)
