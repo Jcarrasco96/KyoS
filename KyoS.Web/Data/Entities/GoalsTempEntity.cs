@@ -35,5 +35,7 @@ namespace KyoS.Web.Data.Entities
 
         [DataType(DataType.Date)]
         public DateTime AdmissionDate { get; set; }
+
+        public int TypeDocument { get; set; }
     }
 }
