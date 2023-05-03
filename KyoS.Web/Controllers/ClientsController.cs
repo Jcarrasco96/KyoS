@@ -214,7 +214,7 @@ namespace KyoS.Web.Controllers
                         OtherLanguage_Understand = false,
                         MedicareId = "",
                         OnlyTCM = false,
-                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0)                       
+                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0)                      
 
                     };
                     return View(model);
@@ -260,6 +260,35 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
+
+                //-------Emergency Contact--------------------------//
+                if (clientViewModel.IdEmergencyContact == 0)
+                {
+                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    {
+                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                        {
+                            Name = clientViewModel.NameEmergencyContact,
+                            Address = clientViewModel.AddressEmergencyContact,
+                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
+                            City = clientViewModel.CityEmergencyContact,
+                            Country = clientViewModel.CountryEmergencyContact,
+                            Email = clientViewModel.EmailEmergencyContact,
+                            State = clientViewModel.StateEmergencyContact,
+                            Telephone = clientViewModel.PhoneEmergencyContact,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
+                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.EmergencyContact = emergencyContact;
+
+                    }
+                }
+
                 _context.Add(clientEntity);
 
                 //----------update Client_Diagnostic table-------------//
@@ -460,7 +489,24 @@ namespace KyoS.Web.Controllers
             {
                 clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
             }
-            
+
+            if (clientEntity.EmergencyContact != null)
+            {
+                clientViewModel.NameEmergencyContact = clientEntity.EmergencyContact.Name;
+                clientViewModel.AddressEmergencyContact = clientEntity.EmergencyContact.Address;
+                clientViewModel.AddressLine2EmergencyContact = clientEntity.EmergencyContact.Address;
+                clientViewModel.CityEmergencyContact = clientEntity.EmergencyContact.City;
+                clientViewModel.CountryEmergencyContact = clientEntity.EmergencyContact.Country;
+                clientViewModel.EmailEmergencyContact = clientEntity.EmergencyContact.Email;
+                clientViewModel.StateEmergencyContact = clientEntity.EmergencyContact.State;
+                clientViewModel.PhoneEmergencyContact = clientEntity.EmergencyContact.Telephone;
+                clientViewModel.PhoneSecundaryEmergencyContact = clientEntity.EmergencyContact.TelephoneSecondary;
+                clientViewModel.ZipCodeEmergencyContact = clientEntity.EmergencyContact.ZipCode;
+                clientViewModel.CreateByEmergencyContact = clientEntity.EmergencyContact.CreatedBy;
+                clientViewModel.CreateOnEmergencyContact = clientEntity.EmergencyContact.CreatedOn;
+
+            }
+
             return View(clientViewModel);
         }
 
@@ -497,7 +543,63 @@ namespace KyoS.Web.Controllers
                     _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
                     _context.Entry(clientEntity).Reference("Group").IsModified = true;
                 }
-                
+
+                //-------Emergency Contact--------------------------//
+                if (clientViewModel.IdEmergencyContact == 0)
+                {
+                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    {
+                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                        {
+                            Name = clientViewModel.NameEmergencyContact,
+                            Address = clientViewModel.AddressEmergencyContact,
+                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
+                            City = clientViewModel.CityEmergencyContact,
+                            Country = clientViewModel.CountryEmergencyContact,
+                            Email = clientViewModel.EmailEmergencyContact,
+                            State = clientViewModel.StateEmergencyContact,
+                            Telephone = clientViewModel.PhoneEmergencyContact,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
+                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(emergencyContact);
+                        clientEntity.EmergencyContact = emergencyContact;
+
+                    }
+                }
+                else
+                {
+                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    {
+                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                        {
+                            Name = clientViewModel.NameEmergencyContact,
+                            Address = clientViewModel.AddressEmergencyContact,
+                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
+                            City = clientViewModel.CityEmergencyContact,
+                            Country = clientViewModel.CountryEmergencyContact,
+                            Email = clientViewModel.EmailEmergencyContact,
+                            State = clientViewModel.StateEmergencyContact,
+                            Telephone = clientViewModel.PhoneEmergencyContact,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
+                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Update(emergencyContact);
+                        clientEntity.EmergencyContact = emergencyContact;
+
+                    }
+                }
+
                 _context.Update(clientEntity);
 
                 //delete all client diagnostic of this client
