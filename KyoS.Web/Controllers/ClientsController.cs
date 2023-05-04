@@ -4780,6 +4780,7 @@ namespace KyoS.Web.Controllers
                                           .Include(n => n.Clients_HealthInsurances)
                                           .ThenInclude(n => n.HealthInsurance)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Service == ServiceType.PSR
                                                    && n.Status == StatusType.Open
                                                   && (n.Clients_HealthInsurances == null
                                                    || n.Clients_HealthInsurances.Where(m => m.Active == true

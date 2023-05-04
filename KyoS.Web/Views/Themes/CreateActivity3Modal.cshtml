@@ -1,0 +1,57 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Creado == "Y")
+        {
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok green"></i>
+                <strong class="green">
+                    Facilitator’s Intervention with Id @ViewBag.IdCreado been successfully created
+                </strong>
+
+            </div>
+        }
+        @if (ViewBag.Creado == "E")
+        {
+            <div class="alert alert-block alert-warning">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Facilitator’s Intervention already exist
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <form asp-action="CreateActivity3Modal" onsubmit="return jQueryAjaxPostTheme(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTheme" />
+            <h4>Theme: @ViewData["theme"]</h4>
+            <div class="form-group">
+                <label class="control-label">Facilitator’s Intervention</label>
+                <textarea asp-for="Name" class="form-control" rows="6" id="Name"></textarea>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-info" id="EnglishName">English</a>
+                <hr />
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

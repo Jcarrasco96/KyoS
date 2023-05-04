@@ -1,10 +1,16 @@
-﻿@model KyoS.Web.Models.Theme3ViewModel 
-<div class="form-group">
+﻿@model KyoS.Web.Models.Theme3ViewModel
+
+<div class="form-group col-md-2">
+    <label asp-for="IdService" class="control-label"></label>
+    <select asp-for="IdService" asp-items="Model.Services" class="form-control" id="check110"></select>
+    <span asp-validation-for="IdService" class="text-danger"></span>
+</div>
+<div class="form-group col-md-7">
     <label class="control-label">Theme</label>
     <input asp-for="Name" class="form-control" />
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
-<div class="form-group">
+<div class="form-group col-md-3">
     <label asp-for="IdClinic" class="control-label"></label>
     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
     <span asp-validation-for="IdClinic" class="text-danger"></span>
