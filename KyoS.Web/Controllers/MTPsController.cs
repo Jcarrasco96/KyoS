@@ -301,6 +301,11 @@ namespace KyoS.Web.Controllers
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 mtpEntity.Setting = form["Setting"].ToString();
 
+                if (mtpEntity.AdmissionDateMTP.Date == mtpEntity.MTPDevelopedDate.Date)
+                {
+                    mtpEntity.MTPDevelopedDate = mtpEntity.MTPDevelopedDate.AddDays(1);
+                }
+
                 //set all mtps of this client non active
                 List<MTPEntity> mtp_list = _context.MTPs.Where(m => m.Client == mtpEntity.Client).ToList();
                 foreach (MTPEntity item in mtp_list)
