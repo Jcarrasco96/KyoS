@@ -103,18 +103,20 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 string documentPath = string.Empty;
+                string documentFile = string.Empty;
                 if (eligibilityViewModel.DocumentFile != null)
                 {
                     documentPath = await _imageHelper.UploadFileAsync(eligibilityViewModel.DocumentFile, "Clients");
+                    documentFile = eligibilityViewModel.DocumentFile.FileName;
                 }
-
+               
                 if (id == 0)
                 {
                     EligibilityViewModel eligibility = new EligibilityViewModel
                     {
                         Id = 0,
                         FileUrl = documentPath,
-                        FileName = eligibilityViewModel.DocumentFile.FileName,
+                        FileName = documentFile,
                         
                         CreatedOn = DateTime.Today,
                         AdmissionedFor = user_logged.FullName,
