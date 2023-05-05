@@ -190,7 +190,7 @@ jQueryAjaxPaymentReceived = form => {
     }
 }
 
-jQueryAjaxPostGoal = form => {
+jQueryAjaxPostGoal = form => {    
     try {
         $.ajax({
             type: 'POST',

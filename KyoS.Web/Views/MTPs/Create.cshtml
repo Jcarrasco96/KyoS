@@ -73,7 +73,7 @@
         }
     </div>
     <div class="row">
-        <form asp-action="Create" asp-route-origin="@ViewData["origin"]">
+        <form asp-action="Create" asp-route-origin="@ViewData["origin"]" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
@@ -93,7 +93,7 @@
                 </div>
             }
             <div class="form-group col-md-12">
-                <input type="submit" value="Create MTP" class="btn btn-primary" />
+                <input  onclick="GenderVerification()" type="submit" value="Create MTP" class="btn btn-primary"/>
                 @if (ViewData["origin"].ToString() == "0")
                 {
                     <a asp-action="Index" asp-controller="Mtps" class="btn btn-success">Back</a>
@@ -167,6 +167,66 @@
                     $(this).closest("tr").next().remove();
                 });
             });
+            function GenderVerification() {
+                
+                var url = "@Url.Action("GetGenderByClient", "MTPs")";
+                
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                    
+                    let initialDC = $("#initialDischargeCriteria").val();
+                    if (data == 'F') //Female
+                    {
+                        if (initialDC.includes(" he ") || initialDC.includes(" He ") || initialDC.includes(" his ") || initialDC.includes(" His ") ||
+                            initialDC.includes(" him ") || initialDC.includes(" him.") || initialDC.includes("himself") || initialDC.includes("Himself") ||
+                            initialDC.includes(" oldman") || initialDC.includes(" wife")) {
+                            Swal.fire({
+                                title: 'Do you want to continue?',
+                                text: "There are gender issues in: Initial discharge criteria",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ec971f',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, continue!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form1.submit();
+                                }
+                            });
+                        }
+                        else
+                        {
+                            form1.submit();
+                        }
+                    }
+                    else
+                    {
+                        if (data == 'M') //Male
+                        {
+                            if (initialDC.includes(" she ") || initialDC.includes(" She ") || initialDC.includes(" her.") || initialDC.includes(" her ") ||
+                                initialDC.includes(" Her ") || initialDC.includes("herself") || initialDC.includes("Herself") || initialDC.includes(" oldwoman") ||
+                                initialDC.includes(" husband")) {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in: Initial discharge criteria",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        form1.submit();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                form1.submit();
+                            }
+                        }                        
+                    }            
+                });
+            }
     </script>
 }
 
