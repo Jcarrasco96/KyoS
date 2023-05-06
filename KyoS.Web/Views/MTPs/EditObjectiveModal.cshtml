@@ -4,7 +4,7 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="EditObjectiveModal" id="form1" onsubmit="return jQueryAjaxPostGoal(this);">
+        <form asp-action="EditObjectiveModal" onsubmit="return jQueryAjaxPostGoal(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdGoal" />
@@ -59,7 +59,7 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input onclick="GenderVerification()" type="submit" value="Save" class="btn btn-primary" id="save"/>
+                    <input onclick="GenderVerificationEOM()" type="submit" value="Save" class="btn btn-primary" id="save"/>
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 
 <script type="text/javascript">
 
-    function GenderVerification() {
+    function GenderVerificationEOM() {
 
         event.preventDefault();
         var url = "@Url.Action("GetGenderByClient", "MTPs")";

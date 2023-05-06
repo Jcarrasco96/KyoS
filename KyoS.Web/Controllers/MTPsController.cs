@@ -184,9 +184,8 @@ namespace KyoS.Web.Controllers
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
                             GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
-                            CodeBill = user_logged.Clinic.CodeMTP                            
-
-                    };
+                            CodeBill = user_logged.Clinic.CodeMTP
+                        };
                     }
                     else
                     {
@@ -249,34 +248,10 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity client = await _context.Clients.FindAsync(mtpViewModel.IdClient);
                 DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                string gender_problems = string.Empty;
-
+               
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
-                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
-                    //if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    //{
-                    //    ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                    //    MTPViewModel model = new MTPViewModel
-                    //    {
-                    //        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    //        IdClient = mtpViewModel.IdClient,
-                    //        MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                    //        NumberOfMonths = mtpViewModel.NumberOfMonths,
-                    //        StartTime = mtpViewModel.StartTime,
-                    //        EndTime = mtpViewModel.EndTime,
-                    //        Modality = mtpViewModel.Modality,
-                    //        Frecuency = mtpViewModel.Frecuency,
-                    //        LevelCare = mtpViewModel.LevelCare,
-                    //        InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                    //        Setting = form["Setting"].ToString(),
-                    //        Review = mtpViewModel.Review,
-                    //        AdmissionedFor = user_logged.FullNameWithDocument,
-                    //        CodeBill = mtpViewModel.CodeBill
-                           
-                    //    };
-                    //    return View(model);
-                    //}
+                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";                    
                 }
 
                 //esto es para cuando el MTP es de group no tener que cambiar mas nada
@@ -3387,7 +3362,7 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public JsonResult GetGenderByClient(int idClient)
         {
             ClientEntity client = _context.Clients
@@ -3956,31 +3931,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
-                    //return View(model);
-                }
-               */
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
+               
                 GoalsTempEntity goalTempEntity = _converterHelper.ToGoalTempEntity(model, true);
                 _context.Add(goalTempEntity);
                 try
@@ -4058,31 +4017,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
-                    //return View(model);
-                }
-               */
+                               
                 GoalsTempEntity goalEntity = _converterHelper.ToGoalTempEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -4169,41 +4112,15 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = await _context.Clients
                                                     .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
 
-                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveTempViewModel newmodel = new ObjectiveTempViewModel
-                    {
-                        GoalTemp = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.ObjetiveTempList.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModalTemp", newmodel) });
-                    //return View(newmodel);
-                }
-                */
+                                
                 ObjectiveTempEntity objective = await _converterHelper.ToObjectiveTempEntity(model, true);
                 _context.Add(objective);
 
@@ -4306,32 +4223,16 @@ namespace KyoS.Web.Controllers
             ClientEntity client = await _context.Clients
                                                  .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
             if (ModelState.IsValid)
-            {
-               /* string gender_problems = string.Empty;
+            {               
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.GoalTemp = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
-                   
-                }
-               */
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+               
                 ObjectiveTempEntity objectiveTemp = await _converterHelper.ToObjectiveTempEntity(model, false);
                 _context.Update(objectiveTemp);
 
@@ -4340,7 +4241,7 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
-                                                                    .Include(g => g.ObjetiveTempList)
+                                                                    .Include(g => g.ObjetiveTempList.OrderBy(o => o.Objetive))                                                                        
                                                                     .Where(g => g.IdClient == goal.IdClient && g.UserName == user_logged.UserName)
                                                                     .ToListAsync();
                     
