@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 
 namespace KyoS.Web.Helpers
 {
@@ -95,7 +97,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),                
-                Name = model.Name
+                Name = model.Name,
+                Service = ThemeUtils.GetThemeByIndex(model.IdService)
             };
         }
 
@@ -115,12 +118,16 @@ namespace KyoS.Web.Helpers
 
         public Theme3ViewModel ToTheme3ViewModel(ThemeEntity themeEntity)
         {
+           
             return new Theme3ViewModel
             {
                 Id = themeEntity.Id,
                 Name = themeEntity.Name,                
                 IdClinic = themeEntity.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdService = Convert.ToInt32(themeEntity.Service),
+                Services = _combosHelper.GetComboThemeType(),
+                Service = themeEntity.Service
             };
         }
 

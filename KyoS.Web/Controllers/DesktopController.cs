@@ -489,6 +489,7 @@ namespace KyoS.Web.Controllers
 
                     ViewBag.ClientAuthorization = _context.Clients
                                                           .Where(n => n.Status == StatusType.Open
+                                                                   && n.Service == ServiceType.PSR
                                                                    && n.Clinic.Id == user_logged.Clinic.Id
                                                                   && (n.Clients_HealthInsurances == null 
                                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true

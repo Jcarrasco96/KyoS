@@ -11,7 +11,6 @@ namespace KyoS.Web.Models
         public int IdClient { get; set; }
 
         [Display(Name = "Choose document")]
-        [Required]
         public IFormFile DocumentFile { get; set; }
 
         

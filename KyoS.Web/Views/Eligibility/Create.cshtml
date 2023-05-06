@@ -22,6 +22,13 @@
                     <span asp-validation-for="EligibilityDate" class="text-danger"></span>
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Exists" class="control-label">Exist (check to confirm eligibility without attaching document)</label>
+                    <input type="checkbox" asp-for="Exists" class="checkbox" />
+                    <span asp-validation-for="Exists" class="text-danger"></span>
+                </div>
+            </div>
             <div>
                 <div class="col-md-offset-9">
                     <input type="submit" value="Submit" class="btn btn-primary" />

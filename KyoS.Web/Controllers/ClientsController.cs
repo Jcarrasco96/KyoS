@@ -100,7 +100,9 @@ namespace KyoS.Web.Controllers
                                           .ThenInclude(c => c.HealthInsurance)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
-                                                    || c.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                    || c.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                    || c.IdFacilitatorPSR == facilitator.Id
+                                                    || c.IdFacilitatorGroup == facilitator.Id)))
                                           .OrderBy(c => c.Name).ToListAsync());
             }
             if (User.IsInRole("CaseManager"))
@@ -264,7 +266,7 @@ namespace KyoS.Web.Controllers
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
-                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    if (clientViewModel.NameEmergencyContact != null && clientViewModel.NameEmergencyContact != string.Empty)
                     {
                         EmergencyContactEntity emergencyContact = new EmergencyContactEntity
                         {
@@ -286,6 +288,10 @@ namespace KyoS.Web.Controllers
                         };
                         clientEntity.EmergencyContact = emergencyContact;
 
+                    }
+                    else
+                    {
+                        clientEntity.EmergencyContact = null;
                     }
                 }
 
@@ -481,13 +487,28 @@ namespace KyoS.Web.Controllers
                                                          .Include(n => n.Workday)
                                                          .Where(m => m.Client.Id == clientEntity.Id )
                                                          .ToList();
-            if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
+            if (clientViewModel.IdFacilitatorPSR == 0)
             {
-                clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
+                {
+                    clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                }
             }
-            if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
+            else
             {
-                clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                clientViewModel.FacilitatorPSR = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorPSR).Name;
+            }
+
+            if (clientViewModel.IdFacilitatorGroup == 0)
+            {
+                if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
+                {
+                    clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                }
+            }
+            else
+            {
+                clientViewModel.FacilitatorGroup = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorGroup).Name;
             }
 
             if (clientEntity.EmergencyContact != null)
@@ -505,6 +526,10 @@ namespace KyoS.Web.Controllers
                 clientViewModel.CreateByEmergencyContact = clientEntity.EmergencyContact.CreatedBy;
                 clientViewModel.CreateOnEmergencyContact = clientEntity.EmergencyContact.CreatedOn;
 
+            }
+            else
+            {
+                clientEntity.EmergencyContact = new EmergencyContactEntity();
             }
 
             return View(clientViewModel);
@@ -547,7 +572,7 @@ namespace KyoS.Web.Controllers
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
-                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    if (clientViewModel.NameEmergencyContact != null && clientViewModel.NameEmergencyContact != string.Empty)
                     {
                         EmergencyContactEntity emergencyContact = new EmergencyContactEntity
                         {
@@ -569,12 +594,17 @@ namespace KyoS.Web.Controllers
                         };
                         _context.Add(emergencyContact);
                         clientEntity.EmergencyContact = emergencyContact;
-
+                        
                     }
+                    else
+                    {
+                        clientEntity.EmergencyContact = null;
+                    }
+                    
                 }
                 else
                 {
-                    if (clientViewModel.NameEmergencyContact != string.Empty)
+                    /*if (clientViewModel.NameEmergencyContact != string.Empty)
                     {
                         EmergencyContactEntity emergencyContact = new EmergencyContactEntity
                         {
@@ -594,10 +624,11 @@ namespace KyoS.Web.Controllers
                             LastModifiedOn = new DateTime(),
 
                         };
-                        _context.Update(emergencyContact);
-                        clientEntity.EmergencyContact = emergencyContact;
+                        //_context.Update(emergencyContact);
+                        
 
-                    }
+                    }*/
+                    clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
                 }
 
                 _context.Update(clientEntity);
@@ -4780,6 +4811,7 @@ namespace KyoS.Web.Controllers
                                           .Include(n => n.Clients_HealthInsurances)
                                           .ThenInclude(n => n.HealthInsurance)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Service == ServiceType.PSR
                                                    && n.Status == StatusType.Open
                                                   && (n.Clients_HealthInsurances == null
                                                    || n.Clients_HealthInsurances.Where(m => m.Active == true

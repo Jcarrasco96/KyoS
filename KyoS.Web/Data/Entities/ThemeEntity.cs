@@ -1,4 +1,5 @@
 ﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -15,5 +16,9 @@ namespace KyoS.Web.Data.Entities
         public DayOfWeekType? Day { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+
+        public ThemeType Service { get; set; }
+
+        public List<ActivityEntity> Activities { get; set; }
     }
 }

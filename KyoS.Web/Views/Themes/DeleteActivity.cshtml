@@ -1,0 +1,61 @@
+﻿@model KyoS.Web.Models.DeleteViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <form asp-action="DeleteActivity" onsubmit="return jQueryAjaxPostTheme(this);">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id_Element" />
+        <div class="col-md-12">
+            <div class="form-group">
+                <h5>Do you want to delete this record?</h5>
+                <h5>Note: all the data related to this element will be deleted.</h5>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-offset-9">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        //    jQueryAjaxPost = form => {
+        //        try {
+        //            $.ajax({
+        //                type: 'POST',
+        //                url: form.action,
+        //                data: new FormData(form),
+        //                contentType: false,
+        //                processData: false,
+        //                success: function (res) {
+        //                    if (res.isValid) {
+        //                        $('#view-all').html(res.html)
+        //                        $('#form-modal .modal-body').html('');
+        //                        $('#form-modal .modal-title').html('');
+        //                        $('#form-modal').modal('hide');
+        //                    }
+        //                    else
+        //                        $('#form-modal .modal-body').html(res.html);
+        //                },
+        //                error: function (err) {
+        //                    console.log(err)
+        //                }
+        //            })
+        //            //to prevent default form submit event
+        //            return false;
+        //        } catch (ex) {
+        //            console.log(ex)
+        //        }
+        //}
+    </script>
+}
+
+
