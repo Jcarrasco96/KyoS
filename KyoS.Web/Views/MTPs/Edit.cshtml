@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.MTPViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit MTP";
 }
 
 <!DOCTYPE html>
@@ -30,14 +30,14 @@
                     @Html.ActionLink("MTPs with review", "MtpWithReview", "MTPs")
                 }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Edit MTP</li>
         </ul><!--.breadcrumb-->
     </div>
 
     <h4>Edit Master Treatment Plan</h4>
     <hr />
     <div class="row">
-        <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data" onsubmit="return false;" id="formEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Active" />
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="form-group col-md-12">
-                <input type="submit" value="Save MTP" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Save MTP" class="btn btn-primary" />
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
@@ -146,6 +146,66 @@
                 $(this).closest("tr").next().remove();
             });
         });
+        function GenderVerification() {
+
+                var url = "@Url.Action("GetGenderByClient", "MTPs")";
+
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+
+                    let initialDC = $("#initialDischargeCriteria").val();
+                    if (data == 'F') //Female
+                    {
+                        if (initialDC.includes(" he ") || initialDC.includes(" He ") || initialDC.includes(" his ") || initialDC.includes(" His ") ||
+                            initialDC.includes(" him ") || initialDC.includes(" him.") || initialDC.includes("himself") || initialDC.includes("Himself") ||
+                            initialDC.includes(" oldman") || initialDC.includes(" wife")) {
+                            Swal.fire({
+                                title: 'Do you want to continue?',
+                                text: "There are gender issues in: Initial discharge criteria",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ec971f',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, continue!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    formEdit.submit();
+                                }
+                            });
+                        }
+                        else
+                        {
+                            formEdit.submit();
+                        }
+                    }
+                    else
+                    {
+                        if (data == 'M') //Male
+                        {
+                            if (initialDC.includes(" she ") || initialDC.includes(" She ") || initialDC.includes(" her.") || initialDC.includes(" her ") ||
+                                initialDC.includes(" Her ") || initialDC.includes("herself") || initialDC.includes("Herself") || initialDC.includes(" oldwoman") ||
+                                initialDC.includes(" husband")) {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in: Initial discharge criteria",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        formEdit.submit();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                formEdit.submit();
+                            }
+                        }
+                    }
+                });
+            }
     </script>
 }
 

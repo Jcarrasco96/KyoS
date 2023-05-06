@@ -15,7 +15,7 @@
                         <th class="col-md-3">
                             Name
                         </th>
-                        <th class="col-md-2" style="text-align:center;">
+                        <th class="col-md-2" style="text-align:left;">
                             Health Insurance
                         </th>
                         <th class="col-md-2" style="text-align:center;">
@@ -28,7 +28,7 @@
                             Status
                         </th>
                         <th class="col-md-1" style="text-align:center;">
-                            MH Therapy
+                            Therapy
                         </th>
                         <th class="col-md-1" align="right">
                         </th>
@@ -87,7 +87,7 @@
                                     |
                                     @Html.DisplayFor(modelItem => item.Code)
                                 </td>
-                                <td align="center">
+                                <td align="left">
                                     @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
                                         @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
@@ -157,7 +157,7 @@
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td align="center">
+                                <td align="left">
                                     @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
                                         @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name

@@ -251,33 +251,33 @@ namespace KyoS.Web.Controllers
                 DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
                 string gender_problems = string.Empty;
 
-                /*if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
-                    if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                        MTPViewModel model = new MTPViewModel
-                        {
-                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            IdClient = mtpViewModel.IdClient,
-                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                            NumberOfMonths = mtpViewModel.NumberOfMonths,
-                            StartTime = mtpViewModel.StartTime,
-                            EndTime = mtpViewModel.EndTime,
-                            Modality = mtpViewModel.Modality,
-                            Frecuency = mtpViewModel.Frecuency,
-                            LevelCare = mtpViewModel.LevelCare,
-                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString(),
-                            Review = mtpViewModel.Review,
-                            AdmissionedFor = user_logged.FullNameWithDocument,
-                            CodeBill = mtpViewModel.CodeBill
+                    //if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
+                    //{
+                    //    ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
+                    //    MTPViewModel model = new MTPViewModel
+                    //    {
+                    //        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                    //        IdClient = mtpViewModel.IdClient,
+                    //        MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
+                    //        NumberOfMonths = mtpViewModel.NumberOfMonths,
+                    //        StartTime = mtpViewModel.StartTime,
+                    //        EndTime = mtpViewModel.EndTime,
+                    //        Modality = mtpViewModel.Modality,
+                    //        Frecuency = mtpViewModel.Frecuency,
+                    //        LevelCare = mtpViewModel.LevelCare,
+                    //        InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
+                    //        Setting = form["Setting"].ToString(),
+                    //        Review = mtpViewModel.Review,
+                    //        AdmissionedFor = user_logged.FullNameWithDocument,
+                    //        CodeBill = mtpViewModel.CodeBill
                            
-                        };
-                        return View(model);
-                    }
-                }*/
+                    //    };
+                    //    return View(model);
+                    //}
+                }
 
                 //esto es para cuando el MTP es de group no tener que cambiar mas nada
                 if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
@@ -520,41 +520,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
-                /*
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
-                {
-                    if (this.GenderEvaluation(mtpEntity.Client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                        List<SelectListItem> list = new List<SelectListItem>();
-                        list.Insert(0, new SelectListItem
-                        {
-                            Text = mtpEntity.Client.Name,
-                            Value = $"{mtpEntity.Client.Id}"
-                        });
-                        MTPViewModel model = new MTPViewModel
-                        {
-                            Clients = list,
-                            IdClient = mtpViewModel.IdClient,
-                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                            NumberOfMonths = mtpViewModel.NumberOfMonths,
-                            StartTime = mtpViewModel.StartTime,
-                            EndTime = mtpViewModel.EndTime,
-                            Modality = mtpViewModel.Modality,
-                            Frecuency = mtpViewModel.Frecuency,
-                            LevelCare = mtpViewModel.LevelCare,
-                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString(),
-                            AdmissionedFor = mtpViewModel.AdmissionedFor,
-                            CreatedBy = mtpViewModel.CreatedBy,
-                            CreatedOn = mtpViewModel.CreatedOn,
-                            IdDocumentAssistant = mtpViewModel.IdDocumentAssistant
-                        };
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
-                }*/
+                
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
                 if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
@@ -819,32 +785,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModal", model) });
-                    //return View(model);
-                }
-                */
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -1128,32 +1078,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModal", model) });
-                    //return View(model);
-                }
-                */
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1508,41 +1442,15 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-               /* string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModal", newmodel) });
-                    //return View(newmodel);
-                }
-               */
+                               
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1986,31 +1894,16 @@ namespace KyoS.Web.Controllers
 
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });                    
-                }
-                */
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -3493,6 +3386,31 @@ namespace KyoS.Web.Controllers
                 foreach (var item in client.Clients_Diagnostics)
                 {
                     text += $"{item.Diagnostic.Code} - {item.Diagnostic.Description} ";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public JsonResult GetGenderByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients
+
+                                          .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                          .FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
+            {
+                if (client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
                 }
             }
 
