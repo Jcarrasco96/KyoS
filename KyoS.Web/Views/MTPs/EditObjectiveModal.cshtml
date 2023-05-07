@@ -72,9 +72,9 @@
     function GenderVerificationEOM() {
 
         event.preventDefault();
-        var url = "@Url.Action("GetGenderByClient", "MTPs")";
+        var url = "@Url.Action("GetGenderByGoal", "MTPs")";
 
-        $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+        $.get(url, { idGoal: @Model.IdGoal }, function (data) {
 
             let description = $("#description").val();
             let intervention = $("#intervention").val();

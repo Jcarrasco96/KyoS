@@ -1129,32 +1129,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {                
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalMTPReviewModal", model) });
-                    //return View(model);
-                }
-                */
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
 
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
@@ -2378,45 +2362,7 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.Client)
                                               .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
                 if (adendumEntity == null)
-                {
-                    string gender_problems = string.Empty;
-                    if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
-                    {
-                        if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
-                        {
-                            ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
-                            AdendumViewModel model1 = new AdendumViewModel
-                            {
-                                CreatedBy = adendumViewModel.CreatedBy,
-                                CreatedOn = adendumViewModel.CreatedOn,
-                                Dateidentified = adendumViewModel.Dateidentified,
-                                Duration = adendumViewModel.Duration,
-                                Facilitator = adendumViewModel.Facilitator,
-                                Frecuency = adendumViewModel.Frecuency,
-                                Goals = adendumViewModel.Goals,
-                                Id = adendumViewModel.Id,
-                                LastModifiedBy = adendumViewModel.LastModifiedBy,
-                                LastModifiedOn = adendumViewModel.LastModifiedOn,
-
-                                ProblemStatement = adendumViewModel.ProblemStatement,
-                                Status = adendumViewModel.Status,
-                                Supervisor = adendumViewModel.Supervisor,
-                                Unit = adendumViewModel.Unit,
-                                IdFacilitator = adendumViewModel.IdFacilitator,
-                                IdMTP = adendumViewModel.IdMTP,
-                                IdSupervisor = adendumViewModel.IdSupervisor,
-
-                                Mtp = _context.MTPs
-                                              .Include(c => c.Client.Clients_Diagnostics)
-                                              .ThenInclude(cd => cd.Diagnostic)
-                                              .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
-
-
-                            };
-                            return View(model1);
-
-                        }
-                    }
+                {                    
                     adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true, user_logged.UserName);
 
                     _context.Adendums.Add(adendumEntity);
@@ -2527,62 +2473,6 @@ namespace KyoS.Web.Controllers
                 MTPEntity mtp = _context.MTPs
                                               .Include(n => n.Client)
                                               .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
-
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
-                {
-                    if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
-                        AdendumViewModel model1 = new AdendumViewModel
-                        {
-                            CreatedBy = adendumViewModel.CreatedBy,
-                            CreatedOn = adendumViewModel.CreatedOn,
-                            Dateidentified = adendumViewModel.Dateidentified,
-                            Duration = adendumViewModel.Duration,
-                            Facilitator = adendumViewModel.Facilitator,
-                            Frecuency = adendumViewModel.Frecuency,
-                            Goals = _context.Adendums
-
-                                                    .Include(a => a.Mtp)
-                                                    .ThenInclude(m => m.Client)
-                                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                                    .ThenInclude(cd => cd.Diagnostic)
-
-                                                    .Include(a => a.Goals)
-                                                    .ThenInclude(g => g.Objetives)
-
-                                                    .Include(a => a.Goals)
-                                                    .ThenInclude(g => g.MTP)
-
-                                                    .Include(a => a.Supervisor)
-
-                                                    .Include(a => a.Facilitator)
-
-                                                    .FirstOrDefault(a => a.Id == adendumViewModel.Id).Goals,
-                            Id = adendumViewModel.Id,
-                            LastModifiedBy = adendumViewModel.LastModifiedBy,
-                            LastModifiedOn = adendumViewModel.LastModifiedOn,
-
-                            ProblemStatement = adendumViewModel.ProblemStatement,
-                            Status = adendumViewModel.Status,
-                            Supervisor = adendumViewModel.Supervisor,
-                            Unit = adendumViewModel.Unit,
-                            IdFacilitator = adendumViewModel.IdFacilitator,
-                            IdMTP = adendumViewModel.IdMTP,
-                            IdSupervisor = adendumViewModel.IdSupervisor,
-
-                            Mtp = _context.MTPs
-                                          .Include(c => c.Client.Clients_Diagnostics)
-                                          .ThenInclude(cd => cd.Diagnostic)
-                                          .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
-
-
-                        };
-                        return View(model1);
-
-                    }
-                }
 
                 _context.Adendums.Update(adendumEntity);
                 try

@@ -53,9 +53,9 @@
     function GenderVerificationEGM() {
 
         event.preventDefault();
-        var url = "@Url.Action("GetGenderByClient", "MTPs")";
+        var url = "@Url.Action("GetGenderByMTP", "MTPs")";
 
-        $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+        $.get(url, { idMTP: @Model.IdMTP }, function (data) {
 
             let area = $("#areaOfFocus").val();
             let name = $("#name").val();
