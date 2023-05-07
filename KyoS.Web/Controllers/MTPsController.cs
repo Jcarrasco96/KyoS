@@ -2859,6 +2859,14 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("Notifications", "Messages");
                     }
+                    if (mtpReviewViewModel.Origin == 5)
+                    {
+                        return RedirectToAction(nameof(ExpiredMTP));
+                    }
+                    if (mtpReviewViewModel.Origin == 6)
+                    {
+                        return RedirectToAction(nameof(MTPRinEdit));
+                    }
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -3131,15 +3139,16 @@ namespace KyoS.Web.Controllers
 
                         if (reviewViewModel.Origin == 1)
                         {
-                            return RedirectToAction(nameof(ExpiredMTP));
+                            //return RedirectToAction(nameof(ExpiredMTP));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 5 });
                         }
 
                         if (reviewViewModel.Origin == 2)
                         {
-                            return RedirectToAction(nameof(MTPRinEdit));
+                            //return RedirectToAction(nameof(MTPRinEdit));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 6 });
                         }
 
-                        return RedirectToAction(nameof(Index));
                     }
                     catch (System.Exception ex)
                     {
