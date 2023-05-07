@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.GoalEntity>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">MTP's goals</h3>
+        <h3 class="panel-title">Goals of MTP</h3>
     </div>
     <div class="panel-body">
         <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -56,15 +56,15 @@
                                     {
                                         <tr>
                                             <td align="center">
-                                                @if (value.IdMTPReview.ToString() != ViewData["Id"].ToString())
+                                                @*@if (value.IdMTPReview.ToString() != ViewData["Id"].ToString())
                                                 {
-                                                    <i class="glyphicon glyphicon-star btn-default"></i>
+                                                    <i class="glyphicon glyphicon-arrow-up"></i>
                                                 }
                                                 @if (value.IdMTPReview.ToString() == ViewData["Id"].ToString())
                                                 {
-                                                    <i class="glyphicon glyphicon-star btn-success"></i>
+                                                    <i class="glyphicon glyphicon-arrow-down"></i>
                                                 }
-                                                &nbsp;
+                                                &nbsp;*@
                                                 @Html.DisplayFor(modelItem => value.Objetive)
                                             </td>
                                             <td align="left">@Html.DisplayFor(modelItem => value.Description)</td>
@@ -116,14 +116,13 @@
                             </div>
                         </td>
                         <td align="center">
-                            
                             @if (item.IdMTPReview.ToString() != ViewData["Id"].ToString())
                             {
-                                <i class="glyphicon glyphicon-star btn-default"></i>
+                                <i class="glyphicon glyphicon-arrow-up" title="This goal was created in the MTP"></i>
                             }
                             @if (item.IdMTPReview.ToString() == ViewData["Id"].ToString())
                             {
-                                <i class="glyphicon glyphicon-star btn-success"></i>
+                                <i class="glyphicon glyphicon-arrow-down" title="This goal was created in this review"></i>
                             }
                             &nbsp;
                             @Html.DisplayFor(modelItem => item.Number)

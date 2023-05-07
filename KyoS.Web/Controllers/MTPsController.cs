@@ -848,32 +848,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
-                    //return View(model);
-                }
-                */
+                                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -3371,15 +3355,56 @@ namespace KyoS.Web.Controllers
         public JsonResult GetGenderByClient(int idClient)
         {
             ClientEntity client = _context.Clients
-
-                                          .Include(c => c.Clients_Diagnostics)
-                                            .ThenInclude(cd => cd.Diagnostic)
-
                                           .FirstOrDefault(c => c.Id == idClient);
             string text = string.Empty;
             if (client != null)
             {
                 if (client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
+        public JsonResult GetGenderByMTP(int idMTP)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .Include(m => m.Client)
+                                    .FirstOrDefault(m => m.Id == idMTP);
+            string text = string.Empty;
+            if (mtp != null)
+            {
+                if (mtp.Client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
+        public JsonResult GetGenderByGoal(int idGoal)
+        {
+            GoalEntity goal = _context.Goals
+                                      .Include(g => g.MTP)
+                                        .ThenInclude(m => m.Client)
+                                      .FirstOrDefault(g => g.Id == idGoal);
+            string text = string.Empty;
+            if (goal != null)
+            {
+                if (goal.MTP.Client.Gender == GenderType.Female)
                 {
                     text = "F";
                 }

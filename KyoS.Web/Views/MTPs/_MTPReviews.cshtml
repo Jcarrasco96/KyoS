@@ -71,26 +71,26 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
         <label asp-for="SummaryOfServices" class="control-label">Summary of services received (also address compliance/non-compliance in this section)</label>
-        <textarea asp-for="SummaryOfServices" class="form-control" rows="6"></textarea>
+        <textarea asp-for="SummaryOfServices" class="form-control" rows="6" id="summaryOfServices"></textarea>
         <span asp-validation-for="SummaryOfServices" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
         <label asp-for="DescribeClient" class="control-label">Describe client’s progress in treatment (or explanation of lack of progress)</label>
-        <textarea asp-for="DescribeClient" class="form-control" rows="6"></textarea>
+        <textarea asp-for="DescribeClient" class="form-control" rows="6" id="describeClient"></textarea>
         <span asp-validation-for="DescribeClient" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-12">
         <label asp-for="DescribeAnyGoals" class="control-label">Describe any goals or objectives that have not been met and update target dates. If all goals and objectives have been met, please justify continuation in treatment (Continue on additional pages if needed)</label>
-        <textarea asp-for="DescribeAnyGoals" class="form-control" rows="6"></textarea>
+        <textarea asp-for="DescribeAnyGoals" class="form-control" rows="6" id="describeAnyGoals"></textarea>
         <span asp-validation-for="DescribeAnyGoals" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
         <label asp-for="SpecifyChanges" class="control-label"><br />Specify changes in treatment or in diagnosis and explain</label>
-        <textarea asp-for="SpecifyChanges" class="form-control" rows="6"></textarea>
+        <textarea asp-for="SpecifyChanges" class="form-control" rows="6" id="specifyChanges"></textarea>
         <span asp-validation-for="SpecifyChanges" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
@@ -98,7 +98,7 @@
             If current treatment goals and objectives have not changed and there is a need for continued therapeutic
             services, please justify the continuation of these goals:
         </label>
-        <textarea asp-for="IfCurrent" class="form-control" rows="6"></textarea>
+        <textarea asp-for="IfCurrent" class="form-control" rows="6" id="ifCurrent"></textarea>
         <span asp-validation-for="IfCurrent" class="text-danger"></span>
     </div>
 </div>

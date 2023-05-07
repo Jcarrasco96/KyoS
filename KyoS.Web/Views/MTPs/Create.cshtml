@@ -168,21 +168,42 @@
                     $(this).closest("tr").next().remove();
                 });
             });
+
             function GenderVerification() {
                 
                 var url = "@Url.Action("GetGenderByClient", "MTPs")";
                 
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
                     
+                    let clientStrengths = $("#clientStrengths").val();
+                    let clientLimitation = $("#clientLimitation").val();
+                    let rationaleForUpdate = $("#rationaleForUpdate").val();
+                    let additionalRecommended = $("#additionalRecommended").val();
                     let initialDC = $("#initialDischargeCriteria").val();
+                    let text = "";
+
                     if (data == 'F') //Female
                     {
-                        if (initialDC.includes(" he ") || initialDC.includes(" He ") || initialDC.includes(" his ") || initialDC.includes(" His ") ||
-                            initialDC.includes(" him ") || initialDC.includes(" him.") || initialDC.includes("himself") || initialDC.includes("Himself") ||
-                            initialDC.includes(" oldman") || initialDC.includes(" wife")) {
+                        if (MaleVerification(clientStrengths) == true) {
+                            text = ", Client’s Strengths";
+                        }
+                        if (MaleVerification(clientLimitation) == true) {
+                            text = text + ", Client’s Limitations";
+                        }
+                        if (MaleVerification(rationaleForUpdate) == true) {
+                            text = text + ", Rationale for Update";
+                        }
+                        if (MaleVerification(additionalRecommended) == true) {
+                            text = text + ", Additional recommended services";
+                        }
+                        if (MaleVerification(initialDC) == true) {
+                            text = text + ", Initial discharge criteria";
+                        }
+
+                        if (text != "") {
                             Swal.fire({
                                 title: 'Do you want to continue?',
-                                text: "There are gender issues in: Initial discharge criteria",
+                                text: "There are gender issues in" + text,
                                 icon: 'warning',
                                 showCancelButton: true,
                                 confirmButtonColor: '#ec971f',
@@ -194,21 +215,34 @@
                                 }
                             });
                         }
-                        else
-                        {
+                        else {
                             form1.submit();
-                        }
+                        }                        
                     }
                     else
                     {
                         if (data == 'M') //Male
                         {
-                            if (initialDC.includes(" she ") || initialDC.includes(" She ") || initialDC.includes(" her.") || initialDC.includes(" her ") ||
-                                initialDC.includes(" Her ") || initialDC.includes("herself") || initialDC.includes("Herself") || initialDC.includes(" oldwoman") ||
-                                initialDC.includes(" husband")) {
+                            if (FemaleVerification(clientStrengths) == true) {
+                                text = ", Client’s Strengths";
+                            }
+                            if (FemaleVerification(clientLimitation) == true) {
+                                text = text + ", Client’s Limitations";
+                            }
+                            if (FemaleVerification(rationaleForUpdate) == true) {
+                                text = text + ", Rationale for Update";
+                            }
+                            if (FemaleVerification(additionalRecommended) == true) {
+                                text = text + ", Additional recommended services";
+                            }
+                            if (FemaleVerification(initialDC) == true) {
+                                text = text + ", Initial discharge criteria";
+                            }
+
+                            if (text != "") {
                                 Swal.fire({
                                     title: 'Do you want to continue?',
-                                    text: "There are gender issues in: Initial discharge criteria",
+                                    text: "There are gender issues in" + text,
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonColor: '#ec971f',
@@ -220,13 +254,34 @@
                                     }
                                 });
                             }
-                            else
-                            {
+                            else {
                                 form1.submit();
                             }
                         }                        
                     }            
                 });
+            }
+
+            function MaleVerification(text) {
+                if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                    text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                    text.includes(" oldman") || text.includes(" wife")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            function FemaleVerification(text) {
+                if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                    text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                    text.includes(" husband")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
     </script>
 }

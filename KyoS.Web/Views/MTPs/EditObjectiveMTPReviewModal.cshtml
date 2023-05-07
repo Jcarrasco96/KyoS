@@ -52,14 +52,14 @@
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Description" class="control-label"></label>
-                        <textarea asp-for="Description" class="form-control" rows="3" readonly></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="3" readonly id="description"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Intervention" class="control-label"></label>
-                        <textarea asp-for="Intervention" class="form-control" rows="2" readonly></textarea>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" readonly id="intervention"></textarea>
                         <span asp-validation-for="Intervention" class="text-danger"></span>
                     </div>
                 </div>
@@ -69,31 +69,31 @@
                 <div class="col-md-push-12">
                     <div class="form-group col-md-4">
                         <label asp-for="DateOpened" class="control-label"></label>
-                        <input asp-for="DateOpened" class="form-control"  />
+                        <input asp-for="DateOpened" class="form-control" />
                         <span asp-validation-for="DateOpened" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4">
                         <label asp-for="DateTarget" class="control-label"></label>
-                        <input asp-for="DateTarget" class="form-control"  />
+                        <input asp-for="DateTarget" class="form-control" />
                         <span asp-validation-for="DateTarget" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4">
                         <label asp-for="DateResolved" class="control-label"></label>
-                        <input asp-for="DateResolved" class="form-control"  />
+                        <input asp-for="DateResolved" class="form-control" />
                         <span asp-validation-for="DateResolved" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Description" class="control-label"></label>
-                        <textarea asp-for="Description" class="form-control" rows="3" ></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="3" id="description"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-push-12">
                     <div class="form-group col-md-12">
                         <label asp-for="Intervention" class="control-label"></label>
-                        <textarea asp-for="Intervention" class="form-control" rows="2" ></textarea>
+                        <textarea asp-for="Intervention" class="form-control" rows="2" id="intervention"></textarea>
                         <span asp-validation-for="Intervention" class="text-danger"></span>
                     </div>
                 </div>
@@ -102,29 +102,172 @@
             <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="Compliment" class="control-label">Accomplished</label> <br />
-                    <input type="checkbox" asp-for="Compliment" class="form-check-input">
+                    <input type="checkbox" asp-for="Compliment" class="form-check-input" id="checkCompliment">
                     <span asp-validation-for="Compliment" class="text-danger"></span>
                 </div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="Compliment_Date" class="control-label">Date of Accomplished</label>
-                    <input asp-for="Compliment_Date" class="form-control">
+                    @if (Model.Compliment)
+                    {
+                        <input asp-for="Compliment_Date" class="form-control" id="dtComplimentDate">
+                    }
+                    else
+                    {
+                        <input asp-for="Compliment_Date" class="form-control" id="dtComplimentDate" disabled>
+                    }                    
                     <span asp-validation-for="Compliment_Date" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-12 form-group">
                     <label asp-for="Compliment_Explain" class="control-label">Explain of accomplished objective</label>&nbsp;
-                    <textarea asp-for="Compliment_Explain" class="form-control" rows="3"></textarea>
+                    @if (Model.Compliment)
+                    {
+                        <textarea asp-for="Compliment_Explain" class="form-control" rows="3" id="explain"></textarea>
+                    }
+                    else
+                    {
+                        <textarea asp-for="Compliment_Explain" class="form-control" rows="3" id="explain" disabled></textarea>
+                    }                    
                     <span asp-validation-for="Compliment_Explain" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input onclick="GenderVerificationEOMRM()" type="submit" value="Save" class="btn btn-primary" id="save" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    checkCompliment.addEventListener('change', (e) => {
+        if (checkCompliment.checked == true) {
+            $("#dtComplimentDate").prop('disabled', false);
+            $("#explain").prop('disabled', false);
+        } else {
+            $("#explain").val("");
+            $("#explain").prop('disabled', true);
+            $("#dtComplimentDate").prop('disabled', true);
+        }
+    })
+
+    function GenderVerificationEOMRM() {
+
+        event.preventDefault();
+        var url = "@Url.Action("GetGenderByGoal", "MTPs")";
+
+        $.get(url, { idGoal: @Model.IdGoal }, function (data) {
+
+            let description = $("#description").val();
+            let intervention = $("#intervention").val();
+            let explain = $("#explain").val();
+            let text = "";
+
+            if (data == 'F') //Female
+            {
+                if (MaleVerification(description) == true)
+                {
+                    text = ", Description";
+                }
+                if (MaleVerification(intervention) == true)
+                {
+                    text = text + ", Intervention";
+                }
+                if (MaleVerification(explain) == true)
+                {
+                    text = text + ", Explain of accomplished objective";
+                }
+
+                if (text != "")
+                {
+                    Swal.fire({
+                        title: 'Do you want to continue?',
+                        text: "There are gender issues in" + text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ec971f',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, continue!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#save").unbind('click').submit();
+                        }
+                    });
+                }
+                else
+                {
+                    $("#save").unbind('click').submit();
+                }
+            }
+            else
+            {
+                if (data == 'M') //Male
+                {
+                    if (FemaleVerification(description) == true) {
+                        text = ", Description";
+                    }
+                    if (FemaleVerification(intervention) == true) {
+                        text = text + ", Intervention";
+                    }
+                    if (FemaleVerification(explain) == true) {
+                        text = text + ", Explain of accomplished objective";
+                    }
+
+                    if (text != "") {
+                        Swal.fire({
+                            title: 'Do you want to continue?',
+                            text: "There are gender issues in" + text,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#ec971f',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, continue!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#save").unbind('click').submit();
+                            }
+                        });
+                    }
+                    else {
+                        $("#save").unbind('click').submit();
+                    }
+                }
+            }
+        });
+
+    }
+
+    function MaleVerification(text)
+    {
+        if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+            text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+            text.includes(" oldman") || text.includes(" wife"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function FemaleVerification(text)
+    {
+        if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+            text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+            text.includes(" husband"))
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+</script>
+
 
