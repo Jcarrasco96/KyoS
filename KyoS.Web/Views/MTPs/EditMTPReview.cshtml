@@ -78,6 +78,14 @@
                 {
                     <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
                 }
+                @if (Model.Origin == 5)
+                {
+                    <a asp-action="ExpiredMTP" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 6)
+                {
+                    <a asp-action="MTPRinEdit" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
