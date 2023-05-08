@@ -3148,7 +3148,11 @@ namespace KyoS.Web.Controllers
                             //return RedirectToAction(nameof(MTPRinEdit));
                             return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 6 });
                         }
-
+                        if (reviewViewModel.Origin == 0)
+                        {
+                            //return RedirectToAction(nameof(MTPRinEdit));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 0 });
+                        }
                     }
                     catch (System.Exception ex)
                     {
