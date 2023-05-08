@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="02/02/2023 13:16:46" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/23/2021 11:43:38" ReportInfo.Modified="05/08/2023 13:25:42" ReportInfo.CreatorVersion="2021.1.0.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3DiVjQRhTlU4Oe2a+8PFbJg==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3oyMjmaGkx6rxdfb8szOzWQ==">
       <TableDataSource Name="Themes1" Alias="Themes2" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -75,7 +75,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u343qJ/sZOFywZZK9YCFgzlA==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ip/K8ZvQpHKIETroeRtWAA==">
       <TableDataSource Name="Themes2" Alias="Themes3" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -127,7 +127,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3IhyHFhVgGq0KKchesIuyCg==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3D9EUaSIo5qn+6S63Q1pvPQ==">
       <TableDataSource Name="Themes3" Alias="Themes4" DataType="System.Int32" Enabled="true" TableName="Themes">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -179,7 +179,7 @@ namespace FastReport
         <Column Name="stressManagement" DataType="System.Boolean" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3phKj46FH8tK3hyIiye28Lg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3vN83xwsNHHLAC37rQB5mvA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -690,10 +690,10 @@ namespace FastReport
     <PageFooterBand Name="PageFooter1" Top="1363.48" Width="800.98" Height="69.25">
       <LineObject Name="Line5" Left="793.8" Top="50.35" Width="-785.45"/>
       <TextObject Name="Text47" Left="9.45" Top="50.35" Width="236.25" Height="18.9" Text="Group Facilitator / Credentials" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text49" Left="359.1" Top="50.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text51" Left="537.85" Top="50.35" Width="255.15" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text53" Left="321.75" Top="32.45" Width="122.85" Height="18.9" Text="[dateFacilitator]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
-      <TextObject Name="Text55" Left="537.85" Top="31" Width="255.15" Height="18.9" Text="[Facilitators.Name] , [Facilitators.Codigo]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text49" Left="321.3" Top="50.35" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text51" Left="490.6" Top="50.35" Width="302.4" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text53" Left="283.95" Top="32.45" Width="122.85" Height="18.9" Text="[dateFacilitator]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text55" Left="490.6" Top="31" Width="302.4" Height="18.9" Text="[Facilitators.Name] , [Facilitators.Codigo]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
       <PictureObject Name="Picture2" Left="62.35" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </PageFooterBand>
   </ReportPage>

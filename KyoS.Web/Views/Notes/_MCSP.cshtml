@@ -7,11 +7,11 @@
             </td>
             <td>
                 &nbsp;&nbsp;
-                <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">MTP's view</a>
+                <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
             </td>
             <td>
                 &nbsp;&nbsp;
-                <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">Goals' view</a>
+                <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">View of Goals</a>
             </td>
         </tr>
     </table>        
@@ -39,7 +39,7 @@
         <input asp-for="Title" class="form-control"/>
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">        
+    <div class="form-group col-md-3">        
             <label asp-for="Setting" class="control-label"></label>
             <br />
             @if (Model.Setting == "53")
