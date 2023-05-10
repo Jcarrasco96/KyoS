@@ -140,7 +140,6 @@
                     {
                         <a asp-action="MessagesOfNotes" asp-controller="Messages" class="btn btn-success">Back</a>
                     }
-
                     @if (Model.Status.ToString() == "Edition")
                     {
                         @if (Model.Origin == 0) //viene de la pagina Index de las notas
@@ -162,144 +161,118 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript">
+    <script type="text/javascript">
 
-        $(document).ready(function () {
-            $("#cbGoal1").change(function () {
-                var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
-                    $("#cbObjetive1").empty();
-                    $.each(data, function (index, row) {
-                        $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+            $(document).ready(function () {
+                $("#cbGoal1").change(function () {
+                    var url = "@Url.Action("GetObjetiveList", "Notes")";
+                    $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
+                        $("#cbObjetive1").empty();
+                        $.each(data, function (index, row) {
+                            $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                        });
+
+                        //actualizo el label con la intervention que corresponde al obj seleccionado
+                        url = "@Url.Action("GetIntervention", "Notes")";
+                        $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
+                            $("#lbIntervention1").text(data);
+                        });
                     });
+                })
+                $("#cbGoal2").change(function () {
+                    var url = "@Url.Action("GetObjetiveList", "Notes")";
+                    $.get(url, { idGoal: $("#cbGoal2").val(), idNote: @Model.Id }, function (data) {
+                        $("#cbObjetive2").empty();
+                        $.each(data, function (index, row) {
+                            $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                        });
 
-                    //actualizo el label con la intervention que corresponde al obj seleccionado
-                    url = "@Url.Action("GetIntervention", "Notes")";
+                        //actualizo el label con la intervention que corresponde al obj seleccionado
+                        url = "@Url.Action("GetIntervention", "Notes")";
+                        $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
+                            $("#lbIntervention2").text(data);
+                        });
+                    });
+                })
+                $("#cbGoal3").change(function () {
+                    var url = "@Url.Action("GetObjetiveList", "Notes")";
+                    $.get(url, { idGoal: $("#cbGoal3").val(), idNote: @Model.Id }, function (data) {
+                        $("#cbObjetive3").empty();
+                        $.each(data, function (index, row) {
+                            $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                        });
+
+                        //actualizo el label con la intervention que corresponde al obj seleccionado
+                        url = "@Url.Action("GetIntervention", "Notes")";
+                        $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {
+                            $("#lbIntervention3").text(data);
+                        });
+                    });
+                })
+                $("#cbGoal4").change(function () {
+                    var url = "@Url.Action("GetObjetiveList", "Notes")";
+                    $.get(url, { idGoal: $("#cbGoal4").val(), idNote: @Model.Id }, function (data) {
+                        $("#cbObjetive4").empty();
+                        $.each(data, function (index, row) {
+                            $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                        });
+
+                        //actualizo el label con la intervention que corresponde al obj seleccionado
+                        url = "@Url.Action("GetIntervention", "Notes")";
+                        $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {
+                            $("#lbIntervention4").text(data);
+                        });
+                    });
+                })
+                $("#cbObjetive1").change(function () {
+                    var url = "@Url.Action("GetIntervention", "Notes")";
                     $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
                         $("#lbIntervention1").text(data);
                     });
-                });
-            })
-            $("#cbGoal2").change(function () {
-                var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal2").val(), idNote: @Model.Id }, function (data) {
-                    $("#cbObjetive2").empty();
-                    $.each(data, function (index, row) {
-                        $("#cbObjetive2").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    });
-
-                    //actualizo el label con la intervention que corresponde al obj seleccionado
-                    url = "@Url.Action("GetIntervention", "Notes")";
+                })
+                $("#cbObjetive2").change(function () {
+                    var url = "@Url.Action("GetIntervention", "Notes")";
                     $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
                         $("#lbIntervention2").text(data);
                     });
-                });
-            })
-            $("#cbGoal3").change(function () {
-                var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal3").val(), idNote: @Model.Id }, function (data) {
-                    $("#cbObjetive3").empty();
-                    $.each(data, function (index, row) {
-                        $("#cbObjetive3").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    });
-
-                    //actualizo el label con la intervention que corresponde al obj seleccionado
-                    url = "@Url.Action("GetIntervention", "Notes")";
+                })
+                $("#cbObjetive3").change(function () {
+                    var url = "@Url.Action("GetIntervention", "Notes")";
                     $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {
                         $("#lbIntervention3").text(data);
                     });
-                });
-            })
-            $("#cbGoal4").change(function () {
-                var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal4").val(), idNote: @Model.Id }, function (data) {
-                    $("#cbObjetive4").empty();
-                    $.each(data, function (index, row) {
-                        $("#cbObjetive4").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    });
-
-                    //actualizo el label con la intervention que corresponde al obj seleccionado
-                    url = "@Url.Action("GetIntervention", "Notes")";
+                })
+                $("#cbObjetive4").change(function () {
+                    var url = "@Url.Action("GetIntervention", "Notes")";
                     $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {
                         $("#lbIntervention4").text(data);
                     });
-                });
-            })
-            $("#cbObjetive1").change(function () {
-                var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
-                    $("#lbIntervention1").text(data);
-                });
-            })
-            $("#cbObjetive2").change(function () {
-                var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive2").val() }, function (data) {
-                    $("#lbIntervention2").text(data);
-                });
-            })
-            $("#cbObjetive3").change(function () {
-                var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive3").val() }, function (data) {
-                    $("#lbIntervention3").text(data);
-                });
-            })
-            $("#cbObjetive4").change(function () {
-                var url = "@Url.Action("GetIntervention", "Notes")";
-                $.get(url, { idObjetive: $("#cbObjetive4").val() }, function (data) {
-                    $("#lbIntervention4").text(data);
-                });
-            })
+                })
 
-            $("#EnglishPlanNote").click(function () {
-                var url = "@Url.Action("Translate", "Notes")";
-                $.get(url, { text: $("#PlanNote").val() }, function (data) {
-                    $("#PlanNote").val(data);
-                });
-            })
-        });
+                $("#EnglishPlanNote").click(function () {
+                    var url = "@Url.Action("Translate", "Notes")";
+                    $.get(url, { text: $("#PlanNote").val() }, function (data) {
+                        $("#PlanNote").val(data);
+                    });
+                })
+            });
 
-        function GenderVerification() {
-
-                var url = "@Url.Action("GetGenderByClient", "MTPs")";
-
-                $.get(url, { idClient: @Model.Workday_Cient.Client.Id }, function (data) {
-
-                    let plan = $("#PlanNote").val();
-                    let text = "";
-
-                    if (data == 'F') //Female
-                    {
-                        if (MaleVerification(plan) == true) {
-                            text = ", Client benefited from...";
-                        }
+            function GenderVerification() {      
+                if ($("#PlanNote").val() != "")
+                {
+                    var url = "@Url.Action("GetGenderByClient", "MTPs")";   
+                
+                    $.get(url, { idClient: @Model.Workday_Cient.Client.Id }, function (data) {
                         
-                        if (text != "") {
-                            Swal.fire({
-                                title: 'Do you want to continue?',
-                                text: "There are gender issues in" + text,
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#ec971f',
-                                cancelButtonColor: '#3085d6',
-                                confirmButtonText: 'Yes, continue!'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    form1.submit();
-                                }
-                            });
-                        }
-                        else {
-                            form1.submit();
-                        }
-                    }
-                    else
-                    {
-                        if (data == 'M') //Male
+                        let plan = $("#PlanNote").val();
+                        let text = "";
+                        
+                        if (data == 'F') //Female
                         {
-                            if (FemaleVerification(plan) == true) {
+                            if (MaleVerification(plan) == true) {
                                 text = ", Client benefited from...";
                             }
-                            
+                        
                             if (text != "") {
                                 Swal.fire({
                                     title: 'Do you want to continue?',
@@ -319,33 +292,61 @@
                                 form1.submit();
                             }
                         }
-                    }
-                });
+                        else
+                        {
+                            if (data == 'M') //Male
+                            {
+                                if (FemaleVerification(plan) == true) {
+                                    text = ", Client benefited from...";
+                                }
+                            
+                                if (text != "") {
+                                    Swal.fire({
+                                        title: 'Do you want to continue?',
+                                        text: "There are gender issues in" + text,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#ec971f',
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: 'Yes, continue!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            form1.submit();
+                                        }
+                                    });
+                                }
+                                else {
+                                    form1.submit();
+                                }
+                            }
+                        }
+                    });
+                }
             }
 
-        function MaleVerification(text) {
-            if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
-                text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
-                text.includes(" oldman") || text.includes(" wife")) {
-                return true;
+            function MaleVerification(text) {
+                if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                    text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                    text.includes(" oldman") || text.includes(" wife")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
-            else {
-                return false;
-            }
+
+            function FemaleVerification(text) {
+                if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                    text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                    text.includes(" husband")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
         }
 
-        function FemaleVerification(text) {
-            if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
-                text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
-                text.includes(" husband")) {
-                return true;
-            }
-            else {
-                return false;
-            }
-    }
-
-</script>
+    </script>
 }
 
 

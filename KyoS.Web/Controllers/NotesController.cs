@@ -4264,10 +4264,6 @@ namespace KyoS.Web.Controllers
 
                                              .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
-            string gender_problems = string.Empty;
-            if (this.GenderEvaluation(workday_Client.Client.Gender, note.PlanNote))
-                gender_problems = $"Client benefited from...";
-
             bool exist = false;            
             foreach (NoteP_Activity item in note.NotesP_Activities)
             {
@@ -4281,14 +4277,6 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction(nameof(EditNoteP), new { id = id, error = 1, origin = 0 });
                 if (origin == 2)
                     return RedirectToAction(nameof(EditNoteP), new { id = id, error = 1, origin = 2 });
-            }
-
-            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
-            {
-                if (origin == 0)
-                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 4, origin = 0, errorText = gender_problems });
-                if (origin == 2)
-                    return RedirectToAction(nameof(EditNoteP), new { id = id, error = 4, origin = 2, errorText = gender_problems });
             }
 
             note.Status = NoteStatus.Pending;
