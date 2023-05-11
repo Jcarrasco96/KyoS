@@ -159,27 +159,27 @@
                                                                                     }*@
                                                                             </td>
                                                                             <td align="right">
-                                                                                @if (day_client.GroupNote == null)
+                                                                                @if (day_client.GroupNote == null && day_client.GroupNote2 == null)
                                                                                 {
                                                                                     <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-remove"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (day_client.GroupNote.Status.ToString() == "Edition")
+                                                                                    if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Edition") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Edition"))
                                                                                     {
                                                                                         <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                         @*<a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-remove"></i></a>*@
                                                                                         <a asp-action="FinishEditingGroup" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                     }
                                                                                     else
-                                                                                        if (day_client.GroupNote.Status.ToString() == "Pending")
+                                                                                        if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Pending") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Pending"))
                                                                                     {
                                                                                         <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (day_client.GroupNote.Status.ToString() == "Approved")
+                                                                                        if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Approved") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Approved"))
                                                                                         {
                                                                                             <a asp-action="ApproveGroupNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
                                                                                             <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>

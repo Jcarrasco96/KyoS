@@ -2119,7 +2119,8 @@ namespace KyoS.Web.Controllers
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open
                                                         && (m.Client.IdFacilitatorPSR == facilitator.Id 
                                                             || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id
-                                                            || m.Client.IdFacilitatorGroup == facilitator.Id)))
+                                                            || m.Client.IdFacilitatorGroup == facilitator.Id
+                                                            || m.AdendumList.Where(n => n.Facilitator.Id == facilitator.Id).Count() > 0)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -3008,7 +3009,11 @@ namespace KyoS.Web.Controllers
                             //return RedirectToAction(nameof(MTPRinEdit));
                             return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 6 });
                         }
-
+                        if (reviewViewModel.Origin == 0)
+                        {
+                            //return RedirectToAction(nameof(MTPRinEdit));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 0 });
+                        }
                     }
                     catch (System.Exception ex)
                     {
