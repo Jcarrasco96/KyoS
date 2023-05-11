@@ -666,30 +666,6 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(model.Name))
-                {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
-                }
-                if (!string.IsNullOrEmpty(model.AreaOfFocus))
-                {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return View(model);
-                }
-
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -950,31 +926,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return View(model);
-                }
-                */
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1254,40 +1215,16 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(m => m.Client)
                                                 .Include(g => g.Objetives)
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
-                /*string gender_problems = string.Empty;
+                
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return View(newmodel);
-                }
-                */
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1511,47 +1448,15 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-                /*string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention,
-                        Compliment = model.Compliment,
-                        Compliment_Date = model.Compliment_Date,
-                        Compliment_Explain = model.Compliment_Explain,
-                        Compliment_IdMTPReview = model.Compliment_IdMTPReview,
-                        IdMTPReview = model.IdMTPReview
-
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
-                    //return View(newmodel);
-                }
-                */
+                                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1727,31 +1632,16 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(m => m.Client)
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {/*
-                string gender_problems = string.Empty;
+            {
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return View(model);
-                }
-                */
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -1954,32 +1844,16 @@ namespace KyoS.Web.Controllers
 
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {
-                /*string gender_problems = string.Empty;
+            {                
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveMTPReviewModal", model) });
-                    //return View(model);
-                }
-                */
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
                 {
@@ -2205,20 +2079,6 @@ namespace KyoS.Web.Controllers
             }
             else
                 return View(null);
-        }
-
-        private bool GenderEvaluation(GenderType gender, string text)
-        {
-            if (gender == GenderType.Female)
-            {
-                return text.Contains(" he ") || text.Contains(" He ") || text.Contains(" his ") || text.Contains(" His ") || text.Contains(" him ") ||
-                       text.Contains(" him.") || text.Contains("himself") || text.Contains("Himself") || text.Contains(" oldman") || text.Contains(" wife");
-            }
-            else
-            {
-                return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her.") || text.Contains(" her ") || text.Contains(" Her ") ||
-                       text.Contains("herself") || text.Contains("Herself") || text.Contains(" oldwoman") || text.Contains(" husband");
-            }
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
