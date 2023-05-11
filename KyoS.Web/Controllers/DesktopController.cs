@@ -366,19 +366,28 @@ namespace KyoS.Web.Controllers
                 {
                     ViewBag.PendingNotes = await _context.Workdays_Clients
                                                      .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                    && (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending
+                                                                    && (wc.Note.Status == NoteStatus.Pending 
+                                                                     || wc.IndividualNote.Status == NoteStatus.Pending
                                                                      || wc.GroupNote.Status == NoteStatus.Pending
+                                                                     || wc.GroupNote2.Status == NoteStatus.Pending
                                                                      || wc.NoteP.Status == NoteStatus.Pending)));
 
                     ViewBag.InProgressNotes = await _context.Workdays_Clients
                                                             .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                           && (wc.Note.Status == NoteStatus.Edition || wc.IndividualNote.Status == NoteStatus.Edition
-                                                                            || wc.GroupNote.Status == NoteStatus.Edition || wc.NoteP.Status == NoteStatus.Edition)));
+                                                                           && (wc.Note.Status == NoteStatus.Edition 
+                                                                            || wc.IndividualNote.Status == NoteStatus.Edition
+                                                                            || wc.GroupNote.Status == NoteStatus.Edition
+                                                                            || wc.GroupNote2.Status == NoteStatus.Edition
+                                                                            || wc.NoteP.Status == NoteStatus.Edition)));
 
                     ViewBag.NotStartedNotes = await _context.Workdays_Clients
                                                             .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                           && wc.Note == null && wc.IndividualNote == null
-                                                                           && wc.GroupNote == null && wc.NoteP == null && wc.Present == true));
+                                                                           && wc.Note == null 
+                                                                           && wc.IndividualNote == null
+                                                                           && wc.GroupNote == null 
+                                                                           && wc.GroupNote2 == null 
+                                                                           && wc.NoteP == null 
+                                                                           && wc.Present == true));
 
                     ViewBag.MTPMissing = await _context.Clients
                                                        .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
@@ -386,16 +395,22 @@ namespace KyoS.Web.Controllers
 
                     ViewBag.NotesWithReview = await _context.Workdays_Clients
                                                             .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                              (wc.Note.Status == NoteStatus.Pending || wc.IndividualNote.Status == NoteStatus.Pending ||
-                                                                               wc.GroupNote.Status == NoteStatus.Pending || wc.NoteP.Status == NoteStatus.Pending) &&
-                                                                               wc.Messages.Count() > 0));
+                                                                              (wc.Note.Status == NoteStatus.Pending 
+                                                                            || wc.IndividualNote.Status == NoteStatus.Pending 
+                                                                            || wc.GroupNote.Status == NoteStatus.Pending
+                                                                            || wc.GroupNote2.Status == NoteStatus.Pending
+                                                                            || wc.NoteP.Status == NoteStatus.Pending) 
+                                                                          &&   wc.Messages.Count() > 0));
 
                     ViewBag.AllDocumentsForClient = await this.AmountOfDocumentsCMH(user_logged.Clinic.Id);
 
                     ViewBag.ApprovedNotes = await _context.Workdays_Clients
                                                           .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                            (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved ||
-                                                                             wc.GroupNote.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)));
+                                                                            (wc.Note.Status == NoteStatus.Approved 
+                                                                          || wc.IndividualNote.Status == NoteStatus.Approved 
+                                                                          || wc.GroupNote.Status == NoteStatus.Approved
+                                                                          || wc.GroupNote2.Status == NoteStatus.Approved
+                                                                          || wc.NoteP.Status == NoteStatus.Approved)));
 
                     ViewBag.NotPresentNotes = await _context.Workdays_Clients
                                                             .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&

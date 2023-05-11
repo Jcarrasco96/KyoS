@@ -41,24 +41,23 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FacilitatorName)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.PSRPending)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.IndPending)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.GroupPending)
-                            </td>
-                            <td align="center">
-                                @(item.PSRPending + item.IndPending + item.GroupPending)
-                            </td>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FacilitatorName)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.PSRPending)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.IndPending)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.GroupPending)
+                                </td>
+                                <td align="center">
+                                    @(item.PSRPending + item.IndPending + item.GroupPending)
+                                </td>
                         </tr>
-
                         }
                     </tbody>
                 </table>

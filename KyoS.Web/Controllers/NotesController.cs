@@ -11238,7 +11238,9 @@ namespace KyoS.Web.Controllers
 
                 int group_cant = await _context.Workdays_Clients
                                                .CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                               && wc.GroupNote == null && wc.Present == true
+                                                               && wc.GroupNote == null
+                                                               && wc.GroupNote2 == null
+                                                               && wc.Present == true
                                                                && wc.Workday.Service == ServiceType.Group));
 
                 notStarted.Add(new NotesSummary {FacilitatorName = item.Name, PSRNotStarted = psr_cant, IndNotStarted = ind_cant, GroupNotStarted = group_cant });
@@ -11272,7 +11274,7 @@ namespace KyoS.Web.Controllers
 
                 int group_cant = await _context.Workdays_Clients
                                                .CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                             && wc.Note.Status == NoteStatus.Edition
+                                                             && (wc.GroupNote.Status == NoteStatus.Edition || wc.GroupNote2.Status == NoteStatus.Edition)
                                                              && wc.Workday.Service == ServiceType.Group));
 
                 editing.Add(new NotesSummary { FacilitatorName = item.Name, PSREditing = psr_cant, IndEditing = ind_cant, GroupEditing = group_cant });
@@ -11306,7 +11308,8 @@ namespace KyoS.Web.Controllers
 
                 int group_cant = await _context.Workdays_Clients
                                                .CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                               && wc.Note.Status == NoteStatus.Pending
+                                                               && (wc.GroupNote.Status == NoteStatus.Pending
+                                                                || wc.GroupNote2.Status == NoteStatus.Pending)
                                                                && wc.Workday.Service == ServiceType.Group));
 
                 pending.Add(new NotesSummary { FacilitatorName = item.Name, PSRPending = psr_cant, IndPending = ind_cant, GroupPending = group_cant });
@@ -11339,7 +11342,7 @@ namespace KyoS.Web.Controllers
                                                                               && wc.Workday.Service == ServiceType.Individual));
 
                 int group_cant = await _context.Workdays_Clients.CountAsync(wc => (wc.Facilitator.Id == item.Id
-                                                                                && wc.Note.Status == NoteStatus.Pending
+                                                                                && (wc.GroupNote.Status == NoteStatus.Pending || wc.GroupNote2.Status == NoteStatus.Pending)
                                                                                 && wc.Messages.Where(m => m.Notification == false).Count() > 0
                                                                                 && wc.Workday.Service == ServiceType.Group));
 
@@ -12900,6 +12903,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(wc => wc.Client)
                                                        .ThenInclude(c => c.Group)
 
+
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(g => g.Facilitator)
@@ -13120,11 +13124,11 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Note)
+                                                       .ThenInclude(wc => wc.GroupNote)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.NoteP)
+                                                       .ThenInclude(wc => wc.GroupNote2)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                  && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0
@@ -13158,11 +13162,11 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(w => w.Days)
                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                      .ThenInclude(wc => wc.Note)
+                                                      .ThenInclude(wc => wc.GroupNote)
 
                                                       .Include(w => w.Days)
                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                      .ThenInclude(wc => wc.NoteP)
+                                                      .ThenInclude(wc => wc.GroupNote2)
 
                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                 && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0
