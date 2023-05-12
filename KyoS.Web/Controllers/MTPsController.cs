@@ -2032,22 +2032,52 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Facilitator"))
                 {
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    mtps = await _context.MTPs
+                   /* mtps = await _context.MTPs
                                          .Include(m => m.MtpReviewList)
                                          .Include(m => m.Client)
                                          .ThenInclude(c => c.Clinic)
                                          .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && m.Active == true && m.Client.Status == StatusType.Open
-                                                && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id))).ToListAsync();
+                                                && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id))).ToListAsync();*/
+                    mtps = await _context.MTPs
+                                        .Include(n => n.Client)
+                                        .ThenInclude(n => n.Clinic)
+
+                                        .Include(n => n.AdendumList)
+
+                                        .Include(n => n.MtpReviewList)
+                                        .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Client.Status == StatusType.Open
+                                                  && m.Active == true
+                                                  && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id)
+                                                  && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                               && o.Goal.Service == m.Client.Service
+                                                                               && o.Compliment == false).Count() > 0
+                                                                     ).Count() == 0
+                                                 ))
+                                        .ToListAsync();
+                    return View(mtps);
                 }
                 else
                 {
                     mtps = await _context.MTPs
-                                         .Include(m => m.MtpReviewList)
-                                         .Include(m => m.Client)
-                                         .ThenInclude(c => c.Clinic)
+                                         .Include(n => n.Client)
+                                         .ThenInclude(n => n.Clinic)
+
+                                         .Include(n => n.AdendumList)
+
+                                         .Include(n => n.MtpReviewList)
                                          .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                              && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                                                   && m.Client.Status == StatusType.Open
+                                                   && m.Active == true
+                                                   && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                && o.Goal.Service == m.Client.Service
+                                                                                && o.Compliment == false).Count() > 0
+                                                                      ).Count() == 0
+                                                  ))
+                                         .ToListAsync();
+                    return View(mtps);
+
                 }
                 List<MTPEntity> expiredMTPs = new List<MTPEntity>();
                 int month = 0;

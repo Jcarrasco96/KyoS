@@ -171,7 +171,7 @@ namespace KyoS.Web.Controllers
 
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
-                List<MTPEntity> mtps = await _context.MTPs
+                /*List<MTPEntity> mtps = await _context.MTPs
                                                      .Include(n => n.MtpReviewList)                                                       
                                                      .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                               && m.Active == true && m.Client.Status == StatusType.Open
@@ -193,9 +193,19 @@ namespace KyoS.Web.Controllers
                         }
                     }
                     month = 0;
-                }
+                }*/
 
-                ViewBag.ExpiredMTPsFacilitator = count.ToString();
+                List<MTPEntity> mtpList = await _context.MTPs
+                                                           .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && m.Client.Status == StatusType.Open
+                                                                     && m.Active == true
+                                                                     && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id)
+                                                                     && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                                           && o.Goal.Service == m.Client.Service
+                                                                                                           && o.Compliment == false).Count() > 0).Count() == 0))
+                                                           .ToListAsync();
+
+                ViewBag.ExpiredMTPsFacilitator = mtpList.Count().ToString();
 
                 List<ClientEntity> clientListPSR = await _context.Clients
                                                                   .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
@@ -416,30 +426,16 @@ namespace KyoS.Web.Controllers
                                                             .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
                                                                                wc.Present == false));
 
-                    List<MTPEntity> mtps = await _context.MTPs
-                                                         .Include(n => n.MtpReviewList)
-                                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id &&
-                                                                      m.Active == true &&
-                                                                      m.Client.Status == StatusType.Open)).ToListAsync();
-                    int count = 0;
-                    int month = 0;
-                    foreach (var item in mtps)
-                    {
-                        foreach (var product in item.MtpReviewList)
-                        {
-                            month += product.MonthOfTreatment;
-                        }
-                        if (item.NumberOfMonths != null)
-                        {
-                            if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
-                            {
-                                count++;
-                            }
-                        }
-                        month = 0;
-                    }
-
-                    ViewBag.ExpiredMTPs = count;
+                    List<MTPEntity> mtpList = await _context.MTPs
+                                                            .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id 
+                                                                      && m.Client.Status == StatusType.Open
+                                                                      && m.Active == true
+                                                                      && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                                            && o.Goal.Service == m.Client.Service
+                                                                                                            && o.Compliment == false).Count() > 0).Count() == 0))
+                                                            .ToListAsync();
+                    
+                    ViewBag.ExpiredMTPs = mtpList.Count();
 
                     ViewBag.PendingBIO = _context.Clients
                                             .Count(wc => (wc.Clinic.Id == user_logged.Clinic.Id
