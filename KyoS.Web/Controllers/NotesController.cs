@@ -2585,6 +2585,7 @@ namespace KyoS.Web.Controllers
                 noteViewModel = new GroupNoteViewModel
                 {
                     Id = workday_Client.Workday.Id,
+                    Workday_Cient = workday_Client
                 };
                 return View(noteViewModel);
             }
@@ -2596,6 +2597,7 @@ namespace KyoS.Web.Controllers
                 noteViewModel = new GroupNoteViewModel
                 {
                     Id = workday_Client.Workday.Id,
+                    Workday_Cient = workday_Client
                 };
                 return View(noteViewModel);
             }
@@ -2853,7 +2855,7 @@ namespace KyoS.Web.Controllers
                 if (note == null)   //la nota no está creada
                 {
                     //Verify the client is not present in other services of notes at the same time
-                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Id))
                     {
                         return RedirectToAction(nameof(EditGroupNote), new { id = model.Id, error = 5, origin = model.Origin });
                     }
@@ -3701,6 +3703,7 @@ namespace KyoS.Web.Controllers
                 noteViewModel = new GroupNote3ViewModel
                 {
                     Id = workday_Client.Workday.Id,
+                    Workday_Cient = workday_Client
                 };
                 return View(noteViewModel);
             }
@@ -3712,6 +3715,7 @@ namespace KyoS.Web.Controllers
                 noteViewModel = new GroupNote3ViewModel
                 {
                     Id = workday_Client.Workday.Id,
+                    Workday_Cient = workday_Client
                 };
                 return View(noteViewModel);
             }
@@ -3883,8 +3887,6 @@ namespace KyoS.Web.Controllers
                     UnableToDetermine = note.UnableToDetermine,
                     Unmotivated = note.Unmotivated,
                     Workday_Client_FK = workday_Client.Id,
-
-
 
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
@@ -4359,28 +4361,15 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(FinishEditingGroup2), new { id = id, origin = origin });
             }
 
-            bool exist = false;            
-            string gender_problems = string.Empty;
+            bool exist = false;   
             int index = 1;
             foreach (GroupNote_Activity item in note.GroupNotes_Activities)
             {
                 if (item.Objetive != null)
                     exist = true;
-                if (!string.IsNullOrEmpty(item.AnswerClient))
-                {
-                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Client Answer #{index}" : $"{gender_problems}, Client Answer #{index}";
-                }
-                if (!string.IsNullOrEmpty(item.AnswerFacilitator))
-                {
-                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Facilitator Answer #{index}" : $"{gender_problems}, Facilitator Answer #{index}";
-                }
+                
                 index++;
             }
-
-            if (this.GenderEvaluation(workday_Client.Client.Gender, note.PlanNote))
-                gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Plan" : $"{gender_problems}, Plan";
 
             if (!exist)     //la nota no tiene goal relacionado
             {
@@ -4388,15 +4377,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 0 });
                 if (origin == 2)
                     return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 2 });
-            }            
-
-            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
-            {
-                if (origin == 0)
-                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 0, errorText = gender_problems });
-                if (origin == 2)
-                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 2, errorText = gender_problems });
-            }
+            }                        
 
             note.Status = NoteStatus.Pending;
             _context.Update(note);
@@ -4431,25 +4412,14 @@ namespace KyoS.Web.Controllers
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             bool exist = false;            
-            string gender_problems = string.Empty;
             int index = 1;
             foreach (GroupNote2_Activity item in note.GroupNotes2_Activities)
             {
                 if (item.Objetive != null)
-                    exist = true;                
-                if (!string.IsNullOrEmpty(item.AnswerClient))
-                {
-                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerClient))
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Client Answer #{index}" : $"{gender_problems}, Client Answer #{index}";
-                }
-               /* if (!string.IsNullOrEmpty(item.AnswerFacilitator))
-                {
-                    if (this.GenderEvaluation(workday_Client.Client.Gender, item.AnswerFacilitator))
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? $"Facilitator Answer #{index}" : $"{gender_problems}, Facilitator Answer #{index}";
-                }*/
+                    exist = true;               
+                
                 index++;
             }
-
            
             if (!exist)     //la nota no tiene goal relacionado
             {
@@ -4457,15 +4427,7 @@ namespace KyoS.Web.Controllers
                     return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 0 });
                 if (origin == 2)
                     return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 1, origin = 2 });
-            }
-
-            if (!string.IsNullOrEmpty(gender_problems))     //la nota tiene problemas con el genero
-            {
-                if (origin == 0)
-                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 0, errorText = gender_problems });
-                if (origin == 2)
-                    return RedirectToAction(nameof(EditGroupNote), new { id = id, error = 4, origin = 2, errorText = gender_problems });
-            }
+            }            
 
             note.Status = NoteStatus.Pending;
             _context.Update(note);

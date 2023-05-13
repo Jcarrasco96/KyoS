@@ -26,23 +26,18 @@
             <strong class="green">
                 Note has been successfully updated
             </strong>
-
         </div>
     }
 </div>
 
-<div class="row">
+<div class="col-md-push-12">
     <form asp-action="ChangeNotes" enctype="multipart/form-data">
       
     </form>
-    <div class="col-md-12">
-        <hr />
-    </div>
     <div id="view-notes">
         @await Html.PartialAsync("_ViewNotes", Model)
     </div>
 </div>
-
 
 <partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />

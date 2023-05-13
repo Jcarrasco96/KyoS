@@ -10,7 +10,7 @@ namespace KyoS.Web.Models
         public int IdActivity1 { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Client statement #1")]
+        [Display(Name = "Client input content")]
         public string AnswerClient1 { get; set; }
 
         //[Required(ErrorMessage = "The field {0} is mandatory.")]

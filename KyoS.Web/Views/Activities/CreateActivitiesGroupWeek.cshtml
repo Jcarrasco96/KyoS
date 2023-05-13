@@ -33,20 +33,15 @@
             <input type="hidden" asp-for="IdWorkday" />
             <div class="col-md-12">
                 <h5><strong>Date: </strong> @Model.Day @Model.Date </h5>
-            </div>
-            <div>
+            </div>       
+            <div class="container-fluid">
                 &nbsp;
             </div>
-            <div class="col-md-12">
-                <div class="form-group col-md-5">
-                    &nbsp;
-                </div>
-                <div class="form-group col-md-2">
-                    <a onclick="showInPopupLg('@Url.Action("SearchTopic", "Activities", null, Context.Request.Scheme)','Search Theme')" class="btn btn-success" title="Search Topic"><i class="glyphicon glyphicon-search"></i> Search Theme</a>
-                </div>
-                <div class="form-group col-md-5">
-                    &nbsp;
-                </div>
+            <div class="form-group col-md-12">                
+                <a onclick="showInPopupLg('@Url.Action("SearchTopic", "Activities", null, Context.Request.Scheme)','Search Theme')" class="btn btn-info" title="Search Topic"><i class="glyphicon glyphicon-search"></i> Search Topic</a>                         
+            </div>
+            <div class="container-fluid">
+                &nbsp;
             </div>
             @if (ViewData["Schema"].ToString() == "Schema1" || ViewData["Schema"].ToString() == "Schema2")
             {

@@ -91,7 +91,7 @@
         </div>
         @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         {
-            <form asp-action="EditGroupNote3" enctype="multipart/form-data">
+            <form asp-action="EditGroupNote3" enctype="multipart/form-data" onsubmit="return false;" id="form1">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="IdActivity1" />
@@ -104,7 +104,7 @@
                 <partial name="_GroupMCS3" />
                 <partial name="_GroupNotes3" />
                 <div class="form-group col-md-12">
-                    <input type="submit" value="Save All" class="btn btn-primary" />
+                    <input onclick="GenderVerification()" type="submit" value="Save All" class="btn btn-primary" />
                     @if (Model.Origin == 0) //viene de la pagina GroupNotes de las notas de grupo
                     {
                         <a asp-action="GroupNotes" class="btn btn-success">Back</a>
@@ -134,11 +134,11 @@
                     {
                         @if (Model.Origin == 0) //viene de la pagina GroupNotes de las notas
                         {
-                            <a asp-action="FinishEditingGroup" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                            <a asp-action="FinishEditingGroup" class="btn btn-warning disabled" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
                         }
                         @if (Model.Origin == 2) //viene de la pagina GroupNotesInEdit de las notas
                         {
-                            <a asp-action="FinishEditingGroup" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                            <a asp-action="FinishEditingGroup" class="btn btn-warning disabled" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
                         }
                     }
                 </div>                
@@ -224,6 +224,98 @@
                 });
             })
         });
+
+        function GenderVerification() {
+
+                if ($("#AnswerClient1").val() != "")
+                {
+
+                    var url = "@Url.Action("GetGenderByClient", "MTPs")";
+
+                    $.get(url, { idClient: @Model.Workday_Cient.Client.Id }, function (data) {
+
+                        let AnswerClient1 = $("#AnswerClient1").val();
+                        let text = "";
+
+                        if (data == 'F') //Female
+                        {
+                            if (MaleVerification(AnswerClient1) == true) {
+                                text = ", Client input content";
+                            }
+
+                            if (text != "") {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in" + text,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        form1.submit();
+                                    }
+                                });
+                            }
+                            else {
+                                form1.submit();
+                            }
+                        }
+                        else
+                        {
+                            if (data == 'M') //Male
+                            {
+                                if (FemaleVerification(AnswerClient1) == true) {
+                                    text = ", Client input content";
+                                }
+
+                                if (text != "") {
+                                    Swal.fire({
+                                        title: 'Do you want to continue?',
+                                        text: "There are gender issues in" + text,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#ec971f',
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: 'Yes, continue!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            form1.submit();
+                                        }
+                                    });
+                                }
+                                else {
+                                    form1.submit();
+                                }
+                            }
+                        }
+                    });
+                }
+        }
+
+        function MaleVerification(text) {
+                if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                    text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                    text.includes(" oldman") || text.includes(" wife")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+        }
+
+        function FemaleVerification(text) {
+                if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                    text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                    text.includes(" husband")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+        }
+
 </script>
 }
 

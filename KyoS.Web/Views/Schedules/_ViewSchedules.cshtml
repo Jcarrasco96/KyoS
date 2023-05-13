@@ -31,9 +31,9 @@
                                 <th class="col-md-1" style="text-align:center;">Service</th>
                                 <th class="col-md-1" style="text-align:center;">Session</th>
                                 <th class="col-md-2" style="text-align:center;">Initial Time</th>
-                                <th class="col-md-2" style="text-align:center;">End Time</th>
+                                <th class="col-md-1" style="text-align:center;">End Time</th>
                                 <th class="col-md-2" style="text-align:center;">Amount</th>
-                                <th class="col-md-2" style="text-align:center;">Description</th>
+                                <th class="col-md-2" style="text-align:left;">Description</th>
                                 <th class="col-md-2">
                                 </th>
                             </tr>
@@ -54,8 +54,8 @@
                                         <div style="display:none">
                                             <table class="table table-striped table-bordered">
                                                 <tr>
-                                                    <th class="col-md-5" style="text-align:center;">Initial time</th>
-                                                    <th class="col-md-5" style="text-align:center;">End time</th>
+                                                    <th class="col-md-5" style="text-align:center;">Initial Time</th>
+                                                    <th class="col-md-5" style="text-align:center;">End Time</th>
                                                     <th class="col-md-2" style="text-align:center;"></th>
                                                 </tr>
                                                 @foreach (var product1 in item.SubSchedules)
@@ -127,12 +127,12 @@
                                             <p>0</p>
                                         }
                                     </td>
-                                    <td align="center">
+                                    <td align="left">
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
                                     <td align="right">
                                         <a onclick="showInPopup('@Url.Action("Edit", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Edit Schedule')" class="btn btn-warning disabled" title="Edit Schedule"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a onclick="showInPopup('@Url.Action("CreateSubSchedule", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Create Schedule')" class="btn btn-primary" title="Create SubSchedule"><i class="glyphicon glyphicon-plus"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("CreateSubSchedule", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Create sub schedule')" class="btn btn-primary" title="Create sub schedule"><i class="glyphicon glyphicon-plus"></i></a>
                                         <a onclick="showInPopup('@Url.Action("Delete", "Schedules", new { id = item.Id}, Context.Request.Scheme)','Delete Schedule')" class="btn btn-danger disabled" title="Delete Schedule"><i class="glyphicon glyphicon-trash"></i></a>
                                     </td>
                                 </tr>

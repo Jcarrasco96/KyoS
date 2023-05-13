@@ -15,14 +15,12 @@
     </ul><!--.breadcrumb-->
 </div>
 <div class="col-md-push-12">
-    <div class="col-md-12 form-group">
+    <div class="form-group col-md-push-12">
         <a onclick="showInPopup('@Url.Action("Create", "Schedules", null, Context.Request.Scheme)','Create Schedule')" class="btn btn-primary" title="Create Schedule"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Schedule</a>
-    </div>
-    <div class="col-md-12">
-        <div id="view-schedule">
-            @await Html.PartialAsync("_ViewSchedules", Model.OrderBy(f => f.Service).ToList())
-        </div>
-    </div>
+    </div>    
+    <div id="view-schedule">
+        @await Html.PartialAsync("_ViewSchedules", Model.OrderBy(f => f.Service).ToList())
+    </div>    
 </div>
 
 <partial name="_ModalPopup" />
