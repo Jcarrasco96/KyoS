@@ -144,47 +144,49 @@
                     <tbody>
                         @foreach (var item in Model.Goals)
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.Objetives.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Objetives.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    else
+                                    {
 
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped table-bordered">
-                                        <tr>
-                                            <th class="col-md-1">Objective</th>
-                                            <th class="col-md-6">Description</th>
-                                            <th class="col-md-5">Intervention</th>
-                                        </tr>
-                                        @foreach (var product in item.Objetives)
-                                        {
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td>@Html.DisplayFor(modelItem => product.Objetive)</td>
-                                                <td>@Html.DisplayFor(modelItem => product.Description)</td>
-                                                <td>@Html.DisplayFor(modelItem => product.Intervention)</td>
+                                                <th class="col-md-1">Objective</th>
+                                                <th class="col-md-5">Description</th>
+                                                <th class="col-md-4">Intervention</th>
+                                                <th class="col-md-2">Active Until</th>
                                             </tr>
-                                        }
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Number)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AreaOfFocus)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
-                            </td>
-                        </tr>
+                                            @foreach (var product in item.Objetives)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => product.Objetive)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Description)</td>
+                                                    <td>@Html.DisplayFor(modelItem => product.Intervention)</td>
+                                                    <td>@product.DateResolved.Date.ToShortDateString()</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Number)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AreaOfFocus)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Service)
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
