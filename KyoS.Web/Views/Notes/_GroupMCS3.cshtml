@@ -2,7 +2,14 @@
 <div class="col-md-12">
     <h4 style="font-weight:bold;"><span class="label label-info">@Model.Workday_Cient.Client.Name</span></h4>
     <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
+    @if (Model.Workday_Cient.Schedule != null)
+    {
+        <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() @Model.Workday_Cient.Workday.Day, Session: @Model.Workday_Cient.Schedule.InitialTime.ToShortTimeString() - @Model.Workday_Cient.Schedule.EndTime.ToShortTimeString()</h5>
+    }
+    else
+    {
+        <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() @Model.Workday_Cient.Workday.Day, Session: @Model.Workday_Cient.Session</h5>
+    }
     <h5>Bill Code: @Model.CodeBill</h5>
     <hr />
 </div>

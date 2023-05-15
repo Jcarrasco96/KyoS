@@ -2146,7 +2146,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
 
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id 
                                                         && (m.Client.IdFacilitatorPSR == facilitator.Id 
                                                             || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id
                                                             || m.Client.IdFacilitatorGroup == facilitator.Id
@@ -2166,7 +2166,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
 
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open))
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                     }

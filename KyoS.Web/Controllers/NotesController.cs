@@ -1072,6 +1072,8 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Facilitator)
 
+                                                          .Include(wc => wc.Schedule)
+
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -10501,6 +10503,8 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Workday)
                                           .ThenInclude(w => w.Week)
 
+                                          .Include(wc => wc.Schedule)
+
                                           .Where(wc => (wc.Facilitator.Name == name
                                                      && wc.Workday.Week.Id == id
                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
@@ -10517,7 +10521,9 @@ namespace KyoS.Web.Controllers
                                           .Include(wc => wc.Client)
                                           .Include(wc => wc.Workday)
                                           .ThenInclude(w => w.Week)
-                                          
+
+                                          .Include(wc => wc.Schedule)
+
                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                      && wc.Note == null && wc.NoteP == null && wc.Present == true
                                                      && wc.Workday.Service == ServiceType.PSR))
@@ -10552,6 +10558,8 @@ namespace KyoS.Web.Controllers
                                       
                                       .Include(wc => wc.Workday)
                                       .ThenInclude(w => w.Week)
+
+                                      .Include(wc => wc.Schedule)
 
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                  && (wc.GroupNote == null 
