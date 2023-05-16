@@ -91,13 +91,18 @@ namespace KyoS.Web.Controllers
 
                 if (User.IsInRole("Facilitator"))
                 {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(m => m.LinkedUser == user_logged.UserName);
                     client = await _context.Clients
 
                                            .Include(g => g.Brief)
                                            .Include(u => u.Clinic)
                                            .ThenInclude(c => c.Setting)
                                            .Include(g => g.List_BehavioralHistory)
-                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && (n.IdFacilitatorGroup == facilitator.Id
+                                             || n.IdFacilitatorPSR == facilitator.Id
+                                             || n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                              && n.Brief != null)
                                            .OrderBy(f => f.Name)
                                            .ToListAsync();
                 }

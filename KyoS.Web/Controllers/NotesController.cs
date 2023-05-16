@@ -458,7 +458,18 @@ namespace KyoS.Web.Controllers
             }
 
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
-            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
+            if (mtp != null)
+            {
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
+                {
+                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                }
+            }
 
             List<Workday_Activity_Facilitator> activities = workday_Client.Workday
                                                                           .Workdays_Activities_Facilitators
@@ -1096,9 +1107,10 @@ namespace KyoS.Web.Controllers
                                                            .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
 
             //el dia no tiene actividad asociada para el facilitator logueado por lo tanto no se puede crear la nota
-            List<Workday_Activity_Facilitator> workday_Activity_Facilitators = workday_Client.Workday.Workdays_Activities_Facilitators
-                                                                                                     .Where(waf => waf.Facilitator == facilitator_logged)   
-                                                                                                     .ToList();
+            List<Workday_Activity_Facilitator> workday_Activity_Facilitators = workday_Client.Workday
+                                                                                             .Workdays_Activities_Facilitators
+                                                                                             .Where(waf => waf.Facilitator == facilitator_logged)   
+                                                                                             .ToList();
             if (workday_Activity_Facilitators.Count() == 0)
             {
                 ViewBag.Error = "1";
@@ -1171,28 +1183,20 @@ namespace KyoS.Web.Controllers
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
             MTPEntity mtp = _context.MTPs
                                     .Include(n => n.MtpReviewList)
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
                                     .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
-            bool mtpExpired = false;
+
+            //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
             if (mtp != null)
             {
-                foreach (var item in mtp.MtpReviewList)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
                 {
-                    if (item.DataOfService.AddMonths(item.MonthOfTreatment) > workday_Client.Workday.Date)
-                    {
-                        mtpExpired = true;
-                    }
-                }
-                if (mtp.AdmissionDateMTP.AddMonths(mtp.NumberOfMonths.Value) > workday_Client.Workday.Date)
-                {
-                    mtpExpired = true;
+                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
                 }
             }
 
-            if (mtpExpired == false)
-            {
-                return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1});
-            }
-
+           
             List<Workday_Activity_Facilitator> activities;
             if (am == true)
             {
@@ -2131,6 +2135,8 @@ namespace KyoS.Web.Controllers
             if (workday_Client.Client != null)
             {
                 mtp = _context.MTPs
+                              .Include(n => n.Goals)
+                              .ThenInclude(n => n.Objetives)
                               .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
             }            
 
@@ -2138,6 +2144,12 @@ namespace KyoS.Web.Controllers
             IEnumerable<SelectListItem> objs = null;
             if (mtp != null)
             {
+                //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
+                {
+                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                }
+
                 //Evaluate setting for goals's classification
                 SettingEntity setting = _context.Settings
                                                 .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
