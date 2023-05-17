@@ -2032,18 +2032,14 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Facilitator"))
                 {
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                   /* mtps = await _context.MTPs
-                                         .Include(m => m.MtpReviewList)
-                                         .Include(m => m.Client)
-                                         .ThenInclude(c => c.Clinic)
-                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                && m.Active == true && m.Client.Status == StatusType.Open
-                                                && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id))).ToListAsync();*/
+                  
                     mtps = await _context.MTPs
                                         .Include(n => n.Client)
                                         .ThenInclude(n => n.Clinic)
 
                                         .Include(n => n.AdendumList)
+                                        .Include(n => n.Goals)
+                                        .ThenInclude(n => n.Objetives)
 
                                         .Include(n => n.MtpReviewList)
                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
@@ -2056,7 +2052,7 @@ namespace KyoS.Web.Controllers
                                                                      ).Count() == 0
                                                  ))
                                         .ToListAsync();
-                    return View(mtps);
+                  
                 }
                 else
                 {
@@ -2065,6 +2061,8 @@ namespace KyoS.Web.Controllers
                                          .ThenInclude(n => n.Clinic)
 
                                          .Include(n => n.AdendumList)
+                                         .Include(n => n.Goals)
+                                         .ThenInclude(n => n.Objetives)
 
                                          .Include(n => n.MtpReviewList)
                                          .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
@@ -2076,36 +2074,57 @@ namespace KyoS.Web.Controllers
                                                                       ).Count() == 0
                                                   ))
                                          .ToListAsync();
-                    return View(mtps);
+                   
 
                 }
-                List<MTPEntity> expiredMTPs = new List<MTPEntity>();
-                int month = 0;
+
+                List<MTPExpiredViewModel> mtpExpireds = new List<MTPExpiredViewModel>();
+                MTPExpiredViewModel mtpExpired = new MTPExpiredViewModel();
+                List<ObjetiveEntity> objs = new List<ObjetiveEntity>();
+
                 foreach (var item in mtps)
                 {
-                    if (item.MtpReviewList != null)
+                    mtpExpired.Id = item.Id;
+                    mtpExpired.Client = item.Client;
+                    objs = _context.Objetives
+                                   .Include(n => n.Goal)
+                                   .ThenInclude(n => n.Adendum)
+                                   .Where(n => n.Goal.MTP.Id == item.Id
+                                            && n.Goal.Service == item.Client.Service
+                                            && n.Compliment == false).ToList();
+                    if (objs.Count() > 0)
                     {
-                        foreach (var value in item.MtpReviewList)
+                        mtpExpired.DateExpired = objs.Max(n => n.DateResolved);
+                        mtpExpired.ExpiredDays = DateTime.Today.Date.Subtract(mtpExpired.DateExpired).Days;
+                        if (objs.Where(n => n.Goal.IdMTPReview > 0).Count() > 0)
                         {
-                            month = month + value.MonthOfTreatment;
-
+                            mtpExpired.TypeDocument = 1;
+                        }
+                        else
+                        {
+                            if (objs.Where(n => n.Goal.Adendum.Id != null).Count() > 0)
+                            {
+                                mtpExpired.TypeDocument = 2;
+                            }
+                            else
+                            {
+                                mtpExpired.TypeDocument = 0;
+                            }
                         }
                     }
                     else
                     {
-                        month = 0;
+                        mtpExpired.DateExpired = item.AdmissionDateMTP;
+                        mtpExpired.ExpiredDays = 0;
+                        mtpExpired.TypeDocument = 0;
                     }
 
-                    if (item.NumberOfMonths != null)
-                    {
-                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
-                        {
-                            expiredMTPs.Add(item);
-                        }
-                    }
-                    month = 0;
+                    mtpExpireds.Add(mtpExpired);
+                    mtpExpired = new MTPExpiredViewModel();
+                    objs = new List<ObjetiveEntity>();
                 }
-                return View(expiredMTPs);
+
+                return View(mtpExpireds);
             }
             else
                 return View(null);

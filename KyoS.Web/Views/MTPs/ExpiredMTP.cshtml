@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPEntity>
+﻿@model IEnumerable<KyoS.Web.Models.MTPExpiredViewModel>
 @{
     ViewData["Title"] = "Expired MTPs";
 }
@@ -27,21 +27,24 @@
                         <tr>
                             <th class="col-md-3">
                                 Client
-                            </th>                            
-                            <th class="col-md-2" style="text-align:center;">
-                                Admission Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Therapy
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
-                            </th>                            
-                            <th class="col-md-2" style="text-align:center;">
-                                Expired days
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Months
+                                Days
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Date MTP
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Document
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -64,7 +67,7 @@
                                 @Html.DisplayFor(modelItem => item.Client.Name)
                                 |
                                 @Html.DisplayFor(modelItem => item.Client.Code)
-                            </td>                            
+                            </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
                             </td>
@@ -86,18 +89,43 @@
                                 }
                             </td>
                             <td align="center">
-                                @if (item.NumberOfMonths != null)
+                                @if (item.ExpiredDays == 0)
+                                {
+                                    <span class="label label-default">
+                                        N_Obj
+                                    </span>
+                                }
+                                else
                                 {
                                     <span class="label label-danger">
-                                        @*@((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days)*@
+                                        @Html.DisplayFor(modelItem => item.ExpiredDays)
                                     </span>
                                 }
                             </td>
                             <td align="center">
-                                @Html.DisplayFor(modelItem => item.NumberOfMonths)
+                                @item.DateExpired.ToShortDateString()
+                            <td align="center">
+                                @if (item.TypeDocument == 0)
+                                {
+                                    <span class="label label-info">
+                                        MTP
+                                    </span>
+                                }
+                                @if (item.TypeDocument == 1)
+                                {
+                                    <span class="label label-info">
+                                        MTPR
+                                    </span>
+                                }
+                                @if (item.TypeDocument == 2)
+                                {
+                                    <span class="label label-info">
+                                        Addendum
+                                    </span>
+                                }
                             </td>
                             <td align="right">
-                                @if (User.IsInRole("Facilitator"))
+                                @*@if (User.IsInRole("Facilitator"))
                                 {
                                     <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
@@ -118,7 +146,10 @@
                                         <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
 
-                                }
+                                }*@
+                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                             </td>
                         </tr>
                         }
