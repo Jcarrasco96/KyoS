@@ -43,21 +43,23 @@
                         <td>
                             <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
                         </td>
+                        <td>
+                            &nbsp;|&nbsp;
+                        </td>
+                        <td>
+                            @if (ViewData["setting"].ToString() == "True")
+                            {
+                                <a onclick="showInPopupLg('@Url.Action("AuditGroups", "Notes", null, Context.Request.Scheme)','Audit PSR Groups')" class="btn btn-danger" title="Audit PSR groups"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Groups</a>
+                            }
+                            else
+                            {
+                                <a onclick="showInPopupLg('@Url.Action("AuditGroups", "Notes", null, Context.Request.Scheme)','Audit PSR Groups')" class="btn btn-danger disabled" title="Audit PSR groups"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Groups</a>
+                            }
 
+                        </td>
                     </tr>
                 </table>
-            </div>
-            <div class="col-md-12">
-                @if (ViewData["setting"].ToString() == "True")
-                {
-                    <a onclick="showInPopupLg('@Url.Action("AuditGroups", "Notes", null, Context.Request.Scheme)','Audit Groups')" class="btn btn-danger" title="Audit the groups"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Groups</a>
-                }
-                else
-                {
-                    <a onclick="showInPopupLg('@Url.Action("AuditGroups", "Notes", null, Context.Request.Scheme)','Audit Groups')" class="btn btn-danger disabled" title="Audit the groups"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Groups</a>
-                }
-
-            </div>
+            </div>            
         </form>
         <div class="col-md-12">
             <hr />

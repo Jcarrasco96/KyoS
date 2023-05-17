@@ -430,13 +430,12 @@ namespace KyoS.Web.Controllers
             }
 
             ClientEntity clientEntity = await _context.Clients
+
                                                       .Include(c => c.Clinic)
 
                                                       .Include(c => c.Doctor)
 
-                                                      .Include(c => c.Psychiatrist)
-
-                                                     // .Include(c => c.Client_Referred)
+                                                      .Include(c => c.Psychiatrist)                                                     
 
                                                       .Include(c => c.LegalGuardian)
 
@@ -468,25 +467,12 @@ namespace KyoS.Web.Controllers
             
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);            
 
-            if (!User.IsInRole("Admin"))
-            {
-                if (user_logged.Clinic != null)
-                {
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = user_logged.Clinic.Name,
-                        Value = $"{user_logged.Clinic.Id}"
-                    });
-                    clientViewModel.Clinics = list;
-                }
-            }
             clientViewModel.Origin = origin;
             List<Workday_Client> worday_clients = _context.Workdays_Clients
-                                                         .Include(n => n.Facilitator)
-                                                         .Include(n => n.Workday)
-                                                         .Where(m => m.Client.Id == clientEntity.Id )
-                                                         .ToList();
+                                                          .Include(n => n.Facilitator)
+                                                          .Include(n => n.Workday)
+                                                          .Where(m => m.Client.Id == clientEntity.Id )
+                                                          .ToList();
             if (clientViewModel.IdFacilitatorPSR == 0)
             {
                 if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
@@ -511,26 +497,26 @@ namespace KyoS.Web.Controllers
                 clientViewModel.FacilitatorGroup = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorGroup).Name;
             }
 
-            if (clientEntity.EmergencyContact != null)
-            {
-                clientViewModel.NameEmergencyContact = clientEntity.EmergencyContact.Name;
-                clientViewModel.AddressEmergencyContact = clientEntity.EmergencyContact.Address;
-                clientViewModel.AddressLine2EmergencyContact = clientEntity.EmergencyContact.Address;
-                clientViewModel.CityEmergencyContact = clientEntity.EmergencyContact.City;
-                clientViewModel.CountryEmergencyContact = clientEntity.EmergencyContact.Country;
-                clientViewModel.EmailEmergencyContact = clientEntity.EmergencyContact.Email;
-                clientViewModel.StateEmergencyContact = clientEntity.EmergencyContact.State;
-                clientViewModel.PhoneEmergencyContact = clientEntity.EmergencyContact.Telephone;
-                clientViewModel.PhoneSecundaryEmergencyContact = clientEntity.EmergencyContact.TelephoneSecondary;
-                clientViewModel.ZipCodeEmergencyContact = clientEntity.EmergencyContact.ZipCode;
-                clientViewModel.CreateByEmergencyContact = clientEntity.EmergencyContact.CreatedBy;
-                clientViewModel.CreateOnEmergencyContact = clientEntity.EmergencyContact.CreatedOn;
+            //if (clientEntity.EmergencyContact != null)
+            //{
+            //    clientViewModel.NameEmergencyContact = clientEntity.EmergencyContact.Name;
+            //    clientViewModel.AddressEmergencyContact = clientEntity.EmergencyContact.Address;
+            //    clientViewModel.AddressLine2EmergencyContact = clientEntity.EmergencyContact.Address;
+            //    clientViewModel.CityEmergencyContact = clientEntity.EmergencyContact.City;
+            //    clientViewModel.CountryEmergencyContact = clientEntity.EmergencyContact.Country;
+            //    clientViewModel.EmailEmergencyContact = clientEntity.EmergencyContact.Email;
+            //    clientViewModel.StateEmergencyContact = clientEntity.EmergencyContact.State;
+            //    clientViewModel.PhoneEmergencyContact = clientEntity.EmergencyContact.Telephone;
+            //    clientViewModel.PhoneSecundaryEmergencyContact = clientEntity.EmergencyContact.TelephoneSecondary;
+            //    clientViewModel.ZipCodeEmergencyContact = clientEntity.EmergencyContact.ZipCode;
+            //    clientViewModel.CreateByEmergencyContact = clientEntity.EmergencyContact.CreatedBy;
+            //    clientViewModel.CreateOnEmergencyContact = clientEntity.EmergencyContact.CreatedOn;
 
-            }
-            else
-            {
-                clientEntity.EmergencyContact = new EmergencyContactEntity();
-            }
+            //}
+            //else
+            //{
+            //    clientEntity.EmergencyContact = new EmergencyContactEntity();
+            //}
 
             return View(clientViewModel);
         }
