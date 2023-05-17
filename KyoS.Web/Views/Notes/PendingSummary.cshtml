@@ -75,20 +75,9 @@
 
             $('#MyTable').DataTable({
                 "order": [[1, "desc"]],
-                "pageLength": 10
+                "pageLength": 25
             });
-
-            // Delete item
-            //var item_to_delete;
-
-            @*$('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });*@
+            
         });
     </script>
 }

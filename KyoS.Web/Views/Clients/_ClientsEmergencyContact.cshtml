@@ -6,141 +6,126 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
         <label asp-for="IdEmergencyContact" class="control-label"></label>
-        <select asp-for="IdEmergencyContact" asp-items="Model.EmergencyContacts" class="form-control"></select>
+        <select asp-for="IdEmergencyContact" asp-items="Model.EmergencyContacts" class="form-control" id="cbEC"></select>
         <span asp-validation-for="IdEmergencyContact" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
         <label asp-for="IdRelationshipEC" class="control-label"></label>
-        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control"></select>
+        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" id="cbREC"></select>
         <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
     </div>
 </div>
-
-
 <div class="col-md-12">
     <hr />
 </div>
-@if (Model.IdEmergencyContact == 0)
-{
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="NameEmergencyContact" class="control-label">Name Emergency Contact</label>&nbsp;*
-            <input asp-for="NameEmergencyContact" class="form-control" />
-            <span asp-validation-for="NameEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="AddressEmergencyContact" class="control-label">Address</label>
-            <input asp-for="AddressEmergencyContact" class="form-control" />
-            <span asp-validation-for="AddressEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="CountryEmergencyContact" class="control-label">Country</label>
-            <input asp-for="CountryEmergencyContact" class="form-control" />
-            <span asp-validation-for="CountryEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="CityEmergencyContact" class="control-label">City</label>
-            <input asp-for="CityEmergencyContact" class="form-control" />
-            <span asp-validation-for="CityEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-1">
-            <label asp-for="StateEmergencyContact" class="control-label">State</label>
-            <input asp-for="StateEmergencyContact" class="form-control" />
-            <span asp-validation-for="StateEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-1">
-            <label asp-for="ZipCodeEmergencyContact" class="control-label">Zip Code</label>
-            <input asp-for="ZipCodeEmergencyContact" class="form-control" />
-            <span asp-validation-for="ZipCodeEmergencyContact" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="AddressLine2EmergencyContact" class="control-label">Address Line 2</label>
-            <input asp-for="AddressLine2EmergencyContact" class="form-control" />
-            <span asp-validation-for="AddressLine2EmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="PhoneEmergencyContact" class="control-label">Telephone</label>
-            <input asp-for="PhoneEmergencyContact" class="form-control" />
-            <span asp-validation-for="PhoneEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="PhoneSecundaryEmergencyContact" class="control-label">Telephone Secundary</label>
-            <input asp-for="PhoneSecundaryEmergencyContact" class="form-control" />
-            <span asp-validation-for="PhoneSecundaryEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="EmailEmergencyContact" class="control-label">Email</label>
-            <input asp-for="EmailEmergencyContact" class="form-control" />
-            <span asp-validation-for="EmailEmergencyContact" class="text-danger"></span>
-        </div>
-    </div>
-
-}
-else
-{
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="NameEmergencyContact" class="control-label">Name Emergency Contact</label>&nbsp;*
-            <input asp-for="NameEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="NameEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="AddressEmergencyContact" class="control-label">Address</label>
-            <input asp-for="AddressEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="AddressEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="CountryEmergencyContact" class="control-label">Country</label>
-            <input asp-for="CountryEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="CountryEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="CityEmergencyContact" class="control-label">City</label>
-            <input asp-for="CityEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="CityEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-1">
-            <label asp-for="StateEmergencyContact" class="control-label">State</label>
-            <input asp-for="StateEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="StateEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-1">
-            <label asp-for="ZipCodeEmergencyContact" class="control-label">Zip Code</label>
-            <input asp-for="ZipCodeEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="ZipCodeEmergencyContact" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="col-md-12">
-        &nbsp;
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="AddressLine2EmergencyContact" class="control-label">Address Line 2</label>
-            <input asp-for="AddressLine2EmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="AddressLine2EmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="PhoneEmergencyContact" class="control-label">Telephone</label>
-            <input asp-for="PhoneEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="PhoneEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="PhoneSecundaryEmergencyContact" class="control-label">Telephone Secundary</label>
-            <input asp-for="PhoneSecundaryEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="PhoneSecundaryEmergencyContact" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="EmailEmergencyContact" class="control-label">Email</label>
-            <input asp-for="EmailEmergencyContact" class="form-control" disabled/>
-            <span asp-validation-for="EmailEmergencyContact" class="text-danger"></span>
-        </div>
-    </div>
-}
 <div class="col-md-12">
-    &nbsp;
+    <input type="checkbox" class="form-check-input" id="chkNewEC">
+    <label class="control-label">New</label>
 </div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="NameEmergencyContact" class="control-label">Emergency Contact Name</label>&nbsp;*
+        <input asp-for="NameEmergencyContact" class="form-control" disabled id="nameEC"/>
+        <span asp-validation-for="NameEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="AddressEmergencyContact" class="control-label">Address</label>
+        <input asp-for="AddressEmergencyContact" class="form-control" disabled id="addressEC"/>
+        <span asp-validation-for="AddressEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CountryEmergencyContact" class="control-label">Country</label>
+        <input asp-for="CountryEmergencyContact" class="form-control" disabled id="countryEC"/>
+        <span asp-validation-for="CountryEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CityEmergencyContact" class="control-label">City</label>
+        <input asp-for="CityEmergencyContact" class="form-control" disabled id="cityEC"/>
+        <span asp-validation-for="CityEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="StateEmergencyContact" class="control-label">State</label>
+        <input asp-for="StateEmergencyContact" class="form-control" disabled id="stateEC"/>
+        <span asp-validation-for="StateEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="ZipCodeEmergencyContact" class="control-label">Zip Code</label>
+        <input asp-for="ZipCodeEmergencyContact" class="form-control" disabled id="zipEC"/>
+        <span asp-validation-for="ZipCodeEmergencyContact" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="AddressLine2EmergencyContact" class="control-label">Address Line 2</label>
+        <input asp-for="AddressLine2EmergencyContact" class="form-control" disabled id="address2EC"/>
+        <span asp-validation-for="AddressLine2EmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PhoneEmergencyContact" class="control-label">Telephone</label>
+        <input asp-for="PhoneEmergencyContact" class="form-control" disabled id="phoneEC"/>
+        <span asp-validation-for="PhoneEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PhoneSecundaryEmergencyContact" class="control-label">Telephone Secundary</label>
+        <input asp-for="PhoneSecundaryEmergencyContact" class="form-control" disabled id="phoneSecundaryEC"/>
+        <span asp-validation-for="PhoneSecundaryEmergencyContact" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmailEmergencyContact" class="control-label">Email</label>
+        <input asp-for="EmailEmergencyContact" class="form-control" disabled id="emailEC"/>
+        <span asp-validation-for="EmailEmergencyContact" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    chkNewEC.addEventListener('change', (e) => {
+        if (chkNewEC.checked == true)
+        {
+            $("#cbEC").prop('selectedIndex', 0);
+            $("#cbEC").prop('disabled', true);
+            //$("#cbREC").prop('selectedIndex', 0);
+            //$("#cbREC").prop('disabled', true);
+
+            $("#nameEC").prop('disabled', false);
+            $("#addressEC").prop('disabled', false);
+            $("#countryEC").prop('disabled', false);
+            $("#cityEC").prop('disabled', false);
+            $("#stateEC").prop('disabled', false);
+            $("#zipEC").prop('disabled', false);
+            $("#address2EC").prop('disabled', false);
+            $("#phoneEC").prop('disabled', false);
+            $("#phoneSecundaryEC").prop('disabled', false);
+            $("#emailEC").prop('disabled', false);
+            $("#nameEC").focus();
+        }
+        else
+        {
+            $("#cbEC").prop('disabled', false);
+            /*$("#cbREC").prop('disabled', false);*/
+
+            $("#nameEC").val("");
+            $("#nameEC").prop('disabled', true);
+            $("#addressEC").val("");
+            $("#addressEC").prop('disabled', true);
+            $("#countryEC").val("");
+            $("#countryEC").prop('disabled', true);
+            $("#cityEC").val("");
+            $("#cityEC").prop('disabled', true);
+            $("#stateEC").val("");
+            $("#stateEC").prop('disabled', true);
+            $("#zipEC").val("");
+            $("#zipEC").prop('disabled', true);
+            $("#address2EC").val("");
+            $("#address2EC").prop('disabled', true);
+            $("#phoneEC").val("");
+            $("#phoneEC").prop('disabled', true);
+            $("#phoneSecundaryEC").val("");
+            $("#phoneSecundaryEC").prop('disabled', true);
+            $("#emailEC").val("");
+            $("#emailEC").prop('disabled', true);
+        }
+    })
+</script>
