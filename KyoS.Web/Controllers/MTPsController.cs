@@ -2102,7 +2102,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (objs.Where(n => n.Goal.Adendum.Id != null).Count() > 0)
+                            if (objs.Where(n => n.Goal.Adendum != null).Count() > 0)
                             {
                                 mtpExpired.TypeDocument = 2;
                             }

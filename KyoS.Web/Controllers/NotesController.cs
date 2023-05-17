@@ -14629,7 +14629,7 @@ namespace KyoS.Web.Controllers
                     objective_temp.NumberObjective = objective.Objetive;
                     objective_temp.Description = objective.Description;
                     objective_temp.Intervention = objective.Intervention;
-                    objective_temp.DateTarget = objective.DateTarget.AddMonths(month).ToShortDateString().ToString();
+                    objective_temp.DateTarget = objective.DateResolved.ToShortDateString().ToString();
 
                     goal_temp.AllObjectives.Add(objective_temp);
                     objective_temp = new AllObjectives();
