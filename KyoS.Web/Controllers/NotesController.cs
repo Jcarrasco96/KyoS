@@ -465,9 +465,20 @@ namespace KyoS.Web.Controllers
             //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
-                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    if (origin == 0)
+                        return RedirectToAction(nameof(Index));
+                    if (origin == 1)
+                        return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    if (origin == 2)
+                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0 });
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(NotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
                 }
             }
 
@@ -1190,9 +1201,21 @@ namespace KyoS.Web.Controllers
             //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
-                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    if (origin == 0)
+                        return RedirectToAction(nameof(Index));
+                    if (origin == 1)
+                        return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    if (origin == 2)
+                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0 });
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(NotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
+
                 }
             }
 
@@ -2145,9 +2168,22 @@ namespace KyoS.Web.Controllers
             if (mtp != null)
             {
                 //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() > 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
-                    return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
+                    if (origin == 0)
+                        return RedirectToAction(nameof(IndividualNotes));
+                    if (origin == 1)
+                        return RedirectToAction(nameof(NotStartedIndNotes));
+                    if (origin == 2)
+                        return RedirectToAction(nameof(IndNotesInEdit));
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingIndNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(IndNotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
+
+                    //return RedirectToAction("IndNotesInEdit", "Notes");
                 }
 
                 //Evaluate setting for goals's classification
@@ -2661,7 +2697,29 @@ namespace KyoS.Web.Controllers
                 }
             }
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
-            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            if (mtp != null)
+            {
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                {
+                    if (origin == 0)
+                        return RedirectToAction(nameof(GroupNotes));
+                    if (origin == 1)
+                        return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
+                    if (origin == 2)
+                        return RedirectToAction(nameof(GroupNotesInEdit));
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingGroupNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(GroupNotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
+                }
+            }
 
             List<Workday_Activity_Facilitator> activities = workday_Client.Workday
                                                                           .Workdays_Activities_Facilitators
@@ -3184,7 +3242,30 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
-            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            if (mtp != null)
+            {
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                {
+                    if (origin == 0)
+                        return RedirectToAction(nameof(GroupNotes));
+                    if (origin == 1)
+                        return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
+                    if (origin == 2)
+                        return RedirectToAction(nameof(GroupNotesInEdit));
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingGroupNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(GroupNotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
+                }
+            }
+
 
             List<Workday_Activity_Facilitator> activities = workday_Client.Workday
                                                                           .Workdays_Activities_Facilitators
@@ -3749,7 +3830,29 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             //-----------se selecciona el primer MTP activo que tenga el cliente-----------//
-            MTPEntity mtp = _context.MTPs.FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+            MTPEntity mtp = _context.MTPs
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
+
+            if (mtp != null)
+            {
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                {
+                    if (origin == 0)
+                        return RedirectToAction(nameof(GroupNotes));
+                    if (origin == 1)
+                        return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
+                    if (origin == 2)
+                        return RedirectToAction(nameof(GroupNotesInEdit));
+                    if (origin == 3)
+                        return RedirectToAction(nameof(PendingGroupNotes));
+                    if (origin == 4)
+                        return RedirectToAction(nameof(GroupNotesWithReview));
+                    if (origin == 5)
+                        return RedirectToAction("MessagesOfNotes", "Messages");
+                }
+            }
 
             List<Workday_Activity_Facilitator> activities = workday_Client.Workday
                                                                           .Workdays_Activities_Facilitators
@@ -10558,8 +10661,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> NotStartedGroupNotes()
+        public async Task<IActionResult> NotStartedGroupNotes(int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             return View(await _context.Workdays_Clients
                                       
                                       .Include(wc => wc.GroupNote)
@@ -14603,6 +14711,8 @@ namespace KyoS.Web.Controllers
             MTPEntity mtp = _context.MTPs
                                     .Include(n => n.Goals)
                                     .ThenInclude(n => n.Objetives)
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Adendum)
                                     .Include(n => n.MtpReviewList)
                                     .FirstOrDefault(n => n.Id == idMtp);
 
@@ -14622,6 +14732,22 @@ namespace KyoS.Web.Controllers
                 goal_temp.AreaFocus = goal.AreaOfFocus;
                 goal_temp.Service = goal.Service;
                 goal_temp.Compliment = goal.Compliment;
+                if (goal.Adendum != null)
+                {
+                    goal_temp.Document = "Addendum";
+                }
+                else
+                {
+                    if (goal.IdMTPReview > 0)
+                    {
+                        goal_temp.Document = "MTPR";
+                    }
+                    else
+                    {
+                        goal_temp.Document = "MTP";
+                    }
+                }
+                
                 goal_temp.AllObjectives = new List<AllObjectives>();
 
                 foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
@@ -14629,7 +14755,7 @@ namespace KyoS.Web.Controllers
                     objective_temp.NumberObjective = objective.Objetive;
                     objective_temp.Description = objective.Description;
                     objective_temp.Intervention = objective.Intervention;
-                    objective_temp.DateTarget = objective.DateTarget.AddMonths(month).ToShortDateString().ToString();
+                    objective_temp.DateTarget = objective.DateResolved.ToShortDateString().ToString();
 
                     goal_temp.AllObjectives.Add(objective_temp);
                     objective_temp = new AllObjectives();

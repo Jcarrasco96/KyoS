@@ -1646,7 +1646,7 @@ namespace KyoS.Web.Controllers
         public JsonResult GetActivityList(int idTheme)
         {
             List<ActivityEntity> activities = _context.Activities
-                                                      .Where(a => (a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved))
+                                                      .Where(a => a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved)
                                                       .ToList();
 
             return Json(new SelectList(activities, "Id", "Name"));

@@ -41,11 +41,14 @@
                             <th class="col-md-3">
                                 Name
                             </th>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 Area of Focus
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Doc.
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Accomplished
@@ -101,6 +104,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Service)
+                                </td>
+                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Document)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Compliment)
