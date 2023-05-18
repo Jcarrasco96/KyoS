@@ -3,79 +3,69 @@
     &nbsp;
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="FullAddress" class="control-label"></label>
-        <input asp-for="FullAddress" class="form-control" readonly />
-        <span asp-validation-for="FullAddress" class="text-danger"></span>
+        <input asp-for="FullAddress" class="form-control" readonly />        
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="AlternativeAddress" class="control-label"></label>
-        <input asp-for="AlternativeAddress" class="form-control" readonly />
-        <span asp-validation-for="AlternativeAddress" class="text-danger"></span>
+        <input asp-for="AlternativeAddress" class="form-control" readonly />       
     </div>
     <div class="form-group col-md-2">
         <label asp-for="Telephone" class="control-label"></label>
-        <input asp-for="Telephone" class="form-control" readonly />
-        <span asp-validation-for="Telephone" class="text-danger"></span>
+        <input asp-for="Telephone" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="TelephoneSecondary" class="control-label"></label>
-        <input asp-for="TelephoneSecondary" class="form-control" readonly />
-        <span asp-validation-for="TelephoneSecondary" class="text-danger"></span>
+        <input asp-for="TelephoneSecondary" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="ZipCode" class="control-label"></label>
-        <input asp-for="ZipCode" class="form-control" readonly />
-        <span asp-validation-for="ZipCode" class="text-danger"></span>
+        <input asp-for="ZipCode" class="form-control" readonly />        
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" readonly />        
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" readonly />
-        <span asp-validation-for="Country" class="text-danger"></span>
+        <input asp-for="Country" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="City" class="control-label"></label>
-        <input asp-for="City" class="form-control" readonly />
-        <span asp-validation-for="City" class="text-danger"></span>
+        <input asp-for="City" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="State" class="control-label"></label>
-        <input asp-for="State" class="form-control" readonly />
-        <span asp-validation-for="State" class="text-danger"></span>
+        <input asp-for="State" class="form-control" readonly />       
     </div>
     <div class="form-group col-md-2">
         <label asp-for="Race" class="control-label"></label>
-        <select asp-for="IdRace" asp-items="Model.Races" class="form-control" disabled></select>
-        <span asp-validation-for="IdRace" class="text-danger"></span>
+        <select asp-for="IdRace" asp-items="Model.Races" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="PlaceOfBirth" class="control-label"></label>
-        <input asp-for="PlaceOfBirth" class="form-control" readonly />
-        <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+        <input asp-for="PlaceOfBirth" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="MaritalStatus" class="control-label"></label>
-        <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" disabled></select>
-        <span asp-validation-for="IdMaritalStatus" class="text-danger"></span>
+        <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" disabled></select>        
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="Ethnicity" class="control-label"></label>
-        <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" disabled></select>
-        <span asp-validation-for="IdEthnicity" class="text-danger"></span>
+        <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="PreferredLanguage" class="control-label"></label>
-        <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" disabled></select>
-        <span asp-validation-for="IdPreferredLanguage" class="text-danger"></span>
+        <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="OtherLanguage" class="control-label"></label>
-        <input asp-for="OtherLanguage" class="form-control" readonly />
-        <span asp-validation-for="OtherLanguage" class="text-danger"></span>
+        <input asp-for="OtherLanguage" class="form-control" readonly />        
     </div>
     <div class="form-group col-md-1">
         <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
@@ -89,7 +79,6 @@
         <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
         <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input" disabled>
     </div>
-
     <div class="form-group col-md-3">
         &nbsp;
     </div>
@@ -100,70 +89,46 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
         <label asp-for="Doctor" class="control-label"></label>
-        <select asp-for="IdDoctor" asp-items="Model.Doctors" class="form-control" disabled></select>
-        <span asp-validation-for="IdDoctor" class="text-danger"></span>
+        <select asp-for="IdDoctor" asp-items="Model.Doctors" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-3">
         <label asp-for="Psychiatrist" class="control-label"></label>
-        <select asp-for="IdPsychiatrist" asp-items="Model.Psychiatrists" class="form-control" disabled></select>
-        <span asp-validation-for="IdPsychiatrist" class="text-danger"></span>
+        <select asp-for="IdPsychiatrist" asp-items="Model.Psychiatrists" class="form-control" disabled></select>        
     </div>
-    <div class="form-group col-md-3">
-        <label asp-for="IdEmergencyContact" class="control-label"></label>
-        <select asp-for="IdEmergencyContact" asp-items="Model.EmergencyContacts" class="form-control" disabled></select>
-        <span asp-validation-for="IdEmergencyContact" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="IdRelationshipEC" class="control-label"></label>
-        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>
-        <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-   
     <div class="form-group col-md-3">
         <label asp-for="IdLegalGuardian" class="control-label"></label>
-        <select asp-for="IdLegalGuardian" asp-items="Model.LegalsGuardians" class="form-control" disabled></select>
-        <span asp-validation-for="IdLegalGuardian" class="text-danger"></span>
+        <select asp-for="IdLegalGuardian" asp-items="Model.LegalsGuardians" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-3">
         <label asp-for="IdRelationship" class="control-label"></label>
-        <select asp-for="IdRelationship" asp-items="Model.Relationships" class="form-control" disabled></select>
-        <span asp-validation-for="IdRelationship" class="text-danger"></span>
+        <select asp-for="IdRelationship" asp-items="Model.Relationships" class="form-control" disabled></select>        
     </div>
-    <div class="form-group col-md-3">
+</div>
+<div class="col-md-push-12">
+    <div class="col-md-3">
         <label asp-for="OnlyTCM" class="control-label">Only TCM</label><br />
         <input type="checkbox" asp-for="OnlyTCM" class="form-check-input" disabled>
     </div>
-    @* Edit mode let change the therapy *@
-
 </div>
 <div class="col-md-12">
     <hr />
 </div>
-<div class="col-md-push-12">
-    @* Edit mode let change the therapy *@
-    @if (Model.Id > 0)
-    {
-        <div class="form-group col-md-3">
-            <label asp-for="IdService" class="control-label"></label>
-            <select asp-for="IdService" asp-items="Model.Services" class="form-control" disabled></select>
-            <span asp-validation-for="IdService" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdFacilitatorIT" class="control-label"></label>
-            <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" disabled></select>
-            <span asp-validation-for="IdFacilitatorIT" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-6">
-            &nbsp;
-        </div>
-    }
-    else
-    {
-        <div class="form-group col-md-12">
-            &nbsp;
-        </div>
-    }
+<div class="col-md-push-12">    
+    <div class="form-group col-md-3">
+        <label asp-for="IdService" class="control-label"></label>
+        <select asp-for="IdService" asp-items="Model.Services" class="form-control" disabled></select>           
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="IdFacilitatorIT" class="control-label"></label>
+        <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" disabled></select>            
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="FacilitatorPSR" class="control-label">Facilitator for PSR Therapy</label>
+        <input asp-for="FacilitatorPSR" class="form-control" disabled />            
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="FacilitatorGroup" class="control-label">Facilitator for Group Therapy</label>
+        <input asp-for="FacilitatorGroup" class="form-control" disabled />            
+    </div>        
 </div>
 

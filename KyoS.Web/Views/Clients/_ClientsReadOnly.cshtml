@@ -4,59 +4,35 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
-        <label asp-for="Name" class="control-label"></label>&nbsp;*
-        <input asp-for="Name" class="form-control" disabled/>
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" disabled/>        
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="IdGender" class="control-label"></label>&nbsp;*
-        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" disabled></select>
-        <span asp-validation-for="IdGender" class="text-danger"></span>
+        <label asp-for="IdGender" class="control-label"></label>
+        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
-        <input asp-for="AdmisionDate" class="form-control" disabled/>
-        <span asp-validation-for="AdmisionDate" class="text-danger"></span>
+        <label asp-for="AdmisionDate" class="control-label"></label>
+        <input asp-for="AdmisionDate" class="form-control" disabled/>        
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
-        <input asp-for="DateOfBirth" class="form-control" disabled/>
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        <label asp-for="DateOfBirth" class="control-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" disabled/>        
     </div>
     <div class="form-group col-md-1">
-        <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
-        <span asp-validation-for="IdStatus" class="text-danger"></span>
+        <label asp-for="IdStatus" class="control-label"></label>
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="DateOfClose" class="control-label"></label>
-        <input asp-for="DateOfClose" class="form-control" disabled/>
-        <span asp-validation-for="DateOfClose" class="text-danger"></span>
+        <input asp-for="DateOfClose" class="form-control" disabled/>        
     </div>
 </div>
 <div class="col-md-push-12">
-    &nbsp;
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="PhotoFile" class="control-label"></label>
-        <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" disabled/>
-        <span asp-validation-for="PhotoFile" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="SignFile" class="control-label"></label>
-        <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" disabled/>
-        <span asp-validation-for="SignFile" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-1">
-        <label asp-for="Code" class="control-label">Case Number</label>
-        <input asp-for="Code" class="form-control" disabled/>
-        <span asp-validation-for="Code" class="text-danger"></span>
-    </div>
     @if (Model.Clients_HealthInsurances == null || Model.Clients_HealthInsurances.Count() == 0)
     {
-        <div class="form-group col-md-2">
-            <label class="control-label">Health Insurance</label>
+        <div class="form-group col-md-3">
+            <label class="control-label">Active Health Insurance</label>
             <input class="form-control" disabled />
         </div>
     }
@@ -64,39 +40,46 @@
     {
         @if (@Model.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
         {
-            <div class=" form-group col-md-2">
-                <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="control-label">Health Insurance</label>
-                <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="form-control" disabled />
-                <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).MemberId" class="text-danger"></span>
+            <div class=" form-group col-md-3">
+                <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="control-label">Active Health Insurance</label>
+                <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).MemberId" class="form-control" disabled />                
             </div>
         }
         else
         {
-            <div class="form-group col-md-2">
-                <label class="control-label">Health Insurance</label>
+            <div class="form-group col-md-3">
+                <label class="control-label">Active Health Insurance</label>
                 <input class="form-control" disabled />
             </div>
         }
     }
     <div class="form-group col-md-2">
+        <label asp-for="Code" class="control-label">Case Number</label>
+        <input asp-for="Code" class="form-control" disabled />        
+    </div>
+    <div class="form-group col-md-2">
         <label asp-for="MedicaidID" class="control-label"></label>
-        <input asp-for="MedicaidID" class="form-control" disabled/>
-        <span asp-validation-for="MedicaidID" class="text-danger"></span>
+        <input asp-for="MedicaidID" class="form-control" disabled />        
     </div>
     <div class="form-group col-md-2">
         <label asp-for="MedicareId" class="control-label">Medicare ID</label>
-        <input asp-for="MedicareId" class="form-control" disabled/>
-        <span asp-validation-for="MedicareId" class="text-danger"></span>
+        <input asp-for="MedicareId" class="form-control" disabled />        
     </div>
-    <div class="form-group col-md-1">
+    <div class="form-group col-md-2">
         <label asp-for="SSN" class="control-label"></label>
-        <input asp-for="SSN" class="form-control" disabled/>
-        <span asp-validation-for="SSN" class="text-danger"></span>
+        <input asp-for="SSN" class="form-control" disabled />        
     </div>
-
 </div>
 <div class="col-md-push-12">
-    &nbsp;
+    <div class="form-group col-md-2">
+        <label asp-for="PhotoFile" class="control-label"></label>       
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="SignFile" class="control-label"></label>    
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
@@ -106,8 +89,7 @@
                 <img class="img-responsive" id="targetImgPhoto" src="@Url.Content(Model.PhotoPath)" width="150" />
                 <div class="caption" id="lbPhoto">
                     <center>
-                        <span id="descriptionPhoto"></span>
-                        <a href="#" onclick="ClearPreviewPhoto()"><i class="glyphicon glyphicon-trash"></i></a>
+                        <span id="descriptionPhoto"></span>                        
                     </center>
                 </div>
             }
@@ -116,14 +98,12 @@
                 <img class="img-responsive" id="targetImgPhoto" src="~/images/Clients/noImage.png" width="150" />
                 <div class="caption" style="display:none" id="lbPhoto">
                     <center>
-                        <span id="descriptionPhoto"></span>
-                        <a href="#" onclick="ClearPreviewPhoto()"><i class="glyphicon glyphicon-trash"></i></a>
+                        <span id="descriptionPhoto"></span>                        
                     </center>
                 </div>
             }
         </div>
     </div>
-
     <div class="form-group col-md-2">
         <div id="imgPreviewSign" class="thumbnail">
             @if (!string.IsNullOrEmpty(Model.SignPath))
@@ -131,8 +111,7 @@
                 <img class="img-responsive" id="targetImgSign" src="@Url.Content(Model.SignPath)" width="150" />
                 <div class="caption" id="lbSign">
                     <center>
-                        <span id="descriptionSign"></span>
-                        <a href="#" onclick="ClearPreviewSign()"><i class="glyphicon glyphicon-trash"></i></a>
+                        <span id="descriptionSign"></span>                        
                     </center>
                 </div>
             }
@@ -141,8 +120,7 @@
                 <img class="img-responsive" id="targetImgSign" src="~/images/Clients/noImage.png" width="150" />
                 <div class="caption" style="display:none" id="lbSign">
                     <center>
-                        <span id="descriptionSign"></span>
-                        <a href="#" onclick="ClearPreviewSign()"><i class="glyphicon glyphicon-trash"></i></a>
+                        <span id="descriptionSign"></span>                        
                     </center>
                 </div>
             }

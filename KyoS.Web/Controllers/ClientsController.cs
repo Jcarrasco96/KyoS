@@ -768,7 +768,6 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.Clinic)
                                                       .Include(c => c.Doctor)
                                                       .Include(c => c.Psychiatrist)
-                                                      //.Include(c => c.Client_Referred)
                                                       .Include(c => c.LegalGuardian)
                                                       .Include(c => c.EmergencyContact)
                                                       .Include(c => c.IndividualTherapyFacilitator)
@@ -795,18 +794,55 @@ namespace KyoS.Web.Controllers
 
             ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
                         
-            if (user_logged.Clinic != null)
-            {
-                List<SelectListItem> list = new List<SelectListItem>();
-                list.Insert(0, new SelectListItem
-                {
-                    Text = user_logged.Clinic.Name,
-                    Value = $"{user_logged.Clinic.Id}"
-                });
-                clientViewModel.Clinics = list;
-            }
-            
             clientViewModel.Origin = origin;
+
+            List<Workday_Client> worday_clients = _context.Workdays_Clients
+                                                          .Include(n => n.Facilitator)
+                                                          .Include(n => n.Workday)
+                                                          .Where(m => m.Client.Id == clientEntity.Id)
+                                                          .ToList();
+            if (clientViewModel.IdFacilitatorPSR == 0)
+            {
+                if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
+                {
+                    clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                }
+            }
+            else
+            {
+                clientViewModel.FacilitatorPSR = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorPSR).Name;
+            }
+
+            if (clientViewModel.IdFacilitatorGroup == 0)
+            {
+                if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
+                {
+                    clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                }
+            }
+            else
+            {
+                clientViewModel.FacilitatorGroup = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorGroup).Name;
+            }
+
+            if (clientEntity.EmergencyContact != null)
+            {
+                clientViewModel.NameEmergencyContact = clientEntity.EmergencyContact.Name;
+                clientViewModel.AddressEmergencyContact = clientEntity.EmergencyContact.Address;
+                clientViewModel.AddressLine2EmergencyContact = clientEntity.EmergencyContact.Address;
+                clientViewModel.CityEmergencyContact = clientEntity.EmergencyContact.City;
+                clientViewModel.CountryEmergencyContact = clientEntity.EmergencyContact.Country;
+                clientViewModel.EmailEmergencyContact = clientEntity.EmergencyContact.Email;
+                clientViewModel.StateEmergencyContact = clientEntity.EmergencyContact.State;
+                clientViewModel.PhoneEmergencyContact = clientEntity.EmergencyContact.Telephone;
+                clientViewModel.PhoneSecundaryEmergencyContact = clientEntity.EmergencyContact.TelephoneSecondary;
+                clientViewModel.ZipCodeEmergencyContact = clientEntity.EmergencyContact.ZipCode;
+            }
+            else
+            {
+                clientEntity.EmergencyContact = new EmergencyContactEntity();
+            }
+
             return View(clientViewModel);
         }
 

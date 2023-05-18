@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.ClientViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Client Details";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -34,10 +34,11 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
                     <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
+                    <li role="presentation"><a href="#emergencyContact" aria-controls="emergencyContact" role="tab" data-toggle="tab">Emergency Contact</a></li>
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
                     <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
                     <li role="presentation"><a href="#referreds" aria-controls="referreds" role="tab" data-toggle="tab">Referreds</a></li>
-                    <li role="presentation"><a href="#healthInsurance" aria-controls="healthInsurance" role="tab" data-toggle="tab">Health Insurance</a></li>
+                    <li role="presentation"><a href="#healthInsurance" aria-controls="healthInsurance" role="tab" data-toggle="tab">Health Insurances</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -64,6 +65,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="others">
                         <partial name="_ClientsOthersReadOnly" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="emergencyContact">
+                        <partial name="_ClientsEmergencyContactRO" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="diagnostics">
                         <partial name="_ClientsDiagnosticsReadOnly" />

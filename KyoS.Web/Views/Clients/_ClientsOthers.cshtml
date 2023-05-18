@@ -123,14 +123,11 @@
         <span asp-validation-for="IdRelationship" class="text-danger"></span>
     </div>
 </div>
-<div class="col-md-push-12">
-   
-    <div class="form-group col-md-3">
+<div class="col-md-push-12">   
+    <div class="col-md-3">
         <label asp-for="OnlyTCM" class="control-label">Only TCM</label><br />
         <input type="checkbox" asp-for="OnlyTCM" class="form-check-input" id="check1">
     </div>
-    @* Edit mode let change the therapy *@
-
 </div>
 @if (Model.Id > 0)
 {
