@@ -472,7 +472,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
                     if (origin == 2)
-                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0 });
+                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingNotes));
                     if (origin == 4)
@@ -1208,7 +1208,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
                     if (origin == 2)
-                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0 });
+                        return RedirectToAction("NotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingNotes));
                     if (origin == 4)
@@ -2175,7 +2175,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction(nameof(NotStartedIndNotes));
                     if (origin == 2)
-                        return RedirectToAction(nameof(IndNotesInEdit));
+                        return RedirectToAction("IndNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingIndNotes));
                     if (origin == 4)
@@ -2711,7 +2711,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
-                        return RedirectToAction(nameof(GroupNotesInEdit));
+                        return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingGroupNotes));
                     if (origin == 4)
@@ -3256,7 +3256,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
-                        return RedirectToAction(nameof(GroupNotesInEdit));
+                        return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingGroupNotes));
                     if (origin == 4)
@@ -3844,7 +3844,7 @@ namespace KyoS.Web.Controllers
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
-                        return RedirectToAction(nameof(GroupNotesInEdit));
+                        return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
                         return RedirectToAction(nameof(PendingGroupNotes));
                     if (origin == 4)
@@ -10690,11 +10690,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> NotesInEdit(int id  = 0)
+        public async Task<IActionResult> NotesInEdit(int id  = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
+            }
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
             }
             return View(await _context.Workdays_Clients.Include(wc => wc.Note)
                                                        .Include(wc => wc.NoteP)
@@ -10709,11 +10713,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> IndNotesInEdit(int id = 0)
+        public async Task<IActionResult> IndNotesInEdit(int id = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
+            }
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
             }
             return View(await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
 
@@ -10731,11 +10739,15 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> GroupNotesInEdit(int id = 0)
+        public async Task<IActionResult> GroupNotesInEdit(int id = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
+            }
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
             }
             return View(await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
 

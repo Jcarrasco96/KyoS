@@ -2753,6 +2753,27 @@ namespace KyoS.Web.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+
+                    //-------listo los goals y sus objectives para actualizar DateResolved-------------
+                    List<GoalEntity> goalMtp = _context.Goals
+                                                       .Include(n => n.Objetives)
+                                                       .Where(n => n.MTP.Id == mtpReviewViewModel.IdMTP
+                                                                && n.Compliment == false)
+                                                       .ToList();
+                    foreach (var item in goalMtp)
+                    {
+                        foreach (var obj in item.Objetives)
+                        {
+                            if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                            {
+                                obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                            }
+                        }
+                    }
+
+                    _context.Goals.UpdateRange(goalMtp);
+                    await _context.SaveChangesAsync();
+
                     if (mtpReviewViewModel.Origin == 1)
                     {
                         return RedirectToAction(nameof(PendingMtpReview));
@@ -3043,8 +3064,31 @@ namespace KyoS.Web.Controllers
                     reviewEntity = await _converterHelper.ToMTPReviewEntity(reviewViewModel, true, reviewViewModel.CreatedBy);
 
                     _context.MTPReviews.Add(reviewEntity);
+
+                   
+
                     try
                     {
+                        await _context.SaveChangesAsync();
+
+                        //-------listo los goals y sus objectives para actualizar DateResolved-------------
+                        List<GoalEntity> goalMtp = _context.Goals
+                                                           .Include(n => n.Objetives)
+                                                           .Where(n => n.MTP.Id == reviewViewModel.IdMTP
+                                                                    && n.Compliment == false)
+                                                           .ToList();
+                        foreach (var item in goalMtp)
+                        {
+                            foreach (var obj in item.Objetives)
+                            {
+                                if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                {
+                                    obj.DateResolved = reviewViewModel.ReviewedOn;
+                                }
+                            }
+                        }
+
+                        _context.Goals.UpdateRange(goalMtp);
                         await _context.SaveChangesAsync();
 
                         if (reviewViewModel.Origin == 1)
