@@ -63,7 +63,7 @@
                                                 @if (ViewData["Billed"].ToString() == "0")
                                                 {
                                                     count = item.Workdays_Clients.Where(w => w.BilledDate == null).Count();
-                                                    @foreach (var element in item.Workdays_Clients.Where(w => w.BilledDate == null))
+                                                    @foreach (var element in item.Workdays_Clients.Where(w => w.BilledDate == null).OrderBy(d => d.Workday.Date))
                                                     {
                                                         <tr>
                                                             <td align="center">
