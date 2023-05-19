@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
 @{
-    ViewData["Title"] = "Birthday Clients";
+    ViewData["Title"] = "Clients' Birthday";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -11,28 +12,124 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Birthday Clients</li>
+        <li class="active">Clients' Birthday</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        @if (ViewBag.Delete == "N")
-        {
-            <div class="alert alert-block alert-danger">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="icon-remove"></i>
-                </button>
-                <strong class="red">
-                    Error. It is not posible delete the client
-                </strong>
-            </div>
-        }
+        <div class="col-md-1">
+            &nbsp;
+        </div>
+        <div class="btn-group col-md-10 container-fluid" role="group">
+            @if (ViewData["month"].ToString() == "January")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="1" type="button" class="btn btn-warning">&nbsp;&nbsp;January&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="1" type="button" class="btn btn-default">&nbsp;&nbsp;January&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "February")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="2" type="button" class="btn btn-warning">&nbsp;&nbsp;February&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="2" type="button" class="btn btn-default">&nbsp;&nbsp;February&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "March")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="3" type="button" class="btn btn-warning">&nbsp;&nbsp;March&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="3" type="button" class="btn btn-default">&nbsp;&nbsp;March&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "April")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="4" type="button" class="btn btn-warning">&nbsp;&nbsp;April&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="4" type="button" class="btn btn-default">&nbsp;&nbsp;April&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "May")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="5" type="button" class="btn btn-warning">&nbsp;&nbsp;May&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="5" type="button" class="btn btn-default">&nbsp;&nbsp;May&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "June")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="6" type="button" class="btn btn-warning">&nbsp;&nbsp;June&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="6" type="button" class="btn btn-default">&nbsp;&nbsp;June&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "July")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="7" type="button" class="btn btn-warning">&nbsp;&nbsp;July&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="7" type="button" class="btn btn-default">&nbsp;&nbsp;July&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "August")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="8" type="button" class="btn btn-warning">&nbsp;&nbsp;August&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="8" type="button" class="btn btn-default">&nbsp;&nbsp;August&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "September")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="9" type="button" class="btn btn-warning">&nbsp;&nbsp;September&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="9" type="button" class="btn btn-default">&nbsp;&nbsp;September&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "October")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="10" type="button" class="btn btn-warning">&nbsp;&nbsp;October&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="10" type="button" class="btn btn-default">&nbsp;&nbsp;Octuber&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "November")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="11" type="button" class="btn btn-warning">&nbsp;&nbsp;November&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="11" type="button" class="btn btn-default">&nbsp;&nbsp;November&nbsp;&nbsp;</a>
+            }
+            @if (ViewData["month"].ToString() == "December")
+            {
+                <a asp-action="BirthDayClients" asp-route-month="12" type="button" class="btn btn-warning">&nbsp;&nbsp;December&nbsp;&nbsp;</a>
+            }
+            else
+            {
+                <a asp-action="BirthDayClients" asp-route-month="12" type="button" class="btn btn-default">&nbsp;&nbsp;December&nbsp;&nbsp;</a>
+            }
+        </div>
+        <div class="col-md-1">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
     </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Birthdays (@ViewData["mounth"])</h3>
+                <h3 class="panel-title">Birthdays</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -41,7 +138,7 @@
                             <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-2 bg-warning" style="text-align:center;">
                                 Birth Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -62,62 +159,6 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                            {
-                                <tr style="color: darkgrey;">
-                                    <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td align="center">
-                                        @if (DateTime.Today.Day == item.DateOfBirth.Day)
-                                        {
-                                            <span class="label label-success">
-                                                @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="label label-info">
-                                                @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                            </span>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => (DateTime.Today - item.AdmisionDate).Days)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                             {
                                 <tr>
@@ -135,18 +176,14 @@
                                         |
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
-                                    <td align="center">
-                                        @if (DateTime.Today.Day == item.DateOfBirth.Day)
+                                    <td align="center" class="bg-warning">
+                                        @if (DateTime.Today.Day == item.DateOfBirth.Day && DateTime.Today.Month == item.DateOfBirth.Month)
                                         {
-                                            <span class="label label-success">
-                                                @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                            </span>
+                                             <b><i class="icon-bell"></i>  Today</b>
                                         }
                                         else
                                         {
-                                            <span class="label label-info">
-                                                @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                            </span>
+                                            @Html.DisplayFor(modelItem => item.DateOfBirth)                                            
                                         }
                                     </td>
                                     <td align="center">
@@ -188,31 +225,19 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
-                "order": [[0, "asc"]],
-                "pageLength": 100
-            });            
-        });
 
-        function ConfirmDelete(e) {
-            Swal.fire({
-                title: 'Do you want to delete?',
-                text: "Note: All data related to this element will be deleted.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "Clients")";
-                    window.location.href = url + '/' + e;
-                }
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[1, "asc"]],
+                "pageLength": 100
             });
-        }
+        });
     </script>
 }
 

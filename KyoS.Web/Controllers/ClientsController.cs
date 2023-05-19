@@ -4845,11 +4845,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BirthDayClients(int idError = 0)
+        public async Task<IActionResult> BirthDayClients(int month = 0)
         {
             UserEntity user_logged = await _context.Users
+
                                                    .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
+                                                        .ThenInclude(c => c.Setting)
+
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
@@ -4857,71 +4859,32 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (idError == 1) //Imposible to delete
+            string monthName = string.Empty;
+            if (month != 0)
             {
-                ViewBag.Delete = "N";
+                monthName = (month == 1) ? "January" : (month == 2) ? "February" : (month == 3) ? "March" : (month == 4) ? "April" : (month == 5) ? "May" :
+                                (month == 6) ? "June" : (month == 7) ? "July" : (month == 8) ? "August" : (month == 9) ? "September" : (month == 10) ? "October" :
+                                    (month == 11) ? "November" : (month == 12) ? "December" : string.Empty;
             }
-           
-
-            string mounth = string.Empty;
-            if (DateTime.Today.Month == 1)
+            else
             {
-                mounth = "January";
+                monthName = (DateTime.Today.Month == 1) ? "January" : (DateTime.Today.Month == 2) ? "February" : (DateTime.Today.Month == 3) ? "March" : 
+                                (DateTime.Today.Month == 4) ? "April" : (DateTime.Today.Month == 5) ? "May" : (DateTime.Today.Month == 6) ? "June" : 
+                                    (DateTime.Today.Month == 7) ? "July" : (DateTime.Today.Month == 8) ? "August" : (DateTime.Today.Month == 9) ? "September" : 
+                                        (DateTime.Today.Month == 10) ? "October" : (DateTime.Today.Month == 11) ? "November" : 
+                                            (DateTime.Today.Month == 12) ? "December" : string.Empty;
             }
-            if (DateTime.Today.Month == 2)
-            {
-                mounth = "February";
-            }
-            if (DateTime.Today.Month == 3)
-            {
-                mounth = "March";
-            }
-            if (DateTime.Today.Month == 4)
-            {
-                mounth = "April";
-            }
-            if (DateTime.Today.Month == 5)
-            {
-                mounth = "May";
-            }
-            if (DateTime.Today.Month == 6)
-            {
-                mounth = "June";
-            }
-            if (DateTime.Today.Month == 7)
-            {
-                mounth = "July";
-            }
-            if (DateTime.Today.Month == 8)
-            {
-                mounth = "August";
-            }
-            if (DateTime.Today.Month == 9)
-            {
-                mounth = "September";
-            }
-            if (DateTime.Today.Month == 10)
-            {
-                mounth = "October";
-            }
-            if (DateTime.Today.Month == 11)
-            {
-                mounth = "November";
-            }
-            if (DateTime.Today.Month == 12)
-            {
-                mounth = "December";
-            }
-            ViewData["mounth"] = mounth;
-
-            if (User.IsInRole("Manager"))
-            {
+            
+            ViewData["month"] = monthName;
+                        
+            if(month == 0)
                 return View(await _context.Clients
-                                          .Where(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open)
+                                          .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                          .ToListAsync());          
+            else
+                return View(await _context.Clients
+                                          .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
                                           .ToListAsync());
-            }
-
-            return RedirectToAction("NotAuthorized", "Account");
         }
     }
 }
