@@ -72,5 +72,9 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of BIO")]
         public string CodeBIO { get; set; }
+
+        [Display(Name = "Bill code of MTPR")]
+        public string CodeMTPR { get; set; }
+
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
 {
@@ -6588,5 +6589,56 @@ namespace KyoS.Web.Helpers
                
             };
         }
+
+        public async Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
+        {
+            return new ClientAuxiliarViewModel
+            {
+                Id = clientEntity.Id,
+                Name = clientEntity.Name,
+                Code = clientEntity.Code,
+                MedicaidID = clientEntity.MedicaidID,
+                DateOfBirth = clientEntity.DateOfBirth,
+                AdmisionDate = clientEntity.AdmisionDate,
+                PlaceOfBirth = clientEntity.PlaceOfBirth,
+                CreatedBy = clientEntity.CreatedBy,
+                CreatedOn = clientEntity.CreatedOn,
+                LastModifiedBy = clientEntity.LastModifiedBy,
+                LastModifiedOn = clientEntity.LastModifiedOn,
+                Email = clientEntity.Email,
+                Telephone = clientEntity.Telephone,
+                TelephoneSecondary = clientEntity.TelephoneSecondary,
+                SSN = clientEntity.SSN,
+                FullAddress = clientEntity.FullAddress,
+                AlternativeAddress = clientEntity.AlternativeAddress,
+                Country = clientEntity.Country,
+                City = clientEntity.City,
+                State = clientEntity.State,
+                ZipCode = clientEntity.ZipCode,
+                OtherLanguage = clientEntity.OtherLanguage,
+                PhotoPath = clientEntity.PhotoPath,
+                SignPath = clientEntity.SignPath,
+                //IdReferred = (clientEntity.Client_Referred != null) ? clientEntity.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Id : 0,
+                //Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
+                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR,
+                IdFacilitatorGroup = clientEntity.IdFacilitatorGroup,
+                OtherLanguage_Read = clientEntity.OtherLanguage_Read,
+                OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
+                OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
+                MedicareId = clientEntity.MedicareId,
+                DateOfClose = clientEntity.DateOfClose,
+                Documents = clientEntity.Documents,
+                OnlyTCM = clientEntity.OnlyTCM,
+                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
+                MTPs = clientEntity.MTPs,
+                Bio = clientEntity.Bio,
+                MTPRList = mtpr,
+                Workdays_Clients = clientEntity.Workdays_Clients,
+                Clients_Diagnostics = clientEntity.Clients_Diagnostics,
+                Clinic = clientEntity.Clinic
+                
+            };
+        }
+
     }
 }

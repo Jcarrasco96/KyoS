@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
 {
@@ -197,5 +198,6 @@ namespace KyoS.Web.Helpers
         SubScheduleViewModel ToSubScheduleViewModel(SubScheduleEntity model);
         Task<ManagerEntity> ToManagerEntity(ManagerViewModel model, string signaturePath, bool isNew);
         ManagerViewModel ToManagerViewModel(ManagerEntity model);
+        Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity model, List<MTPReviewEntity> mtpr);
     }
 }

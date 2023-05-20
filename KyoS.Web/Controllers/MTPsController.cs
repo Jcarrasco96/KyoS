@@ -4425,7 +4425,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
         }
 
-        #region Bill week
+        #region Bill week MTP
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> BillMTPToday(int id = 0, int week = 0, int origin = 0)
         {
@@ -4582,6 +4582,176 @@ namespace KyoS.Web.Controllers
                 else
                 {
                     return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
+
+        #region Bill week MTPR
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillMTPRToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtpr.BilledDate = DateTime.Now;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id });
+                }
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBillMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtpr.BilledDate = null;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillTodayMTPR(int idMtpr = 0, int week = 0, int origin = 0)
+        {
+            if (idMtpr >= 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == idMtpr);
+
+                mtpr.DeniedBill = true;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBillMTPR(int idMtpr = 0, int client = 0, int week = 0)
+        {
+            if (idMtpr > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == idMtpr);
+
+                mtpr.DeniedBill = false;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtpr.PaymentDate = null;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtpr.PaymentDate = DateTime.Now;
+                mtpr.DeniedBill = false;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
                 }
             }
 

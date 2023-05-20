@@ -209,5 +209,6 @@ namespace KyoS.Web.Data.Entities
         public int IdFacilitatorGroup { get; set; }
 
         public List<EligibilityEntity> EligibilityList { get; set; }
+
     }
 }

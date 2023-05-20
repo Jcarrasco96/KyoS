@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230519123338_CodeMTPRinClinic")]
+    partial class CodeMTPRinClinic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4680,9 +4682,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("BilledDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ClientEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ClinicalDirector")
                         .HasColumnType("nvarchar(max)");
 
@@ -4792,8 +4791,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientEntityId");
 
                     b.HasIndex("MtpId");
 
@@ -10669,10 +10666,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", null)
-                        .WithMany("MTPRList")
-                        .HasForeignKey("ClientEntityId");
-
                     b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
                         .WithMany("MtpReviewList")
                         .HasForeignKey("MtpId")
@@ -11735,8 +11728,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("List_BehavioralHistory");
 
                     b.Navigation("MedicationList");
-
-                    b.Navigation("MTPRList");
 
                     b.Navigation("MTPs");
 

@@ -114,5 +114,6 @@ namespace KyoS.Web.Models
         public string CreateByEmergencyContact { get; set; }
         public DateTime CreateOnEmergencyContact { get; set; }
 
+        
     }
 }
