@@ -5,6 +5,7 @@ using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -50,7 +51,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public IActionResult IndexFacilitator()
         {
             UserEntity user_logged = _context.Users
@@ -63,11 +64,30 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            CalendarCMH model = new CalendarCMH
-            {                
-                IdFacilitator = 0,
-                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
-            };
+            CalendarCMH model = null;
+            if (User.IsInRole("Manager"))
+            {
+                model = new CalendarCMH
+                {
+                    IdFacilitator = 0,
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
+                };
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = _context.Facilitators
+                                                        .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
+                model = new CalendarCMH
+                {
+                    IdFacilitator = facilitator.Id,
+                    Facilitators = new List<SelectListItem> { 
+                        new SelectListItem {
+                            Value = facilitator.Id.ToString(),
+                            Text = facilitator.Name
+                        }
+                    }
+                };
+            }
 
             return View(model);
         }
@@ -83,17 +103,23 @@ namespace KyoS.Web.Controllers
                 Task<List<object>> notesTask = NotesByClient(idClient, initDate, finalDate);
                 Task<List<object>> mtpsTask = MTPsByClient(idClient, initDate, finalDate);
                 Task<List<object>> biosTask = BIOsByClient(idClient, initDate, finalDate);
+                Task<List<object>> mtpReviewTask = MTPReviewsByClient(idClient, initDate, finalDate);
+                Task<List<object>> farsTask = FarsByClient(idClient, initDate, finalDate);
 
-                await Task.WhenAll(notesTask, mtpsTask, biosTask);
+                await Task.WhenAll(notesTask, mtpsTask, biosTask, mtpReviewTask, farsTask);
                 
                 var notes = await notesTask;
                 var mtps = await mtpsTask;
                 var bios = await biosTask;
+                var reviews = await mtpReviewTask;
+                var fars = await farsTask;
 
                 List<object> events = new List<object>();
                 events.AddRange(notes);
                 events.AddRange(mtps);
                 events.AddRange(bios);
+                events.AddRange(reviews);
+                events.AddRange(fars);
 
                 return new JsonResult(events);
             }
@@ -104,7 +130,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> EventsFacilitator(string start, string end, int idFacilitator)
         {
             if (idFacilitator != 0)
@@ -115,17 +141,23 @@ namespace KyoS.Web.Controllers
                 Task<List<object>> notesTask = NotesByFacilitator(idFacilitator, initDate, finalDate);
                 Task<List<object>> mtpsTask = MTPsByFacilitator(idFacilitator, initDate, finalDate);
                 Task<List<object>> biosTask = BIOsByFacilitator(idFacilitator, initDate, finalDate);
+                Task<List<object>> mtpReviewTask = MTPReviewsByFacilitator(idFacilitator, initDate, finalDate);
+                Task<List<object>> farsTask = FarsByFacilitator(idFacilitator, initDate, finalDate);
 
-                await Task.WhenAll(notesTask, mtpsTask, biosTask);
+                await Task.WhenAll(notesTask, mtpsTask, biosTask, mtpReviewTask, farsTask);
 
                 var notes = await notesTask;
                 var mtps = await mtpsTask;
                 var bios = await biosTask;
+                var reviews = await mtpReviewTask;
+                var fars = await farsTask;
 
                 List<object> events = new List<object>();
                 events.AddRange(notes);
                 events.AddRange(mtps);
                 events.AddRange(bios);
+                events.AddRange(reviews);
+                events.AddRange(fars);
 
                 return new JsonResult(events);
             }
@@ -249,6 +281,64 @@ namespace KyoS.Web.Controllers
                                 .ToList<object>();
         }
 
+        private async Task<List<object>> MTPReviewsByClient(int idClient, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<MTPReviewEntity> mtpReviewEntity;
+
+            using (DataContext db = new DataContext(options))
+            {
+                mtpReviewEntity = await db.MTPReviews
+
+                                          .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.Mtp.Client.Id == idClient))
+                                          .ToListAsync();
+            }
+
+            return mtpReviewEntity.Select(m => new
+                                  {
+                                    title = "MTP Review Document",
+                                    start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                        m.StartTime.Hour, m.StartTime.Minute, 0)
+                                                                        .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                        m.EndTime.Hour, m.EndTime.Minute, 0)
+                                                                        .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    backgroundColor = "#dff0d8",
+                                    textColor = "#417c49",
+                                    borderColor = "#417c49"
+                                  })
+                                  .ToList<object>();
+        }
+
+        private async Task<List<object>> FarsByClient(int idClient, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<FarsFormEntity> farsEntityList;
+
+            using (DataContext db = new DataContext(options))
+            {
+                farsEntityList = await db.FarsForm
+
+                                         .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.Client.Id == idClient))
+                                         .ToListAsync();
+            }
+
+            return farsEntityList.Select(m => new
+                                 {
+                                    title = "FARS Document",
+                                    start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                            m.StartTime.Hour, m.StartTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                            m.EndTime.Hour, m.EndTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    backgroundColor = "#dff0d8",
+                                    textColor = "#417c49",
+                                    borderColor = "#417c49"
+                                 })
+                                 .ToList<object>();
+        }
+
         private async Task<List<object>> NotesByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
         {
             var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
@@ -370,6 +460,72 @@ namespace KyoS.Web.Controllers
                                     borderColor = "#417c49"
                                 })
                                 .ToList<object>();
+        }
+
+        private async Task<List<object>> MTPReviewsByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<MTPReviewEntity> mtpReviewEntity;
+            FacilitatorEntity facilitator;
+
+            using (DataContext db = new DataContext(options))
+            {
+                facilitator = await db.Facilitators
+                                      .FirstOrDefaultAsync(f => f.Id == idFacilitator);
+
+                mtpReviewEntity = await db.MTPReviews
+
+                                          .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == facilitator.LinkedUser))
+                                          .ToListAsync();
+            }
+
+            return mtpReviewEntity.Select(m => new
+                                  {
+                                      title = "MTP Review Document",
+                                      start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                            m.StartTime.Hour, m.StartTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                      end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                            m.EndTime.Hour, m.EndTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                      backgroundColor = "#dff0d8",
+                                      textColor = "#417c49",
+                                      borderColor = "#417c49"
+                                  })
+                                  .ToList<object>();
+        }
+
+        private async Task<List<object>> FarsByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<FarsFormEntity> farsEntityList;
+            FacilitatorEntity facilitator;
+
+            using (DataContext db = new DataContext(options))
+            {
+                facilitator = await db.Facilitators
+                                      .FirstOrDefaultAsync(f => f.Id == idFacilitator);
+
+                farsEntityList = await db.FarsForm
+
+                                         .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.Client.Id == idFacilitator))
+                                         .ToListAsync();
+            }
+
+            return farsEntityList.Select(m => new
+                                 {
+                                    title = "FARS Document",
+                                    start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                                                m.StartTime.Hour, m.StartTime.Minute, 0)
+                                                                                                                .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                                                                                                                m.EndTime.Hour, m.EndTime.Minute, 0)
+                                                                                                                .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                    backgroundColor = "#dff0d8",
+                                    textColor = "#417c49",
+                                    borderColor = "#417c49"
+                                 })
+                                 .ToList<object>();
         }
         #endregion
     }
