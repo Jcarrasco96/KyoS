@@ -370,7 +370,7 @@ namespace KyoS.Web.Controllers
                 BioEntity bioEntity = _context.Bio.Find(bioViewModel.Id);
                 if (bioEntity == null)
                 {
-                    //calcular las unidades a partir del tiempo de desarrollo del MTP
+                    //calcular las unidades a partir del tiempo de desarrollo del BIO
                     int units = (bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes / 15;
                     if ((bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
                     {
@@ -707,7 +707,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                //calcular las unidades a partir del tiempo de desarrollo del MTP
+                //calcular las unidades a partir del tiempo de desarrollo del BIO
                 int units = (bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes / 15;
                 if ((bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
                 {

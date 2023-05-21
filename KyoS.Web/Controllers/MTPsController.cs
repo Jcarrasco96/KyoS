@@ -2719,6 +2719,18 @@ namespace KyoS.Web.Controllers
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                //calcular las unidades a partir del tiempo de desarrollo del MTPR
+                int units = (mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    mtpReviewViewModel.Units = units;
+                }
+                else
+                {
+                    mtpReviewViewModel.Units = units;
+                }
+
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
 
                 _context.Update(mtpReviewEntity);
@@ -3058,6 +3070,18 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //calcular las unidades a partir del tiempo de desarrollo del MTPR
+                int units = (reviewViewModel.EndTime.TimeOfDay - reviewViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((reviewViewModel.EndTime.TimeOfDay - reviewViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    reviewViewModel.Units = units;
+                }
+                else
+                {
+                    reviewViewModel.Units = units;
+                }
+
                 MTPReviewEntity reviewEntity = _context.MTPReviews.Find(reviewViewModel.Id);
                 if (reviewEntity == null)
                 {

@@ -36,7 +36,7 @@
                             var count = 0;
                             <tr>
                                 <td align="center">
-                                    @if (item.Workdays_Clients.Count() != 0 || item.MTPs != null || item.Bio != null || item.MTPRList != null)
+                                    @if (item.Workdays_Clients.Count() != 0 || item.MTPs != null || item.Bio != null || item.MTPRList != null || item.FarsFormList != null)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
                                     }
@@ -967,6 +967,113 @@
                                                                     <a asp-action="NotPaymentReceivedMTPR" asp-controller="MTPs" asp-route-id="@mtpr.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idMtpr="@ViewData["idMtpr"]" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                 }
                                                                 <a onclick="showInPopup('@Url.Action("PaymentReceivedMTPR", "Notes", new { id = item.Id, week = ViewData["idWeek"], idMtpr = mtpr.Id}, Context.Request.Scheme)','Payment received of this MTPR')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                                            }
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                            }
+                                            @if (item.FarsFormList != null)
+                                            {
+                                                foreach (var fars in item.FarsFormList)
+                                                {
+                                                    count = count + 1;
+
+                                                    <tr>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                                        </td>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => fars.CodeBill)
+                                                        </td>
+                                                        <td align="center">
+                                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                                            {
+                                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => fars.AdmissionedFor)
+                                                        </td>
+                                                        <td align="center">
+                                                            <a>FARS | </a>
+                                                            @Html.DisplayFor(modelItem => fars.Units)
+                                                        </td>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => fars.EvaluationDate)
+                                                        </td>
+                                                        <td align="center">
+                                                            @if (fars.Status == KyoS.Common.Enums.FarsStatus.Edition)
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    Edition
+                                                                </span>
+                                                            }
+                                                            @if (fars.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                                            {
+                                                                <span class="label label-info">
+                                                                    Pending
+                                                                </span>
+                                                            }
+                                                            @if (fars.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    Approved
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => fars.BilledDate)
+                                                        </td>
+                                                        <td align="center">
+                                                            @if (fars.PaymentDate == null)
+                                                            {
+                                                                @if (fars.BilledDate == null)
+                                                                {
+                                                                    <p>-</p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @if (fars.DeniedBill == true)
+                                                                    {
+                                                                        <a asp-action="NotDeniedBillFARS" asp-controller="FarsForms" asp-route-idFars="@fars.Id" asp-route-client="0" asp-route-week="@ViewData["idWeek"]" class="btn btn-danger" title="Not Denied Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a asp-action="DeniedBillTodayFARS" asp-controller="FarsForms" asp-route-idFars="@fars.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-info" title="Deny Bill"><i class="glyphicon glyphicon-check"></i></a>
+                                                                    }
+
+                                                                }
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>@fars.PaymentDate.Value.ToShortDateString()</p>
+                                                            }
+                                                        </td>
+                                                        <td align="right">
+                                                            @if (ViewData["Billed"].ToString() == "0")
+                                                            {
+                                                                <a asp-action="BillFARSToday" asp-controller="FarsForms" asp-route-id="@fars.Id" asp-route-week="@ViewData["idWeek"]" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("BillFARS", "Notes", new { id = item.Id, abilled = @ViewData["Billed"], week = ViewData["idWeek"], idFars = fars.Id }, Context.Request.Scheme)','Bill this FARS')" class="btn btn-warning" title="Billing FARS"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                <a asp-action="PaymentReceivedTodayFARS" asp-route-week="@ViewData["idWeek"]" asp-route-id="@fars.Id" class="btn btn-success disabled" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("PaymentReceived", "Notes", new { id = item.Id }, Context.Request.Scheme)','Payment received of this FARS')" class="btn btn-success disabled" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
+
+                                                            }
+                                                            @if (ViewData["Billed"].ToString() == "1")
+                                                            {
+                                                                <a asp-action="NotBillFARS" asp-controller="FarsForms" asp-route-id="@fars.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idFars="@fars.Id" class="btn btn-danger" title="Return not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("BillFARS", "Notes", new { id = item.Id, abilled = @ViewData["Billed"], week = ViewData["idWeek"], idFars = fars.Id}, Context.Request.Scheme)','Bill this FARS')" class="btn btn-warning" title="Billing FARS"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                @if (fars.PaymentDate == null)
+                                                                {
+                                                                    <a asp-action="PaymentReceivedTodayFARS" asp-controller="FarsForms" asp-route-week="@ViewData["idWeek"]" asp-route-id="@fars.Id" class="btn btn-success" title="Payment today"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-action="NotPaymentReceivedFARS" asp-controller="FarsForms" asp-route-id="@fars.Id" asp-route-week="@ViewData["idWeek"]" asp-route-idFars="@ViewData["idFars"]" class="btn btn-danger" title="Return not Payment"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                }
+                                                                <a onclick="showInPopup('@Url.Action("PaymentReceivedFARS", "Notes", new { id = item.Id, week = ViewData["idWeek"], idFars = fars.Id}, Context.Request.Scheme)','Payment received of this FARS')" class="btn btn-success" title="Payment received"><i class="glyphicon glyphicon-calendar"></i></a>
 
                                                             }
                                                         </td>

@@ -201,6 +201,18 @@ namespace KyoS.Web.Controllers
                 FarsFormEntity farsFormEntity = _context.FarsForm.Find(FarsFormViewModel.Id);
                 if (farsFormEntity == null)
                 {
+                    //calcular las unidades a partir del tiempo de desarrollo del FARS
+                    int units = (FarsFormViewModel.EndTime.TimeOfDay - FarsFormViewModel.StartTime.TimeOfDay).Minutes / 15;
+                    if ((FarsFormViewModel.EndTime.TimeOfDay - FarsFormViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                    {
+                        units++;
+                        FarsFormViewModel.Units = units;
+                    }
+                    else
+                    {
+                        FarsFormViewModel.Units = units;
+                    }
+
                     farsFormEntity = await _converterHelper.ToFarsFormEntity(FarsFormViewModel, true, user_logged.UserName);
                     _context.FarsForm.Add(farsFormEntity);
                     try
@@ -274,8 +286,8 @@ namespace KyoS.Web.Controllers
                 SubstanceScale = FarsFormViewModel.SubstanceScale,
                 ThoughtProcessScale = FarsFormViewModel.ThoughtProcessScale,
                 TraumaticsScale = FarsFormViewModel.TraumaticsScale,
-                WorkScale = FarsFormViewModel.WorkScale
-                
+                WorkScale = FarsFormViewModel.WorkScale,
+                CodeBill = FarsFormViewModel.CodeBill                
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
@@ -331,6 +343,18 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //calcular las unidades a partir del tiempo de desarrollo del FARS
+                int units = (farsFormViewModel.EndTime.TimeOfDay - farsFormViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((farsFormViewModel.EndTime.TimeOfDay - farsFormViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    farsFormViewModel.Units = units;
+                }
+                else
+                {
+                    farsFormViewModel.Units = units;
+                }
+
                 FarsFormEntity farsFormEntity = await _converterHelper.ToFarsFormEntity(farsFormViewModel, false, user_logged.Id);
                 _context.FarsForm.Update(farsFormEntity);
                 try
@@ -1158,5 +1182,170 @@ namespace KyoS.Web.Controllers
 
             return View(auditClient_List);
         }
+
+        #region Bill week FARS
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillFARSToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+                fars.BilledDate = DateTime.Now;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id });
+                }
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBillFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+                fars.BilledDate = null;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillTodayFARS(int idFars = 0, int week = 0, int origin = 0)
+        {
+            if (idFars >= 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == idFars);
+
+                fars.DeniedBill = true;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBillFARS(int idFars = 0, int client = 0, int week = 0)
+        {
+            if (idFars > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == idFars);
+
+                fars.DeniedBill = false;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                fars.PaymentDate = null;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                fars.PaymentDate = DateTime.Now;
+                fars.DeniedBill = false;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
+
     }
 }
