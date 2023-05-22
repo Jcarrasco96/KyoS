@@ -12216,6 +12216,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.MTPs)
                                                            .ThenInclude(wc => wc.MtpReviewList)
                                                            .Include(wc => wc.Bio)
+                                                           .Include(wc => wc.FarsFormList)
 
                                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                               && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -12228,7 +12229,10 @@ namespace KyoS.Web.Controllers
                                                                 ||(wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate == null)
                                                                 || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
                                                                                                   && m.DataOfService <= week.FinalDate
-                                                                                                  && m.BilledDate == null).Count() > 0).Count() > 0))))
+                                                                                                  && m.BilledDate == null).Count() > 0).Count() > 0)
+                                                                || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                   && n.EvaluationDate <= week.FinalDate
+                                                                                   && n.BilledDate == null).Count() > 0))))
 
                                                            .ToListAsync();
                 
@@ -12280,6 +12284,19 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         temp = clients[i].MTPs.Sum(n => n.Units);
+                        cantUnit += temp;
+                        money += temp * 15;
+                        temp = 0;
+                        document++;
+                    }
+
+                    if (clients[i].FarsFormList == null || clients[i].FarsFormList.Where(n => n.EvaluationDate >= week.InitDate && n.EvaluationDate <= week.FinalDate && n.BilledDate == null).Count() == 0)
+                    {
+                        clients[i].FarsFormList = null;
+                    }
+                    else
+                    {
+                        temp = clients[i].FarsFormList.Sum(n => n.Units);
                         cantUnit += temp;
                         money += temp * 15;
                         temp = 0;
@@ -12408,6 +12425,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.MTPs)
                                                            .ThenInclude(wc => wc.MtpReviewList)
                                                            .Include(wc => wc.Bio)
+                                                           .Include(wc => wc.FarsFormList)
 
                                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                               && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -12420,7 +12438,10 @@ namespace KyoS.Web.Controllers
                                                                 || (wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate != null)
                                                                 || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
                                                                                                   && m.DataOfService <= week.FinalDate
-                                                                                                  && m.BilledDate != null).Count() > 0).Count() > 0))))
+                                                                                                  && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                                || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                   && n.EvaluationDate <= week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
 
                                                            .ToListAsync();
                
@@ -12472,6 +12493,19 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         temp = clients[i].MTPs.Sum(n => n.Units);
+                        cantUnit += temp;
+                        money += temp * 15;
+                        temp = 0;
+                        document++;
+                    }
+
+                    if (clients[i].FarsFormList == null || clients[i].FarsFormList.Where(n => n.EvaluationDate >= week.InitDate && n.EvaluationDate <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                    {
+                        clients[i].FarsFormList = null;
+                    }
+                    else
+                    {
+                        temp = clients[i].FarsFormList.Sum(n => n.Units);
                         cantUnit += temp;
                         money += temp * 15;
                         temp = 0;
@@ -12679,6 +12713,7 @@ namespace KyoS.Web.Controllers
                                             .Include(wc => wc.MTPs)
                                             .ThenInclude(wc => wc.MtpReviewList)
                                             .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
 
                                             .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                      && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -12693,7 +12728,10 @@ namespace KyoS.Web.Controllers
                                                                            && wc.Bio.BilledDate == null)
                                                        || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                       && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                      && m.BilledDate == null).Count() > 0).Count() > 0))))
+                                                                                                      && m.BilledDate == null).Count() > 0).Count() > 0)
+                                                       || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                   && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                   && n.BilledDate == null).Count() > 0))))
                                             .ToListAsync();
 
 
@@ -12729,6 +12767,11 @@ namespace KyoS.Web.Controllers
                         if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
                         {
                             clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
                         }
 
                         if (clients[i].Bio != null)
@@ -12788,6 +12831,7 @@ namespace KyoS.Web.Controllers
                                            .Include(wc => wc.MTPs)
                                            .ThenInclude(wc => wc.MtpReviewList)
                                            .Include(wc => wc.Bio)
+                                           .Include(wc => wc.FarsFormList)
 
                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -12802,7 +12846,10 @@ namespace KyoS.Web.Controllers
                                                                            && wc.Bio.BilledDate != null)
                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                      && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0))))
+                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                   && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
                                            .ToListAsync();
 
                     List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
@@ -12836,6 +12883,11 @@ namespace KyoS.Web.Controllers
                         if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                         {
                             clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
                         }
 
                         if (clients[i].Bio != null)
@@ -12943,6 +12995,7 @@ namespace KyoS.Web.Controllers
                                             .Include(wc => wc.MTPs)
                                             .ThenInclude(wc => wc.MtpReviewList)
                                             .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
 
                                             .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                      && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -12957,7 +13010,10 @@ namespace KyoS.Web.Controllers
                                                                            && wc.Bio.BilledDate != null)
                                                        || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                      && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0))))
+                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                       || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                   && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
                                             .ToListAsync();
 
                     List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
@@ -12992,6 +13048,11 @@ namespace KyoS.Web.Controllers
                         if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                         {
                             clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
                         }
 
                         if (clients[i].Bio != null)
@@ -13076,6 +13137,7 @@ namespace KyoS.Web.Controllers
                                             .Include(wc => wc.MTPs)
                                             .ThenInclude(wc => wc.MtpReviewList)
                                             .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
 
                                             .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                      && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -13090,7 +13152,10 @@ namespace KyoS.Web.Controllers
                                                                            && wc.Bio.BilledDate != null)
                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                      && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0))))
+                                                                                                     && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                   && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
                                            .ToListAsync();
 
                     List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
@@ -13125,6 +13190,11 @@ namespace KyoS.Web.Controllers
                         if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                         {
                             clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
                         }
 
                         if (clients[i].Bio != null)
@@ -15062,6 +15132,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(wc => wc.MTPs)
                                                            .ThenInclude(wc => wc.MtpReviewList)
                                                            .Include(wc => wc.Bio)
+                                                           .Include(wc => wc.FarsFormList)
 
                                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id 
                                                                       && wc.Id == idClient 
@@ -15070,7 +15141,8 @@ namespace KyoS.Web.Controllers
                                                                                                   && wc.Hold == false).Count() > 0)
                                                                         || (wc.MTPs.Where(n => n.BilledDate == null).Count() > 0)
                                                                         || (wc.Bio.BilledDate == null)
-                                                                        || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate == null).Count() > 0).Count() > 0))))
+                                                                        || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate == null).Count() > 0).Count() > 0)
+                                                                        || (wc.FarsFormList.Where(n => n.BilledDate == null).Count() > 0))))
                                                            .FirstOrDefaultAsync();
                 if (client_salida != null)
                 {
@@ -15104,6 +15176,16 @@ namespace KyoS.Web.Controllers
                                 money += _mtpr.Units * 15;
                                 documents++;
                             }
+                        }
+                    }
+
+                    foreach (var item in client_salida.FarsFormList)
+                    {
+                        if (item.BilledDate == null)
+                        {
+                            cantUnit += item.Units;
+                            money += item.Units * 15;
+                            documents++;
                         }
                     }
 
@@ -15221,7 +15303,9 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(wc => wc.SubSchedules)
 
                                                     .Include(wc => wc.MTPs)
+                                                    .ThenInclude(wc => wc.MtpReviewList)
                                                     .Include(wc => wc.Bio)
+                                                    .Include(wc => wc.FarsFormList)
 
                                                     .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                         && wc.Id == idClient
@@ -15230,7 +15314,8 @@ namespace KyoS.Web.Controllers
                                                                                           && wc.Hold == false).Count() > 0)
                                                       || (wc.MTPs.Where(n => n.BilledDate != null).Count() > 0)
                                                       || (wc.Bio.BilledDate != null)
-                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate != null).Count() > 0).Count() > 0))));
+                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate != null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.BilledDate != null).Count() > 0))));
 
                 if (client_salida != null)
                 {
@@ -15264,6 +15349,16 @@ namespace KyoS.Web.Controllers
                                 money += _mtpr.Units * 15;
                                 documents++;
                             }
+                        }
+                    }
+
+                    foreach (var item in client_salida.FarsFormList)
+                    {
+                        if (item.BilledDate != null)
+                        {
+                            cantUnit += item.Units;
+                            money += item.Units * 15;
+                            documents++;
                         }
                     }
 
@@ -15433,7 +15528,9 @@ namespace KyoS.Web.Controllers
                                        .ThenInclude(c => c.HealthInsurance)
 
                                        .Include(wc => wc.MTPs)
+                                       .ThenInclude(wc => wc.MtpReviewList)
                                        .Include(wc => wc.Bio)
+                                       .Include(wc => wc.FarsFormList)
 
                                        .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                 && wc.Id == workday_client.Client.Id
@@ -15448,7 +15545,10 @@ namespace KyoS.Web.Controllers
                                                                       && wc.Bio.BilledDate == null)
                                                   || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                      && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                     && m.BilledDate == null).Count() > 0).Count() > 0))));
+                                                                                                     && m.BilledDate == null).Count() > 0).Count() > 0)
+                                                  || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                   && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                   && n.BilledDate == null).Count() > 0))));
 
                     List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
 
@@ -15473,6 +15573,11 @@ namespace KyoS.Web.Controllers
                     if (client.MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
                     {
                         client.MTPs = null;
+                    }
+
+                    if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
+                    {
+                        client.FarsFormList = null;
                     }
 
                     if (client.Bio != null)
@@ -15522,7 +15627,9 @@ namespace KyoS.Web.Controllers
                                          .ThenInclude(c => c.HealthInsurance)
 
                                          .Include(wc => wc.MTPs)
+                                         .ThenInclude(wc => wc.MtpReviewList)
                                          .Include(wc => wc.Bio)
+                                         .Include(wc => wc.FarsFormList)
 
                                          .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                   && wc.Id == workday_client.Client.Id
@@ -15537,7 +15644,10 @@ namespace KyoS.Web.Controllers
                                                                         && wc.Bio.BilledDate != null)
                                                     || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                    && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                   && m.BilledDate != null).Count() > 0).Count() > 0))));
+                                                                                                   && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                    || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                                && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                                && n.BilledDate != null).Count() > 0))));
 
                     List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
 
@@ -15562,6 +15672,11 @@ namespace KyoS.Web.Controllers
                     if (client.MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                     {
                         client.MTPs = null;
+                    }
+
+                    if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
+                    {
+                        client.FarsFormList = null;
                     }
 
                     if (client.Bio != null)
@@ -15674,6 +15789,7 @@ namespace KyoS.Web.Controllers
                                         .Include(wc => wc.MTPs)
                                         .ThenInclude(wcr => wcr.MtpReviewList)
                                         .Include(wc => wc.Bio)
+                                        .Include(wc => wc.FarsFormList)
 
                                         .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                  && wc.Id == workday_client.Client.Id
@@ -15688,7 +15804,10 @@ namespace KyoS.Web.Controllers
                                                                        && wc.Bio.BilledDate != null)
                                                    || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= workday_client.Workday.Week.InitDate
                                                                                                   && m.DataOfService <= workday_client.Workday.Week.FinalDate
-                                                                                                  && m.BilledDate != null).Count() > 0).Count() > 0))));
+                                                                                                  && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                   || (wc.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate
+                                                                               && n.EvaluationDate <= workday_client.Workday.Week.FinalDate
+                                                                               && n.BilledDate != null).Count() > 0))));
 
                 List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
 
@@ -15712,6 +15831,11 @@ namespace KyoS.Web.Controllers
                 if (client.MTPs.Where(n => n.AdmissionDateMTP >= workday_client.Workday.Week.InitDate && n.AdmissionDateMTP <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                 {
                     client.MTPs = null;
+                }
+
+                if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
+                {
+                    client.FarsFormList = null;
                 }
 
                 if (client.Bio != null)
@@ -18555,6 +18679,707 @@ namespace KyoS.Web.Controllers
                                                       || (wc.Bio.BilledDate != null)
                                                       || (wc.MTPs.Where(n => n.BilledDate != null).Count() > 0)
                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate != null).Count() > 0).Count() > 0))));
+                ViewData["Billed"] = "1";
+
+                List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                foreach (var _mtp in clientEntity.MTPs)
+                {
+                    if (_mtp.MtpReviewList != null)
+                    {
+                        foreach (var _mtpr in _mtp.MtpReviewList)
+                        {
+                            if (_mtpr.BilledDate != null)
+                            {
+                                MTPRReview.Add(_mtpr);
+                            }
+                        }
+                    }
+                }
+                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceivedClient", model) });
+        }
+
+        #endregion
+
+        #region FARS Bill
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillFARS(int id, int week = 0, int abilled = 0, int idFars = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            ViewData["week"] = week;
+            ViewData["Billed"] = abilled;
+            ViewData["idFars"] = idFars;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillFARS(BillViewModel model, int idweek = 0, int abilled = 0, int idFars = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                FarsFormEntity fars;
+                if (idweek > 0)
+                {
+                    fars = await _context.FarsForm
+                                         .FirstOrDefaultAsync(n => n.Id == idFars);
+
+                    fars.BilledDate = model.BilledDate;
+                    _context.Update(fars);
+                    await _context.SaveChangesAsync();
+
+                }
+
+                WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idweek);
+                List<ClientEntity> clientsEntity = new List<ClientEntity>();
+                List<ClientAuxiliarViewModel> clients = new List<ClientAuxiliarViewModel>();
+
+                if (abilled == 0)
+                {
+                    clientsEntity = await _context.Clients
+
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                            .Include(c => c.Clients_HealthInsurances)
+                                            .ThenInclude(c => c.HealthInsurance)
+
+                                            .Include(wc => wc.MTPs)
+                                            .ThenInclude(wc => wc.MtpReviewList)
+                                            .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
+
+                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                 && wc.BilledDate == null
+                                                                                 && wc.Hold == false
+                                                                                 && wc.Workday.Week.Id == idweek).Count() > 0)
+                                                       || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
+                                                                           && n.AdmissionDateMTP <= week.FinalDate
+                                                                           && n.BilledDate == null).Count() > 0)
+                                                       || (wc.Bio.DateBio >= week.InitDate
+                                                        && wc.Bio.DateBio <= week.FinalDate
+                                                        && wc.Bio.BilledDate == null)
+                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
+                                                                                                      && m.DataOfService <= week.FinalDate
+                                                                                                      && m.BilledDate == null).Count() > 0).Count() > 0)
+                                                       || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                   && n.EvaluationDate <= week.FinalDate
+                                                                                   && n.BilledDate == null).Count() > 0))))
+                                               .ToListAsync();
+
+                    List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                    foreach (var item in clientsEntity)
+                    {
+                        foreach (var _mtp in item.MTPs)
+                        {
+                            if (_mtp.MtpReviewList != null)
+                            {
+                                foreach (var _mtpr in _mtp.MtpReviewList)
+                                {
+                                    if (_mtpr.DataOfService >= week.InitDate && _mtpr.DataOfService <= week.FinalDate && _mtpr.BilledDate == null)
+                                    {
+                                        MTPRReview.Add(_mtpr);
+                                    }
+                                }
+                            }
+                        }
+                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        MTPRReview = new List<MTPReviewEntity>();
+                    }
+
+                    for (int i = 0; i < clients.Count(); i++)
+                    {
+                        if (clients[i].MTPRList.Where(n => n.DataOfService >= week.InitDate && n.DataOfService <= week.FinalDate && n.BilledDate == null).Count() == 0)
+                        {
+                            clients[i].MTPRList = null;
+                        }
+
+                        if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate && n.AdmissionDateMTP <= week.FinalDate && n.BilledDate == null).Count() == 0)
+                        {
+                            clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= week.InitDate && n.EvaluationDate <= week.FinalDate && n.BilledDate == null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
+                        }
+
+                        if (clients[i].Bio != null)
+                        {
+                            if (clients[i].Bio.DateBio >= week.InitDate && clients[i].Bio.DateBio <= week.FinalDate && clients[i].Bio.BilledDate == null)
+                            {
+
+                            }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }
+                        }
+
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+
+                                                          .Include(wc => wc.IndividualNote)
+
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate == null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == week.Id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
+                    }
+
+                }
+                else
+                {
+                    clientsEntity = await _context.Clients
+
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                            .Include(c => c.Clients_HealthInsurances)
+                                            .ThenInclude(c => c.HealthInsurance)
+
+                                            .Include(wc => wc.MTPs)
+                                            .ThenInclude(wc => wc.MtpReviewList)
+                                            .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
+
+                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                 && wc.BilledDate != null
+                                                                                 && wc.Hold == false
+                                                                                 && wc.Workday.Week.Id == idweek).Count() > 0)
+                                                       || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
+                                                                           && n.AdmissionDateMTP <= week.FinalDate
+                                                                           && n.BilledDate != null).Count() > 0)
+                                                       || (wc.Bio.DateBio >= week.InitDate
+                                                          && wc.Bio.DateBio <= week.FinalDate
+                                                          && wc.Bio.BilledDate != null)
+                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
+                                                                                                      && m.DataOfService <= week.FinalDate
+                                                                                                      && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                       || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                   && n.EvaluationDate <= week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
+                                            .ToListAsync();
+
+                    List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                    foreach (var item in clientsEntity)
+                    {
+                        foreach (var _mtp in item.MTPs)
+                        {
+                            if (_mtp.MtpReviewList != null)
+                            {
+                                foreach (var _mtpr in _mtp.MtpReviewList)
+                                {
+                                    if (_mtpr.DataOfService >= week.InitDate && _mtpr.DataOfService <= week.FinalDate && _mtpr.BilledDate != null)
+                                    {
+                                        MTPRReview.Add(_mtpr);
+                                    }
+                                }
+                            }
+                        }
+                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        MTPRReview = new List<MTPReviewEntity>();
+                    }
+
+                    for (int i = 0; i < clients.Count(); i++)
+                    {
+                        if (clients[i].MTPRList.Where(n => n.DataOfService >= week.InitDate && n.DataOfService <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].MTPRList = null;
+                        }
+
+                        if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate && n.AdmissionDateMTP <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= week.InitDate && n.EvaluationDate <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
+                        }
+
+                        if (clients[i].Bio != null)
+                        {
+                            if (clients[i].Bio.DateBio >= week.InitDate && clients[i].Bio.DateBio <= week.FinalDate && clients[i].Bio.BilledDate != null)
+                            {
+
+                            }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }
+                        }
+
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                          .Include(wc => wc.Note)
+
+                                                          .Include(wc => wc.NoteP)
+
+                                                          .Include(wc => wc.IndividualNote)
+
+                                                          .Include(wc => wc.GroupNote)
+
+                                                          .Include(wc => wc.GroupNote2)
+                                                          .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
+
+                                                          .Include(wc => wc.Facilitator)
+
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(wc => wc.SubSchedules)
+
+                                                          .Where(wc => wc.Present == true
+                                                                    && wc.BilledDate != null
+                                                                    && wc.Hold == false
+                                                                    && wc.Workday.Week.Id == week.Id
+                                                                    && wc.Client.Id == clients[i].Id).ToList();
+                    }
+
+                }
+
+                ViewData["Billed"] = abilled;
+                ViewData["idWeek"] = idweek;
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingWeek", clients) });
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult PaymentReceivedFARS(int id, int week = 0, int idFars = 0)
+        {
+            PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
+            ViewData["week"] = week;
+            ViewData["idFars"] = idFars;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedFARS(PaymentReceivedViewModel model, int idWeek = 0, int idFars = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                FarsFormEntity fars;
+                WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idWeek);
+                List<ClientEntity> clientsEntity = new List<ClientEntity>();
+                List<ClientAuxiliarViewModel> clients = new List<ClientAuxiliarViewModel>();
+                if (idWeek > 0)
+                {
+
+                    fars = await _context.FarsForm
+                                         .FirstOrDefaultAsync(m => m.Id == idFars);
+
+                    fars.PaymentDate = model.PaymentDate;
+                    fars.DeniedBill = false;
+                    _context.Update(fars);
+                    await _context.SaveChangesAsync();
+
+                    clientsEntity = await _context.Clients
+
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+
+                                            .Include(c => c.Clients_HealthInsurances)
+                                            .ThenInclude(c => c.HealthInsurance)
+
+                                            .Include(wc => wc.MTPs)
+                                            .ThenInclude(wc => wc.MtpReviewList)
+                                            .Include(wc => wc.Bio)
+                                            .Include(wc => wc.FarsFormList)
+
+                                            .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                     && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                 && wc.BilledDate != null
+                                                                                 && wc.Hold == false
+                                                                                 && wc.Workday.Week.Id == idWeek).Count() > 0)
+                                                       || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
+                                                                           && n.AdmissionDateMTP <= week.FinalDate
+                                                                           && n.BilledDate != null).Count() > 0)
+                                                       || (wc.Bio.DateBio >= week.InitDate
+                                                          && wc.Bio.DateBio <= week.FinalDate
+                                                          && wc.Bio.BilledDate != null)
+                                                       || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
+                                                                                                      && m.DataOfService <= week.FinalDate
+                                                                                                      && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                       || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                   && n.EvaluationDate <= week.FinalDate
+                                                                                   && n.BilledDate != null).Count() > 0))))
+                                            .ToListAsync();
+
+
+                    List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                    foreach (var item in clientsEntity)
+                    {
+                        foreach (var _mtp in item.MTPs)
+                        {
+                            if (_mtp.MtpReviewList != null)
+                            {
+                                foreach (var _mtpr in _mtp.MtpReviewList)
+                                {
+                                    if (_mtpr.DataOfService >= week.InitDate && _mtpr.DataOfService <= week.FinalDate && _mtpr.BilledDate != null)
+                                    {
+                                        MTPRReview.Add(_mtpr);
+                                    }
+                                }
+                            }
+                        }
+                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        MTPRReview = new List<MTPReviewEntity>();
+                    }
+
+                    for (int i = 0; i < clients.Count(); i++)
+                    {
+                        if (clients[i].MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate && n.AdmissionDateMTP <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].MTPs = null;
+                        }
+
+                        if (clients[i].FarsFormList.Where(n => n.EvaluationDate >= week.InitDate && n.EvaluationDate <= week.FinalDate && n.BilledDate != null).Count() == 0)
+                        {
+                            clients[i].FarsFormList = null;
+                        }
+
+                        if (clients[i].Bio != null)
+                        {
+                            if (clients[i].Bio.DateBio >= week.InitDate && clients[i].Bio.DateBio <= week.FinalDate && clients[i].Bio.BilledDate != null)
+                            {
+
+                            }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }
+                        }
+
+                        clients[i].Workdays_Clients = _context.Workdays_Clients
+                                                              .Include(wc => wc.Note)
+
+                                                              .Include(wc => wc.NoteP)
+
+                                                              .Include(wc => wc.IndividualNote)
+
+                                                              .Include(wc => wc.GroupNote)
+
+                                                              .Include(wc => wc.GroupNote2)
+                                                              .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                                              .Include(wc => wc.Workday)
+                                                              .ThenInclude(w => w.Week)
+
+                                                              .Include(wc => wc.Facilitator)
+
+                                                              .Include(wc => wc.Schedule)
+                                                              .ThenInclude(wc => wc.SubSchedules)
+
+                                                              .Where(wc => wc.Present == true
+                                                                        && wc.BilledDate != null
+                                                                        && wc.Hold == false
+                                                                        && wc.Workday.Week.Id == week.Id
+                                                                        && wc.Client.Id == clients[i].Id).ToList();
+                    }
+
+                    ViewData["Billed"] = "1";
+                    ViewData["idWeek"] = idWeek;
+
+                }
+
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingWeek", clients) });
+
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillFARSClient(int idClient, int abilled = 0, int idFars = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = idClient, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
+            ViewData["FARS"] = idFars;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillFARSClient(BillViewModel model, int abilled = 0, int idFars = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .FirstOrDefaultAsync(wc => wc.Id == idFars);
+
+                ClientEntity clientEntity;
+                ClientAuxiliarViewModel client = new ClientAuxiliarViewModel();
+
+                fars.BilledDate = model.BilledDate;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (abilled == 0)
+                {
+                    clientEntity = await _context.Clients
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Note)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.NoteP)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.IndividualNote)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.GroupNote)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.GroupNote2)
+                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                           .Include(c => c.Clients_Diagnostics)
+                                           .ThenInclude(cd => cd.Diagnostic)
+
+                                           .Include(c => c.Clients_HealthInsurances)
+                                           .ThenInclude(c => c.HealthInsurance)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Workday)
+                                           .ThenInclude(w => w.Week)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Facilitator)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Schedule)
+                                           .ThenInclude(wc => wc.SubSchedules)
+
+                                           .Include(wc => wc.MTPs)
+                                           .ThenInclude(wc => wc.MtpReviewList)
+                                           .Include(wc => wc.Bio)
+                                           .Include(wc => wc.FarsFormList)
+
+                                           .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                    && wc.Id == model.Id
+                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                && wc.BilledDate == null
+                                                                                && wc.Hold == false).Count() > 0)
+                                                      || (wc.MTPs.Where(n => n.BilledDate == null).Count() > 0)
+                                                      || (wc.Bio.BilledDate == null)
+                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate == null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.BilledDate == null).Count() > 0))));
+
+                    List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                    foreach (var _mtp in clientEntity.MTPs)
+                    {
+                        if (_mtp.MtpReviewList != null)
+                        {
+                            foreach (var _mtpr in _mtp.MtpReviewList)
+                            {
+                                if (_mtpr.BilledDate == null)
+                                {
+                                    MTPRReview.Add(_mtpr);
+                                }
+                            }
+                        }
+                    }
+                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+
+                }
+                else
+                {
+                    clientEntity = await _context.Clients
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Note)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.NoteP)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.IndividualNote)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.GroupNote)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.GroupNote2)
+                                           .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                           .Include(c => c.Clients_Diagnostics)
+                                           .ThenInclude(cd => cd.Diagnostic)
+
+                                           .Include(c => c.Clients_HealthInsurances)
+                                           .ThenInclude(c => c.HealthInsurance)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Workday)
+                                           .ThenInclude(w => w.Week)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Facilitator)
+
+                                           .Include(wc => wc.Workdays_Clients)
+                                           .ThenInclude(wc => wc.Schedule)
+                                           .ThenInclude(wc => wc.SubSchedules)
+
+                                           .Include(wc => wc.MTPs)
+                                           .ThenInclude(wc => wc.MtpReviewList)
+                                           .Include(wc => wc.Bio)
+                                           .Include(wc => wc.FarsFormList)
+
+                                           .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                    && wc.Id == model.Id
+                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                && wc.BilledDate != null
+                                                                                && wc.Hold == false).Count() > 0)
+                                                      || (wc.MTPs.Where(n => n.BilledDate != null).Count() > 0)
+                                                      || (wc.Bio.BilledDate != null)
+                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate != null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.BilledDate != null).Count() > 0))));
+
+                    List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();
+
+                    foreach (var _mtp in clientEntity.MTPs)
+                    {
+                        if (_mtp.MtpReviewList != null)
+                        {
+                            foreach (var _mtpr in _mtp.MtpReviewList)
+                            {
+                                if (_mtpr.BilledDate != null)
+                                {
+                                    MTPRReview.Add(_mtpr);
+                                }
+                            }
+                        }
+                    }
+                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+
+                }
+                ViewData["Billed"] = abilled;
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNoteClient", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult PaymentReceivedClientFARS(int id)
+        {
+            PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedClientFARS(PaymentReceivedViewModel model)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                FarsFormEntity fars;
+                fars = await _context.FarsForm
+                                     .Include(n => n.Client)
+                                     .FirstOrDefaultAsync(wc => wc.Id == model.Id);
+
+                fars.PaymentDate = model.PaymentDate;
+                fars.DeniedBill = false;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                ClientEntity clientEntity;
+                ClientAuxiliarViewModel client = new ClientAuxiliarViewModel();
+
+                clientEntity = await _context.Clients
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Note)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.NoteP)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.GroupNote)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.GroupNote2)
+                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
+
+                                       .Include(c => c.Clients_Diagnostics)
+                                       .ThenInclude(cd => cd.Diagnostic)
+
+                                       .Include(c => c.Clients_HealthInsurances)
+                                       .ThenInclude(c => c.HealthInsurance)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Workday)
+                                       .ThenInclude(w => w.Week)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Facilitator)
+
+                                       .Include(wc => wc.Workdays_Clients)
+                                       .ThenInclude(wc => wc.Schedule)
+                                       .ThenInclude(wc => wc.SubSchedules)
+
+                                       .Include(wc => wc.MTPs)
+                                       .ThenInclude(wc => wc.MtpReviewList)
+                                       .Include(wc => wc.Bio)
+                                       .Include(wc => wc.FarsFormList)
+
+                                       .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                    && wc.Id == fars.Client.Id
+                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                && wc.BilledDate != null
+                                                                                && wc.Hold == false).Count() > 0)
+                                                      || (wc.Bio.BilledDate != null)
+                                                      || (wc.MTPs.Where(n => n.BilledDate != null).Count() > 0)
+                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate != null).Count() > 0).Count() > 0)
+                                                      || (wc.FarsFormList.Where(n => n.BilledDate != null).Count() > 0))));
                 ViewData["Billed"] = "1";
 
                 List<MTPReviewEntity> MTPRReview = new List<MTPReviewEntity>();

@@ -47,7 +47,9 @@ namespace KyoS.Web.Helpers
                 CodeIndTherapy = model.CodeIndTherapy,
                 CodePSRTherapy = model.CodePSRTherapy,
                 CodeMTP = model.CodeMTP,
-                CodeBIO = model.CodeBIO
+                CodeBIO = model.CodeBIO,
+                CodeMTPR = model.CodeMTPR,
+                CodeFARS = model.CodeFARS
 
             };
         }
@@ -74,7 +76,9 @@ namespace KyoS.Web.Helpers
                 CodeIndTherapy = clinicEntity.CodeIndTherapy,
                 CodePSRTherapy = clinicEntity.CodePSRTherapy,
                 CodeMTP = clinicEntity.CodeMTP,
-                CodeBIO = clinicEntity.CodeBIO
+                CodeBIO = clinicEntity.CodeBIO,
+                CodeMTPR = clinicEntity.CodeMTPR,
+                CodeFARS = clinicEntity.CodeFARS
 
             };
         }
@@ -2952,7 +2956,11 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null,
-                Type = FARSUtils.GetypeByIndex(model.IdType)
+                Type = FARSUtils.GetypeByIndex(model.IdType),
+                CodeBill = model.CodeBill,
+                Units = model.Units,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
             };
         }
 
@@ -3008,7 +3016,11 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Type = model.Type,
                 IdType = Convert.ToInt32(model.Type),
-                FarsType = _combosHelper.GetComboFARSType()
+                FarsType = _combosHelper.GetComboFARSType(),
+                CodeBill = model.CodeBill,
+                Units = model.Units,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
 
             };
             
@@ -3568,7 +3580,10 @@ namespace KyoS.Web.Helpers
                 Setting = model.Setting,
                 StartTime = model.StartTime,
                 DataOfService = model.DataOfService,
-                Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null,
+                CodeBill = model.CodeBill,
+                Units = model.Units
+
             };
             
             return salida;
@@ -3613,7 +3628,9 @@ namespace KyoS.Web.Helpers
                 MonthOfTreatment = model.MonthOfTreatment,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                DataOfService = model.DataOfService
+                DataOfService = model.DataOfService,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };           
         }
@@ -6635,7 +6652,8 @@ namespace KyoS.Web.Helpers
                 MTPRList = mtpr,
                 Workdays_Clients = clientEntity.Workdays_Clients,
                 Clients_Diagnostics = clientEntity.Clients_Diagnostics,
-                Clinic = clientEntity.Clinic
+                Clinic = clientEntity.Clinic,
+                FarsFormList = clientEntity.FarsFormList
                 
             };
         }
