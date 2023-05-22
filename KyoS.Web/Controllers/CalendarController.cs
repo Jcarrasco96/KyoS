@@ -296,7 +296,7 @@ namespace KyoS.Web.Controllers
 
             return mtpReviewEntity.Select(m => new
                                   {
-                                    title = "MTP Review Document",
+                                    title = "MTPR Document",
                                     start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
                                                                         m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                         .ToString("yyyy-MM-ddTHH:mm:ssK"),
@@ -442,7 +442,7 @@ namespace KyoS.Web.Controllers
 
                 bioEntityList = await db.Bio
 
-                                    .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.Client.Id == idFacilitator))
+                                    .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == facilitator.LinkedUser))
                                     .ToListAsync();
             }
 
@@ -481,7 +481,7 @@ namespace KyoS.Web.Controllers
 
             return mtpReviewEntity.Select(m => new
                                   {
-                                      title = "MTP Review Document",
+                                      title = "MTPR Document",
                                       start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
                                                                                             m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
@@ -508,7 +508,7 @@ namespace KyoS.Web.Controllers
 
                 farsEntityList = await db.FarsForm
 
-                                         .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.Client.Id == idFacilitator))
+                                         .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == facilitator.LinkedUser))
                                          .ToListAsync();
             }
 
