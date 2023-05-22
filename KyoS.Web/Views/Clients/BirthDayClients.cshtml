@@ -179,11 +179,11 @@
                                     <td align="center" class="bg-warning">
                                         @if (DateTime.Today.Day == item.DateOfBirth.Day && DateTime.Today.Month == item.DateOfBirth.Month)
                                         {
-                                             <b><i class="icon-bell"></i>  Today</b>
+                                            <b>@Html.DisplayFor(modelItem => item.DateOfBirth)</b> <i class="icon-bell"></i>
                                         }
                                         else
                                         {
-                                            @Html.DisplayFor(modelItem => item.DateOfBirth)                                            
+                                            @Html.DisplayFor(modelItem => item.DateOfBirth)
                                         }
                                     </td>
                                     <td align="center">
