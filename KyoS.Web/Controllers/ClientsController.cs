@@ -1906,7 +1906,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Date of Close";
                             tempProblem.Description = "Date of close is out of term";
-                            tempProblem.Active = 0;
+                            tempProblem.Active = 1;
                         }
                         else
                         {
@@ -1931,7 +1931,7 @@ namespace KyoS.Web.Controllers
                         {
                             tempProblem.Name = "Date of Close";
                             tempProblem.Description = "Date of close is out of term";
-                            tempProblem.Active = 0;
+                            tempProblem.Active = 1;
                         }
                         else
                         {
