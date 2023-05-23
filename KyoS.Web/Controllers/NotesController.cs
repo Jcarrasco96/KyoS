@@ -13388,11 +13388,7 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Note)
-
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.NoteP)
+                                                       .ThenInclude(wc => wc.IndividualNote)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                  && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0
@@ -13426,11 +13422,7 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(w => w.Days)
                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                      .ThenInclude(wc => wc.Note)
-
-                                                      .Include(w => w.Days)
-                                                      .ThenInclude(d => d.Workdays_Clients)
-                                                      .ThenInclude(wc => wc.NoteP)
+                                                      .ThenInclude(wc => wc.IndividualNote)
 
                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                                 && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0
@@ -14420,6 +14412,52 @@ namespace KyoS.Web.Controllers
             ViewData["facilitatorId"] = facilitatorId;
             return View(week);
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ClientIndForWeek(int id = 0, int weekId = 0, int facilitatorId = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.FinishEdition = "Y";
+            }
+
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<WeekEntity> week = await _context.Weeks
+
+                                                  .Include(w => w.Days)
+                                                  .ThenInclude(d => d.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.Client)
+
+                                                  .Include(w => w.Days)
+                                                  .ThenInclude(d => d.Workdays_Clients)
+                                                  .ThenInclude(g => g.Facilitator)
+
+                                                  .Include(w => w.Days)
+                                                  .ThenInclude(d => d.Workdays_Clients)
+                                                  .ThenInclude(wc => wc.IndividualNote)
+
+                                                  .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                            && w.Days.Where(d => (d.Service == ServiceType.Individual 
+                                                                               && d.Workdays_Clients.Where(wc => (wc.Facilitator.Id == facilitatorId 
+                                                                                                               && wc.Workday.Week.Id == weekId)).Count() > 0)).Count() > 0))
+                                                  .ToListAsync();
+
+            ViewData["facilitatorId"] = facilitatorId;
+            return View(week);
+        }
+
 
         [Authorize(Roles = "Manager")]
         public IActionResult PSRAssistanceModifications(bool update = false, int affected_rows = 0)
