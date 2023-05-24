@@ -2313,6 +2313,7 @@ namespace KyoS.Web.Controllers
             Workday_Client workday_Client = await _context.Workdays_Clients
 
                                                           .Include(wc => wc.Workday)
+                                                          .ThenInclude(c => c.Week)
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.Clinic)                                                                          
@@ -2361,6 +2362,21 @@ namespace KyoS.Web.Controllers
                             }
                         }
 
+                    }
+
+                    //-------Verifico que ese cliente no tenga una nota de Ind en esa semana--------
+                    List<Workday_Client> workdays_clients = _context.Workdays_Clients
+
+                                                                    .Include(wc => wc.Client)
+                                                                    .ThenInclude(n => n.DischargeList)
+                                                                    .Where(wc => (wc.Workday.Week.Id == workday_Client.Workday.Week.Id 
+                                                                               && wc.Workday.Service == ServiceType.Individual
+                                                                               && wc.Client.Id == model.IdClient))
+                                                                    .ToList();
+
+                    if (workdays_clients.Count() > 0)
+                    {
+                        return RedirectToAction(nameof(EditIndNote), new { id = model.Id, error = 5, origin = model.Origin });
                     }
 
                     //note.SubSchedule = workday_Client.Schedule.SubSchedules.FirstOrDefault(n => n.Schedule.SubSchedules.Where(m => m.InitialTime.ToString().Contains(time) == true).Count() > 0);
