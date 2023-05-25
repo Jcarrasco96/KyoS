@@ -196,7 +196,7 @@ namespace KyoS.Web.Controllers
                                                         (wc.Workday.Service == ServiceType.Individual) ? "Individual Therapy" : string.Empty,
                                         start = (wc.Workday.Service == ServiceType.Individual) ?
                                                 new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
-                                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, 0)
+                                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Minute : 0, 0)
                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK")
                                                 :
                                                 new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
@@ -204,7 +204,7 @@ namespace KyoS.Web.Controllers
                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK"),
                                         end = (wc.Workday.Service == ServiceType.Individual) ?
                                                 new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
-                                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, 0)
+                                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Minute : 0, 0)
                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK")
                                                 :
                                                 new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
