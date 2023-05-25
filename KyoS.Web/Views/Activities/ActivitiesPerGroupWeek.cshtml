@@ -70,7 +70,8 @@
                                                                 <table class="table table-striped">
                                                                     <tr>
                                                                         <th class="col-md-3">Topic</th>
-                                                                        <th class="col-md-9">Activity</th>
+                                                                        <th class="col-md-8">Activity</th>
+                                                                        <th class="col-md-1"></th>
                                                                     </tr>
                                                                     @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
                                                                     {
@@ -82,6 +83,9 @@
                                                                             <td>
                                                                                 <a>@Html.DisplayFor(modelItem => activity.Activity.Id)</a> -
                                                                                 @Html.DisplayFor(modelItem => activity.Activity.Name)
+                                                                            </td>
+                                                                             <td  align="right">
+                                                                                 <a asp-action="AddLink" asp-route-id="@activity.Activity.Id" asp-route-origin=1 class="btn btn-primary" title="Add Link"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     }

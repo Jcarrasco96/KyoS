@@ -13,5 +13,6 @@ namespace KyoS.Web.Models
         public int IdTheme { get; set; }
         public int Origin { get; set; }
         public IEnumerable<SelectListItem> Themes { get; set; }
+        public string Link { get; set; }
     }
 }

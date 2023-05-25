@@ -1,0 +1,27 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Add link facilitator's intervention</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddLink" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="IdTheme" />
+            <partial name="_AddLink" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="FISupervision" class="btn btn-success" asp-route-pending="1">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

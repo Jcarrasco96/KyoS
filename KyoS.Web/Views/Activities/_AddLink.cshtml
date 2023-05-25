@@ -1,0 +1,21 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+<div class="form-group">
+    <label asp-for="IdTheme" class="control-label"></label>
+    <select asp-for="IdTheme" asp-items="Model.Themes" class="form-control" disabled></select>
+    <span asp-validation-for="IdTheme" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="control-label">Facilitator’s Intervention</label>
+    <textarea asp-for="Name" class="form-control" rows="6" id="Name" readonly></textarea>
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="control-label">Add Link</label>
+    <textarea asp-for="Link" class="form-control" rows="2" id="Name" ></textarea>
+    <span asp-validation-for="Link" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <a class="btn btn-info" id="EnglishName">English</a>
+    <hr />
+</div>
+

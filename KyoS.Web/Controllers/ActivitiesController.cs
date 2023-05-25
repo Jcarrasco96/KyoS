@@ -1909,5 +1909,77 @@ namespace KyoS.Web.Controllers
                 return false;
         }
         #endregion
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> AddLink(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            if (activityEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
+                }
+            }
+            activityViewModel.Origin = origin;
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddLink(int id, ActivityViewModel activityViewModel)
+        {
+            if (id != activityViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                activityEntity.Name = activityEntity.Name + activityViewModel.Link;
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    if (activityViewModel.Origin == 0)
+                    {
+                        return RedirectToAction(nameof(ActivitiesPerWeek));
+                    }
+                    if (activityViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(ActivitiesPerGroupWeek));
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the activity: {activityEntity.Theme.Name} - {activityEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
+
     }
 }

@@ -92,7 +92,7 @@
                                                                         <th class="col-md-5">Activity</th>
                                                                         <th class="col-md-1" style="text-align:center;">AM</th>
                                                                         <th class="col-md-1" style="text-align:center;">PM</th>
-                                                                        <th class="col-md-1"></th>
+                                                                        <th class="col-md-2"></th>
                                                                     </tr>
                                                                     @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
                                                                     {
@@ -120,6 +120,7 @@
                                                                                 {
                                                                                     <a asp-action="CreateActivitiesWeek" asp-route-id="@day.Id" class="btn btn-warning disabled" title="Activities per week"><i class="glyphicon glyphicon-list"></i></a>
                                                                                 }
+                                                                                <a asp-action="AddLink" asp-route-id="@activity.Activity.Id" class="btn btn-primary" title="Add Link"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     }
