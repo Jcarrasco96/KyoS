@@ -465,7 +465,7 @@ namespace KyoS.Web.Controllers
             //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(Index));
@@ -1201,7 +1201,7 @@ namespace KyoS.Web.Controllers
             //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(Index));
@@ -2168,7 +2168,7 @@ namespace KyoS.Web.Controllers
             if (mtp != null)
             {
                 //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(IndividualNotes));
@@ -2720,7 +2720,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(GroupNotes));
@@ -3265,7 +3265,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(GroupNotes));
@@ -3853,7 +3853,7 @@ namespace KyoS.Web.Controllers
 
             if (mtp != null)
             {
-                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
+                if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
                         return RedirectToAction(nameof(GroupNotes));
@@ -19459,5 +19459,88 @@ namespace KyoS.Web.Controllers
         }
 
         #endregion
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnToNotStarted(int? idWorkday_client)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (idWorkday_client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(n => n.Client)
+                                                          .FirstAsync(t => t.Id == idWorkday_client);
+
+            if (workday_Client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            int idClient = workday_Client.Client.Id;
+
+            IndividualNoteEntity indNotes = _context.IndividualNotes
+                                                    .Include(n => n.Workday_Cient)
+                                                    .ThenInclude(n => n.Client)
+                                                    .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+            
+            if (indNotes != null)
+            {
+                _context.Remove(indNotes);
+                workday_Client.Client = null;
+                _context.Update(workday_Client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+            }
+
+            GroupNoteEntity group = _context.GroupNotes
+                                            .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+
+            if (group != null)
+            {
+                _context.Remove(group);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+            }
+
+            GroupNote2Entity group2 = _context.GroupNotes2
+                                              .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+
+            if (group2 != null)
+            {
+                _context.Remove(group2);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+            }
+            
+            NoteEntity note = _context.Notes
+                                      .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+
+            if (note != null)
+            {
+                _context.Remove(note);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+            }
+
+            NotePEntity noteP = _context.NotesP
+                                        .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+
+            if (noteP != null)
+            {
+                _context.Remove(noteP);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
+        }
+
     }
 }

@@ -172,7 +172,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("facilitator") && facilitator != null)
+                if (User.IsInRole("Facilitator") && facilitator != null)
                 {
                     model.RaterEducation = facilitator.RaterEducation;
                     model.RaterFMHI = facilitator.RaterFMHCertification;

@@ -191,7 +191,36 @@
                                         {
                                             @if (User.IsInRole("Manager"))
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                @if (day_client.Note != null)
+                                                {
+                                                    @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                    {
+                                                        <a asp-action="ReturnToNotStarted" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Return to Not Started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    @if (day_client.NoteP != null)
+                                                    {
+                                                        @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                        {
+                                                            <a asp-action="ReturnToNotStarted" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Return to Not Started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -225,32 +254,36 @@
                                         {
                                             @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                             {
-                                                @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (User.IsInRole("Manager"))
                                                 {
-                                                    @if (User.IsInRole("Manager"))
+                                                    @if (day_client.IndividualNote != null)
                                                     {
-                                                        <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                        {
+                                                            <a asp-action="ReturnToNotStarted" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Return to Not Started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
-                                                    @if (day_client.Hold == false)
-                                                    {
-                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }
-
                                                 }
                                                 else
                                                 {
                                                     <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                }
+                                                @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
+                                                {
+                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
                                                     <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
-
                                             }
                                             else
                                             {
@@ -258,7 +291,35 @@
                                                 {
                                                     @if (User.IsInRole("Manager"))
                                                     {
-                                                        <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        @if (day_client.GroupNote != null)
+                                                        {
+                                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                            {
+                                                                <a asp-action="ReturnToNotStarted" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Return to Not Started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (day_client.GroupNote2 != null)
+                                                            {
+                                                                @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                {
+                                                                    <a asp-action="ReturnToNotStarted" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Return to Not Started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                        }
                                                     }
                                                     else
                                                     {
