@@ -13727,11 +13727,11 @@ namespace KyoS.Web.Controllers
                                             && wc.Session.Contains("AM") == true
                                             && wc.Workday.Date == date
                                             && wc.Id != idWordayClient
-                                            && ((wc.Schedule.InitialTime >= initialTime
-                                                && wc.Schedule.InitialTime <= endTime)
+                                            && ((wc.Schedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                && wc.Schedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                 ||
-                                                (wc.Schedule.EndTime >= initialTime
-                                                && wc.Schedule.EndTime <= endTime))))
+                                                (wc.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
+                                                && wc.Schedule.EndTime.TimeOfDay <= endTime.TimeOfDay))))
                                         .Count() > 0)
                                 return true;
 
@@ -13771,11 +13771,11 @@ namespace KyoS.Web.Controllers
                                                 && wc.Session.Contains("PM") == true
                                                 && wc.Workday.Date == date
                                                 && wc.Id != idWordayClient
-                                                && ((wc.Schedule.InitialTime >= initialTime
-                                                    && wc.Schedule.InitialTime <= endTime)
+                                                && ((wc.Schedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                    && wc.Schedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                     ||
-                                                    (wc.Schedule.EndTime >= initialTime
-                                                    && wc.Schedule.EndTime <= endTime))))
+                                                    (wc.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
+                                                    && wc.Schedule.EndTime.TimeOfDay <= endTime.TimeOfDay))))
                                             .Count() > 0)
                                     return true;
 
@@ -13807,14 +13807,14 @@ namespace KyoS.Web.Controllers
                         else
                         {
                             List<Workday_Client> temp = _context.Workdays_Clients.Where(n => n.Workday.Date == date
-                                                                && ((n.Schedule.InitialTime >= initialTime
-                                                                && n.Schedule.InitialTime <= endTime)
-                                                                    || (n.Schedule.EndTime >= initialTime
-                                                                       && n.Schedule.EndTime <= endTime)
-                                                                    || (n.Schedule.InitialTime <= initialTime
-                                                                       && n.Schedule.EndTime >= initialTime)
-                                                                    || (n.Schedule.InitialTime <= endTime
-                                                                       && n.Schedule.EndTime >= endTime))
+                                                                && ((n.Schedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                && n.Schedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
+                                                                    || (n.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                       && n.Schedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                                    || (n.Schedule.InitialTime.TimeOfDay <= initialTime.TimeOfDay
+                                                                       && n.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                                                    || (n.Schedule.InitialTime.TimeOfDay <= endTime.TimeOfDay
+                                                                       && n.Schedule.EndTime.TimeOfDay >= endTime.TimeOfDay))
                                                                && n.Id != idWordayClient
                                                                && n.Client.Id == idClient
                                                                && n.Present == true)
@@ -19586,6 +19586,118 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public IActionResult AuditOverlapin(int idWeek = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditOverlapin> auditClient_List = new List<AuditOverlapin>();
+            AuditOverlapin auditClient = new AuditOverlapin();
+
+            WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idWeek);
+
+            List<ClientEntity> client_List = _context.Clients
+                                                     .Include(m => m.Workdays_Clients)
+                                                     .ThenInclude(m => m.Workday)
+                                                     .Include(m => m.Workdays_Clients)
+                                                     .ThenInclude(m => m.Facilitator)
+                                                     //.ThenInclude(m => m.Schedule)
+                                                     //.ThenInclude(m => m.SubSchedules)
+                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
+                                                        && n.Workdays_Clients.Where(w => w.Workday.Week.Id == idWeek).Count() > 0))
+                                                     .ToList();
+
+            List<SubScheduleEntity> subSchedules = new List<SubScheduleEntity>();
+            SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
+            List<Workday_Client> workday_clientTemp = new List<Workday_Client>();
+            foreach (var item in client_List)
+            {
+                workday_clientTemp = _context.Workdays_Clients
+                                             .Include(n => n.Workday)
+                                             .Include(n => n.Facilitator)
+                                             .Include(n => n.Workday)
+                                             .Include(n => n.Schedule)
+                                             .Where(n => n.Client.Id == item.Id 
+                                                && n.Workday.Week.Id == idWeek)
+                                             .ToList();
+                foreach (var value in workday_clientTemp)
+                {
+                    if (value.Workday.Service == ServiceType.Individual)
+                    {
+                        if (value.Schedule != null)
+                        {
+                            subSchedules = _context.SubSchedule.Where(n => n.Schedule.Id == value.Schedule.Id).OrderBy(n => n.InitialTime).ToList();
+
+                            string time = value.Session.Substring(0, 7);
+                            foreach (var subSch in subSchedules)
+                            {
+                                if (subSch.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                                {
+                                    subScheduleEntity = subSch;
+                                }
+                            }
+
+                        }
+                        if (this.VerifyNotesAtSameTime(item.Id, value.Session, value.Workday.Date, subScheduleEntity.InitialTime, subScheduleEntity.EndTime, value.Id))
+                        {
+                            auditClient.Name = item.Name;
+                            auditClient.Date = value.Workday.Date;
+                            auditClient.Schedule = value.Session;
+
+                            if (value.Workday.Service == ServiceType.PSR)
+                                auditClient.Services = "PSR";
+                            if (value.Workday.Service == ServiceType.Individual)
+                                auditClient.Services = "Ind.";
+                            if (value.Workday.Service == ServiceType.Group)
+                                auditClient.Services = "Group";
+
+                            auditClient.Facilitator = value.Facilitator.Name;
+
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditOverlapin();
+                        }
+                        
+                        subSchedules = new List<SubScheduleEntity>();
+                        subScheduleEntity = new SubScheduleEntity();
+                    }
+                    else
+                    {
+                        if (this.VerifyNotesAtSameTime(item.Id, value.Session, value.Workday.Date, value.Schedule.InitialTime, value.Schedule.EndTime, value.Id))
+                        {
+                            auditClient.Name = item.Name;
+                            auditClient.Date = value.Workday.Date;
+                            auditClient.Schedule = value.Session;
+
+                            if (value.Workday.Service == ServiceType.PSR)
+                                auditClient.Services = "PSR";
+                            if (value.Workday.Service == ServiceType.Individual)
+                                auditClient.Services = "Ind.";
+                            if (value.Workday.Service == ServiceType.Group)
+                                auditClient.Services = "Group";
+
+                            auditClient.Facilitator = value.Facilitator.Name;
+
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditOverlapin();
+                        }
+                    }
+                }
+                workday_clientTemp = new List<Workday_Client>();
+            }
+            return View(auditClient_List);
+        }
+
 
     }
 }
