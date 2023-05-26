@@ -29,6 +29,18 @@
 
         </div>
     }
+    @if (ViewBag.MtpExpired == "E")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok danger"></i>
+            <strong class="danger">
+                The client's mtp is expired
+            </strong>
+        </div>
+    }
 </div>
 
 <div class="col-md-push-12">

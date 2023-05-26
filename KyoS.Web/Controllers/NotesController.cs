@@ -53,13 +53,17 @@ namespace KyoS.Web.Controllers
         }
         
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> Index(int id = 0)
+        public async Task<IActionResult> Index(int id = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
             }
-           
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             UserEntity user_logged = _context.Users
 
                                              .Include(u => u.Clinic)
@@ -100,13 +104,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> IndividualNotes(int id = 0)
+        public async Task<IActionResult> IndividualNotes(int id = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
             }
-
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
 
             UserEntity user_logged = _context.Users
 
@@ -139,13 +146,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> GroupNotes(int id = 0)
+        public async Task<IActionResult> GroupNotes(int id = 0, int expired = 0)
         {
             if (id == 1)
             {
                 ViewBag.FinishEdition = "Y";
             }
-
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
 
             UserEntity user_logged = _context.Users
 
@@ -468,15 +478,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction("Index","Notes", new { expired = 1});
                     if (origin == 1)
                         return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("NotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingNotes));
+                        return RedirectToAction("PendingNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(NotesWithReview));
+                        return RedirectToAction("NotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
                 }
@@ -1204,15 +1214,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction("Index", "Notes", new { expired = 1 });
                     if (origin == 1)
                         return RedirectToAction("NotStartedNotes", "Notes", new { name = workday_Client.Facilitator.Name, id = 0, expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("NotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingNotes));
+                        return RedirectToAction("PendingNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(NotesWithReview));
+                        return RedirectToAction("NotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
 
@@ -2171,15 +2181,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(IndividualNotes));
+                        return RedirectToAction("IndividualNotes", "Notes", new { expired = 1 });
                     if (origin == 1)
-                        return RedirectToAction(nameof(NotStartedIndNotes));
+                        return RedirectToAction("NotStartedIndNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("IndNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingIndNotes));
+                        return RedirectToAction("PendingIndNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(IndNotesWithReview));
+                        return RedirectToAction("IndNotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
 
@@ -2723,15 +2733,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(GroupNotes));
+                        return RedirectToAction("GroupNotes", "Notes", new { expired = 1 });
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingGroupNotes));
+                        return RedirectToAction("PendingGroupNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(GroupNotesWithReview));
+                        return RedirectToAction("GroupNotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
                 }
@@ -3268,15 +3278,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(GroupNotes));
+                        return RedirectToAction("GroupNotes", "Notes", new { expired = 1 });
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingGroupNotes));
+                        return RedirectToAction("PendingGroupNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(GroupNotesWithReview));
+                        return RedirectToAction("GroupNotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
                 }
@@ -3856,15 +3866,15 @@ namespace KyoS.Web.Controllers
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
                 {
                     if (origin == 0)
-                        return RedirectToAction(nameof(GroupNotes));
+                        return RedirectToAction("GroupNotes", "Notes", new { expired = 1 });
                     if (origin == 1)
                         return RedirectToAction("NotStartedGroupNotes", "Notes", new { expired = 1 });
                     if (origin == 2)
                         return RedirectToAction("GroupNotesInEdit", "Notes", new { id = 0, expired = 1 });
                     if (origin == 3)
-                        return RedirectToAction(nameof(PendingGroupNotes));
+                        return RedirectToAction("PendingGroupNotes", "Notes", new { id = 0, expired = 1 });
                     if (origin == 4)
-                        return RedirectToAction(nameof(GroupNotesWithReview));
+                        return RedirectToAction("GroupNotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
                 }
@@ -10663,8 +10673,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> NotStartedIndNotes()
+        public async Task<IActionResult> NotStartedIndNotes(int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             return View(await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
                                                        .Include(wc => wc.Facilitator)
                                                        .Include(wc => wc.Client)
@@ -10782,8 +10797,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingNotes(int id = 0, int error = 0)
+        public async Task<IActionResult> PendingNotes(int id = 0, int error = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10833,8 +10853,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingIndNotes(int id = 0)
+        public async Task<IActionResult> PendingIndNotes(int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10884,8 +10909,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingGroupNotes(int id = 0)
+        public async Task<IActionResult> PendingGroupNotes(int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -11165,8 +11195,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> NotesWithReview(int id = 0)
+        public async Task<IActionResult> NotesWithReview(int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -11217,8 +11252,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> IndNotesWithReview(int id = 0)
+        public async Task<IActionResult> IndNotesWithReview(int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients
@@ -11273,8 +11313,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> GroupNotesWithReview(int id = 0)
+        public async Task<IActionResult> GroupNotesWithReview(int id = 0, int expired = 0)
         {
+            if (expired == 1)
+            {
+                ViewBag.MtpExpired = "E";
+            }
+
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients
