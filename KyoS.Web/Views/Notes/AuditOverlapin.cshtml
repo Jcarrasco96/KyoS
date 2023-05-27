@@ -18,7 +18,7 @@
                                     <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
                                         <thead>
                                             <tr>
-                                                <th class="col-md-3">
+                                                <th class="col-md-5">
                                                     Name
                                                 </th>
                                                 <th class="col-md-2" style="text-align:center;">
@@ -27,11 +27,8 @@
                                                 <th class="col-md-2" style="text-align:center;">
                                                     Service
                                                 </th>
-                                                <th class="col-md-2" style="text-align:center;">
-                                                    Schedule
-                                                </th>
                                                 <th class="col-md-3" style="text-align:center;">
-                                                    Facilitator
+                                                    Schedule
                                                 </th>
                                             </tr>
                                         </thead>
@@ -43,16 +40,13 @@
                                                         @Html.DisplayFor(modelItem => item.Name)
                                                     </td>
                                                     <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Date)
+                                                        @Html.DisplayFor(modelItem => item.Date.ToShortDateString())
                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => item.Services)
                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => item.Schedule)
-                                                    </td>
-                                                    <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Facilitator)
                                                     </td>
                                                 </tr>
                                             }
