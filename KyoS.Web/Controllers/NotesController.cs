@@ -14591,21 +14591,21 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> DeleteNote(int? idWorkday_client)
+        public async Task<IActionResult> DeleteNote(int? id)
         {
             UserEntity user_logged = await _context.Users
-                                                  .Include(u => u.Clinic)
-                                                  .ThenInclude(c => c.Setting)
-                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                   .Include(u => u.Clinic)
+                                                        .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (idWorkday_client == null)
+            if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
             Workday_Client workday_Client = await _context.Workdays_Clients
                                                           .Include(n => n.Client)
-                                                          .FirstAsync(t => t.Id == idWorkday_client);
+                                                          .FirstAsync(t => t.Id == id);
 
 
             if (workday_Client == null)
@@ -14615,8 +14615,8 @@ namespace KyoS.Web.Controllers
 
             IndividualNoteEntity indNotes = _context.IndividualNotes
                                                     .Include(n => n.Workday_Cient)
-                                                    .ThenInclude(n => n.Client)
-                                                    .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                                        .ThenInclude(n => n.Client)
+                                                    .FirstOrDefault(t => t.Workday_Cient.Id == id);
             int idClient = 0;
             if (indNotes != null)
             {

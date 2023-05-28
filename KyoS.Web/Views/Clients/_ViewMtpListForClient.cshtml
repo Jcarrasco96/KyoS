@@ -14,11 +14,11 @@
                             <th class="col-md-1">
                                 
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-2" style="text-align:center">
-                                Date of Admission
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Evaluation Date
@@ -294,30 +294,26 @@
                                         @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                         {
                                             <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                            
                                         }
                                         else
                                         {
                                             @if (item.Status == KyoS.Common.Enums.MTPStatus.Pending)
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                                
                                             }
                                             else
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                                
                                             }
                                         }
                                     }
                                     else
                                     {
                                         <a asp-action="ReturnTo" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTP"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a asp-action="PrintMTP" asp-controller="Mtps" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>                                        
                                     }
                                     <a asp-action="ViewAllGoals"  asp-controller="Notes" asp-route-idMtp="@item.Id" target="_blank" class="btn btn-info" title="All goals"><i class="glyphicon glyphicon-list-alt"></i></a>
                                 </td>
