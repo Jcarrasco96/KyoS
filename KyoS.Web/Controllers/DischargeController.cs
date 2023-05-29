@@ -436,19 +436,22 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Delete(int? id, int clientId = 0)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            DischargeEntity dischargeEntity = await _context.Discharge.FirstOrDefaultAsync(s => s.Id == id);
+            DischargeEntity dischargeEntity = await _context.Discharge
+                                                            .Include(d => d.Client)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
             if (dischargeEntity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
+            int clientId = dischargeEntity.Client.Id;
             try
             {
                 _context.Discharge.Remove(dischargeEntity);

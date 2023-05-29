@@ -417,19 +417,22 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Delete(int? id, int clientId = 0)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            FarsFormEntity farsFormEntity = await _context.FarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            FarsFormEntity farsFormEntity = await _context.FarsForm
+                                                          .Include(f => f.Client)
+                                                          .FirstOrDefaultAsync(s => s.Id == id);
             if (farsFormEntity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
+            int clientId = farsFormEntity.Client.Id;
             try
             {
                 _context.FarsForm.Remove(farsFormEntity);
