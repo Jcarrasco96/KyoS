@@ -13722,7 +13722,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (wordayClient.Schedule != null)
                         {
-                            if (_context.Workdays_Clients
+                            if (/*_context.Workdays_Clients
                                         .Where(wc => (wc.Client.Id == idClient
                                             && wc.Session.Contains("AM") == true
                                             && wc.Workday.Date == date
@@ -13732,7 +13732,18 @@ namespace KyoS.Web.Controllers
                                                 ||
                                                 (wc.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
                                                 && wc.Schedule.EndTime.TimeOfDay <= endTime.TimeOfDay))))
-                                        .Count() > 0)
+                                        .Count() > 0
+                                        ||*/                  /// asi estaba pero no buscaba en las ind, compara con el schedule en ves del subschedule
+                                            _context.IndividualNotes
+                                                    .Where(n => n.Workday_Cient.Client.Id == idClient
+                                                             && n.Workday_Cient.Workday.Date == date
+                                                             && ((n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                               && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                             ).Count() > 0)
                                 return true;
 
                         }
@@ -13766,7 +13777,7 @@ namespace KyoS.Web.Controllers
                         {
                             if (wordayClient.Schedule != null)
                             {
-                                if (_context.Workdays_Clients
+                                if (/*_context.Workdays_Clients
                                             .Where(wc => (wc.Client.Id == idClient
                                                 && wc.Session.Contains("PM") == true
                                                 && wc.Workday.Date == date
@@ -13776,7 +13787,18 @@ namespace KyoS.Web.Controllers
                                                     ||
                                                     (wc.Schedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
                                                     && wc.Schedule.EndTime.TimeOfDay <= endTime.TimeOfDay))))
-                                            .Count() > 0)
+                                            .Count() > 0
+                                            ||*/
+                                            _context.IndividualNotes
+                                                    .Where(n => n.Workday_Cient.Client.Id == idClient
+                                                             && n.Workday_Cient.Workday.Date == date
+                                                             && ((n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                               && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                             ).Count() > 0)
                                     return true;
 
                             }
