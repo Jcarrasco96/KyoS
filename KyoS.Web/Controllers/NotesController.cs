@@ -19608,12 +19608,6 @@ namespace KyoS.Web.Controllers
             WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idWeek);
 
             List<ClientEntity> client_List = _context.Clients
-                                                     .Include(m => m.Workdays_Clients)
-                                                     .ThenInclude(m => m.Workday)
-                                                     .Include(m => m.Workdays_Clients)
-                                                     .ThenInclude(m => m.Facilitator)
-                                                     //.ThenInclude(m => m.Schedule)
-                                                     //.ThenInclude(m => m.SubSchedules)
                                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                                         && n.Workdays_Clients.Where(w => w.Workday.Week.Id == idWeek).Count() > 0))
                                                      .ToList();
@@ -19624,8 +19618,6 @@ namespace KyoS.Web.Controllers
             foreach (var item in client_List)
             {
                 workday_clientTemp = _context.Workdays_Clients
-                                             .Include(n => n.Workday)
-                                             .Include(n => n.Facilitator)
                                              .Include(n => n.Workday)
                                              .Include(n => n.Schedule)
                                              .Where(n => n.Client.Id == item.Id 
@@ -19655,15 +19647,9 @@ namespace KyoS.Web.Controllers
                             auditClient.Date = value.Workday.Date;
                             auditClient.Schedule = value.Session;
 
-                            if (value.Workday.Service == ServiceType.PSR)
-                                auditClient.Services = "PSR";
                             if (value.Workday.Service == ServiceType.Individual)
                                 auditClient.Services = "Ind.";
-                            if (value.Workday.Service == ServiceType.Group)
-                                auditClient.Services = "Group";
-
-                            auditClient.Facilitator = value.Facilitator.Name;
-
+                           
                             auditClient_List.Add(auditClient);
                             auditClient = new AuditOverlapin();
                         }
@@ -19681,12 +19667,8 @@ namespace KyoS.Web.Controllers
 
                             if (value.Workday.Service == ServiceType.PSR)
                                 auditClient.Services = "PSR";
-                            if (value.Workday.Service == ServiceType.Individual)
-                                auditClient.Services = "Ind.";
                             if (value.Workday.Service == ServiceType.Group)
                                 auditClient.Services = "Group";
-
-                            auditClient.Facilitator = value.Facilitator.Name;
 
                             auditClient_List.Add(auditClient);
                             auditClient = new AuditOverlapin();

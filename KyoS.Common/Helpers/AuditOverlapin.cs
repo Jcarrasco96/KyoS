@@ -9,7 +9,6 @@ namespace KyoS.Common.Helpers
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Services { get; set; }
-        public string Facilitator { get; set; }
         public string Schedule { get; set; }
     }
 }
