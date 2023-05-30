@@ -13737,6 +13737,7 @@ namespace KyoS.Web.Controllers
                                             _context.IndividualNotes
                                                     .Where(n => n.Workday_Cient.Client.Id == idClient
                                                              && n.Workday_Cient.Workday.Date == date
+                                                             && n.Workday_Cient.Present == true
                                                              && ((n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
@@ -13792,6 +13793,7 @@ namespace KyoS.Web.Controllers
                                             _context.IndividualNotes
                                                     .Where(n => n.Workday_Cient.Client.Id == idClient
                                                              && n.Workday_Cient.Workday.Date == date
+                                                             && n.Workday_Cient.Present == true
                                                              && ((n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
@@ -19643,7 +19645,8 @@ namespace KyoS.Web.Controllers
                                              .Include(n => n.Workday)
                                              .Include(n => n.Schedule)
                                              .Where(n => n.Client.Id == item.Id 
-                                                && n.Workday.Week.Id == idWeek)
+                                                      && n.Workday.Week.Id == idWeek
+                                                      && n.Present == true)
                                              .ToList();
                 foreach (var value in workday_clientTemp)
                 {
