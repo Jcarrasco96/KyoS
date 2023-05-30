@@ -123,41 +123,39 @@
         <span asp-validation-for="IdRelationship" class="text-danger"></span>
     </div>
 </div>
-<div class="col-md-push-12">   
+<div class="col-md-push-12">
     <div class="col-md-3">
         <label asp-for="OnlyTCM" class="control-label">Only TCM</label><br />
         <input type="checkbox" asp-for="OnlyTCM" class="form-check-input" id="check1">
     </div>
 </div>
-@if (Model.Id > 0)
-{
-    <div class="col-md-12">
-        <hr />
-    </div> 
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="IdService" class="control-label"></label>
-            <select asp-for="IdService" asp-items="Model.Services" class="form-control" id="check110"></select>
-            <span asp-validation-for="IdService" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdFacilitatorIT" class="control-label">Facilitator for Individual Therapy</label>
-            <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" id="check111"></select>
-            <span asp-validation-for="IdFacilitatorIT" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="FacilitatorPSR" class="control-label">Facilitator for PSR Therapy</label>
-            <input asp-for="FacilitatorPSR" class="form-control" disabled />
-            <span asp-validation-for="FacilitatorPSR" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-3">
-            <label asp-for="FacilitatorGroup" class="control-label">Facilitator for Group Therapy</label>
-            <input asp-for="FacilitatorGroup" class="form-control" disabled />
-            <span asp-validation-for="FacilitatorGroup" class="text-danger"></span>
-        </div>
+
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="IdService" class="control-label"></label>
+        <select asp-for="IdService" asp-items="Model.Services" class="form-control" id="check110"></select>
+        <span asp-validation-for="IdService" class="text-danger"></span>
     </div>
-}
-   
+    <div class="form-group col-md-3">
+        <label asp-for="IdFacilitatorIT" class="control-label">Facilitator for Individual Therapy</label>
+        <select asp-for="IdFacilitatorIT" asp-items="Model.ITFacilitators" class="form-control" id="check111"></select>
+        <span asp-validation-for="IdFacilitatorIT" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="FacilitatorPSR" class="control-label">Facilitator for PSR Therapy</label>
+        <input asp-for="FacilitatorPSR" class="form-control" disabled />
+        <span asp-validation-for="FacilitatorPSR" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="FacilitatorGroup" class="control-label">Facilitator for Group Therapy</label>
+        <input asp-for="FacilitatorGroup" class="form-control" disabled />
+        <span asp-validation-for="FacilitatorGroup" class="text-danger"></span>
+    </div>
+</div>
+
 <script>
     check1.addEventListener('change', (e) => {
         if (check1.checked == true) {
@@ -167,6 +165,6 @@
             document.getElementById('check110').disabled = false;
             document.getElementById('check111').disabled = false;
         }
-    })    
+    })
 </script>
 
