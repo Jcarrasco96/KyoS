@@ -203,6 +203,23 @@
             });
         }
 
+        function ConfirmReturnToNotStarted(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The note will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("ReturnToNotStarted", "Notes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
     </script>
    
 

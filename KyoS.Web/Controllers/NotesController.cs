@@ -19528,21 +19528,21 @@ namespace KyoS.Web.Controllers
         #endregion
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> ReturnToNotStarted(int? idWorkday_client)
+        public async Task<IActionResult> ReturnToNotStarted(int? id)
         {
             UserEntity user_logged = await _context.Users
                                                   .Include(u => u.Clinic)
                                                   .ThenInclude(c => c.Setting)
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (idWorkday_client == null)
+            if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
             Workday_Client workday_Client = await _context.Workdays_Clients
                                                           .Include(n => n.Client)
-                                                          .FirstAsync(t => t.Id == idWorkday_client);
+                                                          .FirstAsync(t => t.Id == id);
 
             if (workday_Client == null)
             {
@@ -19554,7 +19554,7 @@ namespace KyoS.Web.Controllers
             IndividualNoteEntity indNotes = _context.IndividualNotes
                                                     .Include(n => n.Workday_Cient)
                                                     .ThenInclude(n => n.Client)
-                                                    .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                                    .FirstOrDefault(t => t.Workday_Cient.Id == id);
             
             if (indNotes != null)
             {
@@ -19567,7 +19567,7 @@ namespace KyoS.Web.Controllers
             }
 
             GroupNoteEntity group = _context.GroupNotes
-                                            .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                            .FirstOrDefault(t => t.Workday_Cient.Id == id);
 
             if (group != null)
             {
@@ -19577,7 +19577,7 @@ namespace KyoS.Web.Controllers
             }
 
             GroupNote2Entity group2 = _context.GroupNotes2
-                                              .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                              .FirstOrDefault(t => t.Workday_Cient.Id == id);
 
             if (group2 != null)
             {
@@ -19587,7 +19587,7 @@ namespace KyoS.Web.Controllers
             }
             
             NoteEntity note = _context.Notes
-                                      .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                      .FirstOrDefault(t => t.Workday_Cient.Id == id);
 
             if (note != null)
             {
@@ -19597,7 +19597,7 @@ namespace KyoS.Web.Controllers
             }
 
             NotePEntity noteP = _context.NotesP
-                                        .FirstOrDefault(t => t.Workday_Cient.Id == idWorkday_client);
+                                        .FirstOrDefault(t => t.Workday_Cient.Id == id);
 
             if (noteP != null)
             {
