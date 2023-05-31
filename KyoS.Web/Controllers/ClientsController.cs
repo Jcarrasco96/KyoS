@@ -216,7 +216,12 @@ namespace KyoS.Web.Controllers
                         OtherLanguage_Understand = false,
                         MedicareId = "",
                         OnlyTCM = false,
-                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0)                      
+                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
+                        Annotations = string.Empty,
+                        IdService = 0,
+                        Services = _combosHelper.GetComboServices(),
+                        IdFacilitatorIT = 0,
+                        ITFacilitators = _combosHelper.GetComboFacilitators()
 
                     };
                     return View(model);

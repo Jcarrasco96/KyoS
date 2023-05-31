@@ -297,7 +297,7 @@ namespace KyoS.Web.Helpers
                 RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(model.IdRelationshipEC),
                 RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
                 IndividualTherapyFacilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Id == model.IdFacilitatorIT),
-                Service = isNew ? ServiceType.PSR : ServiceUtils.GetServiceByIndex(model.IdService),
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -309,7 +309,8 @@ namespace KyoS.Web.Helpers
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
                 MedicareId = model.MedicareId,
                 DateOfClose = model.DateOfClose,
-                OnlyTCM = model.OnlyTCM
+                OnlyTCM = model.OnlyTCM,
+                Annotations = model.Annotations
             };
         }
 
@@ -390,7 +391,8 @@ namespace KyoS.Web.Helpers
                 Documents = clientEntity.Documents,
                 OnlyTCM = clientEntity.OnlyTCM,
                 HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
-                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances
+                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
+                Annotations = clientEntity.Annotations
             };
         }
 
