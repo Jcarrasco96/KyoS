@@ -43,9 +43,12 @@ namespace KyoS.Web
 
             //not authorized page
             services.ConfigureApplicationCookie(options => 
-            {
-                //options.LoginPath = "/Account/NotAuthorized";
+            {                
                 options.AccessDeniedPath = "/Account/NotAuthorized";
+                options.ExpireTimeSpan = System.TimeSpan.FromMinutes(60);
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";                
+                options.SlidingExpiration = true;
             });
 
             //db connection
@@ -59,7 +62,7 @@ namespace KyoS.Web
             {
                 //options.Cookie.Name = ".AdventureWorks.Session";
                 options.IdleTimeout = System.TimeSpan.FromSeconds(10);
-                options.Cookie.IsEssential = true;
+                options.Cookie.IsEssential = true;                
             });
 
             services.AddTransient<SeedDb>();
