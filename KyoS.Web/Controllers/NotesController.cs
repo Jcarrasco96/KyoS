@@ -15123,6 +15123,10 @@ namespace KyoS.Web.Controllers
                                     .FirstOrDefault(n => n.Id == idMtp);
 
             int month = 0;
+            if (mtp == null)
+            {
+                return View(allGoals_List);
+            }
             if (mtp.MtpReviewList.Count() > 0)
             {
                 foreach (var review in mtp.MtpReviewList)
