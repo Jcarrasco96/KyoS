@@ -225,6 +225,7 @@
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Clients</a>
                                         <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Documentation">Clients' Documentation</a></li>
                                             <li><a asp-area="" asp-controller="Eligibility" asp-action="Index">Clients' Eligibility</a></li>
                                         </ul>
@@ -414,7 +415,13 @@
                                 Clients <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                    </ul>
+                                </li>
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
                             </ul>
                         </li>
@@ -514,7 +521,13 @@
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("PSR Groups", "Index", "Groups")</li>
                                 <li>@Html.ActionLink("Individual Groups", "Individual", "Groups")</li>

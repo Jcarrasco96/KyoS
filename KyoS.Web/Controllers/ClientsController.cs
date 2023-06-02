@@ -4891,5 +4891,111 @@ namespace KyoS.Web.Controllers
                                           .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
                                           .ToListAsync());
         }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> ActiveClients()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                        .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<ClientEntity> clients = new List<ClientEntity>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Include(n => n.IndividualTherapyFacilitator)
+                                        .Where(c => c.Status == StatusType.Open
+                                                 && c.Clinic.Id == user_logged.Clinic.Id)
+                                        .ToListAsync();
+
+            }
+            
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Include(n => n.IndividualTherapyFacilitator)
+                                        .Where(c => c.Status == StatusType.Open
+                                                 && c.Clinic.Id == user_logged.Clinic.Id
+                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
+                                                    || c.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                    || c.IdFacilitatorPSR == facilitator.Id
+                                                    || c.IdFacilitatorGroup == facilitator.Id))
+                                        .ToListAsync();
+
+            }
+
+            List<ClientActivedViewModel> salida = new List<ClientActivedViewModel>();
+            ClientActivedViewModel temp = new ClientActivedViewModel();
+            DateTime date = new DateTime();
+            List<ObjetiveEntity> objectives = new List<ObjetiveEntity>();
+            ObjetiveEntity objective = new ObjetiveEntity();
+
+            foreach (var item in clients)
+            {
+                objectives = _context.Objetives
+                                     .Include(n => n.Goal)
+                                     .Where(g => g.Compliment == false 
+                                              && g.Goal.MTP.Client.Id == item.Id 
+                                              && g.Goal.MTP.Active == true 
+                                              && g.Goal.Compliment == false
+                                              && g.Goal.Service == item.Service)
+                                     .ToList();
+                if (objectives.Count() > 1)
+                {
+                    date = objectives.Max(n => n.DateResolved);
+
+                    objective = objectives.FirstOrDefault(n => n.DateResolved == date);
+
+                    temp.Days = (date - DateTime.Today).Days;
+                    temp.Name = item.Name;
+                    temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
+                    temp.Service = item.Service;
+                    temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
+                    temp.AdmisionDate = item.AdmisionDate;
+                    temp.Code = item.Code;
+                    temp.Gender = item.Gender;
+
+                    if (objective.Goal.Adendum != null)
+                    {
+                        temp.DocumentType = "Addendum";
+                    }
+                    else
+                    {
+                        if (objective.IdMTPReview > 0)
+                        {
+                            temp.DocumentType = "MTPR";
+                        }
+                        else
+                        {
+                            temp.DocumentType = "MTP";
+                        }
+                    }
+
+                    salida.Add(temp);
+                    temp = new ClientActivedViewModel();
+                    objectives = new List<ObjetiveEntity>();
+                    objective = new ObjetiveEntity();
+                    date = new DateTime();
+                }
+               
+            }
+
+            return View(salida);
+        }
     }
 }
