@@ -4992,7 +4992,24 @@ namespace KyoS.Web.Controllers
                     objective = new ObjetiveEntity();
                     date = new DateTime();
                 }
-               
+               else
+                {
+                    temp.Days = -1000;
+                    temp.Name = item.Name;
+                    temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
+                    temp.Service = item.Service;
+                    temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
+                    temp.AdmisionDate = item.AdmisionDate;
+                    temp.Code = item.Code;
+                    temp.Gender = item.Gender;
+                    temp.DocumentType = "N_Doc";
+
+                    salida.Add(temp);
+                    temp = new ClientActivedViewModel();
+                    objectives = new List<ObjetiveEntity>();
+                    objective = new ObjetiveEntity();
+                    date = new DateTime();
+                }
             }
 
             return View(salida);

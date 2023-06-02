@@ -90,7 +90,16 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DocumentType)
+                                        @if (item.DocumentType == "N_Doc")
+                                        {
+                                            <span class="label label-danger">
+                                                @Html.DisplayFor(modelItem => item.DocumentType)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.DocumentType)
+                                        }
                                     </td>
                                     <td align="center">
                                         @if (item.Days <= 10 && item.Days > 0)
@@ -111,9 +120,19 @@
                                             {
                                                 @if (item.Days <= 0)
                                                 {
-                                                    <span class="label label-danger">
-                                                        @Html.DisplayFor(modelItem => item.Days)
-                                                    </span>
+                                                    @if (item.Days == -1000)
+                                                    {
+                                                        <span class="label label-danger">
+                                                            N_Obj
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="label label-danger">
+                                                            @Html.DisplayFor(modelItem => item.Days)
+                                                        </span>
+                                                    }
+
                                                 }
                                             }
                                         }
