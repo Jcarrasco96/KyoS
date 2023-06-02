@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Models.ClientActivedViewModel>
 @{
-    ViewData["Title"] = "Clients";
+    ViewData["Title"] = "Active Clients";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -32,19 +32,25 @@
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Therapy
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
                                 Admission
                             </th>
-                            <th class="col-md-2" style="text-align:left;">
-                                Individual Therapy
+                            <th class="col-md-1" style="text-align:center;">
+                                Therapy
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Document
+                                Doc.
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Days
+                                PSR/Group
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Doc.
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Ind
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Goals
                             </th>
                         </tr>
                     </thead>
@@ -78,16 +84,10 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
-                                    <td align="left">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="center">
                                         @if (item.DocumentType == "N_Doc")
@@ -137,6 +137,58 @@
                                             }
                                         }
                                     </td>
+                                    <td align="center">
+                                        @if (item.DocumentTypeInd == "N_Doc")
+                                        {
+                                            <span class="label label-danger">
+                                                @Html.DisplayFor(modelItem => item.DocumentTypeInd)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.DocumentTypeInd)
+                                        }
+                                    </td>
+                                    <td align="center">
+                                       @if (item.DaysInd <= 10 && item.DaysInd > 0)
+                                        {
+                                            <span class="label label-warning">
+                                                @Html.DisplayFor(modelItem => item.DaysInd)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.DaysInd > 10)
+                                            {
+                                                <span class="label label-success">
+                                                    @Html.DisplayFor(modelItem => item.DaysInd)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (item.DaysInd <= 0)
+                                                {
+                                                    @if (item.DaysInd == -1000)
+                                                    {
+                                                        <span class="label label-danger">
+                                                            N_Ind
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="label label-danger">
+                                                            @Html.DisplayFor(modelItem => item.DaysInd)
+                                                        </span>
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        <a asp-action="ViewAllGoals" asp-controller="Notes" asp-route-idMtp="@item.MtpId" target="_blank" class="btn btn-info" title="All goals"><i class="glyphicon glyphicon-list-alt"></i></a>
+                                    </td>
+                                    
                                 </tr>
                             }
                         }

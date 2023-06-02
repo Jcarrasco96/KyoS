@@ -5350,6 +5350,7 @@ namespace KyoS.Web.Controllers
                                                       
                                                       .Include(n => n.Objective)
                                                       .ThenInclude(o => o.Goal)
+                                                      .ThenInclude(o => o.MTP)
 
                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
@@ -5410,7 +5411,8 @@ namespace KyoS.Web.Controllers
 
                 Goal1 = (note.Objective == null) ? string.Empty : note.Objective.Goal.Number.ToString(),
                 Objetive1 = (note.Objective == null) ? string.Empty : note.Objective.Objetive,                
-                Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention
+                Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
+                MTPId = note.Objective.Goal.MTP.Id
             };           
 
             return View(individualNoteViewModel);

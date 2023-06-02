@@ -4945,17 +4945,35 @@ namespace KyoS.Web.Controllers
             List<ObjetiveEntity> objectives = new List<ObjetiveEntity>();
             ObjetiveEntity objective = new ObjetiveEntity();
 
+            DateTime dateInd = new DateTime();
+            List<ObjetiveEntity> objectivesInd = new List<ObjetiveEntity>();
+            ObjetiveEntity objectiveInd = new ObjetiveEntity();
+
             foreach (var item in clients)
             {
                 objectives = _context.Objetives
                                      .Include(n => n.Goal)
+                                     .ThenInclude(n => n.Adendum)
+                                     .Include(n => n.Goal)
+                                     .ThenInclude(n => n.MTP)
                                      .Where(g => g.Compliment == false 
                                               && g.Goal.MTP.Client.Id == item.Id 
                                               && g.Goal.MTP.Active == true 
                                               && g.Goal.Compliment == false
                                               && g.Goal.Service == item.Service)
                                      .ToList();
-                if (objectives.Count() > 1)
+                objectivesInd = _context.Objetives
+                                        .Include(n => n.Goal)
+                                        .ThenInclude(n => n.Adendum)
+                                        .Include(n => n.Goal)
+                                        .ThenInclude(n => n.MTP)
+                                        .Where(g => g.Compliment == false
+                                                 && g.Goal.MTP.Client.Id == item.Id
+                                                 && g.Goal.MTP.Active == true
+                                                 && g.Goal.Compliment == false
+                                                 && g.Goal.Service == ServiceType.Individual)
+                                     .ToList();
+                if (objectives.Count() > 0)
                 {
                     date = objectives.Max(n => n.DateResolved);
 
@@ -4969,6 +4987,7 @@ namespace KyoS.Web.Controllers
                     temp.AdmisionDate = item.AdmisionDate;
                     temp.Code = item.Code;
                     temp.Gender = item.Gender;
+                    temp.MtpId = objective.Goal.MTP.Id;
 
                     if (objective.Goal.Adendum != null)
                     {
@@ -4986,11 +5005,45 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
+                    //---------para calcular dias de ind-------
+                    if (objectivesInd != null && objectivesInd.Count() > 0)
+                    {
+                        dateInd = objectivesInd.Max(n => n.DateResolved);
+                        objectiveInd = objectivesInd.FirstOrDefault(n => n.DateResolved == dateInd);
+                        temp.DaysInd = (dateInd - DateTime.Today).Days;
+
+                        if (objectiveInd.Goal.Adendum != null)
+                        {
+                            temp.DocumentTypeInd = "Addendum";
+                        }
+                        else
+                        {
+                            if (objectiveInd.IdMTPReview > 0)
+                            {
+                                temp.DocumentTypeInd = "MTPR";
+                            }
+                            else
+                            {
+                                temp.DocumentTypeInd = "MTP";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        temp.DaysInd = -1000;
+                        temp.DocumentTypeInd = "N_Doc";
+                    }
+
+                   
+
                     salida.Add(temp);
                     temp = new ClientActivedViewModel();
                     objectives = new List<ObjetiveEntity>();
                     objective = new ObjetiveEntity();
                     date = new DateTime();
+                    objectivesInd = new List<ObjetiveEntity>();
+                    objectiveInd = new ObjetiveEntity();
+                    dateInd = new DateTime();
                 }
                else
                 {
@@ -5003,12 +5056,18 @@ namespace KyoS.Web.Controllers
                     temp.Code = item.Code;
                     temp.Gender = item.Gender;
                     temp.DocumentType = "N_Doc";
+                    temp.MtpId = 0;
+                    temp.DaysInd = -1000;
+                    temp.DocumentTypeInd = "N_Doc";
 
                     salida.Add(temp);
                     temp = new ClientActivedViewModel();
                     objectives = new List<ObjetiveEntity>();
                     objective = new ObjetiveEntity();
                     date = new DateTime();
+                    objectivesInd = new List<ObjetiveEntity>();
+                    objectiveInd = new ObjetiveEntity();
+                    dateInd = new DateTime();
                 }
             }
 

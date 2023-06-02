@@ -11,5 +11,8 @@ namespace KyoS.Web.Models
     {
         public int Days { get; set; }
         public string DocumentType { get; set; }
+        public int MtpId { get; set; }
+        public int DaysInd { get; set; }
+        public string DocumentTypeInd { get; set; }
     }
 }
