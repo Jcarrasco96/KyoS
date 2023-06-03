@@ -83,5 +83,6 @@ namespace KyoS.Web.Data.Entities
         public ObjetiveEntity Objective { get; set; }
 
         public int? MTPId { get; set; }
+        public SubScheduleEntity SubSchedule { get; set; }
     }
 }

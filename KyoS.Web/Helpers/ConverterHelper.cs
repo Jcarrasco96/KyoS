@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
 {
@@ -42,7 +45,11 @@ namespace KyoS.Web.Helpers
                 SignaturePath = pathSignatureClinical,
                 CodeGroupTherapy = model.CodeGroupTherapy,
                 CodeIndTherapy = model.CodeIndTherapy,
-                CodePSRTherapy = model.CodePSRTherapy
+                CodePSRTherapy = model.CodePSRTherapy,
+                CodeMTP = model.CodeMTP,
+                CodeBIO = model.CodeBIO,
+                CodeMTPR = model.CodeMTPR,
+                CodeFARS = model.CodeFARS
 
             };
         }
@@ -67,7 +74,11 @@ namespace KyoS.Web.Helpers
                 SignaturePath = clinicEntity.SignaturePath,
                 CodeGroupTherapy = clinicEntity.CodeGroupTherapy,
                 CodeIndTherapy = clinicEntity.CodeIndTherapy,
-                CodePSRTherapy = clinicEntity.CodePSRTherapy
+                CodePSRTherapy = clinicEntity.CodePSRTherapy,
+                CodeMTP = clinicEntity.CodeMTP,
+                CodeBIO = clinicEntity.CodeBIO,
+                CodeMTPR = clinicEntity.CodeMTPR,
+                CodeFARS = clinicEntity.CodeFARS
 
             };
         }
@@ -91,7 +102,8 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),                
-                Name = model.Name
+                Name = model.Name,
+                Service = ThemeUtils.GetThemeByIndex(model.IdService)
             };
         }
 
@@ -111,12 +123,16 @@ namespace KyoS.Web.Helpers
 
         public Theme3ViewModel ToTheme3ViewModel(ThemeEntity themeEntity)
         {
+           
             return new Theme3ViewModel
             {
                 Id = themeEntity.Id,
                 Name = themeEntity.Name,                
                 IdClinic = themeEntity.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdService = Convert.ToInt32(themeEntity.Service),
+                Services = _combosHelper.GetComboThemeType(),
+                Service = themeEntity.Service
             };
         }
 
@@ -281,18 +297,20 @@ namespace KyoS.Web.Helpers
                 RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(model.IdRelationshipEC),
                 RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(model.IdRelationship),
                 IndividualTherapyFacilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Id == model.IdFacilitatorIT),
-                Service = isNew ? ServiceType.PSR : ServiceUtils.GetServiceByIndex(model.IdService),
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 IdFacilitatorPSR = model.IdFacilitatorPSR,
+                IdFacilitatorGroup = model.IdFacilitatorGroup,
                 OtherLanguage_Read = model.OtherLanguage_Read,
                 OtherLanguage_Speak = model.OtherLanguage_Speak,
                 OtherLanguage_Understand = model.OtherLanguage_Understand,
                 MedicareId = model.MedicareId,
                 DateOfClose = model.DateOfClose,
-                OnlyTCM = model.OnlyTCM
+                OnlyTCM = model.OnlyTCM,
+                Annotations = model.Annotations
             };
         }
 
@@ -356,14 +374,15 @@ namespace KyoS.Web.Helpers
                 Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(userId),
                 IdLegalGuardian = (clientEntity.LegalGuardian != null) ? clientEntity.LegalGuardian.Id : 0,
                 LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(userId),
-                DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName),
-                ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName),
-                DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName),
+                DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
+                ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == clientEntity.Id),
+                DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 IdService = Convert.ToInt32(clientEntity.Service), 
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
                 ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
                 IdFacilitatorPSR = clientEntity.IdFacilitatorPSR,
+                IdFacilitatorGroup = clientEntity.IdFacilitatorGroup,
                 OtherLanguage_Read = clientEntity.OtherLanguage_Read,
                 OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
                 OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
@@ -371,7 +390,9 @@ namespace KyoS.Web.Helpers
                 DateOfClose = clientEntity.DateOfClose,
                 Documents = clientEntity.Documents,
                 OnlyTCM = clientEntity.OnlyTCM,
-                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName)
+                HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
+                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
+                Annotations = clientEntity.Annotations
             };
         }
 
@@ -510,7 +531,9 @@ namespace KyoS.Web.Helpers
                                       .ToList(),
                 Status = model.Status,
                 SupervisorDate = model.SupervisorDate,
-                DocumentAssistant = await _context.DocumentsAssistant.FindAsync(model.IdDocumentAssistant)
+                DocumentAssistant = await _context.DocumentsAssistant.FindAsync(model.IdDocumentAssistant),
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
         }
@@ -581,7 +604,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = mtpEntity.LastModifiedBy,
                 LastModifiedOn = mtpEntity.LastModifiedOn,
                 Status = mtpEntity.Status,
-                AdmissionedFor = mtpEntity.AdmissionedFor
+                AdmissionedFor = mtpEntity.AdmissionedFor,
+                CodeBill = mtpEntity.CodeBill,
+                Units = mtpEntity.Units
                 
             };
 
@@ -695,13 +720,19 @@ namespace KyoS.Web.Helpers
                 Pm = model.Pm,
                 Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
                 Service = model.Service,
-                SharedSession = model.SharedSession
+                SharedSession = model.SharedSession,
+                Schedule = await _context.Schedule.FindAsync(model.IdSchedule)
             };
         }
 
         public GroupViewModel ToGroupViewModel(GroupEntity groupEntity)
         {
-            return new GroupViewModel
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(c => c.Clinic)
+                                                    .FirstOrDefault(n => n.Id == groupEntity.Facilitator.Id);
+
+            GroupViewModel model = new GroupViewModel();
+            model = new GroupViewModel
             {
                 Id = groupEntity.Id,
                 Facilitator = groupEntity.Facilitator,
@@ -710,18 +741,18 @@ namespace KyoS.Web.Helpers
                 Am = groupEntity.Am,
                 Pm = groupEntity.Pm,
                 Clients = groupEntity.Clients,
-                SharedSession = groupEntity.SharedSession
+                SharedSession = groupEntity.SharedSession,
+                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id, groupEntity.Service)
             };
-        }
-
-        public async Task<PlanEntity> ToPlanEntity(PlanViewModel model, bool isNew)
-        {
-            return new PlanEntity
+            if (groupEntity.Schedule != null)
             {
-
-            };
+                model.Schedule = groupEntity.Schedule;
+                model.IdSchedule = groupEntity.Schedule.Id;
+                
+            }
+            return model;
         }
-
+       
         public PlanViewModel ToPlanViewModel(PlanEntity planEntity)
         {
             return new PlanViewModel
@@ -888,7 +919,8 @@ namespace KyoS.Web.Helpers
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
-                Other_Intervention = model.Other_Intervention
+                Other_Intervention = model.Other_Intervention,
+                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule)
             };
         }
 
@@ -938,9 +970,11 @@ namespace KyoS.Web.Helpers
             };
         }        
 
-        public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model)
+        public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model, bool indTherapy = false)
         {
-            return new Workday_ClientViewModel
+            Workday_ClientViewModel salida = new Workday_ClientViewModel();
+            
+            salida = new Workday_ClientViewModel
             {
                 Id = model.Id,
                 Workday = model.Workday,
@@ -951,6 +985,31 @@ namespace KyoS.Web.Helpers
                 Note = model.Note,
                 IndividualNote = model.IndividualNote
             };
+
+            if (model.Schedule == null)
+            {
+                if (indTherapy == false)
+                {
+                    salida.IdSchedule = 0;
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
+                }
+               
+            }
+            else
+            {
+                if (indTherapy == false)
+                {
+                    salida.IdSchedule = model.Schedule.Id;
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id,model.Id);
+                }
+                else
+                {
+                    salida.IdSchedule = model.Schedule.Id;
+                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id,model.Id);
+                }
+                
+            }
+            return salida;
         }
 
         public async Task<MessageEntity> ToMessageEntity(MessageViewModel model, bool isNew)
@@ -1294,7 +1353,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                MemberId = model.MemberId
+                MemberId = model.MemberId,
+                AuthorizationNumber = model.AuthorizationNumber
             };
         }
 
@@ -1315,7 +1375,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                MemberId = model.MemberId
+                MemberId = model.MemberId,
+                AuthorizationNumber = model.AuthorizationNumber
             };
         }
 
@@ -1421,7 +1482,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMClientEntity> ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
+        public TCMClientEntity ToTCMClientEntity(TCMClientViewModel model, bool isNew, string userId)
         {
             return new TCMClientEntity
             {
@@ -1437,7 +1498,6 @@ namespace KyoS.Web.Helpers
                 DataClose = model.DataClose,
                 Period = model.Period,
                 Client = model.Client
-
             };
         }
 
@@ -1527,7 +1587,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMDomainEntity> ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
+        public TCMDomainEntity ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
            
             return new TCMDomainEntity
@@ -1601,7 +1661,7 @@ namespace KyoS.Web.Helpers
            
         }
 
-        public async Task<IntakeConsentForTreatmentEntity> ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
+        public IntakeConsentForTreatmentEntity ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
         {
             return new IntakeConsentForTreatmentEntity
             {
@@ -1651,7 +1711,7 @@ namespace KyoS.Web.Helpers
             
         }
 
-        public async Task<IntakeConsentForReleaseEntity> ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
+        public IntakeConsentForReleaseEntity ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
         {
             return new IntakeConsentForReleaseEntity
             {
@@ -1721,7 +1781,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeConsumerRightsEntity> ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
+        public IntakeConsumerRightsEntity ToIntakeConsumerRightsEntity(IntakeConsumerRightsViewModel model, bool isNew)
         {
             return new IntakeConsumerRightsEntity
             {
@@ -1757,7 +1817,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeAcknowledgementHippaEntity> ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
+        public IntakeAcknowledgementHippaEntity ToIntakeAcknoewledgementHippaEntity(IntakeAcknoewledgementHippaViewModel model, bool isNew)
         {
             return new IntakeAcknowledgementHippaEntity
             {
@@ -1791,7 +1851,7 @@ namespace KyoS.Web.Helpers
 
         }
         
-        public async Task<IntakeAccessToServicesEntity> ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
+        public IntakeAccessToServicesEntity ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
         {
             return new IntakeAccessToServicesEntity
             {
@@ -1825,7 +1885,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeOrientationChecklistEntity> ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
+        public IntakeOrientationChecklistEntity ToIntakeOrientationChecklistEntity(IntakeOrientationCheckListViewModel model, bool isNew)
         {
             return new IntakeOrientationChecklistEntity
             {
@@ -1980,7 +2040,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeTransportationEntity> ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew)
+        public IntakeTransportationEntity ToIntakeTransportationEntity(IntakeTransportationViewModel model, bool isNew)
         {
             return new IntakeTransportationEntity
             {
@@ -2014,7 +2074,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeConsentPhotographEntity> ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
+        public IntakeConsentPhotographEntity ToIntakeConsentPhotographEntity(IntakeConsentPhotographViewModel model, bool isNew)
         {
             return new IntakeConsentPhotographEntity
             {
@@ -2036,7 +2096,6 @@ namespace KyoS.Web.Helpers
                 Markrting = model.Markrting,
                 ByTODocument = model.ByTODocument,
                 AdmissionedFor = model.AdmissionedFor
-
             };
         }
 
@@ -2145,7 +2204,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMServicePlanReviewDomainEntity> ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
+        public TCMServicePlanReviewDomainEntity ToTCMServicePlanReviewDomainEntity(TCMServicePlanReviewDomainViewModel model, bool isNew, string userId)
         {
             return new TCMServicePlanReviewDomainEntity
             {
@@ -2261,7 +2320,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeFeeAgreementEntity> ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew)
+        public IntakeFeeAgreementEntity ToIntakeFeeAgreementEntity(IntakeFeeAgreementViewModel model, bool isNew)
         {
             return new IntakeFeeAgreementEntity
             {
@@ -2296,7 +2355,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeTuberculosisEntity> ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
+        public IntakeTuberculosisEntity ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew)
         {
             return new IntakeTuberculosisEntity
             {
@@ -2384,7 +2443,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<IntakeMedicalHistoryEntity> ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
+        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
         {
             return new IntakeMedicalHistoryEntity
             {
@@ -2899,7 +2958,11 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Messages = !isNew ? await _context.Messages.Where(m => m.FarsForm.Id == model.Id).ToListAsync() : null,
-                Type = FARSUtils.GetypeByIndex(model.IdType)
+                Type = FARSUtils.GetypeByIndex(model.IdType),
+                CodeBill = model.CodeBill,
+                Units = model.Units,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
             };
         }
 
@@ -2955,7 +3018,11 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Type = model.Type,
                 IdType = Convert.ToInt32(model.Type),
-                FarsType = _combosHelper.GetComboFARSType()
+                FarsType = _combosHelper.GetComboFARSType(),
+                CodeBill = model.CodeBill,
+                Units = model.Units,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
 
             };
             
@@ -3166,7 +3233,9 @@ namespace KyoS.Web.Helpers
                 Messages = _context.Messages
                                    .Where(n => n.Bio.Id == model.Id)
                                    .ToList(),
-                Status = model.Status
+                Status = model.Status,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
         }
@@ -3376,7 +3445,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 AdmissionedFor = model.AdmissionedFor,
-                Status = model.Status
+                Status = model.Status,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };
 
@@ -3511,7 +3582,10 @@ namespace KyoS.Web.Helpers
                 Setting = model.Setting,
                 StartTime = model.StartTime,
                 DataOfService = model.DataOfService,
-                Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null,
+                CodeBill = model.CodeBill,
+                Units = model.Units
+
             };
             
             return salida;
@@ -3556,7 +3630,9 @@ namespace KyoS.Web.Helpers
                 MonthOfTreatment = model.MonthOfTreatment,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                DataOfService = model.DataOfService
+                DataOfService = model.DataOfService,
+                CodeBill = model.CodeBill,
+                Units = model.Units
 
             };           
         }
@@ -3699,7 +3775,7 @@ namespace KyoS.Web.Helpers
                 StausCitizen = model.StausCitizen,
                 YearEnterUsa = model.YearEnterUsa,
                 IdResidentialStatus = Convert.ToInt32(model.ResidentialStatus),
-                ResidentialStatus = _combosHelper.GetComboResidential(),
+                ResidentialStatusList = _combosHelper.GetComboResidential(),
                 PCP_Name = model.PCP_Name,
                 PCP_Address = model.PCP_Address,
                 PCP_Phone = model.PCP_Phone,
@@ -3710,11 +3786,10 @@ namespace KyoS.Web.Helpers
                 Psychiatrist_Address = model.Psychiatrist_Address,
                 Psychiatrist_Phone = model.Psychiatrist_Phone,
                 Psychiatrist_CityStateZip = model.Psychiatrist_CityStateZip
-
             };
         }
 
-        public async Task<TCMIntakeConsentForTreatmentEntity> ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
+        public TCMIntakeConsentForTreatmentEntity ToTCMIntakeConsentForTreatmentEntity(TCMIntakeConsentForTreatmentViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsentForTreatmentEntity
             {
@@ -3737,7 +3812,6 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 Underestand = model.Underestand,
                 AdmissionedFor = model.AdmissionedFor
-
             };
         }
 
@@ -3853,12 +3927,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeConsumerRightsEntity> ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
+        public TCMIntakeConsumerRightsEntity ToTCMIntakeConsumerRightsEntity(TCMIntakeConsumerRightsViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeConsumerRightsEntity
             {
@@ -3903,7 +3975,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeAcknowledgementHippaEntity> ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
+        public TCMIntakeAcknowledgementHippaEntity ToTCMIntakeAcknoewledgementHippaEntity(TCMIntakeAcknoewledgementHippaViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAcknowledgementHippaEntity
             {
@@ -3940,12 +4012,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeOrientationChecklistEntity> ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
+        public TCMIntakeOrientationChecklistEntity ToTCMIntakeOrientationChecklistEntity(TCMIntakeOrientationCheckListViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeOrientationChecklistEntity
             {
@@ -4028,12 +4098,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeAdvancedDirectiveEntity> ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
+        public TCMIntakeAdvancedDirectiveEntity ToTCMIntakeAdvancedDirectiveEntity(TCMIntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeAdvancedDirectiveEntity
             {
@@ -4078,7 +4146,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeForeignLanguageEntity> ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
+        public TCMIntakeForeignLanguageEntity ToTCMIntakeForeignLanguageEntity(TCMIntakeForeignLanguageViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeForeignLanguageEntity
             {
@@ -4115,12 +4183,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
-
         }
 
-        public async Task<TCMIntakeWelcomeEntity> ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
+        public TCMIntakeWelcomeEntity ToTCMIntakeWelcomeEntity(TCMIntakeWelcomeViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeWelcomeEntity
             {
@@ -4133,7 +4199,6 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date
-
             };
         }
 
@@ -4151,12 +4216,11 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
 
-        public async Task<TCMIntakeNonClinicalLogEntity> ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
+        public TCMIntakeNonClinicalLogEntity ToTCMIntakeNonClinicalLogEntity(TCMIntakeNonClinicalLogViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeNonClinicalLogEntity
             {
@@ -4170,7 +4234,6 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
                 DateActivity = model.DateActivity
-
             };
         }
 
@@ -4189,12 +4252,11 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
 
-        public async Task<TCMIntakeMiniMentalEntity> ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
+        public TCMIntakeMiniMentalEntity ToTCMIntakeMiniMenatalEntity(TCMIntakeMiniMentalViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeMiniMentalEntity
             {
@@ -4220,7 +4282,6 @@ namespace KyoS.Web.Helpers
                 RegistrationName = model.RegistrationName,
                 TotalScore = model.TotalScore,
                 Trials = model.Trials
-
             };
         }
 
@@ -4252,10 +4313,9 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-
         }
 
-        public async Task<TCMIntakeCoordinationCareEntity> ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
+        public TCMIntakeCoordinationCareEntity ToTCMIntakeCoordinationCareEntity(TCMIntakeCoordinationCareViewModel model, bool isNew, string userId)
         {
             return new TCMIntakeCoordinationCareEntity
             {
@@ -4285,7 +4345,6 @@ namespace KyoS.Web.Helpers
                 PCP = model.PCP,
                 Specialist = model.Specialist,
                 SpecialistText = model.SpecialistText
-
             };
         }
 
@@ -4320,7 +4379,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
@@ -4364,7 +4422,6 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
             };
-
         }
 
         public async Task<TCMIntakeAppendixJEntity> ToTCMIntakeAppendixJEntity(TCMIntakeAppendixJViewModel model, bool isNew, string userId)
@@ -4389,7 +4446,6 @@ namespace KyoS.Web.Helpers
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
                 TcmSupervisor = model.TcmSupervisor
-
             };
 
             return salida;
@@ -4421,7 +4477,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public async Task<TCMIntakeInterventionLogEntity> ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
+        public TCMIntakeInterventionLogEntity ToTCMIntakeInterventionLogEntity(TCMIntakeInterventionLogViewModel model, bool isNew, string userId)
         {
             TCMIntakeInterventionLogEntity salida;
             salida = new TCMIntakeInterventionLogEntity
@@ -4432,8 +4488,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient_FK = model.TcmClient_FK,
-                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
-                
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()                
             };
 
             return salida;
@@ -4487,7 +4542,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn
-
             };
 
         }
@@ -5959,7 +6013,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<GoalsTempEntity> ToGoalTempEntity(GoalsTempViewModel model, bool isNew)
+        public GoalsTempEntity ToGoalTempEntity(GoalsTempViewModel model, bool isNew)
         {
             return new GoalsTempEntity
             {
@@ -5971,7 +6025,8 @@ namespace KyoS.Web.Helpers
                 IdClient = model.IdClient,
                 UserName = model.UserName,
                 numberMonths = model.numberMonths,
-                AdmissionDate = model.AdmissionDate
+                AdmissionDate = model.AdmissionDate,
+                TypeDocument = model.TypeDocument
             };
         }
 
@@ -5989,7 +6044,8 @@ namespace KyoS.Web.Helpers
                 IdClient = goalEntity.IdClient,
                 UserName = goalEntity.UserName,
                 numberMonths = goalEntity.numberMonths,
-                AdmissionDate = goalEntity.AdmissionDate
+                AdmissionDate = goalEntity.AdmissionDate,
+                TypeDocument = goalEntity.TypeDocument
             };
            
             return model;
@@ -6293,6 +6349,315 @@ namespace KyoS.Web.Helpers
 
             };
 
+        }
+
+        public async Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew)
+        {
+            GroupNote2Entity entity = await _context.GroupNotes2.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new GroupNote2Entity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                Status = NoteStatus.Edition,
+                Other = model.Other,
+                Impaired = model.Impaired,
+                Euthymic = model.Euthymic,
+                Depressed = model.Depressed,
+                Anxious = model.Anxious,
+                Irritable = model.Irritable,
+                Guarded = model.Guarded,
+                Withdrawn = model.Withdrawn,
+                Hostile = model.Hostile,
+
+                Adequated = model.Adequated,
+                Assigned = model.Assigned,
+                AssignedTopicOf = model.AssignedTopicOf,
+                Congruent = model.Congruent,
+                Descompensating = model.Descompensating,
+                Developing = model.Developing,
+                Dramatic = model.Dramatic,
+                Euphoric = model.Euphoric,
+                Expressing = model.Expressing,
+                Facilitated = model.Facilitated,
+                Fair = model.Fair,
+                FairAttitude = model.FairAttitude,
+                Faulty = model.Faulty,
+                Getting = model.Getting,
+                GroupLeaderFacilitator = model.GroupLeaderFacilitator,
+                GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout,
+                GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation,
+                GroupLeaderProviderSupport = model.GroupLeaderProviderSupport,
+                Inadequated = model.Inadequated,
+                InsightAdequate = model.InsightAdequate,
+                Involved = model.Involved,
+                Kept = model.Kept,
+                LearningAbout = model.LearningAbout,
+                LearningFrom = model.LearningFrom,
+                Limited = model.Limited,
+                MildlyImpaired = model.MildlyImpaired,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                Motivated = model.Motivated,
+                Negativistic = model.Negativistic,
+                NoProgress = model.NoProgress,
+                Normal = model.Normal,
+                NotToPerson = model.NotToPerson,
+                NotToPlace = model.NotToPlace,
+                NotToTime = model.NotToTime,
+                Optimistic = model.Optimistic,
+                Oriented = model.Oriented,
+                OtherExplain = model.OtherExplain,
+                Providing = model.Providing,
+                Received = model.Received,
+                Regression = model.Regression,
+                SevereryImpaired = model.SevereryImpaired,
+                Sharing = model.Sharing,
+                Short = model.Short,
+                SignificantProgress = model.SignificantProgress,
+                UnableToDetermine = model.UnableToDetermine,
+                Unmotivated = model.Unmotivated,
+                MTPId = model.MTPId,
+                Schema = model.Schema
+
+            };
+        }
+
+        public async Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew)
+        {
+            GroupNote2Entity entity = await _context.GroupNotes2.FirstOrDefaultAsync(n => n.Workday_Cient.Id == model.Id);
+            return new GroupNote2Entity
+            {
+                Id = isNew ? 0 : entity.Id,
+                Workday_Cient = await _context.Workdays_Clients.FindAsync(model.Id),
+                Status = NoteStatus.Edition,
+                Other = model.Other,
+                Impaired = model.Impaired,
+                Euthymic = model.Euthymic,
+                Depressed = model.Depressed,
+                Anxious = model.Anxious,
+                Irritable = model.Irritable,
+                Guarded = model.Guarded,
+                Withdrawn = model.Withdrawn,
+                Hostile = model.Hostile,
+
+                Adequated = model.Adequated,
+                Assigned = model.Assigned,
+                AssignedTopicOf = model.AssignedTopicOf,
+                Congruent = model.Congruent,
+                Descompensating = model.Descompensating,
+                Developing = model.Developing,
+                Dramatic = model.Dramatic,
+                Euphoric = model.Euphoric,
+                Expressing = model.Expressing,
+                Facilitated = model.Facilitated,
+                Fair = model.Fair,
+                FairAttitude = model.FairAttitude,
+                Faulty = model.Faulty,
+                Getting = model.Getting,
+                GroupLeaderFacilitator = model.GroupLeaderFacilitator,
+                GroupLeaderFacilitatorAbout = model.GroupLeaderFacilitatorAbout,
+                GroupLeaderProviderPsychoeducation = model.GroupLeaderProviderPsychoeducation,
+                GroupLeaderProviderSupport = model.GroupLeaderProviderSupport,
+                Inadequated = model.Inadequated,
+                InsightAdequate = model.InsightAdequate,
+                Involved = model.Involved,
+                Kept = model.Kept,
+                LearningAbout = model.LearningAbout,
+                LearningFrom = model.LearningFrom,
+                Limited = model.Limited,
+                MildlyImpaired = model.MildlyImpaired,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                Motivated = model.Motivated,
+                Negativistic = model.Negativistic,
+                NoProgress = model.NoProgress,
+                Normal = model.Normal,
+                NotToPerson = model.NotToPerson,
+                NotToPlace = model.NotToPlace,
+                NotToTime = model.NotToTime,
+                Optimistic = model.Optimistic,
+                Oriented = model.Oriented,
+                OtherExplain = model.OtherExplain,
+                Providing = model.Providing,
+                Received = model.Received,
+                Regression = model.Regression,
+                SevereryImpaired = model.SevereryImpaired,
+                Sharing = model.Sharing,
+                Short = model.Short,
+                SignificantProgress = model.SignificantProgress,
+                UnableToDetermine = model.UnableToDetermine,
+                Unmotivated = model.Unmotivated,
+                MTPId = model.MTPId,
+                Schema = model.Schema,
+                Workday_Client_FK = model.Workday_Client_FK
+
+            };
+        }
+
+        public ScheduleViewModel ToScheduleViewModel(ScheduleEntity model)
+        {
+            return new ScheduleViewModel
+            {
+                Id = model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                Clinic = model.Clinic,
+                Description = model.Description,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                //IdSession = (model.Session == SessionType.AM) ? 0 : (model.Session == SessionType.PM) ? 1 : 0,
+                Services = _combosHelper.GetComboServices(),
+                IdService = Convert.ToInt32(model.Service),
+                Sessions = _combosHelper.GetComboSession(),
+                IdSession = (model.Session == "AM") ? 0 : 1,
+            };
+        }
+
+        public ScheduleEntity ToScheduleEntity(ScheduleViewModel model, bool isNew, UserEntity user)
+        {
+            ScheduleEntity schedule;
+            schedule = new ScheduleEntity()
+            {
+                Id = isNew ? 0 : model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                Clinic = user.Clinic,
+                Service = ServiceUtils.GetServiceByIndex(model.IdService),
+               
+                Description = model.Description,
+                CreatedBy = isNew ? user.UserName : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? user.UserName : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+            if (model.IdSession == 0)
+            {
+                schedule.Session = "AM";
+            }
+            if (model.IdSession == 1)
+            {
+                schedule.Session = "PM";
+            }
+
+            return schedule;
+        }
+
+        public SubScheduleViewModel ToSubScheduleViewModel(SubScheduleEntity model)
+        {
+            return new SubScheduleViewModel
+            {
+                Id = model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdSchedule = model.Schedule.Id
+               
+            };
+        }
+
+        public SubScheduleEntity ToSubScheduleEntity(SubScheduleViewModel model, bool isNew, UserEntity user)
+        {
+            SubScheduleEntity subSchedule;
+            subSchedule = new SubScheduleEntity()
+            {
+                Id = isNew ? 0 : model.Id,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                CreatedBy = isNew ? user.UserName : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? user.UserName : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule)
+            };
+            
+            return subSchedule;
+        }
+
+        public async Task<ManagerEntity> ToManagerEntity(ManagerViewModel model, string signaturePath, bool isNew)
+        {
+            return new ManagerEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Name = model.Name,
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                LinkedUser = _userHelper.GetUserNameById(model.IdUser),
+                SignaturePath = signaturePath
+                
+            };
+        }
+
+        public ManagerViewModel ToManagerViewModel(ManagerEntity managerEntity)
+        {
+            return new ManagerViewModel
+            {
+                Id = managerEntity.Id,
+                Name = managerEntity.Name,
+                IdClinic = managerEntity.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = (managerEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                IdUser = _userHelper.GetIdByUserName(managerEntity.LinkedUser),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager,0),
+                SignaturePath = managerEntity.SignaturePath
+               
+            };
+        }
+
+        public async Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
+        {
+            return new ClientAuxiliarViewModel
+            {
+                Id = clientEntity.Id,
+                Name = clientEntity.Name,
+                Code = clientEntity.Code,
+                MedicaidID = clientEntity.MedicaidID,
+                DateOfBirth = clientEntity.DateOfBirth,
+                AdmisionDate = clientEntity.AdmisionDate,
+                PlaceOfBirth = clientEntity.PlaceOfBirth,
+                CreatedBy = clientEntity.CreatedBy,
+                CreatedOn = clientEntity.CreatedOn,
+                LastModifiedBy = clientEntity.LastModifiedBy,
+                LastModifiedOn = clientEntity.LastModifiedOn,
+                Email = clientEntity.Email,
+                Telephone = clientEntity.Telephone,
+                TelephoneSecondary = clientEntity.TelephoneSecondary,
+                SSN = clientEntity.SSN,
+                FullAddress = clientEntity.FullAddress,
+                AlternativeAddress = clientEntity.AlternativeAddress,
+                Country = clientEntity.Country,
+                City = clientEntity.City,
+                State = clientEntity.State,
+                ZipCode = clientEntity.ZipCode,
+                OtherLanguage = clientEntity.OtherLanguage,
+                PhotoPath = clientEntity.PhotoPath,
+                SignPath = clientEntity.SignPath,
+                //IdReferred = (clientEntity.Client_Referred != null) ? clientEntity.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Id : 0,
+                //Referreds = _combosHelper.GetComboReferredsByClinic(userId),                
+                IdFacilitatorPSR = clientEntity.IdFacilitatorPSR,
+                IdFacilitatorGroup = clientEntity.IdFacilitatorGroup,
+                OtherLanguage_Read = clientEntity.OtherLanguage_Read,
+                OtherLanguage_Speak = clientEntity.OtherLanguage_Speak,
+                OtherLanguage_Understand = clientEntity.OtherLanguage_Understand,
+                MedicareId = clientEntity.MedicareId,
+                DateOfClose = clientEntity.DateOfClose,
+                Documents = clientEntity.Documents,
+                OnlyTCM = clientEntity.OnlyTCM,
+                Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
+                MTPs = clientEntity.MTPs,
+                Bio = clientEntity.Bio,
+                MTPRList = mtpr,
+                Workdays_Clients = clientEntity.Workdays_Clients,
+                Clients_Diagnostics = clientEntity.Clients_Diagnostics,
+                Clinic = clientEntity.Clinic,
+                FarsFormList = clientEntity.FarsFormList
+                
+            };
         }
 
     }

@@ -3,13 +3,13 @@
 {
     var Therapy = "";
 
-    @if (Model.Workdays_Clients.Where(n => n.NoteP != null).Count() > 0 || Model.Workdays_Clients.Where(n => n.Note != null).Count() > 0)
+    @if (Model.Workdays_Clients.Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.PSR).Count() > 0)
     {
         Therapy = "PSR";
         @if (Model.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)
         {
             Therapy = Therapy + " / Ind";
-            @if (Model.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+            @if (Model.Workdays_Clients.Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.Group).Count() > 0)
             {
                 Therapy = Therapy + " / Group";
             }
@@ -17,7 +17,7 @@
     }
     else
     {
-        @if (Model.Workdays_Clients.Where(n => n.GroupNote != null).Count() > 0)
+        @if (Model.Workdays_Clients.Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.Group).Count() > 0)
         {
             Therapy = Therapy + "Group";
             @if (Model.Workdays_Clients.Where(n => n.IndividualNote != null).Count() > 0)

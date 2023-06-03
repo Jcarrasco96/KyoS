@@ -91,19 +91,23 @@ namespace KyoS.Web.Controllers
 
                 if (User.IsInRole("Facilitator"))
                 {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(m => m.LinkedUser == user_logged.UserName);
                     client = await _context.Clients
 
                                            .Include(g => g.Brief)
                                            .Include(u => u.Clinic)
                                            .ThenInclude(c => c.Setting)
                                            .Include(g => g.List_BehavioralHistory)
-                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && (n.IdFacilitatorGroup == facilitator.Id
+                                             || n.IdFacilitatorPSR == facilitator.Id
+                                             || n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                              && n.Brief != null)
                                            .OrderBy(f => f.Name)
                                            .ToListAsync();
                 }
                 return View(client);
-            }
-            return RedirectToAction("NotAuthorized", "Account");
+            }            
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -894,6 +898,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.DreamsMentalHealthBriefReport(entity);                
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -1521,7 +1530,7 @@ namespace KyoS.Web.Controllers
                                          
                                           .Include(m => m.IndividualTherapyFacilitator)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                           .ToList();
 
                 }
@@ -1601,6 +1610,34 @@ namespace KyoS.Web.Controllers
             }
 
             return View(auditClient_List);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, BioStatus aStatus = BioStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BriefEntity briefEntity = await _context.Brief.FirstOrDefaultAsync(s => s.Id == id);
+            if (briefEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                briefEntity.Status = aStatus;
+                _context.Brief.Update(briefEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
     }

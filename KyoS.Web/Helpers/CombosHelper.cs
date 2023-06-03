@@ -218,20 +218,32 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic)
+        public IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank)
         {
             List<SelectListItem> list = _context.Clients.Where(c => (c.Clinic.Id == idClinic /* && c.MTPs.Count == 0*/))
+                                                        .OrderBy(c => c.Name)
                                                         .Select(c => new SelectListItem
             {
                 Text = $"{c.Name}",
                 Value = $"{c.Id}"
             }).ToList();
 
-            list.Insert(0, new SelectListItem
+            if (!blank)
             {
-                Text = "[Select client...]",
-                Value = "0"
-            });
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = string.Empty,
+                    Value = "0"
+                });
+            }
 
             return list;
         }
@@ -279,10 +291,13 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator)
+        public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday)
         {
             List<ClientEntity> clients = _context.Clients
                                                  .Include(n => n.DischargeList)
+                                                 .Include(wc => wc.MTPs)
+                                                 .ThenInclude(n => n.Goals)
+                                                 .ThenInclude(n => n.Objetives)
                                                  .Where(c => (c.Clinic.Id == idClinic
                                                            && c.MTPs.Where(m => m.Active == true).Count() > 0 && c.Status == StatusType.Open
                                                            && c.IndividualTherapyFacilitator.Id == idFacilitator))
@@ -295,6 +310,12 @@ namespace KyoS.Web.Helpers
                                                             .Where(wc => (wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Individual))
                                                             .ToList();
 
+            Workday_Client workday_client = _context.Workdays_Clients
+                                                    .Include(n => n.Workday)
+                                                    .Include(n => n.Schedule)
+                                                    .ThenInclude(n => n.SubSchedules)
+                                                    .FirstOrDefault(n => n.Id == idWorkday);
+
             foreach (var item in workdays_clients)
             {
                 if (item.Client != null)
@@ -305,9 +326,60 @@ namespace KyoS.Web.Helpers
                 }
             }
 
-            clients = clients.Where(n => n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0).OrderBy(n => n.Name).ToList();
+            clients = clients.Where(n => (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual
+                                                                 && d.DateDischarge > workday_client.Workday.Date).Count() > 0
+                                      || n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0)
+                                      && n.AdmisionDate < workday_client.Workday.Date
+                                      && n.MTPs.First(c => c.Active == true).Goals.Where(g => g.Service == ServiceType.Individual 
+                                                                                           && g.Objetives.Where(o => o.DateResolved > workday_client.Workday.Date).Count() > 0 ).Count() > 0)
+                             .OrderBy(n => n.Name)
+                             .ToList();
+            
+            List<ClientEntity> salida = new List<ClientEntity>();
+            List<Workday_Client> temp = new List<Workday_Client>();
 
-            List<SelectListItem> list = clients.Select(c => new SelectListItem
+            //-----obtengo el susSchedule-----------
+            List<SubScheduleEntity> subSchedules = new List<SubScheduleEntity>();
+            SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
+
+            if (workday_client.Schedule != null)
+            {
+                subSchedules =  _context.SubSchedule.Where(n => n.Schedule.Id == workday_client.Schedule.Id).OrderBy(n => n.InitialTime).ToList();
+
+                string time = workday_client.Session.Substring(0, 7);
+                foreach (var value in subSchedules)
+                {
+                    if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                    {
+                        subScheduleEntity = value;
+                    }
+                }
+
+            }
+
+            foreach (var item in clients)
+            {
+                temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
+                                                               && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                               && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                   || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                      && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
+                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
+                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
+                                                              && n.Id != workday_client.Id
+                                                              && n.Client.Id == item.Id
+                                                              && n.Present == true)
+                                                           .ToList();
+                if (temp.Count() == 0)
+                {
+                    salida.Add(item);
+                    temp = new List<Workday_Client>();
+                }
+            }
+
+            List<SelectListItem> list = salida.Select(c => new SelectListItem
                                                 {
                                                     Text = $"{c.Name}",
                                                     Value = $"{c.Id}"
@@ -1549,7 +1621,7 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = FARSType.Discharge_PSR.ToString(), Value = "2"},
                 new SelectListItem { Text = FARSType.Discharge_Ind.ToString(), Value = "3"},
                 new SelectListItem { Text = FARSType.Discharge_Group.ToString(), Value = "4"},
-                new SelectListItem { Text = FARSType.Other.ToString(), Value = "5"}
+                new SelectListItem { Text = FARSType.Addendums.ToString(), Value = "5"}
             };
 
             return list;
@@ -1613,5 +1685,190 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic, ServiceType service)
+        {
+            List<SelectListItem> list = _context.Schedule.Include(m => m.SubSchedules).Where(n => n.Clinic.Id == idClinic && n.Service == service).OrderBy(f => f.InitialTime).Select(f => new SelectListItem
+            {
+                Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()} ({f.SubSchedules.Count()})",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+           
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboSession()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = SessionType.AM.ToString(), Value = "0"},
+                new SelectListItem { Text = SessionType.PM.ToString(), Value = "1"},
+                
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idClient, int idWorkdayClient)
+        {
+            List<ScheduleEntity> listSchedules = _context.Workdays_Clients.Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday && n.Schedule != null).Select(m => m.Schedule).Distinct().ToList();
+            WorkdayEntity worday = _context.Workdays.FirstOrDefault(n => n.Id == idWorkday);
+
+            List<Workday_Client> allNotes = _context.Workdays_Clients
+                                                    .Include(n => n.Schedule)
+                                                    .ThenInclude(n => n.SubSchedules)
+                                                    .Include(n => n.Workday)
+                                                    .Include(n => n.IndividualNote)
+                                                    .ThenInclude(n => n.SubSchedule)
+                                                    .Where(n => n.Workday.Date == worday.Date
+                                                        && n.Client.Id == idClient
+                                                        && n.Id != idWorkdayClient)
+                                                    .ToList();
+           
+            List<ScheduleEntity> listSchedulesSalida = new List<ScheduleEntity>();
+            if (allNotes.Count() > 0)
+            {
+                foreach (var item in listSchedules)
+                {
+                    if (!allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay) 
+                                            || (n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
+                        && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay) 
+                                               && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay))))
+                    {
+                        listSchedulesSalida.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                listSchedulesSalida = listSchedules;
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (listSchedulesSalida.Count() > 0)
+            {
+                list = listSchedulesSalida.Select(f => new SelectListItem
+                {
+                    Text = $"{f.Service} {f.Session} {f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                    Value = $"{f.Id}"
+                }).ToList();
+
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient)
+        {
+            List<SubScheduleEntity> listSubSchedules = new List<SubScheduleEntity>();
+            List<IndividualNoteEntity> listNotes = _context.IndividualNotes
+                                                           .Include(n => n.SubSchedule)
+                                                           .ThenInclude(n => n.Schedule)
+                                                           .Where(n => n.Workday_Cient.Facilitator.Id == idFacilitator 
+                                                                && n.Workday_Cient.Workday.Id == idWorkday)
+                                                           .ToList();
+
+            List<Workday_Client> workday_Clients = _context.Workdays_Clients
+                                                           .Include(n => n.Schedule)
+                                                           .ThenInclude(n => n.SubSchedules)
+                                                           .Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday).ToList();
+
+            foreach (var item in workday_Clients)
+            {
+                if (item.Schedule != null)
+                {
+                    string time = item.Session.Substring(0, 7);
+                    foreach (var value in item.Schedule.SubSchedules)
+                    {
+                        if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                        {
+                            listSubSchedules.Add(value);
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            foreach (var item in listNotes)
+            {
+                listSubSchedules.Remove(item.SubSchedule);
+            }
+
+            WorkdayEntity worday = _context.Workdays.FirstOrDefault(n => n.Id == idWorkday);
+
+            List<Workday_Client> allNotes = _context.Workdays_Clients
+                                                    .Include(n => n.Schedule)
+                                                    .Where(n => n.Workday.Date == worday.Date
+                                                        && n.Client.Id == idClient
+                                                        && n.Id != idWorkdayClient)
+                                                    .ToList();
+
+            List<SubScheduleEntity> listSubSchedulesSalida = new List<SubScheduleEntity>();
+            if (allNotes.Count() > 0)
+            {
+                foreach (var item in listSubSchedules)
+                {
+                    if ((!allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime))
+                           && !allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
+                        ||
+                        (allNotes.Exists(n => (n.Schedule.InitialTime < item.InitialTime && n.Schedule.EndTime > item.InitialTime || n.Schedule.InitialTime < item.EndTime && n.Schedule.EndTime > item.EndTime) && n.Present == false)
+                        || allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay && n.Present == false))))
+                    {
+                        listSubSchedulesSalida.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                listSubSchedulesSalida = listSubSchedules;
+            }
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (listSubSchedulesSalida.Count() > 0)
+            {
+                list = listSubSchedulesSalida.Select(f => new SelectListItem
+                {
+                    Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                    Value = $"{f.Id}"
+                }).ToList();
+
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboThemeType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = ServiceType.PSR.ToString(), Value = "0"},
+                new SelectListItem { Text = ServiceType.Group.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
     }
 }

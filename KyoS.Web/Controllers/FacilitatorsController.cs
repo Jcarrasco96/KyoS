@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace KyoS.Web.Controllers
 {
@@ -309,6 +310,66 @@ namespace KyoS.Web.Controllers
             byte[] content = _exportExcelHelper.ExportFacilitatorHelper(_context.Facilitators.ToList());
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+
+            return View(await _context.Facilitators
+                                      .Include(f => f.Clinic)
+                                      .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(f => f.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorEntity facilitatorEntity = await _context.Facilitators
+                                                                .Include(n => n.Clinic)
+                                                                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (facilitatorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorViewModel facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, facilitatorEntity.Clinic.Id);
+
+            return View(facilitatorViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> SaveFacilitatorSignature(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Facilitators");
+
+            FacilitatorEntity facilitator = await _context.Facilitators
+                                                          .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (facilitator != null)
+            {
+                facilitator.SignaturePath = signPath;
+                _context.Update(facilitator);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Facilitators") });
         }
     }
 

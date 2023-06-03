@@ -7,6 +7,20 @@
 <h4>Client attendance </h4>
 <hr />
 <div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Error == "1")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    @ViewBag.errorText
+                </strong>
+            </div>
+        }
+    </div>
     <form asp-action="Present">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
@@ -19,8 +33,8 @@
                 }
                 else
                 {
-                    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Client.Name</span></h4>                
-                }                
+                    <h4 style="font-weight:bold;"><span class="label label-info">@Model.Client.Name</span></h4>
+                }
                 <h5 style="font-weight:bold;">Facilitator: @Model.Facilitator.Name</h5>
                 <h5 style="font-weight:bold;">Date: @Model.Workday.Date.ToShortDateString()</h5>
                 <h5 style="font-weight:bold;">Session: @Model.Session</h5>
@@ -41,7 +55,7 @@
         <div class="col-md-12">
             @if (Model.Present)
             {
-                <input type="radio" name="Present" value="nopresent" id="rNoPresent"/>
+                <input type="radio" name="Present" value="nopresent" id="rNoPresent" />
             }
             else
             {
@@ -62,7 +76,7 @@
             {
                 <textarea asp-for="CauseOfNotPresent" class="form-control" rows="4" id="txtCause"></textarea>
             }
-            </div>
+        </div>
         <div class="form-group col-md-12"></div>
         <div class="form-group col-md-12">
             <input type="submit" value="Save" class="btn btn-primary" />

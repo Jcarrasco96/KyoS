@@ -26,12 +26,29 @@
             <strong class="green">
                 Note has been successfully updated
             </strong>
-
+        </div>
+    }
+    @if (ViewBag.MtpExpired == "E")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok danger"></i>
+            <strong class="danger">
+                The client's mtp is expired
+            </strong>
         </div>
     }
 </div>
-<div id="view-notes">
-    @await Html.PartialAsync("_ViewNotes", Model)
+
+<div class="col-md-push-12">
+    <form asp-action="ChangeNotes" enctype="multipart/form-data">
+      
+    </form>
+    <div id="view-notes">
+        @await Html.PartialAsync("_ViewNotes", Model)
+    </div>
 </div>
 
 <partial name="_ModalPopup" />

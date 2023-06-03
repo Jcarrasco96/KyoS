@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Common.Helpers.ClientDischarge>
 @{
     ViewData["Title"] = "Clients without Discharge";
 }
@@ -26,11 +26,8 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 Client Name
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Code
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Admission Date
@@ -40,6 +37,9 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Services
+                            </th>
+                            <th class="col-md-2" >
+                                Facilitator
                             </th>
                             <th class="col-md-1" style="text-align:center;">
 
@@ -60,13 +60,12 @@
                                         <i class="glyphicon glyphicon-user btn-primary"></i>
                                     }
                                     &nbsp;
-                                    @Html.DisplayFor(modelItem => item.Name)
+                                    @item.Name
+                                    |
+                                    @item.Code
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    @item.AdmisionDate.ToShortDateString()
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -83,7 +82,10 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
+                                    @item.Service
+                                </td>
+                                <td>
+                                    @item.FacilitatorName
                                 </td>
                                 <td align="right">
                                     @if (User.IsInRole("Facilitator"))

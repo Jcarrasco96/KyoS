@@ -27,23 +27,132 @@
             <div>
                 <div class=" col-md-12 form-group">
                     <label asp-for="AreaOfFocus" class="control-label"></label> *&nbsp;
-                    <textarea asp-for="AreaOfFocus" class="form-control" rows="6"></textarea>
+                    <textarea asp-for="AreaOfFocus" class="form-control" rows="6" id="areaOfFocus"></textarea>
                     <span asp-validation-for="AreaOfFocus" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-12 form-group">
                     <label asp-for="Name" class="control-label">Goal </label> <strong>@Model.Number</strong> *&nbsp;
-                    <textarea asp-for="Name" class="form-control" rows="3"></textarea>
+                    <textarea asp-for="Name" class="form-control" rows="3" id="name"></textarea>
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input onclick="GenderVerificationEGM()" type="submit" value="Save" class="btn btn-primary" id="save"/>
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function GenderVerificationEGM() {
+
+        event.preventDefault();
+        var url = "@Url.Action("GetGenderByMTP", "MTPs")";
+
+        $.get(url, { idMTP: @Model.IdMTP }, function (data) {
+
+            let area = $("#areaOfFocus").val();
+            let name = $("#name").val();
+            let text = "";
+
+            if (data == 'F') //Female
+            {
+                if (MaleVerification(area) == true)
+                {
+                    text = ", Area of Focus";
+                }
+                if (MaleVerification(name) == true)
+                {
+                    text = text + ", Name of Goal";
+                }
+
+                if (text != "")
+                {
+                    Swal.fire({
+                        title: 'Do you want to continue?',
+                        text: "There are gender issues in" + text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ec971f',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, continue!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#save").unbind('click').submit();
+                        }
+                    });
+                }
+                else
+                {
+                    $("#save").unbind('click').submit();
+                }
+            }
+            else
+            {
+                if (data == 'M') //Male
+                {
+                    if (FemaleVerification(area) == true) {
+                        text = ", Area of Focus";
+                    }
+                    if (FemaleVerification(name) == true) {
+                        text = text + ", Name of Goal";
+                    }
+
+                    if (text != "") {
+                        Swal.fire({
+                            title: 'Do you want to continue?',
+                            text: "There are gender issues in" + text,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#ec971f',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, continue!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#save").unbind('click').submit();
+                            }
+                        });
+                    }
+                    else {
+                        $("#save").unbind('click').submit();
+                    }
+                }
+            }
+        });
+
+    }
+
+    function MaleVerification(text)
+    {
+        if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+            text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+            text.includes(" oldman") || text.includes(" wife"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function FemaleVerification(text)
+    {
+        if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+            text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+            text.includes(" husband"))
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+</script>

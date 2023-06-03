@@ -80,8 +80,8 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 1).Value = "Client Name";
                 worksheet.Cell(currentRow, 2).Value = "Case No";
                 worksheet.Cell(currentRow, 3).Value = "DOB";
-                worksheet.Cell(currentRow, 4).Value = "Member Id";
-                worksheet.Cell(currentRow, 5).Value = "Insurance";
+                worksheet.Cell(currentRow, 4).Value = "Medicaid Id";
+                worksheet.Cell(currentRow, 5).Value = "Insurance | Member Id";
                 worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                 worksheet.Cell(currentRow, 7).Value = "Date";
                 worksheet.Cell(currentRow, 8).Value = "Setting";
@@ -119,6 +119,7 @@ namespace KyoS.Web.Helpers
                     if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                     {
                         worksheet.Cell(currentRow, 5).Value = item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                        worksheet.Cell(currentRow, 5).Value += " | " + item.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                     }
                     else
                     {
@@ -249,10 +250,17 @@ namespace KyoS.Web.Helpers
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range3.Merge();
 
-
                 foreach (var item in workday_Clients.GroupBy(n => n.Client))
                 {
-                    worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                    if (item.Key.Name.ToString().Length > 30)
+                    {
+                        worksheet = workbook.Worksheets.Add(item.Key.Name.Substring(0, 28).ToString());
+                    }
+                    else
+                    {
+                        worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                    }
+                    
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
@@ -287,8 +295,8 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 1).Value = "Client Name";
                     worksheet.Cell(currentRow, 2).Value = "Case No";
                     worksheet.Cell(currentRow, 3).Value = "DOB";
-                    worksheet.Cell(currentRow, 4).Value = "Member Id";
-                    worksheet.Cell(currentRow, 5).Value = "Insurance";
+                    worksheet.Cell(currentRow, 4).Value = "Medicaid Id";
+                    worksheet.Cell(currentRow, 5).Value = "Insurance | Member Id";
                     worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                     worksheet.Cell(currentRow, 7).Value = "Date";
                     worksheet.Cell(currentRow, 8).Value = "Setting";
@@ -329,6 +337,7 @@ namespace KyoS.Web.Helpers
                         if (product.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                         {
                             worksheet.Cell(currentRow, 5).Value = product.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                            worksheet.Cell(currentRow, 5).Value += " | " + product.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                         }
                         else
                         {
@@ -468,8 +477,8 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 2).Value = "Case No";
                 worksheet.Cell(currentRow, 3).Value = "DOB";
                 worksheet.Cell(currentRow, 4).Value = "Gender";
-                worksheet.Cell(currentRow, 5).Value = "Member Id";
-                worksheet.Cell(currentRow, 6).Value = "Insurance";
+                worksheet.Cell(currentRow, 5).Value = "Medicaid Id";
+                worksheet.Cell(currentRow, 6).Value = "Insurance | Member Id";
                 worksheet.Cell(currentRow, 7).Value = "Principal Diagnostics";
                 worksheet.Cell(currentRow, 8).Value = "Admission";
                 worksheet.Cell(currentRow, 9).Value = "Status";
@@ -495,6 +504,7 @@ namespace KyoS.Web.Helpers
                     if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                     {
                         worksheet.Cell(currentRow, 6).Value = item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name;
+                        worksheet.Cell(currentRow, 6).Value += " | " + item.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                     }
                     else
                     {
@@ -590,8 +600,8 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 1).Value = "Client Name";
                 worksheet.Cell(currentRow, 2).Value = "Case No";
                 worksheet.Cell(currentRow, 3).Value = "DOB";
-                worksheet.Cell(currentRow, 4).Value = "Member Id";
-                worksheet.Cell(currentRow, 5).Value = "Insurance";
+                worksheet.Cell(currentRow, 4).Value = "Medicaid Id";
+                worksheet.Cell(currentRow, 5).Value = "Insurance | Member Id";
                 worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                 worksheet.Cell(currentRow, 7).Value = "Date";
                 worksheet.Cell(currentRow, 8).Value = "Setting";
@@ -629,6 +639,7 @@ namespace KyoS.Web.Helpers
                     if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                     {
                         worksheet.Cell(currentRow, 5).Value = item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                        worksheet.Cell(currentRow, 5).Value += " | " + item.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                     }
                     else
                     {
@@ -736,7 +747,15 @@ namespace KyoS.Web.Helpers
 
                 foreach (var item in workday_Clients.GroupBy(n => n.Client))
                 {
-                    worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                    if (item.Key.Name.ToString().Length > 30)
+                    {
+                        worksheet = workbook.Worksheets.Add(item.Key.Name.Substring(0, 28).ToString());
+                    }
+                    else
+                    {
+                        worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                    }
+
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
@@ -772,7 +791,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 2).Value = "Case No";
                     worksheet.Cell(currentRow, 3).Value = "DOB";
                     worksheet.Cell(currentRow, 4).Value = "Member Id";
-                    worksheet.Cell(currentRow, 5).Value = "Insurance";
+                    worksheet.Cell(currentRow, 5).Value = "Insurance | Member Id";
                     worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                     worksheet.Cell(currentRow, 7).Value = "Date";
                     worksheet.Cell(currentRow, 8).Value = "Setting";
@@ -810,6 +829,7 @@ namespace KyoS.Web.Helpers
                         if (product.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                         {
                             worksheet.Cell(currentRow, 5).Value = product.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
+                            worksheet.Cell(currentRow, 5).Value += " | " + product.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
                         }
                         else
                         {

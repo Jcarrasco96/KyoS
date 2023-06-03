@@ -28,23 +28,20 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Code)
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Status)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Admissioned for
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Evaluation date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Type
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Approved
@@ -68,23 +65,8 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.Client.Name)
-                                </td>
-                                <td align="center">
+                                    |
                                     @Html.DisplayFor(modelItem => item.Client.Code)
-                                </td>
-                                <td align="center">
-                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            Close
-                                        </span>
-                                    }
-                                    @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            Open
-                                        </span>
-                                    }
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
@@ -95,6 +77,51 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.EvaluationDate)
                                 </td>
+                                 <td align="center">
+                                    @if (item.Type == KyoS.Common.Enums.FARSType.Initial)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Type)
+                                    }
+                                    else
+                                    {
+                                        @if (item.Type == KyoS.Common.Enums.FARSType.MtpReview)
+                                        {
+                                            <p>MTPR</p>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_PSR)
+                                            {
+                                                <p>D_PSR</p>
+                                            }
+                                            else
+                                            {
+                                                @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_Ind)
+                                                {
+                                                    <p>D_Ind</p>
+                                                }
+                                                else
+                                                {
+                                                    @if (item.Type == KyoS.Common.Enums.FARSType.Discharge_Group)
+                                                    {
+                                                        <p>D_Group</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (item.Type == KyoS.Common.Enums.FARSType.Addendums)
+                                                        {
+                                                            <p>Addendum</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Other</p>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>                               
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
                                     {

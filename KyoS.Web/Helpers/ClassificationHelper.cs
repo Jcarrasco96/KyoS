@@ -28,7 +28,7 @@ namespace KyoS.Web.Helpers
                 {
                     await _context.SaveChangesAsync();
                 }
-                catch (System.Exception ex)
+                finally
                 {}
             }
         }

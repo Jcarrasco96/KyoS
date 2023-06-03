@@ -144,7 +144,7 @@ namespace KyoS.Web.Controllers
                         Appearance_FairHygiene = false,
                         Appearance_WellGroomed = false,
                         Appetite = Bio_Appetite.Diminished,
-                        ApproximateDateReport = DateTime.Now,
+                        ApproximateDateReport = new DateTime(),
                         ApproximateDateReport_Where = "",
                         AReferral = false,
                         AReferral_Services = "",
@@ -158,7 +158,7 @@ namespace KyoS.Web.Controllers
                         ClientFamilyAbusoTrauma = false,
                         CMH = false,
                         Comments = "",
-                        DateAbuse = DateTime.Now,
+                        DateAbuse = new DateTime(),
                         DateBio = DateTime.Now,
                         DateSignatureLicensedPractitioner = DateTime.Now,
                         DateSignaturePerson = DateTime.Now,
@@ -202,7 +202,7 @@ namespace KyoS.Web.Controllers
                         Hydration = Bio_Hydration.Diminished,
                         IConcurWhitDiagnistic = false,
                         Id = 0,
-                        If6_Date = DateTime.Now,
+                        If6_Date = new DateTime(),
                         If6_ReferredTo = "",
                         IfForeing_AgeArrival = 0,
                         IfForeing_Born = false,
@@ -320,7 +320,8 @@ namespace KyoS.Web.Controllers
                         ForHowLong = "",
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
-                        AdmissionedFor = user_logged.FullName
+                        AdmissionedFor = user_logged.FullName,
+                        CodeBill = user_logged.Clinic.CodeBIO
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -369,6 +370,18 @@ namespace KyoS.Web.Controllers
                 BioEntity bioEntity = _context.Bio.Find(bioViewModel.Id);
                 if (bioEntity == null)
                 {
+                    //calcular las unidades a partir del tiempo de desarrollo del BIO
+                    int units = (bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes / 15;
+                    if ((bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                    {
+                        units++;
+                        bioViewModel.Units = units;
+                    }
+                    else
+                    {
+                        bioViewModel.Units = units;
+                    }
+
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
                     bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
 
@@ -599,7 +612,8 @@ namespace KyoS.Web.Controllers
                 ClientDenied = false,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                ForHowLong = ""
+                ForHowLong = "",
+                CodeBill = bioViewModel.CodeBill
             };
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
@@ -693,6 +707,18 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //calcular las unidades a partir del tiempo de desarrollo del BIO
+                int units = (bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((bioViewModel.EndTime.TimeOfDay - bioViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    bioViewModel.Units = units;
+                }
+                else
+                {
+                    bioViewModel.Units = units;
+                }
+
                 BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
                 _context.Bio.Update(bioEntity);
                 try
@@ -1166,13 +1192,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
+            
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSBioReport(entity);
@@ -1181,6 +1201,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCBioReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -1836,7 +1861,7 @@ namespace KyoS.Web.Controllers
                                          
                                           .Include(m => m.IndividualTherapyFacilitator)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                           .ToList();
 
                 }
@@ -1947,5 +1972,196 @@ namespace KyoS.Web.Controllers
             
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ReturnTo(int? id, int clientId = 0, BioStatus aStatus = BioStatus.Edition)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BioEntity bioEntity = await _context.Bio.FirstOrDefaultAsync(s => s.Id == id);
+            if (bioEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                bioEntity.Status = aStatus;
+                _context.Bio.Update(bioEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
+        }
+
+        #region Bill week
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillBIOToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
+
+                bio.BilledDate = DateTime.Now;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id });
+                }
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBill(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
+
+                bio.BilledDate = null;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillToday(int idBio = 0, int week = 0, int origin = 0)
+        {
+            if (idBio >= 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == idBio);
+
+                bio.DeniedBill = true;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBill(int idBio = 0, int client = 0, int week = 0)
+        {
+            if (idBio > 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == idBio);
+
+                bio.DeniedBill = false;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id, billed = 1 });
+                }
+
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedBIO(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                bio.PaymentDate = null;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayBIO(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                BioEntity bio = await _context.Bio
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                bio.PaymentDate = DateTime.Now;
+                bio.DeniedBill = false;
+                _context.Update(bio);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = bio.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
     }
 }

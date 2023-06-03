@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/23/2023 15:34:00" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3t2+WLuv9InXAyDWsrtO3pw==">
+      <TableDataSource Name="Table" Alias="WorkdaysItems" DataType="System.Int32" Enabled="true">
+        <Column Name="DayOfWeek" DataType="System.String"/>
+        <Column Name="Date" DataType="System.DateTime"/>
+        <Column Name="Present" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Session" DataType="System.String" PropName="Column"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3a15zotgNWzxQ//HXWocluw==">
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="MedicalID" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15" LastPageSource="15" Watermark.Enabled="true" Watermark.Image="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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//2Q==" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="94.5">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="383.9" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="383.9" Height="22" CanGrow="true" Text="GROUP THERAPY INDIVIDUAL SIGN IN SHEET" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="89.05" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="88.15" Width="-776"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="98.5" Width="778.3" Height="98.28">
+      <TextObject Name="Text16" Left="14.8" Top="12" Width="122.85" Height="18.9" Text="Client Name:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text34" Left="15.45" Top="32.8" Width="122.85" Height="18.9" Text="Client Code:" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text35" Left="141.75" Top="11.45" Width="349.65" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text36" Left="141.75" Top="32.35" Width="349.65" Height="18.9" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text37" Left="32.8" Top="75.6" Width="383.9" Height="22" CanGrow="true" Text="GROUP THERAPY INDIVIDUAL SIGN IN SHEET" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="230.91" Width="778.3" Height="66.15" Guides="0" DataSource="Table">
+      <TableObject Name="Table1" Left="37.8" Top="-0.1" Width="708.76" Height="66.15">
+        <TableColumn Name="Column1" Width="141.75"/>
+        <TableColumn Name="Column2" Width="141.76"/>
+        <TableColumn Name="Column12" Width="85.05"/>
+        <TableColumn Name="Column10" Width="340.2"/>
+        <TableRow Name="Row1" Height="66.15">
+          <TableCell Name="Cell1" Border.Lines="All" Text="[WorkdaysItems.DayOfWeek]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="[WorkdaysItems.Date]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="[WorkdaysItems.Session]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell10" Border.Lines="All" Text="[IIf([WorkdaysItems.Present] == false,&quot; Absent&quot;,&quot;&quot;)]" VertAlign="Center" Font="Arial, 10pt, style=Bold">
+            <PictureObject Name="Picture6" Left="123.23" Top="1.51" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader1" Top="200.78" Width="778.3" Height="26.13">
+        <TableObject Name="Table2" Left="37.8" Top="3.45" Width="708.76" Height="22.68">
+          <TableColumn Name="Column3" Width="141.75"/>
+          <TableColumn Name="Column4" Width="141.76"/>
+          <TableColumn Name="Column11" Width="85.05"/>
+          <TableColumn Name="Column9" Width="340.2"/>
+          <TableRow Name="Row2" Height="22.68">
+            <TableCell Name="Cell3" Border.Lines="All" Fill.Color="Gainsboro" Text="DAY OF WEEK" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell4" Border.Lines="All" Fill.Color="Gainsboro" Text="DATE" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell11" Restrictions="DontMove" Border.Lines="All" Fill.Color="Gainsboro" Text="SESSION" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell9" Border.Lines="All" Fill.Color="Gainsboro" Text="SIGN" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="301.06" Width="778.3" Height="94.5">
+      <LineObject Name="Line9" Left="773.45" Top="69.05" Width="-776"/>
+      <TextObject Name="Text28" Left="10" Top="72.05" Width="207.9" Height="18.9" Text="Group Facilitator / Credentials" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text30" Left="527.75" Top="72.6" Width="245.7" Height="18.9" Text="Group Facilitator (print legibly)" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text11" Left="527.75" Top="50.25" Width="245.7" Height="18.9" Text="[Facilitators.Name]" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <PictureObject Name="Picture5" Left="66.15" Top="9.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

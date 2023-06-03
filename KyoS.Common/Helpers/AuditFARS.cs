@@ -10,5 +10,6 @@ namespace KyoS.Common.Helpers
         public string Description { get; set; }
         public string AdmissionDate { get; set; }
         public int Active { get; set; }
+        public string Responsible { get; set; }
     }
 }

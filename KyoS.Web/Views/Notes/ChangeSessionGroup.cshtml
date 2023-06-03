@@ -1,0 +1,77 @@
+﻿@model KyoS.Web.Models.Workday_ClientViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="ChangeSessionGroup" onsubmit="return jQueryAjaxPostChangeNote(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="DateInterval" />
+            <div>
+                <div class="col-md-12">
+                    @if (Model.Facilitator == null)
+                    {
+                        <h4 style="font-weight:bold;"><span class="label label-info">Individual Note</span></h4>
+                    }
+                    else
+                    {
+                        <h4 style="font-weight:bold;"><span class="label label-info">Facilitator: @Model.Facilitator.Name</span></h4>
+                    }
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class=" col-md-8 form-group">
+                    <label asp-for="ClientName" class="control-label">Client Name</label>
+                    <input asp-for="ClientName" class="form-control" readonly />
+                    <span asp-validation-for="ClientName" class="text-danger"></span>
+                </div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Workday.Date" class="control-label"></label>
+                    <input asp-for="Workday.Date" class="form-control" readonly />
+                    <span asp-validation-for="Workday.Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                 <div class=" col-md-8 form-group">
+                    <label asp-for="IdSchedule" class="control-label"></label>
+                    <select asp-for="IdSchedule" asp-items="Model.Schedules" class="form-control"></select>
+                    <span asp-validation-for="IdSchedule" class="text-danger"></span>
+                </div>
+                <div class=" col-md-4 form-group">
+                    <label asp-for="Session" class="control-label"></label>
+                    @*<input asp-for="Session" class="form-control"readonly />
+                    <span asp-validation-for="Session" class="text-danger"></span>*@
+                    <br />
+                    @if (ViewData["am"].ToString() == "true")
+                    {
+                        <input type="radio" name="Meridian" value="Am" checked="checked" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="Meridian" value="Am" />
+                    }
+                    AM
+                    &nbsp;&nbsp;
+                    @if (ViewData["am"].ToString() == "true")
+                    {
+                        <input type="radio" name="Meridian" value="Pm" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="Meridian" value="Pm" checked="checked" />
+                    }
+                    PM
+                </div>
+            </div>
+            <div class="form-group col-md-12"></div>
+            <div class="col-md-offset-9">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>

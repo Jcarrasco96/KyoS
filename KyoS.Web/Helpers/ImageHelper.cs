@@ -62,6 +62,20 @@ namespace KyoS.Web.Helpers
         {
             string init = path.Substring(1);
             return init.Replace("/", "\\");            
-        }        
+        }
+
+        public async Task<string> UploadSignatureAsync(string dataUrl, string folder)
+        {
+            var encodedImage = dataUrl.Split(',')[1];
+            var decodedImage = Convert.FromBase64String(encodedImage);
+
+            string guid = Guid.NewGuid().ToString();
+            string file = $"{guid}.png";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\images\\{folder}", file);
+
+            await File.WriteAllBytesAsync(path, decodedImage);
+
+            return $"~/images/{folder}/{file}";
+        }
     }
 }

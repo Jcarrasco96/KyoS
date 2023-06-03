@@ -24,7 +24,7 @@
     <h4>Create Addendum</h4>
     <hr />
     <div class="row">
-        <form asp-action="CreateAdendum" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="CreateAdendum" asp-route-id="@Model.Id" enctype="multipart/form-data" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="IdFacilitator" />
@@ -35,7 +35,7 @@
             <input type="hidden" asp-for="LastModifiedOn" />
             <partial name="_Adendums" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Update Goals" class="btn btn-primary" />
                 <a asp-action="IndexAdendum" class="btn btn-success">Back</a>
             </div>
         </form>
@@ -77,6 +77,94 @@
                 $(this).closest("tr").next().remove();
             });
         });
+
+        function GenderVerification() {
+
+                var url = "@Url.Action("GetGenderByMTP", "MTPs")";
+
+                $.get(url, { idMTP: @Model.IdMTP }, function (data) {
+
+                    let problemsStatement = $("#problemsStatement").val();
+                    let text = "";
+
+                    if (data == 'F') //Female
+                    {
+                        if (MaleVerification(problemsStatement) == true) {
+                            text = ", Problem Statement";
+                        }
+                        
+                        if (text != "") {
+                            Swal.fire({
+                                title: 'Do you want to continue?',
+                                text: "There are gender issues in" + text,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ec971f',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, continue!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form1.submit();
+                                }
+                            });
+                        }
+                        else {
+                            form1.submit();
+                        }
+                    }
+                    else
+                    {
+                        if (data == 'M') //Male
+                        {
+                            if (FemaleVerification(problemsStatement) == true) {
+                                text = ", Problem Statement";
+                            }                            
+
+                            if (text != "") {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in" + text,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        form1.submit();
+                                    }
+                                });
+                            }
+                            else {
+                                form1.submit();
+                            }
+                        }
+                    }
+                });
+            }
+
+        function MaleVerification(text) {
+            if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                text.includes(" oldman") || text.includes(" wife")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function FemaleVerification(text) {
+            if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                text.includes(" husband")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
     </script>
 }
 

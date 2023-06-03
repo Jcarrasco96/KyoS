@@ -11,6 +11,8 @@
     <title>Create</title>
 </head>
 <body>
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/datepicker.min.css">
 
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
@@ -52,13 +54,24 @@
                 </div>
             }
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <form asp-action="Create3">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <partial name="_Themes3" />
-                <div class="form-group">
+                <div class="form-group col-md-3">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+                <div class="form-group col-md-12">
+                    <hr />
+                </div>
+                <div class="">
+                    <div id="view-themes">
+                        @if (Model.Themes.Count() > 0)
+                        {
+                            @await Html.PartialAsync("_ViewTheme3", Model.Themes.ToList())
+                        }
+                    </div>
                 </div>
             </form>
         </div>
@@ -66,3 +79,33 @@
 
 </body>
 </html>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+         $(document).ready(function () {
+             $('#MyTable').DataTable({
+                  "pageLength": 100
+                   });
+
+              
+             });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}

@@ -12,5 +12,9 @@ namespace KyoS.Web.Models
     {
         public int IdMTP { get; set; }
         public int Origin { get; set; }
+
+        public IEnumerable<GoalsTempEntity> GoalTempList { get; set; }
+       
+        public int IdDocumentAssistant { get; set; }
     }
 }

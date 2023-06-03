@@ -149,5 +149,27 @@ namespace KyoS.Web.Data.Entities
         public IEnumerable<MessageEntity> Messages { get; set; }
 
         public FARSType Type { get; set; }
+
+        public string CodeBill { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? BilledDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PaymentDate { get; set; }
+
+        public bool DeniedBill { get; set; }
+
+        public int Units { get; set; }
+
+        [Display(Name = "Start Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime StartTime { get; set; }
+
+        [Display(Name = "End Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime EndTime { get; set; }
     }
 }

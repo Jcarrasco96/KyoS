@@ -89,6 +89,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Clinics" asp-action="Index">Clinics</a></li>
                                 <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Managers", "Index", "Managers")</li>
                                 <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
                                 <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
                                 <li role="separator" class="divider"></li>
@@ -129,7 +130,14 @@
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Create">Create Client</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Signatures">Clients' Signatures</a></li>
+                                        </ul>
+                                    </li>                                    
                                 }
                                 else
                                 {
@@ -214,13 +222,29 @@
                                             <li><a asp-area="" asp-controller="DocumentsAssistants" asp-action="Index">Documents Assistants</a></li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Clients</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Documentation">Clients' Documentation</a></li>
+                                            <li><a asp-area="" asp-controller="Eligibility" asp-action="Index">Clients' Eligibility</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Calendar</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
+                                            <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
+                                        </ul>
+                                    </li>                                    
                                     <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                    <li>@Html.ActionLink("Topics / Activity", "Index", "Themes")</li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Groups</a>
                                         <ul class="dropdown-menu">
                                             <li>@Html.ActionLink("PSR", "Index", "Groups")</li>
+                                            <li>@Html.ActionLink("Individual", "Individual", "Groups")</li>
                                             <li>@Html.ActionLink("Group", "Group", "Groups")</li>
                                         </ul>
                                     </li>
@@ -232,6 +256,7 @@
                                             <li>@Html.ActionLink("Group", "GroupWorkdays", "Workdays")</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Notes Changes</a>
                                         <ul class="dropdown-menu">
@@ -390,7 +415,13 @@
                                 Clients <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                    </ul>
+                                </li>
                                 <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
                             </ul>
                         </li>
@@ -399,7 +430,7 @@
                                 Topics / Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics / Themes", "Index", "Themes")</li>
+                                <li>@Html.ActionLink("Topics / Activity", "Index", "Themes")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions", "ActivitiesSupervision", "Activities")</li>
                             </ul>
                         </li>
@@ -490,13 +521,24 @@
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
+                                    </ul>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("PSR Groups", "Index", "Groups")</li>
+                                <li>@Html.ActionLink("Individual Groups", "Individual", "Groups")</li>
+                                <li>@Html.ActionLink("Group Therapy Groups", "Group", "Groups")</li>
                                 <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Topics / Activities", "Index", "Themes")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -518,7 +560,7 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Fars Forms</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutInitialFARS", "FarsForms")</li>
+                                        <li>@Html.ActionLink("Clients without FARS", "ClientswithoutFARS", "FarsForms")</li>
                                         <li>@Html.ActionLink("Edition FARS", "EditionFars", "FarsForms")</li>
                                         <li>@Html.ActionLink("All FARS Forms", "Index", "FarsForms")</li>
                                     </ul>
@@ -552,6 +594,7 @@
                                         <li>@Html.ActionLink("All BIOs", "Index", "Bios")</li>
                                     </ul>
                                 </li>
+                                <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
@@ -569,8 +612,20 @@
                                 Reports <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
-                                <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">PSR Therapy</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PSR Daily assistance", "DailyAssistance", "Reports")</li>
+                                        <li>@Html.ActionLink("PSR Individual sign in sheet", "IndividualSignInSheet", "Notes")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Group Therapy</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Group Daily assistance", "DailyAssistanceGroup", "Reports")</li>
+                                        <li>@Html.ActionLink("Group Individual sign in sheet", "IndividualSignInSheetGroup", "Notes")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -1394,13 +1449,14 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2022 - DMS System</p>
+            <p>&copy; 2023 - DMS System</p>
         </footer>
     </div>    
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
@@ -1416,8 +1472,9 @@
                 crossorigin="anonymous"
                 integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>            
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     <script>
@@ -1428,9 +1485,10 @@
                 e.preventDefault();
             });            
         });
+
         $(window).on('load', function () {
                 $('.spinner').css('display', 'none');
-            });
+        });
     </script>
 
     @RenderSection("Scripts", required: false)

@@ -1,0 +1,416 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Group Notes</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+
+                            </th>
+                            <th class="col-md-2">
+
+                            </th>
+                            <th class="col-md-3">
+
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Init Date
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Final Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
+                        {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Days.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-1"></th>
+                                                <th class="col-md-3">Date</th>
+                                                <th class="col-md-4">Day</th>
+                                                <th class="col-md-4"></th>
+                                            </tr>
+                                            @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Group).OrderBy(d => d.Date))
+                                            {
+                                                <tr>
+                                                    <td align="center">
+                                                        @if (day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != 0)
+                                                        {
+                                                            <a class="icon-plus-sign-alt"></a>
+                                                        }
+                                                        <div style="display:none">
+                                                            <table class="table table-striped">
+                                                                <tr>
+                                                                    <th class="col-md-2" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-3">Name</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Present</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Note Status</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Change Session</th>
+                                                                    <th class="col-md-2"></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name).OrderBy(n => n.Schedule.InitialTime))
+                                                                {
+                                                                    @if (day_client.Present)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                -
+                                                                                @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Present)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.GroupNote == null && day_client.GroupNote2 == null)
+                                                                                {
+                                                                                    <span class="label label-danger">
+                                                                                        Not Started
+                                                                                    </span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @if (day_client.GroupNote != null)
+                                                                                    {
+                                                                                        if (day_client.GroupNote.Status.ToString() == "Edition")
+                                                                                        {
+                                                                                            <span class="label label-warning">
+                                                                                                Edition
+                                                                                            </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (day_client.GroupNote.Status.ToString() == "Pending")
+                                                                                            {
+                                                                                                <span class="label label-info">
+                                                                                                    Pending
+                                                                                                </span>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (day_client.GroupNote.Status.ToString() == "Approved")
+                                                                                                {
+                                                                                                    <span class="label label-success">
+                                                                                                        Approved
+                                                                                                    </span>
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        @if (day_client.GroupNote2 != null)
+                                                                                        {
+                                                                                            if (day_client.GroupNote2.Status.ToString() == "Edition")
+                                                                                            {
+                                                                                                <span class="label label-warning">
+                                                                                                    Edition
+                                                                                                </span>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (day_client.GroupNote2.Status.ToString() == "Pending")
+                                                                                                {
+                                                                                                    <span class="label label-info">
+                                                                                                        Pending
+                                                                                                    </span>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    if (day_client.GroupNote2.Status.ToString() == "Approved")
+                                                                                                    {
+                                                                                                        <span class="label label-success">
+                                                                                                            Approved
+                                                                                                        </span>
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                @*@if (day_client.BilledDate == null)
+                                                                                    {
+                                                                                        <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a asp-action="ChangeSessionGroup" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                    }*@
+                                                                            </td>
+                                                                            <td align="right">
+                                                                                @if (day_client.GroupNote == null && day_client.GroupNote2 == null)
+                                                                                {
+                                                                                    <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                    <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-remove"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Edition") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Edition"))
+                                                                                    {
+                                                                                        <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                        @*<a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-remove"></i></a>*@
+                                                                                        <a asp-action="FinishEditingGroup" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                                    }
+                                                                                    else
+                                                                                        if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Pending") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Pending"))
+                                                                                    {
+                                                                                        <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Approved") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Approved"))
+                                                                                        {
+                                                                                            <a asp-action="ApproveGroupNote" asp-route-id="@day_client.Id" class="btn btn-primary" title="View of note"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                            <a asp-action="PrintGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr style="color:darkgrey">
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                -
+                                                                                @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => day_client.Present)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.GroupNote == null && day_client.GroupNote2 == null)
+                                                                                {
+                                                                                    <span class="label label-danger">
+                                                                                        Not Started
+                                                                                    </span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @if (day_client.GroupNote != null)
+                                                                                    {
+                                                                                        if (day_client.GroupNote.Status.ToString() == "Edition")
+                                                                                        {
+                                                                                            <span class="label label-warning">
+                                                                                                Edition
+                                                                                            </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (day_client.GroupNote.Status.ToString() == "Pending")
+                                                                                            {
+                                                                                                <span class="label label-info">
+                                                                                                    Pending
+                                                                                                </span>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (day_client.GroupNote.Status.ToString() == "Approved")
+                                                                                                {
+                                                                                                    <span class="label label-success">
+                                                                                                        Approved
+                                                                                                    </span>
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        @if (day_client.GroupNote2 != null)
+                                                                                        {
+                                                                                            if (day_client.GroupNote2.Status.ToString() == "Edition")
+                                                                                            {
+                                                                                                <span class="label label-warning">
+                                                                                                    Edition
+                                                                                                </span>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (day_client.GroupNote2.Status.ToString() == "Pending")
+                                                                                                {
+                                                                                                    <span class="label label-info">
+                                                                                                        Pending
+                                                                                                    </span>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    if (day_client.GroupNote2.Status.ToString() == "Approved")
+                                                                                                    {
+                                                                                                        <span class="label label-success">
+                                                                                                            Approved
+                                                                                                        </span>
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                @* @if (day_client.BilledDate == null)
+                                                                                    {
+                                                                                        <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a asp-action="ChangeSessionGroup" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                    }*@
+                                                                            </td>
+                                                                            <td align="right">
+                                                                                <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
+                                                                                <a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-primary" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Date)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => day.Day)
+                                                    </td>
+                                                    <td align="right">
+                                                        @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() == (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) && (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() > 0))
+                                                        {
+                                                            //schema 1
+                                                            if ((day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count()) == day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count())
+                                                            {
+                                                                <a asp-action="PrintWorkdaysGroupNotes" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                            //schema 3
+                                                            if ((day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote2 != null)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count()) == day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count())
+                                                            {
+                                                                <a asp-action="PrintWorkdaysGroupNotes2" asp-route-id="@day.Id" class="btn btn-success" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                        }
+                                                        @if ((day.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() != (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.Present == false)).Count() + day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count())) || (day.Workdays_Clients.Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name && wc.GroupNote != null && wc.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)).Count() == 0))
+                                                        {
+                                                            <a class="btn btn-success disabled" title="Print notes - Date: @day.Date.ToShortDateString()"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.MonthYear.Contains("January"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("February"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("March"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("April"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("May"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("June"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("July"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("August"))
+                                    {
+                                        <span class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("September"))
+                                    {
+                                        <span class="label label-warning">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("October"))
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("November"))
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                    @if (item.MonthYear.Contains("December"))
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Alias)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.InitDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.FinalDate)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

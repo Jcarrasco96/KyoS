@@ -1,0 +1,96 @@
+﻿@model KyoS.Web.Models.CalendarCMH
+@{
+    ViewData["Title"] = "CMH Calendar";
+}
+<link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Client CMH Calendar</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <label asp-for="IdClient" class="control-label">Select client</label>
+        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
+        <span asp-validation-for="IdClient" class="text-danger"></span>
+    </div>    
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/fullcalendar/lib/main.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    start: 'dayGridMonth,timeGridWeek,timeGridDay',
+                  center: 'title',
+                  end: 'today prev,next'
+                },
+                height: 400,
+                contentHeight: 'auto',
+                initialView: 'dayGridMonth',
+                allDaySlot: false,
+                slotDuration: '00:60:00',
+                slotLabelFormat: {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      omitZeroMinute: false,
+                      meridiem: 'large'
+                },
+                slotLabelInterval: '00:60:00',
+                slotMinTime: '07:00:00',
+                slotMaxTime: '20:00:00',
+                navLinks: true,
+                firstDay: 0,
+                eventTimeFormat: { // like '14:30:00'
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: true
+                },
+                events: {
+                            url: '@Url.Action("Events", "Calendar")',
+                            method: 'POST',
+                            extraParams: function() {
+                                return {
+                                    idClient: $("#cbClient").val()
+                                };
+                            },
+                            success: function() {
+                                
+                            }
+
+                }
+            });
+            calendar.render();
+
+            $("#cbClient").change(function () {                
+                calendar.refetchEvents();
+            })            
+        });
+    </script>
+}
+
+

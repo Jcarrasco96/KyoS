@@ -56,8 +56,9 @@
                                                         <div style="display:none">
                                                             <table class="table table-striped">
                                                                 <tr>
-                                                                    <th class="col-md-3">Facilitator</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-2">Facilitator</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                    <th class="col-md-2" style="text-align:center;">Schedule</th>
                                                                     <th class="col-md-3">Name</th>
                                                                     <th class="col-md-1" style="text-align:center;">Present</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
@@ -75,8 +76,18 @@
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Session)
                                                                             </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
+                                                                            </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                                <a>|</a>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Code)
                                                                             </td>
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)
@@ -125,27 +136,29 @@
                                                                                 {
                                                                                     @if (day_client.Note == null && day_client.NoteP != null)
                                                                                     {
-                                                                                        @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                         <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                       @* @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                                                                         {
                                                                                             <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                         }
                                                                                         else
                                                                                         {
                                                                                             <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                        }
+                                                                                        }*@
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         @if (day_client.Note != null && day_client.NoteP == null)
                                                                                         {
-                                                                                            @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                            <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>               
+                                                                                            @*if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                                                                             {
                                                                                                 <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                             }
                                                                                             else
                                                                                             {
                                                                                                 <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                            }
+                                                                                            }*@
                                                                                         }
                                                                                     }
                                                                                 }
@@ -161,8 +174,18 @@
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Session)
                                                                             </td>
+                                                                            <td align="center">
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
+                                                                            </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                                                                <a>|</a>
+                                                                                @Html.DisplayFor(modelItem => day_client.Client.Code)
                                                                             </td>
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Present)

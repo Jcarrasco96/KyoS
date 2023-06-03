@@ -1,0 +1,58 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ScheduleEntity>
+@{
+    ViewData["Title"] = "Schedules";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Schedules</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-push-12">
+        <a onclick="showInPopup('@Url.Action("Create", "Schedules", null, Context.Request.Scheme)','Create Schedule')" class="btn btn-primary" title="Create Schedule"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Schedule</a>
+    </div>    
+    <div id="view-schedule">
+        @await Html.PartialAsync("_ViewSchedules", Model.OrderBy(f => f.Service).ToList())
+    </div>    
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+               "order": [[1, "asc"]],
+                "pageLength": 25
+            });          
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+
+    </script>
+}
+

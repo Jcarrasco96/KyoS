@@ -38,16 +38,21 @@
     &nbsp;
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="PhotoFile" class="control-label"></label>
+    <div class="form-group col-md-2">
+        <label asp-for="PhotoFile" class="control-label">Photo</label>
         <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" />
         <span asp-validation-for="PhotoFile" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="SignFile" class="control-label"></label>
+        <label asp-for="SignFile" class="control-label">Signature Photo</label>
         <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
         <span asp-validation-for="SignFile" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Code" class="control-label">Case Number</label>
+        <input asp-for="Code" class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>    
     <div class="form-group col-md-2">
         <label asp-for="MedicaidID" class="control-label"></label>
         <input asp-for="MedicaidID" class="form-control" />
@@ -58,15 +63,10 @@
         <input asp-for="MedicareId" class="form-control" />
         <span asp-validation-for="MedicareId" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-1">
+    <div class="form-group col-md-2">
         <label asp-for="SSN" class="control-label"></label>
         <input asp-for="SSN" class="form-control" />
         <span asp-validation-for="SSN" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Code" class="control-label"></label>
-        <input asp-for="Code" class="form-control" />
-        <span asp-validation-for="Code" class="text-danger"></span>
     </div>
 </div>
 <div class="col-md-push-12">
@@ -97,9 +97,6 @@
             }
         </div>
     </div>
-    <div class="form-group col-md-1">
-        &nbsp;
-    </div>
     <div class="form-group col-md-2">
         <div id="imgPreviewSign" class="thumbnail">
             @if (!string.IsNullOrEmpty(Model.SignPath))
@@ -123,5 +120,33 @@
                 </div>
             }
         </div>
-    </div>    
+    </div>
+    @if (Model.Id > 0)
+    {
+        @if (Model.Clients_HealthInsurances == null || Model.Clients_HealthInsurances.Count() == 0)
+        {
+            <div class="form-group col-md-4">
+                <label class="control-label">Active Health Insurance</label>
+                <input class="form-control" disabled />
+            </div>
+        }
+        else
+        {
+            @if (@Model.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+            {
+                <div class=" form-group col-md-4">
+                    <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="control-label">Active Health Insurance</label>
+                    <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="form-control" disabled />
+                    <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group col-md-4">
+                    <label class="control-label">Active Health Insurance</label>
+                    <input class="form-control" disabled />
+                </div>
+            }
+        }
+    }
 </div>

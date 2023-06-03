@@ -41,24 +41,23 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FacilitatorName)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.PSRPending)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.IndPending)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.GroupPending)
-                            </td>
-                            <td align="center">
-                                @(item.PSRPending + item.IndPending + item.GroupPending)
-                            </td>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FacilitatorName)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.PSRPending)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.IndPending)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.GroupPending)
+                                </td>
+                                <td align="center">
+                                    @(item.PSRPending + item.IndPending + item.GroupPending)
+                                </td>
                         </tr>
-
                         }
                     </tbody>
                 </table>
@@ -76,20 +75,9 @@
 
             $('#MyTable').DataTable({
                 "order": [[1, "desc"]],
-                "pageLength": 10
+                "pageLength": 25
             });
-
-            // Delete item
-            //var item_to_delete;
-
-            @*$('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });*@
+            
         });
     </script>
 }

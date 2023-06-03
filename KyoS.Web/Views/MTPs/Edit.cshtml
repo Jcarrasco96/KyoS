@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.MTPViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit MTP";
 }
 
 <!DOCTYPE html>
@@ -30,14 +30,14 @@
                     @Html.ActionLink("MTPs with review", "MtpWithReview", "MTPs")
                 }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Edit MTP</li>
         </ul><!--.breadcrumb-->
     </div>
 
     <h4>Edit Master Treatment Plan</h4>
     <hr />
     <div class="row">
-        <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data" onsubmit="return false;" id="formEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Active" />
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="form-group col-md-12">
-                <input type="submit" value="Save MTP" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Save MTP" class="btn btn-primary" />
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
@@ -146,6 +146,122 @@
                 $(this).closest("tr").next().remove();
             });
         });
+
+        function GenderVerification() {
+
+                var url = "@Url.Action("GetGenderByClient", "MTPs")";
+
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+
+                    let clientStrengths = $("#clientStrengths").val();
+                    let clientLimitation = $("#clientLimitation").val();
+                    let rationaleForUpdate = $("#rationaleForUpdate").val();
+                    let additionalRecommended = $("#additionalRecommended").val();
+                    let initialDC = $("#initialDischargeCriteria").val();
+                    let text = "";
+
+                    if (data == 'F') //Female
+                    {
+                        if (MaleVerification(clientStrengths) == true) {
+                            text = ", Client’s Strengths";
+                        }
+                        if (MaleVerification(clientLimitation) == true) {
+                            text = text + ", Client’s Limitations";
+                        }
+                        if (MaleVerification(rationaleForUpdate) == true) {
+                            text = text + ", Rationale for Update";
+                        }
+                        if (MaleVerification(additionalRecommended) == true) {
+                            text = text + ", Additional recommended services";
+                        }
+                        if (MaleVerification(initialDC) == true) {
+                            text = text + ", Initial discharge criteria";
+                        }
+
+                        if (text != "") {
+                            Swal.fire({
+                                title: 'Do you want to continue?',
+                                text: "There are gender issues in" + text,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ec971f',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, continue!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    formEdit.submit();
+                                }
+                            });
+                        }
+                        else {
+                            formEdit.submit();
+                        }
+                    }
+                    else
+                    {
+                        if (data == 'M') //Male
+                        {
+                            if (FemaleVerification(clientStrengths) == true) {
+                                text = ", Client’s Strengths";
+                            }
+                            if (FemaleVerification(clientLimitation) == true) {
+                                text = text + ", Client’s Limitations";
+                            }
+                            if (FemaleVerification(rationaleForUpdate) == true) {
+                                text = text + ", Rationale for Update";
+                            }
+                            if (FemaleVerification(additionalRecommended) == true) {
+                                text = text + ", Additional recommended services";
+                            }
+                            if (FemaleVerification(initialDC) == true) {
+                                text = text + ", Initial discharge criteria";
+                            }
+
+                            if (text != "") {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in" + text,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        formEdit.submit();
+                                    }
+                                });
+                            }
+                            else {
+                                formEdit.submit();
+                            }
+                        }
+                    }
+                });
+            }
+
+        function MaleVerification(text) {
+            if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                text.includes(" oldman") || text.includes(" wife")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function FemaleVerification(text) {
+            if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                text.includes(" husband")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
     </script>
 }
 

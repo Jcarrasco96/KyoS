@@ -91,7 +91,14 @@
                                                     }
                                                     else
                                                     {
-                                                        <p>Other</p>
+                                                        @if (item.Type == KyoS.Common.Enums.FARSType.Addendums)
+                                                        {
+                                                            <p>Addendum</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Other</p>
+                                                        }
                                                     }
                                                 }
                                             }
@@ -101,12 +108,13 @@
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
                                     {
-                                        <a asp-action="EditOnlyTypeFARS" asp-controller="Clients" asp-route-id="@item.Id" class="btn btn-warning" title="Edit only Type"><i class="glyphicon glyphicon-check"></i>&nbsp;Type</a>
-                                        @*<a onclick="showInPopup('@Url.Action("EditOnlyTypeFARS", "Clients", new {id = item.Id }, Context.Request.Scheme)','Edit Only Type')" class="btn btn-warning" title="Edit Only Type"><i class="glyphicon glyphicon-ok"></i>&nbsp;&nbsp;Edit Only Type</a>*@
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
                                     }
                                     else
-                                    {
-                                        if (item.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                    { 
+                                        @if (item.Status == KyoS.Common.Enums.FarsStatus.Pending)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -130,7 +138,7 @@
                                         {
                                             <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="ConfirmDeleteFars(@item.Id)" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else
                                         {
@@ -138,21 +146,28 @@
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a onclick="ConfirmDeleteFars(@item.Id)" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a onclick="ConfirmDeleteFars(@item.Id)" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>                                                
                                             }
                                         }
                                     }
                                     else
                                     {
                                         <a asp-action="ReturnTo" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Delete" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                        {
+                                            <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintFarsForm" asp-controller="FarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -163,43 +178,3 @@
         </div>
     </div>
 }
-
-<partial name="_ModalPopup" />
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-        //    jQueryAjaxPost = form => {
-        //        try {
-        //            $.ajax({
-        //                type: 'POST',
-        //                url: form.action,
-        //                data: new FormData(form),
-        //                contentType: false,
-        //                processData: false,
-        //                success: function (res) {
-        //                    if (res.isValid) {
-        //                        $('#view-all').html(res.html)
-        //                        $('#form-modal .modal-body').html('');
-        //                        $('#form-modal .modal-title').html('');
-        //                        $('#form-modal').modal('hide');
-        //                    }
-        //                    else
-        //                        $('#form-modal .modal-body').html(res.html);
-        //                },
-        //                error: function (err) {
-        //                    console.log(err)
-        //                }
-        //            })
-        //            //to prevent default form submit event
-        //            return false;
-        //        } catch (ex) {
-        //            console.log(ex)
-        //        }
-        //}
-    </script>
-}
-

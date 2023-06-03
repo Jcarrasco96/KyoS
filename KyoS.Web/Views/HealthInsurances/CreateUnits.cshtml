@@ -45,7 +45,9 @@
                     <span asp-validation-for="Units" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    &nbsp;
+                    <label asp-for="AuthorizationNumber" class="control-label"></label>&nbsp;*
+                    <input asp-for="AuthorizationNumber" class="form-control" />
+                    <span asp-validation-for="AuthorizationNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

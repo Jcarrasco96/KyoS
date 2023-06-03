@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="02/02/2023 13:17:56" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="05/11/2023 17:17:09" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3T5HLQZtXC9M8Sd33o/5ZKg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3KPSGqtjN/JrTOifRvbWBTw==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -152,7 +152,7 @@
         <TableRow Name="Row2">
           <TableCell Name="Cell6" Border.Lines="All" Text="Date: [datenote]" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell7" Border.Lines="All" Text="Code: [Workdays_Clients.CodeBill]" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell8" Border.Lines="All" Text="Units: 4" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="Units: [IIf([Workdays_Clients.CodeBill] == &quot;90837&quot;,&quot;1&quot;,&quot;4&quot;)]" Font="Times New Roman, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
     </PageHeaderBand>

@@ -1,0 +1,42 @@
+﻿@model KyoS.Web.Models.ActivityViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Add Link</li>
+    </ul><!--.breadcrumb-->
+</div>
+<h4>Add link facilitator's intervention</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddLink" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="IdTheme" />
+            <partial name="_AddLink" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @if (Model.Origin == 0)
+                {
+                    <a asp-action="ActivitiesPerWeek" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 1)
+                {
+                    <a asp-action="ActivitiesPerGroupWeek" class="btn btn-success">Back</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

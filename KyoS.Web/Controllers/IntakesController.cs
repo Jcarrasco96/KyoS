@@ -450,7 +450,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentForTreatmentEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
+                IntakeConsentForTreatmentEntity IntakeConsentEntity = _converterHelper.ToIntakeConsentForTreatmentEntity(IntakeViewModel, false);
                 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -570,7 +570,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentForReleaseEntity IntakeConsentEntity = await _converterHelper.ToIntakeConsentForReleaseEntity(IntakeViewModel, false);
+                IntakeConsentForReleaseEntity IntakeConsentEntity = _converterHelper.ToIntakeConsentForReleaseEntity(IntakeViewModel, false);
 
                 if (IntakeConsentEntity.Id == 0)
                 {
@@ -672,7 +672,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsumerRightsEntity IntakeConsumerEntity = await _converterHelper.ToIntakeConsumerRightsEntity(IntakeViewModel, false);
+                IntakeConsumerRightsEntity IntakeConsumerEntity = _converterHelper.ToIntakeConsumerRightsEntity(IntakeViewModel, false);
 
                 if (IntakeConsumerEntity.Id == 0)
                 {
@@ -768,12 +768,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
@@ -784,7 +778,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.DreamsMentalHealthIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -812,6 +810,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -883,7 +886,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = await _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
+                IntakeAcknowledgementHippaEntity IntakeAckNowEntity = _converterHelper.ToIntakeAcknoewledgementHippaEntity(IntakeViewModel, false);
 
                 if (IntakeAckNowEntity.Id == 0)
                 {
@@ -985,7 +988,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeAccessToServicesEntity IntakeAccessEntity = await _converterHelper.ToIntakeAccessToServicesEntity(IntakeViewModel, false);
+                IntakeAccessToServicesEntity IntakeAccessEntity = _converterHelper.ToIntakeAccessToServicesEntity(IntakeViewModel, false);
 
                 if (IntakeAccessEntity.Id == 0)
                 {
@@ -1107,7 +1110,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeOrientationChecklistEntity IntakeOrientationEntity = await _converterHelper.ToIntakeOrientationChecklistEntity(IntakeViewModel, false);
+                IntakeOrientationChecklistEntity IntakeOrientationEntity = _converterHelper.ToIntakeOrientationChecklistEntity(IntakeViewModel, false);
 
                 if (IntakeOrientationEntity.Id == 0)
                 {
@@ -1207,7 +1210,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeTransportationEntity IntakeTransportationEntity = await _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
+                IntakeTransportationEntity IntakeTransportationEntity = _converterHelper.ToIntakeTransportationEntity(IntakeViewModel, false);
 
                 if (IntakeTransportationEntity.Id == 0)
                 {
@@ -1318,7 +1321,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeConsentPhotographEntity IntakeConsentPhotographEntity = await _converterHelper.ToIntakeConsentPhotographEntity(IntakeViewModel, false);
+                IntakeConsentPhotographEntity IntakeConsentPhotographEntity = _converterHelper.ToIntakeConsentPhotographEntity(IntakeViewModel, false);
 
                 if (IntakeConsentPhotographEntity.Id == 0)
                 {
@@ -1418,7 +1421,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeFeeAgreementEntity IntakefeeAgreementEntity = await _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
+                IntakeFeeAgreementEntity IntakefeeAgreementEntity = _converterHelper.ToIntakeFeeAgreementEntity(IntakeViewModel, false);
 
                 if (IntakefeeAgreementEntity.Id == 0)
                 {
@@ -1545,7 +1548,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeTuberculosisEntity IntakeTuberculosisEntity = await _converterHelper.ToIntakeTuberculosisEntity(IntakeViewModel, false);
+                IntakeTuberculosisEntity IntakeTuberculosisEntity = _converterHelper.ToIntakeTuberculosisEntity(IntakeViewModel, false);
 
                 if (IntakeTuberculosisEntity.Id == 0)
                 {
@@ -1791,7 +1794,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = await _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
 
                 if (IntakeMedicalHistoryEntity.Id == 0)
                 {
@@ -2026,7 +2029,7 @@ namespace KyoS.Web.Controllers
                                        .Include(m => m.IntakeTransportation)
                                        .Include(m => m.IntakeTuberculosis)
                                        .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
-                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                        && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id)))
                                        .ToList();
             }
            
@@ -2158,6 +2161,41 @@ namespace KyoS.Web.Controllers
             }
 
             return View(auditClient_List);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        public async Task<IActionResult> ClientswithoutIntake(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<ClientEntity> ClientList = await _context.Clients
+                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                             && n.IntakeScreening == null
+                                                             && n.IntakeConsentForTreatment == null
+                                                             && n.IntakeConsentForRelease == null
+                                                             && n.IntakeConsumerRights == null
+                                                             && n.IntakeAcknowledgementHipa == null
+                                                             && n.IntakeAccessToServices == null
+                                                             && n.IntakeOrientationChecklist == null
+                                                             && n.IntakeTransportation == null
+                                                             && n.IntakeConsentPhotograph == null
+                                                             && n.IntakeFeeAgreement == null
+                                                             && n.IntakeTuberculosis == null
+                                                             && n.OnlyTCM == false)
+                                                          .ToListAsync();
+
+            return View(ClientList);
+
         }
 
     }

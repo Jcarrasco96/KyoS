@@ -18,10 +18,10 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboFacilitators();
         IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboClients();
-        IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboActiveClientsPSRByClinic(int idClinic);
-        IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator);
+        IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday);
         IEnumerable<SelectListItem> GetComboActivities();
         IEnumerable<SelectListItem> GetComboActivitiesByTheme(int idTheme, int idFacilitator, DateTime date);
         IEnumerable<SelectListItem> GetComboClassifications();
@@ -79,5 +79,10 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboUserNamesByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsAdmissionByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboBio_Type();
+        IEnumerable<SelectListItem> GetComboSchedulesByClinic(int idClinic, ServiceType service);
+        IEnumerable<SelectListItem> GetComboSession();
+        IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idClient, int idWorkdayClient);
+        IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient);
+        IEnumerable<SelectListItem> GetComboThemeType();
     }
 }

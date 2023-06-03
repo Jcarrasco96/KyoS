@@ -44,7 +44,10 @@
                                     @Html.DisplayFor(modelItem => day_client.Session)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                    @if (day_client.Client != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => day_client.Client.Name)
+                                    }
                                 </td>
                                 <td align="center">
                                     <span class="label label-default">

@@ -1536,11 +1536,11 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     Activities1 = null,
 
                     IdTopic2 = 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     Activities2 = null,                    
                 };
             }
@@ -1558,17 +1558,17 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
                     IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
             }
-
+            ViewData["Schema"] = user_logged.Clinic.SchemaGroup;
             return View(model);
         }
 
@@ -1577,11 +1577,12 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateActivitiesGroupWeek(Workday_Activity_FacilitatorGroupViewModel model)
         {
-            if (ModelState.IsValid)
+            FacilitatorEntity facilitator_logged = await _context.Facilitators
+                                                                    .Include(f => f.Clinic)
+                                                                    .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+            if (ModelState.IsValid || (facilitator_logged.Clinic.SchemaGroup == SchemaTypeGroup.Schema3 && model.IdTopic1 > 0 && model.IdActivity1 > 0))
             {
-                FacilitatorEntity facilitator_logged = await _context.Facilitators
-                                                                     .Include(f => f.Clinic)
-                                                                     .FirstOrDefaultAsync(f => f.LinkedUser == User.Identity.Name);
+               
 
                 WorkdayEntity workday = await _context.Workdays
                                                       .FirstOrDefaultAsync(w => w.Id == model.IdWorkday);
@@ -1607,14 +1608,18 @@ namespace KyoS.Web.Controllers
                     Schema = SchemaType.Schema1
                 };
                 _context.Add(activity);
-                activity = new Workday_Activity_Facilitator
+                
+                if (facilitator_logged.Clinic.SchemaGroup != SchemaTypeGroup.Schema3)
                 {
-                    Facilitator = facilitator_logged,
-                    Workday = workday,
-                    Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
-                    Schema = SchemaType.Schema1
-                };
-                _context.Add(activity);        
+                    activity = new Workday_Activity_Facilitator
+                    {
+                        Facilitator = facilitator_logged,
+                        Workday = workday,
+                        Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
+                        Schema = SchemaType.Schema1
+                    };
+                    _context.Add(activity);
+                }
 
                 try
                 {
@@ -1641,7 +1646,7 @@ namespace KyoS.Web.Controllers
         public JsonResult GetActivityList(int idTheme)
         {
             List<ActivityEntity> activities = _context.Activities
-                                                      .Where(a => (a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved))
+                                                      .Where(a => a.Theme.Id == idTheme && a.Status == ActivityStatus.Approved)
                                                       .ToList();
 
             return Json(new SelectList(activities, "Id", "Name"));
@@ -1904,5 +1909,77 @@ namespace KyoS.Web.Controllers
                 return false;
         }
         #endregion
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> AddLink(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            if (activityEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
+                }
+            }
+            activityViewModel.Origin = origin;
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddLink(int id, ActivityViewModel activityViewModel)
+        {
+            if (id != activityViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                activityEntity.Name = activityEntity.Name + activityViewModel.Link;
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    if (activityViewModel.Origin == 0)
+                    {
+                        return RedirectToAction(nameof(ActivitiesPerWeek));
+                    }
+                    if (activityViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(ActivitiesPerGroupWeek));
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the activity: {activityEntity.Theme.Name} - {activityEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
+
     }
 }

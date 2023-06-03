@@ -7,19 +7,28 @@
             </td>
             <td>
                 &nbsp;&nbsp;
-                <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">MTP's view</a>
+                <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
             </td>
             <td>
                 &nbsp;&nbsp;
-                <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">Goals' view</a>
+                <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">View of Goals</a>
             </td>
         </tr>
     </table>        
-    <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session 
-    @if (Model.Workday_Cient.SharedSession)
-    { 
-        <b>(Shared Session)</b>
-    }
+    <h5>
+        Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() @Model.Workday_Cient.Workday.Day, Session:
+        @if (Model.Workday_Cient.Schedule != null)
+        {
+            @Model.Workday_Cient.Schedule.InitialTime.ToShortTimeString() <a> - </a> @Model.Workday_Cient.Schedule.EndTime.ToShortTimeString()
+        }
+        else
+        {
+            @Model.Workday_Cient.Session
+        }
+        @if (Model.Workday_Cient.SharedSession)
+        {
+            <b>(Shared Session)</b>
+        }
     </h5>
 </div>
 <div class="col-md-12">
@@ -39,7 +48,7 @@
         <input asp-for="Title" class="form-control"/>
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">        
+    <div class="form-group col-md-3">        
             <label asp-for="Setting" class="control-label"></label>
             <br />
             @if (Model.Setting == "53")
@@ -62,6 +71,11 @@
                 <input type="radio" name="Setting" value="02" />
             }
             <strong>02</strong>&nbsp;Remote        
+    </div>
+     <div class="form-group col-md-2">
+        <label asp-for="CodeBill" class="control-label">Bill Code</label>
+        <input asp-for="CodeBill" class="form-control"/>
+        <span asp-validation-for="CodeBill" class="text-danger"></span>
     </div>
     <div class="container-fluid">
         &nbsp;

@@ -28,49 +28,75 @@
     }
     else
     {
-<form asp-action="CreateActivitiesGroupWeek">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="IdWorkday" />
-    <div class="col-md-12">
-        <h5><strong>Date: </strong> @Model.Day @Model.Date </h5>
-    </div>
-    <div>
-        &nbsp;
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="IdTopic1" class="control-label"></label>
-            <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
-            <span asp-validation-for="IdTopic1" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-9">
-            <label asp-for="IdActivity1" class="control-label"></label>
-            <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
-            <span asp-validation-for="IdActivity1" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="col-md-push-12">
-        <div class="form-group col-md-3">
-            <label asp-for="IdTopic2" class="control-label"></label>
-            <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
-            <span asp-validation-for="IdTopic2" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-9">
-            <label asp-for="IdActivity2" class="control-label"></label>
-            <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
-            <span asp-validation-for="IdActivity2" class="text-danger"></span>
-        </div>
-    </div>
-    <div>
-        &nbsp;
-    </div>
-    <div class="col-md-12">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        <a asp-action="ActivitiesPerGroupWeek" class="btn btn-success">Back</a>
-    </div>
-</form>
+        <form asp-action="CreateActivitiesGroupWeek">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdWorkday" />
+            <div class="col-md-12">
+                <h5><strong>Date: </strong> @Model.Day @Model.Date </h5>
+            </div>       
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+            <div class="form-group col-md-12">                
+                <a onclick="showInPopupLg('@Url.Action("SearchTopic", "Activities", null, Context.Request.Scheme)','Search Theme')" class="btn btn-info" title="Search Topic"><i class="glyphicon glyphicon-search"></i> Search Topic</a>                         
+            </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+            @if (ViewData["Schema"].ToString() == "Schema1" || ViewData["Schema"].ToString() == "Schema2")
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-3">
+                        <label asp-for="IdTopic1" class="control-label"></label>
+                        <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                        <span asp-validation-for="IdTopic1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label asp-for="IdActivity1" class="control-label"></label>
+                        <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                        <span asp-validation-for="IdActivity1" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-3">
+                        <label asp-for="IdTopic2" class="control-label"></label>
+                        <select asp-for="IdTopic2" asp-items="Model.Topics2" class="form-control" id="cbTopic2"></select>
+                        <span asp-validation-for="IdTopic2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label asp-for="IdActivity2" class="control-label"></label>
+                        <select asp-for="IdActivity2" asp-items="Model.Activities2" class="form-control" id="cbActivity2"></select>
+                        <span asp-validation-for="IdActivity2" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-3">
+                        <label asp-for="IdTopic1" class="control-label"></label>
+                        <select asp-for="IdTopic1" asp-items="Model.Topics1" class="form-control" id="cbTopic1"></select>
+                        <span asp-validation-for="IdTopic1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label asp-for="IdActivity1" class="control-label"></label>
+                        <select asp-for="IdActivity1" asp-items="Model.Activities1" class="form-control" id="cbActivity1"></select>
+                        <span asp-validation-for="IdActivity1" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            <div>
+                &nbsp;
+            </div>
+            <div class="col-md-12">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="ActivitiesPerGroupWeek" class="btn btn-success">Back</a>
+            </div>
+        </form>
     }
 </div>
+
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

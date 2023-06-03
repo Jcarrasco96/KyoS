@@ -128,6 +128,12 @@ namespace KyoS.Web.Data
         public DbSet<ObjectiveTempEntity> ObjetivesTemp { get; set; }
         public DbSet<HealthInsuranceTempEntity> HealthInsuranceTemp { get; set; }
         public DbSet<BriefEntity> Brief { get; set; }
+        public DbSet<GroupNote2Entity> GroupNotes2 { get; set; }
+        public DbSet<GroupNote2_Activity> GroupNotes2_Activities { get; set; }
+        public DbSet<ScheduleEntity> Schedule { get; set; }
+        public DbSet<SubScheduleEntity> SubSchedule { get; set; }
+        public DbSet<ManagerEntity> Manager { get; set; }
+        public DbSet<EligibilityEntity> Eligibilities { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -582,6 +588,16 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.Client)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<BriefEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.GroupNote2)
+                        .WithOne(gn => gn.Workday_Cient)
+                        .HasForeignKey<GroupNote2Entity>(g => g.Workday_Client_FK);
+
+            modelBuilder.Entity<Workday_Client>()
+                        .HasOne(wd => wd.GroupNote2)
+                        .WithOne(n => n.Workday_Cient)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

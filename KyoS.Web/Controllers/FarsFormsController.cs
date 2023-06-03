@@ -83,7 +83,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.FarsFormList)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -172,7 +172,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("facilitator") && facilitator != null)
+                if (User.IsInRole("Facilitator") && facilitator != null)
                 {
                     model.RaterEducation = facilitator.RaterEducation;
                     model.RaterFMHI = facilitator.RaterFMHCertification;
@@ -201,6 +201,18 @@ namespace KyoS.Web.Controllers
                 FarsFormEntity farsFormEntity = _context.FarsForm.Find(FarsFormViewModel.Id);
                 if (farsFormEntity == null)
                 {
+                    //calcular las unidades a partir del tiempo de desarrollo del FARS
+                    int units = (FarsFormViewModel.EndTime.TimeOfDay - FarsFormViewModel.StartTime.TimeOfDay).Minutes / 15;
+                    if ((FarsFormViewModel.EndTime.TimeOfDay - FarsFormViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                    {
+                        units++;
+                        FarsFormViewModel.Units = units;
+                    }
+                    else
+                    {
+                        FarsFormViewModel.Units = units;
+                    }
+
                     farsFormEntity = await _converterHelper.ToFarsFormEntity(FarsFormViewModel, true, user_logged.UserName);
                     _context.FarsForm.Add(farsFormEntity);
                     try
@@ -274,8 +286,8 @@ namespace KyoS.Web.Controllers
                 SubstanceScale = FarsFormViewModel.SubstanceScale,
                 ThoughtProcessScale = FarsFormViewModel.ThoughtProcessScale,
                 TraumaticsScale = FarsFormViewModel.TraumaticsScale,
-                WorkScale = FarsFormViewModel.WorkScale
-                
+                WorkScale = FarsFormViewModel.WorkScale,
+                CodeBill = FarsFormViewModel.CodeBill                
 
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", FarsFormViewModel) });
@@ -331,6 +343,18 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //calcular las unidades a partir del tiempo de desarrollo del FARS
+                int units = (farsFormViewModel.EndTime.TimeOfDay - farsFormViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((farsFormViewModel.EndTime.TimeOfDay - farsFormViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    farsFormViewModel.Units = units;
+                }
+                else
+                {
+                    farsFormViewModel.Units = units;
+                }
+
                 FarsFormEntity farsFormEntity = await _converterHelper.ToFarsFormEntity(farsFormViewModel, false, user_logged.Id);
                 _context.FarsForm.Update(farsFormEntity);
                 try
@@ -393,19 +417,22 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Delete(int? id, int clientId = 0)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            FarsFormEntity farsFormEntity = await _context.FarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            FarsFormEntity farsFormEntity = await _context.FarsForm
+                                                          .Include(f => f.Client)
+                                                          .FirstOrDefaultAsync(s => s.Id == id);
             if (farsFormEntity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
+            int clientId = farsFormEntity.Client.Id;
             try
             {
                 _context.FarsForm.Remove(farsFormEntity);
@@ -439,12 +466,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            //if (entity.Client.Clinic.Name == "DAVILA")
-            //{
-            //    Stream stream = _reportHelper.FloridaSocialHSIntakeReport(entity);
-            //    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            //}
-
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSFarsReport(entity);
@@ -453,6 +474,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -482,7 +508,8 @@ namespace KyoS.Web.Controllers
                                                               .Where(n => n.FarsFormList.Count == 0 
                                                                  && n.Clinic.Id == user_logged.Clinic.Id
                                                                  && (n.IdFacilitatorPSR == facilitator.Id 
-                                                                    || n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                                    || n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                                    || n.IdFacilitatorGroup == facilitator.Id)
                                                                  && n.OnlyTCM == false)
                                                               .ToListAsync();
 
@@ -662,7 +689,7 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Client.Id == idClient
-                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id || n.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
                 }
@@ -778,6 +805,8 @@ namespace KyoS.Web.Controllers
                                       .Include(m => m.FarsFormList)
                                       .Include(m => m.DischargeList)
                                       .Include(m => m.IndividualTherapyFacilitator)
+                                      .Include(m => m.Workdays_Clients)
+                                      .ThenInclude(m => m.Workday)
                                       .Where(n => n.Clinic.Id == user_logged.Clinic.Id
                                             && n.MTPs.Count() > 0)
                                       .ToList();
@@ -797,8 +826,14 @@ namespace KyoS.Web.Controllers
                                           .Include(m => m.FarsFormList)
                                           .Include(m => m.DischargeList)
                                           .Include(m => m.IndividualTherapyFacilitator)
+                                          .Include(m => m.Workdays_Clients)
+                                          .ThenInclude(m => m.Workday)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                              && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                              && n.MTPs.Count() > 0 
+                                              && ((n.IdFacilitatorPSR == facilitator.Id 
+                                                || n.IndividualTherapyFacilitator.Id == facilitator.Id 
+                                                || n.IdFacilitatorGroup == facilitator.Id)
+                                              || n.MTPs.Where(a => a.AdendumList.Where(aa => aa.Facilitator.Id == facilitator.Id).Count() > 0).Count() > 0))
                                           .ToList();
 
                 }
@@ -806,34 +841,42 @@ namespace KyoS.Web.Controllers
             }
 
             MTPEntity mtp = new MTPEntity();
-            List<MTPReviewEntity> review = new List<MTPReviewEntity>();
-            int individualTherapy = 0;
+            int review = 0;
+            int addendums = 0;
+            int discharge = 0;
             int admission = 1;
-            int close = 1;
+            int close = 0;
             int resto = 0;
 
             foreach (var item in client_List.OrderBy(n => n.AdmisionDate))
             {
-                if (item.IndividualTherapyFacilitator != null)
-                {
-                    individualTherapy = 1;
-                }
-                else
-                {
-                    individualTherapy = 0;
-                }
-
+                
                 mtp = item.MTPs.FirstOrDefault(n => n.Active == true);
-                review = mtp.MtpReviewList;
+                review = mtp.MtpReviewList.Count();
+                addendums = mtp.AdendumList.Count();
+                discharge = item.DischargeList.Count();
+
+                if (item.Workdays_Clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
+                {
+                    close++;
+                }
+                if (item.Workdays_Clients.Where(n => n.Workday.Service == ServiceType.Individual).Count() > 0)
+                {
+                    close++;
+                }
+                if (item.Workdays_Clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
+                {
+                    close++;
+                }
 
                 if (item.Status == StatusType.Open)
                 {
-                    resto = (admission + review.Count()) - item.FarsFormList.Count();
+                    resto = (admission + review + addendums + discharge) - item.FarsFormList.Count();
                     if (resto > 0)
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Missing FARS PSR (" + resto + ")";
+                        auditClient.Description = "Missing FARS (" + resto + "), the client is Open";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -843,12 +886,12 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    resto = (admission + review.Count() + individualTherapy + close) - item.FarsFormList.Count();
+                    resto = (admission + review + addendums + close) - item.FarsFormList.Count();
                     if (resto > 0)
                     {
                         auditClient.NameClient = item.Name;
                         auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
-                        auditClient.Description = "Missing FARS Ind. (" + resto + ")";
+                        auditClient.Description = "Missing FARS (" + resto + "), the client is Close";
                         auditClient.Active = 0;
 
                         auditClient_List.Add(auditClient);
@@ -856,7 +899,7 @@ namespace KyoS.Web.Controllers
                         resto = 0;
                     }
                 }
-               
+                close = 0;
             }
 
             return View(auditClient_List);
@@ -885,9 +928,11 @@ namespace KyoS.Web.Controllers
                                                               .Include(n => n.MTPs)
                                                               .ThenInclude(n => n.MtpReviewList)
                                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                                 && ((n.IdFacilitatorPSR == facilitator.Id && n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
-                                                                  || (n.IdFacilitatorPSR == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                                  || (n.IndividualTherapyFacilitator.Id == facilitator.Id && n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                                 && ((n.MTPs.FirstOrDefault(m => m.Active ==true).MtpReviewList.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual && d.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
                                                                  && n.OnlyTCM == false)
                                                               .ToListAsync();
 
@@ -901,7 +946,9 @@ namespace KyoS.Web.Controllers
                                                               && n.Clinic.Id == user_logged.Clinic.Id
                                                               && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0))
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
                                                               && n.OnlyTCM == false)
                                                           .ToListAsync();
 
@@ -910,5 +957,398 @@ namespace KyoS.Web.Controllers
 
 
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> FARSMissingForClient()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            
+            if (User.IsInRole("Manager"))
+            {
+
+                List<ClientEntity> ClientList = await _context.Clients
+                                                          .Include(n => n.FarsFormList)
+                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                 && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > 0).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()))
+                                                                 && n.OnlyTCM == false)
+                                                          .ToListAsync();
+
+                return View(ClientList);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager, Facilitator")]
+        public async Task<IActionResult> AuditFARSforId(int id = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditFARS> auditClient_List = new List<AuditFARS>();
+            AuditFARS auditClient = new AuditFARS();
+
+            ClientEntity client = new ClientEntity();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Facilitator"))
+            {
+                client = await _context.Clients
+                                       .Include(m => m.MTPs)
+                                       .ThenInclude(m => m.MtpReviewList)
+                                       .Include(m => m.MTPs)
+                                       .ThenInclude(m => m.AdendumList)
+                                       .Include(m => m.FarsFormList)
+                                       .Include(m => m.DischargeList)
+                                       .Include(m => m.IndividualTherapyFacilitator)
+                                       .Include(m => m.Workdays_Clients)
+                                       .ThenInclude(m => m.Workday)
+                                       .FirstOrDefaultAsync(n => n.Clinic.Id == user_logged.Clinic.Id
+                                            && n.MTPs.Count() > 0
+                                            && n.Id == id);
+
+            }
+           
+
+            MTPEntity mtp = new MTPEntity();
+            List<MTPReviewEntity> review = new List<MTPReviewEntity>();
+            bool initialFars = false;
+            bool reviewFars = false;
+            bool individualFars = false;
+            bool PSRFars = false;
+            bool GroupFars = false;
+            
+            mtp = client.MTPs.FirstOrDefault(n => n.Active == true);
+            review = mtp.MtpReviewList;
+
+            if (client.FarsFormList.Count() > 0)
+            {
+                foreach (var item in client.FarsFormList)
+                {
+                    if (item.Type == FARSType.Initial)
+                    {
+                        initialFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_Ind)
+                    {
+                        individualFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_PSR)
+                    {
+                        PSRFars = true;
+                    }
+                    if (item.Type == FARSType.Discharge_Group)
+                    {
+                        GroupFars = true;
+                    }
+                    
+                }
+
+            }
+
+            if (review.Count() <= client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
+            {
+                reviewFars = true;
+            }
+
+            if (initialFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing Initial FARS";
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (client.MTPs.Sum(n => n.MtpReviewList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.MtpReview).Count())
+            {
+                foreach (var item in client.MTPs)
+                {
+                    foreach (var element in item.MtpReviewList)
+                    {
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.DataOfService && n.Type == FARSType.MtpReview) == true)
+                        {
+
+                        }
+                        else
+                        {
+                            auditClient.NameClient = client.Name;
+                            auditClient.AdmissionDate = element.DataOfService.ToShortDateString();
+                            auditClient.Description = "Missing FARS MTPR";
+                            auditClient.Responsible = element.Therapist;
+                            auditClient.Active = 0;
+
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditFARS();
+                        }
+                    }
+                }
+
+            }
+
+            if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
+            {
+                foreach (var item in client.MTPs)
+                {
+                    foreach (var element in item.AdendumList)
+                    {
+                        if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
+                        {
+
+                        }
+                        else
+                        {
+                            auditClient.NameClient = client.Name;
+                            auditClient.AdmissionDate = element.Dateidentified.ToShortDateString();
+                            auditClient.Description = "Missing FARS Addendums";
+                            if (element.Facilitator != null)
+                            {
+                                auditClient.Responsible = element.Facilitator.Name;
+                            }
+                            else
+                            {
+                                auditClient.Responsible = element.CreatedBy;
+                            }
+
+                            auditClient.Active = 0;
+
+                            auditClient_List.Add(auditClient);
+                            auditClient = new AuditFARS();
+                        }
+
+                    }
+                }
+                
+            }
+
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.Individual) > 0 && individualFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_Ind";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.Individual && n.Client.Id == id).AdmissionedFor;
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.PSR) > 0 && PSRFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_PSR";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.PSR && n.Client.Id == id).AdmissionedFor;
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+            if (client.DischargeList.Count(n => n.TypeService == ServiceType.Group) > 0 && GroupFars == false)
+            {
+                auditClient.NameClient = client.Name;
+                auditClient.AdmissionDate = client.AdmisionDate.ToShortDateString();
+                auditClient.Description = "Missing FARS Discharge_Group";
+                auditClient.Responsible = _context.Discharge.FirstOrDefault(n => n.TypeService == ServiceType.Group && n.Client.Id == id).AdmissionedFor;
+                auditClient.Active = 0;
+
+                auditClient_List.Add(auditClient);
+                auditClient = new AuditFARS();
+            }
+
+
+            return View(auditClient_List);
+        }
+
+        #region Bill week FARS
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillFARSToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+                fars.BilledDate = DateTime.Now;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id });
+                }
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBillFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+                fars.BilledDate = null;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillTodayFARS(int idFars = 0, int week = 0, int origin = 0)
+        {
+            if (idFars >= 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == idFars);
+
+                fars.DeniedBill = true;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBillFARS(int idFars = 0, int client = 0, int week = 0)
+        {
+            if (idFars > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == idFars);
+
+                fars.DeniedBill = false;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                fars.PaymentDate = null;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayFARS(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                FarsFormEntity fars = await _context.FarsForm
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                fars.PaymentDate = DateTime.Now;
+                fars.DeniedBill = false;
+                _context.Update(fars);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = fars.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
+
     }
 }

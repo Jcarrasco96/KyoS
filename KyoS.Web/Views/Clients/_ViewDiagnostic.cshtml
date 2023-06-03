@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="form-group">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -12,10 +12,10 @@
                     <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
                         <thead>
                             <tr>
-                                <th class="col-md-1">
+                                <th class="col-md-2">
                                     @Html.DisplayNameFor(model => model.Code)
                                 </th>
-                                <th class="col-md-8">
+                                <th class="col-md-7">
                                     @Html.DisplayNameFor(model => model.Description)
                                 </th>
                                 <th class="col-md-2" style="text-align:center;">
@@ -39,7 +39,10 @@
                                         @Html.DisplayFor(modelItem => item.Principal)
                                     </td>
                                     <td align="right">
-                                        <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        {
+                                            <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
                                     </td>
                                 </tr>
                             }

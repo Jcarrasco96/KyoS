@@ -22,13 +22,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IReportHelper _reportHelper;
-        
-        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public GroupsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _renderHelper = renderHelper;
         }
 
         [Authorize(Roles = "Manager, Facilitator")]
@@ -65,6 +67,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(g => g.Clients)
                                                         .ThenInclude(g => g.Clients_Diagnostics)
                                                         .ThenInclude(g => g.Diagnostic)
+                                                        .Include(g => g.Schedule)
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
                                                         .OrderBy(g => g.Facilitator.Name)
                                                         .ToListAsync();
@@ -80,6 +83,7 @@ namespace KyoS.Web.Controllers
                                                         .Include(g => g.Clients)
                                                         .ThenInclude(g => g.Clients_Diagnostics)
                                                         .ThenInclude(g => g.Diagnostic)
+                                                        .Include(g => g.Schedule)
                                                         .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
                                                              && g.Service == Common.Enums.ServiceType.PSR)
                                                              && g.Facilitator.LinkedUser == user_logged.UserName)
@@ -139,7 +143,8 @@ namespace KyoS.Web.Controllers
             {
                 model = new GroupViewModel
                 {
-                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                    Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                    Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.PSR)
                 };
 
                 clients = await _context.Clients
@@ -166,6 +171,10 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GroupViewModel model, IFormCollection form)
         {
+            UserEntity user_logged = _context.Users
+                                                .Include(u => u.Clinic)
+                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 switch (form["Meridian"])
@@ -202,10 +211,6 @@ namespace KyoS.Web.Controllers
                         break;
                 }
 
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
                 model.Service = Common.Enums.ServiceType.PSR;
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
                 _context.Add(group);
@@ -221,10 +226,14 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                        List<Workday_Client> workday_Client_group;
                         List<Workday_Client> workday_client = new List<Workday_Client>();                        
                         if (client != null)
                         {
                             client.Group = group;
+                            client.IdFacilitatorPSR = group.Facilitator.Id;
+                           
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -236,14 +245,31 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
+                            workday_Client_group = await _context.Workdays_Clients
+                                                                .Include(w => w.Workday)
 
+                                                                .Where(w => (w.Workday.Date >= developed_date
+                                                                       && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                       && w.Workday.Service == Common.Enums.ServiceType.Group
+                                                                       && w.Client.Id == client.Id))
+                                                                .ToListAsync();
+                            foreach (var item in workday_Client_group)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+                            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule);
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, schedule.InitialTime, schedule.EndTime, ServiceType.PSR))
                                     {
                                         return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
                                     }
@@ -261,7 +287,9 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = client.Group.SharedSession
+                                        SharedSession = client.Group.SharedSession,
+                                        CodeBill = user_logged.Clinic.CodePSRTherapy,
+                                        Schedule = client.Group.Schedule
                                     });                                    
                                 }                                
                             }
@@ -292,6 +320,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.Facilitators = _combosHelper.GetComboFacilitators();
+            model.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.PSR);
 
             MultiSelectList client_list = new MultiSelectList(await _context.Clients.OrderBy(c => c.Name).ToListAsync(), "Id", "Name");
             ViewData["clients"] = client_list;
@@ -308,6 +337,7 @@ namespace KyoS.Web.Controllers
             }
 
             GroupEntity groupEntity = await _context.Groups.Include(g => g.Facilitator)
+                                                           .Include(g => g.Schedule)
                                                            .Include(g => g.Clients).FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
@@ -345,7 +375,7 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic != null)
             {
                 groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
-
+               
                 clients = await _context.Clients
 
                                         .Include(c => c.MTPs)
@@ -358,7 +388,7 @@ namespace KyoS.Web.Controllers
                                         .ToListAsync();
 
                 clients = clients.Where(c => c.MTPs.Count > 0).ToList();
-                foreach (ClientEntity item in groupViewModel.Clients)
+                foreach (ClientEntity item in groupViewModel.Clients) 
                 {
                     clients.Add(item);
                 }
@@ -420,6 +450,7 @@ namespace KyoS.Web.Controllers
 
                 GroupEntity original_group = await _context.Groups
                                                            .Include(g => g.Clients)
+                                                           .Include(g => g.Schedule)
                                                            .FirstOrDefaultAsync(g => g.Id == model.Id);
 
                 foreach (ClientEntity value in original_group.Clients)
@@ -434,6 +465,8 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
+                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                    List<Workday_Client> workday_Client_group;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
@@ -444,6 +477,7 @@ namespace KyoS.Web.Controllers
                         {
                             client.Group = group;
                             client.IdFacilitatorPSR = group.Facilitator.Id;
+                           
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -455,13 +489,31 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
+                            workday_Client_group = await _context.Workdays_Clients
+                                                                 .Include(w => w.Workday)
+                                                           
+                                                                 .Where(w => (w.Workday.Date >= developed_date
+                                                                        && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                        && w.Workday.Service == Common.Enums.ServiceType.Group
+                                                                        && w.Client.Id == client.Id))
+                                                                 .ToListAsync();
+                            foreach (var item in workday_Client_group)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.PSR))
+                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.PSR))
                                     {
                                         return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
                                     }
@@ -479,8 +531,11 @@ namespace KyoS.Web.Controllers
                                         Facilitator = client.Group.Facilitator,
                                         Session = client.Group.Meridian,
                                         Present = true,
-                                        SharedSession = client.Group.SharedSession
-                                    });                                    
+                                        SharedSession = client.Group.SharedSession,
+                                        CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                        Schedule = client.Group.Schedule
+                                    }); 
+                                   
                                 }                                
                             }
                             if (workday_client.Count() > 0)
@@ -531,7 +586,7 @@ namespace KyoS.Web.Controllers
             return await Task.Run(() => File(result, System.Net.Mime.MediaTypeNames.Application.Pdf));            
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public async Task<IActionResult> Group()
         {
             UserEntity user_logged = await _context.Users
@@ -550,17 +605,33 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Message = "1";
                 ViewData["count"] = count;
-            }           
+            }
 
-            return View(await _context.Groups
-
-                                      .Include(g => g.Facilitator)
-
-                                      .Include(g => g.Clients)
-
-                                      .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
-                                      .OrderBy(g => g.Facilitator.Name)
-                                      .ToListAsync());
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+            if (user_logged.UserType.ToString() == "Facilitator")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
+                                                            && g.Service == Common.Enums.ServiceType.Group
+                                                            && g.Facilitator.LinkedUser == user_logged.UserName))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+            return RedirectToAction("Home/Error404");
         }
 
         [Authorize(Roles = "Manager")]
@@ -612,10 +683,11 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-                        
+
             model = new GroupViewModel
             {
-                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id)
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Group)
             };
 
             clients = await _context.Clients
@@ -678,10 +750,14 @@ namespace KyoS.Web.Controllers
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
                         DateTime developed_date;
                         List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                        List<Workday_Client> workday_Client_PSR;
                         List<Workday_Client> workday_client = new List<Workday_Client>();
                         if (client != null)
                         {                            
                             client.Group = group;
+                            client.IdFacilitatorGroup = group.Facilitator.Id;
+                         
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -696,33 +772,68 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
+                            workday_Client_PSR = await _context.Workdays_Clients
+                                                                .Include(w => w.Workday)
 
+                                                                .Where(w => (w.Workday.Date >= developed_date
+                                                                       && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                       && w.Workday.Service == Common.Enums.ServiceType.PSR
+                                                                       && w.Client.Id == client.Id))
+                                                                .ToListAsync();
+                            foreach (var item in workday_Client_PSR)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
+                            
+                            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule);
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                    {
-                                        return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
-                                    }
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, schedule.InitialTime, schedule.EndTime, ServiceType.Group))
+                                     {
+                                         return RedirectToAction(nameof(CreateGT), new { error = 2, idClient = client.Id });
+                                     }
 
-                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                    {
-                                        return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
-                                    }
+                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                     {
+                                         return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                     }
 
-                                    workday_client.Add(new Workday_Client
+                                     workday_client.Add(new Workday_Client
+                                     {
+                                         Workday = item,
+                                         Client = client,
+                                         Facilitator = client.Group.Facilitator,
+                                         Session = client.Group.Meridian,
+                                         Present = true,
+                                         SharedSession = false,
+                                         CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                         Schedule = client.Group.Schedule
+                                     });
+                                   /* if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                        && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
-                                        Workday = item,
-                                        Client = client,
-                                        Facilitator = client.Group.Facilitator,
-                                        Session = client.Group.Meridian,
-                                        Present = true,
-                                        SharedSession = false
-                                    });
+                                        workday_client.Add(new Workday_Client
+                                        {
+                                            Workday = item,
+                                            Client = client,
+                                            Facilitator = client.Group.Facilitator,
+                                            Session = client.Group.Meridian,
+                                            Present = true,
+                                            SharedSession = false,
+                                            CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                            Schedule = client.Group.Schedule
+                                        });
+                                    }*/
                                 }                                
                             }
 
@@ -781,6 +892,7 @@ namespace KyoS.Web.Controllers
             GroupEntity groupEntity = await _context.Groups
                                                     .Include(g => g.Facilitator)
                                                     .Include(g => g.Clients)
+                                                    .Include(g => g.Schedule)
                                                     .FirstOrDefaultAsync(g => g.Id == id);
             if (groupEntity == null)
             {
@@ -820,6 +932,7 @@ namespace KyoS.Web.Controllers
             }
             
             groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Group);
 
             clients = await _context.Clients
 
@@ -877,6 +990,7 @@ namespace KyoS.Web.Controllers
 
                 GroupEntity original_group = await _context.Groups
                                                            .Include(g => g.Clients)
+                                                           .Include(g => g.Schedule)
                                                            .FirstOrDefaultAsync(g => g.Id == model.Id);
 
                 foreach (ClientEntity value in original_group.Clients)
@@ -891,6 +1005,8 @@ namespace KyoS.Web.Controllers
                     ClientEntity client;
                     DateTime developed_date;
                     List<WorkdayEntity> workdays;
+                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                    List<Workday_Client> workday_Client_PSR;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
                     foreach (string value in clients)
                     {
@@ -900,6 +1016,7 @@ namespace KyoS.Web.Controllers
                         if (client != null)
                         {
                             client.Group = group;
+                            client.IdFacilitatorGroup = group.Facilitator.Id;
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
@@ -914,33 +1031,65 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
+                            workday_Client_PSR = await _context.Workdays_Clients
+                                                               .Include(w => w.Workday)
 
+                                                               .Where(w => (w.Workday.Date >= developed_date
+                                                                      && w.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                      && w.Workday.Service == Common.Enums.ServiceType.PSR
+                                                                      && w.Client.Id == client.Id))
+                                                               .ToListAsync();
+                            foreach (var item in workday_Client_PSR)
+                            {
+                                workday_Temp = workdays.FirstOrDefault(n => n.Date == item.Workday.Date);
+                                if (workday_Temp != null)
+                                {
+                                    workdays.Remove(workday_Temp);
+                                }
+                                workday_Temp = new WorkdayEntity();
+                            }
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
                                 if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
                                 {
                                     //Verify the client is not present in other services of notes at the same time
-                                    if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                    {
-                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
-                                    }
+                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.Group))
+                                     {
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id });
+                                     }
 
-                                    //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
-                                    if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
-                                    {
-                                        return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
-                                    }
+                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
+                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date))
+                                     {
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                     }
 
-                                    workday_client.Add(new Workday_Client
+                                     workday_client.Add(new Workday_Client
+                                     {
+                                         Workday = item,
+                                         Client = client,
+                                         Facilitator = client.Group.Facilitator,
+                                         Session = client.Group.Meridian,
+                                         Present = true,
+                                         SharedSession = false,
+                                         Schedule = client.Group.Schedule
+                                     });     
+                                    /*if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
+                                        && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
                                     {
-                                        Workday = item,
-                                        Client = client,
-                                        Facilitator = client.Group.Facilitator,
-                                        Session = client.Group.Meridian,
-                                        Present = true,
-                                        SharedSession = false
-                                    });                                    
+                                        workday_client.Add(new Workday_Client
+                                        {
+                                            Workday = item,
+                                            Client = client,
+                                            Facilitator = client.Group.Facilitator,
+                                            Session = client.Group.Meridian,
+                                            Present = true,
+                                            SharedSession = false,
+                                            CodeBill = user_logged.Clinic.CodeGroupTherapy,
+                                            Schedule = client.Group.Schedule
+                                        });
+                                    }*/
                                 }                                
                             }
 
@@ -1028,6 +1177,356 @@ namespace KyoS.Web.Controllers
 
             return View(null);
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ListClientWithoutIndividualTherapy(ServiceType serviceType = ServiceType.Individual)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
+            {
+
+                clients = await _context.Clients
+
+                                        .Include(c => c.MTPs)
+                                        .Include(c => c.Clients_HealthInsurances)
+                                        .ThenInclude(c => c.HealthInsurance)
+                                        .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                    && c.Status == Common.Enums.StatusType.Open
+                                                    && c.IndividualTherapyFacilitator == null))
+                                        .OrderBy(c => c.Name).ToListAsync();
+
+                clients = clients.Where(c => c.MTPs.Count > 0).ToList();
+               
+                ViewData["service"] = "Individual";
+                
+                return View(clients);
+            }
+
+            return View(null);
+        }
+
+        [Authorize(Roles = "Manager, Facilitator")]
+        public async Task<IActionResult> Individual()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            int count = await _context.Clients
+                                      .Where(c => (c.Status == StatusType.Open && c.IndividualTherapyFacilitator == null && c.Clinic.Id == user_logged.Clinic.Id &&
+                                                   c.MTPs.Count() > 0))
+                                      .CountAsync();
+            if (count > 0)
+            {
+                ViewBag.Message = "1";
+                ViewData["count"] = count;
+            }
+
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .ThenInclude(g => g.SubSchedules)
+
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                            && g.Service == ServiceType.Individual))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+          
+            if (user_logged.UserType.ToString() == "Facilitator")
+            {
+                List<GroupEntity> group = await _context.Groups
+                                                        .Include(g => g.Facilitator)
+                                                        .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .Include(g => g.Clients)
+                                                        .Include(g => g.Schedule)
+                                                        .ThenInclude(g => g.SubSchedules)
+
+                                                        .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                            && g.Service == ServiceType.Individual
+                                                            && g.Facilitator.LinkedUser == user_logged.UserName))
+                                                        .OrderBy(g => g.Facilitator.Name)
+                                                        .ToListAsync();
+                return View(group);
+            }
+
+            return RedirectToAction("Home/Error404");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateIndividualGroup(int id = 0, int error = 0, int idFacilitator = 0, int idClient = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            GroupViewModel model;
+           
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            model = new GroupViewModel
+            {
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
+                Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Individual)
+            };
+           
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateIndividualGroup(GroupViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                switch (form["Meridian"])
+                {
+                    case "Am":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            break;
+                        }
+                    case "Pm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                model.Service = Common.Enums.ServiceType.Individual;
+                GroupEntity group = await _converterHelper.ToGroupEntity(model, true);
+                _context.Add(group);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("CreateIndividualGroup", new { id = 1 });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the group");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            model.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditIndividualGroup(int? id, int error = 0, int idFacilitator = 0, int idClient = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(g => g.Facilitator)
+                                                    .Include(g => g.Clients)
+                                                    .Include(g => g.Schedule)
+                                                    .FirstOrDefaultAsync(g => g.Id == id);
+            if (groupEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            //the facilitator has not availability on that dates
+           
+            GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";
+            
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            groupViewModel.Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id);
+            groupViewModel.Schedules = _combosHelper.GetComboSchedulesByClinic(user_logged.Clinic.Id, ServiceType.Individual);
+
+            return View(groupViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditIndividualGroup(GroupViewModel model, IFormCollection form)
+        {
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                switch (form["Meridian"])
+                {
+                    case "Am":
+                        {
+                            model.Am = true;
+                            model.Pm = false;
+                            break;
+                        }
+                    case "Pm":
+                        {
+                            model.Am = false;
+                            model.Pm = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                model.Service = Common.Enums.ServiceType.Individual;
+                GroupEntity group = await _converterHelper.ToGroupEntity(model, false);
+                _context.Update(group);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Individual));
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exists the group");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(g => g.Facilitator)
+                                                    .Include(g => g.Clients)
+                                                    .FirstOrDefaultAsync(g => g.Id == model.Id);
+
+            GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
+            ViewData["am"] = groupViewModel.Am ? "true" : "false";
+
+            return View(groupViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult DeleteIndividual(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteIndividual(DeleteViewModel groupViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                GroupEntity group = await _context.Groups
+                                                  .FirstAsync(n => n.Id == groupViewModel.Id_Element);
+
+                try
+                {
+                    _context.Groups.Remove(group);
+                    await _context.SaveChangesAsync();
+                    List<GroupEntity> ListGroup = await _context.Groups
+
+                                                                .Include(g => g.Facilitator)
+                                                                .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                                .Include(g => g.Clients)
+                                                                .Include(g => g.Schedule)
+
+                                                                .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                    && g.Service == ServiceType.Individual))
+                                                                .OrderBy(g => g.Facilitator.Name)
+                                                                .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", ListGroup) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualGroup", _context.Schedule.Include(n => n.SubSchedules).ToListAsync()) });
+        }
+
 
         [Authorize(Roles = "Manager")]
         #region Utils Functions     
@@ -1127,7 +1626,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, ServiceType service)
+        private bool VerifyNotesAtSameTime(int idClient, string session, DateTime date, DateTime initialTime, DateTime endTime, ServiceType service)
         {
             //Individual notes
             if (session == "8.00 - 9.00 AM" || session == "9.05 - 10.05 AM" || session == "10.15 - 11.15 AM" || session == "11.20 - 12.20 PM")
@@ -1139,14 +1638,18 @@ namespace KyoS.Web.Controllers
                 return false;
 
             }
-            if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+            else
             {
-                if (_context.Workdays_Clients
-                            .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
-                            .Count() > 0)
-                    return true;
-                return false;
+                if (session == "12.45 - 1.45 PM" || session == "1.50 - 2.50 PM" || session == "3.00 - 4.00 PM" || session == "4.05 - 5.05 PM")
+                {
+                    if (_context.Workdays_Clients
+                                .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date))
+                                .Count() > 0)
+                        return true;
+                    return false;
+                }
             }
+            
 
             //PSR notes
             if (session == "AM" && service == ServiceType.PSR)
@@ -1164,7 +1667,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "AM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient 
+                                    && wc.Workday.Date == date 
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1184,7 +1694,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1206,7 +1723,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "11.20 - 12.20 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "AM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Count() > 0
+                        || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1226,7 +1750,14 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Session == "4.05 - 5.05 PM" && wc.Workday.Date == date))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Session == "PM" && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
+                                  .Count() > 0
+                       || _context.Workdays_Clients
+                                  .Where(wc => (wc.Client.Id == idClient
+                                    && wc.Workday.Date == date
+                                    && wc.Workday.Service == ServiceType.Individual
+                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;

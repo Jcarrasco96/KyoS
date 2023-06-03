@@ -1,0 +1,76 @@
+﻿@model KyoS.Web.Models.EligibilityViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" onsubmit="return jQueryAjaxPostEligibility(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="DocumentFile" class="control-label"></label>&nbsp;*
+                    <input asp-for="DocumentFile" class="form-control" type="file" id="photoBrowser" />
+                    <span asp-validation-for="DocumentFile" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="EligibilityDate" class="control-label"></label>&nbsp;*
+                    <input asp-for="EligibilityDate" class="form-control" />
+                    <span asp-validation-for="EligibilityDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Exists" class="control-label">Exist (check to confirm eligibility without attaching document)</label>
+                    <input type="checkbox" asp-for="Exists" class="checkbox" />
+                    <span asp-validation-for="Exists" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+    //    jQueryAjaxPost = form => {
+    //        try {
+    //            $.ajax({
+    //                type: 'POST',
+    //                url: form.action,
+    //                data: new FormData(form),
+    //                contentType: false,
+    //                processData: false,
+    //                success: function (res) {
+    //                    if (res.isValid) {
+    //                        $('#view-all').html(res.html)
+    //                        $('#form-modal .modal-body').html('');
+    //                        $('#form-modal .modal-title').html('');
+    //                        $('#form-modal').modal('hide');
+    //                    }
+    //                    else
+    //                        $('#form-modal .modal-body').html(res.html);
+    //                },
+    //                error: function (err) {
+    //                    console.log(err)
+    //                }
+    //            })
+    //            //to prevent default form submit event
+    //            return false;
+    //        } catch (ex) {
+    //            console.log(ex)
+    //        }
+    //}
+    </script>
+}

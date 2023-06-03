@@ -56,18 +56,16 @@
                                 @Html.DisplayNameFor(model => model.Id)
                             </th>
                             <th class="col-md-2">
-                                Theme
+                                @Html.DisplayNameFor(model => model.Theme)
                             </th>
-                            <th class="col-md-5" style="text-align:center;">
+                            <th class="col-md-6" style="text-align:center;">
                                 Facilitator's Intervention
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Created by
-                            </th>
+                            
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -81,12 +79,10 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Theme.Name)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
+                                <td align="left">
+                                    @item.Name.ToLower()
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                                </td>
+                               
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.ActivityStatus.Pending)
                                     {

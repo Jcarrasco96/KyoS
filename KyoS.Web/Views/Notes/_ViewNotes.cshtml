@@ -55,10 +55,10 @@
                                                         }
                                                         <div style="display:none">
                                                             <table class="table table-striped">
-                                                                <tr>
-                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                <tr>                                                                    
+                                                                    <th class="col-md-2" style="text-align:center;">Schedule</th>
                                                                     <th class="col-md-3">Name</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Present</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Present</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
                                                                     <th class="col-md-2" style="text-align:center;">Change Session</th>
                                                                     <th class="col-md-2"></th>
@@ -68,9 +68,14 @@
                                                                 {
                                                                     @if (day_client.Present)
                                                                     {
-                                                                        <tr>
+                                                                        <tr>                                                                           
                                                                             <td align="center">
-                                                                                @Html.DisplayFor(modelItem => day_client.Session)
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
                                                                             </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
@@ -114,38 +119,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.Note == null && day_client.NoteP == null)
+                                                                              <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                @*@if (day_client.BilledDate == null)
                                                                                 {
                                                                                     <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    @if (day_client.Note == null && day_client.NoteP != null)
-                                                                                    {
-                                                                                        @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                                                                        {
-                                                                                            <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        @if (day_client.Note != null && day_client.NoteP == null)
-                                                                                        {
-                                                                                            @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                                                                            {
-                                                                                                <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
+                                                                                    <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }*@
                                                                             </td>
                                                                             <td align="right">
                                                                                 @if (day_client.Note == null && day_client.NoteP == null)
@@ -187,9 +169,14 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        <tr style="color:darkgrey">
+                                                                        <tr style="color:darkgrey">                                                                            
                                                                             <td align="center">
-                                                                                @Html.DisplayFor(modelItem => day_client.Session)
+                                                                                @if (day_client.Schedule != null)
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.InitialTime)
+                                                                                    <a> - </a>
+                                                                                    @Html.DisplayFor(modelItem => day_client.Schedule.EndTime)
+                                                                                }
                                                                             </td>
                                                                             <td>
                                                                                 @Html.DisplayFor(modelItem => day_client.Client.Name)
@@ -233,38 +220,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                @if (day_client.Note == null && day_client.NoteP == null)
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                               @* @if (day_client.BilledDate == null)
                                                                                 {
                                                                                     <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    @if (day_client.Note == null && day_client.NoteP != null)
-                                                                                    {
-                                                                                        @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                                                                        {
-                                                                                            <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        @if (day_client.Note != null && day_client.NoteP == null)
-                                                                                        {
-                                                                                            @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                                                                            {
-                                                                                                <a onclick="showInPopup('@Url.Action("ChangeSession", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
+                                                                                    <a asp-action="ChangeSession" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }*@
                                                                             </td>
                                                                             <td align="right">
                                                                                 <a asp-action="EditNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>

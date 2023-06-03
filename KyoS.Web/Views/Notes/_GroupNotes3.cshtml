@@ -1,0 +1,231 @@
+﻿@model KyoS.Web.Models.GroupNote3ViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <strong>Focus of the 1st group: @Model.Topic1</strong>
+        <br />
+        <strong>Content of Group Discussion: </strong>@Model.Activity1
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label class="control-label">Client input content&nbsp;*</label>
+        <textarea asp-for="AnswerClient1" class="form-control" rows="4" id="AnswerClient1"></textarea>
+        <span asp-validation-for="AnswerClient1" class="text-danger"></span>
+    </div>
+
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <a class="btn btn-info" id="EnglishAnswerClient1">English</a>
+    </div>
+
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="IdGoal1" class="control-label"></label>
+        <select asp-for="IdGoal1" asp-items="Model.Goals1" class="form-control" id="cbGoal1"></select>
+        <span asp-validation-for="IdGoal1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="IdObjetive1" class="control-label"></label>
+        <select asp-for="IdObjetive1" asp-items="Model.Objetives1" class="form-control" id="cbObjetive1"></select>
+        <span asp-validation-for="IdObjetive1" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-8">
+        <label class="control-label">Intervention</label>
+        <br />
+        <label id="lbIntervention1" style="font-weight:normal">@Model.Intervention1</label>
+    </div>
+</div>
+@if (Model.Goals1.Count() == 1)
+{
+    <div class="col-md-12">
+        <div class="alert alert-warning form-group col-md-4">
+            <i class="icon-info-sign"></i>
+            The client must have MTP, it is mandatory.
+        </div>
+        <div class="form-group col-md-4">
+            &nbsp;
+        </div>
+    </div>
+}
+<div class="col-md-12">
+    <hr />
+</div>
+
+
+@*si se va a crear la nota doy la posibilidad de seleccionar el avance del plan para que despues se agregue al futuro plan*@
+@if (@Model.Workday_Cient.GroupNote2 == null)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label style="font-weight: bold;">Progress Made Towards Goal</label>
+            <br />
+            <input type="checkbox" asp-for="SignificantProgress" />
+            Significant Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="ModerateProgress" />
+            Moderate Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="MinimalProgress" checked />
+            Minimal Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="NoProgress" />
+            NoProgress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="Regression" />
+            Regression
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="Descompensating" />
+            Decompensating
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="UnableToDetermine" />
+            Unabled to determine at this time
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label style="font-weight: bold;">Progress Made Towards Goal</label>
+            <br />
+            <input type="checkbox" asp-for="SignificantProgress" />
+            Significant Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="ModerateProgress" />
+            Moderate Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="MinimalProgress" />
+            Minimal Progress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="NoProgress" />
+            NoProgress
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="Regression" />
+            Regression
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="Descompensating" />
+            Decompensating
+            &nbsp;&nbsp;
+            <input type="checkbox" asp-for="UnableToDetermine" />
+            Unabled to determine at this time
+        </div>
+    </div>
+}
+<div class="col-md-12">
+    <p style="font-weight:bold;">Client Appearance: (check all that apply) Video call </p>
+</div>
+<div class="col-md-12">
+    <table border="1" width="70%">
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Orientation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Oriented" /> Oriented
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotToTime" /> Not to Time  &nbsp;&nbsp;
+                <input type="checkbox" asp-for="NotToPlace" /> Not to Place
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="NotToPerson" /> Not To Person
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Insight/Judgment</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Fair" /> Fair&nbsp;&nbsp;
+                <input type="checkbox" asp-for="InsightAdequate" /> Adequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Limited" /> Limited  &nbsp;&nbsp;
+                <input type="checkbox" asp-for="Impaired" /> Impaired
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Faulty" /> Faulty
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Mood/Affect</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euthymic" /> Euthymic&nbsp;&nbsp;
+                <input type="checkbox" asp-for="Congruent" /> Congruent </br>
+                <input type="checkbox" asp-for="Negativistic" /> Negativistic&nbsp;&nbsp;
+                <input type="checkbox" asp-for="Depressed" /> Depressed
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Euphoric" /> Euphoric&nbsp;&nbsp;
+                <input type="checkbox" asp-for="Optimistic" /> Optimistic</br>
+                <input type="checkbox" asp-for="Anxious" /> Anxious
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Hostile" /> Hostile&nbsp;&nbsp;
+                <input type="checkbox" asp-for="Withdrawn" /> Withdrawn </br>
+                <input type="checkbox" asp-for="Irritable" /> Irritable&nbsp;&nbsp;
+                <input type="checkbox" asp-for="Dramatic" /> Dramatic
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Apptude & Cooperation</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Adequated" /> Adequate &nbsp;&nbsp;
+                <input type="checkbox" asp-for="Inadequated" /> Inadequate
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="FairAttitude" /> Fair  &nbsp;&nbsp;
+                <input type="checkbox" asp-for="Unmotivated" /> Unmotivated
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Motivated" /> Motivated  &nbsp;&nbsp;
+                <input type="checkbox" asp-for="Guarded" /> Guarded
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">&nbsp;Attention & Concentration</p>
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="Normal" /> Normal &nbsp;&nbsp;
+                <input type="checkbox" asp-for="Short" /> Short
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="MildlyImpaired" /> Mildly Impaired
+            </td>
+            <td align="center">
+                <input type="checkbox" asp-for="SevereryImpaired" /> Severery Impaired
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-12">
+    </br>
+</div>
+<div class="col-md-12">
+    <p style="font-weight:bold;">CLIENT BENEFITED BY: </p>
+</div>
+<div class="col-md-12">
+    <input type="checkbox" asp-for="Getting" /> Getting support from group about how to control his/her symptoms &nbsp;&nbsp; </br>
+    <input type="checkbox" asp-for="Sharing" /> Sharing and/or developing insight about his/her mental illness with group members</br>
+    <input type="checkbox" asp-for="Expressing" /> Expressing and processing his/her current feelings with the group about his/her mental conditions</br>
+    <input type="checkbox" asp-for="LearningFrom" /> Learning from other group members how to cope with mental illness</br>
+    <input type="checkbox" asp-for="Developing" /> Developing baseline psycho-educational knowledge about topic discussed</br>
+    <input type="checkbox" asp-for="Received" /> Received feedback from group members about how his/her illness affect his/her behavior</br>
+    <input type="checkbox" asp-for="Providing" /> Providing feedback to other group members about their interaction in the group session &nbsp;&nbsp;</br>
+    <input type="checkbox" asp-for="LearningAbout" /> Learning about how to confront a crisis or prevent a replace </br>
+    <input type="checkbox" asp-for="Other" /> Other: &nbsp;&nbsp;<input asp-for="OtherExplain" style="width:40%" /> </br>
+</div>
+
+<div class="col-md-12">
+    <hr />
+</div>

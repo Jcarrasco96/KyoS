@@ -21,7 +21,7 @@
 
 <div class="row">
     <form asp-action="BillingReport1" enctype="multipart/form-data">
-        <div class="form-group col-md-9">
+        <div class="form-group col-md-10">
             <label asp-for="IdWeek" class="control-label">Date Range</label>&nbsp;*
             <table border="0" width="100%">
                 <tr>
@@ -40,10 +40,9 @@
                     <td>
                         <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
                         <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Full Report</a>
+                        |
+                        <a onclick="showInPopupLg('@Url.Action("AuditOverlapin", "Notes", new { idWeek = Model.IdWeek}, Context.Request.Scheme)','Bill Audit')" class="btn btn-danger" title="Overlapping bill audit"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;&nbsp;&nbsp;Bill Audit&nbsp;&nbsp;&nbsp;&nbsp;</a>
                     </td>                    
-                    <td>
-                        
-                    </td>
                 </tr>                
             </table>
         </div>        
@@ -193,7 +192,18 @@
                                                                                     {
                                                                                         if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                                         {
-                                                                                            <label>8</label>
+                                                                                            if (workdayClient.GroupNote2 != null)
+                                                                                            {
+                                                                                                var value = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                                <label>@value</label>
+                                                                                                value = 0;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                                <label>@value</label>
+                                                                                                value = 0;
+                                                                                            }
                                                                                         }
                                                                                         else
                                                                                         {
@@ -260,7 +270,18 @@
                                                                     {
                                                                         if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                         {
-                                                                            units = units + 8;
+                                                                            if (workdayClient.GroupNote2 != null)
+                                                                            {
+                                                                                var value1 = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                units = units + value1;
+                                                                                value1 = 0;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                units = units + value;
+                                                                                value = 0;
+                                                                            }
                                                                         }
                                                                         else
                                                                         {
@@ -399,6 +420,7 @@
 </div>
 
 <partial name="_DeleteDialog" />
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

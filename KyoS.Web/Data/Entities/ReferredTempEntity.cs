@@ -17,5 +17,7 @@ namespace KyoS.Web.Data.Entities
         public ServiceAgency Service { get; set; }
 
         public string ReferredNote { get; set; }
+
+        public int IdClient { get; set; }
     }
 }

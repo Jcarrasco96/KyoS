@@ -8,6 +8,7 @@
         <form asp-action="AddHealthInsuranceClient" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostHealthInsurance(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Name" />
+            <input type="hidden" asp-for="IdClient" />
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="IdhealthInsurance" class="control-label"></label>&nbsp;*
@@ -46,7 +47,9 @@
                     <span asp-validation-for="Units" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    &nbsp;
+                    <label asp-for="AuthorizationNumber" class="control-label"></label>&nbsp;*
+                    <input asp-for="AuthorizationNumber" class="form-control" />
+                    <span asp-validation-for="AuthorizationNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

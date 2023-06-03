@@ -37,12 +37,17 @@
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-
+       
         <div class="col-md-push-12">
             <div class="form-group col-md-4">
                 <label asp-for="IdFacilitator" class="control-label"></label>&nbsp;*
                 <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control"></select>
                 <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="IdSchedule" class="control-label"></label>&nbsp;*
+                <select asp-for="IdSchedule" asp-items="Model.Schedules" class="form-control"></select>
+                <span asp-validation-for="IdSchedule" class="text-danger"></span>
             </div>
             <div class="form-group col-md-8">
                 &nbsp;
@@ -59,7 +64,7 @@
                 }
                 else
                 {
-                    <input type="radio" name="Meridian" value="Am"/>
+                    <input type="radio" name="Meridian" value="Am" />
                 }
                 <label style="font-weight: bold;"> AM</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -69,7 +74,7 @@
                 }
                 else
                 {
-                    <input type="radio" name="Meridian" value="SharedAm"/>
+                    <input type="radio" name="Meridian" value="SharedAm" />
                 }
                 <b>AM</b> (Shared session with another group of the same facilitator)
             </div>
@@ -82,7 +87,7 @@
                 }
                 else
                 {
-                    <input type="radio" name="Meridian" value="Pm"/>
+                    <input type="radio" name="Meridian" value="Pm" />
                 }
                 <label style="font-weight: bold;"> PM</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

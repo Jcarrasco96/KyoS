@@ -16,7 +16,10 @@
 </div>
 
 <p>
-    <a asp-action="CreateGT" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create GT Group</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <a asp-action="CreateGT" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create GT Group</a>
+    }
 </p>
 
 <div class="row">
@@ -24,7 +27,7 @@
     {
         <div class="col-md-12">
             <p class="alert alert-block alert-danger">
-                <strong class="red"> Note: </strong> There are group therapy active clients that are not in any group (<a asp-action="ListClientWithoutGroup" asp-route-serviceType="@KyoS.Common.Enums.ServiceType.Group">@ViewData["count"]</a> ).
+                <strong class="red"> Note: </strong> There are group therapy active clients that are not in any group (<a asp-action="ListClientWithoutGroup" asp-route-serviceType="@KyoS.Common.Enums.ServiceType.Group">@ViewData["count"]</a>).
             </p>
         </div>
     }
@@ -40,7 +43,7 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 Facilitator
                             </th>
                             <th class="col-md-2" style="text-align:center;">
@@ -55,7 +58,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 PM
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-2" style="text-align:center;">
+                                Schedule
+                            </th>
+                            <th class="col-md-1">
 
                             </th>
                         </tr>
@@ -63,59 +69,68 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td align="center">
-                                @if (item.Clients.Count() != 0)
-                                {
-                                    <a class="icon-plus-sign-alt"></a>
-                                }
-                                else
-                                {
+                            <tr>
+                                <td align="center">
+                                    @if (item.Clients.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    else
+                                    {
 
-                                }
-                                <div style="display:none">
-                                    <table class="table table-striped table-bordered">
-                                        <tr>
-                                            <th class="col-md-6">Client Name</th>
-                                            <th class="col-md-3" style="text-align:center;">Date of birth</th>
-                                            <th class="col-md-3" style="text-align:center;">Medical ID</th>
-                                        </tr>
-                                        @foreach (var client in item.Clients)
-                                        {
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td>@Html.DisplayFor(modelItem => client.Name)</td>
-                                                <td align="center">@Html.DisplayFor(modelItem => client.DateOfBirth)</td>
-                                                <td align="center">@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                <th class="col-md-6">Client Name</th>
+                                                <th class="col-md-3" style="text-align:center;">Date of birth</th>
+                                                <th class="col-md-3" style="text-align:center;">Medical ID</th>
                                             </tr>
-                                        }
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
-                            </td>
-                            <td align="center">
-                                @item.Clients.Count()
-                            </td>
-                            <td align="center">
-                                @if (item.Am)
-                                {
-                                    <i class="icon-ok green"></i>
-                                }
-                            </td>
-                            <td align="center">
-                                @if (item.Pm)
-                                {
-                                    <i class="icon-ok green"></i>
-                                }
-                            </td>
-                            <td align="right">
-                                <a asp-action="EditGT" asp-route-id="@item.Id" class="btn btn-warning" title="Edit GT group"><i class="glyphicon glyphicon-pencil"></i></a>
-                            </td>
-                        </tr>
+                                            @foreach (var client in item.Clients)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => client.Name)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => client.DateOfBirth)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => client.MedicaidID)</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Service)
+                                </td>
+                                <td align="center">
+                                    @item.Clients.Count()
+                                </td>
+                                <td align="center">
+                                    @if (item.Am)
+                                    {
+                                        <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.Pm)
+                                    {
+                                        <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.Schedule != null)
+                                    {
+                                        <label> @item.Schedule.InitialTime.ToShortTimeString() to @item.Schedule.EndTime.ToShortTimeString()</label>
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        <a asp-action="EditGT" asp-route-id="@item.Id" class="btn btn-warning" title="Edit GT group"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

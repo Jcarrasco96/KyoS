@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -93,6 +94,26 @@ namespace KyoS.Web.Models
         public int IdFacilitatorIT { get; set; }
         public IEnumerable<SelectListItem> ITFacilitators { get; set; }
 
-        public int IdTCMClient { get; set; }        
+        public int IdTCMClient { get; set; }
+
+        public string FacilitatorPSR { get; set; }
+
+        public string FacilitatorGroup { get; set; }
+
+        //emergency Contact
+        public string NameEmergencyContact { get; set; }
+        public string AddressEmergencyContact { get; set; }
+        public string EmailEmergencyContact { get; set; }
+        public string PhoneEmergencyContact { get; set; }
+        public string PhoneSecundaryEmergencyContact { get; set; }
+        public string AddressLine2EmergencyContact { get; set; }
+        public string CountryEmergencyContact { get; set; }
+        public string CityEmergencyContact { get; set; }
+        public string StateEmergencyContact { get; set; }
+        public string ZipCodeEmergencyContact { get; set; }
+        public string CreateByEmergencyContact { get; set; }
+        public DateTime CreateOnEmergencyContact { get; set; }
+
+        
     }
 }

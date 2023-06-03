@@ -13,7 +13,7 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Create new client</h4>
+<h4>Create Client</h4>
 @*<hr />*@
 <div class="row">
     <div class="col-md-12">
@@ -42,6 +42,18 @@
                 </strong>
             </div>
         }
+        @if (ViewBag.Creado == "C")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Code already exist
+                </strong>
+            </div>
+        }
     </div>
     <div>
         <form asp-action="Create" enctype="multipart/form-data">
@@ -50,10 +62,12 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
                     <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
+                    <li role="presentation"><a href="#emergencyContact" aria-controls="emergencyContact" role="tab" data-toggle="tab">Emergency Contact</a></li>
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
                     <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
                     <li role="presentation"><a href="#referreds" aria-controls="referreds" role="tab" data-toggle="tab">Referreds</a></li>
-                    <li role="presentation"><a href="#healthInsurance" aria-controls="healthInsurance" role="tab" data-toggle="tab">Health Insurance</a></li>
+                    <li role="presentation"><a href="#healthInsurance" aria-controls="healthInsurance" role="tab" data-toggle="tab">Health Insurances</a></li>
+                    <li role="presentation"><a href="#annotations" aria-controls="annotations" role="tab" data-toggle="tab">Annotations</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -70,6 +84,9 @@
                     <div role="tabpanel" class="tab-pane" id="others">
                         <partial name="_ClientsOthers" />
                     </div>
+                    <div role="tabpanel" class="tab-pane" id="emergencyContact">
+                        <partial name="_ClientsEmergencyContact" />
+                    </div>
                     <div role="tabpanel" class="tab-pane" id="diagnostics">
                         <partial name="_ClientsDiagnostics" />
                     </div>
@@ -81,6 +98,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="healthInsurance">
                         <partial name="_ClientsHealthInsurance" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="annotations">
+                        <partial name="_ClientsAnnotations" />
                     </div>
                 </div>
             </div>

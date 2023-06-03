@@ -5,17 +5,17 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Discharge</h3>
+                <h3 class="panel-title">Discharges</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" >
                     <thead>
                         <tr>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-2" style="text-align:center">
-                                Date of Admission
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Evaluation Date
@@ -96,7 +96,7 @@
                                         {
                                             <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="ConfirmDeleteDischarge(@item.Id)" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else
                                         {
@@ -104,21 +104,28 @@
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a onclick="ConfirmDeleteDischarge(@item.Id)" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a onclick="ConfirmDeleteDischarge(@item.Id)" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                             }
                                         }
                                     }
                                     else
                                     {
                                         <a asp-action="ReturnTo" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        <a asp-action="Delete" asp-controller="Discharge" asp-route-id="@item.Id" asp-route-clientId="@item.Client_FK" class="btn btn-danger disabled" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.DischargeStatus.Approved)
+                                        {
+                                            <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintDischarge" asp-controller="Discharge" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a class="btn btn-danger disabled" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

@@ -5,7 +5,7 @@
 <div class="col-md-push-12">
     <div class="col-md-12">
         <div class="form-group">
-            <a onclick="showInPopup('@Url.Action("AddDocument","Clients",null,Context.Request.Scheme)','Add Document')" class="btn btn-warning">Add Document</a>
+            <a onclick="showInPopup('@Url.Action("AddDocument","Clients",new {idClient = Model.Id },Context.Request.Scheme)','Add Document')" class="btn btn-warning">Add Document</a>
         </div>
     </div>
     <div id="view-documents">

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<KyoS.Common.Helpers.AuditFARS>
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AuditFARS">
+            <div class="col-md-12">
+                @if (Model != null)
+                {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Audit (Count of missing FARS by clients)</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-3">
+                                                    Name
+                                                </th>
+                                                <th class="col-md-4">
+                                                    Responsible
+                                                </th>
+                                                <th class="col-md-4">
+                                                    Description
+                                                </th>
+                                                <th class="col-md-1" style="text-align:center;">
+
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.NameClient)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Responsible)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Description)
+                                                    </td>
+                                                    <td align="center">
+                                                        @if (item.Active == 0)
+                                                        {
+                                                            <span class="label label-danger">
+                                                                &nbsp;X&nbsp;
+                                                            </span>
+                                                        }
+                                                        @if (item.Active == 1)
+                                                        {
+                                                            <span class="label label-warning">
+                                                                &nbsp;X&nbsp;
+                                                            </span>
+                                                        }
+                                                        @if (item.Active == 2)
+                                                        {
+                                                            <span class="label label-success">
+                                                                OK
+                                                            </span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-offset-10">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

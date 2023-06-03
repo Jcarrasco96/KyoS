@@ -13,9 +13,6 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Referreds { get; set; }
 
         public int IdServiceAgency { get; set; }
-        public IEnumerable<SelectListItem> ServiceAgency { get; set; }
-
-        [Display(Name = "Referred Note")]
-        public string ReferredNote { get; set; }
+        public IEnumerable<SelectListItem> ServiceAgency { get; set; }        
     }
 }

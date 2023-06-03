@@ -1,0 +1,250 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+@{
+    ViewData["Title"] = "Documentation";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Clients", "Index", "Clients")
+        </li>
+        <li class="active">Clients' CMH Documentation</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <strong>Note: </strong>The available documents to download are only approved documents.
+    </div>
+    &nbsp;
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>                            
+                            <th class="col-md-1" style="text-align:center;">
+                                Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission
+                            </th>
+                            <th class="col-md-2" style="text-align:left;">
+                                Individual Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-4">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                            {
+                                <tr style="color: darkgrey;">
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>                                    
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="left">
+                                        @if (item.IndividualTherapyFacilitator != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>                                    
+                                    <td align="right">
+                                        <a onclick="ShowAlert(@item.Id)" class="btn btn-warning" title="Download documents generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Doc. </a>
+                                        @*<a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>*@
+                                        <a onclick="ShowAlert4(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
+                                        <a onclick="ShowAlert3(@item.Id)" class="btn btn-default" title="Download documents uploaded by the user to the system"><i class="glyphicon glyphicon-download-alt"></i> User Doc.</a>
+                                    </td>                                    
+                                </tr>
+                            }
+                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>                                    
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="left">
+                                        @if (item.IndividualTherapyFacilitator != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        <a onclick="ShowAlert(@item.Id)" class="btn btn-warning" title="Download documents generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Doc.</a>
+                                        @*<a onclick="ShowAlert2(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>*@
+                                        <a onclick="ShowAlert4(@item.Id)" class="btn btn-warning" title="Download approved notes generated in the system"><i class="glyphicon glyphicon-download-alt"></i> Notes</a>
+                                        <a onclick="ShowAlert3(@item.Id)" class="btn btn-default" title="Download documents uploaded by the user to the system"><i class="glyphicon glyphicon-download-alt"></i> User Doc.</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalPopupLg" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
+
+        function ShowAlert(e) {
+            Swal.fire({
+                title: 'Do you want to do this?',
+                text: " Download client's documents will take a few minutes.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#5cb85c',
+                confirmButtonText: 'Yes, I do!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DownloadDocumentation", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ShowAlert2(e) {
+            Swal.fire({
+                title: 'Do you want to do this?',
+                text: " Download client's approved notes will take a few minutes.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#5cb85c',
+                confirmButtonText: 'Yes, I do!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DownloadApprovedNotes", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ShowAlert3(e) {
+            Swal.fire({
+                title: 'Do you want to do this?',
+                text: " Download client's documents will take a few minutes.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#5cb85c',
+                confirmButtonText: 'Yes, I do!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DownloadDocumentationUploadedByUser", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ShowAlert4(e) {
+            Swal.fire({
+                title: 'Do you want to do this?',
+                text: " Download client's approved notes will take a few minutes.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#5cb85c',
+                confirmButtonText: 'Yes, I do!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DownloadApprovedNotesSimultaneous", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
+}
+
+
+

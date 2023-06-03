@@ -243,7 +243,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> Edit(int Id = 0, int origin = 0)
+        public IActionResult Edit(int Id = 0, int origin = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .Include(f => f.TCMDomain)
@@ -635,7 +635,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                TCMDomainEntity tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, false, tcmDomainViewModel.Origin, user_logged.UserName);
+                TCMDomainEntity tcmDomainEntity = _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, false, tcmDomainViewModel.Origin, user_logged.UserName);
                 _context.Update(tcmDomainEntity);
 
                 try
@@ -758,7 +758,7 @@ namespace KyoS.Web.Controllers
                 if (tcmDomainEntity == null)
                 {
                     CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
-                    tcmDomainEntity = await _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true,"Service Plan", user_logged.UserName);
+                    tcmDomainEntity = _converterHelper.ToTCMDomainEntity(tcmDomainViewModel, true,"Service Plan", user_logged.UserName);
 
                     _context.Add(tcmDomainEntity);
                     try
@@ -1985,7 +1985,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditReadOnly(int Id = 0, int origi = 0)
+        public IActionResult EditReadOnly(int Id = 0, int origi = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .Include(f => f.TCMDomain)

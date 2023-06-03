@@ -28,5 +28,8 @@ namespace KyoS.Web.Models
         public string Goal1 { get; set; }
         public string Objetive1 { get; set; }
         public string Intervention1 { get; set; }
+
+        public string CodeBill { get; set; }
+        public int IdSubSchedule { get; set; }
     }
 }

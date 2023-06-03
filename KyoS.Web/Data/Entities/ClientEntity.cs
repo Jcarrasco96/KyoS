@@ -205,5 +205,12 @@ namespace KyoS.Web.Data.Entities
         }
 
         public BriefEntity Brief { get; set; }
+
+        public int IdFacilitatorGroup { get; set; }
+
+        public List<EligibilityEntity> EligibilityList { get; set; }
+
+        public string Annotations { get; set; }
+
     }
 }

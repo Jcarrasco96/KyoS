@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Notes</h3>
+                <h3 class="panel-title">Notes - @Model.FirstOrDefault().Client.Name</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -13,11 +13,10 @@
                         <tr>
                             <th class="col-md-1" style="text-align:center;">Date</th>
                             <th class="col-md-1" style="text-align:center;">Service</th>
-                            <th class="col-md-1" style="text-align:center;">Session</th>
-                            <th class="col-md-2">Name</th>
+                            <th class="col-md-2" style="text-align:center;">Session</th>                           
                             <th class="col-md-1" style="text-align:center;">Present</th>
                             <th class="col-md-1" style="text-align:center;">Status</th>
-                            <th class="col-md-2">Facilitator</th>
+                            <th class="col-md-3">Facilitator</th>
                             <th class="col-md-1" style="text-align:center;">Billed</th>
                             <th class="col-md-2"></th>
                         </tr>
@@ -25,7 +24,7 @@
                     <tbody>
                         @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date))
                         {
-                            @if (day_client.Note != null || day_client.NoteP != null || day_client.IndividualNote != null || day_client.GroupNote != null)
+                            @if (day_client.Note != null || day_client.NoteP != null || day_client.IndividualNote != null || day_client.GroupNote != null || day_client.GroupNote2 != null)
                             {
                                 <tr>
                                     <td align="center">
@@ -36,10 +35,7 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Session)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                    </td>
+                                    </td>                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Present)
                                     </td>
@@ -115,25 +111,54 @@
                                         }
                                         @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                         {
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                            @if (day_client.GroupNote != null)
                                             {
-                                                <span class="label label-warning">
-                                                    Edition
-                                                </span>
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                {
+                                                    <span class="label label-warning">
+                                                        Edition
+                                                    </span>
+                                                }
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                {
+                                                    <span class="label label-info">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                {
+                                                    <span class="label label-success">
+                                                        Approved
+                                                    </span>
+                                                }
                                             }
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                            else
                                             {
-                                                <span class="label label-info">
-                                                    Pending
-                                                </span>
-                                            }
-                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                            {
-                                                <span class="label label-success">
-                                                    Approved
-                                                </span>
+                                                @if (day_client.GroupNote2 != null)
+                                                {
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                    {
+                                                        <span class="label label-warning">
+                                                            Edition
+                                                        </span>
+                                                    }
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                    {
+                                                        <span class="label label-info">
+                                                            Pending
+                                                        </span>
+                                                    }
+                                                    @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                    {
+                                                        <span class="label label-success">
+                                                            Approved
+                                                        </span>
+                                                    }
+                                                }
                                             }
                                         }
+
+
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
@@ -141,20 +166,18 @@
                                     <td align="center">
                                         @if (day_client.BilledDate == null)
                                         {
-                                            <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i> </a>
-
+                                            <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger" title="Not billed"><i class="glyphicon glyphicon-usd"></i> </a>
                                         }
                                         else
                                         {
                                             @if(day_client.PaymentDate == null)
                                             { 
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning"><i class="glyphicon glyphicon-usd"></i></a>
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning" title="Billed but not paid"><i class="glyphicon glyphicon-usd"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success"><i class="glyphicon glyphicon-usd"></i></a>    
-                                            }
-                                            
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success" title="Billed and paid"><i class="glyphicon glyphicon-usd"></i></a>    
+                                            }                                            
                                         }
                                     </td>
                                     <td align="right">
@@ -162,11 +185,40 @@
                                         {
                                             @if (User.IsInRole("Manager"))
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                @if (day_client.Note != null)
+                                                {
+                                                    @if (day_client.Note.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                    {
+                                                        <a onclick="ConfirmReturnToNotStarted(@day_client.Id)" class="btn btn-danger" title="Return to not started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    @if (day_client.NoteP != null)
+                                                    {
+                                                        @if (day_client.NoteP.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                        {
+                                                            <a onclick="ConfirmReturnToNotStarted(@day_client.Id)" class="btn btn-danger" title="Return to not started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    }
+                                                }
                                             }
                                             else
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             }
 
                                             @if (day_client.Note != null)
@@ -196,68 +248,118 @@
                                         {
                                             @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                             {
-                                                @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (User.IsInRole("Manager"))
                                                 {
-                                                    @if (User.IsInRole("Manager"))
+                                                    @if (day_client.IndividualNote != null)
                                                     {
-                                                        <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        @if (day_client.IndividualNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                        {
+                                                            <a onclick="ConfirmReturnToNotStarted(@day_client.Id)" class="btn btn-danger" title="Return to not started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
                                                     @if (day_client.Hold == false)
                                                     {
                                                         <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
                                                     else
-                                                    { 
+                                                    {
                                                         <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
-
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="ReturnIndNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                    <a asp-action="PrintIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                    <a class="btn btn-success disabled" title="Print individual note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
-
                                             }
                                             else
                                             {
-                                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group && day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                 {
                                                     @if (User.IsInRole("Manager"))
                                                     {
-                                                        <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        @if (day_client.GroupNote != null)
+                                                        {
+                                                            @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                            {
+                                                                <a onclick="ConfirmReturnToNotStarted(@day_client.Id)" class="btn btn-danger" title="Return to not started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (day_client.GroupNote2 != null)
+                                                            {
+                                                                @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                {
+                                                                    <a onclick="ConfirmReturnToNotStarted(@day_client.Id)" class="btn btn-danger" title="Return to not started"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            }
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <a asp-action="ReturnGroupNoteTo" asp-controller="Notes" asp-route-id="@day_client.Id" asp-route-clientId="@day_client.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                        <a class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                     }
-                                                    @if (day_client.Hold == false)
+                                                    @if (day_client.GroupNote != null)
                                                     {
-                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>  
-                                                    }
-                                                    else
-                                                    { 
-                                                        <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                    }
+                                                        @if (day_client.GroupNote.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
+                                                        {
+                                                            <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        }
 
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (day_client.GroupNote2 != null)
+                                                        {
+                                                            @if (day_client.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved && day_client.Hold == false)
+                                                            {
+                                                                <a asp-action="PrintGroupNote2" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-action="PrintGroupNote2" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a asp-action="PrintGroupNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success disabled" title="Print group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a class="btn btn-success disabled" title="Print group note"><i class="glyphicon glyphicon-print"></i></a>
                                                 }
                                             }
                                         }
                                         @if (User.IsInRole("Manager"))
                                         {
-                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="ConfirmDeleteNote(@day_client.Id)" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -274,10 +376,7 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Session)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                    </td>
+                                    </td>                                   
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Present)
                                     </td>
@@ -294,7 +393,6 @@
                                                 Not Started
                                             </span>
                                         }
-
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
@@ -304,22 +402,22 @@
                                         {
                                             @if (day_client.PaymentDate != null)
                                             {
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success"><i class="glyphicon glyphicon-usd"></i></a>
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-success" title="Billed and paid"><i class="glyphicon glyphicon-usd"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning"><i class="glyphicon glyphicon-usd"></i></a>
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="1" asp-route-idClient="@day_client.Client.Id" class="btn btn-warning" title="Billed but not paid"><i class="glyphicon glyphicon-usd"></i></a>
                                             }
                                         }
                                         else
                                         {
                                             @if (day_client.Present == false)
                                             {
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-usd"></i></a>
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-default disabled" title="Absent"><i class="glyphicon glyphicon-usd"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger"><i class="glyphicon glyphicon-usd"></i></a>
+                                                <a asp-action="BillingClient" asp-controller="Notes" asp-route-billed="0" asp-route-idClient="@day_client.Client.Id" class="btn btn-danger" title="Not billed"><i class="glyphicon glyphicon-usd"></i></a>
                                             }
 
                                         }
@@ -343,7 +441,7 @@
                                                 {
                                                     @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                     {
-                                                        <a asp-action="PrintAbsenceIndNote" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                        <a asp-action="PrintAbsence" asp-controller="Notes" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                     }
                                                     else
                                                     {
@@ -359,11 +457,11 @@
                                         }
                                         @if (User.IsInRole("Manager"))
                                         {
-                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="ConfirmDeleteNote(@day_client.Id)" class="btn btn-danger" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="DeleteNote" asp-controller="Notes" asp-route-idWorkday_client="@day_client.Id" class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a class="btn btn-danger disabled" title="Delete note"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                     </td>
                                 </tr>

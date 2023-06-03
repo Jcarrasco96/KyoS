@@ -66,7 +66,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.MedicationList)
 
                                               .Where(n => (n.Clinic.Id == user_logged.Clinic.Id)
-                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -312,7 +312,7 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Client.Id == idClient
-                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id || n.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
                 }

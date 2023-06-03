@@ -51,22 +51,18 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic == null)
                 return View(null);
 
-            return View(await _context.Weeks.Include(w => w.Days)
-                                                .ThenInclude(d => d.Workdays_Clients)
-                                                .ThenInclude(wc => wc.Client)
-                                                .ThenInclude(c => c.Group)
+            return View(await _context.Weeks
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(wc => wc.Client)
 
-                                                .Include(w => w.Days)
-                                                .ThenInclude(d => d.Workdays_Clients)
-                                                .ThenInclude(g => g.Facilitator)
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(g => g.Facilitator)
 
-                                                .Include(w => w.Days)
-                                                .ThenInclude(d => d.Workdays_Clients)
-                                                .ThenInclude(wc => wc.Note)
-
-                                                .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                          && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
-                                                .ToListAsync());            
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
+                                      .ToListAsync());            
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -88,6 +84,52 @@ namespace KyoS.Web.Controllers
             }
 
             Stream stream = _reportHelper.DailyAssistanceReport(workdayClientList);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> DailyAssistanceGroup()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
+
+            return View(await _context.Weeks
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(wc => wc.Client)                                        
+
+                                      .Include(w => w.Days)
+                                        .ThenInclude(d => d.Workdays_Clients)
+                                        .ThenInclude(g => g.Facilitator)                                      
+
+                                      .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
+                                      .ToListAsync());
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> PrintDailyAssistanceGroup(int id)
+        {
+            List<Workday_Client> workdayClientList = await _context.Workdays_Clients
+
+                                                                   .Include(wc => wc.Facilitator)
+                                                                        .ThenInclude(f => f.Clinic)
+
+                                                                   .Include(wc => wc.Workday)
+
+                                                                   .Include(wc => wc.Client)
+
+                                                                   .Where(wc => (wc.Workday.Id == id && wc.Facilitator.LinkedUser == User.Identity.Name))
+                                                                   .ToListAsync();
+            if (workdayClientList.Count() == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.DailyAssistanceReportGroup(workdayClientList);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
     }

@@ -59,7 +59,8 @@
                     Error. There are gender issues in: @ViewBag.errorText
                 </strong>
             </div>
-        }@if (ViewBag.Creado == "S")
+        }
+        @if (ViewBag.Creado == "S")
         {
             <div class="alert alert-block alert-danger">
                 <button type="button" class="close" data-dismiss="alert">
@@ -73,7 +74,7 @@
         }
     </div>
     <div class="row">
-        <form asp-action="Create" asp-route-origin="@ViewData["origin"]">
+        <form asp-action="Create" asp-route-origin="@ViewData["origin"]" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
@@ -93,7 +94,7 @@
                 </div>
             }
             <div class="form-group col-md-12">
-                <input type="submit" value="Create MTP" class="btn btn-primary" />
+                <input  onclick="GenderVerification()" type="submit" value="Create MTP" class="btn btn-primary"/>
                 @if (ViewData["origin"].ToString() == "0")
                 {
                     <a asp-action="Index" asp-controller="Mtps" class="btn btn-success">Back</a>
@@ -111,62 +112,177 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript">
-        $(document).ready(function () {
-            $("#cbClient").change(function () {
-                var url = "@Url.Action("GetCodeByClient", "MTPs")";
-                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
-                $("#txtCode").val(data);
-                });
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $("#cbClient").change(function () {
+                    var url = "@Url.Action("GetCodeByClient", "MTPs")";
+                    $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                    $("#txtCode").val(data);
+                    });
 
-                var url = "@Url.Action("GetDiagnosisByClient", "MTPs")";
+                    var url = "@Url.Action("GetDiagnosisByClient", "MTPs")";
+                    $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                    $("#txtDiagnosis").val(data);
+                    });
+                })
+                $("#EnglishClientStrengths").click(function () {
+                    var url = "@Url.Action("Translate", "MTPs")";
+                    $.get(url, { text: $("#clientStrengths").val() }, function (data) {
+                        $("#clientStrengths").val(data);
+                    });
+                })
+                $("#EnglishClientLimitation").click(function () {
+                    var url = "@Url.Action("Translate", "MTPs")";
+                    $.get(url, { text: $("#clientLimitation").val() }, function (data) {
+                        $("#clientLimitation").val(data);
+                    });
+                })
+                $("#EnglishRationaleForUpdate").click(function () {
+                    var url = "@Url.Action("Translate", "MTPs")";
+                    $.get(url, { text: $("#rationaleForUpdate").val() }, function (data) {
+                        $("#rationaleForUpdate").val(data);
+                    });
+                })
+                $("#EnglishAdditionalRecommended").click(function () {
+                    var url = "@Url.Action("Translate", "MTPs")";
+                    $.get(url, { text: $("#additionalRecommended").val() }, function (data) {
+                        $("#additionalRecommended").val(data);
+                    });
+                })
+                $("#EnglishInitialDischargeCriteria").click(function () {
+                    var url = "@Url.Action("Translate", "MTPs")";
+                    $.get(url, { text: $("#initialDischargeCriteria").val() }, function (data) {
+                        $("#initialDischargeCriteria").val(data);
+                    });
+                })
+            });
+            $(function () {
+                //Assign Click event to Plus Image.
+                $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                    $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                    $(this).attr("class", "icon-minus-sign-alt");
+                });
+                //Assign Click event to Minus Image.
+                $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                    $(this).attr("class", "icon-plus-sign-alt");
+                    $(this).closest("tr").next().remove();
+                });
+            });
+
+            function GenderVerification() {
+                
+                var url = "@Url.Action("GetGenderByClient", "MTPs")";
+                
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
-                $("#txtDiagnosis").val(data);
+                    
+                    let clientStrengths = $("#clientStrengths").val();
+                    let clientLimitation = $("#clientLimitation").val();
+                    let rationaleForUpdate = $("#rationaleForUpdate").val();
+                    let additionalRecommended = $("#additionalRecommended").val();
+                    let initialDC = $("#initialDischargeCriteria").val();
+                    let text = "";
+
+                    if (data == 'F') //Female
+                    {
+                        if (MaleVerification(clientStrengths) == true) {
+                            text = ", Client’s Strengths";
+                        }
+                        if (MaleVerification(clientLimitation) == true) {
+                            text = text + ", Client’s Limitations";
+                        }
+                        if (MaleVerification(rationaleForUpdate) == true) {
+                            text = text + ", Rationale for Update";
+                        }
+                        if (MaleVerification(additionalRecommended) == true) {
+                            text = text + ", Additional recommended services";
+                        }
+                        if (MaleVerification(initialDC) == true) {
+                            text = text + ", Initial discharge criteria";
+                        }
+
+                        if (text != "") {
+                            Swal.fire({
+                                title: 'Do you want to continue?',
+                                text: "There are gender issues in" + text,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ec971f',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, continue!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {                                    
+                                    form1.submit();
+                                }
+                            });
+                        }
+                        else {
+                            form1.submit();
+                        }                        
+                    }
+                    else
+                    {
+                        if (data == 'M') //Male
+                        {
+                            if (FemaleVerification(clientStrengths) == true) {
+                                text = ", Client’s Strengths";
+                            }
+                            if (FemaleVerification(clientLimitation) == true) {
+                                text = text + ", Client’s Limitations";
+                            }
+                            if (FemaleVerification(rationaleForUpdate) == true) {
+                                text = text + ", Rationale for Update";
+                            }
+                            if (FemaleVerification(additionalRecommended) == true) {
+                                text = text + ", Additional recommended services";
+                            }
+                            if (FemaleVerification(initialDC) == true) {
+                                text = text + ", Initial discharge criteria";
+                            }
+
+                            if (text != "") {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in" + text,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        form1.submit();
+                                    }
+                                });
+                            }
+                            else {
+                                form1.submit();
+                            }
+                        }                        
+                    }            
                 });
-            })
-            $("#EnglishClientStrengths").click(function () {
-                var url = "@Url.Action("Translate", "MTPs")";
-                $.get(url, { text: $("#clientStrengths").val() }, function (data) {
-                    $("#clientStrengths").val(data);
-                });
-            })
-            $("#EnglishClientLimitation").click(function () {
-                var url = "@Url.Action("Translate", "MTPs")";
-                $.get(url, { text: $("#clientLimitation").val() }, function (data) {
-                    $("#clientLimitation").val(data);
-                });
-            })
-            $("#EnglishRationaleForUpdate").click(function () {
-                var url = "@Url.Action("Translate", "MTPs")";
-                $.get(url, { text: $("#rationaleForUpdate").val() }, function (data) {
-                    $("#rationaleForUpdate").val(data);
-                });
-            })
-            $("#EnglishAdditionalRecommended").click(function () {
-                var url = "@Url.Action("Translate", "MTPs")";
-                $.get(url, { text: $("#additionalRecommended").val() }, function (data) {
-                    $("#additionalRecommended").val(data);
-                });
-            })
-            $("#EnglishInitialDischargeCriteria").click(function () {
-                var url = "@Url.Action("Translate", "MTPs")";
-                $.get(url, { text: $("#initialDischargeCriteria").val() }, function (data) {
-                    $("#initialDischargeCriteria").val(data);
-                });
-            })
-        });
-        $(function () {
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
-        });
-</script>
+            }
+
+            function MaleVerification(text) {
+                if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                    text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                    text.includes(" oldman") || text.includes(" wife")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            function FemaleVerification(text) {
+                if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                    text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                    text.includes(" husband")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+    </script>
 }
 

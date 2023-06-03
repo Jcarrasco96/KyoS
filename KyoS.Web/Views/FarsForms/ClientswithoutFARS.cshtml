@@ -30,16 +30,16 @@
                             Client Name
                         </th>
                         <th class="col-md-2" style="text-align:center;">
-                            Client Code
-                        </th>
-                        <th class="col-md-2" style="text-align:center;">
                             Admission Date
                         </th>
                         <th class="col-md-2" style="text-align:center;">
                             Client Status
                         </th>
                         <th class="col-md-2" style="text-align:center;">
-                            Services
+                            FARS (amount)
+                        </th>
+                        <th class="col-md-2" style="text-align:center;">
+                            Missing
                         </th>
                         <th class="col-md-1" style="text-align:center;">
 
@@ -52,17 +52,16 @@
                         <tr>
                             <td>
                                 @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
+                                {
+                                    <i class="glyphicon glyphicon-user btn-danger"></i>
+                                }
                                 @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
+                                {
+                                    <i class="glyphicon glyphicon-user btn-primary"></i>
+                                }
                                 &nbsp;
                                 @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td align="center">
+                                |
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
                             <td align="center">
@@ -72,8 +71,8 @@
                                 @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                  {
                                      <span class="label label-success">
-                                    Open
-                                </span>
+                                        Open
+                                     </span>
                                  }
                                 @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                  {
@@ -83,9 +82,17 @@
                                  }
                             </td>
                             <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
+                                @if (item.FarsFormList.Count() > 0)
+                                {
+                                    @item.FarsFormList.Count()
+                                }
+
+                            </td>
+                            <td align="center">
+                                <a onclick="showInPopupLg('@Url.Action("AuditFARSforId", "FarsForms", new { id = @item.Id }, Context.Request.Scheme)','Audit FARS')" class="btn btn-info" title="Audit FARS"><i class="glyphicon glyphicon-search"></i></a>
                             </td>
                             <td align="right">
+
                                 @if (User.IsInRole("Facilitator"))
                                 {
                                     <a asp-action="Create" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-primary" title="Create FARS"><i class="glyphicon glyphicon-plus"></i></a>
@@ -104,6 +111,7 @@
 </div>
 
 }
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

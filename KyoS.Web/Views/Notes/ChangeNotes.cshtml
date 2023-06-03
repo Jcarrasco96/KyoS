@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.BillingReportViewModel
 @{
-    ViewData["Title"] = "PSR Notes";
+    ViewData["Title"] = "Session changes";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -12,7 +12,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">PSR Notes</li>
+        <li class="active">Session changes</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -58,7 +58,7 @@
     <div class="col-md-12">
         <hr />
     </div>
-    <div id="view-notes">
+    <div class="col-md-12" id="view-notes">
         @await Html.PartialAsync("_ViewNotesForChanges", Model)
     </div>
 </div>

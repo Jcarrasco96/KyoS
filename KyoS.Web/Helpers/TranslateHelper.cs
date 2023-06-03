@@ -34,7 +34,7 @@ namespace KyoS.Web.Helpers
                 }
                 return traslation;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //return "Error. It's not possible to translate";
                 return textToTranslate;

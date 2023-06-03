@@ -27,5 +27,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Member ID")]
         public string MemberId { get; set; }
+
+        [Display(Name = "Authorization Number")]
+        public string AuthorizationNumber { get; set; }
     }
 }

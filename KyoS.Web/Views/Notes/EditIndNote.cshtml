@@ -81,14 +81,15 @@
         </div>
         @if ((ViewBag.Error != "1") && (ViewBag.Error != "3"))  //se puede crear o editar la nota
         {
-        <form asp-action="EditIndNote" enctype="multipart/form-data">
+        <form asp-action="EditIndNote" enctype="multipart/form-data" onsubmit="return false;" id="form1">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Origin" />
+        <input type="hidden" asp-for="IdSubSchedule" />
         <partial name="_IndividualMCS" />
         <partial name="_IndividualNotes" />
         <div class="form-group col-md-12">
-            <input type="submit" value="Save All" class="btn btn-primary" />
+            <input onclick="GenderVerification()" type="submit" value="Save All" class="btn btn-primary" />
             @if (Model.Origin == 0) //viene de la pagina IndividualNotes de las notas individuales
             {
                 <a asp-action="IndividualNotes" class="btn btn-success">Back</a>
@@ -118,11 +119,11 @@
             {
                 @if (Model.Origin == 0) //viene de la pagina IndividualNotes de las notas
                 {
-                    <a asp-action="FinishEditingIN" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
+                    <a asp-action="FinishEditingIN" class="btn btn-warning disabled" asp-route-id="@Model.Id" asp-route-origin="0" title="Finish edition of note">Finish Editing</a>
                 }
                 @if (Model.Origin == 2) //viene de la pagina IndNotesInEdit de las notas
                 {
-                    <a asp-action="FinishEditingIN" class="btn btn-warning" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
+                    <a asp-action="FinishEditingIN" class="btn btn-warning disabled" asp-route-id="@Model.Id" asp-route-origin="2" title="Finish edition of note">Finish Editing</a>
                 }
             }
         </div>
@@ -135,16 +136,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
-            
+
             $("#cbClient").change(function () {
                 var url = "@Url.Action("GetGoalsIndList", "Notes")";
                 $.get(url, { idClient: $("#cbClient").val() }, function (data) {
                     $("#cbGoal1").empty();
                     $.each(data, function (index, row) {
                         $("#cbGoal1").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                    }); 
+                    });
 
                     //actualizo el combobox y el label con la intervention que corresponde al obj seleccionado
                     $("#cbObjetive1").empty();
@@ -152,10 +153,10 @@
 
                     $("#lbIntervention1").text('Select goal and objective');
                 });
-            })      
+            })
             $("#cbGoal1").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
-                $.get(url, { idGoal: $("#cbGoal1").val() }, function (data) {
+                $.get(url, { idGoal: $("#cbGoal1").val(), idNote: @Model.Id }, function (data) {
                     $("#cbObjetive1").empty();
                     $.each(data, function (index, row) {
                         $("#cbObjetive1").append("<option value='" + row.value + "'>" + row.text + "</option>")
@@ -167,39 +168,151 @@
                         $("#lbIntervention1").text(data);
                     });
                 });
-            })        
+            })
             $("#cbObjetive1").change(function () {
                 var url = "@Url.Action("GetIntervention", "Notes")";
                 $.get(url, { idObjetive: $("#cbObjetive1").val() }, function (data) {
                     $("#lbIntervention1").text(data);
                 });
-            })            
+            })
             $("#EnglishSubjectiveData").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#subjectiveData").val() }, function (data) {
                     $("#subjectiveData").val(data);
                 });
-            })         
+            })
             $("#EnglishObjectiveData").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#objectiveData").val() }, function (data) {
                     $("#objectiveData").val(data);
                 });
-            }) 
+            })
             $("#EnglishAssessment").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#assessment").val() }, function (data) {
                     $("#assessment").val(data);
                 });
-            }) 
+            })
             $("#EnglishPlanNote").click(function () {
                 var url = "@Url.Action("Translate", "Notes")";
                 $.get(url, { text: $("#PlanNote").val() }, function (data) {
-                    $("#PlanNote").val(data);                    
+                    $("#PlanNote").val(data);
                 });
             })
         });
-    </script>
+
+        function GenderVerification() {
+
+                if ($("#subjectiveData").val() != "" && $("#objectiveData").val() != "" && $("#assessment").val() != "" && $("#PlanNote").val() != "")
+                {
+
+                    var url = "@Url.Action("GetGenderByClient", "MTPs")";
+
+                    $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+
+                        let subjectiveData = $("#subjectiveData").val();
+                        let objectiveData = $("#objectiveData").val();
+                        let assessment = $("#assessment").val();
+                        let PlanNote = $("#PlanNote").val();
+                        let text = "";
+
+                        if (data == 'F') //Female
+                        {
+                            if (MaleVerification(subjectiveData) == true) {
+                                text = ", Subjective Data";
+                            }
+                            if (MaleVerification(objectiveData) == true) {
+                                text = text + ", Objective Data";
+                            }
+                            if (MaleVerification(assessment) == true) {
+                                text = text + ", Assessment";
+                            }
+                            if (MaleVerification(PlanNote) == true) {
+                                text = text + ", Plan";
+                            }
+
+                            if (text != "") {
+                                Swal.fire({
+                                    title: 'Do you want to continue?',
+                                    text: "There are gender issues in" + text,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ec971f',
+                                    cancelButtonColor: '#3085d6',
+                                    confirmButtonText: 'Yes, continue!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        form1.submit();
+                                    }
+                                });
+                            }
+                            else {
+                                form1.submit();
+                            }
+                        }
+                        else
+                        {
+                            if (data == 'M') //Male
+                            {
+                                if (FemaleVerification(subjectiveData) == true) {
+                                    text = ", Subjective Data";
+                                }
+                                if (FemaleVerification(objectiveData) == true) {
+                                    text = text + ", Objective Data";
+                                }
+                                if (FemaleVerification(assessment) == true) {
+                                    text = text + ", Assessment";
+                                }
+                                if (FemaleVerification(PlanNote) == true) {
+                                    text = text + ", Plan";
+                                }
+
+                                if (text != "") {
+                                    Swal.fire({
+                                        title: 'Do you want to continue?',
+                                        text: "There are gender issues in" + text,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#ec971f',
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: 'Yes, continue!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            form1.submit();
+                                        }
+                                    });
+                                }
+                                else {
+                                    form1.submit();
+                                }
+                            }
+                        }
+                    });
+                }
+        }
+
+        function MaleVerification(text) {
+                if (text.includes(" he ") || text.includes(" He ") || text.includes(" his ") || text.includes(" His ") ||
+                    text.includes(" him ") || text.includes(" him.") || text.includes("himself") || text.includes("Himself") ||
+                    text.includes(" oldman") || text.includes(" wife")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+        function FemaleVerification(text) {
+                if (text.includes(" she ") || text.includes(" She ") || text.includes(" her.") || text.includes(" her ") ||
+                    text.includes(" Her ") || text.includes("herself") || text.includes("Herself") || text.includes(" oldwoman") ||
+                    text.includes(" husband")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+        }
+</script>
 }
 
 

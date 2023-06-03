@@ -37,6 +37,7 @@ namespace KyoS.Web.Data.Entities
         public string FaxNo { get; set; }
 
         public SchemaType Schema { get; set; }
+        public SchemaTypeGroup SchemaGroup { get; set; }
 
         public ICollection<FacilitatorEntity> Facilitators { get; set; }
         public ICollection<CaseMannagerEntity> CaseManagers { get; set; }
@@ -65,5 +66,17 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of PSR Therapy")]
         public string CodePSRTherapy { get; set; }
+
+        [Display(Name = "Bill code of MTP")]
+        public string CodeMTP { get; set; }
+
+        [Display(Name = "Bill code of BIO")]
+        public string CodeBIO { get; set; }
+
+        [Display(Name = "Bill code of MTPR")]
+        public string CodeMTPR { get; set; }
+
+        [Display(Name = "Bill code of FARS")]
+        public string CodeFARS { get; set; }
     }
 }

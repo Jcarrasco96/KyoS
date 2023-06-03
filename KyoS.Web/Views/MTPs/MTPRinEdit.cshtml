@@ -222,16 +222,18 @@
                                         <td align="center">
                                             @if (item.NumberOfMonths != null)
                                             {
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
+                                                @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days >= 0)
                                                 {
                                                     <span class="label label-danger" title="Expired days">
-                                                        @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
+                                                        @*@(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)*@
+                                                        @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days)
                                                     </span>
                                                 }
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
+                                                @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days < 0)
                                                 {
                                                     <span class="label label-primary" title="Number of days to expire the MTP">
-                                                        @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
+                                                        @*@((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)*@
+                                                        @((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths+item.MtpReviewList.Sum(m => m.MonthOfTreatment)))).Days)
                                                     </span>
                                                 }
                                             }
@@ -313,16 +315,16 @@
                                         <td align="center">
                                             @if (item.NumberOfMonths != null)
                                             {
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
+                                                @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
                                                 {
                                                     <span class="label label-danger" title="Expired days">
-                                                        @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
+                                                        @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
                                                     </span>
                                                 }
-                                                @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
+                                                @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
                                                 {
                                                     <span class="label label-primary" title="Number of days to expire the MTP">
-                                                        @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
+                                                        @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
                                                     </span>
                                                 }
                                             }

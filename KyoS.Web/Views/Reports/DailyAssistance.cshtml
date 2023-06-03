@@ -82,7 +82,7 @@
                                                                     @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.LinkedUser == User.Identity.Name))
                                                                     {
                                                                         <tr>
-                                                                            <td>
+                                                                            <td align="center">
                                                                                 @Html.DisplayFor(modelItem => day_client.Session)
                                                                             </td>
                                                                             <td>

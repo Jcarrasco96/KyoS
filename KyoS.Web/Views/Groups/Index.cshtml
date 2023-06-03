@@ -47,10 +47,7 @@
                             </th>
                             <th class="col-md-3">
                                 Facilitator
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Therapy
-                            </th>
+                            </th>                            
                             <th class="col-md-1" style="text-align:center;">
                                 Clients
                             </th>
@@ -62,6 +59,9 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Shared session
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Schedule
                             </th>
                             <th class="col-md-1">
 
@@ -116,10 +116,7 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Facilitator.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
-                                </td>
+                                </td>                                
                                 <td align="center">
                                     @if (@item.Clients.Count() > 12)
                                     {
@@ -149,6 +146,14 @@
                                     @if (item.SharedSession)
                                     {
                                         <i class="icon-ok green"></i>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.Schedule != null)
+                                    {
+                                        @item.Schedule.InitialTime.ToShortTimeString()
+                                        <a> - </a>
+                                        @item.Schedule.EndTime.ToShortTimeString()
                                     }
                                 </td>
                                 <td align="right">

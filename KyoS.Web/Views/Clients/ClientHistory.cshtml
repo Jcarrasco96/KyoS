@@ -23,82 +23,89 @@
         </ul><!--.breadcrumb-->
     </div>
 
-    <div class="row">
-        <form asp-action="Create" asp-route-id="@Model.Id" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <partial name="_ClientAllDate" />
-            <div class="col-md-12">
-                <hr />
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
-                        @if (Model.Clinic.Setting.MHProblems == true)
-                        {
-                            <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
-                        }
-                        else
-                        {
-                            <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger disabled" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
-                        }
-                    </div>
+    <div class="row">        
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <partial name="_ClientAllDate" />
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">               
+            <div class="col-md-12 form-group">
+                @if (Model.Clinic.Setting.MHProblems == true)
+                {
+                    <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
+                }
+                else
+                {
+                    <a onclick="showInPopupLg('@Url.Action("ClientProblemList", "Clients", new { idClient = @Model.Id }, Context.Request.Scheme)','Audit Documents')" class="btn btn-danger disabled" title="Audit the documentation"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Documents</a>
+                }
+            </div>                
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div class="">
+                <div id="view-farsForClient">
+                    @if (Model.Bio != null)
+                    {
+                        @await Html.PartialAsync("_ViewBIOForClient", Model.Bio)
+                    }
+                    @if (Model.Brief != null)
+                    {
+                        @await Html.PartialAsync("_ViewBriefForClient", Model.Brief)
+                    }
                 </div>
             </div>
-            <div class="col-md-12">
-                <hr />
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div id="view-farsForClient">
-                        @if (Model.MTPs.Count() > 0)
-                        {
-                            @await Html.PartialAsync("_ViewMtpListForClient", Model.MTPs.ToList())
-                        }
-                    </div>
+        </div>
+        <div class="col-md-push-12">                
+            <div id="view-farsForClient">
+                @if (Model.MTPs.Count() > 0)
+                {
+                    @await Html.PartialAsync("_ViewMtpListForClient", Model.MTPs.ToList())
+                }
+            </div>                
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div class="">
+                <div id="view-farsForClient">
+                    @if (Model.FarsFormList.Count() > 0)
+                    {
+                        @await Html.PartialAsync("_ViewFarsListForClient", Model.FarsFormList.ToList())
+                    }
                 </div>
             </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div class="">
+                <div id="view-farsForClient">
+                    @if (Model.DischargeList.Count() > 0)
+                    {
+                        @await Html.PartialAsync("_ViewDischargeListForClient", Model.DischargeList.ToList())
+                    }
 
-            <div class="col-md-12">
-                <hr />
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div id="view-farsForClient">
-                        @if (Model.FarsFormList.Count() > 0)
-                        {
-                            @await Html.PartialAsync("_ViewFarsListForClient", Model.FarsFormList.ToList())
-                        }
-                    </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <hr />
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div id="view-farsForClient">
-                        @if (Model.DischargeList.Count() > 0)
-                        {
-                            @await Html.PartialAsync("_ViewDischargeListForClient", Model.DischargeList.ToList())
-                        }
-
-                    </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div class="">
+                <div id="view-notesForClient">
+                    @if (Model.Workdays_Clients.Count() > 0)
+                    {
+                        @await Html.PartialAsync("_ViewNotesForClient", Model.Workdays_Clients.ToList())
+                    }
                 </div>
             </div>
-            <div class="col-md-12">
-                <hr />
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div id="view-notesForClient">
-                        @if (Model.Workdays_Clients.Count() > 0)
-                        {
-                            @await Html.PartialAsync("_ViewNotesForClient", Model.Workdays_Clients.ToList())
-                        }
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>        
     </div>
 </body>
 </html>
@@ -115,6 +122,7 @@
     <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
 
     <script type="text/javascript">
+
         $(document).ready(function () {
 
             $.fn.dataTable.moment('MM/DD/YYYY');
@@ -129,6 +137,7 @@
             //    autoClose: true
             //})
         });
+
         $(function () {
 
             //Assign Click event to Plus Image.
@@ -142,6 +151,75 @@
                 $(this).closest("tr").next().remove();
             });
         });
+
+        function ConfirmDeleteFars(e) {
+            Swal.fire({
+                title: 'Do you want delete this FARS?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "FarsForms")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteDischarge(e) {
+            Swal.fire({
+                title: 'Do you want delete this discharge?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "Discharge")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteNote(e) {
+            Swal.fire({
+                title: 'Do you want delete this note?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteNote", "Notes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmReturnToNotStarted(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The note will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("ReturnToNotStarted", "Notes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
     </script>
    
 

@@ -75,7 +75,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(c => c.Client.Group)
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id
                                                         && (m.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                            || m.Client.IdFacilitatorGroup == facilitator.Id)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
                     }
                     if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
@@ -167,6 +168,7 @@ namespace KyoS.Web.Controllers
                             MedicationCode = "T1015",
                             IndividualCode = "H2019 HR",
                             FamilyCode = "H2019 HR",
+                            GroupCode = "90853",
                             PsychosocialCode = "H2017",
                             PsychosocialUnits = 16,
                             PsychosocialFrecuency = "4 times for week",
@@ -181,8 +183,9 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(cd => cd.Diagnostic)
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
-                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList()
-                    };
+                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
+                            CodeBill = user_logged.Clinic.CodeMTP
+                        };
                     }
                     else
                     {
@@ -202,6 +205,7 @@ namespace KyoS.Web.Controllers
                             MedicationCode = "T1015",
                             IndividualCode = "H2019 HR",
                             FamilyCode = "H2019 HR",
+                            GroupCode = "90853",
                             PsychosocialCode = "H2017",
                             PsychosocialUnits = 16,
                             PsychosocialFrecuency = "4 times for week",
@@ -244,37 +248,38 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity client = await _context.Clients.FindAsync(mtpViewModel.IdClient);
                 DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                string gender_problems = string.Empty;
-
+               
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
-                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
-                    if (this.GenderEvaluation(client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                        MTPViewModel model = new MTPViewModel
-                        {
-                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            IdClient = mtpViewModel.IdClient,
-                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                            NumberOfMonths = mtpViewModel.NumberOfMonths,
-                            StartTime = mtpViewModel.StartTime,
-                            EndTime = mtpViewModel.EndTime,
-                            Modality = mtpViewModel.Modality,
-                            Frecuency = mtpViewModel.Frecuency,
-                            LevelCare = mtpViewModel.LevelCare,
-                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString(),
-                            Review = mtpViewModel.Review,
-                            AdmissionedFor = user_logged.FullNameWithDocument
-                           
-                        };
-                        return View(model);
-                    }
+                    mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";                    
                 }
 
+                //esto es para cuando el MTP es de group no tener que cambiar mas nada
+                if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
+                {
+                    mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
+                }
+
+                //calcular las unidades a partir del tiempo de desarrollo del MTP
+                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes/15;
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    mtpViewModel.Units = units;
+                }
+                else
+                {
+                    mtpViewModel.Units = units;
+                }
+
+                mtpViewModel.Units = 0;
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 mtpEntity.Setting = form["Setting"].ToString();
+
+                if (mtpEntity.AdmissionDateMTP.Date == mtpEntity.MTPDevelopedDate.Date)
+                {
+                    mtpEntity.MTPDevelopedDate = mtpEntity.MTPDevelopedDate.AddDays(1);
+                }
 
                 //set all mtps of this client non active
                 List<MTPEntity> mtp_list = _context.MTPs.Where(m => m.Client == mtpEntity.Client).ToList();
@@ -292,7 +297,9 @@ namespace KyoS.Web.Controllers
                 //update Client_Referred table with the news ReferredTemp
                 IQueryable<GoalsTempEntity> list_to_delete_Goals = _context.GoalsTemp
                                                                            .Include(n => n.ObjetiveTempList)
-                                                                           .Where(n => n.IdClient == mtpViewModel.IdClient);
+                                                                           .Where(n => n.IdClient == mtpViewModel.IdClient
+                                                                                    && n.UserName == user_logged.UserName
+                                                                                    && n.TypeDocument == 0);
                 GoalEntity goal = new GoalEntity();
                 mtpEntity.Goals = new List<GoalEntity>();
                 ObjetiveEntity objective = new ObjetiveEntity();
@@ -469,42 +476,26 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
                 }
 
-                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
-
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
+                //esto es para cuando el MTP es de group no tener que cambiar mas nada
+                if (mtpViewModel.GroupDuration > 0 && mtpViewModel.PsychosocialDuration == 0)
                 {
-                    if (this.GenderEvaluation(mtpEntity.Client.Gender, mtpViewModel.InitialDischargeCriteria))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Initial discharge criteria");
-                        List<SelectListItem> list = new List<SelectListItem>();
-                        list.Insert(0, new SelectListItem
-                        {
-                            Text = mtpEntity.Client.Name,
-                            Value = $"{mtpEntity.Client.Id}"
-                        });
-                        MTPViewModel model = new MTPViewModel
-                        {
-                            Clients = list,
-                            IdClient = mtpViewModel.IdClient,
-                            MTPDevelopedDate = mtpViewModel.MTPDevelopedDate,
-                            NumberOfMonths = mtpViewModel.NumberOfMonths,
-                            StartTime = mtpViewModel.StartTime,
-                            EndTime = mtpViewModel.EndTime,
-                            Modality = mtpViewModel.Modality,
-                            Frecuency = mtpViewModel.Frecuency,
-                            LevelCare = mtpViewModel.LevelCare,
-                            InitialDischargeCriteria = mtpViewModel.InitialDischargeCriteria,
-                            Setting = form["Setting"].ToString(),
-                            AdmissionedFor = mtpViewModel.AdmissionedFor,
-                            CreatedBy = mtpViewModel.CreatedBy,
-                            CreatedOn = mtpViewModel.CreatedOn,
-                            IdDocumentAssistant = mtpViewModel.IdDocumentAssistant
-                        };
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
+                    mtpViewModel.PsychosocialDuration = mtpViewModel.GroupDuration;
                 }
+
+                //calcular las unidades a partir del tiempo de desarrollo del MTP
+                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    mtpViewModel.Units = units;
+                }
+                else
+                {
+                    mtpViewModel.Units = units;
+                }
+
+                MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
+                
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
                 if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
@@ -675,30 +666,6 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(model.Name))
-                {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
-                }
-                if (!string.IsNullOrEmpty(model.AreaOfFocus))
-                {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return View(model);
-                }
-
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -770,31 +737,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModal", model) });
-                    //return View(model);
-                }
-
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -874,31 +825,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalMTPReviewModal", model) });
-                    //return View(model);
-                }
-
+                                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, true);
                 _context.Add(goalEntity);
                 try
@@ -992,30 +927,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return View(model);
-                }
-
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1079,31 +999,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModal", model) });
-                    //return View(model);
-                }
-
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
                 _context.Update(goalEntity);
                 try
@@ -1186,32 +1090,16 @@ namespace KyoS.Web.Controllers
             model.MTP = await _context.MTPs.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == model.IdMTP);
 
             if (ModelState.IsValid)
-            {
-                string gender_problems = string.Empty;
+            {                
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(model.MTP.Client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalMTPReviewModal", model) });
-                    //return View(model);
-                }
-
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
+                
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
 
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
@@ -1327,40 +1215,16 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(m => m.Client)
                                                 .Include(g => g.Objetives)
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
-                string gender_problems = string.Empty;
+                
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return View(newmodel);
-                }
-
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1458,41 +1322,15 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModal", newmodel) });
-                    //return View(newmodel);
-                }
-
+                               
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1610,47 +1448,15 @@ namespace KyoS.Web.Controllers
 
                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
 
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveViewModel newmodel = new ObjectiveViewModel
-                    {
-                        Goal = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.Objetives.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention,
-                        Compliment = model.Compliment,
-                        Compliment_Date = model.Compliment_Date,
-                        Compliment_Explain = model.Compliment_Explain,
-                        Compliment_IdMTPReview = model.Compliment_IdMTPReview,
-                        IdMTPReview = model.IdMTPReview
-
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveMTPReviewModal", model) });
-                    //return View(newmodel);
-                }
-
+                                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, true);
                 _context.Add(objective);
 
@@ -1827,30 +1633,15 @@ namespace KyoS.Web.Controllers
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return View(model);
-                }
-
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -1937,31 +1728,15 @@ namespace KyoS.Web.Controllers
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });
-                    return View(model);
-                }
-
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 _context.Update(objective);
 
@@ -2069,32 +1844,16 @@ namespace KyoS.Web.Controllers
 
                                             .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             if (ModelState.IsValid)
-            {
-                string gender_problems = string.Empty;
+            {                
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(goal.MTP.Client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Goal = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveMTPReviewModal", model) });
-                    //return View(model);
-                }
-
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+                
                 ObjetiveEntity objective = await _converterHelper.ToObjectiveEntity(model, false);
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
                 {
@@ -2235,6 +1994,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.DemoClinic2MTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -2268,67 +2032,102 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Facilitator"))
                 {
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                  
                     mtps = await _context.MTPs
-                                         .Include(m => m.MtpReviewList)
-                                         .Include(m => m.Client)
-                                         .ThenInclude(c => c.Clinic)
-                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                && m.Active == true && m.Client.Status == StatusType.Open
-                                                && m.Client.Group.Facilitator.Id == facilitator.Id)).ToListAsync();
+                                        .Include(n => n.Client)
+                                        .ThenInclude(n => n.Clinic)
+
+                                        .Include(n => n.AdendumList)
+                                        .Include(n => n.Goals)
+                                        .ThenInclude(n => n.Objetives)
+
+                                        .Include(n => n.MtpReviewList)
+                                        .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                  && m.Client.Status == StatusType.Open
+                                                  && m.Active == true
+                                                  && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id)
+                                                  && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                               && o.Goal.Service == m.Client.Service
+                                                                               && o.Compliment == false).Count() > 0
+                                                                     ).Count() == 0
+                                                 ))
+                                        .ToListAsync();
+                  
                 }
                 else
                 {
                     mtps = await _context.MTPs
-                                         .Include(m => m.MtpReviewList)
-                                         .Include(m => m.Client)
-                                         .ThenInclude(c => c.Clinic)
+                                         .Include(n => n.Client)
+                                         .ThenInclude(n => n.Clinic)
+
+                                         .Include(n => n.AdendumList)
+                                         .Include(n => n.Goals)
+                                         .ThenInclude(n => n.Objetives)
+
+                                         .Include(n => n.MtpReviewList)
                                          .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                              && m.Active == true && m.Client.Status == StatusType.Open)).ToListAsync();
+                                                   && m.Client.Status == StatusType.Open
+                                                   && m.Active == true
+                                                   && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                && o.Goal.Service == m.Client.Service
+                                                                                && o.Compliment == false).Count() > 0
+                                                                      ).Count() == 0
+                                                  ))
+                                         .ToListAsync();
+                   
+
                 }
-                List<MTPEntity> expiredMTPs = new List<MTPEntity>();
-                int month = 0;
+
+                List<MTPExpiredViewModel> mtpExpireds = new List<MTPExpiredViewModel>();
+                MTPExpiredViewModel mtpExpired = new MTPExpiredViewModel();
+                List<ObjetiveEntity> objs = new List<ObjetiveEntity>();
+
                 foreach (var item in mtps)
                 {
-                    if (item.MtpReviewList != null)
+                    mtpExpired.Id = item.Id;
+                    mtpExpired.Client = item.Client;
+                    objs = _context.Objetives
+                                   .Include(n => n.Goal)
+                                   .ThenInclude(n => n.Adendum)
+                                   .Where(n => n.Goal.MTP.Id == item.Id
+                                            && n.Goal.Service == item.Client.Service
+                                            && n.Compliment == false).ToList();
+                    if (objs.Count() > 0)
                     {
-                        foreach (var value in item.MtpReviewList)
+                        mtpExpired.DateExpired = objs.Max(n => n.DateResolved);
+                        mtpExpired.ExpiredDays = DateTime.Today.Date.Subtract(mtpExpired.DateExpired).Days;
+                        if (objs.Where(n => n.Goal.IdMTPReview > 0).Count() > 0)
                         {
-                            month = month + value.MonthOfTreatment;
-
+                            mtpExpired.TypeDocument = 1;
+                        }
+                        else
+                        {
+                            if (objs.Where(n => n.Goal.Adendum != null).Count() > 0)
+                            {
+                                mtpExpired.TypeDocument = 2;
+                            }
+                            else
+                            {
+                                mtpExpired.TypeDocument = 0;
+                            }
                         }
                     }
                     else
                     {
-                        month = 0;
+                        mtpExpired.DateExpired = item.AdmissionDateMTP;
+                        mtpExpired.ExpiredDays = 0;
+                        mtpExpired.TypeDocument = 0;
                     }
 
-                    if (item.NumberOfMonths != null)
-                    {
-                        if (DateTime.Now > item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)))
-                        {
-                            expiredMTPs.Add(item);
-                        }
-                    }
-                    month = 0;
+                    mtpExpireds.Add(mtpExpired);
+                    mtpExpired = new MTPExpiredViewModel();
+                    objs = new List<ObjetiveEntity>();
                 }
-                return View(expiredMTPs);
+
+                return View(mtpExpireds);
             }
             else
                 return View(null);
-        }
-
-        private bool GenderEvaluation(GenderType gender, string text)
-        {
-            if (gender == GenderType.Female)
-            {
-                return text.Contains(" he ") || text.Contains(" He ") || text.Contains(" his ") || text.Contains(" His ") || text.Contains(" him ") ||
-                       text.Contains(" him.") || text.Contains("himself") || text.Contains("Himself") || text.Contains(" oldman") || text.Contains(" wife");
-            }
-            else
-            {
-                return text.Contains(" she ") || text.Contains(" She ") || text.Contains(" her.") || text.Contains(" her ") || text.Contains(" Her ") ||
-                       text.Contains("herself") || text.Contains("Herself") || text.Contains(" oldwoman") || text.Contains(" husband");
-            }
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
@@ -2360,11 +2159,17 @@ namespace KyoS.Web.Controllers
                                                   .Include(m => m.AdendumList)
                                                   .ThenInclude(c => c.Facilitator)
 
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Goals)
+
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
 
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)))
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id 
+                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id 
+                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                            || m.Client.IdFacilitatorGroup == facilitator.Id
+                                                            || m.AdendumList.Where(n => n.Facilitator.Id == facilitator.Id).Count() > 0)))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -2374,10 +2179,13 @@ namespace KyoS.Web.Controllers
                                                   .Include(m => m.AdendumList)
                                                   .ThenInclude(c => c.Facilitator)
 
+                                                  .Include(m => m.AdendumList)
+                                                  .ThenInclude(c => c.Goals)
+
                                                   .Include(c => c.Client)
                                                   .ThenInclude(c => c.Clinic)
 
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id && m.Client.Status == StatusType.Open))
+                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id))
                                                   .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -2464,53 +2272,14 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.Client)
                                               .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
                 if (adendumEntity == null)
-                {
-                    string gender_problems = string.Empty;
-                    if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
-                    {
-                        if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
-                        {
-                            ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
-                            AdendumViewModel model1 = new AdendumViewModel
-                            {
-                                CreatedBy = adendumViewModel.CreatedBy,
-                                CreatedOn = adendumViewModel.CreatedOn,
-                                Dateidentified = adendumViewModel.Dateidentified,
-                                Duration = adendumViewModel.Duration,
-                                Facilitator = adendumViewModel.Facilitator,
-                                Frecuency = adendumViewModel.Frecuency,
-                                Goals = adendumViewModel.Goals,
-                                Id = adendumViewModel.Id,
-                                LastModifiedBy = adendumViewModel.LastModifiedBy,
-                                LastModifiedOn = adendumViewModel.LastModifiedOn,
-
-                                ProblemStatement = adendumViewModel.ProblemStatement,
-                                Status = adendumViewModel.Status,
-                                Supervisor = adendumViewModel.Supervisor,
-                                Unit = adendumViewModel.Unit,
-                                IdFacilitator = adendumViewModel.IdFacilitator,
-                                IdMTP = adendumViewModel.IdMTP,
-                                IdSupervisor = adendumViewModel.IdSupervisor,
-
-                                Mtp = _context.MTPs
-                                              .Include(c => c.Client.Clients_Diagnostics)
-                                              .ThenInclude(cd => cd.Diagnostic)
-                                              .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
-
-
-                            };
-                            return View(model1);
-
-                        }
-                    }
+                {                    
                     adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, true, user_logged.UserName);
 
                     _context.Adendums.Add(adendumEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
-
-                        return RedirectToAction("IndexAdendum", "MTPs");
+                        return RedirectToAction("EditAdendum", "MTPs", new { id = _context.Adendums.FirstOrDefault(n => n.CreatedBy == adendumEntity.CreatedBy && n.CreatedOn == adendumEntity.CreatedOn).Id, origin = 0 });
                     }
                     catch (System.Exception ex)
                     {
@@ -2614,62 +2383,6 @@ namespace KyoS.Web.Controllers
                 MTPEntity mtp = _context.MTPs
                                               .Include(n => n.Client)
                                               .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP);
-
-                string gender_problems = string.Empty;
-                if (!string.IsNullOrEmpty(adendumViewModel.ProblemStatement))
-                {
-                    if (this.GenderEvaluation(mtp.Client.Gender, adendumViewModel.ProblemStatement))
-                    {
-                        ModelState.AddModelError(string.Empty, "Error.There are gender issues in: Problem Statement");
-                        AdendumViewModel model1 = new AdendumViewModel
-                        {
-                            CreatedBy = adendumViewModel.CreatedBy,
-                            CreatedOn = adendumViewModel.CreatedOn,
-                            Dateidentified = adendumViewModel.Dateidentified,
-                            Duration = adendumViewModel.Duration,
-                            Facilitator = adendumViewModel.Facilitator,
-                            Frecuency = adendumViewModel.Frecuency,
-                            Goals = _context.Adendums
-
-                                                    .Include(a => a.Mtp)
-                                                    .ThenInclude(m => m.Client)
-                                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                                    .ThenInclude(cd => cd.Diagnostic)
-
-                                                    .Include(a => a.Goals)
-                                                    .ThenInclude(g => g.Objetives)
-
-                                                    .Include(a => a.Goals)
-                                                    .ThenInclude(g => g.MTP)
-
-                                                    .Include(a => a.Supervisor)
-
-                                                    .Include(a => a.Facilitator)
-
-                                                    .FirstOrDefault(a => a.Id == adendumViewModel.Id).Goals,
-                            Id = adendumViewModel.Id,
-                            LastModifiedBy = adendumViewModel.LastModifiedBy,
-                            LastModifiedOn = adendumViewModel.LastModifiedOn,
-
-                            ProblemStatement = adendumViewModel.ProblemStatement,
-                            Status = adendumViewModel.Status,
-                            Supervisor = adendumViewModel.Supervisor,
-                            Unit = adendumViewModel.Unit,
-                            IdFacilitator = adendumViewModel.IdFacilitator,
-                            IdMTP = adendumViewModel.IdMTP,
-                            IdSupervisor = adendumViewModel.IdSupervisor,
-
-                            Mtp = _context.MTPs
-                                          .Include(c => c.Client.Clients_Diagnostics)
-                                          .ThenInclude(cd => cd.Diagnostic)
-                                          .FirstOrDefault(n => n.Id == adendumViewModel.IdMTP)
-
-
-                        };
-                        return View(model1);
-
-                    }
-                }
 
                 _context.Adendums.Update(adendumEntity);
                 try
@@ -2796,8 +2509,10 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
-                                                            && a.Status == AdendumStatus.Pending && (a.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || a.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                            && a.Status == AdendumStatus.Pending 
+                                                            && (a.Mtp.Client.IdFacilitatorPSR == facilitator.Id
+                                                               || a.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                               || a.Mtp.Client.IdFacilitatorGroup == facilitator.Id))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -2877,6 +2592,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -2999,6 +2719,18 @@ namespace KyoS.Web.Controllers
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                //calcular las unidades a partir del tiempo de desarrollo del MTPR
+                int units = (mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    mtpReviewViewModel.Units = units;
+                }
+                else
+                {
+                    mtpReviewViewModel.Units = units;
+                }
+
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
 
                 _context.Update(mtpReviewEntity);
@@ -3033,6 +2765,27 @@ namespace KyoS.Web.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+
+                    //-------listo los goals y sus objectives para actualizar DateResolved-------------
+                    List<GoalEntity> goalMtp = _context.Goals
+                                                       .Include(n => n.Objetives)
+                                                       .Where(n => n.MTP.Id == mtpReviewViewModel.IdMTP
+                                                                && n.Compliment == false)
+                                                       .ToList();
+                    foreach (var item in goalMtp)
+                    {
+                        foreach (var obj in item.Objetives)
+                        {
+                            if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                            {
+                                obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                            }
+                        }
+                    }
+
+                    _context.Goals.UpdateRange(goalMtp);
+                    await _context.SaveChangesAsync();
+
                     if (mtpReviewViewModel.Origin == 1)
                     {
                         return RedirectToAction(nameof(PendingMtpReview));
@@ -3048,6 +2801,14 @@ namespace KyoS.Web.Controllers
                     if (mtpReviewViewModel.Origin == 4)
                     {
                         return RedirectToAction("Notifications", "Messages");
+                    }
+                    if (mtpReviewViewModel.Origin == 5)
+                    {
+                        return RedirectToAction(nameof(ExpiredMTP));
+                    }
+                    if (mtpReviewViewModel.Origin == 6)
+                    {
+                        return RedirectToAction(nameof(MTPRinEdit));
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -3159,8 +2920,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                            && m.Status == AdendumStatus.Pending && (m.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || m.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                            && m.Status == AdendumStatus.Pending 
+                                                            && m.CreatedBy == user_logged.UserName)
                                                   .ToListAsync());
                     }
                     else
@@ -3249,6 +3010,7 @@ namespace KyoS.Web.Controllers
                     Setting = "02",
                     DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
                     Origin = origin
+                 
                 };
             }
             if (User.IsInRole("Facilitator"))
@@ -3286,7 +3048,7 @@ namespace KyoS.Web.Controllers
                     MonthOfTreatment = 3,
                     Setting = "02",
                     DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
-                    Origin = origin
+                    Origin = origin                    
                 };
 
             }
@@ -3308,27 +3070,67 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                //calcular las unidades a partir del tiempo de desarrollo del MTPR
+                int units = (reviewViewModel.EndTime.TimeOfDay - reviewViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((reviewViewModel.EndTime.TimeOfDay - reviewViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    reviewViewModel.Units = units;
+                }
+                else
+                {
+                    reviewViewModel.Units = units;
+                }
+
                 MTPReviewEntity reviewEntity = _context.MTPReviews.Find(reviewViewModel.Id);
                 if (reviewEntity == null)
                 {
                     reviewEntity = await _converterHelper.ToMTPReviewEntity(reviewViewModel, true, reviewViewModel.CreatedBy);
 
                     _context.MTPReviews.Add(reviewEntity);
+
+                   
+
                     try
                     {
                         await _context.SaveChangesAsync();
 
+                        //-------listo los goals y sus objectives para actualizar DateResolved-------------
+                        List<GoalEntity> goalMtp = _context.Goals
+                                                           .Include(n => n.Objetives)
+                                                           .Where(n => n.MTP.Id == reviewViewModel.IdMTP
+                                                                    && n.Compliment == false)
+                                                           .ToList();
+                        foreach (var item in goalMtp)
+                        {
+                            foreach (var obj in item.Objetives)
+                            {
+                                if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                {
+                                    obj.DateResolved = reviewViewModel.ReviewedOn;
+                                }
+                            }
+                        }
+
+                        _context.Goals.UpdateRange(goalMtp);
+                        await _context.SaveChangesAsync();
+
                         if (reviewViewModel.Origin == 1)
                         {
-                            return RedirectToAction(nameof(ExpiredMTP));
+                            //return RedirectToAction(nameof(ExpiredMTP));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 5 });
                         }
 
                         if (reviewViewModel.Origin == 2)
                         {
-                            return RedirectToAction(nameof(MTPRinEdit));
+                            //return RedirectToAction(nameof(MTPRinEdit));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 6 });
                         }
-
-                        return RedirectToAction(nameof(Index));
+                        if (reviewViewModel.Origin == 0)
+                        {
+                            //return RedirectToAction(nameof(MTPRinEdit));
+                            return RedirectToAction("EditMTPReview", "MTPs", new { id = _context.MTPReviews.FirstOrDefault(n => n.CreatedBy == reviewEntity.CreatedBy && n.CreatedOn == reviewEntity.CreatedOn).Id, origin = 0 });
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -3388,6 +3190,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.DreamsMentalHealthMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Mtp.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -3419,6 +3226,72 @@ namespace KyoS.Web.Controllers
                 foreach (var item in client.Clients_Diagnostics)
                 {
                     text += $"{item.Diagnostic.Code} - {item.Diagnostic.Description} ";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
+        public JsonResult GetGenderByClient(int idClient)
+        {
+            ClientEntity client = _context.Clients
+                                          .FirstOrDefault(c => c.Id == idClient);
+            string text = string.Empty;
+            if (client != null)
+            {
+                if (client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
+        public JsonResult GetGenderByMTP(int idMTP)
+        {
+            MTPEntity mtp = _context.MTPs
+                                    .Include(m => m.Client)
+                                    .FirstOrDefault(m => m.Id == idMTP);
+            string text = string.Empty;
+            if (mtp != null)
+            {
+                if (mtp.Client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
+                }
+            }
+
+            return Json(text);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
+        public JsonResult GetGenderByGoal(int idGoal)
+        {
+            GoalEntity goal = _context.Goals
+                                      .Include(g => g.MTP)
+                                        .ThenInclude(m => m.Client)
+                                      .FirstOrDefault(g => g.Id == idGoal);
+            string text = string.Empty;
+            if (goal != null)
+            {
+                if (goal.MTP.Client.Gender == GenderType.Female)
+                {
+                    text = "F";
+                }
+                else
+                {
+                    text = "M";
                 }
             }
 
@@ -3458,8 +3331,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Clinic)
 
                                                   .Where(m => (m.Client.Clinic.Id == clinic.Id
-                                                        && (m.Client.IdFacilitatorPSR == facilitator.Id
-                                                            || m.Client.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                        && (m.MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0)
                                                         ))
                                                   .OrderBy(m => m.Client.Clinic.Name)
                                                   .ToListAsync();
@@ -3616,7 +3488,7 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Client.Id == idClient
-                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Client.IdFacilitatorPSR == facilitator.Id || n.Client.IndividualTherapyFacilitator.Id == facilitator.Id || n.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
                 }
@@ -3669,7 +3541,9 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => n.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                 && n.Mtp.Client.Id == idClient
-                                                && (n.Mtp.Client.IdFacilitatorPSR == facilitator.Id || n.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                && (n.Mtp.Client.IdFacilitatorPSR == facilitator.Id 
+                                                    || n.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                    || n.Mtp.Client.IdFacilitatorGroup == facilitator.Id))
                                               .OrderBy(f => f.Mtp.Client.Name)
                                               .ToListAsync());
                 }
@@ -3918,8 +3792,8 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> CreateGoalModalTemp(DateTime admissionDate, int idClient = 0, int numberMonths = 0)
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
+        public async Task<IActionResult> CreateGoalModalTemp(DateTime admissionDate, int idClient = 0, int numberMonths = 0, int typeDocument = 0)
         {
             if (idClient == 0)
             {
@@ -3948,7 +3822,8 @@ namespace KyoS.Web.Controllers
                 IdClient = idClient,
                 UserName = user_logged.UserName,
                 numberMonths = numberMonths,
-                AdmissionDate = admissionDate
+                AdmissionDate = admissionDate,
+                TypeDocument = typeDocument
             };
 
             return View(model);
@@ -3956,7 +3831,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateGoalModalTemp(GoalsTempViewModel model)
         {
             UserEntity user_logged = await _context.Users
@@ -3967,32 +3842,16 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
-                    //return View(model);
-                }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
+                }                
                
-                GoalsTempEntity goalTempEntity = await _converterHelper.ToGoalTempEntity(model, true);
+                GoalsTempEntity goalTempEntity = _converterHelper.ToGoalTempEntity(model, true);
                 _context.Add(goalTempEntity);
                 try
                 {
@@ -4015,7 +3874,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModalTemp", model) });
         }
 
-        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        [Authorize(Roles = "Documents_Assistant, Supervisor, Facilitator")]
         public void DeleteGoalsTemp(int idClient = 0)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -4032,7 +3891,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditGoalModalTemp(int? id)
         {
             if (id == null)
@@ -4054,7 +3913,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditGoalModalTemp(int id, GoalsTempViewModel model)
         {
             if (id != model.Id)
@@ -4069,32 +3928,16 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Name))
                 {
-                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";
-                    if (this.GenderEvaluation(client.Gender, model.Name))
-                    {
-                        gender_problems = "Name";
-                    }
+                    model.Name = (model.Name.Last() == '.') ? model.Name : $"{model.Name}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
-                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";
-                    if (this.GenderEvaluation(client.Gender, model.AreaOfFocus))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Area of Focus" : $"{gender_problems}, Area of Focus";
-                    }
+                    model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el goal tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.Services = _combosHelper.GetComboServices();
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
-                    //return View(model);
-                }
-
-                GoalsTempEntity goalEntity = await _converterHelper.ToGoalTempEntity(model, false);
+                               
+                GoalsTempEntity goalEntity = _converterHelper.ToGoalTempEntity(model, false);
                 _context.Update(goalEntity);
                 try
                 {
@@ -4124,7 +3967,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModalTemp", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateObjectiveModalTemp(int? idGoal, int idClient, string nameGoal, int numberGoal, int number, DateTime  admissisonDate)
         {
             if (idGoal == null)
@@ -4165,7 +4008,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> CreateObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
         {
             UserEntity user_logged = await _context.Users
@@ -4180,41 +4023,15 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = await _context.Clients
                                                     .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
 
-                string gender_problems = string.Empty;
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
                 }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    ObjectiveTempViewModel newmodel = new ObjectiveTempViewModel
-                    {
-                        GoalTemp = goal,
-                        IdGoal = goal.Id,
-                        DateOpened = model.DateOpened,
-                        DateResolved = model.DateResolved,
-                        DateTarget = model.DateTarget,
-                        Objetive = $"{goal.Number}.{goal.ObjetiveTempList.Count() + 1}",
-                        Description = model.Description,
-                        Intervention = model.Intervention
-                    };
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjectiveModalTemp", newmodel) });
-                    //return View(newmodel);
-                }
-
+                                
                 ObjectiveTempEntity objective = await _converterHelper.ToObjectiveTempEntity(model, true);
                 _context.Add(objective);
 
@@ -4281,7 +4098,7 @@ namespace KyoS.Web.Controllers
            
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditObjectiveModalTemp(int? id, string nameGoal, int numberGoal)
         {
             if (id == null)
@@ -4305,7 +4122,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> EditObjectiveModalTemp(ObjectiveTempViewModel model, IFormCollection form)
         {
             UserEntity user_logged = await _context.Users
@@ -4315,34 +4132,18 @@ namespace KyoS.Web.Controllers
             GoalsTempEntity goal = await _context.GoalsTemp
                                                  .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
             ClientEntity client = await _context.Clients
-                                                 .FirstOrDefaultAsync(m => m.Id == model.IdGoal);
+                                                 .FirstOrDefaultAsync(m => m.Id == goal.IdClient);
             if (ModelState.IsValid)
-            {
-                string gender_problems = string.Empty;
+            {               
                 if (!string.IsNullOrEmpty(model.Description))
                 {
-                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";
-                    if (this.GenderEvaluation(client.Gender, model.Description))
-                    {
-                        gender_problems = "Description";
-                    }
+                    model.Description = (model.Description.Last() == '.') ? model.Description : $"{model.Description}.";                    
                 }
                 if (!string.IsNullOrEmpty(model.Intervention))
                 {
-                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";
-                    if (this.GenderEvaluation(client.Gender, model.Intervention))
-                    {
-                        gender_problems = string.IsNullOrEmpty(gender_problems) ? "Intervention" : $"{gender_problems}, Intervention";
-                    }
-                }
-                if (!string.IsNullOrEmpty(gender_problems))     //el objective tiene problemas con el genero
-                {
-                    ModelState.AddModelError(string.Empty, $"Error.There are gender issues in: {gender_problems}");
-                    model.GoalTemp = goal;
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
-                   
-                }
-
+                    model.Intervention = (model.Intervention.Last() == '.') ? model.Intervention : $"{model.Intervention}.";                    
+                }                
+               
                 ObjectiveTempEntity objectiveTemp = await _converterHelper.ToObjectiveTempEntity(model, false);
                 _context.Update(objectiveTemp);
 
@@ -4351,7 +4152,7 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<GoalsTempEntity> goalsTemp = await _context.GoalsTemp
-                                                                    .Include(g => g.ObjetiveTempList)
+                                                                    .Include(g => g.ObjetiveTempList.OrderBy(o => o.Objetive))                                                                        
                                                                     .Where(g => g.IdClient == goal.IdClient && g.UserName == user_logged.UserName)
                                                                     .ToListAsync();
                     
@@ -4376,7 +4177,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModalTemp", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Facilitator")]
         public async Task<IActionResult> DeleteObjectiveTemp(int? id, int origin = 0)
         {
             if (id == null)
@@ -4504,7 +4305,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> AuditMtp()
+        public IActionResult AuditMtp()
         {
             UserEntity user_logged = _context.Users
 
@@ -4648,6 +4449,338 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewGoalsTemp", _context.GoalsTemp.Include(g => g.ObjetiveTempList).Where(d => d.IdClient == 0).ToList()) });
         }
 
+        #region Bill week MTP
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillMTPToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
 
+                mtp.BilledDate = DateTime.Now;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id });
+                }
+            }
+
+           
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBill(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtp.BilledDate = null;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+                
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillToday(int idMtp = 0, int week = 0, int origin = 0)
+        {
+            if (idMtp >= 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == idMtp);
+
+                mtp.DeniedBill = true;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBill(int idMtp = 0, int client = 0, int week = 0)
+        {
+            if (idMtp > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == idMtp);
+
+                mtp.DeniedBill = false;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedMTP(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtp.PaymentDate = null;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayMTP(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPEntity mtp = await _context.MTPs
+                                              .Include(n => n.Client)
+                                              .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtp.PaymentDate = DateTime.Now;
+                mtp.DeniedBill = false;
+                _context.Update(mtp);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
+
+        #region Bill week MTPR
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillMTPRToday(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtpr.BilledDate = DateTime.Now;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id });
+                }
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotBillMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(n => n.Id == id);
+
+                mtpr.BilledDate = null;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeniedBillTodayMTPR(int idMtpr = 0, int week = 0, int origin = 0)
+        {
+            if (idMtpr >= 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == idMtpr);
+
+                mtpr.DeniedBill = true;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotDeniedBillMTPR(int idMtpr = 0, int client = 0, int week = 0)
+        {
+            if (idMtpr > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == idMtpr);
+
+                mtpr.DeniedBill = false;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (client == 0 && week > 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotPaymentReceivedMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtpr.PaymentDate = null;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PaymentReceivedTodayMTPR(int id = 0, int week = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                MTPReviewEntity mtpr = await _context.MTPReviews
+                                                     .Include(n => n.Mtp)
+                                                     .ThenInclude(n => n.Client)
+                                                     .FirstOrDefaultAsync(wc => wc.Id == id);
+
+                mtpr.PaymentDate = DateTime.Now;
+                mtpr.DeniedBill = false;
+                _context.Update(mtpr);
+                await _context.SaveChangesAsync();
+
+                if (origin == 0)
+                {
+                    return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("BillingClient", "Notes", new { idClient = mtpr.Mtp.Client.Id, billed = 1 });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+        #endregion
     }
 }

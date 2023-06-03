@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KyoS.Common.Enums;
@@ -258,6 +259,66 @@ namespace KyoS.Web.Controllers
                 }
             }
             return View(supervisorViewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+
+            return View(await _context.Supervisors
+                                          .Include(f => f.Clinic)
+                                          .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorEntity supervisorEntity = await _context.Supervisors
+                                                              .Include(n => n.Clinic)
+                                                              .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (supervisorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorViewModel supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, supervisorEntity.Clinic.Id);
+
+            return View(supervisorViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> SaveSupervisorSignature(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Supervisors");
+
+            SupervisorEntity supervisor = await _context.Supervisors
+                                                        .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (supervisor != null)
+            {
+                supervisor.SignaturePath = signPath;
+                _context.Update(supervisor);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Supervisors") });
         }
     }
 }

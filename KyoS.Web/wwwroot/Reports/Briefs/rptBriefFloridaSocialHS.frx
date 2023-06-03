@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/19/2023 11:55:58" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/25/2023 17:02:58" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3wBr5ih/pecNje0V/r2slEQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RRbFoCGLdMpd2HoM1nHhxA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -288,6 +288,12 @@
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3n1VrHgkRvuPDDnJXiPkOdQ==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
   </Dictionary>
@@ -900,9 +906,9 @@
       <CheckBoxObject Name="CheckBox550" Left="9.45" Top="513.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IConcurWhitDiagnistic"/>
       <TextObject Name="Text772" Top="570.45" Width="402.57" Height="18.9" Text="ALTERNATIVE DIAGNOSIS AND/OR RECOMMENDATIONS" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text773" Left="7.45" Top="593.35" Width="763.56" Height="18.9" CanGrow="true" Text="[Bio.AlternativeDiagnosis]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="75.6" Top="380.55" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture3" Left="75.6" Top="207.45" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
-      <PictureObject Name="Picture2" Left="75.6" Top="623.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture4" Left="86.94" Top="380.55" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="86.94" Top="207.45" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture2" Left="86.94" Top="623.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text226" Left="300.51" Top="419.35" Width="270.65" Height="18.9" Text="[DocumentsAssistant.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text228" Left="300.4" Top="245.25" Width="270.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Name],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text227" Left="300.4" Top="660.5" Width="270.65" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
@@ -913,6 +919,7 @@
       <LineObject Name="Line20" Left="558.1" Top="111.95" Width="-240.03"/>
       <TextObject Name="Text778" Left="302.4" Top="116.4" Width="270.5" Height="24.57" CanGrow="true" Text="Client Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text779" Left="309.85" Top="92.05" Width="255.15" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture5" Left="87.05" Top="55.7" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
   </ReportPage>
 </Report>
