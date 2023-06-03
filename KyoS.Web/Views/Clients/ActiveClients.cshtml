@@ -93,7 +93,7 @@
                                         @if (item.DocumentType == "N_Doc")
                                         {
                                             <span class="label label-danger">
-                                                @Html.DisplayFor(modelItem => item.DocumentType)
+                                                -
                                             </span>
                                         }
                                         else
@@ -123,7 +123,7 @@
                                                     @if (item.Days == -1000)
                                                     {
                                                         <span class="label label-danger">
-                                                            N_Obj
+                                                            -
                                                         </span>
                                                     }
                                                     else
@@ -141,7 +141,7 @@
                                         @if (item.DocumentTypeInd == "N_Doc")
                                         {
                                             <span class="label label-danger">
-                                                @Html.DisplayFor(modelItem => item.DocumentTypeInd)
+                                                -
                                             </span>
                                         }
                                         else
@@ -171,7 +171,7 @@
                                                     @if (item.DaysInd == -1000)
                                                     {
                                                         <span class="label label-danger">
-                                                            N_Ind
+                                                            -
                                                         </span>
                                                     }
                                                     else
@@ -186,7 +186,7 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        <a asp-action="ViewAllGoals" asp-controller="Notes" asp-route-idMtp="@item.MtpId" target="_blank" class="btn btn-info" title="All goals"><i class="glyphicon glyphicon-list-alt"></i></a>
+                                        <a asp-action="ViewAllGoals" asp-controller="Notes" asp-route-idMtp="@item.MtpId" target="_blank" class="btn btn-default" title="View all goals"><i class="glyphicon glyphicon-list-alt"></i></a>
                                     </td>
                                     
                                 </tr>
