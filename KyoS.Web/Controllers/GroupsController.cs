@@ -1673,8 +1673,8 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient 
                                     && wc.Workday.Date == date 
                                     && wc.Workday.Service == ServiceType.Individual
-                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
-                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
+                                    && ((wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1700,8 +1700,8 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient
                                     && wc.Workday.Date == date
                                     && wc.Workday.Service == ServiceType.Individual
-                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
-                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
+                                    && ((wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1729,8 +1729,8 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient
                                     && wc.Workday.Date == date
                                     && wc.Workday.Service == ServiceType.Individual
-                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
-                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
+                                    && ((wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
@@ -1756,8 +1756,8 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient
                                     && wc.Workday.Date == date
                                     && wc.Workday.Service == ServiceType.Individual
-                                    && ((wc.Schedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > initialTime.TimeOfDay
-                                        || wc.Schedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.Schedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
+                                    && ((wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < initialTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > initialTime.TimeOfDay
+                                        || wc.IndividualNote.SubSchedule.InitialTime.TimeOfDay < endTime.TimeOfDay && wc.IndividualNote.SubSchedule.EndTime.TimeOfDay > endTime.TimeOfDay))))
                                   .Count() > 0)
                     return true;
                 return false;
