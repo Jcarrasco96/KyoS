@@ -2649,7 +2649,7 @@ namespace KyoS.Web.Controllers
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
 
-                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp.Where(n => n.IdClient == HealthInsuranceModel.IdClient)
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp.Where(n => n.IdClient == HealthInsuranceModel.IdClient && n.UserName == user_logged.UserName)
                                                                          .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list )});
