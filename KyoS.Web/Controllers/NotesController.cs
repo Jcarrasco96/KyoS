@@ -12321,7 +12321,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                    clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                     MTPRReview = new List<MTPReviewEntity>();
                 }
 
@@ -12530,7 +12530,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                    clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                     MTPRReview = new List<MTPReviewEntity>();
                 }
 
@@ -12816,7 +12816,7 @@ namespace KyoS.Web.Controllers
                             }
                             
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -12839,8 +12839,6 @@ namespace KyoS.Web.Controllers
 
                         if (clients[i].Bio != null)
                         {
-                            if (clients[i].Bio.DateBio != null)
-                            {
                                 if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate == null)
                                 {
 
@@ -12848,8 +12846,7 @@ namespace KyoS.Web.Controllers
                                 else
                                 {
                                     clients[i].Bio = null;
-                                }
-                            }
+                                }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -12932,7 +12929,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -12954,18 +12951,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -13096,7 +13090,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -13119,18 +13113,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -13239,7 +13230,7 @@ namespace KyoS.Web.Controllers
                             }
                             
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -13261,18 +13252,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -15691,7 +15679,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                     
 
                     if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
@@ -15707,14 +15695,6 @@ namespace KyoS.Web.Controllers
                     if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
                     {
                         client.FarsFormList = null;
-                    }
-
-                    if (client.Bio != null)
-                    {
-                        if (client.Bio.DateBio != null)
-                        {
-                            client.Bio = null;
-                        }
                     }
 
                     client.Workdays_Clients = _context.Workdays_Clients
@@ -15790,7 +15770,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
 
                     if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
@@ -15806,14 +15786,6 @@ namespace KyoS.Web.Controllers
                     if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                     {
                         client.FarsFormList = null;
-                    }
-
-                    if (client.Bio != null)
-                    {
-                        if (client.Bio.DateBio == null)
-                        {
-                            client.Bio = null;
-                        }
                     }
 
                     client.Workdays_Clients = _context.Workdays_Clients
@@ -15950,7 +15922,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                 {
@@ -15965,14 +15937,6 @@ namespace KyoS.Web.Controllers
                 if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                 {
                     client.FarsFormList = null;
-                }
-
-                if (client.Bio != null)
-                {
-                    if (client.Bio.DateBio == null)
-                    {
-                        client.Bio = null;
-                    }
                 }
 
                 client.Workdays_Clients = _context.Workdays_Clients
@@ -16905,7 +16869,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17008,7 +16972,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17154,7 +17118,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17315,7 +17279,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -17382,7 +17346,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -17485,7 +17449,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -17578,7 +17542,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17681,7 +17645,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17827,7 +17791,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17988,7 +17952,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                 }
                 else
                 {
@@ -18054,7 +18018,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                 }
                 ViewData["Billed"] = abilled;
 
@@ -18156,7 +18120,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -18249,7 +18213,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18352,7 +18316,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18498,7 +18462,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18654,7 +18618,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -18721,7 +18685,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -18825,7 +18789,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -18922,7 +18886,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19034,7 +18998,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19189,7 +19153,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19352,7 +19316,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -19421,7 +19385,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -19526,7 +19490,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }

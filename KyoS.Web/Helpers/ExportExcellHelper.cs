@@ -1,20 +1,17 @@
-﻿using KyoS.Web.Data;
+﻿using ClosedXML.Excel;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
-using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using System.IO;
-using ClosedXML.Excel;
 using System.Linq;
 
 namespace KyoS.Web.Helpers
 {
     public class ExportExcellHelper : IExportExcellHelper
     {
-        private readonly DataContext _context;
-       
         public ExportExcellHelper(DataContext context)
         {
-            _context = context;
+
         }
 
         #region Export Excel
@@ -59,10 +56,10 @@ namespace KyoS.Web.Helpers
             var workday_Clients = aworkday_Clients;
             int amount = 0;
             int unit_total = 0;
-            
+
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("All Services ("+aworkday_Clients.Count() +" Services)");
+                var worksheet = workbook.Worksheets.Add("All Services (" + aworkday_Clients.Count() + " Services)");
                 worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                 worksheet.Cell(2, 1).Value = ClinicName;
                 worksheet.Cell(3, 2).Value = Periodo;
@@ -133,7 +130,7 @@ namespace KyoS.Web.Helpers
                     {
                         worksheet.Cell(currentRow, 6).Value = "-";
                     }
-                    worksheet.Cell(currentRow, 7).Value = item.Workday.Date.ToShortDateString(); 
+                    worksheet.Cell(currentRow, 7).Value = item.Workday.Date.ToShortDateString();
                     if (item.Note != null)
                     {
                         worksheet.Cell(currentRow, 8).Value = item.Note.Setting;
@@ -188,7 +185,7 @@ namespace KyoS.Web.Helpers
                     rangeCurrent.Style.Font.FontSize = 11;
                     rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeCurrent.Style.Font.Bold = false;
-                   
+
                     worksheet.Cell(5, 1).Value = codes.Count() + " Clients";
                     worksheet.Cell(5, 7).Value = workday_Clients.Count() + " Services";
                     worksheet.Cell(5, 9).Value = unit_total;
@@ -227,7 +224,7 @@ namespace KyoS.Web.Helpers
                             }
                         }
                     }
-                    
+
 
                 }
 
@@ -260,7 +257,7 @@ namespace KyoS.Web.Helpers
                     {
                         worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
                     }
-                    
+
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
@@ -465,7 +462,7 @@ namespace KyoS.Web.Helpers
         public byte[] ExportAllClients(List<ClientEntity> clients, string date = "")
         {
             var Clients = clients;
-            
+
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("All Clients (" + clients.Count() + ")");
@@ -500,7 +497,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 3).Value = item.DateOfBirth.ToShortDateString();
                     worksheet.Cell(currentRow, 4).Value = item.Gender;
                     worksheet.Cell(currentRow, 5).Value = item.MedicaidID;
-                    
+
                     if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                     {
                         worksheet.Cell(currentRow, 6).Value = item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name;
@@ -520,7 +517,7 @@ namespace KyoS.Web.Helpers
                         worksheet.Cell(currentRow, 7).Value = " - ";
                         worksheet.Cell(currentRow, 7).Style.Fill.SetBackgroundColor(XLColor.Yellow);
                     }
-                    
+
                     worksheet.Cell(currentRow, 8).Value = item.AdmisionDate;
                     worksheet.Cell(currentRow, 9).Value = item.Status;
                     if (item.Status == Common.Enums.StatusType.Open)
@@ -531,7 +528,7 @@ namespace KyoS.Web.Helpers
                     {
                         worksheet.Cell(currentRow, 9).Style.Fill.SetBackgroundColor(XLColor.Red);
                     }
-                    
+
                     worksheet.Cell(currentRow, 10).Value = item.FullAddress;
                     worksheet.Cell(currentRow, 11).Value = item.Telephone;
                     worksheet.Cell(currentRow, 12).Value = item.DateOfClose.ToShortDateString();
@@ -539,12 +536,12 @@ namespace KyoS.Web.Helpers
                     {
                         worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Yellow);
                     }
-                    
+
                     IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
                     rangeCurrent.Style.Font.FontSize = 11;
                     rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeCurrent.Style.Font.Bold = false;
-                    
+
                 }
 
                 worksheet.ColumnsUsed().AdjustToContents();
@@ -723,7 +720,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 11).Value = item.Facilitator.Name;
                     worksheet.Cell(currentRow, 12).Value = "Hold";
                     worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Red);
-         
+
                 }
 
                 worksheet.ColumnsUsed().AdjustToContents();
@@ -812,9 +809,9 @@ namespace KyoS.Web.Helpers
                     facilitators = new List<string>();
                     foreach (var product in item)
                     {
-                        if (codes.Contains(product.Client.Code) == false) 
+                        if (codes.Contains(product.Client.Code) == false)
                         {
-                             codes.Add(product.Client.Code);
+                            codes.Add(product.Client.Code);
                         }
 
                         if (facilitators.Contains(product.Facilitator.Name) == false)
@@ -896,7 +893,7 @@ namespace KyoS.Web.Helpers
                         }
 
                         worksheet.Cell(currentRow, 11).Value = product.Facilitator.Name;
-   
+
                         IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
                         rangeCurrent.Style.Font.FontSize = 11;
                         rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
@@ -926,7 +923,6 @@ namespace KyoS.Web.Helpers
                 }
             }
         }
-
 
         #endregion
 

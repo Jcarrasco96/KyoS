@@ -1035,8 +1035,7 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtp = new MTPEntity();
             List<MTPReviewEntity> review = new List<MTPReviewEntity>();
-            bool initialFars = false;
-            bool reviewFars = false;
+            bool initialFars = false;            
             bool individualFars = false;
             bool PSRFars = false;
             bool GroupFars = false;
@@ -1068,12 +1067,7 @@ namespace KyoS.Web.Controllers
                 }
 
             }
-
-            if (review.Count() <= client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
-            {
-                reviewFars = true;
-            }
-
+            
             if (initialFars == false)
             {
                 auditClient.NameClient = client.Name;

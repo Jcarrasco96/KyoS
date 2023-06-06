@@ -198,6 +198,6 @@ namespace KyoS.Web.Helpers
         SubScheduleViewModel ToSubScheduleViewModel(SubScheduleEntity model);
         Task<ManagerEntity> ToManagerEntity(ManagerViewModel model, string signaturePath, bool isNew);
         ManagerViewModel ToManagerViewModel(ManagerEntity model);
-        Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity model, List<MTPReviewEntity> mtpr);
+        ClientAuxiliarViewModel ToClientAUXViewModel(ClientEntity model, List<MTPReviewEntity> mtpr);
     }
 }

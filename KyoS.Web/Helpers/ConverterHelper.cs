@@ -4,11 +4,9 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
-using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
 {
@@ -101,7 +99,7 @@ namespace KyoS.Web.Helpers
             return new ThemeEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Clinic = await _context.Clinics.FindAsync(model.IdClinic),                
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Name = model.Name,
                 Service = ThemeUtils.GetThemeByIndex(model.IdService)
             };
@@ -123,11 +121,11 @@ namespace KyoS.Web.Helpers
 
         public Theme3ViewModel ToTheme3ViewModel(ThemeEntity themeEntity)
         {
-           
+
             return new Theme3ViewModel
             {
                 Id = themeEntity.Id,
-                Name = themeEntity.Name,                
+                Name = themeEntity.Name,
                 IdClinic = themeEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdService = Convert.ToInt32(themeEntity.Service),
@@ -271,7 +269,7 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 MedicaidID = model.MedicaidID,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
-                Status = StatusUtils.GetStatusByIndex(model.IdStatus),                
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 Email = model.Email,
                 Telephone = model.Telephone,
                 TelephoneSecondary = model.TelephoneSecondary,
@@ -377,7 +375,7 @@ namespace KyoS.Web.Helpers
                 DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == clientEntity.Id),
                 DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
-                IdService = Convert.ToInt32(clientEntity.Service), 
+                IdService = Convert.ToInt32(clientEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
                 ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
@@ -469,7 +467,7 @@ namespace KyoS.Web.Helpers
             return new MTPEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Client = await _context.Clients.FindAsync(model.IdClient),                
+                Client = await _context.Clients.FindAsync(model.IdClient),
                 MTPDevelopedDate = model.MTPDevelopedDate,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -545,7 +543,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = mtpEntity.Id,
                 IdClient = mtpEntity.Client.Id,
-                Clients = _combosHelper.GetComboClients(),               
+                Clients = _combosHelper.GetComboClients(),
                 MTPDevelopedDate = mtpEntity.MTPDevelopedDate,
                 StartTime = mtpEntity.StartTime,
                 EndTime = mtpEntity.EndTime,
@@ -553,7 +551,7 @@ namespace KyoS.Web.Helpers
                 InitialDischargeCriteria = mtpEntity.InitialDischargeCriteria,
                 Modality = mtpEntity.Modality,
                 Frecuency = mtpEntity.Frecuency,
-                NumberOfMonths = mtpEntity.NumberOfMonths,                
+                NumberOfMonths = mtpEntity.NumberOfMonths,
                 Setting = mtpEntity.Setting,
                 Active = mtpEntity.Active,
                 AdditionalRecommended = mtpEntity.AdditionalRecommended,
@@ -607,7 +605,7 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = mtpEntity.AdmissionedFor,
                 CodeBill = mtpEntity.CodeBill,
                 Units = mtpEntity.Units
-                
+
             };
 
             if (mtpEntity.DocumentAssistant == null)
@@ -620,7 +618,7 @@ namespace KyoS.Web.Helpers
             }
 
             return model;
-        }        
+        }
 
         public async Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew)
         {
@@ -656,14 +654,14 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 Compliment = goalEntity.Compliment,
-                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
+                Compliment_Date = goalEntity.Compliment_Date,
                 Compliment_Explain = goalEntity.Compliment_Explain,
                 Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
-                IdMTPReview = goalEntity.IdMTPReview                
+                IdMTPReview = goalEntity.IdMTPReview
             };
             if (goalEntity.Adendum != null)
             {
-                model.IdAdendum = goalEntity.Adendum.Id;               
+                model.IdAdendum = goalEntity.Adendum.Id;
             }
 
             return model;
@@ -748,11 +746,11 @@ namespace KyoS.Web.Helpers
             {
                 model.Schedule = groupEntity.Schedule;
                 model.IdSchedule = groupEntity.Schedule.Id;
-                
+
             }
             return model;
         }
-       
+
         public PlanViewModel ToPlanViewModel(PlanEntity planEntity)
         {
             return new PlanViewModel
@@ -915,7 +913,7 @@ namespace KyoS.Web.Helpers
                 Obsessive = model.Obsessive,
                 Paranoid = model.Paranoid,
                 Scattered = model.Scattered,
-                Psychotic = model.Psychotic,           
+                Psychotic = model.Psychotic,
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
@@ -968,12 +966,12 @@ namespace KyoS.Web.Helpers
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention
             };
-        }        
+        }
 
         public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model, bool indTherapy = false)
         {
             Workday_ClientViewModel salida = new Workday_ClientViewModel();
-            
+
             salida = new Workday_ClientViewModel
             {
                 Id = model.Id,
@@ -993,21 +991,21 @@ namespace KyoS.Web.Helpers
                     salida.IdSchedule = 0;
                     salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
                 }
-               
+
             }
             else
             {
                 if (indTherapy == false)
                 {
                     salida.IdSchedule = model.Schedule.Id;
-                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id,model.Id);
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
                 }
                 else
                 {
                     salida.IdSchedule = model.Schedule.Id;
-                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id,model.Id);
+                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id, model.Id);
                 }
-                
+
             }
             return salida;
         }
@@ -1123,7 +1121,7 @@ namespace KyoS.Web.Helpers
             return new ReferredEntity
             {
                 Id = isNew ? 0 : model.Id,
-               // ReferredNote = model.ReferredNote,
+                // ReferredNote = model.ReferredNote,
                 Name = model.Name,
                 Address = model.Address,
                 Telephone = model.Telephone,
@@ -1316,7 +1314,7 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)                
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
             };
         }
 
@@ -1345,10 +1343,10 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 ApprovedDate = model.ApprovedDate,
                 DurationTime = model.DurationTime,
-                Units = model.Units,                
+                Units = model.Units,
                 Active = isNew ? true : model.Active,
                 Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
-                HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == model.IdHealthInsurance),                
+                HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == model.IdHealthInsurance),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -1365,7 +1363,7 @@ namespace KyoS.Web.Helpers
                 Id = model.Id,
                 ApprovedDate = model.ApprovedDate,
                 DurationTime = model.DurationTime,
-                Units = model.Units,                
+                Units = model.Units,
                 Active = model.Active,
                 IdClient = model.Client.Id,
                 Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
@@ -1534,7 +1532,7 @@ namespace KyoS.Web.Helpers
                 Strengths = TcmServicePlanEntity.Strengths,
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2
             };
         }
 
@@ -1589,7 +1587,7 @@ namespace KyoS.Web.Helpers
 
         public TCMDomainEntity ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
-           
+
             return new TCMDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -1634,7 +1632,7 @@ namespace KyoS.Web.Helpers
 
         public IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model)
         {
-            return new   IntakeScreeningViewModel
+            return new IntakeScreeningViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -1658,7 +1656,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee
 
             };
-           
+
         }
 
         public IntakeConsentForTreatmentEntity ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
@@ -1667,7 +1665,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Client = model.Client,
-                
+
                 Aggre = model.Aggre,
                 Aggre1 = model.Aggre1,
                 AuthorizeRelease = model.AuthorizeRelease,
@@ -1681,7 +1679,7 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 Underestand = model.Underestand,
                 AdmissionedFor = model.AdmissionedFor
-                
+
 
             };
         }
@@ -1708,7 +1706,7 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor
 
             };
-            
+
         }
 
         public IntakeConsentForReleaseEntity ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
@@ -1733,7 +1731,7 @@ namespace KyoS.Web.Helpers
                 History = model.History,
                 HospitalRecord = model.HospitalRecord,
                 IncidentReport = model.IncidentReport,
-                
+
                 LabWork = model.LabWork,
                 Other = model.Other,
                 Other_Explain = model.Other_Explain,
@@ -1846,11 +1844,11 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-               
+
             };
 
         }
-        
+
         public IntakeAccessToServicesEntity ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
         {
             return new IntakeAccessToServicesEntity
@@ -1880,7 +1878,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-                
+
             };
 
         }
@@ -1946,10 +1944,10 @@ namespace KyoS.Web.Helpers
                 Task = model.task,
                 //Long_Term = model.long_Term,
                 StartDate = model.StartDate,
-                
+
                 TargetDate = model.TargetDate,
                 EndDate = model.EndDate,
-                Finish = model.Finish,                
+                Finish = model.Finish,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 Responsible = model.Responsible,
                 Origin = valor
@@ -1964,7 +1962,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmObjetiveEntity.Id,
                 Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
-                IdObjetive= TcmObjetiveEntity.IdObjetive,
+                IdObjetive = TcmObjetiveEntity.IdObjetive,
                 //IdClinic = TcmObjetiveEntity.Clinic.Id,
                 //Clinics = _combosHelper.GetComboClinics(),
                 name = TcmObjetiveEntity.Name,
@@ -1986,7 +1984,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = TcmObjetiveEntity.LastModifiedBy,
                 LastModifiedOn = TcmObjetiveEntity.LastModifiedOn,
                 Name = TcmObjetiveEntity.Name,
-                Task = TcmObjetiveEntity.Task                
+                Task = TcmObjetiveEntity.Task
             };
 
             if (TcmObjetiveEntity.Origin == "Service Plan")
@@ -2147,7 +2145,7 @@ namespace KyoS.Web.Helpers
             return new TCMServicePlanReviewViewModel
             {
                 Id = TcmServicePlanReviewEntity.Id,
-                DateOpending  = TcmServicePlanReviewEntity.DateOpending,
+                DateOpending = TcmServicePlanReviewEntity.DateOpending,
                 DateServicePlanReview = TcmServicePlanReviewEntity.DateServicePlanReview,
                 Recomendation = TcmServicePlanReviewEntity.Recomendation,
                 SummaryProgress = TcmServicePlanReviewEntity.SummaryProgress,
@@ -2200,7 +2198,7 @@ namespace KyoS.Web.Helpers
                 IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
                 TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
                 status = _combosHelper.GetComboClientStatus()
-              
+
             };
         }
 
@@ -2215,7 +2213,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = model.TcmDomain,
                 ChangesUpdate = model.ChangesUpdate
-               
+
             };
         }
 
@@ -2269,7 +2267,7 @@ namespace KyoS.Web.Helpers
                 AllServiceInPlace = model.AllServiceInPlace,
                 NonComplianceWithAgencyRules = model.NonComplianceWithAgencyRules,
                 Referred = model.Referred,
-                ClientMovedOutArea =model.ClientMovedOutArea,
+                ClientMovedOutArea = model.ClientMovedOutArea,
                 ClientLeftVoluntarily = model.ClientLeftVoluntarily,
                 LackOfProgress = model.LackOfProgress,
                 Other = model.Other,
@@ -2349,7 +2347,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-                
+
 
             };
 
@@ -2437,7 +2435,7 @@ namespace KyoS.Web.Helpers
                 HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
                 AgencyExpectation = model.AgencyExpectation,
                 If1OrMore = model.If1OrMore,
-                
+
                 AdmissionedFor = model.AdmissionedFor
             };
 
@@ -2889,7 +2887,7 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Frequency = model.Frequency,
                 Prescriber = model.Prescriber
-                
+
             };
         }
 
@@ -3025,7 +3023,7 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime
 
             };
-            
+
             if (model.Supervisor != null)
                 salida.IdSupervisor = model.Supervisor.Id;
             else
@@ -3493,7 +3491,7 @@ namespace KyoS.Web.Helpers
                                     .ThenInclude(c => c.Clients_Diagnostics)
                                     .ThenInclude(cd => cd.Diagnostic)
                                     .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
-                
+
                 Goals = model.Goals,
                 Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
                 Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
@@ -3548,7 +3546,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-             
+
                 ACopy = model.ACopy,
                 DateClinicalDirector = model.DateClinicalDirector,
                 DateLicensedPractitioner = model.DateLicensedPractitioner,
@@ -3587,7 +3585,7 @@ namespace KyoS.Web.Helpers
                 Units = model.Units
 
             };
-            
+
             return salida;
         }
 
@@ -3634,7 +3632,7 @@ namespace KyoS.Web.Helpers
                 CodeBill = model.CodeBill,
                 Units = model.Units
 
-            };           
+            };
         }
 
         public async Task<TCMIntakeFormEntity> ToTCMIntakeFormEntity(TCMIntakeFormViewModel model, bool isNew, string userId)
@@ -3947,7 +3945,7 @@ namespace KyoS.Web.Helpers
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-                
+
 
             };
         }
@@ -4328,7 +4326,7 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
-                DateSignatureEmployee =model.DateSignatureEmployee,
+                DateSignatureEmployee = model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
@@ -4386,7 +4384,7 @@ namespace KyoS.Web.Helpers
         public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew, string userId)
         {
             TCMDischargeFollowUpEntity salida;
-            salida  = new TCMDischargeFollowUpEntity
+            salida = new TCMDischargeFollowUpEntity
             {
                 Id = isNew ? 0 : model.Id,
                 CreatedBy = isNew ? userId : model.CreatedBy,
@@ -4488,7 +4486,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient_FK = model.TcmClient_FK,
-                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()                
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
             };
 
             return salida;
@@ -4524,7 +4522,7 @@ namespace KyoS.Web.Helpers
                 Activity = model.Activity,
                 Date = model.Date,
                 TcmInterventionLog = await _context.TCMIntakeInterventionLog.FirstOrDefaultAsync(n => n.Id == model.IdInterventionLog)
-        };
+            };
 
             return salida;
         }
@@ -4552,7 +4550,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 TCMClient = await _context.TCMClient
-                                          .Include(n => n.Client)  
+                                          .Include(n => n.Client)
                                           .FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
                 AbilityScale = model.AbilityScale,
                 ActivitiesScale = model.ActivitiesScale,
@@ -4672,7 +4670,7 @@ namespace KyoS.Web.Helpers
                 TcmClient = await _context.TCMClient
                                           .Include(n => n.Client)
                                           .FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
-                
+
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -4703,7 +4701,7 @@ namespace KyoS.Web.Helpers
                 School = model.School,
                 Separated = model.Separated,
                 Treating = model.Treating,
-                
+
                 MedicationList = model.MedicationList,
                 PastCurrentServiceList = model.PastCurrentServiceList,
                 AnyOther = model.AnyOther,
@@ -4795,408 +4793,6 @@ namespace KyoS.Web.Helpers
                 LegalDecisionNone = model.LegalDecisionNone,
                 LegalDecisionOther = model.LegalDecisionOther,
                 LegalDecisionOtherExplain = model.LegalDecisionOtherExplain,
-                LegalDecisionParent = model.LegalDecisionParent,
-                LegalDecisionPhone = model.LegalDecisionPhone,
-                MedicalProblemList = model.MedicalProblemList,
-                MentalHealth = model.MentalHealth,
-                NeedOfSpecial = model.NeedOfSpecial,
-                NeedOfSpecialSpecify = model.NeedOfSpecialSpecify,
-                NoHearing = model.NoHearing,
-                NoUseful = model.NoUseful,
-                Outcome = model.Outcome,
-                Provider = model.Provider,
-                Suicidal = model.Suicidal,
-                SurgeryList = model.SurgeryList,
-                TypeOfAssessmentAnnual = model.TypeOfAssessmentAnnual,
-                TypeOfAssessmentInitial = model.TypeOfAssessmentInitial,
-                TypeOfAssessmentOther = model.TypeOfAssessmentOther,
-                TypeOfAssessmentOtherExplain = model.TypeOfAssessmentOtherExplain,
-                TypeOfAssessmentSignificant = model.TypeOfAssessmentSignificant,
-                VisionImpairment = model.VisionImpairment,
-                VisionNotDetermined = model.VisionNotDetermined,
-                WhenWas = model.WhenWas,
-
-                AcademicEelementary = model.AcademicEelementary,
-                AcademicHigh = model.AcademicHigh,
-                AcademicMiddle = model.AcademicMiddle,
-                AcademicPreSchool = model.AcademicPreSchool,
-                AdditionalInformation = model.AdditionalInformation,
-                AdditionalInformationMigration = model.AdditionalInformationMigration,
-                AHomeVisit = model.AHomeVisit,
-                AHomeVisitOn = model.AHomeVisitOn,
-                Appliances = model.Appliances,
-                AttendanceEelementary = model.AttendanceEelementary,
-                AttendanceHigh = model.AttendanceHigh,
-                AttendanceMiddle = model.AttendanceMiddle,
-                AttendancePreSchool = model.AttendancePreSchool,
-                BathingAssistive = model.BathingAssistive,
-                BathingIndependent = model.BathingIndependent,
-                BathingPhysical = model.BathingPhysical,
-                BathingSupervision = model.BathingSupervision,
-                BathingTotal = model.BathingTotal,
-                Bathtub = model.Bathtub,
-                BehaviorEelementary = model.BehaviorEelementary,
-                BehaviorHigh = model.BehaviorHigh,
-                BehaviorMiddle = model.BehaviorMiddle,
-                BehaviorPreSchool = model.BehaviorPreSchool,
-                Briefly = model.Briefly,
-                CaseManagerWas = model.CaseManagerWas,
-                CaseManagerWasDueTo = model.CaseManagerWasDueTo,
-                Citizen = model.Citizen,
-                ColonCancer = model.ColonCancer,
-                CongredatedHowOften = model.CongredatedHowOften,
-                CongredatedProvider = model.CongredatedProvider,
-                CongredatedReceive = model.CongredatedReceive,
-                ContinueToLive = model.ContinueToLive,
-                ContinueToLiveOnly = model.ContinueToLiveOnly,
-                CookingAssistive = model.CookingAssistive,
-                CookingIndependent = model.CookingIndependent,
-                CookingPhysical = model.CookingPhysical,
-                CookingSupervision = model.CookingSupervision,
-                CookingTotal = model.CookingTotal,
-                CountryOfBirth = model.CountryOfBirth,
-                CurrentEmployer = model.CurrentEmployer,
-                DentalExam = model.DentalExam,
-                DescribeAnySchool = model.DescribeAnySchool,
-                DescribeClientCultural = model.DescribeClientCultural,
-                DescribeClientEducation = model.DescribeClientEducation,
-                DescribeClientLiving = model.DescribeClientLiving,
-                DescribeClientRelationship = model.DescribeClientRelationship,
-                DescribeNeighborhood = model.DescribeNeighborhood,
-                DescribeOtherNeedConcerns = model.DescribeOtherNeedConcerns,
-                DoesClientBasicNeed = model.DoesClientBasicNeed,
-                DoesClientCurrently = model.DoesClientCurrently,
-                DoesClientCurrentlyExplain = model.DoesClientCurrentlyExplain,
-                DoesClientFeel = model.DoesClientFeel,
-                DoesClientFeelExplain = model.DoesClientFeelExplain,
-                DoesClientNeedAssistance = model.DoesClientNeedAssistance,
-                DoesClientNeedAssistanceEducational = model.DoesClientNeedAssistanceEducational,
-                DoesClientNeedAssistanceEducationalExplain = model.DoesClientNeedAssistanceEducationalExplain,
-                DoesClientNeedAssistanceExplain = model.DoesClientNeedAssistanceExplain,
-                DoesNotKnow = model.DoesNotKnow,
-                DoingAssistive = model.DoingAssistive,
-                DoingIndependent = model.DoingIndependent,
-                DoingPhysical = model.DoingPhysical,
-                DoingSupervision = model.DoingSupervision,
-                DoingTotal = model.DoingTotal,
-                DressingAssistive = model.DressingAssistive,
-                DressingIndependent = model.DressingIndependent,
-                DressingPhysical = model.DressingPhysical,
-                DressingSupervision = model.DressingSupervision,
-                DressingTotal = model.DressingTotal,
-                Drives = model.Drives,
-                Electrical = model.Electrical,
-                EmployerAddress = model.EmployerAddress,
-                EmployerCityState = model.EmployerCityState,
-                EmployerContactPerson = model.EmployerContactPerson,
-                EmployerPhone = model.EmployerPhone,
-                EmploymentStatus = model.EmploymentStatus,
-                ExcessiveCluter = model.ExcessiveCluter,
-                FailToEelementary = model.FailToEelementary,
-                FailToHigh = model.FailToHigh,
-                FailToMiddle = model.FailToMiddle,
-                FailToPreSchool = model.FailToPreSchool,
-                FeedingAssistive = model.FeedingAssistive,
-                FeedingIndependent = model.FeedingIndependent,
-                FeedingPhysical = model.FeedingPhysical,
-                FeedingSupervision = model.FeedingSupervision,
-                FeedingTotal = model.FeedingTotal,
-                FireHazards = model.FireHazards,
-                Flooring = model.Flooring,
-                FoodPantryHowOften = model.FoodPantryHowOften,
-                FoodPantryProvider = model.FoodPantryProvider,
-                FoodPantryReceive = model.FoodPantryReceive,
-                FoodStampHowOften = model.FoodStampHowOften,
-                FoodStampProvider = model.FoodStampProvider,
-                FoodStampReceive = model.FoodStampReceive,
-                FriendOrFamily = model.FriendOrFamily,
-                GroomingAssistive = model.GroomingAssistive,
-                GroomingIndependent = model.GroomingIndependent,
-                GroomingPhysical = model.GroomingPhysical,
-                GroomingSupervision = model.GroomingSupervision,
-                GroomingTotal = model.GroomingTotal,
-                HasClientEverArrest = model.HasClientEverArrest,
-                HasClientEverArrestLastTime = model.HasClientEverArrestLastTime,
-                HasClientEverArrestManyTime = model.HasClientEverArrestManyTime,
-                HomeDeliveredHowOften = model.HomeDeliveredHowOften,
-                HomeDeliveredProvider = model.HomeDeliveredProvider,
-                HomeDeliveredReceive = model.HomeDeliveredReceive,
-                IfThereAnyHousing = model.IfThereAnyHousing,
-                IfYesWereCriminal = model.IfYesWereCriminal,
-                IfYesWhatArea = model.IfYesWhatArea,
-                ImmigrationOther = model.ImmigrationOther, 
-                ImmigrationOtherExplain = model.ImmigrationOtherExplain,
-                Insect = model.Insect,
-                IsClientCurrentlyEmployed = model.IsClientCurrentlyEmployed,
-                IsClientCurrentlySchool = model.IsClientCurrentlySchool,
-                IsClientCurrentlySchoolExplain = model.IsClientCurrentlySchoolExplain,
-                IsClientInterested = model.IsClientInterested,
-                IsClientInvolved = model.IsClientInvolved,
-                IsClientInvolvedSpecify = model.IsClientInvolvedSpecify,
-                IsTheClientAbleWork = model.IsTheClientAbleWork,
-                IsTheClientAbleWorkLimitation = model.IsTheClientAbleWorkLimitation,
-                IsTheClientHavingFinancial = model.IsTheClientHavingFinancial,
-                IsTheClientHavingFinancialExplain = model.IsTheClientHavingFinancialExplain,
-                IsThereAnyAide = model.IsThereAnyAide,
-                IsThereAnyAideName = model.IsThereAnyAideName,
-                IsThereAnyAidePhone = model.IsThereAnyAidePhone,
-                IsThereAnyCurrentLegalProcess = model.IsThereAnyCurrentLegalProcess,
-                LabWorks = model.LabWorks,
-                LearningEelementary = model.LearningEelementary,
-                LearningHigh = model.LearningHigh,
-                LearningMiddle = model.LearningMiddle,
-                LearningPreSchool = model.LearningPreSchool,
-                ListAnyNeed = model.ListAnyNeed,
-                ListClientCurrentPotencialStrngths = model.ListClientCurrentPotencialStrngths,
-                ListClientCurrentPotencialWeakness = model.ListClientCurrentPotencialWeakness,
-                MakingAssistive = model.MakingAssistive,
-                MakingIndependent = model.MakingIndependent,
-                MakingPhysical = model.MakingPhysical,
-                MakingSupervision = model.MakingSupervision,
-                MakingTotal = model.MakingTotal,
-                Mammogram = model.Mammogram,
-                MayWeLeaveSend = model.MayWeLeaveSend,
-                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
-                NoAirCondition = model.NoAirCondition,
-                NoTelephone = model.NoTelephone,
-                NotHot = model.NotHot,
-                NumberOfBedrooms = model.NumberOfBedrooms,
-                NumberOfPersonLiving = model.NumberOfPersonLiving,
-                OtherFinancial = model.OtherFinancial,
-                OtherHowOften = model.OtherHowOften,
-                OtherProvider = model.OtherProvider,
-                OtherReceive = model.OtherReceive,
-                PapAndHPV = model.PapAndHPV,
-                ParticipationEelementary = model.ParticipationEelementary,
-                ParticipationHigh = model.ParticipationHigh,
-                ParticipationMiddle = model.ParticipationMiddle,
-                ParticipationPreSchool = model.ParticipationPreSchool,
-                PersonPorBedrooms = model.PersonPorBedrooms,
-                PhysicalExam = model.PhysicalExam,
-                PhysicalOther = model.PhysicalOther,
-                PreferToLive = model.PreferToLive,
-                Poor = model.Poor,
-                ProbationOfficer = model.ProbationOfficer,
-                ProbationOfficerName = model.ProbationOfficerName,
-                ProbationOfficerPhone = model.ProbationOfficerPhone,
-                RecommendedActivities = model.RecommendedActivities,
-                RecommendedBasicNeed = model.RecommendedBasicNeed,
-                RecommendedEconomic = model.RecommendedEconomic,
-                RecommendedHousing = model.RecommendedHousing,
-                RecommendedLegalImmigration = model.RecommendedLegalImmigration,
-                RecommendedMentalHealth = model.RecommendedMentalHealth,
-                RecommendedOther = model.RecommendedOther,
-                RecommendedOtherSpecify = model.RecommendedOtherSpecify,
-                RecommendedPhysicalHealth = model.RecommendedPhysicalHealth,
-                RecommendedRecreational = model.RecommendedRecreational,
-                RecommendedSchool = model.RecommendedSchool,
-                RecommendedTransportation = model.RecommendedTransportation,
-                RecommendedVocation = model.RecommendedVocation,
-                RelationshipEelementary = model.RelationshipEelementary,
-                RelationshipHigh =model.RelationshipHigh,
-                RelationshipMiddle = model.RelationshipMiddle,
-                RelationshipPreSchool = model.RelationshipPreSchool,
-                Resident = model.Resident,
-                ResidentStatus = model.ResidentStatus,
-                SchoolAddress = model.SchoolAddress,
-                SchoolCityState = model.SchoolCityState,
-                SchoolDistrict = model.SchoolDistrict,
-                SchoolGrade = model.SchoolGrade,
-                SchoolName = model.SchoolName,
-                SchoolProgramEBD = model.SchoolProgramEBD,
-                SchoolProgramESE = model.SchoolProgramESE,
-                SchoolProgramESOL = model.SchoolProgramESOL,
-                SchoolProgramHHIP = model.SchoolProgramHHIP,
-                SchoolProgramOther = model.SchoolProgramOther,
-                SchoolProgramRegular = model.SchoolProgramRegular,
-                SchoolProgramTeacherName = model.SchoolProgramTeacherName,
-                SchoolProgramTeacherPhone = model.SchoolProgramTeacherPhone,
-                ShoppingAssistive = model.ShoppingAssistive,
-                ShoppingIndependent = model.ShoppingIndependent,
-                ShoppingPhysical = model.ShoppingPhysical,
-                ShoppingSupervision = model.ShoppingSupervision,
-                ShoppingTotal = model.ShoppingTotal,
-                Staff = model.Staff,
-                Stairs = model.Stairs,
-                Structural = model.Structural,
-                TakesABus = model.TakesABus,
-                TransferringAssistive = model.TransferringAssistive,
-                TransferringIndependent = model.TransferringIndependent,
-                TransferringPhysical = model.TransferringPhysical,
-                TransferringSupervision = model.TransferringSupervision,
-                TransferringTotal = model.TransferringTotal,
-                TransportationOther = model.TransportationOther,
-                TransportationOtherExplain = model.TransportationOtherExplain,
-                Tripping = model.Tripping,
-                Unsanitary = model.Unsanitary,
-                VocationalEmployment = model.VocationalEmployment,
-                Walks = model.Walks,
-                WhatActivityThings = model.WhatActivityThings,
-                WhatIsCollegeGraduated = model.WhatIsCollegeGraduated,
-                WhatIsElementary = model.WhatIsElementary,
-                WhatIsGED = model.WhatIsGED,
-                WhatIsGraduated = model.WhatIsGraduated,
-                WhatIsGraduatedDegree = model.WhatIsGraduatedDegree,
-                WhatIsHighSchool = model.WhatIsHighSchool,
-                WhatIsMiddle = model.WhatIsMiddle,
-                WhatIsNoSchool = model.WhatIsNoSchool,
-                WhatIsSomeCollege = model.WhatIsSomeCollege,
-                WhatIsSomeHigh = model.WhatIsSomeHigh,
-                WhatIsTheMainSource = model.WhatIsTheMainSource,
-                WhatIsTradeSchool = model.WhatIsTradeSchool,
-                WhatIsUnknown = model.WhatIsUnknown,
-                WouldLikeObtainJob = model.WouldLikeObtainJob,
-                WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
-                YearEnteredUsa = model.YearEnteredUsa,
-
-                CantDoItAtAll = model.CantDoItAtAll,
-                DateSignatureCaseManager = model.DateSignatureCaseManager,
-                DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
-                DoesClientTranspotation = model.DoesClientTranspotation,
-                DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
-                HoweverOn = model.HoweverOn,
-                HoweverVisitScheduler = model.HoweverVisitScheduler,
-                NeedALot = model.NeedALot,
-                NeedNoHelp = model.NeedNoHelp,
-                NeedSome = model.NeedSome,
-                OtherReceiveExplain = model.OtherReceiveExplain,
-                Status = TCMDocumentStatus.Approved,
-                TCMSupervisor = model.TCMSupervisor,
-                TcmMessages = _context.TCMMessages
-                                      .Where(n => n.TCMAssessment.Id == model.Id)
-                                      .ToList()
-
-            };
-        }
-
-        public TCMAssessmentViewModel ToTCMAssessmentViewModel(TCMAssessmentEntity model)
-        {
-            TCMAssessmentViewModel salida;
-            salida = new TCMAssessmentViewModel
-            {
-                Id = model.Id,
-                TcmClient = model.TcmClient,
-                CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn,
-                LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn,
-                Approved = model.Approved,
-                AreChild = model.AreChild,
-                AreChildAddress = model.AreChildAddress,
-                TcmClient_FK = model.TcmClient_FK,
-                AreChildCity = model.AreChildCity,
-                AreChildName = model.AreChildName,
-                AreChildPhone = model.AreChildPhone,
-                Caregiver = model.Caregiver,
-                ChildFather = model.ChildFather,
-                ChildMother = model.ChildMother,
-                ClientInput = model.ClientInput,
-                DateAssessment = model.DateAssessment,
-                Divorced = model.Divorced,
-                Family = model.Family,
-                Married = model.Married,
-                MayWe = model.MayWe,
-                MayWeNA = model.MayWeNA,
-                NeverMarried = model.NeverMarried,
-                Other = model.Other,
-                OtherExplain = model.OtherExplain,
-                PresentingProblems = model.PresentingProblems,
-                Referring = model.Referring,
-                Review = model.Review,
-                School = model.School,
-                Separated = model.Separated,
-                Treating = model.Treating,
-                MedicationList = model.MedicationList,
-                PastCurrentServiceList = model.PastCurrentServiceList,
-                AnyOther = model.AnyOther,
-                DateOfOnSetPresentingProblem = model.DateOfOnSetPresentingProblem,
-                HasTheClient = model.HasTheClient,
-                HouseCompositionList = model.HouseCompositionList,
-                HowDoesByFollowing = model.HowDoesByFollowing,
-                HowDoesCalendar = model.HowDoesCalendar,
-                HowDoesDaily = model.HowDoesDaily,
-                HowDoesElectronic = model.HowDoesElectronic,
-                HowDoesFamily = model.HowDoesFamily,
-                HowDoesKeeping = model.HowDoesKeeping,
-                HowDoesOther = model.HowDoesOther,
-                HowDoesOtherExplain = model.HowDoesOtherExplain,
-                HowDoesPill = model.HowDoesPill,
-                HowDoesRNHHA = model.HowDoesRNHHA,
-                HowWeelEnable = model.HowWeelEnable,
-                HowWeelWithALot = model.HowWeelWithALot,
-                HowWeelWithNo = model.HowWeelWithNo,
-                HowWeelWithSome = model.HowWeelWithSome,
-                IndividualAgencyList = model.IndividualAgencyList,
-                PharmacyPhone = model.PharmacyPhone,
-                PresentingProblemPrevious = model.PresentingProblemPrevious,
-                WhatPharmacy = model.WhatPharmacy,
-
-                HospitalList = model.HospitalList,
-                AbuseViolence = model.AbuseViolence,
-                Allergy = model.Allergy,
-                AllergySpecify = model.AllergySpecify,
-                AreAllImmunization = model.AreAllImmunization,
-                AreAllImmunizationExplain = model.AreAllImmunizationExplain,
-                AreYouPhysician = model.AreYouPhysician,
-                AreYouPhysicianSpecify = model.AreYouPhysicianSpecify,
-                DateMostRecent = model.DateMostRecent,
-                DescribeAnyOther = model.DescribeAnyOther,
-                DescribeAnyRisk = model.DescribeAnyRisk,
-                DoesAggressiveness = model.DoesAggressiveness,
-                DoesAnxiety = model.DoesAnxiety,
-                DoesDelusions = model.DoesDelusions,
-                DoesDepression = model.DoesDepression,
-                DoesFearfulness = model.DoesFearfulness,
-                DoesHallucinations = model.DoesHallucinations,
-                DoesHelplessness = model.DoesHelplessness,
-                DoesHopelessness = model.DoesHopelessness,
-                DoesHyperactivity = model.DoesHyperactivity,
-                DoesImpulsivity = model.DoesImpulsivity,
-                DoesIrritability = model.DoesIrritability,
-                DoesLoss = model.DoesLoss,
-                DoesLow = model.DoesLow,
-                DoesMood = model.DoesMood,
-                DoesNegative = model.DoesNegative,
-                DoesNervousness = model.DoesNervousness,
-                DoesObsessive = model.DoesObsessive,
-                DoesPanic = model.DoesPanic,
-                DoesParanoia = model.DoesParanoia,
-                DoesPoor = model.DoesPoor,
-                DoesSadness = model.DoesSadness,
-                DoesSelfNeglect = model.DoesSelfNeglect,
-                DoesSheUnderstand = model.DoesSheUnderstand,
-                DoesSleep = model.DoesSleep,
-                DoesTheClientFeel = model.DoesTheClientFeel,
-                DoesWithdrawal = model.DoesWithdrawal,
-                DrugList = model.DrugList,
-                HasClientUndergone = model.HasClientUndergone,
-                HasDifficultySeeingLevel = model.HasDifficultySeeingLevel,
-                HasDifficultySeeingObjetive = model.HasDifficultySeeingObjetive,
-                HasNoImpairment = model.HasNoImpairment,
-                HasNoUsefull = model.HasNoUsefull,
-                HaveYouEverBeenToAny = model.HaveYouEverBeenToAny,
-                HaveYouEverUsedAlcohol = model.HaveYouEverUsedAlcohol,
-                HearingDifficulty = model.HearingDifficulty,
-                HearingImpairment = model.HearingImpairment,
-                HearingNotDetermined = model.HearingNotDetermined,
-                Hears = model.Hears,
-                Homicidal = model.Homicidal,
-                HowActive = model.HowActive,
-                HowManyTimes = model.HowManyTimes,
-                IsClientCurrently = model.IsClientCurrently,
-                IsClientPregnancy = model.IsClientPregnancy,
-                IsClientPregnancyNA = model.IsClientPregnancyNA,
-                IsSheReceiving = model.IsSheReceiving,
-                Issues = model.Issues,
-                LegalDecisionAddress = model.LegalDecisionAddress, 
-                LegalDecisionAdLitem = model.LegalDecisionAdLitem,
-                LegalDecisionAttomey = model.LegalDecisionAttomey, 
-                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip, 
-                LegalDecisionLegal = model.LegalDecisionLegal, 
-                LegalDecisionName = model.LegalDecisionName,
-                LegalDecisionNone = model.LegalDecisionNone,
-                LegalDecisionOther = model.LegalDecisionOther, 
-                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain, 
                 LegalDecisionParent = model.LegalDecisionParent,
                 LegalDecisionPhone = model.LegalDecisionPhone,
                 MedicalProblemList = model.MedicalProblemList,
@@ -5450,7 +5046,409 @@ namespace KyoS.Web.Helpers
                 WouldLikeObtainJob = model.WouldLikeObtainJob,
                 WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
                 YearEnteredUsa = model.YearEnteredUsa,
-               
+
+                CantDoItAtAll = model.CantDoItAtAll,
+                DateSignatureCaseManager = model.DateSignatureCaseManager,
+                DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
+                DoesClientTranspotation = model.DoesClientTranspotation,
+                DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
+                HoweverOn = model.HoweverOn,
+                HoweverVisitScheduler = model.HoweverVisitScheduler,
+                NeedALot = model.NeedALot,
+                NeedNoHelp = model.NeedNoHelp,
+                NeedSome = model.NeedSome,
+                OtherReceiveExplain = model.OtherReceiveExplain,
+                Status = TCMDocumentStatus.Approved,
+                TCMSupervisor = model.TCMSupervisor,
+                TcmMessages = _context.TCMMessages
+                                      .Where(n => n.TCMAssessment.Id == model.Id)
+                                      .ToList()
+
+            };
+        }
+
+        public TCMAssessmentViewModel ToTCMAssessmentViewModel(TCMAssessmentEntity model)
+        {
+            TCMAssessmentViewModel salida;
+            salida = new TCMAssessmentViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Approved = model.Approved,
+                AreChild = model.AreChild,
+                AreChildAddress = model.AreChildAddress,
+                TcmClient_FK = model.TcmClient_FK,
+                AreChildCity = model.AreChildCity,
+                AreChildName = model.AreChildName,
+                AreChildPhone = model.AreChildPhone,
+                Caregiver = model.Caregiver,
+                ChildFather = model.ChildFather,
+                ChildMother = model.ChildMother,
+                ClientInput = model.ClientInput,
+                DateAssessment = model.DateAssessment,
+                Divorced = model.Divorced,
+                Family = model.Family,
+                Married = model.Married,
+                MayWe = model.MayWe,
+                MayWeNA = model.MayWeNA,
+                NeverMarried = model.NeverMarried,
+                Other = model.Other,
+                OtherExplain = model.OtherExplain,
+                PresentingProblems = model.PresentingProblems,
+                Referring = model.Referring,
+                Review = model.Review,
+                School = model.School,
+                Separated = model.Separated,
+                Treating = model.Treating,
+                MedicationList = model.MedicationList,
+                PastCurrentServiceList = model.PastCurrentServiceList,
+                AnyOther = model.AnyOther,
+                DateOfOnSetPresentingProblem = model.DateOfOnSetPresentingProblem,
+                HasTheClient = model.HasTheClient,
+                HouseCompositionList = model.HouseCompositionList,
+                HowDoesByFollowing = model.HowDoesByFollowing,
+                HowDoesCalendar = model.HowDoesCalendar,
+                HowDoesDaily = model.HowDoesDaily,
+                HowDoesElectronic = model.HowDoesElectronic,
+                HowDoesFamily = model.HowDoesFamily,
+                HowDoesKeeping = model.HowDoesKeeping,
+                HowDoesOther = model.HowDoesOther,
+                HowDoesOtherExplain = model.HowDoesOtherExplain,
+                HowDoesPill = model.HowDoesPill,
+                HowDoesRNHHA = model.HowDoesRNHHA,
+                HowWeelEnable = model.HowWeelEnable,
+                HowWeelWithALot = model.HowWeelWithALot,
+                HowWeelWithNo = model.HowWeelWithNo,
+                HowWeelWithSome = model.HowWeelWithSome,
+                IndividualAgencyList = model.IndividualAgencyList,
+                PharmacyPhone = model.PharmacyPhone,
+                PresentingProblemPrevious = model.PresentingProblemPrevious,
+                WhatPharmacy = model.WhatPharmacy,
+
+                HospitalList = model.HospitalList,
+                AbuseViolence = model.AbuseViolence,
+                Allergy = model.Allergy,
+                AllergySpecify = model.AllergySpecify,
+                AreAllImmunization = model.AreAllImmunization,
+                AreAllImmunizationExplain = model.AreAllImmunizationExplain,
+                AreYouPhysician = model.AreYouPhysician,
+                AreYouPhysicianSpecify = model.AreYouPhysicianSpecify,
+                DateMostRecent = model.DateMostRecent,
+                DescribeAnyOther = model.DescribeAnyOther,
+                DescribeAnyRisk = model.DescribeAnyRisk,
+                DoesAggressiveness = model.DoesAggressiveness,
+                DoesAnxiety = model.DoesAnxiety,
+                DoesDelusions = model.DoesDelusions,
+                DoesDepression = model.DoesDepression,
+                DoesFearfulness = model.DoesFearfulness,
+                DoesHallucinations = model.DoesHallucinations,
+                DoesHelplessness = model.DoesHelplessness,
+                DoesHopelessness = model.DoesHopelessness,
+                DoesHyperactivity = model.DoesHyperactivity,
+                DoesImpulsivity = model.DoesImpulsivity,
+                DoesIrritability = model.DoesIrritability,
+                DoesLoss = model.DoesLoss,
+                DoesLow = model.DoesLow,
+                DoesMood = model.DoesMood,
+                DoesNegative = model.DoesNegative,
+                DoesNervousness = model.DoesNervousness,
+                DoesObsessive = model.DoesObsessive,
+                DoesPanic = model.DoesPanic,
+                DoesParanoia = model.DoesParanoia,
+                DoesPoor = model.DoesPoor,
+                DoesSadness = model.DoesSadness,
+                DoesSelfNeglect = model.DoesSelfNeglect,
+                DoesSheUnderstand = model.DoesSheUnderstand,
+                DoesSleep = model.DoesSleep,
+                DoesTheClientFeel = model.DoesTheClientFeel,
+                DoesWithdrawal = model.DoesWithdrawal,
+                DrugList = model.DrugList,
+                HasClientUndergone = model.HasClientUndergone,
+                HasDifficultySeeingLevel = model.HasDifficultySeeingLevel,
+                HasDifficultySeeingObjetive = model.HasDifficultySeeingObjetive,
+                HasNoImpairment = model.HasNoImpairment,
+                HasNoUsefull = model.HasNoUsefull,
+                HaveYouEverBeenToAny = model.HaveYouEverBeenToAny,
+                HaveYouEverUsedAlcohol = model.HaveYouEverUsedAlcohol,
+                HearingDifficulty = model.HearingDifficulty,
+                HearingImpairment = model.HearingImpairment,
+                HearingNotDetermined = model.HearingNotDetermined,
+                Hears = model.Hears,
+                Homicidal = model.Homicidal,
+                HowActive = model.HowActive,
+                HowManyTimes = model.HowManyTimes,
+                IsClientCurrently = model.IsClientCurrently,
+                IsClientPregnancy = model.IsClientPregnancy,
+                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IsSheReceiving = model.IsSheReceiving,
+                Issues = model.Issues,
+                LegalDecisionAddress = model.LegalDecisionAddress,
+                LegalDecisionAdLitem = model.LegalDecisionAdLitem,
+                LegalDecisionAttomey = model.LegalDecisionAttomey,
+                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip,
+                LegalDecisionLegal = model.LegalDecisionLegal,
+                LegalDecisionName = model.LegalDecisionName,
+                LegalDecisionNone = model.LegalDecisionNone,
+                LegalDecisionOther = model.LegalDecisionOther,
+                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain,
+                LegalDecisionParent = model.LegalDecisionParent,
+                LegalDecisionPhone = model.LegalDecisionPhone,
+                MedicalProblemList = model.MedicalProblemList,
+                MentalHealth = model.MentalHealth,
+                NeedOfSpecial = model.NeedOfSpecial,
+                NeedOfSpecialSpecify = model.NeedOfSpecialSpecify,
+                NoHearing = model.NoHearing,
+                NoUseful = model.NoUseful,
+                Outcome = model.Outcome,
+                Provider = model.Provider,
+                Suicidal = model.Suicidal,
+                SurgeryList = model.SurgeryList,
+                TypeOfAssessmentAnnual = model.TypeOfAssessmentAnnual,
+                TypeOfAssessmentInitial = model.TypeOfAssessmentInitial,
+                TypeOfAssessmentOther = model.TypeOfAssessmentOther,
+                TypeOfAssessmentOtherExplain = model.TypeOfAssessmentOtherExplain,
+                TypeOfAssessmentSignificant = model.TypeOfAssessmentSignificant,
+                VisionImpairment = model.VisionImpairment,
+                VisionNotDetermined = model.VisionNotDetermined,
+                WhenWas = model.WhenWas,
+
+                AcademicEelementary = model.AcademicEelementary,
+                AcademicHigh = model.AcademicHigh,
+                AcademicMiddle = model.AcademicMiddle,
+                AcademicPreSchool = model.AcademicPreSchool,
+                AdditionalInformation = model.AdditionalInformation,
+                AdditionalInformationMigration = model.AdditionalInformationMigration,
+                AHomeVisit = model.AHomeVisit,
+                AHomeVisitOn = model.AHomeVisitOn,
+                Appliances = model.Appliances,
+                AttendanceEelementary = model.AttendanceEelementary,
+                AttendanceHigh = model.AttendanceHigh,
+                AttendanceMiddle = model.AttendanceMiddle,
+                AttendancePreSchool = model.AttendancePreSchool,
+                BathingAssistive = model.BathingAssistive,
+                BathingIndependent = model.BathingIndependent,
+                BathingPhysical = model.BathingPhysical,
+                BathingSupervision = model.BathingSupervision,
+                BathingTotal = model.BathingTotal,
+                Bathtub = model.Bathtub,
+                BehaviorEelementary = model.BehaviorEelementary,
+                BehaviorHigh = model.BehaviorHigh,
+                BehaviorMiddle = model.BehaviorMiddle,
+                BehaviorPreSchool = model.BehaviorPreSchool,
+                Briefly = model.Briefly,
+                CaseManagerWas = model.CaseManagerWas,
+                CaseManagerWasDueTo = model.CaseManagerWasDueTo,
+                Citizen = model.Citizen,
+                ColonCancer = model.ColonCancer,
+                CongredatedHowOften = model.CongredatedHowOften,
+                CongredatedProvider = model.CongredatedProvider,
+                CongredatedReceive = model.CongredatedReceive,
+                ContinueToLive = model.ContinueToLive,
+                ContinueToLiveOnly = model.ContinueToLiveOnly,
+                CookingAssistive = model.CookingAssistive,
+                CookingIndependent = model.CookingIndependent,
+                CookingPhysical = model.CookingPhysical,
+                CookingSupervision = model.CookingSupervision,
+                CookingTotal = model.CookingTotal,
+                CountryOfBirth = model.CountryOfBirth,
+                CurrentEmployer = model.CurrentEmployer,
+                DentalExam = model.DentalExam,
+                DescribeAnySchool = model.DescribeAnySchool,
+                DescribeClientCultural = model.DescribeClientCultural,
+                DescribeClientEducation = model.DescribeClientEducation,
+                DescribeClientLiving = model.DescribeClientLiving,
+                DescribeClientRelationship = model.DescribeClientRelationship,
+                DescribeNeighborhood = model.DescribeNeighborhood,
+                DescribeOtherNeedConcerns = model.DescribeOtherNeedConcerns,
+                DoesClientBasicNeed = model.DoesClientBasicNeed,
+                DoesClientCurrently = model.DoesClientCurrently,
+                DoesClientCurrentlyExplain = model.DoesClientCurrentlyExplain,
+                DoesClientFeel = model.DoesClientFeel,
+                DoesClientFeelExplain = model.DoesClientFeelExplain,
+                DoesClientNeedAssistance = model.DoesClientNeedAssistance,
+                DoesClientNeedAssistanceEducational = model.DoesClientNeedAssistanceEducational,
+                DoesClientNeedAssistanceEducationalExplain = model.DoesClientNeedAssistanceEducationalExplain,
+                DoesClientNeedAssistanceExplain = model.DoesClientNeedAssistanceExplain,
+                DoesNotKnow = model.DoesNotKnow,
+                DoingAssistive = model.DoingAssistive,
+                DoingIndependent = model.DoingIndependent,
+                DoingPhysical = model.DoingPhysical,
+                DoingSupervision = model.DoingSupervision,
+                DoingTotal = model.DoingTotal,
+                DressingAssistive = model.DressingAssistive,
+                DressingIndependent = model.DressingIndependent,
+                DressingPhysical = model.DressingPhysical,
+                DressingSupervision = model.DressingSupervision,
+                DressingTotal = model.DressingTotal,
+                Drives = model.Drives,
+                Electrical = model.Electrical,
+                EmployerAddress = model.EmployerAddress,
+                EmployerCityState = model.EmployerCityState,
+                EmployerContactPerson = model.EmployerContactPerson,
+                EmployerPhone = model.EmployerPhone,
+                EmploymentStatus = model.EmploymentStatus,
+                ExcessiveCluter = model.ExcessiveCluter,
+                FailToEelementary = model.FailToEelementary,
+                FailToHigh = model.FailToHigh,
+                FailToMiddle = model.FailToMiddle,
+                FailToPreSchool = model.FailToPreSchool,
+                FeedingAssistive = model.FeedingAssistive,
+                FeedingIndependent = model.FeedingIndependent,
+                FeedingPhysical = model.FeedingPhysical,
+                FeedingSupervision = model.FeedingSupervision,
+                FeedingTotal = model.FeedingTotal,
+                FireHazards = model.FireHazards,
+                Flooring = model.Flooring,
+                FoodPantryHowOften = model.FoodPantryHowOften,
+                FoodPantryProvider = model.FoodPantryProvider,
+                FoodPantryReceive = model.FoodPantryReceive,
+                FoodStampHowOften = model.FoodStampHowOften,
+                FoodStampProvider = model.FoodStampProvider,
+                FoodStampReceive = model.FoodStampReceive,
+                FriendOrFamily = model.FriendOrFamily,
+                GroomingAssistive = model.GroomingAssistive,
+                GroomingIndependent = model.GroomingIndependent,
+                GroomingPhysical = model.GroomingPhysical,
+                GroomingSupervision = model.GroomingSupervision,
+                GroomingTotal = model.GroomingTotal,
+                HasClientEverArrest = model.HasClientEverArrest,
+                HasClientEverArrestLastTime = model.HasClientEverArrestLastTime,
+                HasClientEverArrestManyTime = model.HasClientEverArrestManyTime,
+                HomeDeliveredHowOften = model.HomeDeliveredHowOften,
+                HomeDeliveredProvider = model.HomeDeliveredProvider,
+                HomeDeliveredReceive = model.HomeDeliveredReceive,
+                IfThereAnyHousing = model.IfThereAnyHousing,
+                IfYesWereCriminal = model.IfYesWereCriminal,
+                IfYesWhatArea = model.IfYesWhatArea,
+                ImmigrationOther = model.ImmigrationOther,
+                ImmigrationOtherExplain = model.ImmigrationOtherExplain,
+                Insect = model.Insect,
+                IsClientCurrentlyEmployed = model.IsClientCurrentlyEmployed,
+                IsClientCurrentlySchool = model.IsClientCurrentlySchool,
+                IsClientCurrentlySchoolExplain = model.IsClientCurrentlySchoolExplain,
+                IsClientInterested = model.IsClientInterested,
+                IsClientInvolved = model.IsClientInvolved,
+                IsClientInvolvedSpecify = model.IsClientInvolvedSpecify,
+                IsTheClientAbleWork = model.IsTheClientAbleWork,
+                IsTheClientAbleWorkLimitation = model.IsTheClientAbleWorkLimitation,
+                IsTheClientHavingFinancial = model.IsTheClientHavingFinancial,
+                IsTheClientHavingFinancialExplain = model.IsTheClientHavingFinancialExplain,
+                IsThereAnyAide = model.IsThereAnyAide,
+                IsThereAnyAideName = model.IsThereAnyAideName,
+                IsThereAnyAidePhone = model.IsThereAnyAidePhone,
+                IsThereAnyCurrentLegalProcess = model.IsThereAnyCurrentLegalProcess,
+                LabWorks = model.LabWorks,
+                LearningEelementary = model.LearningEelementary,
+                LearningHigh = model.LearningHigh,
+                LearningMiddle = model.LearningMiddle,
+                LearningPreSchool = model.LearningPreSchool,
+                ListAnyNeed = model.ListAnyNeed,
+                ListClientCurrentPotencialStrngths = model.ListClientCurrentPotencialStrngths,
+                ListClientCurrentPotencialWeakness = model.ListClientCurrentPotencialWeakness,
+                MakingAssistive = model.MakingAssistive,
+                MakingIndependent = model.MakingIndependent,
+                MakingPhysical = model.MakingPhysical,
+                MakingSupervision = model.MakingSupervision,
+                MakingTotal = model.MakingTotal,
+                Mammogram = model.Mammogram,
+                MayWeLeaveSend = model.MayWeLeaveSend,
+                MonthlyFamilyIncome = model.MonthlyFamilyIncome,
+                NoAirCondition = model.NoAirCondition,
+                NoTelephone = model.NoTelephone,
+                NotHot = model.NotHot,
+                NumberOfBedrooms = model.NumberOfBedrooms,
+                NumberOfPersonLiving = model.NumberOfPersonLiving,
+                OtherFinancial = model.OtherFinancial,
+                OtherHowOften = model.OtherHowOften,
+                OtherProvider = model.OtherProvider,
+                OtherReceive = model.OtherReceive,
+                PapAndHPV = model.PapAndHPV,
+                ParticipationEelementary = model.ParticipationEelementary,
+                ParticipationHigh = model.ParticipationHigh,
+                ParticipationMiddle = model.ParticipationMiddle,
+                ParticipationPreSchool = model.ParticipationPreSchool,
+                PersonPorBedrooms = model.PersonPorBedrooms,
+                PhysicalExam = model.PhysicalExam,
+                PhysicalOther = model.PhysicalOther,
+                PreferToLive = model.PreferToLive,
+                Poor = model.Poor,
+                ProbationOfficer = model.ProbationOfficer,
+                ProbationOfficerName = model.ProbationOfficerName,
+                ProbationOfficerPhone = model.ProbationOfficerPhone,
+                RecommendedActivities = model.RecommendedActivities,
+                RecommendedBasicNeed = model.RecommendedBasicNeed,
+                RecommendedEconomic = model.RecommendedEconomic,
+                RecommendedHousing = model.RecommendedHousing,
+                RecommendedLegalImmigration = model.RecommendedLegalImmigration,
+                RecommendedMentalHealth = model.RecommendedMentalHealth,
+                RecommendedOther = model.RecommendedOther,
+                RecommendedOtherSpecify = model.RecommendedOtherSpecify,
+                RecommendedPhysicalHealth = model.RecommendedPhysicalHealth,
+                RecommendedRecreational = model.RecommendedRecreational,
+                RecommendedSchool = model.RecommendedSchool,
+                RecommendedTransportation = model.RecommendedTransportation,
+                RecommendedVocation = model.RecommendedVocation,
+                RelationshipEelementary = model.RelationshipEelementary,
+                RelationshipHigh = model.RelationshipHigh,
+                RelationshipMiddle = model.RelationshipMiddle,
+                RelationshipPreSchool = model.RelationshipPreSchool,
+                Resident = model.Resident,
+                ResidentStatus = model.ResidentStatus,
+                SchoolAddress = model.SchoolAddress,
+                SchoolCityState = model.SchoolCityState,
+                SchoolDistrict = model.SchoolDistrict,
+                SchoolGrade = model.SchoolGrade,
+                SchoolName = model.SchoolName,
+                SchoolProgramEBD = model.SchoolProgramEBD,
+                SchoolProgramESE = model.SchoolProgramESE,
+                SchoolProgramESOL = model.SchoolProgramESOL,
+                SchoolProgramHHIP = model.SchoolProgramHHIP,
+                SchoolProgramOther = model.SchoolProgramOther,
+                SchoolProgramRegular = model.SchoolProgramRegular,
+                SchoolProgramTeacherName = model.SchoolProgramTeacherName,
+                SchoolProgramTeacherPhone = model.SchoolProgramTeacherPhone,
+                ShoppingAssistive = model.ShoppingAssistive,
+                ShoppingIndependent = model.ShoppingIndependent,
+                ShoppingPhysical = model.ShoppingPhysical,
+                ShoppingSupervision = model.ShoppingSupervision,
+                ShoppingTotal = model.ShoppingTotal,
+                Staff = model.Staff,
+                Stairs = model.Stairs,
+                Structural = model.Structural,
+                TakesABus = model.TakesABus,
+                TransferringAssistive = model.TransferringAssistive,
+                TransferringIndependent = model.TransferringIndependent,
+                TransferringPhysical = model.TransferringPhysical,
+                TransferringSupervision = model.TransferringSupervision,
+                TransferringTotal = model.TransferringTotal,
+                TransportationOther = model.TransportationOther,
+                TransportationOtherExplain = model.TransportationOtherExplain,
+                Tripping = model.Tripping,
+                Unsanitary = model.Unsanitary,
+                VocationalEmployment = model.VocationalEmployment,
+                Walks = model.Walks,
+                WhatActivityThings = model.WhatActivityThings,
+                WhatIsCollegeGraduated = model.WhatIsCollegeGraduated,
+                WhatIsElementary = model.WhatIsElementary,
+                WhatIsGED = model.WhatIsGED,
+                WhatIsGraduated = model.WhatIsGraduated,
+                WhatIsGraduatedDegree = model.WhatIsGraduatedDegree,
+                WhatIsHighSchool = model.WhatIsHighSchool,
+                WhatIsMiddle = model.WhatIsMiddle,
+                WhatIsNoSchool = model.WhatIsNoSchool,
+                WhatIsSomeCollege = model.WhatIsSomeCollege,
+                WhatIsSomeHigh = model.WhatIsSomeHigh,
+                WhatIsTheMainSource = model.WhatIsTheMainSource,
+                WhatIsTradeSchool = model.WhatIsTradeSchool,
+                WhatIsUnknown = model.WhatIsUnknown,
+                WouldLikeObtainJob = model.WouldLikeObtainJob,
+                WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
+                YearEnteredUsa = model.YearEnteredUsa,
+
                 CantDoItAtAll = model.CantDoItAtAll,
                 DateSignatureCaseManager = model.DateSignatureCaseManager,
                 DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
@@ -5465,7 +5463,7 @@ namespace KyoS.Web.Helpers
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
-                
+
             };
 
             return salida;
@@ -5544,7 +5542,7 @@ namespace KyoS.Web.Helpers
                 TcmAssessment = model.TcmAssessment,
                 Agency = model.Agency,
                 IdTCMAssessment = model.TcmAssessment.Id
-                
+
             };
 
             return salida;
@@ -5565,7 +5563,7 @@ namespace KyoS.Web.Helpers
                 Frequency = model.Frequency,
                 Prescriber = model.Prescriber,
                 ReasonPurpose = model.ReasonPurpose
-          
+
             };
         }
 
@@ -5743,7 +5741,7 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
-        public async Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity (TCMAssessmentSurgeryViewModel model, bool isNew, string userId)
+        public async Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity(TCMAssessmentSurgeryViewModel model, bool isNew, string userId)
         {
             return new TCMAssessmentSurgeryEntity
             {
@@ -5754,7 +5752,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
                 Date = model.Date,
-                Hospital =model.Hospital,
+                Hospital = model.Hospital,
                 Outcome = model.Outcome,
                 TypeSurgery = model.TypeSurgery
             };
@@ -5791,10 +5789,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Outcome = model.Outcome,
-               // CaseManager = _context.CaseManagers
-                 //                     .FirstOrDefault(n => n.Id == model.IdCaseManager),
-                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),                
-                DateOfService = model.DateOfService,                
+                // CaseManager = _context.CaseManagers
+                //                     .FirstOrDefault(n => n.Id == model.IdCaseManager),
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
+                DateOfService = model.DateOfService,
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5820,8 +5818,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Outcome = model.Outcome,
                 //CaseManager = model.CaseManager,
-                TCMNoteActivity = model.TCMNoteActivity,                
-                DateOfService = model.DateOfService,               
+                TCMNoteActivity = model.TCMNoteActivity,
+                DateOfService = model.DateOfService,
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5829,7 +5827,7 @@ namespace KyoS.Web.Helpers
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
-                
+
             };
 
             return salida;
@@ -5884,7 +5882,7 @@ namespace KyoS.Web.Helpers
                 ServiceName = model.ServiceName,
                 IdTCMActivity = model.TCMServiceActivity.Id,
                 DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description
-        };
+            };
 
             return salida;
         }
@@ -5937,7 +5935,7 @@ namespace KyoS.Web.Helpers
                 Status = model.Status,
                 Approved = model.Approved,
                 Frecuency = model.Frecuency
-                
+
             };
         }
 
@@ -6047,7 +6045,7 @@ namespace KyoS.Web.Helpers
                 AdmissionDate = goalEntity.AdmissionDate,
                 TypeDocument = goalEntity.TypeDocument
             };
-           
+
             return model;
         }
 
@@ -6063,7 +6061,7 @@ namespace KyoS.Web.Helpers
                 Description = model.Description,
                 Intervention = model.Intervention,
                 GoalTemp = await _context.GoalsTemp.FindAsync(model.IdGoal)
-                
+
             };
         }
 
@@ -6080,7 +6078,7 @@ namespace KyoS.Web.Helpers
                 DateTarget = objectiveEntity.DateTarget,
                 Description = objectiveEntity.Description,
                 Intervention = objectiveEntity.Intervention
-               
+
             };
         }
 
@@ -6525,7 +6523,7 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime,
                 Clinic = user.Clinic,
                 Service = ServiceUtils.GetServiceByIndex(model.IdService),
-               
+
                 Description = model.Description,
                 CreatedBy = isNew ? user.UserName : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
@@ -6556,7 +6554,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 IdSchedule = model.Schedule.Id
-               
+
             };
         }
 
@@ -6574,7 +6572,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule)
             };
-            
+
             return subSchedule;
         }
 
@@ -6588,7 +6586,7 @@ namespace KyoS.Web.Helpers
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 SignaturePath = signaturePath
-                
+
             };
         }
 
@@ -6603,13 +6601,13 @@ namespace KyoS.Web.Helpers
                 IdStatus = (managerEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(managerEntity.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager,0),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, 0),
                 SignaturePath = managerEntity.SignaturePath
-               
+
             };
         }
 
-        public async Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
+        public ClientAuxiliarViewModel ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
         {
             return new ClientAuxiliarViewModel
             {
@@ -6656,7 +6654,7 @@ namespace KyoS.Web.Helpers
                 Clients_Diagnostics = clientEntity.Clients_Diagnostics,
                 Clinic = clientEntity.Clinic,
                 FarsFormList = clientEntity.FarsFormList
-                
+
             };
         }
 
