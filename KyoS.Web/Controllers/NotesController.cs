@@ -10805,7 +10805,10 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.MtpExpired = "E";
             }
-
+            if (error == 1)
+            {
+                ViewBag.Error = "E";
+            }
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10911,13 +10914,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingGroupNotes(int id = 0, int expired = 0)
+        public async Task<IActionResult> PendingGroupNotes(int id = 0, int expired = 0, int error = 0)
         {
             if (expired == 1)
             {
                 ViewBag.MtpExpired = "E";
             }
-
+            if (error == 1)
+            {
+                ViewBag.Error = "E";
+            }
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10954,6 +10960,8 @@ namespace KyoS.Web.Controllers
 
                                                                .Include(wc => wc.Workday)
                                                                .ThenInclude(w => w.Week)
+                                                               .Include(wc => wc.GroupNote)
+                                                               .Include(wc => wc.GroupNote2)
 
                                                                .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
@@ -19675,6 +19683,222 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup(int id, int origin = 0)
+        {
+            GroupNoteEntity noteGroup = await _context.GroupNotes
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Client)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(w => w.Workday)
+
+                                                      .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+           
+
+            if (noteGroup == null)
+            {
+                //return RedirectToAction("Home/Error404");
+                return View(null);
+            }
+            else
+            {
+                List<GroupNoteEntity> notelist = await _context.GroupNotes
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Client)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Facilitator)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Messages)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(w => w.Workday)
+
+                                                               .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup.Workday_Cient.Facilitator.Id
+                                                                         && n.Status == NoteStatus.Pending
+                                                                         && n.Workday_Cient.Workday.Id == noteGroup.Workday_Cient.Workday.Id
+                                                                         && n.Workday_Cient.Messages.Count() == 0))
+                                                               .ToListAsync();
+                if (notelist.Count() == 0)
+                {
+                    return RedirectToAction("PendingGroupNotes", "Notes", new { id = id, error = 1 });
+                }
+                return View(notelist);
+            }
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup(int id = 0)
+        {
+            GroupNoteEntity noteGroup = await _context.GroupNotes
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Client)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(w => w.Workday)
+
+                                                      .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (noteGroup == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            else
+            {
+                List<GroupNoteEntity> model = await _context.GroupNotes
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Client)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Facilitator)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Messages)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(w => w.Workday)
+
+                                                            .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup.Workday_Cient.Facilitator.Id
+                                                                      && n.Status == NoteStatus.Pending
+                                                                      && n.Workday_Cient.Workday.Id == noteGroup.Workday_Cient.Workday.Id
+                                                                      && n.Workday_Cient.Messages.Count() == 0))
+                                                            .ToListAsync();
+
+                foreach (var item in model)
+                {
+                    item.Status = NoteStatus.Approved;
+                    item.DateOfApprove = DateTime.Now;
+                    item.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                    _context.Update(item);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(PendingGroupNotes));
+            }
+            
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup2(int id, int origin = 0)
+        {
+            GroupNote2Entity noteGroup2 = await _context.GroupNotes2
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(wc => wc.Client)
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(wc => wc.Facilitator)
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (noteGroup2 == null)
+            {
+                //return RedirectToAction("Home/Error404");
+                return View(null);
+            }
+            else
+            {
+                List<GroupNote2Entity> notelist = await _context.GroupNotes2
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Client)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Facilitator)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Messages)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(w => w.Workday)
+
+                                                                    .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup2.Workday_Cient.Facilitator.Id
+                                                                              && n.Status == NoteStatus.Pending
+                                                                              && n.Workday_Cient.Workday.Id == noteGroup2.Workday_Cient.Workday.Id
+                                                                              && n.Workday_Cient.Messages.Count() == 0))
+                                                                    .ToListAsync();
+                if (notelist.Count() == 0)
+                {
+                    return RedirectToAction("PendingGroupNotes", "Notes", new { id = id, error = 1});
+                }
+                return View(notelist);
+            }
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup2(int id = 0)
+        {
+            GroupNote2Entity noteGroup2 = await _context.GroupNotes2
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(wc => wc.Client)
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(wc => wc.Facilitator)
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(w => w.Workday)
+
+                                                        .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (noteGroup2 == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            else
+            {
+                List<GroupNote2Entity> model = await _context.GroupNotes2
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Client)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Facilitator)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Messages)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(w => w.Workday)
+
+                                                                .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup2.Workday_Cient.Facilitator.Id
+                                                                          && n.Status == NoteStatus.Pending
+                                                                          && n.Workday_Cient.Workday.Id == noteGroup2.Workday_Cient.Workday.Id
+                                                                          && n.Workday_Cient.Messages.Count() == 0))
+                                                                .ToListAsync();
+
+                foreach (var item in model)
+                {
+                    item.Status = NoteStatus.Approved;
+                    item.DateOfApprove = DateTime.Now;
+                    item.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                    _context.Update(item);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(PendingGroupNotes));
+            }
+            
+        }
 
     }
 }
