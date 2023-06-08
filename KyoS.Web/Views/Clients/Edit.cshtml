@@ -58,20 +58,21 @@
                         <input type="hidden" asp-for="IdFacilitatorPSR" />
                         <input type="hidden" asp-for="CreateByEmergencyContact" />
                         <input type="hidden" asp-for="CreateOnEmergencyContact" />
+                        <input type="hidden" asp-for="IdFacilitatorGroup" />
                         <partial name="_Clients" />
                         <div class="form-group col-md-12">
                             <input type="submit" value="Save" class="btn btn-primary" />
                             @if (Model.Origin == 0) //viene de la pagina Index de los clientes
                             {
-                                <a asp-action="Index" class="btn btn-success">Back</a>
+                            <a asp-action="Index" class="btn btn-success">Back</a>
                             }
                             @if (Model.Origin == 1) //viene de la pagina ClientsWithoutDOC del dashboard del manager
                             {
-                                <a asp-action="ClientsWithoutDOC" class="btn btn-success">Back</a>
+                            <a asp-action="ClientsWithoutDOC" class="btn btn-success">Back</a>
                             }
                             @if (Model.Origin == 2) //viene de la pagina ClientsWithoutDOC del dashboard del manager
                             {
-                                <a asp-action="Clients" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                            <a asp-action="Clients" asp-controller="TCMClients" class="btn btn-success">Back</a>
                             }
                         </div>
                     </div>

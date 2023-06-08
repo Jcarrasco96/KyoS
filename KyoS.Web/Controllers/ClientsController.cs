@@ -482,7 +482,12 @@ namespace KyoS.Web.Controllers
             {
                 if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
                 {
-                    clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                    FacilitatorEntity FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator;
+                    if (FacilitatorPSR != null)
+                    {
+                        clientViewModel.FacilitatorPSR = FacilitatorPSR.Name;
+                        clientViewModel.IdFacilitatorPSR = FacilitatorPSR.Id;
+                    }
                 }
             }
             else
@@ -494,7 +499,13 @@ namespace KyoS.Web.Controllers
             {
                 if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
                 {
-                    clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+
+                    FacilitatorEntity FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator;
+                    if (FacilitatorGroup != null)
+                    {
+                        clientViewModel.FacilitatorGroup = FacilitatorGroup.Name;
+                        clientViewModel.IdFacilitatorGroup = FacilitatorGroup.Id;
+                    }
                 }
             }
             else
@@ -1915,7 +1926,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (client.DateOfClose == date)
+                            if (client.DateOfClose == null || client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
@@ -1940,7 +1951,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (client.DateOfClose == date)
+                            if (client.DateOfClose == null || client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
