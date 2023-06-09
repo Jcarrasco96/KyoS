@@ -10,5 +10,6 @@ namespace KyoS.Common.Helpers
         public string Description { get; set; }
         public string Intervention { get; set; }
         public string DateTarget { get; set; }
+        public int IdObjective { get; set; }
     }
 }

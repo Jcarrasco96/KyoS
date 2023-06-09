@@ -4782,5 +4782,50 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
         #endregion
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult UpdateDateUntilObjective(DateTime dateUntil, int idObj = 0, int idMtp = 0)
+        {
+            if (idObj == 0)
+            {
+                return View(new DateUntilViewModel());
+            }
+            else
+            {
+                DateUntilViewModel model = new DateUntilViewModel()
+                {
+                    IdObjective = idObj,
+                    IdMtp = idMtp,
+                    DateUntil = dateUntil
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> UpdateDateUntilObjective(DateUntilViewModel dateUntilViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ObjetiveEntity model = await _context.Objetives
+                                                     .Include(n => n.Goal)
+                                                     .ThenInclude(n => n.MTP)
+                                                     .FirstOrDefaultAsync(n => n.Id == dateUntilViewModel.IdObjective);
+               
+                model.DateResolved = dateUntilViewModel.DateUntil;
+                
+                _context.Update(model);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("ViewAllGoals", "Notes", new { idMtp = model.Goal.MTP.Id });
+            }
+
+            return RedirectToAction("ViewAllGoals", "Notes", new { idMtp = dateUntilViewModel.IdMtp });
+            
+        }
+
     }
 }

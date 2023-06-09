@@ -15138,6 +15138,7 @@ namespace KyoS.Web.Controllers
                 goal_temp.AreaFocus = goal.AreaOfFocus;
                 goal_temp.Service = goal.Service;
                 goal_temp.Compliment = goal.Compliment;
+                goal_temp.IdMtp = goal.Id;
                 if (goal.Adendum != null)
                 {
                     goal_temp.Document = "Addendum";
@@ -15162,6 +15163,7 @@ namespace KyoS.Web.Controllers
                     objective_temp.Description = objective.Description;
                     objective_temp.Intervention = objective.Intervention;
                     objective_temp.DateTarget = objective.DateResolved.ToShortDateString().ToString();
+                    objective_temp.IdObjective = objective.Id;
 
                     goal_temp.AllObjectives.Add(objective_temp);
                     objective_temp = new AllObjectives();

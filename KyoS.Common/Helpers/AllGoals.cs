@@ -13,5 +13,6 @@ namespace KyoS.Common.Helpers
         public List<AllObjectives> AllObjectives { get; set; }
         public string Document { get; set; }
         public bool Compliment { get; set; }
+        public int IdMtp { get; set; }
     }
 }

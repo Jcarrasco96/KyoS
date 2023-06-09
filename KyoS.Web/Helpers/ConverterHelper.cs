@@ -4,9 +4,11 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Helpers
 {
@@ -99,7 +101,7 @@ namespace KyoS.Web.Helpers
             return new ThemeEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),                
                 Name = model.Name,
                 Service = ThemeUtils.GetThemeByIndex(model.IdService)
             };
@@ -121,11 +123,11 @@ namespace KyoS.Web.Helpers
 
         public Theme3ViewModel ToTheme3ViewModel(ThemeEntity themeEntity)
         {
-
+           
             return new Theme3ViewModel
             {
                 Id = themeEntity.Id,
-                Name = themeEntity.Name,
+                Name = themeEntity.Name,                
                 IdClinic = themeEntity.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 IdService = Convert.ToInt32(themeEntity.Service),
@@ -269,7 +271,7 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 MedicaidID = model.MedicaidID,
                 Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
-                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),                
                 Email = model.Email,
                 Telephone = model.Telephone,
                 TelephoneSecondary = model.TelephoneSecondary,
@@ -375,7 +377,7 @@ namespace KyoS.Web.Helpers
                 DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == clientEntity.Id),
                 DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
-                IdService = Convert.ToInt32(clientEntity.Service),
+                IdService = Convert.ToInt32(clientEntity.Service), 
                 Services = _combosHelper.GetComboServices(),
                 IdFacilitatorIT = (clientEntity.IndividualTherapyFacilitator != null) ? clientEntity.IndividualTherapyFacilitator.Id : 0,
                 ITFacilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true),
@@ -467,7 +469,7 @@ namespace KyoS.Web.Helpers
             return new MTPEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Client = await _context.Clients.FindAsync(model.IdClient),
+                Client = await _context.Clients.FindAsync(model.IdClient),                
                 MTPDevelopedDate = model.MTPDevelopedDate,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -543,7 +545,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = mtpEntity.Id,
                 IdClient = mtpEntity.Client.Id,
-                Clients = _combosHelper.GetComboClients(),
+                Clients = _combosHelper.GetComboClients(),               
                 MTPDevelopedDate = mtpEntity.MTPDevelopedDate,
                 StartTime = mtpEntity.StartTime,
                 EndTime = mtpEntity.EndTime,
@@ -551,7 +553,7 @@ namespace KyoS.Web.Helpers
                 InitialDischargeCriteria = mtpEntity.InitialDischargeCriteria,
                 Modality = mtpEntity.Modality,
                 Frecuency = mtpEntity.Frecuency,
-                NumberOfMonths = mtpEntity.NumberOfMonths,
+                NumberOfMonths = mtpEntity.NumberOfMonths,                
                 Setting = mtpEntity.Setting,
                 Active = mtpEntity.Active,
                 AdditionalRecommended = mtpEntity.AdditionalRecommended,
@@ -605,7 +607,7 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = mtpEntity.AdmissionedFor,
                 CodeBill = mtpEntity.CodeBill,
                 Units = mtpEntity.Units
-
+                
             };
 
             if (mtpEntity.DocumentAssistant == null)
@@ -618,7 +620,7 @@ namespace KyoS.Web.Helpers
             }
 
             return model;
-        }
+        }        
 
         public async Task<GoalEntity> ToGoalEntity(GoalViewModel model, bool isNew)
         {
@@ -654,14 +656,14 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 Compliment = goalEntity.Compliment,
-                Compliment_Date = goalEntity.Compliment_Date,
+                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
                 Compliment_Explain = goalEntity.Compliment_Explain,
                 Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
-                IdMTPReview = goalEntity.IdMTPReview
+                IdMTPReview = goalEntity.IdMTPReview                
             };
             if (goalEntity.Adendum != null)
             {
-                model.IdAdendum = goalEntity.Adendum.Id;
+                model.IdAdendum = goalEntity.Adendum.Id;               
             }
 
             return model;
@@ -746,11 +748,11 @@ namespace KyoS.Web.Helpers
             {
                 model.Schedule = groupEntity.Schedule;
                 model.IdSchedule = groupEntity.Schedule.Id;
-
+                
             }
             return model;
         }
-
+       
         public PlanViewModel ToPlanViewModel(PlanEntity planEntity)
         {
             return new PlanViewModel
@@ -913,7 +915,7 @@ namespace KyoS.Web.Helpers
                 Obsessive = model.Obsessive,
                 Paranoid = model.Paranoid,
                 Scattered = model.Scattered,
-                Psychotic = model.Psychotic,
+                Psychotic = model.Psychotic,           
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
@@ -966,12 +968,12 @@ namespace KyoS.Web.Helpers
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention
             };
-        }
+        }        
 
         public Workday_ClientViewModel ToWorkdayClientViewModel(Workday_Client model, bool indTherapy = false)
         {
             Workday_ClientViewModel salida = new Workday_ClientViewModel();
-
+            
             salida = new Workday_ClientViewModel
             {
                 Id = model.Id,
@@ -991,21 +993,21 @@ namespace KyoS.Web.Helpers
                     salida.IdSchedule = 0;
                     salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
                 }
-
+               
             }
             else
             {
                 if (indTherapy == false)
                 {
                     salida.IdSchedule = model.Schedule.Id;
-                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id, model.Id);
+                    salida.Schedules = _combosHelper.GetComboSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Client.Id,model.Id);
                 }
                 else
                 {
                     salida.IdSchedule = model.Schedule.Id;
-                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id, model.Id);
+                    salida.Schedules = _combosHelper.GetComboSubSchedulesForFacilitatorForDay(model.Facilitator.Id, model.Workday.Id, model.Schedule.Id, model.Client.Id,model.Id);
                 }
-
+                
             }
             return salida;
         }
@@ -1121,7 +1123,7 @@ namespace KyoS.Web.Helpers
             return new ReferredEntity
             {
                 Id = isNew ? 0 : model.Id,
-                // ReferredNote = model.ReferredNote,
+               // ReferredNote = model.ReferredNote,
                 Name = model.Name,
                 Address = model.Address,
                 Telephone = model.Telephone,
@@ -1314,7 +1316,7 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)                
             };
         }
 
@@ -1343,10 +1345,10 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 ApprovedDate = model.ApprovedDate,
                 DurationTime = model.DurationTime,
-                Units = model.Units,
+                Units = model.Units,                
                 Active = isNew ? true : model.Active,
                 Client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == model.IdClient),
-                HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == model.IdHealthInsurance),
+                HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(hi => hi.Id == model.IdHealthInsurance),                
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -1363,7 +1365,7 @@ namespace KyoS.Web.Helpers
                 Id = model.Id,
                 ApprovedDate = model.ApprovedDate,
                 DurationTime = model.DurationTime,
-                Units = model.Units,
+                Units = model.Units,                
                 Active = model.Active,
                 IdClient = model.Client.Id,
                 Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
@@ -1532,7 +1534,7 @@ namespace KyoS.Web.Helpers
                 Strengths = TcmServicePlanEntity.Strengths,
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
             };
         }
 
@@ -1587,7 +1589,7 @@ namespace KyoS.Web.Helpers
 
         public TCMDomainEntity ToTCMDomainEntity(TCMDomainViewModel model, bool isNew, string origin = "Service Plan Review", string userId = "")
         {
-
+           
             return new TCMDomainEntity
             {
                 Id = isNew ? 0 : model.Id,
@@ -1632,7 +1634,7 @@ namespace KyoS.Web.Helpers
 
         public IntakeScreeningViewModel ToIntakeViewModel(IntakeScreeningEntity model)
         {
-            return new IntakeScreeningViewModel
+            return new   IntakeScreeningViewModel
             {
                 Id = model.Id,
                 Client = model.Client,
@@ -1656,7 +1658,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureEmployee = model.DateSignatureEmployee
 
             };
-
+           
         }
 
         public IntakeConsentForTreatmentEntity ToIntakeConsentForTreatmentEntity(IntakeConsentForTreatmentViewModel model, bool isNew)
@@ -1665,7 +1667,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Client = model.Client,
-
+                
                 Aggre = model.Aggre,
                 Aggre1 = model.Aggre1,
                 AuthorizeRelease = model.AuthorizeRelease,
@@ -1679,7 +1681,7 @@ namespace KyoS.Web.Helpers
                 Documents = model.Documents,
                 Underestand = model.Underestand,
                 AdmissionedFor = model.AdmissionedFor
-
+                
 
             };
         }
@@ -1706,7 +1708,7 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor
 
             };
-
+            
         }
 
         public IntakeConsentForReleaseEntity ToIntakeConsentForReleaseEntity(IntakeConsentForReleaseViewModel model, bool isNew)
@@ -1731,7 +1733,7 @@ namespace KyoS.Web.Helpers
                 History = model.History,
                 HospitalRecord = model.HospitalRecord,
                 IncidentReport = model.IncidentReport,
-
+                
                 LabWork = model.LabWork,
                 Other = model.Other,
                 Other_Explain = model.Other_Explain,
@@ -1844,11 +1846,11 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-
+               
             };
 
         }
-
+        
         public IntakeAccessToServicesEntity ToIntakeAccessToServicesEntity(IntakeAccessToServicesViewModel model, bool isNew)
         {
             return new IntakeAccessToServicesEntity
@@ -1878,7 +1880,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-
+                
             };
 
         }
@@ -1944,10 +1946,10 @@ namespace KyoS.Web.Helpers
                 Task = model.task,
                 //Long_Term = model.long_Term,
                 StartDate = model.StartDate,
-
+                
                 TargetDate = model.TargetDate,
                 EndDate = model.EndDate,
-                Finish = model.Finish,
+                Finish = model.Finish,                
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 Responsible = model.Responsible,
                 Origin = valor
@@ -1962,7 +1964,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = TcmObjetiveEntity.Id,
                 Id_Domain = TcmObjetiveEntity.TcmDomain.Id,
-                IdObjetive = TcmObjetiveEntity.IdObjetive,
+                IdObjetive= TcmObjetiveEntity.IdObjetive,
                 //IdClinic = TcmObjetiveEntity.Clinic.Id,
                 //Clinics = _combosHelper.GetComboClinics(),
                 name = TcmObjetiveEntity.Name,
@@ -1984,7 +1986,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = TcmObjetiveEntity.LastModifiedBy,
                 LastModifiedOn = TcmObjetiveEntity.LastModifiedOn,
                 Name = TcmObjetiveEntity.Name,
-                Task = TcmObjetiveEntity.Task
+                Task = TcmObjetiveEntity.Task                
             };
 
             if (TcmObjetiveEntity.Origin == "Service Plan")
@@ -2145,7 +2147,7 @@ namespace KyoS.Web.Helpers
             return new TCMServicePlanReviewViewModel
             {
                 Id = TcmServicePlanReviewEntity.Id,
-                DateOpending = TcmServicePlanReviewEntity.DateOpending,
+                DateOpending  = TcmServicePlanReviewEntity.DateOpending,
                 DateServicePlanReview = TcmServicePlanReviewEntity.DateServicePlanReview,
                 Recomendation = TcmServicePlanReviewEntity.Recomendation,
                 SummaryProgress = TcmServicePlanReviewEntity.SummaryProgress,
@@ -2198,7 +2200,7 @@ namespace KyoS.Web.Helpers
                 IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
                 TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
                 status = _combosHelper.GetComboClientStatus()
-
+              
             };
         }
 
@@ -2213,7 +2215,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = model.TcmDomain,
                 ChangesUpdate = model.ChangesUpdate
-
+               
             };
         }
 
@@ -2267,7 +2269,7 @@ namespace KyoS.Web.Helpers
                 AllServiceInPlace = model.AllServiceInPlace,
                 NonComplianceWithAgencyRules = model.NonComplianceWithAgencyRules,
                 Referred = model.Referred,
-                ClientMovedOutArea = model.ClientMovedOutArea,
+                ClientMovedOutArea =model.ClientMovedOutArea,
                 ClientLeftVoluntarily = model.ClientLeftVoluntarily,
                 LackOfProgress = model.LackOfProgress,
                 Other = model.Other,
@@ -2347,7 +2349,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-
+                
 
             };
 
@@ -2435,7 +2437,7 @@ namespace KyoS.Web.Helpers
                 HaveYoyEverBeenTold = model.HaveYoyEverBeenTold,
                 AgencyExpectation = model.AgencyExpectation,
                 If1OrMore = model.If1OrMore,
-
+                
                 AdmissionedFor = model.AdmissionedFor
             };
 
@@ -2887,7 +2889,7 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 Frequency = model.Frequency,
                 Prescriber = model.Prescriber
-
+                
             };
         }
 
@@ -3023,7 +3025,7 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime
 
             };
-
+            
             if (model.Supervisor != null)
                 salida.IdSupervisor = model.Supervisor.Id;
             else
@@ -3491,7 +3493,7 @@ namespace KyoS.Web.Helpers
                                     .ThenInclude(c => c.Clients_Diagnostics)
                                     .ThenInclude(cd => cd.Diagnostic)
                                     .FirstOrDefaultAsync(c => c.Id == model.IdMTP),
-
+                
                 Goals = model.Goals,
                 Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
                 Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
@@ -3546,7 +3548,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-
+             
                 ACopy = model.ACopy,
                 DateClinicalDirector = model.DateClinicalDirector,
                 DateLicensedPractitioner = model.DateLicensedPractitioner,
@@ -3585,7 +3587,7 @@ namespace KyoS.Web.Helpers
                 Units = model.Units
 
             };
-
+            
             return salida;
         }
 
@@ -3632,7 +3634,7 @@ namespace KyoS.Web.Helpers
                 CodeBill = model.CodeBill,
                 Units = model.Units
 
-            };
+            };           
         }
 
         public async Task<TCMIntakeFormEntity> ToTCMIntakeFormEntity(TCMIntakeFormViewModel model, bool isNew, string userId)
@@ -3945,7 +3947,7 @@ namespace KyoS.Web.Helpers
                 ServedOf = model.ServedOf,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
-
+                
 
             };
         }
@@ -4326,7 +4328,7 @@ namespace KyoS.Web.Helpers
                 TcmClient_FK = model.TcmClient_FK,
                 AdmissionedFor = model.AdmissionedFor,
                 Date = model.Date,
-                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureEmployee =model.DateSignatureEmployee,
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
@@ -4384,7 +4386,7 @@ namespace KyoS.Web.Helpers
         public async Task<TCMDischargeFollowUpEntity> ToTCMDischargeFollowUpEntity(TCMDischargeFollowUpViewModel model, bool isNew, string userId)
         {
             TCMDischargeFollowUpEntity salida;
-            salida = new TCMDischargeFollowUpEntity
+            salida  = new TCMDischargeFollowUpEntity
             {
                 Id = isNew ? 0 : model.Id,
                 CreatedBy = isNew ? userId : model.CreatedBy,
@@ -4486,7 +4488,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmClient_FK = model.TcmClient_FK,
-                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()
+                InterventionList = new System.Collections.Generic.List<TCMIntakeInterventionEntity>()                
             };
 
             return salida;
@@ -4522,7 +4524,7 @@ namespace KyoS.Web.Helpers
                 Activity = model.Activity,
                 Date = model.Date,
                 TcmInterventionLog = await _context.TCMIntakeInterventionLog.FirstOrDefaultAsync(n => n.Id == model.IdInterventionLog)
-            };
+        };
 
             return salida;
         }
@@ -4550,7 +4552,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 TCMClient = await _context.TCMClient
-                                          .Include(n => n.Client)
+                                          .Include(n => n.Client)  
                                           .FirstOrDefaultAsync(c => c.Id == model.IdTCMClient),
                 AbilityScale = model.AbilityScale,
                 ActivitiesScale = model.ActivitiesScale,
@@ -4670,7 +4672,7 @@ namespace KyoS.Web.Helpers
                 TcmClient = await _context.TCMClient
                                           .Include(n => n.Client)
                                           .FirstOrDefaultAsync(c => c.Id == model.TcmClient_FK),
-
+                
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
@@ -4701,7 +4703,7 @@ namespace KyoS.Web.Helpers
                 School = model.School,
                 Separated = model.Separated,
                 Treating = model.Treating,
-
+                
                 MedicationList = model.MedicationList,
                 PastCurrentServiceList = model.PastCurrentServiceList,
                 AnyOther = model.AnyOther,
@@ -4922,7 +4924,7 @@ namespace KyoS.Web.Helpers
                 IfThereAnyHousing = model.IfThereAnyHousing,
                 IfYesWereCriminal = model.IfYesWereCriminal,
                 IfYesWhatArea = model.IfYesWhatArea,
-                ImmigrationOther = model.ImmigrationOther,
+                ImmigrationOther = model.ImmigrationOther, 
                 ImmigrationOtherExplain = model.ImmigrationOtherExplain,
                 Insect = model.Insect,
                 IsClientCurrentlyEmployed = model.IsClientCurrentlyEmployed,
@@ -4991,7 +4993,7 @@ namespace KyoS.Web.Helpers
                 RecommendedTransportation = model.RecommendedTransportation,
                 RecommendedVocation = model.RecommendedVocation,
                 RelationshipEelementary = model.RelationshipEelementary,
-                RelationshipHigh = model.RelationshipHigh,
+                RelationshipHigh =model.RelationshipHigh,
                 RelationshipMiddle = model.RelationshipMiddle,
                 RelationshipPreSchool = model.RelationshipPreSchool,
                 Resident = model.Resident,
@@ -5186,15 +5188,15 @@ namespace KyoS.Web.Helpers
                 IsClientPregnancyNA = model.IsClientPregnancyNA,
                 IsSheReceiving = model.IsSheReceiving,
                 Issues = model.Issues,
-                LegalDecisionAddress = model.LegalDecisionAddress,
+                LegalDecisionAddress = model.LegalDecisionAddress, 
                 LegalDecisionAdLitem = model.LegalDecisionAdLitem,
-                LegalDecisionAttomey = model.LegalDecisionAttomey,
-                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip,
-                LegalDecisionLegal = model.LegalDecisionLegal,
+                LegalDecisionAttomey = model.LegalDecisionAttomey, 
+                LegalDecisionCityStateZip = model.LegalDecisionCityStateZip, 
+                LegalDecisionLegal = model.LegalDecisionLegal, 
                 LegalDecisionName = model.LegalDecisionName,
                 LegalDecisionNone = model.LegalDecisionNone,
-                LegalDecisionOther = model.LegalDecisionOther,
-                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain,
+                LegalDecisionOther = model.LegalDecisionOther, 
+                LegalDecisionOtherExplain = model.LegalDecisionOtherExplain, 
                 LegalDecisionParent = model.LegalDecisionParent,
                 LegalDecisionPhone = model.LegalDecisionPhone,
                 MedicalProblemList = model.MedicalProblemList,
@@ -5448,7 +5450,7 @@ namespace KyoS.Web.Helpers
                 WouldLikeObtainJob = model.WouldLikeObtainJob,
                 WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
                 YearEnteredUsa = model.YearEnteredUsa,
-
+               
                 CantDoItAtAll = model.CantDoItAtAll,
                 DateSignatureCaseManager = model.DateSignatureCaseManager,
                 DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
@@ -5463,7 +5465,7 @@ namespace KyoS.Web.Helpers
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
-
+                
             };
 
             return salida;
@@ -5542,7 +5544,7 @@ namespace KyoS.Web.Helpers
                 TcmAssessment = model.TcmAssessment,
                 Agency = model.Agency,
                 IdTCMAssessment = model.TcmAssessment.Id
-
+                
             };
 
             return salida;
@@ -5563,7 +5565,7 @@ namespace KyoS.Web.Helpers
                 Frequency = model.Frequency,
                 Prescriber = model.Prescriber,
                 ReasonPurpose = model.ReasonPurpose
-
+          
             };
         }
 
@@ -5741,7 +5743,7 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
-        public async Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity(TCMAssessmentSurgeryViewModel model, bool isNew, string userId)
+        public async Task<TCMAssessmentSurgeryEntity> ToTCMAssessmentSurgeryEntity (TCMAssessmentSurgeryViewModel model, bool isNew, string userId)
         {
             return new TCMAssessmentSurgeryEntity
             {
@@ -5752,7 +5754,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
                 Date = model.Date,
-                Hospital = model.Hospital,
+                Hospital =model.Hospital,
                 Outcome = model.Outcome,
                 TypeSurgery = model.TypeSurgery
             };
@@ -5789,10 +5791,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Outcome = model.Outcome,
-                // CaseManager = _context.CaseManagers
-                //                     .FirstOrDefault(n => n.Id == model.IdCaseManager),
-                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),
-                DateOfService = model.DateOfService,
+               // CaseManager = _context.CaseManagers
+                 //                     .FirstOrDefault(n => n.Id == model.IdCaseManager),
+                TCMNoteActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == model.IdTCMNote).ToListAsync(),                
+                DateOfService = model.DateOfService,                
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5818,8 +5820,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 Outcome = model.Outcome,
                 //CaseManager = model.CaseManager,
-                TCMNoteActivity = model.TCMNoteActivity,
-                DateOfService = model.DateOfService,
+                TCMNoteActivity = model.TCMNoteActivity,                
+                DateOfService = model.DateOfService,               
                 NextStep = model.NextStep,
                 ServiceCode = model.ServiceCode,
                 Status = model.Status,
@@ -5827,7 +5829,7 @@ namespace KyoS.Web.Helpers
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id
-
+                
             };
 
             return salida;
@@ -5882,7 +5884,7 @@ namespace KyoS.Web.Helpers
                 ServiceName = model.ServiceName,
                 IdTCMActivity = model.TCMServiceActivity.Id,
                 DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description
-            };
+        };
 
             return salida;
         }
@@ -5935,7 +5937,7 @@ namespace KyoS.Web.Helpers
                 Status = model.Status,
                 Approved = model.Approved,
                 Frecuency = model.Frecuency
-
+                
             };
         }
 
@@ -6045,7 +6047,7 @@ namespace KyoS.Web.Helpers
                 AdmissionDate = goalEntity.AdmissionDate,
                 TypeDocument = goalEntity.TypeDocument
             };
-
+           
             return model;
         }
 
@@ -6061,7 +6063,7 @@ namespace KyoS.Web.Helpers
                 Description = model.Description,
                 Intervention = model.Intervention,
                 GoalTemp = await _context.GoalsTemp.FindAsync(model.IdGoal)
-
+                
             };
         }
 
@@ -6078,7 +6080,7 @@ namespace KyoS.Web.Helpers
                 DateTarget = objectiveEntity.DateTarget,
                 Description = objectiveEntity.Description,
                 Intervention = objectiveEntity.Intervention
-
+               
             };
         }
 
@@ -6523,7 +6525,7 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime,
                 Clinic = user.Clinic,
                 Service = ServiceUtils.GetServiceByIndex(model.IdService),
-
+               
                 Description = model.Description,
                 CreatedBy = isNew ? user.UserName : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
@@ -6554,7 +6556,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 IdSchedule = model.Schedule.Id
-
+               
             };
         }
 
@@ -6572,7 +6574,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Schedule = _context.Schedule.FirstOrDefault(n => n.Id == model.IdSchedule)
             };
-
+            
             return subSchedule;
         }
 
@@ -6586,7 +6588,7 @@ namespace KyoS.Web.Helpers
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 SignaturePath = signaturePath
-
+                
             };
         }
 
@@ -6601,9 +6603,9 @@ namespace KyoS.Web.Helpers
                 IdStatus = (managerEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 IdUser = _userHelper.GetIdByUserName(managerEntity.LinkedUser),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, 0),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager,0),
                 SignaturePath = managerEntity.SignaturePath
-
+               
             };
         }
 
@@ -6654,7 +6656,7 @@ namespace KyoS.Web.Helpers
                 Clients_Diagnostics = clientEntity.Clients_Diagnostics,
                 Clinic = clientEntity.Clinic,
                 FarsFormList = clientEntity.FarsFormList
-
+                
             };
         }
 
