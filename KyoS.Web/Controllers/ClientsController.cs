@@ -1926,7 +1926,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            if (client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
@@ -1951,7 +1951,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            if (client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
