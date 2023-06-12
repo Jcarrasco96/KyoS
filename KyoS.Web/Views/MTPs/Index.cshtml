@@ -65,7 +65,7 @@
                                 <th class="col-md-1">
 
                                 </th>
-                                <th class="col-md-3">
+                                <th class="col-md-4">
                                     Client
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
@@ -77,8 +77,7 @@
                                 <th class="col-md-1" style="text-align:center;">
                                     Status
                                 </th>
-                                <th class="col-md-1" style="text-align:center;">
-                                </th>
+                               
                                 <th class="col-md-1" style="text-align:center;">
                                     Document
                                 </th>
@@ -244,34 +243,7 @@
                                                     </span>
                                                 }
                                             </td>
-                                            <td align="center">
-                                                @if (item.NumberOfMonths != null)
-                                                {
-                                                    @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
-                                                    {
-                                                        <span class="label label-danger" title="Expired days">
-                                                            @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days)
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
-                                                        {
-                                                            <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
-                                                            </span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="label label-warning" title="Number of days to expire the MTP">
-                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days)
-                                                            </span>
-                                                        }
-                                                    }
-
-                                                    month = 0;
-                                                }
-                                            </td>
+                                            
                                             <td align="center">
                                                 @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                                 {
@@ -406,34 +378,7 @@
                                                     </span>
                                                 }
                                             </td>
-                                            <td align="center">
-                                                @if (item.NumberOfMonths != null)
-                                                {
-                                                    @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days >= 0)
-                                                    {
-                                                        <span class="label label-danger" title="Expired days">
-                                                            @(-(DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days )
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month))).Days < -10)
-                                                        {
-                                                            <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
-                                                            </span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="label label-warning" title="Number of days to expire the MTP">
-                                                                @((item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths + month)) - DateTime.Now).Days )
-                                                            </span>
-                                                        }
-                                                    }
-
-                                                    month = 0;
-                                                }
-                                            </td>
+                                           
                                             <td align="center">
                                                 @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                                 {
@@ -673,23 +618,7 @@
                                                     </span>
                                                 }
                                             </td>
-                                            <td align="center">
-                                                @* @if (item.NumberOfMonths != null)
-                                                    {
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
-                                                        {
-                                                            <span class="label label-danger" title="Expired days">
-                                                                @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
-                                                            </span>
-                                                        }
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
-                                                        {
-                                                            <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
-                                                            </span>
-                                                        }
-                                                    }*@
-                                            </td>
+                                           
                                             <td align="center">
                                                 @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                                 {
@@ -816,23 +745,7 @@
                                                     </span>
                                                 }
                                             </td>
-                                            <td align="center">
-                                                @* @if (item.NumberOfMonths != null)
-                                                    {
-                                                        @if ((DateTime.Now - item.AdmissionDateMTP.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days >= 0)
-                                                        {
-                                                            <span class="label label-danger" title="Expired days">
-                                                                @(-(DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days)
-                                                            </span>
-                                                        }
-                                                        @if ((DateTime.Now - item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths))).Days < 0)
-                                                        {
-                                                            <span class="label label-primary" title="Number of days to expire the MTP">
-                                                                @((item.MTPDevelopedDate.Date.AddMonths(Convert.ToInt32(item.NumberOfMonths)) - DateTime.Now).Days)
-                                                            </span>
-                                                        }
-                                                    }*@
-                                            </td>
+                                           
                                             <td align="center">
                                                 @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
                                                 {
