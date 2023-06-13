@@ -90,221 +90,224 @@
                         {
                             <tr>
                                 <td align="center">
-                                    @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
+                                    @if (item.Clinic.Facilitators != null)
                                     {
-                                        <a class="icon-plus-sign-alt"></a>
-                                    }
-                                    <div style="display:none">
-                                        <table class="table table-striped">
-                                            <tr>
-                                                <th class="col-md-1"></th>
-                                                <th class="col-md-5">Facilitator Name</th>
-                                                <th class="col-md-2" style="text-align:center;">Clients</th>
-                                                <th class="col-md-2" style="text-align:center;">Notes</th>
-                                                <th class="col-md-2" style="text-align:center;">Units</th>
-                                            </tr>
-                                            @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
-                                            {
+                                        @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
+                                        {
+                                            <a class="icon-plus-sign-alt"></a>
+                                        }
+                                        <div style="display:none">
+                                            <table class="table table-striped">
                                                 <tr>
-                                                    <td align="center">
-                                                        @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
-                                                        {
-                                                            <a class="icon-plus-sign-alt"></a>
-                                                        }
-                                                        <div style="display:none">
-                                                            <table class="table table-striped">
-                                                                <tr>
-                                                                    <th class="col-md-1" style="text-align:center;">Code</th>
-                                                                    <th class="col-md-2">Client Name</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Date</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Session</th>
-                                                                    <th class="col-md-2" style="text-align:center;">Diagnostics</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Billed</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Notes</th>
-                                                                    <th class="col-md-1" style="text-align:center;">Units</th>
-                                                                </tr>
-                                                                @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
-                                                                {
+                                                    <th class="col-md-1"></th>
+                                                    <th class="col-md-5">Facilitator Name</th>
+                                                    <th class="col-md-2" style="text-align:center;">Clients</th>
+                                                    <th class="col-md-2" style="text-align:center;">Notes</th>
+                                                    <th class="col-md-2" style="text-align:center;">Units</th>
+                                                </tr>
+                                                @foreach (var facilitator in item.Clinic.Facilitators.OrderByDescending(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()))
+                                                {
+                                                    <tr>
+                                                        <td align="center">
+                                                            @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0)
+                                                            {
+                                                                <a class="icon-plus-sign-alt"></a>
+                                                            }
+                                                            <div style="display:none">
+                                                                <table class="table table-striped">
                                                                     <tr>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.Code)
-                                                                        </td>
-                                                                        <td>
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.Name)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @Html.DisplayFor(modelItem => workdayClient.Session)
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (workdayClient.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
-                                                                            {
-                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code)
-                                                                            }
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (workdayClient.BilledDate == null)
-                                                                            {
-                                                                                <p>-</p>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <p>@workdayClient.BilledDate.Value.ToShortDateString()</p>
-                                                                            }
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            1
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            @if (workdayClient.Note != null)
-                                                                            {
-                                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
+                                                                        <th class="col-md-1" style="text-align:center;">Code</th>
+                                                                        <th class="col-md-2">Client Name</th>
+                                                                        <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Date</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Session</th>
+                                                                        <th class="col-md-2" style="text-align:center;">Diagnostics</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Billed</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Notes</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Units</th>
+                                                                    </tr>
+                                                                    @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).OrderBy(wc => wc.Client.Name))
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.Code)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.Name)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Client.MedicaidID)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @Html.DisplayFor(modelItem => workdayClient.Session)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (workdayClient.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
                                                                                 {
-                                                                                    <label>16</label>
+                                                                                    @Html.DisplayFor(modelItem => workdayClient.Client.Clients_Diagnostics.First(n => n.Principal == true).Diagnostic.Code)
                                                                                 }
-                                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (workdayClient.BilledDate == null)
                                                                                 {
-                                                                                    <label>12</label>
+                                                                                    <p>-</p>
                                                                                 }
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                @if (workdayClient.NoteP != null)
+                                                                                else
                                                                                 {
-                                                                                    if (workdayClient.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                                                    <p>@workdayClient.BilledDate.Value.ToShortDateString()</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                1
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                @if (workdayClient.Note != null)
+                                                                                {
+                                                                                    if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
                                                                                     {
-                                                                                        <label>@workdayClient.NoteP.RealUnits</label>
+                                                                                        <label>16</label>
+                                                                                    }
+                                                                                    if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                    {
+                                                                                        <label>12</label>
                                                                                     }
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                                                                    @if (workdayClient.NoteP != null)
                                                                                     {
-                                                                                        <label>4</label>
+                                                                                        if (workdayClient.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                                                        {
+                                                                                            <label>@workdayClient.NoteP.RealUnits</label>
+                                                                                        }
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                                         {
-                                                                                            if (workdayClient.GroupNote2 != null)
-                                                                                            {
-                                                                                                var value = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
-                                                                                                <label>@value</label>
-                                                                                                value = 0;
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
-                                                                                                <label>@value</label>
-                                                                                                value = 0;
-                                                                                            }
+                                                                                            <label>4</label>
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                            if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                                             {
-                                                                                                <label>16</label>
+                                                                                                if (workdayClient.GroupNote2 != null)
+                                                                                                {
+                                                                                                    var value = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                                    <label>@value</label>
+                                                                                                    value = 0;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                                    <label>@value</label>
+                                                                                                    value = 0;
+                                                                                                }
                                                                                             }
-                                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                            else
                                                                                             {
-                                                                                                <label>12</label>
+                                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                                {
+                                                                                                    <label>16</label>
+                                                                                                }
+                                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                                {
+                                                                                                    <label>12</label>
+                                                                                                }
                                                                                             }
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                            </table>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => facilitator.Name)
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Select(wc => wc.Client).Distinct().Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
-                                                    </td>
-                                                    <td align="center">
-                                                        @{
-                                                            units = 0;
-                                                        }
-                                                        @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)))
-                                                        {
-                                                            @if (workdayClient.Note != null)
-                                                            {
-                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
-                                                                {
-                                                                    units = units + 16;
-                                                                }
-                                                                if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
-                                                                {
-                                                                    units = units + 12;
-                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => facilitator.Name)
+                                                        </td>
+                                                        <td align="center">
+                                                            @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Select(wc => wc.Client).Distinct().Count()
+                                                        </td>
+                                                        <td align="center">
+                                                            @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count()
+                                                        </td>
+                                                        <td align="center">
+                                                            @{
+                                                                units = 0;
                                                             }
-                                                            else
+                                                            @foreach (var workdayClient in facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)))
                                                             {
-                                                                if (workdayClient.NoteP != null)
+                                                                @if (workdayClient.Note != null)
                                                                 {
-                                                                    if (workdayClient.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                                    if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema2))
                                                                     {
-                                                                        units = units + workdayClient.NoteP.RealUnits;
+                                                                        units = units + 16;
+                                                                    }
+                                                                    if ((workdayClient.Note.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                    {
+                                                                        units = units + 12;
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                                                    if (workdayClient.NoteP != null)
                                                                     {
-                                                                        units = units + 4;
+                                                                        if (workdayClient.NoteP.Schema == KyoS.Common.Enums.SchemaType.Schema3)
+                                                                        {
+                                                                            units = units + workdayClient.NoteP.RealUnits;
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
+                                                                        if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
                                                                         {
-                                                                            if (workdayClient.GroupNote2 != null)
-                                                                            {
-                                                                                var value1 = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
-                                                                                units = units + value1;
-                                                                                value1 = 0;
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
-                                                                                units = units + value;
-                                                                                value = 0;
-                                                                            }
+                                                                            units = units + 4;
                                                                         }
                                                                         else
                                                                         {
-                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                            if (workdayClient.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                                                             {
-                                                                                units = units + 16;
+                                                                                if (workdayClient.GroupNote2 != null)
+                                                                                {
+                                                                                    var value1 = @workdayClient.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                                                                    units = units + value1;
+                                                                                    value1 = 0;
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    var value = @workdayClient.Schedule.SubSchedules.Count() * 4;
+                                                                                    units = units + value;
+                                                                                    value = 0;
+                                                                                }
                                                                             }
-                                                                            if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                            else
                                                                             {
-                                                                                units = units + 12;
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema1) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema2) || (workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema3))
+                                                                                {
+                                                                                    units = units + 16;
+                                                                                }
+                                                                                if ((workdayClient.Workday.Week.Clinic.Schema == KyoS.Common.Enums.SchemaType.Schema4))
+                                                                                {
+                                                                                    units = units + 12;
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
-                                                        }
-                                                        <label>@units</label>
-                                                        @*@(facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() * 16)*@
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </table>
-                                    </div>
+                                                            <label>@units</label>
+                                                            @*@(facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Workday.Week.Id == item.Id)).Count() * 16)*@
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    }
                                 </td>
                                 <td>
                                     @if (item.MonthYear.Contains("January"))
