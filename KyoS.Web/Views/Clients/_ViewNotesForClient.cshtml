@@ -34,7 +34,14 @@
                                         @Html.DisplayFor(modelItem => day_client.Workday.Service)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Session)
+                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        {
+                                            @Html.DisplayFor(modelItem => day_client.Session)
+                                        }
+                                        else
+                                        {
+                                            @day_client.Schedule.InitialTime.ToShortTimeString() <a> - </a> @day_client.Schedule.EndTime.ToShortTimeString()
+                                        }
                                     </td>                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Present)
@@ -157,8 +164,6 @@
                                                 }
                                             }
                                         }
-
-
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => day_client.Facilitator.Name)
@@ -375,7 +380,14 @@
                                         @Html.DisplayFor(modelItem => day_client.Workday.Service)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Session)
+                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        {
+                                            @Html.DisplayFor(modelItem => day_client.Session)
+                                        }
+                                        else
+                                        {
+                                            @day_client.Schedule.InitialTime.ToShortTimeString() <a> - </a> @day_client.Schedule.EndTime.ToShortTimeString()
+                                        }
                                     </td>                                   
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => day_client.Present)

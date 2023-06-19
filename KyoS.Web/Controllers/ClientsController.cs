@@ -1674,6 +1674,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.GroupNote2)
 
+                                                 .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Schedule)
+
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
