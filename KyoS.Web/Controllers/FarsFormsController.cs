@@ -1113,7 +1113,10 @@ namespace KyoS.Web.Controllers
                     {
                         if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
                         {
+                            FarsFormEntity aux = client.FarsFormList.FirstOrDefault(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums);
 
+                            client.FarsFormList.Remove(aux);
+                            aux = new FarsFormEntity();
                         }
                         else
                         {

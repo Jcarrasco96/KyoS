@@ -1785,7 +1785,9 @@ namespace KyoS.Web.Helpers
             List<Workday_Client> workday_Clients = _context.Workdays_Clients
                                                            .Include(n => n.Schedule)
                                                            .ThenInclude(n => n.SubSchedules)
-                                                           .Where(n => n.Facilitator.Id == idFacilitator && n.Workday.Id == idWorkday).ToList();
+                                                           .Where(n => n.Facilitator.Id == idFacilitator 
+                                                                    && n.Workday.Id == idWorkday
+                                                                    && n.Client == null).ToList();
 
             foreach (var item in workday_Clients)
             {
