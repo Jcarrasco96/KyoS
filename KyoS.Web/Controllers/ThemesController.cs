@@ -151,7 +151,9 @@ namespace KyoS.Web.Controllers
                 DayOfWeekType day = (themeViewModel.DayId == 1) ? DayOfWeekType.Monday : (themeViewModel.DayId == 2) ? DayOfWeekType.Tuesday :
                                     (themeViewModel.DayId == 3) ? DayOfWeekType.Wednesday : (themeViewModel.DayId == 4) ? DayOfWeekType.Thursday :
                                     (themeViewModel.DayId == 5) ? DayOfWeekType.Friday : DayOfWeekType.Monday;
-                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == day && t.Clinic.Id == themeViewModel.IdClinic)));
+                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name 
+                                                                                  && t.Day == day 
+                                                                                  && t.Clinic.Id == themeViewModel.IdClinic)));
                 if (theme == null)
                 {
                     ThemeEntity themeEntity = await _converterHelper.ToThemeEntity(themeViewModel, true);
@@ -260,7 +262,10 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == null && t.Clinic.Id == themeViewModel.IdClinic)));
+                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name 
+                                                                                  && t.Day == null 
+                                                                                  && t.Clinic.Id == themeViewModel.IdClinic
+                                                                                  && t.Service == ThemeUtils.GetThemeByIndex(themeViewModel.IdService))));
                 if (theme == null)
                 {
                     ThemeEntity themeEntity = await _converterHelper.ToTheme3Entity(themeViewModel, true);
