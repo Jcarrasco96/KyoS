@@ -115,7 +115,7 @@
                 <partial name="_MCSP" />
                 <partial name="_NotesP" />
                 <div class="form-group col-md-12">
-                    <input onclick="GenderVerification()" type="submit" value="Save All" class="btn btn-primary" />
+                    <input onclick="Verifications()" type="submit" value="Save All" class="btn btn-primary" />
                     @if (Model.Origin == 0) //viene de la pagina Index de las notas
                     {
                         <a asp-action="Index" class="btn btn-success">Back</a>
@@ -257,11 +257,24 @@
                 })
             });
 
-            function GenderVerification() {
+            function Verifications() {
             
                 if ($("#PlanNote").val() != "")
                 {
-                    
+                    //user must select at least one client's response per theme
+                    if (ClientResponseVerification()) {                        
+                        Swal.fire({
+                            title: 'Error',
+                            text: "You must select at least one client's response per theme.",
+                            icon: 'error',
+                            showConfirmButton: false,
+                            showCancelButton: true,                            
+                            cancelButtonText: '   OK   '
+                        });
+                        return;
+                    }
+
+                    //gender verification
                     var url = "@Url.Action("GetGenderByClient", "MTPs")";   
                 
                     $.get(url, { idClient: @Model.Workday_Cient.Client.Id }, function (data) {
@@ -346,7 +359,21 @@
                 else {
                     return false;
                 }
-        }
+            }
+
+            function ClientResponseVerification() {
+
+                //The user must select at least one client response per theme 
+                if ((Present1.checked == true && Cooperative1.checked == false && Assertive1.checked == false && Passive1.checked == false && Variable1.checked == false && Uninterested1.checked == false && Engaged1.checked == false && Distractible1.checked == false && Confused1.checked == false && Aggresive1.checked == false && Resistant1.checked == false && Other1.checked == false)
+                    || (Present2.checked == true && Cooperative2.checked == false && Assertive2.checked == false && Passive2.checked == false && Variable2.checked == false && Uninterested2.checked == false && Engaged2.checked == false && Distractible2.checked == false && Confused2.checked == false && Aggresive2.checked == false && Resistant2.checked == false && Other2.checked == false)
+                    || (Present3.checked == true && Cooperative3.checked == false && Assertive3.checked == false && Passive3.checked == false && Variable3.checked == false && Uninterested3.checked == false && Engaged3.checked == false && Distractible3.checked == false && Confused3.checked == false && Aggresive3.checked == false && Resistant3.checked == false && Other3.checked == false)
+                    || (Present4.checked == true && Cooperative4.checked == false && Assertive4.checked == false && Passive4.checked == false && Variable4.checked == false && Uninterested4.checked == false && Engaged4.checked == false && Distractible4.checked == false && Confused4.checked == false && Aggresive4.checked == false && Resistant4.checked == false && Other4.checked == false)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
 
     </script>
 }
