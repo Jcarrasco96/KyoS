@@ -34,7 +34,7 @@
                                         @Html.DisplayFor(modelItem => day_client.Workday.Service)
                                     </td>
                                     <td align="center">
-                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual || day_client.Schedule == null)
                                         {
                                             @Html.DisplayFor(modelItem => day_client.Session)
                                         }
@@ -380,7 +380,7 @@
                                         @Html.DisplayFor(modelItem => day_client.Workday.Service)
                                     </td>
                                     <td align="center">
-                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual)
+                                        @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Individual || day_client.Schedule == null)
                                         {
                                             @Html.DisplayFor(modelItem => day_client.Session)
                                         }
