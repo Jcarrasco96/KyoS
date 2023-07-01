@@ -1412,14 +1412,20 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            MTPReviewEntity mtpReview = new MTPReviewEntity();
+            if (_context.MTPReviews.FirstOrDefault(n => n.Id == idReview) != null)
+            {
+                mtpReview = _context.MTPReviews.FirstOrDefault(n => n.Id == idReview);
+            }
+
             string objetive = $"{goalEntity.Number}.{goalEntity.Objetives.Count() + 1}";
             ObjectiveViewModel model = new ObjectiveViewModel
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.AdmissionDateMTP,
-                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
-                DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = mtpReview.DataOfService,
+                DateResolved = mtpReview.ReviewedOn,
+                DateTarget = mtpReview.ReviewedOn,
                 Objetive = objetive,
                 IdMTPReview = idReview
             };
@@ -2967,12 +2973,13 @@ namespace KyoS.Web.Controllers
 
             MTPReviewViewModel model = new MTPReviewViewModel();
             MTPEntity mtp = _context.MTPs
-                                  .Include(n => n.Client)
-                                  .ThenInclude(n => n.LegalGuardian)
-                                  .Include(n => n.Client.Clinic)
-                                  .Include(n => n.Goals)
-                                  .ThenInclude(n => n.Objetives)
-                                  .FirstOrDefault(m => m.Id == id);
+                                    .Include(n => n.Client)
+                                    .ThenInclude(n => n.LegalGuardian)
+                                    .Include(n => n.Client.Clinic)
+                                    .Include(n => n.Goals)
+                                    .ThenInclude(n => n.Objetives)
+                                    .Include(n => n.MtpReviewList)
+                                    .FirstOrDefault(m => m.Id == id);
 
             if (User.IsInRole("Supervisor"))
             {
@@ -3013,6 +3020,22 @@ namespace KyoS.Web.Controllers
                  
                 };
             }
+            DateTime aux = new DateTime();
+            
+            if (mtp.MtpReviewList.Count() > 0)
+            {
+                aux = _context.MTPReviews
+                              .Include(n => n.Mtp)
+                              .ThenInclude(n => n.Client)
+                              .Where(m => m.MTP_FK == id)
+                              .Max(n => n.ReviewedOn);
+            }
+            else
+            {
+                aux = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths));
+            }
+
+            
             if (User.IsInRole("Facilitator"))
             {
                 model = new MTPReviewViewModel
@@ -3023,7 +3046,7 @@ namespace KyoS.Web.Controllers
                     DateLicensedPractitioner = DateTime.Now,
                     DateSignaturePerson = DateTime.Now,
                     DateTherapist = DateTime.Now,
-                    ReviewedOn = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
+                    ReviewedOn = aux.AddMonths(Convert.ToInt32(3)),
                     Status = AdendumStatus.Edition,
                     ACopy = false,
                     ClinicalDirector = mtp.Client.Clinic.ClinicalDirector,
@@ -3047,7 +3070,7 @@ namespace KyoS.Web.Controllers
                     Frecuency = "Four times per week",
                     MonthOfTreatment = 3,
                     Setting = "02",
-                    DataOfService = mtp.AdmissionDateMTP.AddMonths(Convert.ToInt32(mtp.NumberOfMonths)),
+                    DataOfService = aux,
                     Origin = origin                    
                 };
 
