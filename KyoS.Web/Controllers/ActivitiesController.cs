@@ -901,6 +901,7 @@ namespace KyoS.Web.Controllers
 
                     AM = true,
                     PM = true
+
                 };
             }
             else
@@ -930,7 +931,8 @@ namespace KyoS.Web.Controllers
                         Activities4 = null,
 
                         AM = activities_list.ElementAtOrDefault(0).PM,
-                        PM = activities_list.ElementAtOrDefault(0).AM
+                        PM = activities_list.ElementAtOrDefault(0).AM,
+                        TitleNote = activities_list.ElementAtOrDefault(0).TitleNote
                     };
                     ViewData["edit"] = 0;
                 }
@@ -1017,7 +1019,8 @@ namespace KyoS.Web.Controllers
                         stressManagement4 = activities_list[3].stressManagement == null ? false : Convert.ToBoolean(activities_list[3].stressManagement),
 
                         AM = activities_list.ElementAtOrDefault(0).AM,
-                        PM = activities_list.ElementAtOrDefault(0).PM
+                        PM = activities_list.ElementAtOrDefault(0).PM,
+                        TitleNote = activities_list.ElementAtOrDefault(0).TitleNote
                     };
                 }
                 
@@ -1087,8 +1090,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills1,
                     stressManagement = model.stressManagement1,
                     AM = model.AM,
-                    PM = model.PM
-
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1107,7 +1110,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills2,
                     stressManagement = model.stressManagement2,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1126,7 +1130,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills3,
                     stressManagement = model.stressManagement3,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1145,7 +1150,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills4,
                     stressManagement = model.stressManagement4,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
 

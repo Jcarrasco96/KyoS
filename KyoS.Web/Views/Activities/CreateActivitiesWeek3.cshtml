@@ -67,7 +67,14 @@
                 <div class ="form-group col-md-12">
                     <a onclick="showInPopupLg('@Url.Action("SearchTopic", "Activities", null, Context.Request.Scheme)','Search Theme')" class="btn btn-info" title="Search Theme"><i class="glyphicon glyphicon-search"></i> Search Theme</a>
                 </div>
-            </div>                
+            </div> 
+            <div class="col-md-push-12">
+                <div class="form-group col-md-12">
+                    <label asp-for="TitleNote" class="control-label">Note title</label>
+                    <input asp-for="TitleNote" class="form-control" />
+                    <span asp-validation-for="TitleNote" class="text-danger"></span>
+                </div>
+            </div> 
             <div class="col-md-push-12">
                 <div class="form-group col-md-6">
                     <label class="control-label">Group 1 Theme</label>

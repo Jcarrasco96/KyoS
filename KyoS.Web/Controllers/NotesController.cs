@@ -1349,7 +1349,8 @@ namespace KyoS.Web.Controllers
                     stressManagement4 = activities[3].stressManagement == null ? false : Convert.ToBoolean(activities[3].stressManagement),
 
                     Workday_Cient = workday_Client,
-                    MTPId = mtp.Id
+                    MTPId = mtp.Id,
+                    Title = activities[0].TitleNote
                 };
             }
             else
