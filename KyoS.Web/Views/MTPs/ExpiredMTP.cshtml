@@ -91,8 +91,8 @@
                             <td align="center">
                                 @if (item.ExpiredDays == 0)
                                 {
-                                    <span class="label label-default">
-                                        N_Obj
+                                    <span class="label label-danger">
+                                        -
                                     </span>
                                 }
                                 else
@@ -123,6 +123,12 @@
                                         Addendum
                                     </span>
                                 }
+                                @if (item.TypeDocument == 3)
+                                {
+                                    <span class="label label-danger">
+                                        -
+                                    </span>
+                                }
                             </td>
                             <td align="right">
                                 @*@if (User.IsInRole("Facilitator"))
@@ -149,7 +155,14 @@
                                 }*@
                                 @if (User.IsInRole("Facilitator"))
                                 {
-                                    <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                    @if (item.TypeDocument == 0 && item.MtpReviewCount == 0)
+                                    {
+                                        <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
+                                    else
+                                    { 
+                                        <a asp-action="CreateAddemdun" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Addemdun"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
                                 }
                                 else
                                 {

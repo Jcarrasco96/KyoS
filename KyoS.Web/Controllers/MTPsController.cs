@@ -2122,7 +2122,16 @@ namespace KyoS.Web.Controllers
                     {
                         mtpExpired.DateExpired = item.AdmissionDateMTP;
                         mtpExpired.ExpiredDays = 0;
-                        mtpExpired.TypeDocument = 0;
+                        mtpExpired.TypeDocument = 3;
+                    }
+
+                    if (item.MtpReviewList == null)
+                    {
+                        mtpExpired.MtpReviewCount = 0;
+                    }
+                    else
+                    {
+                        mtpExpired.MtpReviewCount = item.MtpReviewList.Count();
                     }
 
                     mtpExpireds.Add(mtpExpired);
