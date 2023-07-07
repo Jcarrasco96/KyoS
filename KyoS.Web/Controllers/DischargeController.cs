@@ -153,6 +153,19 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
+                    if (service == ServiceType.PSR)
+                    {
+                        model.ProgramPSR = true;
+                    }
+                    if (service == ServiceType.Individual)
+                    {
+                        model.ProgramInd = true;
+                    }
+                    if (service == ServiceType.Group)
+                    {
+                        model.ProgramGroup = true;
+                    }
+
                     return View(model);
                 }
             }
@@ -277,17 +290,35 @@ namespace KyoS.Web.Controllers
                 {
                     DischargeEntity = await _converterHelper.ToDischargeEntity(DischargeViewModel, true, user_logged.UserName);
                     _context.Discharge.Add(DischargeEntity);
+
+                    // update DateResolved in all Objective for this services
+                    
+                    List<ObjetiveEntity> listObjective = new List<ObjetiveEntity>();
+                    List<ObjetiveEntity> listObjective_Salida = new List<ObjetiveEntity>();
+                    listObjective = _context.Objetives
+                                            .Where(n => n.Goal.MTP.Client.Id == DischargeEntity.Client_FK
+                                                     && n.Goal.Service == DischargeEntity.TypeService)
+                                            .ToList();
+                    if (listObjective.Count() > 0)
+                    {
+                        foreach (var item in listObjective)
+                        {
+                            item.DateResolved = DischargeEntity.DateDischarge;
+                            _context.Update(item);
+                        }
+                        
+                    }
                     try
                     {
                         await _context.SaveChangesAsync();
 
                         if (DischargeViewModel.Origin == 1)
                         {
-                            RedirectToAction("ClientswithoutDischarge");                            
+                            return RedirectToAction("ClientswithoutDischarge");                            
                         }
                         if (DischargeViewModel.Origin == 2)
                         {
-                            RedirectToAction("DischargeOfService");
+                            return RedirectToAction("DischargeOfService");
                         }
                         return RedirectToAction("Index");
                     }
