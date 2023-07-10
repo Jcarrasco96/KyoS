@@ -215,6 +215,9 @@ namespace KyoS.Web.Data.Entities
         public bool Takes3OrMore { get; set; }
         public bool WithoutWanting { get; set; }
         public bool NotAlwaysPhysically { get; set; }
+        //new
+        public bool AnyFood { get; set; }
+        public bool AnyEating { get; set; }
 
         public string If6_ReferredTo { get; set; }
 
@@ -227,6 +230,9 @@ namespace KyoS.Web.Data.Entities
 
         //7. PSYCHOSOCIAL HISTORY
         public string SubstanceAbuse { get; set; }
+        public bool MilitaryServiceHistory { get; set; }
+        public string MilitaryServiceHistory_Explain { get; set; }
+        public string VocationalAssesment { get; set; }
         public string LegalHistory { get; set; }
         public string PersonalFamilyPsychiatric { get; set; }
         public bool DoesClientRequired { get; set; }
