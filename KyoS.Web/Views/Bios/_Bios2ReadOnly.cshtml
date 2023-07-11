@@ -53,7 +53,7 @@
             Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8" disabled> Yes   <input type="checkbox" class="form-check-input" id="check108" disabled> No     If yes, specify:  <input asp-for="HasTheClient_Explain" style="width:15%" disabled>
 
 
-    <strong>C. Physical/Sexual/Emotional Abuse:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
+    <strong>C. Physical/Sexual/Emotional Abuse or exploitation:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
       If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
       if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
       reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
@@ -111,6 +111,8 @@
     Takes 3 or more different prescribed or over-the-counter drugs a day.           <input type="checkbox" asp-for="Takes3OrMore" class="form-check-input" id="check18" disabled> YES  <input type="checkbox" class="form-check-input" id="check118" disabled> NO
     Without wanting to. Has lost or gained 10 pounds in the last 6 months.          <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" id="check19" disabled> YES  <input type="checkbox" class="form-check-input" id="check119" disabled> NO
     Not always physically able to shop, cook and/or feed self.                      <input type="checkbox" asp-for="NotAlwaysPhysically" class="form-check-input" id="check20" disabled> YES  <input type="checkbox" class="form-check-input" id="check120" disabled> NO
+    Any Food, Medications, or environmental allergies.                              <input type="checkbox" asp-for="AnyFood" class="form-check-input" id="check26"> YES  <input type="checkbox" class="form-check-input" id="check126"> NO
+    Any eating desorder.                                                            <input type="checkbox" asp-for="AnyEating" class="form-check-input" id="check27"> YES  <input type="checkbox" class="form-check-input" id="check127"> NO
     <strong>Total: </strong>   
     <strong>0-2 GOOD. </strong>As appropriate reassess and/or provide information based on situation.
     <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
@@ -128,6 +130,10 @@
 
     Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
     <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" disabled></textarea>   
+    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28"> YES  <input type="checkbox" class="form-check-input" id="check128"> NO
+    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4"></textarea>   
+    <strong>VOCATIONAL ASSESMENT:</strong>
+    <textarea asp-for="VocationalAssesment" style="width:90%" rows="2"></textarea>
     Legal History (specifying changes, date, convictions and incarcerations):
     <textarea asp-for="LegalHistory" style="width:90%" rows="2" disabled></textarea>  
     Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
@@ -713,6 +719,66 @@
         check125.checked = false;
     } else {
         check125.checked = true;
+    }
+    //---------------------------------
+    check26.addEventListener('change', (e) => {
+        if (check26.checked == true) {
+            check126.checked = false;
+        } else {
+            check126.checked = true;
+        }
+    })
+    check126.addEventListener('change', (e) => {
+        if (check126.checked == true) {
+            check26.checked = false;
+        } else {
+            check26.checked = true;
+        }
+    })
+    if (check26.checked == true) {
+        check126.checked = false;
+    } else {
+        check126.checked = true;
+    }
+    //---------------------------------
+    check27.addEventListener('change', (e) => {
+        if (check27.checked == true) {
+            check127.checked = false;
+        } else {
+            check127.checked = true;
+        }
+    })
+    check127.addEventListener('change', (e) => {
+        if (check127.checked == true) {
+            check27.checked = false;
+        } else {
+            check27.checked = true;
+        }
+    })
+    if (check27.checked == true) {
+        check127.checked = false;
+    } else {
+        check127.checked = true;
+    }
+    //---------------------------------
+    check28.addEventListener('change', (e) => {
+        if (check28.checked == true) {
+            check128.checked = false;
+        } else {
+            check128.checked = true;
+        }
+    })
+    check128.addEventListener('change', (e) => {
+        if (check128.checked == true) {
+            check28.checked = false;
+        } else {
+            check28.checked = true;
+        }
+    })
+    if (check28.checked == true) {
+        check128.checked = false;
+    } else {
+        check128.checked = true;
     }
 </script>
 

@@ -3235,7 +3235,12 @@ namespace KyoS.Web.Helpers
                                    .ToList(),
                 Status = model.Status,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                AnyEating = model.AnyEating,
+                AnyFood = model.AnyFood,
+                MilitaryServiceHistory = model.MilitaryServiceHistory,
+                MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
+                VocationalAssesment = model.VocationalAssesment
 
             };
         }
@@ -3447,7 +3452,12 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor,
                 Status = model.Status,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                AnyEating = model.AnyEating,
+                AnyFood = model.AnyFood,
+                MilitaryServiceHistory = model.MilitaryServiceHistory,
+                MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
+                VocationalAssesment = model.VocationalAssesment
 
             };
 

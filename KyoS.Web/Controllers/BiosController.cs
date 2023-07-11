@@ -321,7 +321,12 @@ namespace KyoS.Web.Controllers
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
                         AdmissionedFor = user_logged.FullName,
-                        CodeBill = user_logged.Clinic.CodeBIO
+                        CodeBill = user_logged.Clinic.CodeBIO,
+                        AnyEating = false,
+                        AnyFood = false,
+                        MilitaryServiceHistory = false,
+                        MilitaryServiceHistory_Explain = string.Empty,
+                        VocationalAssesment = string.Empty
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
