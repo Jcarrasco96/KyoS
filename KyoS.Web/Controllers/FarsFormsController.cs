@@ -984,7 +984,7 @@ namespace KyoS.Web.Controllers
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > 0).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()))
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
                                                                  && n.OnlyTCM == false)
                                                           .ToListAsync();
 
@@ -1126,13 +1126,29 @@ namespace KyoS.Web.Controllers
                             if (element.Facilitator != null)
                             {
                                 auditClient.Responsible = element.Facilitator.Name;
+                                if (client.FarsFormList.Exists(n => n.AdmissionedFor == element.Facilitator.Name && n.Type == FARSType.Addendums) == true)
+                                {
+                                    auditClient.Active = 1;
+                                    auditClient.Description = "Check date FARS type Addendums";
+                                }
+                                else
+                                {
+                                    auditClient.Active = 0;
+                                }
                             }
                             else
                             {
                                 auditClient.Responsible = element.CreatedBy;
+                                if (client.FarsFormList.Exists(n => n.CreatedBy == element.CreatedBy && n.Type == FARSType.Addendums) == true)
+                                {
+                                    auditClient.Active = 1;
+                                    auditClient.Description = "Check date FARS type Addendums";
+                                }
+                                else
+                                {
+                                    auditClient.Active = 0;
+                                }
                             }
-
-                            auditClient.Active = 0;
 
                             auditClient_List.Add(auditClient);
                             auditClient = new AuditFARS();
