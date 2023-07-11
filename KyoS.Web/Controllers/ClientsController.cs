@@ -2187,17 +2187,20 @@ namespace KyoS.Web.Controllers
 
             }
 
-           
+
 
             if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
             {
                 int cant_Addendums = client.MTPs.Sum(n => n.AdendumList.Count()) - client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count();
                 tempProblem.Name = "FARS";
-                tempProblem.Description = "The amount of FARS does not match with Addendums (" + cant_Addendums +")";
-                tempProblem.Active = 1;
+                tempProblem.Description = "The amount of FARS does not match with Addendums (" + cant_Addendums + ")";
+                tempProblem.Active = 0;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
 
+            }
+            else
+            {
                 foreach (var item in client.MTPs)
                 {
                     foreach (var element in item.AdendumList)
@@ -2226,29 +2229,73 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            if (dischage_psr == true && fars_d_psr == false)
+            if (dischage_psr == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge PSR)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_PSR).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge PSR)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_psr == true && fars_d_psr == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge PSR)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
-            if (dischage_group == true && fars_d_group == false)
+
+            if (dischage_group == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge Group)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_Group).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge Group)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_group == true && fars_d_group == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge Group)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
-            if (dischage_ind == true && fars_d_ind == false)
+
+            if (dischage_ind == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge Ind.)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_Ind).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge Ind.)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_ind == true && fars_d_ind == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge Ind.)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
 
             if (farsEdition == true)
