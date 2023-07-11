@@ -8456,7 +8456,6 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
-
         private DataTable GetTCMSupervisorDS(TCMSupervisorEntity supervisor)
         {
             DataTable dt = new DataTable
@@ -11811,6 +11810,12 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("SupervisorId", typeof(int));
 
+            dt.Columns.Add("AnyFood", typeof(bool));
+            dt.Columns.Add("AnyEating", typeof(bool));
+            dt.Columns.Add("MilitaryServiceHistory", typeof(bool));
+            dt.Columns.Add("MilitaryServiceHistory_Explain", typeof(string));
+            dt.Columns.Add("VocationalAssesment", typeof(string));
+
             if (bio != null)
             {
                 dt.Rows.Add(new object[]
@@ -12006,7 +12011,12 @@ namespace KyoS.Web.Helpers
                                             bio.LastModifiedOn,
                                             0,
                                             bio.Status,
-                                            0
+                                            0,
+                                            bio.AnyFood,
+                                            bio.AnyEating,
+                                            bio.MilitaryServiceHistory,
+                                            bio.MilitaryServiceHistory_Explain,
+                                            bio.VocationalAssesment
             });
             }
             else
@@ -12204,7 +12214,12 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             0,
                                             0,
-                                            0
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty
                                         });
             }
 
