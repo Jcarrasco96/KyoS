@@ -481,11 +481,13 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 9).Value = "Status";
                 worksheet.Cell(currentRow, 10).Value = "Full Address";
                 worksheet.Cell(currentRow, 11).Value = "Telephone";
-                worksheet.Cell(currentRow, 12).Value = "Date Close";
+                worksheet.Cell(currentRow, 12).Value = "Race";
+                worksheet.Cell(currentRow, 13).Value = "Preferred Language";
+                worksheet.Cell(currentRow, 14).Value = "Date Close";
 
 
                 worksheet.Style.Font.Bold = true;
-                IXLRange range = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
+                IXLRange range = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 14).Address);
                 range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range.SetAutoFilter();
 
@@ -531,13 +533,15 @@ namespace KyoS.Web.Helpers
 
                     worksheet.Cell(currentRow, 10).Value = item.FullAddress;
                     worksheet.Cell(currentRow, 11).Value = item.Telephone;
-                    worksheet.Cell(currentRow, 12).Value = item.DateOfClose.ToShortDateString();
+                    worksheet.Cell(currentRow, 12).Value = item.Race;
+                    worksheet.Cell(currentRow, 13).Value = item.PreferredLanguage;
+                    worksheet.Cell(currentRow, 14).Value = item.DateOfClose.ToShortDateString();
                     if (item.DateOfClose.DayOfYear == 1 && item.Status == Common.Enums.StatusType.Close)
                     {
-                        worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Yellow);
+                        worksheet.Cell(currentRow, 14).Style.Fill.SetBackgroundColor(XLColor.Yellow);
                     }
 
-                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
+                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 14).Address);
                     rangeCurrent.Style.Font.FontSize = 11;
                     rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeCurrent.Style.Font.Bold = false;
@@ -545,18 +549,18 @@ namespace KyoS.Web.Helpers
                 }
 
                 worksheet.ColumnsUsed().AdjustToContents();
-                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 14).Address);
                 range1.Style.Font.FontSize = 18;
                 range1.Style.Font.Bold = false;
                 range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range1.Merge();
-                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 12).Address);
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 14).Address);
                 range2.Style.Font.FontSize = 16;
                 range2.Style.Font.Bold = false;
                 range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range2.Merge();
-                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 12).Address);
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 14).Address);
                 range3.Style.Font.FontSize = 14;
                 range3.Style.Font.Bold = false;
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
