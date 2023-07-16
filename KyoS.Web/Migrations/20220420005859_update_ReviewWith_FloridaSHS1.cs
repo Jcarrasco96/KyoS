@@ -6,19 +6,9 @@ namespace KyoS.Web.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "EmergencyContact",
-                table: "IntakeScreenings");
+           
         }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<bool>(
-                name: "EmergencyContact",
-                table: "IntakeScreenings",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
-        }
+       
     }
 }

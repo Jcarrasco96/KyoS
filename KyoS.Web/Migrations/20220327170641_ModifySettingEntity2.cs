@@ -13,19 +13,7 @@ namespace KyoS.Web.Migrations
                 nullable: false,
                 defaultValue: false);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "MentalHealthClinic",
-                table: "Settings",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "TCMClinic",
-                table: "Settings",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -34,13 +22,7 @@ namespace KyoS.Web.Migrations
                 name: "MHClassificationOfGoals",
                 table: "Settings");
 
-            migrationBuilder.DropColumn(
-                name: "MentalHealthClinic",
-                table: "Settings");
-
-            migrationBuilder.DropColumn(
-                name: "TCMClinic",
-                table: "Settings");
+         
         }
     }
 }
