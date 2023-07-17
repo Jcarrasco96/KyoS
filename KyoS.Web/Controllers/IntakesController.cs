@@ -139,6 +139,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeScreeningViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -149,7 +150,7 @@ namespace KyoS.Web.Controllers
                     {
                         IdClient = id,
                         Client_FK = id,
-                        Client = _context.Clients.Include(n => n.LegalGuardian).Include(n => n.EmergencyContact).FirstOrDefault(n => n.Id == id),
+                        Client = client,
                         InformationGatheredBy = user_logged.FullName,
                         ClientIsStatus = IntakeClientIsStatus.Clean,
                         BehaviorIsStatus = IntakeBehaviorIsStatus.Normal,
@@ -158,9 +159,9 @@ namespace KyoS.Web.Controllers
                         DoesClientKnowTodayDate = true,
                         DoesClientKnowWhereIs = true,
                         DoesClientKnowTimeOfDay = true,
-                        DateSignatureClient = DateTime.Now,
-                        DateSignatureWitness = DateTime.Now,
-                        DateSignatureEmployee = DateTime.Now,
+                        DateSignatureClient = client.AdmisionDate,
+                        DateSignatureWitness = client.AdmisionDate,
+                        DateSignatureEmployee = client.AdmisionDate,
                         IdClientIs = 0,
                         ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
                         IdBehaviorIs = 0,
@@ -193,9 +194,9 @@ namespace KyoS.Web.Controllers
                 DoesClientKnowTodayDate = true,
                 DoesClientKnowWhereIs = true,
                 DoesClientKnowTimeOfDay = true,
-                DateSignatureClient = DateTime.Now,
-                DateSignatureWitness = DateTime.Now,
-                DateSignatureEmployee = DateTime.Now,
+                DateSignatureClient = client.AdmisionDate,
+                DateSignatureWitness = client.AdmisionDate,
+                DateSignatureEmployee = client.AdmisionDate,
                 IdClientIs = 0,
                 ClientIs_Status = _combosHelper.GetComboIntake_ClientIs(),
                 IdBehaviorIs = 0,
@@ -388,6 +389,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeConsentForTreatmentViewModel model;
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -402,16 +404,16 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeConsentForTreatmentViewModel
                         {
-                            Client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             Aggre = true,
                             Aggre1 = true,
                             AuthorizeRelease = true,
                             AuthorizeStaff = true,
                             Certify = false,
                             Certify1 = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Documents = true,
                             Id = 0,
                             Underestand = true,
@@ -498,6 +500,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeConsentForReleaseViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -511,7 +514,7 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeConsentForReleaseViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
@@ -534,9 +537,9 @@ namespace KyoS.Web.Controllers
                             Other = false,
                             Other_Explain = "",
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             AdmissionedFor = user_logged.FullName
 
                         };
@@ -617,6 +620,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeConsumerRightsViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -630,15 +634,15 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeConsumerRightsViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
                             ServedOf = user_logged.FullName,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             AdmissionedFor = user_logged.FullName
 
                         };
@@ -830,6 +834,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeAcknoewledgementHippaViewModel model;
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -845,10 +850,10 @@ namespace KyoS.Web.Controllers
 
                         model = new IntakeAcknoewledgementHippaViewModel
                         {
-                            Client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id),
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            Client = client,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Documents = true,
                             Id = 0,
                             IdClient = id,
@@ -932,6 +937,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeAccessToServicesViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -945,14 +951,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeAccessToServicesViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             AdmissionedFor = user_logged.FullName,
 
                         };
@@ -1034,6 +1040,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeOrientationCheckListViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -1047,13 +1054,13 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeOrientationCheckListViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Access = true,
                             AgencyExpectation = true,
                             AgencyPolice = true,
@@ -1156,6 +1163,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeTransportationViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -1169,14 +1177,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeTransportationViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             AdmissionedFor = user_logged.FullName,
 
                         };
@@ -1257,6 +1265,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeConsentPhotographViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -1270,13 +1279,13 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeConsentPhotographViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Photograph = true,
                             Filmed = true,
                             VideoTaped = true,
@@ -1367,6 +1376,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeFeeAgreementViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -1380,14 +1390,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeFeeAgreementViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             AdmissionedFor = user_logged.FullName,
 
                         };
@@ -1467,6 +1477,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeTuberculosisViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager"))
             {
@@ -1480,13 +1491,13 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeTuberculosisViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
 
                             DoYouCurrently  = false,
                             DoYouBring = false,
@@ -1594,6 +1605,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeMedicalHistoryViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
@@ -1607,13 +1619,13 @@ namespace KyoS.Web.Controllers
                     {
                         model = new IntakeMedicalHistoryViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
+                            Client = client,
                             IdClient = id,
                             Client_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Documents = true,
 
                             AddressPhysician = "",
