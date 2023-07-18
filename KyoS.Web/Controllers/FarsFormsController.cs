@@ -805,10 +805,10 @@ namespace KyoS.Web.Controllers
                                       .Include(m => m.FarsFormList)
                                       .Include(m => m.DischargeList)
                                       .Include(m => m.IndividualTherapyFacilitator)
-                                      .Include(m => m.Workdays_Clients)
-                                      .ThenInclude(m => m.Workday)
+                                      //.Include(m => m.Workdays_Clients)
+                                      //.ThenInclude(m => m.Workday)
                                       .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                            && n.MTPs.Count() > 0)
+                                               && n.MTPs.Where(n => n.Active == true).Count() > 0)
                                       .ToList();
 
             }
@@ -855,6 +855,10 @@ namespace KyoS.Web.Controllers
                 review = mtp.MtpReviewList.Count();
                 addendums = mtp.AdendumList.Count();
                 discharge = item.DischargeList.Count();
+                item.Workdays_Clients = _context.Clients
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(m => m.Workday)
+                                                .FirstOrDefault(n => n.Id == item.Id).Workdays_Clients;
 
                 if (item.Workdays_Clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
                 {
