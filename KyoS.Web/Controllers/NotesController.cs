@@ -19737,7 +19737,10 @@ namespace KyoS.Web.Controllers
             List<AuditOverlapin> auditClient_List = new List<AuditOverlapin>();
             AuditOverlapin auditClient = new AuditOverlapin();
 
-            WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idWeek);
+            List<WorkdayEntity> workDayList = _context.Workdays
+                                                  .Include(n => n.Week)
+                                                  .Where(n => n.Week.Id == idWeek)
+                                                  .ToList();
 
             List<ClientEntity> client_List = _context.Clients
                                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
@@ -19808,6 +19811,27 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
+
+                foreach (var workday in workDayList)
+                {
+                    if (workday_clientTemp.Where(n => n.Client.Id == item.Id && n.Workday.Id == workday.Id).Count() > 1)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.Date = workday.Date;
+                        auditClient.Schedule = string.Empty;
+
+                        if (workday.Service == ServiceType.Individual)
+                            auditClient.Services = "Ind.";
+                        if (workday.Service == ServiceType.PSR)
+                            auditClient.Services = "PSR";
+                        if (workday.Service == ServiceType.Group)
+                            auditClient.Services = "GROUP";
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditOverlapin();
+                    }
+                }
+
                 workday_clientTemp = new List<Workday_Client>();
             }
             return View(auditClient_List);
