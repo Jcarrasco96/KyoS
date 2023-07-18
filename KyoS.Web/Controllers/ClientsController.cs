@@ -127,7 +127,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -242,7 +242,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(ClientViewModel clientViewModel)
         {
             if (ModelState.IsValid)
@@ -426,7 +426,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager")]
         public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
@@ -539,7 +539,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager")]
         public async Task<IActionResult> Edit(int id, ClientViewModel clientViewModel)
         {
             if (id != clientViewModel.Id)
@@ -655,7 +655,7 @@ namespace KyoS.Web.Controllers
                         Principal = item.Principal
                     };
                     _context.Add(clientDiagnostic);
-                    _context.DiagnosticsTemp.Remove(item);
+                    //_context.DiagnosticsTemp.Remove(item);
                 }
 
                 //delete all client referred of this client
@@ -679,7 +679,7 @@ namespace KyoS.Web.Controllers
                         ReferredNote = item1.ReferredNote
                     };
                     _context.Add(clientReferred);
-                    _context.ReferredsTemp.Remove(item1);
+                    //_context.ReferredsTemp.Remove(item1);
                 }
 
                 //delete all client Documents of this client
@@ -710,7 +710,7 @@ namespace KyoS.Web.Controllers
                         };
                         _context.Add(document);
                    // }                    
-                    _context.DocumentsTemp.Remove(item);
+                    //_context.DocumentsTemp.Remove(item);
                 }
 
                 //delete all client Health Insurance of this client
@@ -738,7 +738,7 @@ namespace KyoS.Web.Controllers
                         AuthorizationNumber = item.AuthorizationNumber
                     };
                     _context.Add(clientHealthInsurance);
-                    _context.HealthInsuranceTemp.Remove(item);
+                    //_context.HealthInsuranceTemp.Remove(item);
                 }
 
                 try
