@@ -489,6 +489,7 @@ namespace KyoS.Web.Controllers
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
+                            //aqui cargo todas las notas de grupo para ver las fechas y que en esas fechas no se generen notas de PSR
                             workday_Client_group = await _context.Workdays_Clients
                                                                  .Include(w => w.Workday)
                                                            
@@ -1021,7 +1022,8 @@ namespace KyoS.Web.Controllers
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
                             developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
-                            
+
+                            //aqui cargo todas las notas de PSR para ver las fechas y que en esas fechas no se generen notas de GROUP
                             workdays = await _context.Workdays
 
                                                      .Include(w => w.Workdays_Clients)
