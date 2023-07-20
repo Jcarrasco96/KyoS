@@ -1081,21 +1081,6 @@ namespace KyoS.Web.Controllers
                                          SharedSession = false,
                                          Schedule = client.Group.Schedule
                                      });     
-                                    /*if ((!this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, ServiceType.Group))
-                                        && (!this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.Group, group.Meridian, item.Date)))
-                                    {
-                                        workday_client.Add(new Workday_Client
-                                        {
-                                            Workday = item,
-                                            Client = client,
-                                            Facilitator = client.Group.Facilitator,
-                                            Session = client.Group.Meridian,
-                                            Present = true,
-                                            SharedSession = false,
-                                            CodeBill = user_logged.Clinic.CodeGroupTherapy,
-                                            Schedule = client.Group.Schedule
-                                        });
-                                    }*/
                                 }                                
                             }
 
@@ -1103,6 +1088,10 @@ namespace KyoS.Web.Controllers
                             {
                                 _context.AddRange(workday_client);
                             }
+
+                            workdays = new List<WorkdayEntity>();
+                            workday_Client_PSR = new List<Workday_Client>();
+                            client = new ClientEntity();
                         }
                     }
                 }
