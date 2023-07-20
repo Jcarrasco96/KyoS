@@ -468,13 +468,15 @@ namespace KyoS.Web.Controllers
                     WorkdayEntity workday_Temp = new WorkdayEntity(); ;
                     List<Workday_Client> workday_Client_group;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
+                    List<ClientEntity> client_List = new List<ClientEntity>();
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
-                        if (client != null)
+                        if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
                         {
+                            client_List.Add(client);
                             client.Group = group;
                             client.IdFacilitatorPSR = group.Facilitator.Id;
                            
@@ -1009,13 +1011,15 @@ namespace KyoS.Web.Controllers
                     WorkdayEntity workday_Temp = new WorkdayEntity(); ;
                     List<Workday_Client> workday_Client_PSR;
                     List<Workday_Client> workday_client = new List<Workday_Client>();
+                    List<ClientEntity> client_List = new List<ClientEntity>();
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
-                        if (client != null)
+                        if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
                         {
+                            client_List.Add(client);
                             client.Group = group;
                             client.IdFacilitatorGroup = group.Facilitator.Id;
                             _context.Update(client);
@@ -1671,9 +1675,6 @@ namespace KyoS.Web.Controllers
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
                                   .Count() > 0
-                                  || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
-                                  .Count() > 0
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient 
                                     && wc.Workday.Date == date 
@@ -1700,9 +1701,6 @@ namespace KyoS.Web.Controllers
                                   .Count() > 0
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
-                                  .Count() > 0
-                                  || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
                                   .Count() > 0
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient
@@ -1734,9 +1732,6 @@ namespace KyoS.Web.Controllers
                                   .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
                                   .Count() > 0
                        || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient
                                     && wc.Workday.Date == date
                                     && wc.Workday.Service == ServiceType.Individual
@@ -1762,9 +1757,6 @@ namespace KyoS.Web.Controllers
                                   .Count() > 0
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.PSR))
-                                  .Count() > 0
-                       || _context.Workdays_Clients
-                                  .Where(wc => (wc.Client.Id == idClient && wc.Workday.Date == date && wc.Workday.Service == ServiceType.Group))
                                   .Count() > 0
                        || _context.Workdays_Clients
                                   .Where(wc => (wc.Client.Id == idClient
