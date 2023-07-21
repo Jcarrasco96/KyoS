@@ -1738,8 +1738,12 @@ namespace KyoS.Web.Helpers
                 {
                     if (!allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay) 
                                             || (n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
-                        && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay) 
-                                               && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay))))
+                        && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= item.EndTime.TimeOfDay) 
+                                               && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)))
+                        && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay > item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay)
+                                            || (n.IndividualNote.SubSchedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay < item.EndTime.TimeOfDay)))
+                        && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= item.EndTime.TimeOfDay)
+                                               && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay <= item.EndTime.TimeOfDay))))
                     {
                         listSchedulesSalida.Add(item);
                     }
