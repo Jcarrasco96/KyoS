@@ -13752,10 +13752,14 @@ namespace KyoS.Web.Controllers
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                 && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
-                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= endTime.TimeOfDay))
                                                              ).Count() > 0)
                                 return true;
-
+                           
                         }
                         else
                         {
@@ -13808,10 +13812,14 @@ namespace KyoS.Web.Controllers
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                 && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
-                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= endTime.TimeOfDay))
                                                              ).Count() > 0)
                                     return true;
-
+                                
                             }
                             else
                             {
@@ -19799,7 +19807,7 @@ namespace KyoS.Web.Controllers
                         {
                             auditClient.Name = item.Name;
                             auditClient.Date = value.Workday.Date;
-                            auditClient.Schedule = value.Session;
+                            auditClient.Schedule = value.Schedule.InitialTime.ToShortTimeString() + " - " + value.Schedule.EndTime.ToShortTimeString();
 
                             if (value.Workday.Service == ServiceType.PSR)
                                 auditClient.Services = "PSR";
