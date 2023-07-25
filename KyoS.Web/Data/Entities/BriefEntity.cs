@@ -39,6 +39,7 @@ namespace KyoS.Web.Data.Entities
         public bool Priv { get; set; }
         public bool BioH0031HN { get; set; }
         public bool IDAH0031HO { get; set; }
+        public bool Code90791 { get; set; }
 
         //2. CLIENT’S PRESENTING PROBLEM 
         public string PresentingProblem { get; set; }

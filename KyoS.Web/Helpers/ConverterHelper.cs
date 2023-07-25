@@ -3240,7 +3240,8 @@ namespace KyoS.Web.Helpers
                 AnyFood = model.AnyFood,
                 MilitaryServiceHistory = model.MilitaryServiceHistory,
                 MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
-                VocationalAssesment = model.VocationalAssesment
+                VocationalAssesment = model.VocationalAssesment,
+                Code90791 = model.Code90791
 
             };
         }
@@ -3457,7 +3458,8 @@ namespace KyoS.Web.Helpers
                 AnyFood = model.AnyFood,
                 MilitaryServiceHistory = model.MilitaryServiceHistory,
                 MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
-                VocationalAssesment = model.VocationalAssesment
+                VocationalAssesment = model.VocationalAssesment,
+                Code90791 = model.Code90791
 
             };
 
@@ -6223,7 +6225,8 @@ namespace KyoS.Web.Helpers
                                    .Where(n => n.Brief.Id == model.Id)
                                    .ToList(),
                 Status = model.Status,
-                SumanrOfFindings = model.SumanrOfFindings
+                SumanrOfFindings = model.SumanrOfFindings,
+                Code90791 = model.Code90791
 
             };
         }
@@ -6355,7 +6358,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 AdmissionedFor = model.AdmissionedFor,
                 Status = model.Status,
-                SumanrOfFindings = model.SumanrOfFindings
+                SumanrOfFindings = model.SumanrOfFindings,
+                Code90791 = model.Code90791
 
             };
 

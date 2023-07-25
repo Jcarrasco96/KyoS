@@ -326,7 +326,8 @@ namespace KyoS.Web.Controllers
                         AnyFood = false,
                         MilitaryServiceHistory = false,
                         MilitaryServiceHistory_Explain = string.Empty,
-                        VocationalAssesment = string.Empty
+                        VocationalAssesment = string.Empty,
+                        Code90791 = false
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -618,7 +619,8 @@ namespace KyoS.Web.Controllers
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
                 ForHowLong = "",
-                CodeBill = bioViewModel.CodeBill
+                CodeBill = bioViewModel.CodeBill,
+                Code90791 = false
             };
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });

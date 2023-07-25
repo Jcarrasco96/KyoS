@@ -253,7 +253,8 @@ namespace KyoS.Web.Controllers
                         EndTime = DateTime.Now,*/
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
-                        AdmissionedFor = user_logged.FullName
+                        AdmissionedFor = user_logged.FullName,
+                        Code90791 = false
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -462,8 +463,9 @@ namespace KyoS.Web.Controllers
                 Treatmentrecomendations = "",
                 ClientDenied = false,
                 StartTime = DateTime.Now,
-                EndTime = DateTime.Now
-                
+                EndTime = DateTime.Now,
+                Code90791 = false
+
             };
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
