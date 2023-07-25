@@ -42,24 +42,27 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FacilitatorName)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.PSRNotStarted)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.IndNotStarted)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.GroupNotStarted)
-                            </td>
-                            <td align="center">
-                                @(item.PSRNotStarted + item.IndNotStarted + item.GroupNotStarted)
-                            </td>
-                        </tr>
-
+                            @if (item.PSRNotStarted > 0 || item.IndNotStarted > 0 || item.GroupNotStarted > 0)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FacilitatorName)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.PSRNotStarted)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.IndNotStarted)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.GroupNotStarted)
+                                    </td>
+                                    <td align="center">
+                                        @(item.PSRNotStarted + item.IndNotStarted + item.GroupNotStarted)
+                                    </td>
+                                </tr>
+                            }
+                            
                         }
                     </tbody>
                 </table>
