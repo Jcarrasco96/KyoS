@@ -274,7 +274,7 @@ namespace KyoS.Web.Controllers
 
                 mtpViewModel.Units = 0;
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
-                mtpEntity.Setting = form["Setting"].ToString();
+                //mtpEntity.Setting = form["Setting"].ToString();
 
                 if (mtpEntity.AdmissionDateMTP.Date == mtpEntity.MTPDevelopedDate.Date)
                 {
@@ -499,7 +499,7 @@ namespace KyoS.Web.Controllers
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
                 if ((User.IsInRole("Supervisor")) || (User.IsInRole("Documents_Assistant"))) //|| ((mtpEntity.MtpReview != null) && (mtpEntity.MtpReview.CreatedBy == user_logged.Id)))
                 {
-                    mtpEntity.Setting = form["Setting"].ToString();
+                    //mtpEntity.Setting = form["Setting"].ToString();
                     _context.Update(mtpEntity);
                     try
                     {

@@ -62,15 +62,20 @@
             <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <div class="form-group">
             <label asp-for="CodeBill" class="control-label">Code Bill</label>
             <input asp-for="CodeBill" class="form-control" />
             <span asp-validation-for="CodeBill" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
+            <label asp-for="Setting" class="control-label">Setting</label>
+            <input asp-for="Setting" class="form-control" />
+            <span asp-validation-for="Setting" class="text-danger"></span>
+        </div>
+        @*<div class="form-group">
             <label asp-for="Setting" class="control-label"></label>
             <br />
             @if (Model.Setting == "53")
@@ -92,7 +97,7 @@
                 <input type="radio" name="Setting" value="02" />
             }
             <strong>02</strong>&nbsp;Remote
-        </div>
+        </div>*@
     </div>
 </div>
 <div class="col-md-push-12">
