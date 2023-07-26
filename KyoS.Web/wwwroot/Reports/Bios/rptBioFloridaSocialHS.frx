@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/19/2023 12:10:48" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="07/26/2023 10:39:43" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ebMfHGxQ6kPLaT/d8IcHrQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35HZ2H2BJpkmsXAU3ci2iBg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -285,6 +285,7 @@
         <Column Name="DocumentsAssistantId" DataType="System.Int32"/>
         <Column Name="Status" DataType="System.Int32"/>
         <Column Name="SupervisorId" DataType="System.Int32"/>
+        <Column Name="Code90791" DataType="System.Boolean" PropName="Column" BindableControl="CheckBox"/>
       </TableDataSource>
       <TableDataSource Name="Bio_BehavioralHistory" DataType="System.Int32" Enabled="true" TableName="Bio_BehavioralHistory">
         <Column Name="Id" DataType="System.Int32"/>
@@ -374,11 +375,11 @@
       <TextObject Name="Text455" Left="132.3" Top="9.45" Width="302.4" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
       <TextObject Name="Text456" Left="444.15" Top="9.45" Width="56.7" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text457" Left="500.3" Top="9.45" Width="217.35" Height="18.9" Text="[Clients.MedicaidID]" Font="Arial, 10pt"/>
-      <TableObject Name="Table49" Top="75.6" Width="774.91" Height="47.25" Border.Lines="All">
-        <TableColumn Name="Column171" Width="158.29"/>
-        <TableColumn Name="Column172" Width="177.19"/>
-        <TableColumn Name="Column173" Width="139.39"/>
-        <TableColumn Name="Column174" Width="300.04"/>
+      <TableObject Name="Table49" Top="75.6" Width="774.9" Height="47.25" Border.Lines="All">
+        <TableColumn Name="Column171" Width="160.65"/>
+        <TableColumn Name="Column172" Width="179.55"/>
+        <TableColumn Name="Column173" Width="122.85"/>
+        <TableColumn Name="Column174" Width="311.85"/>
         <TableRow Name="Row232" Height="47.25">
           <TableCell Name="Cell1040" Border.Lines="All" Font="Arial, 10pt">
             <TextObject Name="Text458" Left="5.45" Top="2" Width="94.5" Height="18.9" Text="Program:" Font="Arial, 9pt, style=Bold"/>
@@ -396,14 +397,16 @@
             <TextObject Name="Text474" Left="105.95" Top="26.35" Width="62.37" Height="18.9" Text="[Bio.EndTime]" Format="Time" Format.Format="t" Font="Arial, 9pt"/>
           </TableCell>
           <TableCell Name="Cell1042" Border.Lines="All" Font="Arial, 10pt">
-            <TextObject Name="Text463" Left="9" Top="14.45" Width="122.85" Height="18.9" Text="&lt;b&gt;Setting:&lt;/b&gt; [Bio.Setting]" HorzAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+            <TextObject Name="Text463" Left="2" Top="14.45" Width="119.07" Height="18.9" Text="&lt;b&gt;Setting:&lt;/b&gt; [Bio.Setting]" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
           </TableCell>
           <TableCell Name="Cell1043" Border.Lines="All" Font="Arial, 10pt">
             <TextObject Name="Text464" Left="6" Top="2" Width="94.5" Height="18.9" Text="Select:" Font="Arial, 9pt, style=Bold"/>
-            <CheckBoxObject Name="CheckBox396" Left="18.45" Top="26.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.BioH0031HN"/>
-            <TextObject Name="Text465" Left="34.35" Top="23.9" Width="103.95" Height="18.9" Text="BIO H0031 HN" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox397" Left="154.2" Top="26.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IDAH0031HO"/>
-            <TextObject Name="Text466" Left="168.65" Top="23.9" Width="113.4" Height="18.9" Text="IDA H0031 HO" VertAlign="Center" Font="Arial, 9pt"/>
+            <CheckBoxObject Name="CheckBox396" Left="6.45" Top="26.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.BioH0031HN"/>
+            <TextObject Name="Text465" Left="22.35" Top="23.9" Width="94.5" Height="18.9" Text="BIO H0031 HN" VertAlign="Center" Font="Arial, 9pt"/>
+            <CheckBoxObject Name="CheckBox397" Left="121.2" Top="26.9" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IDAH0031HO"/>
+            <TextObject Name="Text466" Left="135.65" Top="23.9" Width="94.5" Height="18.9" Text="IDA H0031 HO" VertAlign="Center" Font="Arial, 9pt"/>
+            <CheckBoxObject Name="CheckBox551" Left="236.25" Top="26.35" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.Code90791"/>
+            <TextObject Name="Text775" Left="250.7" Top="23.35" Width="47.25" Height="18.9" Text="90791" VertAlign="Center" Font="Arial, 9pt"/>
           </TableCell>
         </TableRow>
       </TableObject>

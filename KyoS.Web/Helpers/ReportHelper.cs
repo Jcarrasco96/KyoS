@@ -11567,6 +11567,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Priv", typeof(bool));
             dt.Columns.Add("BioH0031HN", typeof(bool));
             dt.Columns.Add("IDAH0031HO", typeof(bool));
+            dt.Columns.Add("Code90791", typeof(bool));
 
             dt.Columns.Add("PresentingProblem", typeof(string));
             dt.Columns.Add("ClientAssessmentSituation", typeof(string));
@@ -11829,6 +11830,7 @@ namespace KyoS.Web.Helpers
                                             bio.Priv,
                                             bio.BioH0031HN,
                                             bio.IDAH0031HO,
+                                            bio.Code90791,
                                             bio.PresentingProblem,
                                             bio.ClientAssessmentSituation,
                                             bio.FamilyAssessmentSituation,
@@ -12028,6 +12030,7 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             new DateTime(),                                            
                                             string.Empty,
+                                            false,
                                             false,
                                             false,
                                             false,
@@ -12246,6 +12249,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Priv", typeof(bool));
             dt.Columns.Add("BioH0031HN", typeof(bool));
             dt.Columns.Add("IDAH0031HO", typeof(bool));
+            dt.Columns.Add("Code90791", typeof(bool));
 
             dt.Columns.Add("PresentingProblem", typeof(string));
             dt.Columns.Add("ClientAssessmentSituation", typeof(string));
@@ -12389,6 +12393,7 @@ namespace KyoS.Web.Helpers
                                             brief.Priv,
                                             brief.BioH0031HN,
                                             brief.IDAH0031HO,
+                                            brief.Code90791,
                                             brief.PresentingProblem,
                                             brief.ClientAssessmentSituation,
                                             brief.FamilyAssessmentSituation,
@@ -12513,6 +12518,7 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             new DateTime(),
                                             string.Empty,
+                                            false,
                                             false,
                                             false,
                                             false,
