@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="02/24/2023 15:05:12" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="07/26/2023 11:46:06" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u34/1E88EmgfGXPiS16lUQAQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3enGhKqT0T+uUwO9F8nVWgA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -203,12 +203,12 @@
         <TableRow Name="Row1" MaxHeight="994.14" Height="34.02">
           <TableCell Name="Cell1" Border.Lines="All" Text="Date: [datenote]" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell69" Border.Lines="All" Text="Time in: [Hour([Schedule.InitialTime])]:[IIf(Minute([Schedule.InitialTime]) == 0,&quot;00&quot;,Minute([Schedule.InitialTime]))] [Schedule.Session]" Font="Times New Roman, 10pt, style=Bold"/>
-          <TableCell Name="Cell2" Border.Lines="All" Text="Time out: [Hour([Schedule.EndTime])]:[IIf(Minute([Schedule.EndTime]) == 0,&quot;00&quot;,Minute([Schedule.EndTime]))] [Schedule.Session]" Font="Times New Roman, 10pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="Time out: [Hour([Schedule.EndTime])]:[IIf(Minute([Schedule.EndTime]) == 0,&quot;00&quot;,Minute([Schedule.EndTime]))] [IIf(Hour([Schedule.EndTime]) == 12,&quot;PM&quot;,[Schedule.Session])]" Font="Times New Roman, 10pt, style=Bold"/>
           <TableCell Name="Cell3" Border.Lines="All" Text="Service Provided:&#13;&#10;Group Therapy" Font="Times New Roman, 10pt, style=Bold"/>
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="144.97" Width="740.5" Height="794.25" CanShrink="true">
+    <DataBand Name="Data1" Top="144.97" Width="740.5" Height="794.25" CanShrink="true" CanBreak="true">
       <TextObject Name="Text48" Top="255.15" Width="737.1" Height="18.9" Border.Lines="All" Text="Goals/Objectives addressed during session:" Font="Times New Roman, 10pt, style=Bold"/>
       <TextObject Name="Text2" Left="77.6" Top="277.5" Width="661.5" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="[goal_text]" HorzAlign="Justify" Font="Times New Roman, 10pt"/>
       <TextObject Name="Text4" Top="277.5" Width="75.6" Height="18.9" Text="[num_of_goal]" HorzAlign="Right" Font="Times New Roman, 10pt, style=Bold"/>
