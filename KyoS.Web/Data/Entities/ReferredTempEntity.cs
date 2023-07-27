@@ -19,5 +19,7 @@ namespace KyoS.Web.Data.Entities
         public string ReferredNote { get; set; }
 
         public int IdClient { get; set; }
+
+        public ReferredType type { get; set; }
     }
 }

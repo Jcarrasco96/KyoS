@@ -351,7 +351,8 @@ namespace KyoS.Web.Controllers
                         Client = clientEntity,
                         Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item.IdReferred),
                         Service = item.Service,
-                        ReferredNote = item.ReferredNote
+                        ReferredNote = item.ReferredNote,
+                        type = item.type
                     };
                     _context.Add(clientReferred);
                     _context.ReferredsTemp.Remove(item);
@@ -676,7 +677,8 @@ namespace KyoS.Web.Controllers
                         Client = clientEntity,
                         Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item1.IdReferred),
                         Service = item1.Service,
-                        ReferredNote = item1.ReferredNote
+                        ReferredNote = item1.ReferredNote,
+                        type = item1.type
                     };
                     _context.Add(clientReferred);
                     //_context.ReferredsTemp.Remove(item1);
@@ -1311,7 +1313,8 @@ namespace KyoS.Web.Controllers
                         Telephone = item.Referred.Telephone,
                         IdReferred = item.Referred.Id,
                         CreatedBy = user_logged.UserName,
-                        IdClient = client.Id
+                        IdClient = client.Id,
+                        type = item.type
                     };
                     _context.Add(referred);
                 }
@@ -1510,7 +1513,9 @@ namespace KyoS.Web.Controllers
                     ServiceAgency = _combosHelper.GetComboServiceAgency(),
                     CreatedBy = user_logged.UserName,
                     CreatedOn = DateTime.Now,
-                    IdClient = idClient
+                    IdClient = idClient,
+                    IdType = 0,
+                    Types = _combosHelper.GetComboTypeReferred(),
 
                 };
                 return View(model);
@@ -1548,7 +1553,8 @@ namespace KyoS.Web.Controllers
                         IdReferred = referred.Id,
                         CreatedBy = referredTempViewModel.CreatedBy,
                         CreatedOn = referredTempViewModel.CreatedOn,
-                        IdClient = referredTempViewModel.IdClient
+                        IdClient = referredTempViewModel.IdClient,
+                        type = ReferredUtils.GetTypeReferredByIndex(referredTempViewModel.IdType)
 
                     };
                     _context.Add(referredTemp);
@@ -1566,7 +1572,8 @@ namespace KyoS.Web.Controllers
                 ServiceAgency = _combosHelper.GetComboServiceAgency(),
                 CreatedOn = referredTempViewModel.CreatedOn,
                 CreatedBy = referredTempViewModel.CreatedBy,
-                IdClient = referredTempViewModel.IdClient
+                IdClient = referredTempViewModel.IdClient,
+                type = referredTempViewModel.type
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
         }        
@@ -1975,6 +1982,78 @@ namespace KyoS.Web.Controllers
                 }
             }
             tempProblem = new Problem();
+
+            if (client.Bio != null)
+            {
+                if (client.Bio.Setting == string.Empty)
+                {
+                    tempProblem.Name = "BIO";
+                    tempProblem.Description = "Not exists setting in the BIO";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+
+                if (client.MTPs.Count() > 0)
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        if (item.Setting == string.Empty)
+                        {
+                            tempProblem.Name = "MTP";
+                            tempProblem.Description = "Not exists setting in the MTP";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                        if (item.Setting != client.Bio.Setting)
+                        {
+                            tempProblem.Name = "Setting";
+                            tempProblem.Description = "Review setting in the documents(BIO, MTP)";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                    }
+                }
+            }
+            
+           
+
+            if (client.Brief != null)
+            {
+                if (client.Brief.Setting == string.Empty)
+                {
+                    tempProblem.Name = "Brief";
+                    tempProblem.Description = "Not exists setting in the Brief";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+
+                if (client.MTPs.Count() > 0)
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        if (item.Setting == string.Empty)
+                        {
+                            tempProblem.Name = "MTP";
+                            tempProblem.Description = "Not exists setting in the MTP";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                        if (item.Setting != client.Bio.Setting)
+                        {
+                            tempProblem.Name = "Setting";
+                            tempProblem.Description = "Review setting in the documents(Brief, MTP)";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                    }
+                }
+            }
 
             //Discharge
             bool dischage_ind = false;

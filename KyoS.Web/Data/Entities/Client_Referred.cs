@@ -17,5 +17,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Referred Note")]
         public string ReferredNote { get; set; }
+
+        public ReferredType type { get; set; }
     }
 }
