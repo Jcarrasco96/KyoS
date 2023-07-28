@@ -16268,7 +16268,42 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return RedirectToAction("NotAuthorized", "Account");
+                string Periodo = "";
+                string ReportName = "SuperBill Unbilled Full Report.xlsx";
+                string data = "";
+                workday_Client = _context.Workdays_Clients
+                                             .Include(f => f.Facilitator)
+                                             .Include(c => c.Client)
+                                             .Include(w => w.Workday)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_Diagnostics)
+                                             .ThenInclude(w => w.Diagnostic)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_HealthInsurances)
+                                             .ThenInclude(w => w.HealthInsurance)
+
+                                             .Include(w => w.Note)
+                                             .Include(w => w.NoteP)
+                                             .Include(w => w.IndividualNote)
+                                             .Include(w => w.GroupNote)
+
+                                             .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Present == true
+                                                   && n.Client != null
+                                                   && n.BilledDate == null)
+                                             .OrderBy(n => n.Client.Name)
+                                             .ThenBy(n => n.Workday.Date)
+                                             .ToList();
+                Periodo = "Unbilled Full Report";
+                data = "NOT BILLED";
+
+
+                byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, user_logged.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+                //return RedirectToAction("NotAuthorized", "Account");
             }
         }
 

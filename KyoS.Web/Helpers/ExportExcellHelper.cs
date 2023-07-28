@@ -249,16 +249,38 @@ namespace KyoS.Web.Helpers
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range3.Merge();
 
+                int count = 0;
                 foreach (var item in workday_Clients.GroupBy(n => n.Client))
                 {
-                    if (item.Key.Name.ToString().Length > 30)
+                    if (item.Key.Name.ToString().Length > 24)
                     {
-                        worksheet = workbook.Worksheets.Add(item.Key.Name.Substring(0, 28).ToString());
+                        count = workbook.Worksheets.Where(n => n.Name.Contains(item.Key.Name.Substring(0, 24).ToString()) == true).Count();
+                        if (count > 0)
+                        {
+                            count++;
+                            worksheet = workbook.Worksheets.Add(item.Key.Name.Substring(0, 24).ToString() + '-' + count.ToString() + '-' + item.Key.Workdays_Clients.Count().ToString());
+                        }
+                        else
+                        {
+                            worksheet = workbook.Worksheets.Add(item.Key.Name.Substring(0, 24).ToString() + item.Key.Workdays_Clients.Count().ToString());
+                        }
                     }
                     else
                     {
-                        worksheet = workbook.Worksheets.Add(item.Key.Name.ToString());
+                        count = workbook.Worksheets.Where(n => n.Name.Contains(item.Key.Name.ToString()) == true).Count();
+                        if (count > 0)
+                        {
+                            count++;
+                            worksheet = workbook.Worksheets.Add(item.Key.Name.ToString() + '-' + count.ToString() + '-' + item.Key.Workdays_Clients.Count().ToString());
+                        }
+                        else
+                        {
+                            worksheet = workbook.Worksheets.Add(item.Key.Name.ToString() + item.Key.Workdays_Clients.Count().ToString());
+                        }
+                        
                     }
+
+                    count = 0;
 
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
