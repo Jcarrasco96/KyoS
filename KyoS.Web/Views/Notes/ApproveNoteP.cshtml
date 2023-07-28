@@ -42,7 +42,7 @@
                 @if (User.IsInRole("Supervisor"))
                 {
                     <input type="submit" value="Approve" class="btn btn-primary" title="Approve note and enable it to print" />
-                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
+                    <a class="btn btn-warning" onclick="showInPopupLg('@Url.Action("AddMessageEntity","Notes",new {id = Model.Workday_Cient.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to facilitator')" title="Not approved note due to problems">Review</a>
                     @if (Model.Origin == 0) //viene de la pagina NotesSupervision
                     {
                         <a asp-action="NotesSupervision" class="btn btn-success">Back</a>

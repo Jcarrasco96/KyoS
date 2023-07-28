@@ -1033,6 +1033,8 @@ namespace KyoS.Web.Helpers
                                                          .FirstOrDefaultAsync(d => d.Id == model.IdMtp) : null,
                 Brief = (model.IdBrief != 0) ? await _context.Brief
                                                          .FirstOrDefaultAsync(d => d.Id == model.IdBrief) : null,
+                Bio = (model.IdBio != 0) ? await _context.Bio
+                                                         .FirstOrDefaultAsync(d => d.Id == model.IdBio) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,

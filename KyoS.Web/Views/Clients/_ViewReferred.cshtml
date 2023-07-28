@@ -21,7 +21,10 @@
                                 <th class="col-md-3">
                                     @Html.DisplayNameFor(model => model.Agency)
                                 </th>
-                                <th class="col-md-5" style="text-align:center;">
+                                <th class="col-md-1" style="text-align:center;">
+                                    Type
+                                </th>
+                                <th class="col-md-4" style="text-align:center;">
                                     Referred Note
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
@@ -41,6 +44,20 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Agency)
                                     </td>
+                                    <td align="center">
+                                        @if (item.type == KyoS.Common.Enums.ReferredType.In)
+                                        {
+                                            <span class="label label-success">
+                                                In
+                                            </span>
+                                         }
+                                         @if (item.type == KyoS.Common.Enums.ReferredType.Out)
+                                         {
+                                            <span class="label label-default">
+                                                Out
+                                            </span>
+                                         }
+                                        </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.ReferredNote)
                                     </td>

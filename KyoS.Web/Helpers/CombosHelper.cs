@@ -1876,5 +1876,14 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboTypeReferred()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = ReferredType.In.ToString(), Value = "0"},
+                                  new SelectListItem { Text = ReferredType.Out.ToString(), Value = "1"}};
+
+            return list;
+        }
     }
 }

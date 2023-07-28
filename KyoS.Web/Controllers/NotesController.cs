@@ -16274,7 +16274,42 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return RedirectToAction("NotAuthorized", "Account");
+                string Periodo = "";
+                string ReportName = "SuperBill Unbilled Full Report.xlsx";
+                string data = "";
+                workday_Client = _context.Workdays_Clients
+                                             .Include(f => f.Facilitator)
+                                             .Include(c => c.Client)
+                                             .Include(w => w.Workday)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_Diagnostics)
+                                             .ThenInclude(w => w.Diagnostic)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_HealthInsurances)
+                                             .ThenInclude(w => w.HealthInsurance)
+
+                                             .Include(w => w.Note)
+                                             .Include(w => w.NoteP)
+                                             .Include(w => w.IndividualNote)
+                                             .Include(w => w.GroupNote)
+
+                                             .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Present == true
+                                                   && n.Client != null
+                                                   && n.BilledDate == null)
+                                             .OrderBy(n => n.Client.Name)
+                                             .ThenBy(n => n.Workday.Date)
+                                             .ToList();
+                Periodo = "Unbilled Full Report";
+                data = "NOT BILLED";
+
+
+                byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, user_logged.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+                //return RedirectToAction("NotAuthorized", "Account");
             }
         }
 
@@ -20067,6 +20102,106 @@ namespace KyoS.Web.Controllers
             }
             
         }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult DeleteIndNoteModal(int id = 0, int weekId = 0, int facilitatorId = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                ViewData["week"] = weekId;
+                ViewData["facilitator"] = facilitatorId;
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteIndNoteModal(DeleteViewModel worday_client_model, int weekId = 0, int facilitatorId = 0)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<WeekEntity> list = await _context.Weeks
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(wc => wc.Client)
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(wc => wc.IndividualNote)
+
+                                                 .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                           && w.Days.Where(d => (d.Service == ServiceType.Individual
+                                                                              && d.Workdays_Clients.Where(wc => (wc.Facilitator.Id == facilitatorId
+                                                                                                              && wc.Workday.Week.Id == weekId)).Count() > 0)).Count() > 0))
+                                                 .ToListAsync();
+            if (ModelState.IsValid)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+                                                              .FirstAsync(n => n.Id == worday_client_model.Id_Element 
+                                                                            && n.Workday.Service == ServiceType.Individual
+                                                                            && n.IndividualNote == null);
+                try
+                {
+                    _context.Workdays_Clients.Remove(workday_client);
+                    await _context.SaveChangesAsync();
+
+                    list = await _context.Weeks
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(wc => wc.Client)
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(g => g.Facilitator)
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(wc => wc.IndividualNote)
+
+                                         .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Days.Where(d => (d.Service == ServiceType.Individual
+                                                                      && d.Workdays_Clients.Where(wc => (wc.Facilitator.Id == facilitatorId
+                                                                                                      && wc.Workday.Week.Id == weekId)).Count() > 0)).Count() > 0))
+                                         .ToListAsync();
+
+                    ViewData["facilitatorId"] = facilitatorId;
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesIndForFacilitator", list) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesIndForFacilitator", list) });
+
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ClientIndForWeek", list/*, new { weekId = weekId, facilitatorId = facilitatorId }*/) });
+        }
+
 
     }
 }

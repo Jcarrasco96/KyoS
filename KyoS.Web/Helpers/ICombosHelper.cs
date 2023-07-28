@@ -84,5 +84,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idClient, int idWorkdayClient);
         IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient);
         IEnumerable<SelectListItem> GetComboThemeType();
+        IEnumerable<SelectListItem> GetComboTypeReferred();
     }
 }

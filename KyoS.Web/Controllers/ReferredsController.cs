@@ -8,6 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using System.IO;
+using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
+using AspNetCore.Reporting;
+using System.Reflection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace KyoS.Web.Controllers
 {
@@ -17,12 +25,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        
-        public ReferredsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly IExportExcellHelper _exportExcelHelper;
+
+        public ReferredsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IExportExcellHelper exportExcelHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _exportExcelHelper = exportExcelHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -231,6 +241,29 @@ namespace KyoS.Web.Controllers
             }
             
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCELallReferred()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<Client_Referred> clientRefereeds = new List<Client_Referred>();
+            string date = "Date Report: " + DateTime.Today.ToLongDateString();
+
+            clientRefereeds = _context.Clients_Referreds
+                              .Include(w => w.Client)
+                              .Include(w => w.Referred)
+
+                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                              .OrderBy(n => n.Referred.Name)
+                              .ToList();
+
+            byte[] content = _exportExcelHelper.ExportAllReferreds(clientRefereeds);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_REFERREDS.xlsx");
         }
     }
 }

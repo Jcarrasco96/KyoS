@@ -12,12 +12,17 @@
         <input type="hidden" asp-for="CreatedBy" />
         <input type="hidden" asp-for="IdClient" />
         <div class="col-md-12">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <label asp-for="Id_Referred" class="control-label"></label>
                 <select asp-for="Id_Referred" asp-items="Model.Referreds" class="form-control" id="Code_Name" onchange="getCode();"></select>
                 <span asp-validation-for="Id_Referred" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <label asp-for="IdType" class="control-label">Type</label>
+                <select asp-for="IdType" asp-items="Model.Types" class="form-control"></select>
+                <span asp-validation-for="IdType" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
                 <label asp-for="IdServiceAgency" class="control-label">Service</label>
                 <select asp-for="IdServiceAgency" asp-items="Model.ServiceAgency" class="form-control"></select>
                 <span asp-validation-for="IdServiceAgency" class="text-danger"></span>
