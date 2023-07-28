@@ -5035,7 +5035,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> ActiveClients()
+        public async Task<IActionResult> ActiveClients(int warning = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -5176,9 +5176,29 @@ namespace KyoS.Web.Controllers
                         temp.DocumentTypeInd = "N_Doc";
                     }
 
-                   
 
-                    salida.Add(temp);
+                    if (warning == 1)
+                    {
+                        if ((temp.Days < 15 && temp.Days > 0) || (temp.DaysInd < 15 && temp.DaysInd > 0))
+                        {
+                            salida.Add(temp);
+                        }
+                       
+                    }
+                    else
+                    {
+                        if (warning == 2)
+                        {
+                            if ((temp.Days <= 0 && temp.Days != -1000) || (temp.DaysInd <= 0 && temp.DaysInd != -1000))
+                            {
+                                salida.Add(temp);
+                            }
+                        }
+                        else
+                        {
+                            salida.Add(temp);
+                        }
+                    }
                     temp = new ClientActivedViewModel();
                     objectives = new List<ObjetiveEntity>();
                     objective = new ObjetiveEntity();
@@ -5189,27 +5209,31 @@ namespace KyoS.Web.Controllers
                 }
                else
                 {
-                    temp.Days = -1000;
-                    temp.Name = item.Name;
-                    temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
-                    temp.Service = item.Service;
-                    temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
-                    temp.AdmisionDate = item.AdmisionDate;
-                    temp.Code = item.Code;
-                    temp.Gender = item.Gender;
-                    temp.DocumentType = "N_Doc";
-                    temp.MtpId = 0;
-                    temp.DaysInd = -1000;
-                    temp.DocumentTypeInd = "N_Doc";
+                    if (warning == 0)
+                    {
+                        temp.Days = -1000;
+                        temp.Name = item.Name;
+                        temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
+                        temp.Service = item.Service;
+                        temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
+                        temp.AdmisionDate = item.AdmisionDate;
+                        temp.Code = item.Code;
+                        temp.Gender = item.Gender;
+                        temp.DocumentType = "N_Doc";
+                        temp.MtpId = 0;
+                        temp.DaysInd = -1000;
+                        temp.DocumentTypeInd = "N_Doc";
 
-                    salida.Add(temp);
-                    temp = new ClientActivedViewModel();
-                    objectives = new List<ObjetiveEntity>();
-                    objective = new ObjetiveEntity();
-                    date = new DateTime();
-                    objectivesInd = new List<ObjetiveEntity>();
-                    objectiveInd = new ObjetiveEntity();
-                    dateInd = new DateTime();
+                        salida.Add(temp);
+                        temp = new ClientActivedViewModel();
+                        objectives = new List<ObjetiveEntity>();
+                        objective = new ObjetiveEntity();
+                        date = new DateTime();
+                        objectivesInd = new List<ObjetiveEntity>();
+                        objectiveInd = new ObjetiveEntity();
+                        dateInd = new DateTime();
+                    }
+                    
                 }
             }
 
