@@ -266,7 +266,7 @@ namespace KyoS.Web.Controllers
                         RiskToSelf_Low = false,
                         RiskToSelf_Medium = false,
                         SafetyPlan = false,
-                        Setting = "02",
+                        Setting = "53",
                         Speech_Impoverished = false,
                         Speech_Loud = false,
                         Speech_Mumbled = false,
