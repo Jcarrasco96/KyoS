@@ -16215,8 +16215,12 @@ namespace KyoS.Web.Controllers
 
                                              .Include(w => w.Note)
                                              .Include(w => w.NoteP)
+                                             .ThenInclude(w => w.NotesP_Activities)
                                              .Include(w => w.IndividualNote)
                                              .Include(w => w.GroupNote)
+                                             .ThenInclude(w => w.GroupNotes_Activities)
+                                             .Include(w => w.GroupNote2)
+                                             .ThenInclude(w => w.GroupNotes2_Activities)
 
                                              .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                    && n.Workday.Week.Id == idWeek
@@ -16246,8 +16250,12 @@ namespace KyoS.Web.Controllers
 
                                                  .Include(w => w.Note)
                                                  .Include(w => w.NoteP)
+                                                 .ThenInclude(w => w.NotesP_Activities)
                                                  .Include(w => w.IndividualNote)
                                                  .Include(w => w.GroupNote)
+                                                 .ThenInclude(w => w.GroupNotes_Activities)
+                                                 .Include(w => w.GroupNote2)
+                                                 .ThenInclude(w => w.GroupNotes2_Activities)
 
                                                  .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                        && n.Workday.Week.Id == idWeek
@@ -16286,8 +16294,12 @@ namespace KyoS.Web.Controllers
 
                                              .Include(w => w.Note)
                                              .Include(w => w.NoteP)
+                                             .ThenInclude(w => w.NotesP_Activities)
                                              .Include(w => w.IndividualNote)
                                              .Include(w => w.GroupNote)
+                                             .ThenInclude(w => w.GroupNotes_Activities)
+                                             .Include(w => w.GroupNote2)
+                                             .ThenInclude(w => w.GroupNotes2_Activities)
 
                                              .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                    && n.Present == true

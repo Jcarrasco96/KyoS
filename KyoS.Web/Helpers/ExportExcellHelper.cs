@@ -65,10 +65,10 @@ namespace KyoS.Web.Helpers
                 worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                 worksheet.Cell(2, 1).Value = ClinicName;
                 worksheet.Cell(3, 2).Value = Periodo;
-                worksheet.Cell(3, 12).Value = data;
-                worksheet.Cell(3, 12).Style.Font.FontColor = XLColor.Red;
-                worksheet.Cell(3, 12).Style.Font.FontSize = 16;
-                worksheet.Cell(3, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(3, 13).Value = data;
+                worksheet.Cell(3, 13).Style.Font.FontColor = XLColor.Red;
+                worksheet.Cell(3, 13).Style.Font.FontSize = 16;
+                worksheet.Cell(3, 13).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(3, 1).Value = "SUPERBILL";
                 worksheet.Cell(3, 1).Style.Font.FontColor = XLColor.BlueGray;
                 worksheet.Cell(3, 1).Style.Font.FontSize = 16;
@@ -83,15 +83,16 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 5).Value = "Insurance | Member Id";
                 worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                 worksheet.Cell(currentRow, 7).Value = "Date";
-                worksheet.Cell(currentRow, 8).Value = "Setting";
-                worksheet.Cell(currentRow, 9).Value = "Units";
-                worksheet.Cell(currentRow, 10).Value = "Amount";
-                worksheet.Cell(currentRow, 11).Value = "Therapist";
-                worksheet.Cell(currentRow, 12).Value = "Status Bill";
+                worksheet.Cell(currentRow, 8).Value = "Service";
+                worksheet.Cell(currentRow, 9).Value = "Setting";
+                worksheet.Cell(currentRow, 10).Value = "Units";
+                worksheet.Cell(currentRow, 11).Value = "Amount";
+                worksheet.Cell(currentRow, 12).Value = "Therapist";
+                worksheet.Cell(currentRow, 13).Value = "Status Bill";
 
 
                 worksheet.Style.Font.Bold = true;
-                IXLRange range = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 12).Address);
+                IXLRange range = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 13).Address);
                 range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range.SetAutoFilter();
                 currentRow++;
@@ -145,9 +146,10 @@ namespace KyoS.Web.Helpers
                     {
                         if (item.NoteP != null)
                         {
-                            worksheet.Cell(currentRow, 8).Value = item.NoteP.Setting;
-                            worksheet.Cell(currentRow, 9).Value = item.NoteP.RealUnits;
-                            worksheet.Cell(currentRow, 10).Value = item.NoteP.RealUnits * 9;
+                            worksheet.Cell(currentRow, 8).Value = "PSR";
+                            worksheet.Cell(currentRow, 9).Value = item.NoteP.Setting;
+                            worksheet.Cell(currentRow, 10).Value = item.NoteP.RealUnits;
+                            worksheet.Cell(currentRow, 11).Value = item.NoteP.RealUnits * 9;
                             unit_total += item.NoteP.RealUnits;
                             amount += (item.NoteP.RealUnits * 9);
                         }
@@ -155,9 +157,10 @@ namespace KyoS.Web.Helpers
                         {
                             if (item.IndividualNote != null)
                             {
-                                worksheet.Cell(currentRow, 8).Value = "53";
-                                worksheet.Cell(currentRow, 9).Value = 4;
-                                worksheet.Cell(currentRow, 10).Value = 4 * 12;
+                                worksheet.Cell(currentRow, 8).Value = "Ind.";
+                                worksheet.Cell(currentRow, 9).Value = "";
+                                worksheet.Cell(currentRow, 10).Value = 4;
+                                worksheet.Cell(currentRow, 11).Value = 4 * 12;
                                 unit_total += 4;
                                 amount += (4 * 9);
                             }
@@ -165,64 +168,79 @@ namespace KyoS.Web.Helpers
                             {
                                 if (item.GroupNote != null)
                                 {
-                                    worksheet.Cell(currentRow, 8).Value = "101";
-                                    worksheet.Cell(currentRow, 9).Value = 8;
-                                    worksheet.Cell(currentRow, 10).Value = 8 * 7;
+                                    worksheet.Cell(currentRow, 8).Value = "Group";
+                                    worksheet.Cell(currentRow, 9).Value = "";
+                                    worksheet.Cell(currentRow, 10).Value = 8;
+                                    worksheet.Cell(currentRow, 11).Value = 8 * 7;
                                     unit_total += 8;
                                     amount += (8 * 7);
                                 }
                                 else
                                 {
-                                    worksheet.Cell(currentRow, 8).Value = "53";
-                                    worksheet.Cell(currentRow, 9).Value = 16;
-                                    worksheet.Cell(currentRow, 10).Value = 16 * 9;
-                                    unit_total += 16;
-                                    amount += (16 * 9);
+                                    if (item.GroupNote2 != null)
+                                    {
+                                        worksheet.Cell(currentRow, 8).Value = "Group";
+                                        worksheet.Cell(currentRow, 9).Value = "";
+                                        worksheet.Cell(currentRow, 10).Value = item.GroupNote2.GroupNotes2_Activities.Count();
+                                        worksheet.Cell(currentRow, 11).Value = item.GroupNote2.GroupNotes2_Activities.Count() * 7;
+                                        unit_total += 8;
+                                        amount += (8 * 7);
+                                    }
+                                    else
+                                    {
+                                        worksheet.Cell(currentRow, 8).Value = "PSR";
+                                        worksheet.Cell(currentRow, 9).Value = "53";
+                                        worksheet.Cell(currentRow, 10).Value = 16;
+                                        worksheet.Cell(currentRow, 11).Value = 16 * 9;
+                                        unit_total += 16;
+                                        amount += (16 * 9);
+                                    }
+                                   
                                 }
                             }
                         }
                     }
 
-                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
+                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 13).Address);
                     rangeCurrent.Style.Font.FontSize = 11;
                     rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeCurrent.Style.Font.Bold = false;
 
                     worksheet.Cell(5, 1).Value = codes.Count() + " Clients";
-                    worksheet.Cell(5, 7).Value = workday_Clients.Count() + " Services";
-                    worksheet.Cell(5, 9).Value = unit_total;
-                    worksheet.Cell(5, 10).Value = "$ " + amount;
-                    worksheet.Cell(5, 11).Value = facilitators.Count() + " Facilitators";
-                    IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 11).Address);
+                    worksheet.Cell(5, 8).Value = workday_Clients.Count() + " Services";
+                    worksheet.Cell(5, 10).Value = unit_total;
+                    worksheet.Cell(5, 11).Value = "$ " + amount;
+                    worksheet.Cell(5, 12).Value = facilitators.Count() + " Facilitators";
+                    IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 12).Address);
                     rangeTotal.Style.Font.FontSize = 13;
                     rangeTotal.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeTotal.Style.Font.Bold = true;
                     rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
 
-                    worksheet.Cell(currentRow, 11).Value = item.Facilitator.Name;
+                    worksheet.Cell(currentRow, 12).Value = item.Facilitator.Name;
                     if (item.DeniedBill == true)
                     {
-                        worksheet.Cell(currentRow, 12).Value = "Denied";
-                        worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Red);
+                        worksheet.Cell(currentRow, 13).Value = "Denied";
+                        worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Red);
                     }
                     else
                     {
                         if (item.BilledDate != null && item.PaymentDate != null)
                         {
-                            worksheet.Cell(currentRow, 12).Value = "Paid";
-                            worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Green);
+                            worksheet.Cell(currentRow, 13).Value = "Paid";
+                            worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Green);
                         }
                         else
                         {
                             if (item.BilledDate != null && item.PaymentDate == null)
                             {
-                                worksheet.Cell(currentRow, 12).Value = "Pending";
-                                worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                worksheet.Cell(currentRow, 13).Value = "Pending";
+                                worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
                             }
                             else
                             {
-                                worksheet.Cell(currentRow, 12).Value = "Not Billed";
-                                worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                                worksheet.Cell(currentRow, 13).Value = "Not Billed";
+                                worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.LightGray);
                             }
                         }
                     }
@@ -232,18 +250,18 @@ namespace KyoS.Web.Helpers
 
                 worksheet.ColumnsUsed().AdjustToContents();
 
-                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 13).Address);
                 range1.Style.Font.FontSize = 18;
                 range1.Style.Font.Bold = false;
                 range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range1.Merge();
-                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 12).Address);
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 13).Address);
                 range2.Style.Font.FontSize = 16;
                 range2.Style.Font.Bold = false;
                 range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range2.Merge();
-                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 11).Address);
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 13).Address);
                 range3.Style.Font.FontSize = 14;
                 range3.Style.Font.Bold = false;
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -285,28 +303,28 @@ namespace KyoS.Web.Helpers
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
-                    worksheet.Cell(3, 12).Value = data;
-                    worksheet.Cell(3, 12).Style.Font.FontColor = XLColor.Red;
-                    worksheet.Cell(3, 12).Style.Font.FontSize = 16;
-                    worksheet.Cell(3, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(3, 13).Value = data;
+                    worksheet.Cell(3, 13).Style.Font.FontColor = XLColor.Red;
+                    worksheet.Cell(3, 13).Style.Font.FontSize = 16;
+                    worksheet.Cell(3, 13).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(3, 1).Value = "SUPERBILL";
                     worksheet.Cell(3, 1).Style.Font.FontColor = XLColor.BlueGray;
                     worksheet.Cell(3, 1).Style.Font.FontSize = 16;
                     worksheet.Cell(3, 1).Style.Font.Bold = true;
                     worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+                    IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 13).Address);
                     range11.Style.Font.FontSize = 18;
                     range11.Style.Font.Bold = false;
                     range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                     range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     range11.Merge();
-                    IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 12).Address);
+                    IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 13).Address);
                     range21.Style.Font.FontSize = 16;
                     range21.Style.Font.Bold = false;
                     range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     range21.Merge();
-                    IXLRange range31 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 11).Address);
+                    IXLRange range31 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 12).Address);
                     range31.Style.Font.FontSize = 14;
                     range31.Style.Font.Bold = false;
                     range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -321,13 +339,14 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 6).Value = "Diagnostics";
                     worksheet.Cell(currentRow, 7).Value = "Date";
                     worksheet.Cell(currentRow, 8).Value = "Setting";
-                    worksheet.Cell(currentRow, 9).Value = "Units";
-                    worksheet.Cell(currentRow, 10).Value = "Amount";
-                    worksheet.Cell(currentRow, 11).Value = "Therapist";
-                    worksheet.Cell(currentRow, 12).Value = "Status Bill";
+                    worksheet.Cell(currentRow, 9).Value = "Setting";
+                    worksheet.Cell(currentRow, 10).Value = "Units";
+                    worksheet.Cell(currentRow, 11).Value = "Amount";
+                    worksheet.Cell(currentRow, 12).Value = "Therapist";
+                    worksheet.Cell(currentRow, 13).Value = "Status Bill";
 
 
-                    IXLRange range0 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 12).Address);
+                    IXLRange range0 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 13).Address);
                     range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                     range0.SetAutoFilter();
                     range0.Style.Font.Bold = true;
@@ -395,7 +414,7 @@ namespace KyoS.Web.Helpers
                             {
                                 if (product.IndividualNote != null)
                                 {
-                                    worksheet.Cell(currentRow, 8).Value = "53";
+                                    worksheet.Cell(currentRow, 8).Value = "";
                                     worksheet.Cell(currentRow, 9).Value = 4;
                                     worksheet.Cell(currentRow, 10).Value = 4 * 12;
                                     unit_total += 4;
@@ -405,7 +424,7 @@ namespace KyoS.Web.Helpers
                                 {
                                     if (product.GroupNote != null)
                                     {
-                                        worksheet.Cell(currentRow, 8).Value = "101";
+                                        worksheet.Cell(currentRow, 8).Value = "";
                                         worksheet.Cell(currentRow, 9).Value = 8;
                                         worksheet.Cell(currentRow, 10).Value = 8 * 7;
                                         unit_total += 8;
@@ -413,56 +432,67 @@ namespace KyoS.Web.Helpers
                                     }
                                     else
                                     {
-                                        worksheet.Cell(currentRow, 8).Value = "53";
-                                        worksheet.Cell(currentRow, 9).Value = 16;
-                                        worksheet.Cell(currentRow, 10).Value = 16 * 9;
-                                        unit_total += 16;
-                                        amount += (16 * 9);
+                                        if (product.GroupNote2 != null)
+                                        {
+                                            worksheet.Cell(currentRow, 8).Value = "";
+                                            worksheet.Cell(currentRow, 9).Value = product.GroupNote2.GroupNotes2_Activities.Count();
+                                            worksheet.Cell(currentRow, 10).Value = product.GroupNote2.GroupNotes2_Activities.Count() * 7;
+                                            unit_total += 8;
+                                            amount += (8 * 7);
+                                        }
+                                        else
+                                        {
+                                            worksheet.Cell(currentRow, 8).Value = "53";
+                                            worksheet.Cell(currentRow, 9).Value = 16;
+                                            worksheet.Cell(currentRow, 10).Value = 16 * 9;
+                                            unit_total += 16;
+                                            amount += (16 * 9);
+                                        }
                                     }
                                 }
                             }
 
                         }
 
-                        worksheet.Cell(currentRow, 11).Value = product.Facilitator.Name;
+                        worksheet.Cell(currentRow, 12).Value = product.Facilitator.Name;
                         if (product.DeniedBill == true)
                         {
-                            worksheet.Cell(currentRow, 12).Value = "Denied";
-                            worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Red);
+                            worksheet.Cell(currentRow, 13).Value = "Denied";
+                            worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Red);
                         }
                         else
                         {
                             if (product.BilledDate != null && product.PaymentDate != null)
                             {
-                                worksheet.Cell(currentRow, 12).Value = "Paid";
-                                worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.Green);
+                                worksheet.Cell(currentRow, 13).Value = "Paid";
+                                worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Green);
                             }
                             else
                             {
                                 if (product.BilledDate != null && product.PaymentDate == null)
                                 {
-                                    worksheet.Cell(currentRow, 12).Value = "Pending";
-                                    worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                    worksheet.Cell(currentRow, 13).Value = "Pending";
+                                    worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
                                 }
                                 else
                                 {
-                                    worksheet.Cell(currentRow, 12).Value = "Not Billed";
-                                    worksheet.Cell(currentRow, 12).Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                                    worksheet.Cell(currentRow, 13).Value = "Not Billed";
+                                    worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.LightGray);
                                 }
                             }
                         }
 
-                        IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 12).Address);
-                        rangeCurrent.Style.Font.FontSize = 11;
+                        IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 13).Address);
+                        rangeCurrent.Style.Font.FontSize = 12;
                         rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         rangeCurrent.Style.Font.Bold = false;
 
                         worksheet.Cell(5, 1).Value = codes.Count() + " Client";
-                        worksheet.Cell(5, 7).Value = item.Count() + " Services";
-                        worksheet.Cell(5, 9).Value = unit_total;
-                        worksheet.Cell(5, 10).Value = "$ " + amount;
-                        worksheet.Cell(5, 11).Value = facilitators.Count() + " Facilitators";
-                        IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 11).Address);
+                        worksheet.Cell(5, 8).Value = item.Count() + " Services";
+                        worksheet.Cell(5, 10).Value = unit_total;
+                        worksheet.Cell(5, 11).Value = "$ " + amount;
+                        worksheet.Cell(5, 12).Value = facilitators.Count() + " Facilitators";
+                        IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 12).Address);
                         rangeTotal.Style.Font.FontSize = 13;
                         rangeTotal.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         rangeTotal.Style.Font.Bold = true;
