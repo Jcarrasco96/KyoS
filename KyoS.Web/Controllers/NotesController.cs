@@ -11068,6 +11068,8 @@ namespace KyoS.Web.Controllers
 
                                 .Include(wc => wc.GroupNote)
 
+                                .Include(wc => wc.GroupNote2)
+
                                 .Include(wc => wc.NoteP)
 
                                 .Include(wc => wc.Facilitator)
@@ -11079,6 +11081,7 @@ namespace KyoS.Web.Controllers
                                 .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                             && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                     || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                    || wc.GroupNote2.Status == NoteStatus.Approved
                                                                                     || wc.NoteP.Status == NoteStatus.Approved)
                                             && wc.Workday.Date >= DateTime.Now.AddMonths(-1)));
 
@@ -11102,6 +11105,8 @@ namespace KyoS.Web.Controllers
 
                             .Include(wc => wc.GroupNote)
 
+                            .Include(wc => wc.GroupNote2)
+
                             .Include(wc => wc.NoteP)
 
                             .Include(wc => wc.Facilitator)
@@ -11113,6 +11118,7 @@ namespace KyoS.Web.Controllers
                             .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                         && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                   || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                  || wc.GroupNote2.Status == NoteStatus.Approved
                                                                                   || wc.NoteP.Status == NoteStatus.Approved)));
 
             if (dateInterval != string.Empty)
