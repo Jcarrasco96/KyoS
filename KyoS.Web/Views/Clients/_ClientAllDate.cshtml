@@ -65,9 +65,20 @@
                 <input asp-for="Bio.DateBio" class="form-control" readonly>
             </div>
         }
-         <div class="container-fluid">
-            &nbsp;
-        </div>
+        @if (Model.MTPs.Count() > 0)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="MTPs.ElementAtOrDefault(0).MTPDevelopedDate" class="control-label">Initial Therapy</label>
+                <input asp-for="MTPs.ElementAtOrDefault(0).MTPDevelopedDate" class="form-control" readonly>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <label class="control-label">Initial Therapy</label>
+                <input class="form-control" readonly>
+            </div>
+        }
         @if (Model.MTPs.Count() > 0)
         {
             @if (Model.MTPs.ElementAt(0).MtpReviewList.Count() == 0)
