@@ -76,7 +76,10 @@ namespace KyoS.Web.Controllers
             }
 
             return View(await _context.Weeks.Include(w => w.Days)
-                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
+                                            .ThenInclude(n => n.Workdays_Clients)
+                                            .ThenInclude(f => f.Facilitator)
+                                            .Where(w => (w.Clinic.Id == user_logged.Clinic.Id 
+                                                      && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
                                             .ToListAsync());
         }
 
