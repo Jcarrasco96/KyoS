@@ -22,6 +22,7 @@ namespace KyoS.Web.Helpers
         Stream DemoClinic1AbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic2AbsenceNoteReport(Workday_Client workdayClient);
         Stream CommunityHTCAbsenceNoteReport(Workday_Client workdayClient);
+        Stream PrincipleCCIAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -32,6 +33,8 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthNoteReportSchema3SS(Workday_Client workdayClient);
         Stream CommunityHTCNoteReportSchema3(Workday_Client workdayClient);
         Stream CommunityHTCNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream PrincipleCCINoteReportSchema3(Workday_Client workdayClient);
+        Stream PrincipleCCINoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -39,6 +42,7 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSIndNoteReportSchema1(Workday_Client workdayClient);
         Stream DreamsMentalHealthIndNoteReportSchema1(Workday_Client workdayClient);
         Stream CommunityHTCIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream PrincipleCCIIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -48,9 +52,11 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream CommunityHTCGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream PrincipleCCIGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream FloridaSocialHSGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream CommunityHTCGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream PrincipleCCIGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
@@ -64,6 +70,7 @@ namespace KyoS.Web.Helpers
         Stream DemoClinic1MTPReport(MTPEntity mtp);
         Stream DemoClinic2MTPReport(MTPEntity mtp);
         Stream CommunityHTCMTPReport(MTPEntity mtp);
+        Stream PrincipleCCIMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR general reports
@@ -77,48 +84,56 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSIntakeReport(IntakeScreeningEntity intake);
         Stream DreamsMentalHealthIntakeReport(IntakeScreeningEntity intake);
         Stream CommunityHTCIntakeReport(IntakeScreeningEntity intake);
+        Stream PrincipleCCIIntakeReport(IntakeScreeningEntity intake);
         #endregion
 
         #region Fars reports
         Stream FloridaSocialHSFarsReport(FarsFormEntity intake);
         Stream DreamsMentalHealthFarsReport(FarsFormEntity intake);
         Stream CommunityHTCFarsReport(FarsFormEntity intake);
+        Stream PrincipleCCIFarsReport(FarsFormEntity intake);
         #endregion
 
         #region Discharge reports
         Stream FloridaSocialHSDischargeReport(DischargeEntity intake);
         Stream DreamsMentalHealthDischargeReport(DischargeEntity intake);
         Stream CommunityHTCDischargeReport(DischargeEntity intake);
+        Stream PrincipleCCIDischargeReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
         Stream FloridaSocialHSBioReport(BioEntity bio);
         Stream DreamsMentalHealthBioReport(BioEntity bio);
         Stream CommunityHTCBioReport(BioEntity bio);
+        Stream PrincipleCCIBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
         Stream FloridaSocialHSAddendumReport(AdendumEntity addendum);
         Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
         Stream CommunityHTCAddendumReport(AdendumEntity addendum);
+        Stream PrincipleCCIAddendumReport(AdendumEntity addendum);
         #endregion
 
         #region MTP Review reports
         Stream FloridaSocialHSMTPReviewReport(MTPReviewEntity review);
         Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
         Stream CommunityHTCMTPReviewReport(MTPReviewEntity review);
+        Stream PrincipleCCIMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Medical History
         Stream FloridaSocialHSMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream DreamsMentalHealthMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream CommunityHTCMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream PrincipleCCIMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
         #region Brief reports
         Stream FloridaSocialHSBriefReport(BriefEntity brief);
         Stream DreamsMentalHealthBriefReport(BriefEntity brief);
         Stream CommunityHTCBriefReport(BriefEntity brief);
+        Stream PrincipleCCIBriefReport(BriefEntity brief);
         #endregion
 
         #region Utils functions
