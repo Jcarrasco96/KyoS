@@ -13885,8 +13885,10 @@ namespace KyoS.Web.Controllers
         #endregion
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> ChangeNotes(string dateInterval = "")
-        {           
+        public async Task<IActionResult> ChangeNotes(string dateInterval = "", int aService = 0)
+        {
+            ServiceType service = ServiceUtils.GetServiceByIndex(aService);
+
             UserEntity user_logged = await _context.Users
 
                                                    .Include(u => u.Clinic)
@@ -13923,10 +13925,22 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == service)).Count() > 0
                                                                  && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));                                                
                                 
                 BillingReportViewModel model = new BillingReportViewModel
@@ -13936,7 +13950,9 @@ namespace KyoS.Web.Controllers
                     Facilitators = null,
                     IdClient = 0,
                     Clients = null,
-                    Weeks = query.ToList()
+                    Weeks = query.ToList(),
+                    IdService = 0,
+                    Services = _combosHelper.GetComboServices()
                 };
 
                 return View(model);                
@@ -13963,10 +13979,22 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == service)).Count() > 0
                                                                  && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));                                                        
 
                 BillingReportViewModel model = new BillingReportViewModel
@@ -13976,7 +14004,9 @@ namespace KyoS.Web.Controllers
                     Facilitators = null,
                     IdClient = 0,
                     Clients = null,
-                    Weeks = query.ToList()
+                    Weeks = query.ToList(),
+                    IdService = 0,
+                    Services = _combosHelper.GetComboServices()
                 };
 
                 return View(model);
@@ -13994,7 +14024,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(ChangeNotes), new { dateInterval = model.DateIterval });
+                return RedirectToAction(nameof(ChangeNotes), new { dateInterval = model.DateIterval, service  = model.IdService});
             }
 
             return View(model);

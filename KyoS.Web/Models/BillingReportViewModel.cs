@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
+using System.Data;
+using KyoS.Common.Enums;
 
 namespace KyoS.Web.Models
 {
@@ -17,6 +20,10 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Clients { get; set; }
 
         public List<WeekEntity> Weeks { get; set; }
+
+        public int IdService { get; set; }
+
+        public IEnumerable<SelectListItem> Services { get; set; }
 
     }
 }
