@@ -4380,8 +4380,11 @@ namespace KyoS.Web.Controllers
                                                                 && (m.Goal.Service == ServiceType.Individual
                                                                 && m.IndividualNotes.Count() == 0))
                                                                 ||((m.Goal.Service == ServiceType.PSR
-                                                                && m.Note_Activity.Count() == 0
-                                                                && m.NoteP_Activity.Count() == 0)))
+                                                                 && m.Note_Activity.Count() == 0
+                                                                 && m.NoteP_Activity.Count() == 0))
+                                                                || ((m.Goal.Service == ServiceType.Group
+                                                                  && m.GroupNote_Activity.Count() == 0
+                                                                  && m.GroupNote2_Activity.Count() == 0)))
                                                           .OrderBy(n => n.Goal.MTP.AdmissionDateMTP)
                                                           .ToList();
 
@@ -4393,6 +4396,67 @@ namespace KyoS.Web.Controllers
                 auditMtp.Active = 0;
                 auditMtp_List.Add(auditMtp);
                 auditMtp = new AuditMtps();
+            }
+
+            List<ClientEntity> clients = _context.Clients
+                                                 .Include(n => n.MTPs)
+                                                 .ThenInclude(m => m.Goals)
+                                                 .ThenInclude(m => m.Objetives)
+                                                 .Where(m => m.MTPs.Count() > 0)
+                                                 .ToList();
+
+            foreach (var item in clients)
+            {
+                if (item.MTPs.Count() == 0)
+                {
+                    auditMtp.NameClient = item.Name;
+                    auditMtp.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditMtp.Description = "The client does not have MTP ";
+                    auditMtp.Active = 0;
+                    auditMtp_List.Add(auditMtp);
+                    auditMtp = new AuditMtps();
+                }
+                else
+                {
+                    if (item.MTPs.Count() > 1)
+                    {
+                        auditMtp.NameClient = item.Name;
+                        auditMtp.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditMtp.Description = "The client has " + item.MTPs.Count() + " MTPs ";
+                        auditMtp.Active = 0;
+                        auditMtp_List.Add(auditMtp);
+                        auditMtp = new AuditMtps();
+                    }
+                }
+
+                foreach (var mtps in item.MTPs)
+                {
+                    if (mtps.Goals.Count() > 0)
+                    {
+                        foreach (var goal in mtps.Goals)
+                        {
+                            if (goal.Objetives.Count() == 0)
+                            {
+                                auditMtp.NameClient = item.Name;
+                                auditMtp.AdmissionDate = mtps.AdmissionDateMTP.ToShortDateString();
+                                auditMtp.Description = "There is an goal without objective ";
+                                auditMtp.Active = 0;
+                                auditMtp_List.Add(auditMtp);
+                                auditMtp = new AuditMtps();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        auditMtp.NameClient = item.Name;
+                        auditMtp.AdmissionDate = mtps.AdmissionDateMTP.ToShortDateString();
+                        auditMtp.Description = "There is an mtp without goals ";
+                        auditMtp.Active = 0;
+                        auditMtp_List.Add(auditMtp);
+                        auditMtp = new AuditMtps();
+                    }
+                }
+                
             }
 
             return View(auditMtp_List);

@@ -55,5 +55,8 @@ namespace KyoS.Web.Data.Entities
         public int Compliment_IdMTPReview { get; set; }
 
         public int IdMTPReview { get; set; }
+
+        public IEnumerable<GroupNote_Activity> GroupNote_Activity { get; set; }
+        public IEnumerable<GroupNote2_Activity> GroupNote2_Activity { get; set; }
     }
 }
