@@ -35,16 +35,29 @@
                         <button type="submit" class="btn btn-success" title="Refresh"><i class="glyphicon glyphicon-refresh"></i></button>
                     </td>
                     <td>
-                        &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                        &nbsp;&nbsp; &nbsp;
                     </td>
                     <td>
                         <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
                         <a asp-action="EXCEL" asp-route-idWeek="@Model.IdWeek" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Full Report</a>
-                        |
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
                         <a asp-action="EXCEL" asp-route-idWeek="0" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Full Report</a>
-                        |
-                        <a onclick="showInPopupLg('@Url.Action("AuditOverlapin", "Notes", new { idWeek = Model.IdWeek}, Context.Request.Scheme)','Bill Audit')" class="btn btn-danger" title="Overlapping bill audit"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;&nbsp;&nbsp;Bill Audit&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    </td>                    
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        <a onclick="showInPopupLg('@Url.Action("AuditOverlapin", "Notes", new { idWeek = Model.IdWeek}, Context.Request.Scheme)','Bill Audit')" class="btn btn-danger" title="Overlapping bill audit"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Bill Audit</a>
+                    </td>
                 </tr>                
             </table>
         </div>        
