@@ -545,6 +545,11 @@ namespace KyoS.Web.Controllers
                             {
                                 _context.AddRange(workday_client);
                             }
+
+                            workdays = new List<WorkdayEntity>();
+                            workday_Client_group = new List<Workday_Client>();
+                            client = new ClientEntity();
+                            workday_client = new List<Workday_Client>();
                         }
                     }
                 }
@@ -1092,6 +1097,7 @@ namespace KyoS.Web.Controllers
                             workdays = new List<WorkdayEntity>();
                             workday_Client_PSR = new List<Workday_Client>();
                             client = new ClientEntity();
+                            workday_client = new List<Workday_Client>();
                         }
                     }
                 }
