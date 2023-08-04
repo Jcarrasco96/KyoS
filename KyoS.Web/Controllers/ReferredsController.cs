@@ -26,13 +26,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IRenderHelper _renderHelper;
 
-        public ReferredsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IExportExcellHelper exportExcelHelper)
+        public ReferredsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IExportExcellHelper exportExcelHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _exportExcelHelper = exportExcelHelper;
+            _renderHelper = renderHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -265,5 +267,159 @@ namespace KyoS.Web.Controllers
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_REFERREDS.xlsx");
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ReferredViewModel model = new ReferredViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(ReferredViewModel referredViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ReferredEntity referred = await _context.Referreds.FirstOrDefaultAsync(c => c.Name == referredViewModel.Name);
+                if (referred == null)
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referredViewModel, true, user_logged.Id);
+
+                    _context.Add(referredEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<ReferredEntity> referreds_List = await _context.Referreds
+
+                                                                            .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferreds", referreds_List) });
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the referred: {referredEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", referredViewModel) });
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", referredViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            ReferredEntity referredEntity = await _context.Referreds.FirstOrDefaultAsync(c => c.Id == id);
+            if (referredEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ReferredViewModel referredViewModel = _converterHelper.ToReferredViewModel(referredEntity);
+
+            return View(referredViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, ReferredViewModel referredViewModel)
+        {
+            if (id != referredViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referredViewModel, false, user_logged.Id);
+                _context.Update(referredEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<ReferredEntity> referreds_List = await _context.Referreds
+                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferreds", referreds_List) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the referred: {referredEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", referredViewModel) });
+        }
+
+
     }
 }
