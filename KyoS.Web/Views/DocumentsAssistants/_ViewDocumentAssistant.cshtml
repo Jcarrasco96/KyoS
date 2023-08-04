@@ -60,10 +60,11 @@
                                  <td align="center">
                                     @Html.DisplayFor(modelItem => item.LinkedUser)
                                 </td>
-                                <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                </td>
+                                 <td align="right">
+                                     <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                     @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                     <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
+                                 </td>
                             </tr>
                         }
                     </tbody>

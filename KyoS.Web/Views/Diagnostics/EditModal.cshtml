@@ -1,0 +1,44 @@
+﻿@model KyoS.Web.Models.DiagnosticViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostDiagnostics(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-9 form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

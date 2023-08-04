@@ -571,57 +571,6 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", documentsAssistantViewModel) });
         }
-
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public IActionResult DeleteGoalTemp1(int id = 0)
-        {
-            if (id > 0)
-            {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                DeleteViewModel model = new DeleteViewModel
-                {
-                    Id_Element = id,
-                    Desciption = "Do you want to delete this record?"
-
-                };
-                return View(model);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> DeleteModal(DeleteViewModel assistantViewModel)
-        {
-            DocumentsAssistantEntity assistantTemp = await _context.DocumentsAssistant
-                                                                       .Include(n => n.Clinic)
-                                                                       .FirstAsync(n => n.Id == assistantViewModel.Id_Element);
-            ClinicEntity clinic = assistantTemp.Clinic;
-
-            if (ModelState.IsValid)
-            {
-                
-                try
-                {
-                    _context.DocumentsAssistant.Remove(assistantTemp);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
-                }
-
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
-            }
-
-            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
-        }
-
+               
     }
 }
