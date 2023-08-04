@@ -17,11 +17,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        public LegalGuardiansController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public LegalGuardiansController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _renderHelper = renderHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -236,5 +239,160 @@ namespace KyoS.Web.Controllers
             
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            LegalGuardianViewModel model = new LegalGuardianViewModel()
+            {
+                Country = "United States",
+                City = "Miami",
+                State = "Florida"
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(LegalGuardianViewModel legalGuardianViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                LegalGuardianEntity legalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Name == legalGuardianViewModel.Name);
+                if (legalGuardian == null)
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    LegalGuardianEntity legalGuardianEntity = _converterHelper.ToLegalGuardianEntity(legalGuardianViewModel, true, user_logged.Id);
+
+                    _context.Add(legalGuardianEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<LegalGuardianEntity> legal_List = await _context.LegalGuardians
+                                                                             .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewLegalGuardian", legal_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the legal guardian: {legalGuardianEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", legalGuardianViewModel) });
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", legalGuardianViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            LegalGuardianEntity legalGuardianEntity = await _context.LegalGuardians.FirstOrDefaultAsync(c => c.Id == id);
+            if (legalGuardianEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            LegalGuardianViewModel legalGuardianViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardianEntity);
+
+            return View(legalGuardianViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, LegalGuardianViewModel legalGuardianViewModel)
+        {
+            if (id != legalGuardianViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                LegalGuardianEntity legalGuardianEntity = _converterHelper.ToLegalGuardianEntity(legalGuardianViewModel, false, user_logged.Id);
+                _context.Update(legalGuardianEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<LegalGuardianEntity> legal_List = await _context.LegalGuardians
+                                                                             .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewLegalGuardian", legal_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the legal guardian: {legalGuardianEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", legalGuardianViewModel) });
+        }
+
+
     }
 }
