@@ -22,12 +22,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
-        public DocumentsAssistantsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public DocumentsAssistantsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
+            _renderHelper = renderHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -320,5 +323,305 @@ namespace KyoS.Web.Controllers
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "DocumentsAssistants") });
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            DocumentsAssistantViewModel model;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new DocumentsAssistantViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id,
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, user_logged.Clinic.Id)
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new DocumentsAssistantViewModel
+            {
+                Clinics = _combosHelper.GetComboClinics(),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, 0)
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(DocumentsAssistantViewModel documentAssistantViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                               .Include(u => u.Clinic)
+                                               .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+               
+
+                DocumentsAssistantEntity supervisor = await _context.DocumentsAssistant.FirstOrDefaultAsync(s => s.Name == documentAssistantViewModel.Name);
+                if (supervisor == null)
+                {
+                    if (documentAssistantViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+
+                        
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clinic.Name,
+                            Value = $"{clinic.Id}"
+                        });
+
+                        documentAssistantViewModel.Clinics = list;
+                        documentAssistantViewModel.IdClinic = clinic.Id;
+                        documentAssistantViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, user_logged.Clinic.Id);
+                        
+
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", documentAssistantViewModel) });
+                    }
+
+                    string path = string.Empty;
+                    if (documentAssistantViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(documentAssistantViewModel.SignatureFile, "Signatures");
+                    }
+
+                    DocumentsAssistantEntity documentsEntity = await _converterHelper.ToDocumentsAssistantEntity(documentAssistantViewModel, path, true);
+
+                    _context.Add(documentsEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<DocumentsAssistantEntity> assistant_List = await _context.DocumentsAssistant
+
+                                                                            .Include(h => h.Clinic)
+
+                                                                            .Where(ch => (ch.Clinic.Id == user_logged.Clinic.Id))
+                                                                            .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", assistant_List) });
+                        
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the documents assistant: {documentsEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", documentAssistantViewModel )});
+                }
+            }
+
+            clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            list = new List<SelectListItem>();
+            list.Insert(0, new SelectListItem
+            {
+                Text = clinic.Name,
+                Value = $"{clinic.Id}"
+            });
+
+            documentAssistantViewModel.Clinics = list;
+            documentAssistantViewModel.IdClinic = clinic.Id;
+            documentAssistantViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, user_logged.Clinic.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", documentAssistantViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DocumentsAssistantEntity dosumentAssistantEntity = await _context.DocumentsAssistant.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
+            if (dosumentAssistantEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DocumentsAssistantViewModel documentsAssistantViewModel;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                documentsAssistantViewModel = _converterHelper.ToDocumentsAssistantViewModel(dosumentAssistantEntity, user_logged.Clinic.Id);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    documentsAssistantViewModel.Clinics = list;
+                }
+            }
+            else
+                documentsAssistantViewModel = _converterHelper.ToDocumentsAssistantViewModel(dosumentAssistantEntity, 0);
+
+            return View(documentsAssistantViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, DocumentsAssistantViewModel documentsAssistantViewModel)
+        {
+            if (id != documentsAssistantViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                              .Include(u => u.Clinic)
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+                string path = documentsAssistantViewModel.SignaturePath;
+                if (documentsAssistantViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(documentsAssistantViewModel.SignatureFile, "Signatures");
+                }
+                DocumentsAssistantEntity documentsAssitantEntity = await _converterHelper.ToDocumentsAssistantEntity(documentsAssistantViewModel, path, false);
+                _context.Update(documentsAssitantEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<DocumentsAssistantEntity> assistant_list = await _context.DocumentsAssistant
+
+                                                                        .Include(h => h.Clinic)
+
+                                                                        .Where(ch => (ch.Clinic.Id == user_logged.Clinic.Id))
+                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", assistant_list) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the documents assistant: {documentsAssitantEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            list = new List<SelectListItem>();
+            list.Insert(0, new SelectListItem
+            {
+                Text = clinic.Name,
+                Value = $"{clinic.Id}"
+            });
+
+            documentsAssistantViewModel.Clinics = list;
+            documentsAssistantViewModel.IdClinic = clinic.Id;
+            documentsAssistantViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, user_logged.Clinic.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", documentsAssistantViewModel) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteGoalTemp1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteModal(DeleteViewModel assistantViewModel)
+        {
+            DocumentsAssistantEntity assistantTemp = await _context.DocumentsAssistant
+                                                                       .Include(n => n.Clinic)
+                                                                       .FirstAsync(n => n.Id == assistantViewModel.Id_Element);
+            ClinicEntity clinic = assistantTemp.Clinic;
+
+            if (ModelState.IsValid)
+            {
+                
+                try
+                {
+                    _context.DocumentsAssistant.Remove(assistantTemp);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
+                }
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocumentAssistant", _context.DocumentsAssistant.Include(n => n.Clinic).Where(d => d.Clinic.Id == clinic.Id).ToList()) });
+        }
+
     }
 }

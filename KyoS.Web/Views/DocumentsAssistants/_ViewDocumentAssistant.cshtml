@@ -1,41 +1,30 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.SupervisorEntity>
-@{
-    ViewData["Title"] = "Update Signatures";
-}
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentsAssistantEntity>
 
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
-
-<div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            @Html.ActionLink("Supervisors", "Index", "Supervisors")
-        </li>
-        <li class="active">Update Signatures</li>
-    </ul><!--.breadcrumb-->
-</div>
-
-<div class="row">    
+@if (Model != null)
+{
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Supervisors</h3>
+                <h3 class="panel-title">Documents Assistants</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
-                            <th class="col-md-3" style="text-align:center;">
+                            <th class="col-md-3">
                                 Clinic
                             </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Signature
+                            </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Sign
+                                User
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -51,26 +40,29 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Code)
                                 </td>
-                                
-                                <td align="center">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.Clinic.Name)
                                 </td>
                                 <td align="center">
                                     @if (item.SignaturePath == string.Empty || item.SignaturePath == null)
                                     {
                                         <span class="label label-danger">
-                                            No
+                                          No
                                         </span>
                                     }
                                     else
-                                    {
+                                    { 
                                         <span class="label label-success">
-                                            Yes
+                                          Yes
                                         </span>
                                     }
                                 </td>
+                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.LinkedUser)
+                                </td>
                                 <td align="right">
-                                    <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit supervisor's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                    <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
                             </tr>
                         }
@@ -79,35 +71,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<partial name="_ModalPopupLg" />
-<partial name="_DeleteDialog" />
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-                        $(document).ready(function () {
-                            $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
-                                "pageLength": 100
-                            });
-
-                            // Delete item
-                            var item_to_delete;
-
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
-
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "Clients")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });
-                        });
-    </script>
 }
 
 
