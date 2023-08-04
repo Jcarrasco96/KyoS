@@ -7,6 +7,8 @@
     <div class="col-md-12">
         <form asp-action="EditModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostAssistant(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="SignaturePath" />
             <div>
                 <div class="col-md-9 form-group">
                     <label asp-for="Name" class="control-label"></label>
