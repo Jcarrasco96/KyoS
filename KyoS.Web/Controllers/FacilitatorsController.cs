@@ -25,14 +25,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IRenderHelper _renderHelper;
 
-        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IExportExcellHelper exportExcelHelper)
+        public FacilitatorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IExportExcellHelper exportExcelHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
             _exportExcelHelper = exportExcelHelper;
+            _renderHelper = renderHelper;
 
 
         }
@@ -371,6 +373,197 @@ namespace KyoS.Web.Controllers
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "Facilitators") });
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            FacilitatorViewModel model;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new FacilitatorViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id,
+                        StatusList = _combosHelper.GetComboClientStatus(),
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id)
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new FacilitatorViewModel
+            {
+                Clinics = _combosHelper.GetComboClinics(),
+                IdStatus = 1,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, 0)
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(FacilitatorViewModel facilitatorViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Name == facilitatorViewModel.Name);
+                if (facilitator == null)
+                {
+                    if (facilitatorViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+                        return View(facilitatorViewModel);
+                    }
+
+                    string path = string.Empty;
+                    if (facilitatorViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(facilitatorViewModel.SignatureFile, "Signatures");
+                    }
+
+                    FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, path, true);
+
+                    _context.Add(facilitatorEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<FacilitatorEntity> facilitators_List = await _context.Facilitators
+                                                                                  .Include(n => n.Clinic)
+                                                                                  .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewFacilitators", facilitators_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {facilitatorEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorEntity facilitatorEntity = await _context.Facilitators.Include(f => f.Clinic).FirstOrDefaultAsync(f => f.Id == id);
+            if (facilitatorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            FacilitatorViewModel facilitatorViewModel;
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, user_logged.Clinic.Id);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    facilitatorViewModel.Clinics = list;
+                }
+
+            }
+            else
+                facilitatorViewModel = _converterHelper.ToFacilitatorViewModel(facilitatorEntity, 0);
+
+            return View(facilitatorViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, FacilitatorViewModel facilitatorViewModel)
+        {
+            if (id != facilitatorViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                string path = facilitatorViewModel.SignaturePath;
+                if (facilitatorViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(facilitatorViewModel.SignatureFile, "Signatures");
+                }
+                FacilitatorEntity facilitatorEntity = await _converterHelper.ToFacilitatorEntity(facilitatorViewModel, path, false);
+                _context.Update(facilitatorEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<FacilitatorEntity> facilitators_List = await _context.Facilitators
+                                                                                  .Include(n => n.Clinic)
+                                                                                  .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewFacilitators", facilitators_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {facilitatorEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
+        }
+
     }
 
 }
