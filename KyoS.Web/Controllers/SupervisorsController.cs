@@ -22,12 +22,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
-        public SupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public SupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
+            _renderHelper = renderHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -320,5 +323,260 @@ namespace KyoS.Web.Controllers
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "Supervisors") });
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            SupervisorViewModel model;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+                    model = new SupervisorViewModel
+                    {
+                        Clinics = list,
+                        IdClinic = clinic.Id,
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id)
+                    };
+                    return View(model);
+                }
+            }
+
+            model = new SupervisorViewModel
+            {
+                Clinics = _combosHelper.GetComboClinics(),
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, 0)
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(SupervisorViewModel supervisorViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                SupervisorEntity supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.Name == supervisorViewModel.Name);
+                if (supervisor == null)
+                {
+                    if (supervisorViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+                        
+                        ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clinic.Name,
+                            Value = $"{clinic.Id}"
+                        });
+
+                        supervisorViewModel.Clinics = list;
+                        supervisorViewModel.IdClinic = clinic.Id;
+                        supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", supervisorViewModel) });
+                    }
+
+                    string path = string.Empty;
+                    if (supervisorViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(supervisorViewModel.SignatureFile, "Signatures");
+                    }
+
+                    SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, path, true);
+
+                    _context.Add(supervisorEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<SupervisorEntity> supervisors_List = await _context.Supervisors
+                                                                                  .Include(n => n.Clinic)
+                                                                                  .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the supervisor: {supervisorEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", supervisorViewModel) });
+                }
+            }
+            else
+            {
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                supervisorViewModel.Clinics = list;
+                supervisorViewModel.IdClinic = clinic.Id;
+                supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+                
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", supervisorViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorEntity supervisorEntity = await _context.Supervisors.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
+            if (supervisorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorViewModel supervisorViewModel;
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, user_logged.Clinic.Id);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    supervisorViewModel.Clinics = list;
+                }
+            }
+            else
+                supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, 0);
+
+            return View(supervisorViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, SupervisorViewModel supervisorViewModel)
+        {
+            if (id != supervisorViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                            .Include(u => u.Clinic)
+                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (supervisorViewModel.IdUser == "0")
+                {
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+
+                    supervisorViewModel.Clinics = list;
+                    supervisorViewModel.IdClinic = clinic.Id;
+                    supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
+                }
+
+                string path = supervisorViewModel.SignaturePath;
+                if (supervisorViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(supervisorViewModel.SignatureFile, "Signatures");
+                }
+                SupervisorEntity supervisorEntity = await _converterHelper.ToSupervisorEntity(supervisorViewModel, path, false);
+                _context.Update(supervisorEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<SupervisorEntity> supervisors_List = await _context.Supervisors
+                                                                                 .Include(n => n.Clinic)
+                                                                                 .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the supervisor: {supervisorEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            else
+            {
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                supervisorViewModel.Clinics = list;
+                supervisorViewModel.IdClinic = clinic.Id;
+                supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
+        }
+
     }
 }

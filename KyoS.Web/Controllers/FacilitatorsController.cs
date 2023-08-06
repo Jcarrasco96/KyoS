@@ -432,6 +432,9 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateModal(FacilitatorViewModel facilitatorViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.Name == facilitatorViewModel.Name);
@@ -440,7 +443,20 @@ namespace KyoS.Web.Controllers
                     if (facilitatorViewModel.IdUser == "0")
                     {
                         ModelState.AddModelError(string.Empty, "You must select a linked user");
-                        return View(facilitatorViewModel);
+                        ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clinic.Name,
+                            Value = $"{clinic.Id}"
+                        });
+
+                        facilitatorViewModel.Clinics = list;
+                        facilitatorViewModel.IdClinic = clinic.Id;
+                        facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                        facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
                     }
 
                     string path = string.Empty;
@@ -478,6 +494,22 @@ namespace KyoS.Web.Controllers
                 {
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
                 }
+            }
+            else
+            {
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                facilitatorViewModel.Clinics = list;
+                facilitatorViewModel.IdClinic = clinic.Id;
+                facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+               
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
         }
@@ -530,8 +562,30 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
+                if (facilitatorViewModel.IdUser == "0")
+                {
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+
+                    facilitatorViewModel.Clinics = list;
+                    facilitatorViewModel.IdClinic = clinic.Id;
+                    facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", facilitatorViewModel) });
+                }
+
                 string path = facilitatorViewModel.SignaturePath;
                 if (facilitatorViewModel.SignatureFile != null)
                 {
@@ -561,7 +615,22 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", facilitatorViewModel) });
+            else
+            {
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                facilitatorViewModel.Clinics = list;
+                facilitatorViewModel.IdClinic = clinic.Id;
+                facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", facilitatorViewModel) });
         }
 
     }

@@ -523,6 +523,25 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (documentsAssistantViewModel.IdUser == "0")
+                {
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+
+
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+
+                    documentsAssistantViewModel.Clinics = list;
+                    documentsAssistantViewModel.IdClinic = clinic.Id;
+                    documentsAssistantViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Documents_Assistant, user_logged.Clinic.Id);
+
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", documentsAssistantViewModel) });
+                }
+
                 string path = documentsAssistantViewModel.SignaturePath;
                 if (documentsAssistantViewModel.SignatureFile != null)
                 {
