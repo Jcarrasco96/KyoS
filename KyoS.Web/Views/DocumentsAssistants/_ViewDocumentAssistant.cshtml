@@ -21,10 +21,10 @@
                                 Clinic
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Signature
+                                User
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                User
+                                Signature
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -44,6 +44,9 @@
                                     @Html.DisplayFor(modelItem => item.Clinic.Name)
                                 </td>
                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.LinkedUser)
+                                </td>
+                                <td align="center">
                                     @if (item.SignaturePath == string.Empty || item.SignaturePath == null)
                                     {
                                         <span class="label label-danger">
@@ -57,14 +60,11 @@
                                         </span>
                                     }
                                 </td>
-                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.LinkedUser)
+                                <td align="right">
+                                    <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning" title="Edit Documents Assistant"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
-                                 <td align="right">
-                                     <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning" title="Edit Documents Assistant"><i class="glyphicon glyphicon-pencil"></i></a>
-                                     @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
-                                     <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
-                                 </td>
                             </tr>
                         }
                     </tbody>

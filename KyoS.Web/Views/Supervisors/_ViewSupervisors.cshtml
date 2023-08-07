@@ -11,14 +11,20 @@
             <table class="table table-hover table-responsive table-striped" id="MyTable">
                 <thead>
                     <tr>
-                        <th class="col-md-5">
+                        <th class="col-md-3">
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        <th class="col-md-2" style="text-align:center;">
+                        <th class="col-md-1" style="text-align:center;">
                             @Html.DisplayNameFor(model => model.Code)
                         </th>
-                        <th class="col-md-3">
+                        <th class="col-md-3" style="text-align:center;">
                             Clinic
+                        </th>
+                        <th class="col-md-2" style="text-align:center;">
+                            User Link
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Signature
                         </th>
                         <th class="col-md-2">
                         </th>
@@ -34,8 +40,25 @@
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
-                            <td>
+                            <td align="center">
                                 @Html.DisplayFor(modelItem => item.Clinic.Name)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.LinkedUser)
+                            </td>
+                            <td align="center">
+                                @if (item.SignaturePath == string.Empty || item.SignaturePath == null)
+                                 {
+                                     <span class="label label-danger">
+                                        No
+                                     </span>
+                                 }
+                                 else
+                                 { 
+                                     <span class="label label-success">
+                                         Yes
+                                     </span>
+                                 }
                             </td>
                             <td align="right">
                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>*@

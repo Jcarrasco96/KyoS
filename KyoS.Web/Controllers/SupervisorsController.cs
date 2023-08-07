@@ -511,14 +511,15 @@ namespace KyoS.Web.Controllers
                                             .Include(u => u.Clinic)
                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            List<SelectListItem> list = new List<SelectListItem>();
+
             if (ModelState.IsValid)
             {
                 if (supervisorViewModel.IdUser == "0")
                 {
                     ModelState.AddModelError(string.Empty, "You must select a linked user");
 
-                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                    List<SelectListItem> list = new List<SelectListItem>();
                     list.Insert(0, new SelectListItem
                     {
                         Text = clinic.Name,
@@ -561,20 +562,17 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
-            else
-            {
-                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                List<SelectListItem> list = new List<SelectListItem>();
-                list.Insert(0, new SelectListItem
-                {
-                    Text = clinic.Name,
-                    Value = $"{clinic.Id}"
-                });
 
-                supervisorViewModel.Clinics = list;
-                supervisorViewModel.IdClinic = clinic.Id;
-                supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
-            }
+            list.Insert(0, new SelectListItem
+            {
+                Text = clinic.Name,
+                Value = $"{clinic.Id}"
+            });
+
+            supervisorViewModel.Clinics = list;
+            supervisorViewModel.IdClinic = clinic.Id;
+            supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
         }
 
