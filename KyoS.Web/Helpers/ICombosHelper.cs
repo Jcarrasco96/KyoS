@@ -13,8 +13,8 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic);
         IEnumerable<SelectListItem> GetComboDays();
         IEnumerable<SelectListItem> GetComboThemes();
-        IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic);
-        IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic);
+        IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic, ThemeType service);
+        IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic, ThemeType service);
         IEnumerable<SelectListItem> GetComboFacilitators();
         IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboClients();

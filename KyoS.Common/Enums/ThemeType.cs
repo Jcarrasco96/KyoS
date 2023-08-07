@@ -3,7 +3,8 @@
     public enum ThemeType
     {
         PSR,
-        Group
+        Group,
+        All
     }
 
     public class ThemeUtils
@@ -11,7 +12,8 @@
         public static ThemeType GetThemeByIndex(int index)
         {
             return (index == 0) ? ThemeType.PSR :
-                   (index == 1) ? ThemeType.Group : ThemeType.PSR;
+                   (index == 1) ? ThemeType.Group :
+                   (index == 2) ? ThemeType.All : ThemeType.PSR;
         }
     }
 

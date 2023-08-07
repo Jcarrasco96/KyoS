@@ -720,7 +720,7 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
                 }
             }
            

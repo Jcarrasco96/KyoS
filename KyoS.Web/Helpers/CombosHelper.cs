@@ -122,38 +122,77 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic)
+        public IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic, ThemeType service = ThemeType.PSR)
         {
-            List<SelectListItem> list = _context.Themes.Where(t => t.Clinic.Id == idClinic).Select(t => new SelectListItem
+            if (service == ThemeType.All)
             {
-                Text = $"{t.Day.ToString()} - {t.Name}",
-                Value = $"{t.Id}"
-            }).ToList();
+                List<SelectListItem> list = _context.Themes.Where(t => t.Clinic.Id == idClinic).Select(t => new SelectListItem
+                {
+                    Text = $"{t.Day.ToString()} - {t.Name}",
+                    Value = $"{t.Id}"
+                }).ToList();
 
-            list.Insert(0, new SelectListItem
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select topic...]",
+                    Value = "0"
+                });
+
+                return list;
+            }
+            else
             {
-                Text = "[Select topic...]",
-                Value = "0"
-            });
+                List<SelectListItem> list = _context.Themes.Where(t => t.Clinic.Id == idClinic && t.Service == service).Select(t => new SelectListItem
+                {
+                    Text = $"{t.Day.ToString()} - {t.Name}",
+                    Value = $"{t.Id}"
+                }).ToList();
 
-            return list;
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select topic...]",
+                    Value = "0"
+                });
+
+                return list;
+            }
         }
 
-        public IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic)
+        public IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic, ThemeType service = ThemeType.PSR)
         {
-            List<SelectListItem> list = _context.Themes.Where(t => (t.Clinic.Id == idClinic && t.Day == null)).Select(t => new SelectListItem
+            if (service == ThemeType.All)
             {
-                Text = $"{t.Name + " | " + t.Id}",
-                Value = $"{t.Id}"
-            }).ToList();
+                List<SelectListItem> list = _context.Themes.Where(t => (t.Clinic.Id == idClinic && t.Day == null)).Select(t => new SelectListItem
+                {
+                    Text = $"{t.Name + " | " + t.Id}",
+                    Value = $"{t.Id}"
+                }).ToList();
 
-            list.Insert(0, new SelectListItem
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select theme...]",
+                    Value = "0"
+                });
+
+                return list;
+            }
+            else
             {
-                Text = "[Select theme...]",
-                Value = "0"
-            });
+                List<SelectListItem> list = _context.Themes.Where(t => (t.Clinic.Id == idClinic && t.Day == null && t.Service == service)).Select(t => new SelectListItem
+                {
+                    Text = $"{t.Name + " | " + t.Id}",
+                    Value = $"{t.Id}"
+                }).ToList();
 
-            return list;
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select theme...]",
+                    Value = "0"
+                });
+
+                return list;
+            }
+            
         }
 
         public IEnumerable<SelectListItem> GetComboFacilitators()
