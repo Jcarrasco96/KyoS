@@ -1615,16 +1615,24 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             IntakeMedicalHistoryViewModel model;
-            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
+            ClientEntity client = _context.Clients
+                                          .Include(n => n.LegalGuardian)
+                                          .Include(n => n.Doctor)
+                                          .Include(n => n.MedicationList)
+                                          .FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
                 if (user_logged.Clinic != null)
                 {
                     IntakeMedicalHistoryEntity intakeMedicalHistory = _context.IntakeMedicalHistory
-                                                                            .Include(n => n.Client)
-                                                                            .ThenInclude(n => n.LegalGuardian)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                                                                              .Include(n => n.Client)
+                                                                              .ThenInclude(n => n.LegalGuardian)
+                                                                              .Include(n => n.Client)
+                                                                              .ThenInclude(n => n.Doctor)
+                                                                              .Include(n => n.Client)
+                                                                              .ThenInclude(n => n.MedicationList)
+                                                                              .FirstOrDefault(n => n.Client.Id == id);
                     if (intakeMedicalHistory == null)
                     {
                         model = new IntakeMedicalHistoryViewModel
@@ -1783,10 +1791,20 @@ namespace KyoS.Web.Controllers
                             UsualDurationOfPeriods = "",
                             UsualIntervalBetweenPeriods = "",
                             AdmissionedFor = user_logged.FullName,
+                            IdDoctor = 0
 
                         };
                         if (model.Client.LegalGuardian == null)
                             model.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (client.Doctor != null)
+                        {
+                            model.PrimaryCarePhysician = client.Doctor.Name;
+                            model.AddressPhysician = client.Doctor.Address;
+                            model.City = client.Doctor.City;
+                            model.State = client.Doctor.State;
+                            model.ZipCode = client.Doctor.ZipCode;
+                            model.IdDoctor = client.Doctor.Id;
+                        }
                         ViewData["origin"] = origin;
                         return View(model);
                     }
@@ -1794,6 +1812,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (intakeMedicalHistory.Client.LegalGuardian == null)
                             intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
+                       
                         model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
                         ViewData["origin"] = origin;
                         return View(model);
@@ -2219,6 +2238,101 @@ namespace KyoS.Web.Controllers
             return View(ClientList);
 
         }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult CreateMedicationModal(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            MedicationViewModel model;
+
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
+            {
+
+
+                if (user_logged.Clinic != null)
+                {
+
+                    model = new MedicationViewModel
+                    {
+                        IdClient = id,
+                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                        Id = 0,
+                        Dosage = "",
+                        Frequency = "",
+                        Name = "",
+                        Prescriber = ""
+
+                    };
+                    if (model.Client.MedicationList == null)
+                        model.Client.MedicationList = new List<MedicationEntity>();
+                    return View(model);
+                }
+            }
+
+            model = new MedicationViewModel
+            {
+                IdClient = id,
+                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                Id = 0,
+                Dosage = "",
+                Frequency = "",
+                Name = "",
+                Prescriber = ""
+            };
+            if (model.Client.MedicationList == null)
+                model.Client.MedicationList = new List<MedicationEntity>();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> CreateMedicationModal(MedicationViewModel medicationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+
+                MedicationEntity medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, true);
+                _context.Medication.Add(medicationEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<MedicationEntity> medication = await _context.Medication
+                                                                      .Include(g => g.Client)
+                                                                      .Where(g => g.Client.Id == medicationViewModel.IdClient)
+                                                                      .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", medication) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+            MedicationViewModel model;
+            model = new MedicationViewModel
+            {
+                IdClient = medicationViewModel.IdClient,
+                Client = _context.Clients.Find(medicationViewModel.IdClient),
+                Id = medicationViewModel.Id,
+                Dosage = medicationViewModel.Dosage,
+                Frequency = medicationViewModel.Frequency,
+                Name = medicationViewModel.Name,
+                Prescriber = medicationViewModel.Prescriber
+
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
+        }
+
 
     }
 }
