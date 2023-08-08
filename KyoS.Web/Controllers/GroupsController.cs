@@ -463,17 +463,20 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
-                    DateTime developed_date;
-                    List<WorkdayEntity> workdays;
-                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
-                    List<Workday_Client> workday_Client_group;
-                    List<Workday_Client> workday_client = new List<Workday_Client>();
                     List<ClientEntity> client_List = new List<ClientEntity>();
+                  
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
+
+                        DateTime developed_date;
+                        List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity();
+                        List<Workday_Client> workday_Client_group;
+                        List<Workday_Client> workday_client = new List<Workday_Client>();
+
                         if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
                         {
                             client_List.Add(client);
@@ -545,11 +548,7 @@ namespace KyoS.Web.Controllers
                             {
                                 _context.AddRange(workday_client);
                             }
-
-                            workdays = new List<WorkdayEntity>();
-                            workday_Client_group = new List<Workday_Client>();
-                            client = new ClientEntity();
-                            workday_client = new List<Workday_Client>();
+                                                       
                         }
                     }
                 }
@@ -1011,17 +1010,20 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
-                    DateTime developed_date;
-                    List<WorkdayEntity> workdays;
-                    WorkdayEntity workday_Temp = new WorkdayEntity(); ;
-                    List<Workday_Client> workday_Client_PSR;
-                    List<Workday_Client> workday_client = new List<Workday_Client>();
                     List<ClientEntity> client_List = new List<ClientEntity>();
+               
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
+
+                        DateTime developed_date;
+                        List<WorkdayEntity> workdays;
+                        WorkdayEntity workday_Temp = new WorkdayEntity(); ;
+                        List<Workday_Client> workday_Client_PSR;
+                        List<Workday_Client> workday_client = new List<Workday_Client>();
+
                         if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
                         {
                             client_List.Add(client);
@@ -1094,10 +1096,6 @@ namespace KyoS.Web.Controllers
                                 _context.AddRange(workday_client);
                             }
 
-                            workdays = new List<WorkdayEntity>();
-                            workday_Client_PSR = new List<Workday_Client>();
-                            client = new ClientEntity();
-                            workday_client = new List<Workday_Client>();
                         }
                     }
                 }
