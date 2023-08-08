@@ -1969,6 +1969,8 @@ namespace KyoS.Web.Controllers
                 {
                     return View(await _context.Clients
                                           .Include(n => n.IntakeMedicalHistory)
+                                          .Include(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
                                             && n.IntakeMedicalHistory.AdmissionedFor == user_logged.FullName)
                                           .ToListAsync());
@@ -1976,6 +1978,8 @@ namespace KyoS.Web.Controllers
                 else
                     return View(await _context.Clients
                                           .Include(n => n.IntakeMedicalHistory)
+                                          .Include(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                           .ToListAsync());
 
@@ -2333,6 +2337,69 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", medicationViewModel) });
         }
 
+        public IActionResult AuditMedicalHistory()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditMedicalHistory> auditClient_List = new List<AuditMedicalHistory>();
+            AuditMedicalHistory auditClient = new AuditMedicalHistory();
+
+            List<ClientEntity> client_List = _context.Clients
+                                                     .Include(m => m.Doctor)
+                                                     .Include(m => m.IntakeMedicalHistory)
+                                                     .Include(m => m.MedicationList)
+                                                     .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                                     .ToList();
+
+            foreach (var item in client_List)
+            {
+                if (item.IntakeMedicalHistory == null)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client has no Medical History";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditMedicalHistory();
+                }
+                else
+                {
+                    if (item.Doctor == null)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client has no Doctor";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditMedicalHistory();
+                    }
+                    if (item.MedicationList.Count() == 0)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                        auditClient.Description = "The client has no Medication list";
+                        auditClient.Active = 1;
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditMedicalHistory();
+                    }
+                }
+               
+            }
+
+            return View(auditClient_List);
+        }
 
     }
 }

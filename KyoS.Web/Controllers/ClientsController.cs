@@ -185,7 +185,7 @@ namespace KyoS.Web.Controllers
                         StatusList = _combosHelper.GetComboClientStatus(),
                         Country = "United States",
                         State = "Florida",
-                        City = "Miami",
+                        City = user_logged.Clinic == null || user_logged.Clinic.City == null || user_logged.Clinic.City == string.Empty ? "Miami" : user_logged.Clinic.City,
                         IdRace = 0,
                         Races = _combosHelper.GetComboRaces(),
                         IdMaritalStatus = 0,
@@ -1744,6 +1744,10 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.AdendumList)
 
+                                                .Include(w => w.IntakeMedicalHistory)
+                                                .Include(w => w.Doctor)
+                                                .Include(w => w.MedicationList)
+
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
@@ -1867,6 +1871,38 @@ namespace KyoS.Web.Controllers
             }
             problem.Add(tempProblem);
             tempProblem = new Problem();
+
+            //Medical History
+            if (client.IntakeMedicalHistory == null)
+            {
+                tempProblem.Name = "Medical History";
+                tempProblem.Description = "The client has no Medical History";
+                tempProblem.Active = 0;
+
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            else
+            {
+                if (client.Doctor == null)
+                {
+                    tempProblem.Name = "Medical History";
+                    tempProblem.Description = "The client has no Doctor";
+                    tempProblem.Active = 1;
+
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                if (client.MedicationList.Count() == 0)
+                {
+                    tempProblem.Name = "Medical History"; ;
+                    tempProblem.Description = "The client has no Medication list";
+                    tempProblem.Active = 1;
+
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+            }
 
             //FARS initial
             if (client.FarsFormList.Count() > 0 && client.Bio != null )
