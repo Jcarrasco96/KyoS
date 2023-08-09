@@ -511,7 +511,7 @@ namespace KyoS.Web.Controllers
                                             .Include(u => u.Clinic)
                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == supervisorViewModel.IdClinic);
             List<SelectListItem> list = new List<SelectListItem>();
 
             if (ModelState.IsValid)
@@ -528,7 +528,7 @@ namespace KyoS.Web.Controllers
 
                     supervisorViewModel.Clinics = list;
                     supervisorViewModel.IdClinic = clinic.Id;
-                    supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+                    supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, supervisorViewModel.IdClinic);
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
                 }
@@ -571,7 +571,7 @@ namespace KyoS.Web.Controllers
 
             supervisorViewModel.Clinics = list;
             supervisorViewModel.IdClinic = clinic.Id;
-            supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+            supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, supervisorViewModel.IdClinic);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
         }
