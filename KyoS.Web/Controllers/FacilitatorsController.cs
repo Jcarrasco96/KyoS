@@ -579,7 +579,7 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == facilitatorViewModel.IdClinic);
             List<SelectListItem> list = new List<SelectListItem>();
 
             if (ModelState.IsValid)
@@ -597,7 +597,7 @@ namespace KyoS.Web.Controllers
                     facilitatorViewModel.Clinics = list;
                     facilitatorViewModel.IdClinic = clinic.Id;
                     facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
-                    facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+                    facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, facilitatorViewModel.IdClinic);
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", facilitatorViewModel) });
                 }
@@ -641,7 +641,7 @@ namespace KyoS.Web.Controllers
             facilitatorViewModel.Clinics = list;
             facilitatorViewModel.IdClinic = clinic.Id;
             facilitatorViewModel.StatusList = _combosHelper.GetComboClientStatus();
-            facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, user_logged.Clinic.Id);
+            facilitatorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, facilitatorViewModel.IdClinic);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", facilitatorViewModel) });
         }
