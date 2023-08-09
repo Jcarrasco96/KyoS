@@ -579,7 +579,7 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == facilitatorViewModel.IdClinic);
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
             List<SelectListItem> list = new List<SelectListItem>();
 
             if (ModelState.IsValid)
