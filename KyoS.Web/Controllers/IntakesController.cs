@@ -804,6 +804,8 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(c => c.Clinic)
                                                         .Include(i => i.Client)
                                                             .ThenInclude(c => c.IntakeTuberculosis)
+                                                        .Include(i => i.Client)
+                                                            .ThenInclude(c => c.MedicationList)
 
                                                         .FirstOrDefault(i => (i.Client.Id == id));
             if (entity == null)

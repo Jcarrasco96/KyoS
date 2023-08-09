@@ -4,11 +4,11 @@
     <pre>
     <strong>MEDICAL HISTORY</strong>
 
-        Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No:<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong>
+        Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                                 Case No: <strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong>
             
         Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%" disabled>
             
-        Address Physician:      <input asp-for="AddressPhysician" style="width:20%" disabled>
+        Address Physician:      <input asp-for="AddressPhysician" style="width:25%" disabled>
             
         City:                   <input asp-for="City" style="width:20%" disabled>                           State: <input asp-for="State" disabled>                Zip:  <input asp-for="ZipCode" disabled>
     </pre>
@@ -103,7 +103,7 @@
     <input type="checkbox" asp-for="DoYouSmoke" class="form-check-input"> Do you smoke? If Yes, <input asp-for="DoYouSmoke_PackPerDay"> packs per day for <input asp-for="DoYouSmoke_Year"> years
     </pre>
 </div>
-<br />
+
 
 
 

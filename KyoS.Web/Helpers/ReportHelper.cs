@@ -8842,6 +8842,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(medicalHistory.Client.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
             DocumentsAssistantEntity assistant = _context.DocumentsAssistant
                                                          .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
 
@@ -8908,6 +8912,10 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(medicalHistory.Client.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
 
             DocumentsAssistantEntity assistant = _context.DocumentsAssistant
                                                          .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
@@ -8976,6 +8984,10 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
 
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(medicalHistory.Client.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
             DocumentsAssistantEntity assistant = _context.DocumentsAssistant
                                                          .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
 
@@ -9042,6 +9054,10 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
             WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(medicalHistory.Client.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
 
             DocumentsAssistantEntity assistant = _context.DocumentsAssistant
                                                          .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
