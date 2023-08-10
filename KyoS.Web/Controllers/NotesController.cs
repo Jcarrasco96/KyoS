@@ -13942,9 +13942,9 @@ namespace KyoS.Web.Controllers
         #endregion
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> ChangeNotes(string dateInterval = "", int aService = 0)
+        public async Task<IActionResult> ChangeNotes(string dateInterval = "", int service = 0)
         {
-            ServiceType service = ServiceUtils.GetServiceByIndex(aService);
+            ServiceType serviceType = ServiceUtils.GetServiceByIndex(service);
 
             UserEntity user_logged = await _context.Users
 
@@ -13997,7 +13997,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == service)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == serviceType)).Count() > 0
                                                                  && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));                                                
                                 
                 BillingReportViewModel model = new BillingReportViewModel
@@ -14008,7 +14008,7 @@ namespace KyoS.Web.Controllers
                     IdClient = 0,
                     Clients = null,
                     Weeks = query.ToList(),
-                    IdService = 0,
+                    IdService = service,
                     Services = _combosHelper.GetComboServices()
                 };
 
@@ -14051,7 +14051,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == service)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == serviceType)).Count() > 0
                                                                  && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));                                                        
 
                 BillingReportViewModel model = new BillingReportViewModel
