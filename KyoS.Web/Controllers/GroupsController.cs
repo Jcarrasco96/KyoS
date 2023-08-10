@@ -463,8 +463,7 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
-                    List<ClientEntity> client_List = new List<ClientEntity>();
-                  
+                                      
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
@@ -476,10 +475,9 @@ namespace KyoS.Web.Controllers
                         WorkdayEntity workday_Temp = new WorkdayEntity();
                         List<Workday_Client> workday_Client_group;
                         List<Workday_Client> workday_client = new List<Workday_Client>();
-
-                        if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
+                        
+                        if (client != null)
                         {
-                            client_List.Add(client);
                             client.Group = group;
                             client.IdFacilitatorPSR = group.Facilitator.Id;
                            
@@ -547,8 +545,7 @@ namespace KyoS.Web.Controllers
                             if (workday_client.Count() > 0)
                             {
                                 _context.AddRange(workday_client);
-                            }
-                                                       
+                            }                                                       
                         }
                     }
                 }
