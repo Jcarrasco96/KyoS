@@ -500,7 +500,7 @@ namespace KyoS.Web.Controllers
                                                                                     || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                .ToListAsync();
 
-                    if (noteActivities.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                    if (noteActivities.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                     .Include(n => n.TCMClient)
@@ -517,7 +517,7 @@ namespace KyoS.Web.Controllers
                         }
 
                         ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
-                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", TcmNotesViewModel) });
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
 
@@ -640,7 +640,7 @@ namespace KyoS.Web.Controllers
                                                                                             || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                    .ToListAsync();
 
-                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                     TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
@@ -1191,7 +1191,22 @@ namespace KyoS.Web.Controllers
 
             List<Workday_Client> workday_Client = _context.Workdays_Clients
                                                           .Where(n => (n.Workday.Date == start.Date
-                                                            && n.Client.Id == idClient))
+                                                                    && n.Client.Id == idClient
+                                                                    && ((n.Workday.Service != ServiceType.Individual
+                                                                        && (n.Schedule.InitialTime.TimeOfDay <= start.TimeOfDay && n.Schedule.EndTime.TimeOfDay >= start.TimeOfDay
+                                                                         || n.Schedule.InitialTime.TimeOfDay <= end.TimeOfDay && n.Schedule.EndTime.TimeOfDay >= end.TimeOfDay
+                                                                         || start.TimeOfDay <= n.Schedule.InitialTime.TimeOfDay && end.TimeOfDay >= n.Schedule.InitialTime.TimeOfDay
+                                                                         || start.TimeOfDay <= n.Schedule.EndTime.TimeOfDay && end.TimeOfDay >= n.Schedule.EndTime.TimeOfDay
+                                                                         || n.Schedule.InitialTime.TimeOfDay <= start.TimeOfDay && n.Schedule.EndTime.TimeOfDay >= end.TimeOfDay
+                                                                         || start.TimeOfDay <= n.Schedule.InitialTime.TimeOfDay  && end.TimeOfDay >= n.Schedule.EndTime.TimeOfDay))
+                                                                     || (n.Workday.Service == ServiceType.Individual
+                                                                        && (n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= start.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= start.TimeOfDay
+                                                                         || n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= end.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= end.TimeOfDay
+                                                                         || start.TimeOfDay <= n.IndividualNote.SubSchedule.InitialTime.TimeOfDay && end.TimeOfDay >= n.IndividualNote.SubSchedule.InitialTime.TimeOfDay
+                                                                         || start.TimeOfDay <= n.IndividualNote.SubSchedule.EndTime.TimeOfDay && end.TimeOfDay >= n.IndividualNote.SubSchedule.EndTime.TimeOfDay
+                                                                         || n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= start.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= end.TimeOfDay
+                                                                         || start.TimeOfDay <= n.IndividualNote.SubSchedule.InitialTime.TimeOfDay && end.TimeOfDay >= n.IndividualNote.SubSchedule.EndTime.TimeOfDay))
+                                                                     )))
                                                           .ToList();
 
             if (workday_Client.Count > 0)
