@@ -1,6 +1,8 @@
 ﻿using KyoS.Common.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
+
 
 namespace KyoS.Web.Data.Entities
 {
@@ -34,9 +36,17 @@ namespace KyoS.Web.Data.Entities
 
         public ClinicEntity Clinic { get; set; }
 
-        List<TCMNoteEntity> TCMNotes { get; set; }
+        public List<TCMNoteEntity> TCMNotes { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public decimal Money { get; set; }
+
+        public TCMSupervisorEntity TCMSupervisor { get; set; }
+
+        public string RaterEducation { get; set; }
+
+        public string RaterFMHCertification { get; set; }
+
+        public List<TCMClientEntity> TCMClients { get; set; }
     }
 }

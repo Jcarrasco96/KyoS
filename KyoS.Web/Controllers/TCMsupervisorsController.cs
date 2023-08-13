@@ -38,6 +38,9 @@ namespace KyoS.Web.Controllers
             {
                 return View(await _context.TCMSupervisors
                                           .Include(f => f.Clinic)
+                                          .Include(f => f.CaseManagerList)
+                                          .ThenInclude(f => f.TCMClients)
+                                          .ThenInclude(f => f.Client)
                                           .OrderBy(f => f.Name)
                                           .ToListAsync());
             }
@@ -60,12 +63,17 @@ namespace KyoS.Web.Controllers
                     ViewBag.Delete = "N";
                 }
 
-                         
-                return View(await _context.TCMSupervisors
-                                        .Include(f => f.Clinic)
-                                        .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
-                                        .OrderBy(f => f.Name)
-                                        .ToListAsync());                
+                List<TCMSupervisorEntity> tcmSupervisorList = await _context.TCMSupervisors
+                                                                            .Include(f => f.Clinic)
+                                                                            .Include(f => f.CaseManagerList)
+                                                                            .ThenInclude(f => f.TCMClients)
+                                                                            .ThenInclude(f => f.Client)
+                                                                            .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                                                            .OrderBy(f => f.Name)
+                                                                            .ToListAsync();
+                
+               
+                return View(tcmSupervisorList);                
             }
         }
 
@@ -112,7 +120,9 @@ namespace KyoS.Web.Controllers
                          StatusList = _combosHelper.GetComboClientStatus(),
                          UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id),
                          CreatedBy = user_logged.UserName,
-                         CreatedOn = DateTime.Now
+                         CreatedOn = DateTime.Now,
+                         RaterEducation = string.Empty,
+                         RaterFMHCertification = string.Empty
                      };
                      return View(model);
                 }
@@ -123,7 +133,9 @@ namespace KyoS.Web.Controllers
                 Clinics = _combosHelper.GetComboClinics(),
                 IdStatus = 1,
                 StatusList = _combosHelper.GetComboClientStatus(),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0),
+                RaterEducation = string.Empty,
+                RaterFMHCertification = string.Empty
             };
             return View(model);
         }

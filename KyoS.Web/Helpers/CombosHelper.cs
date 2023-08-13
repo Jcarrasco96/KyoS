@@ -1924,5 +1924,34 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboTCMSupervisorByClinic(int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (idClinic == 0)
+            {
+                list = _context.TCMSupervisors.Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.TCMSupervisors.Where(u => (u.Clinic.Id == idClinic)).Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Supervisor...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using KyoS.Common.Enums;
 using System.ComponentModel.DataAnnotations;
 using KyoS.Web.Data.Contracts;
+using System.Collections.Generic;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -31,5 +32,8 @@ namespace KyoS.Web.Data.Entities
         public string RaterEducation { get; set; }
 
         public string RaterFMHCertification { get; set; }
+
+        public ICollection<CaseMannagerEntity> CaseManagerList { get; set; }
+
     }
 }

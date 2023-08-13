@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230812151316_caseManager_TCMsupervisor")]
+    partial class caseManager_TCMsupervisor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1184,12 +1186,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProviderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaterEducation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SignaturePath")

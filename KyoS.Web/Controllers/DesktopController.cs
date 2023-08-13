@@ -783,6 +783,7 @@ namespace KyoS.Web.Controllers
                 ViewBag.NotStartedCases = await _context.TCMClient                                                                 
                                                         .CountAsync(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
                                                                         && s.Status == StatusType.Open
+                                                                        && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
                                                                         && (s.TcmServicePlan == null
                                                                             || s.TcmServicePlan.Approved != 2
                                                                             || s.TCMAssessment == null
@@ -801,42 +802,52 @@ namespace KyoS.Web.Controllers
 
                 ViewBag.OpenBinder = await _context.TCMClient
                                                    .CountAsync(g => (g.Status == StatusType.Open
-                                                                  && g.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                  && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                  && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.ServicePlanPending = await _context.TCMClient                                                     
                                                            .CountAsync(g => ( g.Status == StatusType.Open
                                                                            && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                           && g.TcmServicePlan.Approved == 1));
+                                                                           && g.TcmServicePlan.Approved == 1
+                                                                           && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.AdendumPending = await _context.TCMAdendums                                                 
-                                                       .CountAsync(g => (g.Approved == 1 && g.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                       .CountAsync(g => (g.Approved == 1
+                                                                      && g.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && g.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.ServicePlanReviewEdition = await _context.TCMClient                                                           
                                                                  .CountAsync(g => (g.Status == StatusType.Open
                                                                                 && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 0));
+                                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 0
+                                                                                && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.ServicePlanReviewPending = await _context.TCMClient                                                           
                                                                  .CountAsync(g => (g.Status == StatusType.Open
                                                                                 && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 1));
+                                                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 1
+                                                                                && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.DischargePending = await _context.TCMClient                                                   
                                                          .CountAsync(g => (g.Status == StatusType.Open
                                                                         && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && g.TcmServicePlan.TCMDischarge.Approved == 1));
+                                                                        && g.TcmServicePlan.TCMDischarge.Approved == 1
+                                                                        && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.TCMFarsPending = await _context.TCMFarsForm                                                 
                                                        .CountAsync(g => (g.Status == FarsStatus.Pending
-                                                                      && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                      && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && g.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.NotesPending = await _context.TCMNote
                                                      .CountAsync(g => (g.Status == NoteStatus.Pending
-                                                                    && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                    && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && g.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.NotesApproved = await _context.TCMNote
                                                       .CountAsync(g => (g.Status == NoteStatus.Approved
-                                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                     && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                     && g.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.ActivityPending = await _context.TCMServiceActivity
                                                         .CountAsync(g => (g.Approved < 2
@@ -845,17 +856,20 @@ namespace KyoS.Web.Controllers
                 ViewBag.AppendiceJPending = await _context.TCMIntakeAppendixJ
                                                           .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                          && g.Approved == 1
-                                                                         && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                         && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                         && g.TcmSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.FarsPending = await _context.TCMFarsForm
                                                     .CountAsync(g => (g.TCMClient.Casemanager.Id == user_logged.Clinic.Id
                                                                    && g.Status == FarsStatus.Pending
-                                                                   && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                   && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                   && g.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.AssesmentPending = await _context.TCMAssessment
                                                          .CountAsync(g => (g.TcmClient.Casemanager.Id == user_logged.Clinic.Id
                                                                         && g.Approved == 1
-                                                                        && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id));
+                                                                        && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                        && g.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.TCMNoteReview = _context.TCMNote
                                                 .Include(wc => wc.TCMClient)
@@ -864,8 +878,15 @@ namespace KyoS.Web.Controllers
                                                 .Include(wc => wc.TCMMessages.Where(m => m.Notification == false))
                                                 .Where(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
                                                            && wc.Status == NoteStatus.Pending
-                                                           && wc.TCMMessages.Count() > 0)).Count()
+                                                           && wc.TCMMessages.Count() > 0
+                                                           && wc.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)).Count()
                                                 .ToString();
+
+                ViewBag.TCMCaseManager = await _context.CaseManagers
+                                                       .CountAsync(g => (g.Status == StatusType.Open
+                                                                      && g.Clinic.Id == user_logged.Clinic.Id
+                                                                      && g.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                                      && g.TCMSupervisor.LinkedUser == user_logged.UserName));
             }
             return View();
         }
