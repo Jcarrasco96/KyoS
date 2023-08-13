@@ -36,7 +36,7 @@ namespace KyoS.Web.Data.Entities
 
         public ClinicEntity Clinic { get; set; }
 
-        public List<TCMNoteEntity> TCMNotes { get; set; }
+        //public List<TCMNoteEntity> TCMNotes { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public decimal Money { get; set; }

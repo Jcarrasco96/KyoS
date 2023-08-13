@@ -491,7 +491,7 @@ namespace KyoS.Web.Controllers
                                                                                 || s.TcmServicePlan.Approved != 2
                                                                                 || s.TCMAssessment == null
                                                                                 || s.TCMAssessment.Approved != 2
-                                                                                || s.TcmIntakeAppendixJ == null
+                                                                        //      || s.TcmIntakeAppendixJ == null
                                                                                 || s.TcmIntakeAcknowledgementHipa == null
                                                                                 || s.TCMIntakeAdvancedDirective == null
                                                                                 || s.TcmIntakeConsentForRelease == null
@@ -557,7 +557,10 @@ namespace KyoS.Web.Controllers
                     ViewBag.TCMNotesWithReview = await _context.TCMNote
                                                                .CountAsync(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id &&
                                                                                   wc.Status == NoteStatus.Pending &&
-                                                                                  wc.TCMMessages.Count() > 0));                                                                             
+                                                                                  wc.TCMMessages.Count() > 0));
+                    ViewBag.TCMSupervisor = await _context.TCMSupervisors
+                                                          .CountAsync(g => (g.Status == StatusType.Open
+                                                                         && g.Clinic.Id == user_logged.Clinic.Id));
                 }
             }
             if (User.IsInRole("Admin"))
@@ -580,7 +583,7 @@ namespace KyoS.Web.Controllers
                                                                     || g.TcmServicePlan.Approved != 2
                                                                     || g.TCMAssessment == null
                                                                     || g.TCMAssessment.Approved != 2
-                                                                    || g.TcmIntakeAppendixJ == null
+                                                                //  || g.TcmIntakeAppendixJ == null
                                                                     || g.TcmIntakeAcknowledgementHipa == null
                                                                     || g.TCMIntakeAdvancedDirective == null
                                                                     || g.TcmIntakeConsentForRelease == null
@@ -788,7 +791,7 @@ namespace KyoS.Web.Controllers
                                                                             || s.TcmServicePlan.Approved != 2
                                                                             || s.TCMAssessment == null
                                                                             || s.TCMAssessment.Approved != 2
-                                                                            || s.TcmIntakeAppendixJ == null
+                                                                    //      || s.TcmIntakeAppendixJ == null
                                                                             || s.TcmIntakeAcknowledgementHipa == null
                                                                             || s.TCMIntakeAdvancedDirective == null
                                                                             || s.TcmIntakeConsentForRelease == null

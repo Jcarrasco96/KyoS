@@ -59,13 +59,10 @@ namespace KyoS.Web.Controllers
                     return View(await _context.CaseManagers
                                               .Include(f => f.Clinic)
                                               .Include(f => f.TCMSupervisor)
+                                              .Include(f => f.TCMClients)
+                                              .ThenInclude(f => f.Client)
                                               .Where(f => f.Clinic.Id == clinic.Id).OrderBy(f => f.Name).ToListAsync());
-                else
-                    return View(await _context.CaseManagers
-                                              .Include(f => f.Clinic)
-                                              .Include(f => f.TCMSupervisor)
-                                              .OrderBy(f => f.Name).ToListAsync());
-
+               
             }
             else
             {
@@ -83,13 +80,14 @@ namespace KyoS.Web.Controllers
                         ViewBag.Delete = "N";
                     }
 
-                   
                     return View(await _context.CaseManagers
-                                                  .Include(f => f.Clinic)
-                                                  .Include(f => f.TCMSupervisor)
-                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id
-                                                    && f.TCMSupervisor.Id == supervisorEntity.Id)
-                                                  .OrderBy(f => f.Name).ToListAsync());
+                                              .Include(f => f.Clinic)
+                                              .Include(f => f.TCMSupervisor)
+                                              .Include(f => f.TCMClients)
+                                              .ThenInclude(f => f.Client)
+                                              .Where(f => f.Clinic.Id == user_logged.Clinic.Id
+                                                       && f.TCMSupervisor.Id == supervisorEntity.Id)
+                                              .OrderBy(f => f.Name).ToListAsync());
                    
                 }
             }

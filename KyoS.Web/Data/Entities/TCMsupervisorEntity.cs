@@ -33,7 +33,7 @@ namespace KyoS.Web.Data.Entities
 
         public string RaterFMHCertification { get; set; }
 
-        public ICollection<CaseMannagerEntity> CaseManagerList { get; set; }
+        public List<CaseMannagerEntity> CaseManagerList { get; set; }
 
     }
 }

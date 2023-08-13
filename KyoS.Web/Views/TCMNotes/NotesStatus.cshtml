@@ -262,7 +262,7 @@
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="6" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
                                             }
@@ -277,13 +277,21 @@
                                         {
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id"  class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                @if (item.TCMClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+                                                {
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                }
+
                                                 <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
                                             }
@@ -311,7 +319,7 @@
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }

@@ -16,18 +16,37 @@
 }
 else
 {
-    <div class="col-md-push-12">
-        <div class="form-group col-md-6">
-            <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
-            <textarea asp-for="Outcome" class="form-control" rows="5" readonly></textarea>
-            <span asp-validation-for="Outcome" class="text-danger"></span>
+    @if ( Model.TCMClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+                <textarea asp-for="Outcome" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Outcome" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+                <textarea asp-for="NextStep" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="NextStep" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
-            <textarea asp-for="NextStep" class="form-control" rows="5" readonly></textarea>
-            <span asp-validation-for="NextStep" class="text-danger"></span>
+    }
+    else
+    { 
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+                <textarea asp-for="Outcome" class="form-control" rows="5" readonly></textarea>
+                <span asp-validation-for="Outcome" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+                <textarea asp-for="NextStep" class="form-control" rows="5" readonly></textarea>
+                <span asp-validation-for="NextStep" class="text-danger"></span>
+            </div>
         </div>
-    </div>
+    }
+    
 }
 @*<div class="col-md-12">
                 <pre>
