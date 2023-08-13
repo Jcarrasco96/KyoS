@@ -11,6 +11,10 @@ namespace KyoS.Web.Models
         public int IdClient { get; set; }
         public IEnumerable<SelectListItem> Clients { get; set; }
 
+        [Display(Name = "TCM")]
+        public int IdCaseManager { get; set; }
+        public IEnumerable<SelectListItem> CaseManagers { get; set; }
+
         public static implicit operator TCMBillingViewModel(AddProgressNoteViewModel v)
         {
             throw new NotImplementedException();

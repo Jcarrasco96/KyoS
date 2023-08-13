@@ -1953,5 +1953,27 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user)
+        {
+            List<SelectListItem> list = _context.CaseManagers
+
+                                                .Where(c => (c.TCMClients.Where(n => n.TcmServicePlan.Status == StatusType.Open 
+                                                                                  && n.TcmServicePlan.Approved == 2).Count() > 0)
+                                                          && c.TCMSupervisor.LinkedUser == user)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name} ",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

@@ -832,7 +832,7 @@ namespace KyoS.Web.Controllers
                                                                                 && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.DischargePending = await _context.TCMClient                                                   
-                                                         .CountAsync(g => (g.Status == StatusType.Open
+                                                         .CountAsync(g => (g.Status == StatusType.Close
                                                                         && g.Client.Clinic.Id == user_logged.Clinic.Id
                                                                         && g.TcmServicePlan.TCMDischarge.Approved == 1
                                                                         && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
@@ -890,6 +890,16 @@ namespace KyoS.Web.Controllers
                                                                       && g.Clinic.Id == user_logged.Clinic.Id
                                                                       && g.TCMSupervisor.LinkedUser == user_logged.UserName
                                                                       && g.TCMSupervisor.LinkedUser == user_logged.UserName));
+
+                ViewBag.OpenBinderClose = await _context.TCMClient
+                                                  .CountAsync(g => (g.Status == StatusType.Close
+                                                                 && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                 && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
+
+                ViewBag.Billing = await _context.TCMClient
+                                         .CountAsync(g => (g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                        && g.Status == StatusType.Open
+                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id));
             }
             return View();
         }
