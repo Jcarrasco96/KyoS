@@ -85,5 +85,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient);
         IEnumerable<SelectListItem> GetComboThemeType();
         IEnumerable<SelectListItem> GetComboTypeReferred();
+        IEnumerable<SelectListItem> GetComboTCMSupervisorByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user);
     }
 }

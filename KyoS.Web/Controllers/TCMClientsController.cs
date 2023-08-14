@@ -530,7 +530,7 @@ namespace KyoS.Web.Controllers
                                                                             || g.TcmServicePlan.Approved != 2
                                                                             || g.TCMAssessment == null
                                                                             || g.TCMAssessment.Approved != 2
-                                                                            || g.TcmIntakeAppendixJ == null
+                                                                        //  || g.TcmIntakeAppendixJ == null
                                                                             || g.TcmIntakeAcknowledgementHipa == null
                                                                             || g.TCMIntakeAdvancedDirective == null
                                                                             || g.TcmIntakeConsentForRelease == null
@@ -574,7 +574,7 @@ namespace KyoS.Web.Controllers
                                                                         || s.TcmServicePlan.Approved != 2
                                                                         || s.TCMAssessment == null
                                                                         || s.TCMAssessment.Approved != 2
-                                                                        || s.TcmIntakeAppendixJ == null
+                                                                //      || s.TcmIntakeAppendixJ == null
                                                                         || s.TcmIntakeAcknowledgementHipa == null
                                                                         || s.TCMIntakeAdvancedDirective == null
                                                                         || s.TcmIntakeConsentForRelease == null

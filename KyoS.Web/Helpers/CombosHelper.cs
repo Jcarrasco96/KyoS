@@ -1924,5 +1924,56 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboTCMSupervisorByClinic(int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (idClinic == 0)
+            {
+                list = _context.TCMSupervisors.Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.TCMSupervisors.Where(u => (u.Clinic.Id == idClinic)).Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM Supervisor...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user)
+        {
+            List<SelectListItem> list = _context.CaseManagers
+
+                                                .Where(c => (c.TCMClients.Where(n => n.TcmServicePlan.Status == StatusType.Open 
+                                                                                  && n.TcmServicePlan.Approved == 2).Count() > 0)
+                                                          && c.TCMSupervisor.LinkedUser == user)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name} ",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select TCM...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

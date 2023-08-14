@@ -48,7 +48,7 @@
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
                 </div>
             </div>
-            <partial name="_TCMNotes1" />
+            <partial name="_TCMNotes1ReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("TCMSupervisor"))
                 {

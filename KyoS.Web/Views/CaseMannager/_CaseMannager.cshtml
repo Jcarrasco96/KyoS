@@ -5,7 +5,7 @@
     <input asp-for="Name" class="form-control" />
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
-<div class="col-md-3 form-group">
+<div class="col-md-2 form-group">
     <label asp-for="IdClinic" class="control-label"></label>
     <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
     <span asp-validation-for="IdClinic" class="text-danger"></span>
@@ -25,7 +25,7 @@
     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
     <span asp-validation-for="IdStatus" class="text-danger"></span>
 </div>
-<div class="col-md-3 form-group">
+<div class="col-md-2 form-group">
     <label asp-for="IdUser" class="control-label"></label>
     <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
     <span asp-validation-for="IdUser" class="text-danger"></span>
@@ -49,4 +49,9 @@
     <label asp-for="Money" class="control-label">Salary / Hour</label>
     <input asp-for="Money" class="form-control" />
     <span asp-validation-for="Money" class="text-danger"></span>
+</div>
+<div class="col-md-2 form-group">
+    <label asp-for="IdTCMsupervisor" class="control-label"></label>
+    <select asp-for="IdTCMsupervisor" asp-items="Model.TCMsupervisors" class="form-control"></select>
+    <span asp-validation-for="IdTCMsupervisor" class="text-danger"></span>
 </div>

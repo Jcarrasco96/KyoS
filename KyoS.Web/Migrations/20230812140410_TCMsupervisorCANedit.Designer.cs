@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230812140410_TCMsupervisorCANedit")]
+    partial class TCMsupervisorCANedit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1186,19 +1188,10 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ProviderNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RaterEducation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaterFMHCertification")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SignaturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TCMSupervisorId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1207,8 +1200,6 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique();
-
-                    b.HasIndex("TCMSupervisorId");
 
                     b.ToTable("CaseManagers");
                 });
@@ -10194,13 +10185,7 @@ namespace KyoS.Web.Migrations
                         .WithMany("CaseManagers")
                         .HasForeignKey("ClinicId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.TCMSupervisorEntity", "TCMSupervisor")
-                        .WithMany("CaseManagerList")
-                        .HasForeignKey("TCMSupervisorId");
-
                     b.Navigation("Clinic");
-
-                    b.Navigation("TCMSupervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClientEntity", b =>
@@ -12100,11 +12085,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMMessages");
 
                     b.Navigation("TCMServicePlanRevDomain");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
-                {
-                    b.Navigation("CaseManagerList");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ThemeEntity", b =>

@@ -233,7 +233,10 @@ namespace KyoS.Web.Helpers
                 SignaturePath = signaturePath,
                 Email = model.Email,
                 Phone = model.Phone,
-                Money = model.Money
+                Money = model.Money,
+                TCMSupervisor = await _context.TCMSupervisors.FindAsync(model.IdTCMsupervisor),
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -254,7 +257,11 @@ namespace KyoS.Web.Helpers
                 SignaturePath = caseMannagerEntity.SignaturePath,
                 Email = caseMannagerEntity.Email,
                 Phone = caseMannagerEntity.Phone,
-                Money = caseMannagerEntity.Money
+                Money = caseMannagerEntity.Money,
+                IdTCMsupervisor = caseMannagerEntity.TCMSupervisor == null? 0 : caseMannagerEntity.TCMSupervisor.Id,
+                TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(idClinic),
+                RaterEducation = caseMannagerEntity.RaterEducation,
+                RaterFMHCertification = caseMannagerEntity.RaterFMHCertification
             };
         }
 
@@ -443,6 +450,8 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 SignaturePath = signaturePath,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -460,7 +469,9 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, idClinic),
                 SignaturePath = TCMSupervisorEntity.SignaturePath,
                 IdStatus = (TCMSupervisorEntity.Status == StatusType.Open) ? 1 : 2,
-                StatusList = _combosHelper.GetComboClientStatus()
+                StatusList = _combosHelper.GetComboClientStatus(),
+                RaterEducation = TCMSupervisorEntity.RaterEducation,
+                RaterFMHCertification = TCMSupervisorEntity.RaterFMHCertification
             };
         }
 
@@ -1402,7 +1413,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                MHProblems = model.MHProblems
+                MHProblems = model.MHProblems,
+                TCMSupervisorEdit = model.TCMSupervisorEdit
             };
         }
 
@@ -1421,7 +1433,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                MHProblems = model.MHProblems
+                MHProblems = model.MHProblems,
+                TCMSupervisorEdit = model.TCMSupervisorEdit
             };
         }
 
