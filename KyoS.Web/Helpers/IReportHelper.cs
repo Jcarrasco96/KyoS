@@ -23,6 +23,7 @@ namespace KyoS.Web.Helpers
         Stream DemoClinic2AbsenceNoteReport(Workday_Client workdayClient);
         Stream CommunityHTCAbsenceNoteReport(Workday_Client workdayClient);
         Stream PrincipleCCIAbsenceNoteReport(Workday_Client workdayClient);
+        Stream SapphireMHCAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -35,6 +36,8 @@ namespace KyoS.Web.Helpers
         Stream CommunityHTCNoteReportSchema3SS(Workday_Client workdayClient);
         Stream PrincipleCCINoteReportSchema3(Workday_Client workdayClient);
         Stream PrincipleCCINoteReportSchema3SS(Workday_Client workdayClient);
+        Stream SapphireMHCNoteReportSchema3(Workday_Client workdayClient);
+        Stream SapphireMHCNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -43,6 +46,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthIndNoteReportSchema1(Workday_Client workdayClient);
         Stream CommunityHTCIndNoteReportSchema1(Workday_Client workdayClient);
         Stream PrincipleCCIIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream SapphireMHCIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -53,10 +57,12 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream CommunityHTCGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream PrincipleCCIGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream SapphireMHCGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream FloridaSocialHSGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream DreamsMentalHealthGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream CommunityHTCGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream PrincipleCCIGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream SapphireMHCGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
@@ -71,6 +77,7 @@ namespace KyoS.Web.Helpers
         Stream DemoClinic2MTPReport(MTPEntity mtp);
         Stream CommunityHTCMTPReport(MTPEntity mtp);
         Stream PrincipleCCIMTPReport(MTPEntity mtp);
+        Stream SapphireMHCMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR general reports
@@ -85,6 +92,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthIntakeReport(IntakeScreeningEntity intake);
         Stream CommunityHTCIntakeReport(IntakeScreeningEntity intake);
         Stream PrincipleCCIIntakeReport(IntakeScreeningEntity intake);
+        Stream SapphireMHCIntakeReport(IntakeScreeningEntity intake);
         #endregion
 
         #region Fars reports
@@ -92,6 +100,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthFarsReport(FarsFormEntity intake);
         Stream CommunityHTCFarsReport(FarsFormEntity intake);
         Stream PrincipleCCIFarsReport(FarsFormEntity intake);
+        Stream SapphireMHCFarsReport(FarsFormEntity intake);
         #endregion
 
         #region Discharge reports
@@ -99,6 +108,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthDischargeReport(DischargeEntity intake);
         Stream CommunityHTCDischargeReport(DischargeEntity intake);
         Stream PrincipleCCIDischargeReport(DischargeEntity intake);
+        Stream SapphireMHCDischargeReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
@@ -106,6 +116,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthBioReport(BioEntity bio);
         Stream CommunityHTCBioReport(BioEntity bio);
         Stream PrincipleCCIBioReport(BioEntity bio);
+        Stream SapphireMHCBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
@@ -113,6 +124,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthAddendumReport(AdendumEntity addendum);
         Stream CommunityHTCAddendumReport(AdendumEntity addendum);
         Stream PrincipleCCIAddendumReport(AdendumEntity addendum);
+        Stream SapphireMHCAddendumReport(AdendumEntity addendum);
         #endregion
 
         #region MTP Review reports
@@ -120,6 +132,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthMTPReviewReport(MTPReviewEntity review);
         Stream CommunityHTCMTPReviewReport(MTPReviewEntity review);
         Stream PrincipleCCIMTPReviewReport(MTPReviewEntity review);
+        Stream SapphireMHCMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Medical History
@@ -127,6 +140,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream CommunityHTCMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream PrincipleCCIMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream SapphireMHCMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
         #region Brief reports
@@ -134,6 +148,7 @@ namespace KyoS.Web.Helpers
         Stream DreamsMentalHealthBriefReport(BriefEntity brief);
         Stream CommunityHTCBriefReport(BriefEntity brief);
         Stream PrincipleCCIBriefReport(BriefEntity brief);
+        Stream SapphireMHCBriefReport(BriefEntity brief);
         #endregion
 
         #region Utils functions

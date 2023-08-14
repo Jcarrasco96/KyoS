@@ -2010,6 +2010,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.PrincipleCCIMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -2624,7 +2629,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.PrincipleCCIAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Mtp.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -3240,6 +3249,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
             {
                 Stream stream = _reportHelper.PrincipleCCIMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

@@ -6615,6 +6615,19 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.SapphireMHCNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.SapphireMHCNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
@@ -6672,6 +6685,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "PRINCIPLE CARE CENTER INC")
             {
                 Stream stream = _reportHelper.PrincipleCCIIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -6828,6 +6846,21 @@ namespace KyoS.Web.Controllers
                 if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
                 {
                     stream = _reportHelper.PrincipleCCIGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.SapphireMHCGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.SapphireMHCGroupNoteReportSchema3(workdayClient);
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
@@ -11822,6 +11855,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -11903,6 +11941,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Facilitator.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -11981,6 +12024,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "PRINCIPLE CARE CENTER INC")
             {
                 Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
