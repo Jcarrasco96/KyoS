@@ -6697,5 +6697,97 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public TCMIntakeClientSignatureVerificationEntity ToTCMIntakeClientSignatureVerificationEntity(TCMIntakeClientSignatureVerificationViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeClientSignatureVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor                
+               
+            };
+        }
+
+        public TCMIntakeClientSignatureVerificationViewModel ToTCMIntakeClientSignatureVerificationViewModel(TCMIntakeClientSignatureVerificationEntity model)
+        {
+            return new TCMIntakeClientSignatureVerificationViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+
+        }
+
+        public TCMIntakeClientIdDocumentVerificationEntity ToTCMIntakeClientIdDocumentVerificationEntity(TCMIntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeClientIdDocumentVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public TCMIntakeClientIdDocumentVerificationViewModel ToTCMIntakeClientIdDocumentVerificationViewModel(TCMIntakeClientIdDocumentVerificationEntity model)
+        {
+            return new TCMIntakeClientIdDocumentVerificationViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+
+        }
+
     }
 }

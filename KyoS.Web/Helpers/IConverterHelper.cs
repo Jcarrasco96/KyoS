@@ -199,5 +199,9 @@ namespace KyoS.Web.Helpers
         Task<ManagerEntity> ToManagerEntity(ManagerViewModel model, string signaturePath, bool isNew);
         ManagerViewModel ToManagerViewModel(ManagerEntity model);
         ClientAuxiliarViewModel ToClientAUXViewModel(ClientEntity model, List<MTPReviewEntity> mtpr);
+        TCMIntakeClientSignatureVerificationEntity ToTCMIntakeClientSignatureVerificationEntity(TCMIntakeClientSignatureVerificationViewModel model, bool isNew, string userId);
+        TCMIntakeClientSignatureVerificationViewModel ToTCMIntakeClientSignatureVerificationViewModel(TCMIntakeClientSignatureVerificationEntity model);
+        TCMIntakeClientIdDocumentVerificationEntity ToTCMIntakeClientIdDocumentVerificationEntity(TCMIntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId);
+        TCMIntakeClientIdDocumentVerificationViewModel ToTCMIntakeClientIdDocumentVerificationViewModel(TCMIntakeClientIdDocumentVerificationEntity model);
     }
 }

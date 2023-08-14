@@ -134,6 +134,8 @@ namespace KyoS.Web.Data
         public DbSet<SubScheduleEntity> SubSchedule { get; set; }
         public DbSet<ManagerEntity> Manager { get; set; }
         public DbSet<EligibilityEntity> Eligibilities { get; set; }
+        public DbSet<TCMIntakeClientSignatureVerificationEntity> TCMIntakeClientSignatureVerification { get; set; }
+        public DbSet<TCMIntakeClientIdDocumentVerificationEntity> TCMIntakeClientDocumentVerification { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -598,6 +600,19 @@ namespace KyoS.Web.Data
                         .HasOne(wd => wd.GroupNote2)
                         .WithOne(n => n.Workday_Cient)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeClientSignatureVerification)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeClientSignatureVerificationEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeClientIdDocumentVerification)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeClientIdDocumentVerificationEntity>(s => s.TcmClient_FK);
+
         }
     }
 }

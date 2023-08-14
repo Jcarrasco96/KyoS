@@ -1,0 +1,59 @@
+﻿@model KyoS.Web.Models.TCMIntakeClientIdDocumentVerificationViewModel
+<div class="col-md-12">
+    <pre>  
+    <strong>Client's Name:</strong> @Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)      <strong>Record Number:</strong> @Html.DisplayFor(modelItem => Model.TcmClient.CaseNumber)
+
+    This form is to verify client’s identity in order to prevent intentional deception, misrepresentation or unauthorized services, which may constitute fraud under
+    federal and state laws related to Medicaid. The use of this form is <strong>mandatory</strong> when copies of original documents <strong>cannot</strong> be obtained (you must provide reason). 
+    The information on this form is for identity verification purpose only and will be kept in the strictest confidentiality, as required by law, and will not be 
+    shared with any entity or person outside the agency, unless so requested by client/legal guardian.
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>  
+    I hereby certify that the following original identification documents were produced/presented to me by client/legal guardian (check all IDs presented and verified):
+    </pre>
+</div>
+
+<br />
+
+<div class="col-md-12">
+    <pre>  
+            <strong>Type of Document</strong>                           <strong>Number</strong> 
+
+            State ID or Driver’s License                <input asp-for="Id_DriverLicense">
+            Social Security Card                        <input asp-for="Social">
+            Medicaid Recipient ID Card                  <input asp-for="MedicaidId">
+            Medicare Card                               <input asp-for="MedicareCard">
+            Health Plan (HMO) Member ID Card            <input asp-for="HealthPlan">
+            Passport/Residence Card                     <input asp-for="Passport_Resident">
+            Other:  <input asp-for="Other_Name">              <input asp-for="Other_Identification">
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Client/parent/legal guardian signature</strong>    <input asp-for="DateSignatureLegalGuardianOrClient">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name) / @Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    @*<div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>*@
+</div>
+<br />
+
+
+

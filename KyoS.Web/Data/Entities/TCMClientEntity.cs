@@ -66,5 +66,9 @@ namespace KyoS.Web.Data.Entities
         public TCMAssessmentEntity TCMAssessment { get; set; }
 
         public List<TCMNoteEntity> TCMNote{ get; set; }
+
+        public TCMIntakeClientSignatureVerificationEntity TCMIntakeClientSignatureVerification { get; set; }
+
+        public TCMIntakeClientIdDocumentVerificationEntity TCMIntakeClientIdDocumentVerification { get; set; }
     }
 }

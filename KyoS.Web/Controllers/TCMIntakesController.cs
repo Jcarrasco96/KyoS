@@ -3052,6 +3052,8 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMFarsFormList)   
                                                             .Include(n => n.TCMAssessment)     
                                                             .Include(n => n.TCMNote)
+                                                            .Include(n => n.TCMIntakeClientSignatureVerification)
+                                                            .Include(n => n.TCMIntakeClientIdDocumentVerification)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
            // List<DocumentEntity> listDocument = await _context.Documents
@@ -3989,5 +3991,234 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMDischarge(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakeClientSignatureVerification(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeClientSignatureVerificationViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeClientSignatureVerificationEntity clientSignatureverification = _context.TCMIntakeClientSignatureVerification
+                                                                                           .Include(n => n.TcmClient)
+                                                                                           .ThenInclude(n => n.Client)
+                                                                                           .ThenInclude(n => n.LegalGuardian)
+                                                                                           .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (clientSignatureverification == null)
+                    {
+                        model = new TCMIntakeClientSignatureVerificationViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardianOrClient = DateTime.Now
+                                                        
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                       
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (clientSignatureverification.TcmClient.Client.LegalGuardian == null)
+                            clientSignatureverification.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                       
+                        model = _converterHelper.ToTCMIntakeClientSignatureVerificationViewModel(clientSignatureverification);
+                        ViewData["origi"] = origi;
+                       
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakeClientSignatureVerification(TCMIntakeClientSignatureVerificationViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeClientSignatureVerificationEntity clientSignatureVerificationEntity = _converterHelper.ToTCMIntakeClientSignatureVerificationEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (clientSignatureVerificationEntity.Id == 0)
+                {
+                    clientSignatureVerificationEntity.TcmClient = null;
+                    _context.TCMIntakeClientSignatureVerification.Add(clientSignatureVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    clientSignatureVerificationEntity.TcmClient = null;
+                    _context.TCMIntakeClientSignatureVerification.Update(clientSignatureVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeClientSignatureVerification", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakeClientIdDocumentVerification(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeClientIdDocumentVerificationViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeClientIdDocumentVerificationEntity clientIdDocumentationverification = _context.TCMIntakeClientDocumentVerification
+                                                                                                      .Include(n => n.TcmClient)
+                                                                                                      .ThenInclude(n => n.Client)
+                                                                                                      .ThenInclude(n => n.LegalGuardian)
+                                                                                                      .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (clientIdDocumentationverification == null)
+                    {
+                        model = new TCMIntakeClientIdDocumentVerificationViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardianOrClient = DateTime.Now,
+                            HealthPlan = string.Empty,
+                            Id_DriverLicense = string.Empty,
+                            MedicaidId = string.Empty,
+                            MedicareCard = string.Empty,
+                            Other_Identification = string.Empty,
+                            Other_Name = string.Empty,
+                            Passport_Resident = string.Empty,
+                            Social = string.Empty
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (clientIdDocumentationverification.TcmClient.Client.LegalGuardian == null)
+                            clientIdDocumentationverification.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        model = _converterHelper.ToTCMIntakeClientIdDocumentVerificationViewModel(clientIdDocumentationverification);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakeClientIdDocumentVerification(TCMIntakeClientIdDocumentVerificationViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeClientIdDocumentVerificationEntity clientIdDocumentVerificationEntity = _converterHelper.ToTCMIntakeClientIdDocumentVerificationEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (clientIdDocumentVerificationEntity.Id == 0)
+                {
+                    clientIdDocumentVerificationEntity.TcmClient = null;
+                    _context.TCMIntakeClientDocumentVerification.Add(clientIdDocumentVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    clientIdDocumentVerificationEntity.TcmClient = null;
+                    _context.TCMIntakeClientDocumentVerification.Update(clientIdDocumentVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeClientIdDocumentVerification", IntakeViewModel) });
+        }
+
     }
 }

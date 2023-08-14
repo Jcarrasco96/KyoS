@@ -1,0 +1,46 @@
+﻿@model KyoS.Web.Models.TCMIntakeClientSignatureVerificationViewModel
+<div class="col-md-12">
+    <pre>  
+    <strong>Client's Signature Verification Form</strong>  
+
+    This form is to authenticate the signature(s) of client/parent/legal guardian in order to prevent intentional deception, misrepresentation or
+    unauthorized services provided by a health care provider, which may constitutes fraud under federal and state laws related to Medicaid. This 
+    form may be used regularly to verify the authenticity of signatures on forms and documents and will help to eliminate signature discrepancies.
+
+    Please sign your name in black or blue ink within the box below and try to keep your signature as consistent as possible:
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>  
+    *By signing below, I <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong> (client/parent/legal guardian) agree that my signature as shown
+    above is accurate to the best of my ability. I also agree that this is the signature that I will be consistently using to sign forms and 
+    any other legal documentation. I understand that any significant change in my signature or in my ability to sign, must be immediately 
+    notified and this verification form must be updated.
+    </pre>
+</div>
+
+<br />
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Client/parent/legal guardian signature</strong>    <input asp-for="DateSignatureLegalGuardianOrClient">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name) / @Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    @*<div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>*@
+</div>
+<br />
+
