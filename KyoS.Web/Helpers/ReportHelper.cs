@@ -3280,6 +3280,7 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
+            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
 
             //signatures images 
             byte[] stream1 = null;
@@ -3307,6 +3308,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.SetParameterValue("goal_text", goal_text);
             WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
             WebReport.Report.SetParameterValue("obj_text", obj_text);
+            WebReport.Report.SetParameterValue("diagnostic", (diagnostic == null) ? string.Empty : diagnostic.Diagnostic.Code);
 
             WebReport.Report.Prepare();
 
@@ -5686,8 +5688,8 @@ namespace KyoS.Web.Helpers
 
             var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
-            var dateSupervisor = workdayClient.IndividualNote
-                .DateOfApprove.Value.ToShortDateString();
+            var dateSupervisor = workdayClient.IndividualNote.DateOfApprove.Value.ToShortDateString();
+            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
 
             //signatures images 
             byte[] stream1 = null;
@@ -5715,6 +5717,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.SetParameterValue("goal_text", goal_text);
             WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
             WebReport.Report.SetParameterValue("obj_text", obj_text);
+            WebReport.Report.SetParameterValue("diagnostic", (diagnostic == null) ? string.Empty : diagnostic.Diagnostic.Code);
 
             WebReport.Report.Prepare();
 
@@ -6953,6 +6956,7 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.GroupNote2.DateOfApprove.Value.ToShortDateString();
+            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
 
             //signatures images 
             byte[] stream1 = null;
@@ -6980,6 +6984,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.SetParameterValue("goal_text", goal_text);
             WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
             WebReport.Report.SetParameterValue("obj_text", obj_text);
+            WebReport.Report.SetParameterValue("diagnostic", (diagnostic == null) ? string.Empty : diagnostic.Diagnostic.Code);
 
             WebReport.Report.Prepare();
 

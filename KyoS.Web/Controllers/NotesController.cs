@@ -6784,6 +6784,10 @@ namespace KyoS.Web.Controllers
                                                    
                                                    .Include(wc => wc.Schedule)
 
+                                                   .Include(wc => wc.Client)
+                                                   .ThenInclude(c => c.Clients_Diagnostics)
+                                                   .ThenInclude(cd => cd.Diagnostic)
+
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote2.Status == NoteStatus.Approved));
             if (workdayClient == null)
             {
