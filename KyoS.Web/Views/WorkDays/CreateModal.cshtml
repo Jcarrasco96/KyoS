@@ -1,0 +1,63 @@
+﻿@model KyoS.Web.Models.WeekViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+    <link rel="stylesheet" href="~/css/datepicker.min.css">
+</head>
+<body>
+    <div class="row">
+       
+            <form asp-action="CreateModal" asp-route-id="@Model.Id"  onsubmit="return jQueryAjaxPostWorkDay(this);">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+                    <span asp-validation-for="IdClinic" class="text-danger"></span>
+                </div>
+                <div class="col-md-12 form-group">
+                    <label class="control-label">Select workdays</label>&nbsp;*<br />
+                    <input type="text" asp-for="Workdays"
+                           class="form-control datepicker-here"
+                           data-language='en'
+                           data-multiple-dates="6"
+                           data-multiple-dates-separator=","
+                           style="width:100%;"
+                           data-position="right top" />
+                </div>
+                <div class="col-md-12 form-group">
+                    <strong>Note: </strong> Corresponding notes of clients related to this therapy will be generated.
+                </div>
+                <div>
+                    <div class="form-group col-md-12">
+                        <hr />
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-offset-9 form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-success">Back</a>
+                    </div>
+                </div>
+            </form>
+       
+    </div>
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
+        
+    }
+</body>
+</html>
+
+
