@@ -136,7 +136,10 @@ namespace KyoS.Web.Data
         public DbSet<EligibilityEntity> Eligibilities { get; set; }
         public DbSet<TCMIntakeClientSignatureVerificationEntity> TCMIntakeClientSignatureVerification { get; set; }
         public DbSet<TCMIntakeClientIdDocumentVerificationEntity> TCMIntakeClientDocumentVerification { get; set; }
-
+        public DbSet<TCMIntakePainScreenEntity> TCMIntakePainScreen { get; set; }
+        public DbSet<TCMIntakeColumbiaSuicideEntity> TCMIntakeColumbiaSuicide { get; set; }
+        public DbSet<TCMIntakeNutritionalScreenEntity> TCMIntakeNutritionalScreen { get; set; }
+        public DbSet<TCMIntakePersonalWellbeingEntity> TCMIntakePersonalWellbeing { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -613,6 +616,29 @@ namespace KyoS.Web.Data
                        .OnDelete(DeleteBehavior.Cascade)
                        .HasForeignKey<TCMIntakeClientIdDocumentVerificationEntity>(s => s.TcmClient_FK);
 
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakePainScreen)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakePainScreenEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakeColumbiaSuicide)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakeColumbiaSuicideEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakeNutritionalScreen)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakeNutritionalScreenEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakePersonalWellbeing)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakePersonalWellbeingEntity>(s => s.TcmClient_FK);
         }
     }
 }

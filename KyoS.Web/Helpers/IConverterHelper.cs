@@ -203,5 +203,13 @@ namespace KyoS.Web.Helpers
         TCMIntakeClientSignatureVerificationViewModel ToTCMIntakeClientSignatureVerificationViewModel(TCMIntakeClientSignatureVerificationEntity model);
         TCMIntakeClientIdDocumentVerificationEntity ToTCMIntakeClientIdDocumentVerificationEntity(TCMIntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId);
         TCMIntakeClientIdDocumentVerificationViewModel ToTCMIntakeClientIdDocumentVerificationViewModel(TCMIntakeClientIdDocumentVerificationEntity model);
+        TCMIntakePainScreenEntity ToTCMIntakePainScreenEntity(TCMIntakePainScreenViewModel model, bool isNew, string userId);
+        TCMIntakePainScreenViewModel ToTCMIntakePainScreenViewModel(TCMIntakePainScreenEntity model);
+        TCMIntakeColumbiaSuicideEntity ToTCMIntakeColumbiaSuicideEntity(TCMIntakeColumbiaSuicideViewModel model, bool isNew, string userId);
+        TCMIntakeColumbiaSuicideViewModel ToTCMIntakeColumbiaSuicideViewModel(TCMIntakeColumbiaSuicideEntity model);
+        TCMIntakePersonalWellbeingEntity ToTCMIntakePersonalWellbeingEntity(TCMIntakePersonalWellbeingViewModel model, bool isNew, string userId);
+        TCMIntakePersonalWellbeingViewModel ToTCMIntakePersonalWellbeingViewModel(TCMIntakePersonalWellbeingEntity model);
+        TCMIntakeNutritionalScreenEntity ToTCMIntakeNutritionalScreenEntity(TCMIntakeNutritionalScreenViewModel model, bool isNew, string userId);
+        TCMIntakeNutritionalScreenViewModel ToTCMIntakeNutritionalScreenViewModel(TCMIntakeNutritionalScreenEntity model);
     }
 }

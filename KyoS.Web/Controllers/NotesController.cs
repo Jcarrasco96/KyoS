@@ -559,7 +559,8 @@ namespace KyoS.Web.Controllers
                     Goals4 = goals,
                     Objetives4 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Setting = "53"
                 };
             }
             else
@@ -692,6 +693,7 @@ namespace KyoS.Web.Controllers
                     Objetives4 = _combosHelper.GetComboObjetives(((note_Activity.Count > 3) && (note_Activity[3].Objetive != null))
                                                                         ? note_Activity[3].Objetive.Goal.Id : 0),
                     Intervention4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Intervention : string.Empty,
+                    Setting = note.Setting
                 };
             }
             return View(noteViewModel);
@@ -759,7 +761,7 @@ namespace KyoS.Web.Controllers
                     noteEntity.Regression = (form["Progress"] == "Regression") ? true : false;
                     noteEntity.Decompensating = (form["Progress"] == "Decompensating") ? true : false;
                     noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
-                    noteEntity.Setting = workday_Client.Client.MTPs.FirstOrDefault().Setting;
+                    noteEntity.Setting = model.Setting;
                     
                     //vinculo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
@@ -912,6 +914,7 @@ namespace KyoS.Web.Controllers
                     note.ShortSpanned = model.ShortSpanned;
                     note.MildlyImpaired = model.MildlyImpaired;
                     note.SeverelyImpaired = model.SeverelyImpaired;
+                    note.Setting = model.Setting;
 
                     //actualizo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
@@ -1351,6 +1354,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     MTPId = mtp.Id,
                     Title = activities[0].TitleNote
+                   
                 };
             }
             else
@@ -2234,7 +2238,8 @@ namespace KyoS.Web.Controllers
                     Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id),
                     IdClient = 0,
                     MTPId = 0,
-                    CodeBill = user_logged.Clinic.CodeIndTherapy
+                    CodeBill = user_logged.Clinic.CodeIndTherapy,
+                    Setting = "53"
                 };
             }
             else
@@ -2308,7 +2313,8 @@ namespace KyoS.Web.Controllers
                     Objetives1 = _combosHelper.GetComboObjetives((note.Objective == null) ? 0 : note.Objective.Goal.Id),
                     Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
                     MTPId = mtp.Id,
-                    IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id
+                    IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id,
+                    Setting = note.Setting
                 };
             }
 
@@ -2511,7 +2517,8 @@ namespace KyoS.Web.Controllers
                     note.CBT = model.CBT;
                     note.Psychodynamic = model.Psychodynamic;
                     note.BehaviorModification = model.BehaviorModification;
-                    note.Other_Intervention = model.Other_Intervention;  
+                    note.Other_Intervention = model.Other_Intervention;
+                    note.Setting = model.Setting;
                     
 
                     note.Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null;
@@ -2801,7 +2808,8 @@ namespace KyoS.Web.Controllers
                     Goals2 = goals,
                     Objetives2 = objs,                    
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Setting = "53"
                 };
             }
             else
@@ -2845,6 +2853,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Setting = note.Setting,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -3351,7 +3360,9 @@ namespace KyoS.Web.Controllers
 
                     Workday_Cient = workday_Client,
                     Schema = workday_Client.Client.Clinic.SchemaGroup,
-                    Workday_Client_FK = workday_Client.Id
+                    Workday_Client_FK = workday_Client.Id,
+                    Setting = "53"
+                    
                 };
             }
             else
@@ -3395,6 +3406,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
+                    Setting = note.Setting,
                     
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3661,7 +3673,7 @@ namespace KyoS.Web.Controllers
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
                     note.Schema = model.Schema;
-                    
+                    note.Setting = model.Setting;
                     
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -3921,6 +3933,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
+                    Setting = "53",
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3976,6 +3989,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
+                    Setting = note.Setting,
                    
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -4221,6 +4235,7 @@ namespace KyoS.Web.Controllers
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
                     note.Schema = model.Schema;
+                    note.Setting = model.Setting;
 
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -5381,6 +5396,7 @@ namespace KyoS.Web.Controllers
                 PlanNote = note.PlanNote,
                 Origin = origin,
                 CodeBill = workday_Client.CodeBill,
+                Setting = note.Setting,
                 
                 Groomed = note.Groomed,
                 Unkempt = note.Unkempt,
@@ -5856,6 +5872,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Setting = note.Setting,
 
                     Other = note.Other,
                     Impaired = note.Impaired,

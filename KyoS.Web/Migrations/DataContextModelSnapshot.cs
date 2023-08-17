@@ -2773,6 +2773,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Schema")
                         .HasColumnType("int");
 
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("SevereryImpaired")
                         .HasColumnType("bit");
 
@@ -2960,6 +2963,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Scattered")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Slow")
                         .HasColumnType("bit");
@@ -3304,6 +3310,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Scattered")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Setting")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Slow")
                         .HasColumnType("bit");
@@ -8146,6 +8155,114 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeClientSignatureVerification");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeColumbiaSuicideEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("HaveYouActuallyLifeTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouActuallyLifeTime_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouActuallyPastMonth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouActuallyPastMonth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouBeenLifeTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouBeenLifeTime_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouBeenPastMonth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouBeenPastMonth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouEver")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HaveYouEverIfYes")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouEverIfYes_Value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HaveYouEver_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouHadLifeTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouHadLifeTime_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouHadPastMonth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouHadPastMonth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouStartedLifeTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouStartedLifeTime_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouStartedPastMonth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouStartedPastMonth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouWishedLifeTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouWishedLifeTime_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HaveYouWishedPastMonth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HaveYouWishedPastMonth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeColumbiaSuicide");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -8870,6 +8987,150 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeNonClinicalLog");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNutritionalScreenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ClientAlwaysHungry")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientAlwaysHungry_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientAlwaysThirsty")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientAlwaysThirsty_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientAppetiteFair")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientAppetiteFair_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientAppetiteGood")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientAppetiteGood_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientAppetitepoor")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientAppetitepoor_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientBinges")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientBinges_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientDiarrhea")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientDiarrhea_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientEatsAlone")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientEatsAlone_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientEatsFew")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientEatsFew_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientEatsFewer")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientEatsFewer_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientFoodAllergies")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientFoodAllergies_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientHasHistory")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientHasHistory_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientHasIllnes")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientHasIllnes_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientHasTooth")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientHasTooth_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientTakes")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientTakes_Value")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ClientVomits")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientVomits_Value")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfReferral")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReferredTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("WithoutWanting")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("WithoutWanting_Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakeNutritionalScreen");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -8982,6 +9243,141 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("TCMIntakeOrientationCheckList");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakePainScreenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AlwayasThere")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ComesAndGoes")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentPainScore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfReferral")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DidYouUse")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouBelieve")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouFell")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoYouSuffer")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesYourPainEffect")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReferredTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("WereYourDrugs")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatCauses")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhereIs")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakePainScreen");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakePersonalWellbeingEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Community")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Feel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Life")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Living")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Relationships")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Religion")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Security")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TcmClient_FK")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmClient_FK")
+                        .IsUnique();
+
+                    b.ToTable("TCMIntakePersonalWellbeing");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeWelcomeEntity", b =>
@@ -11390,6 +11786,17 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeColumbiaSuicideEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeColumbiaSuicide")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeColumbiaSuicideEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeConsentForReleaseEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
@@ -11498,11 +11905,44 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeNutritionalScreenEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakeNutritionalScreen")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeNutritionalScreenEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
                         .WithOne("TCMIntakeOrientationChecklist")
                         .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeOrientationChecklistEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakePainScreenEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakePainScreen")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakePainScreenEntity", "TcmClient_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TcmClient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakePersonalWellbeingEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
+                        .WithOne("TCMIntakePersonalWellbeing")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakePersonalWellbeingEntity", "TcmClient_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12143,6 +12583,8 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMIntakeClientSignatureVerification");
 
+                    b.Navigation("TCMIntakeColumbiaSuicide");
+
                     b.Navigation("TcmIntakeConsentForRelease");
 
                     b.Navigation("TcmIntakeConsentForTreatment");
@@ -12159,7 +12601,13 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMIntakeNonClinicalLog");
 
+                    b.Navigation("TCMIntakeNutritionalScreen");
+
                     b.Navigation("TCMIntakeOrientationChecklist");
+
+                    b.Navigation("TCMIntakePainScreen");
+
+                    b.Navigation("TCMIntakePersonalWellbeing");
 
                     b.Navigation("TCMIntakeWelcome");
 
