@@ -291,6 +291,99 @@
                     </a>
                 }
             </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div class="col-md-2">
+                &nbsp;
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (Model.TCMIntakeNutritionalScreen != null)
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeNutritionalScreen" asp-route-origi="@ViewData["origin"]" role="button">
+                            <h4 style="align-content:end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Nutritional<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screen</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMForeignLanguage" role="button" title="Print Foreign Language Acknowledgement" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                    
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeNutritionalScreen" asp-route-origi="@ViewData["origin"]" role="button">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Nutritional<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screen</h4>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (Model.TCMIntakePersonalWellbeing != null)
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakePersonalWellbeing" asp-route-origi="@ViewData["origin"]" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Personal<br>&nbsp;&nbsp;&nbsp;Wellbeing Index</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMCorrespondence" role="button" title="Print Correspondence" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                   
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakePersonalWellbeing" asp-route-origi="@ViewData["origin"]" role="button">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Personal<br>&nbsp;&nbsp;&nbsp;Wellbeing Index</h4>
+                        </div>
+                    </a>
+                }
+            </div>
+             <div class="col-sm-3 col-md-2">
+                @if (Model.TCMIntakeColumbiaSuicide != null)
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeColumbiaSuicide" asp-route-origi="@ViewData["origin"]" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Columbia-Suicide <br>&nbsp;&nbsp;&nbsp;&nbsp; Severity Rating</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMCorrespondence" role="button" title="Print Correspondence" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                   
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakeColumbiaSuicide" asp-route-origi="@ViewData["origin"]" role="button">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Columbia-Suicide<br>&nbsp;&nbsp;&nbsp;&nbsp; Severity Rating</h4>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-sm-3 col-md-2">
+                @if (Model.TCMIntakePainScreen != null)
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakePainScreen" asp-route-origi="@ViewData["origin"]" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Pain<br>&nbsp;&nbsp;&nbsp;&nbsp; Screen</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMCorrespondence" role="button" title="Print Correspondence" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                   
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMIntakePainScreen" asp-route-origi="@ViewData["origin"]" role="button">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Pain<br>&nbsp;&nbsp;&nbsp;&nbsp; Screen</h4>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
+                &nbsp;
+            </div>
         </div>
     }
     @if (ViewData["Section"].ToString() == "2")

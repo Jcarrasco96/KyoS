@@ -6786,6 +6786,330 @@ namespace KyoS.Web.Helpers
                 Social = model.Social
 
             };
+        }
+
+        public TCMIntakePainScreenEntity ToTCMIntakePainScreenEntity(TCMIntakePainScreenViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakePainScreenEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                AlwayasThere = model.AlwayasThere,
+                ComesAndGoes = model.ComesAndGoes,
+                CurrentPainScore = model.CurrentPainScore,
+                DidYouUse = model.DidYouUse,
+                DoesYourPainEffect = model.DoesYourPainEffect,
+                DoYouBelieve = model.DoYouBelieve,
+                DoYouFell = model.DoYouFell,
+                DoYouSuffer = model.DoYouSuffer,
+                WereYourDrugs = model.WereYourDrugs,
+                WhatCauses = model.WhatCauses,
+                WhereIs = model.WhereIs,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo
+                
+            };
+        }
+
+        public TCMIntakePainScreenViewModel ToTCMIntakePainScreenViewModel(TCMIntakePainScreenEntity model)
+        {
+            return new TCMIntakePainScreenViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                AlwayasThere = model.AlwayasThere,
+                ComesAndGoes = model.ComesAndGoes,
+                CurrentPainScore = model.CurrentPainScore,
+                DidYouUse = model.DidYouUse,
+                DoesYourPainEffect = model.DoesYourPainEffect,
+                DoYouBelieve = model.DoYouBelieve,
+                DoYouFell = model.DoYouFell,
+                DoYouSuffer = model.DoYouSuffer,
+                WereYourDrugs = model.WereYourDrugs,
+                WhatCauses = model.WhatCauses,
+                WhereIs = model.WhereIs,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo
+            };
+
+        }
+
+        public TCMIntakeColumbiaSuicideEntity ToTCMIntakeColumbiaSuicideEntity(TCMIntakeColumbiaSuicideViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeColumbiaSuicideEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                HaveYouActuallyLifeTime = model.HaveYouActuallyLifeTime,
+                HaveYouActuallyLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouActuallyLifeTime_Value),
+                HaveYouActuallyPastMonth = model.HaveYouActuallyPastMonth,
+                HaveYouActuallyPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouActuallyPastMonth_Value),
+                HaveYouBeenLifeTime = model.HaveYouBeenLifeTime,
+                HaveYouBeenLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouBeenLifeTime_Value),
+                HaveYouBeenPastMonth = model.HaveYouBeenPastMonth,
+                HaveYouBeenPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouBeenPastMonth_Value),
+                HaveYouEver = model.HaveYouEver,
+                HaveYouEverIfYes = model.HaveYouEverIfYes,
+                HaveYouEverIfYes_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouEverIfYes_Value),
+                HaveYouEver_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouEver_Value),
+                HaveYouHadLifeTime = model.HaveYouHadLifeTime,
+                HaveYouHadLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouHadLifeTime_Value),
+                HaveYouHadPastMonth = model.HaveYouHadPastMonth,
+                HaveYouHadPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouHadPastMonth_Value),
+                HaveYouStartedLifeTime = model.HaveYouStartedLifeTime,
+                HaveYouStartedLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouStartedLifeTime_Value),
+                HaveYouStartedPastMonth = model.HaveYouStartedPastMonth,
+                HaveYouStartedPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouStartedPastMonth_Value),
+                HaveYouWishedLifeTime = model.HaveYouWishedLifeTime,
+                HaveYouWishedLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouWishedLifeTime_Value),
+                HaveYouWishedPastMonth = model.HaveYouWishedPastMonth,
+                HaveYouWishedPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouWishedPastMonth_Value)
+
+            };
+        }
+
+        public TCMIntakeColumbiaSuicideViewModel ToTCMIntakeColumbiaSuicideViewModel(TCMIntakeColumbiaSuicideEntity model)
+        {
+            return new TCMIntakeColumbiaSuicideViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HaveYouActuallyLifeTime = model.HaveYouActuallyLifeTime,
+                HaveYouActuallyLifeTime_Value = model.HaveYouActuallyLifeTime_Value,
+                HaveYouActuallyPastMonth = model.HaveYouActuallyPastMonth,
+                HaveYouActuallyPastMonth_Value = model.HaveYouActuallyPastMonth_Value,
+                HaveYouBeenLifeTime = model.HaveYouBeenLifeTime,
+                HaveYouBeenLifeTime_Value = model.HaveYouBeenLifeTime_Value,
+                HaveYouBeenPastMonth = model.HaveYouBeenPastMonth,
+                HaveYouBeenPastMonth_Value = model.HaveYouBeenPastMonth_Value,
+                HaveYouEver = model.HaveYouEver,
+                HaveYouEverIfYes = model.HaveYouEverIfYes,
+                HaveYouEverIfYes_Value = model.HaveYouEverIfYes_Value,
+                HaveYouEver_Value = model.HaveYouEver_Value,
+                HaveYouHadLifeTime = model.HaveYouHadLifeTime,
+                HaveYouHadLifeTime_Value = model.HaveYouHadLifeTime_Value,
+                HaveYouHadPastMonth = model.HaveYouHadPastMonth,
+                HaveYouHadPastMonth_Value = model.HaveYouHadPastMonth_Value,
+                HaveYouStartedLifeTime = model.HaveYouStartedLifeTime,
+                HaveYouStartedLifeTime_Value = model.HaveYouStartedLifeTime_Value,
+                HaveYouStartedPastMonth = model.HaveYouStartedPastMonth,
+                HaveYouStartedPastMonth_Value = model.HaveYouStartedPastMonth_Value,
+                HaveYouWishedLifeTime = model.HaveYouWishedLifeTime,
+                HaveYouWishedLifeTime_Value = model.HaveYouWishedLifeTime_Value,
+                HaveYouWishedPastMonth = model.HaveYouWishedPastMonth,
+                HaveYouWishedPastMonth_Value = model.HaveYouWishedPastMonth_Value,
+
+                IdHaveYouWishedPastMonth_Value = (model.HaveYouWishedPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouWishedPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouWishedPastMonth_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouWishedLifeTime_Value = (model.HaveYouWishedLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouWishedLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouWishedLifeTime_Value == RiskType.High) ? 3 : 0,
+
+                IdHaveYouActuallyPastMonth_Value = (model.HaveYouActuallyPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouActuallyPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouActuallyPastMonth_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouActuallyLifeTime_Value = (model.HaveYouActuallyLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouActuallyLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouActuallyLifeTime_Value == RiskType.High) ? 3 : 0,
+
+                IdHaveYouBeenPastMonth_Value = (model.HaveYouBeenPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouBeenPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouBeenPastMonth_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouBeenLifeTime_Value = (model.HaveYouBeenLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouBeenLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouBeenLifeTime_Value == RiskType.High) ? 3 : 0,
+
+                IdHaveYouHadPastMonth_Value = (model.HaveYouHadPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouHadPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouHadPastMonth_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouHadLifeTime_Value = (model.HaveYouHadLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouHadLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouHadLifeTime_Value == RiskType.High) ? 3 : 0,
+
+                IdHaveYouStartedPastMonth_Value = (model.HaveYouStartedPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouStartedPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouStartedPastMonth_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouStartedLifeTime_Value = (model.HaveYouStartedLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouStartedLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouStartedLifeTime_Value == RiskType.High) ? 3 : 0,
+
+                IdHaveYouEver_Value = (model.HaveYouEver_Value == RiskType.Low) ? 1 : (model.HaveYouEver_Value == RiskType.Moderate) ? 2 : (model.HaveYouEver_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouEverIfYes_Value = (model.HaveYouEverIfYes_Value == RiskType.Low) ? 1 : (model.HaveYouEverIfYes_Value == RiskType.Moderate) ? 2 : (model.HaveYouEverIfYes_Value == RiskType.High) ? 3 : 0,
+
+                RiskList = _combosHelper.GetComboRisk(),
+
+            };
+
+        }
+
+        public TCMIntakePersonalWellbeingEntity ToTCMIntakePersonalWellbeingEntity(TCMIntakePersonalWellbeingViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakePersonalWellbeingEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                Living = model.Living,
+                Community = model.Community,
+                Feel = model.Feel,
+                Health = model.Health,
+                Life = model.Life,
+                Relationships = model.Relationships,
+                Religion = model.Religion,
+                Security = model.Security
+                
+            };
+        }
+
+        public TCMIntakePersonalWellbeingViewModel ToTCMIntakePersonalWellbeingViewModel(TCMIntakePersonalWellbeingEntity model)
+        {
+            return new TCMIntakePersonalWellbeingViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Living = model.Living,
+                Community = model.Community,
+                Feel = model.Feel,
+                Health = model.Health,
+                Life = model.Life,
+                Relationships = model.Relationships,
+                Religion = model.Religion,
+                Security = model.Security
+
+            };
+
+        }
+
+        public TCMIntakeNutritionalScreenEntity ToTCMIntakeNutritionalScreenEntity(TCMIntakeNutritionalScreenViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeNutritionalScreenEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                ClientAlwaysHungry = model.ClientAlwaysHungry,
+                ClientAlwaysHungry_Value = model.ClientAlwaysHungry_Value,
+                ClientAlwaysThirsty = model.ClientAlwaysThirsty,
+                ClientAlwaysThirsty_Value = model.ClientAlwaysThirsty_Value,
+                ClientAppetiteFair = model.ClientAppetiteFair,
+                ClientAppetiteFair_Value = model.ClientAppetiteFair_Value,
+                ClientAppetiteGood = model.ClientAppetiteGood,
+                ClientAppetiteGood_Value = model.ClientAppetiteGood_Value,
+                ClientAppetitepoor = model.ClientAppetitepoor,
+                ClientAppetitepoor_Value = model.ClientAppetitepoor_Value,
+                ClientBinges = model.ClientBinges,
+                ClientBinges_Value = model.ClientBinges_Value,
+                ClientDiarrhea = model.ClientDiarrhea,
+                ClientDiarrhea_Value = model.ClientDiarrhea_Value,
+                ClientEatsAlone = model.ClientEatsAlone,
+                ClientEatsAlone_Value = model.ClientEatsAlone_Value,
+                ClientEatsFew = model.ClientEatsFew,
+                ClientEatsFewer = model.ClientEatsFewer,
+                ClientEatsFewer_Value = model.ClientEatsFewer_Value,
+                ClientEatsFew_Value = model.ClientEatsFew_Value,
+                ClientFoodAllergies = model.ClientFoodAllergies,
+                ClientFoodAllergies_Value = model.ClientFoodAllergies_Value,
+                ClientHasHistory = model.ClientHasHistory,
+                ClientHasHistory_Value = model.ClientHasHistory_Value,
+                ClientHasIllnes = model.ClientHasIllnes,
+                ClientHasIllnes_Value = model.ClientHasIllnes_Value,
+                ClientHasTooth = model.ClientHasTooth,
+                ClientHasTooth_Value = model.ClientHasTooth_Value,
+                ClientTakes = model.ClientTakes,
+                ClientTakes_Value = model.ClientTakes_Value,
+                ClientVomits = model.ClientVomits,
+                ClientVomits_Value = model.ClientVomits_Value,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo,
+                WithoutWanting = model.WithoutWanting,
+                WithoutWanting_Value = model.WithoutWanting_Value
+
+            };
+        }
+
+        public TCMIntakeNutritionalScreenViewModel ToTCMIntakeNutritionalScreenViewModel(TCMIntakeNutritionalScreenEntity model)
+        {
+            return new TCMIntakeNutritionalScreenViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                ClientAlwaysHungry = model.ClientAlwaysHungry,
+                ClientAlwaysHungry_Value = model.ClientAlwaysHungry_Value,
+                ClientAlwaysThirsty = model.ClientAlwaysThirsty,
+                ClientAlwaysThirsty_Value = model.ClientAlwaysThirsty_Value,
+                ClientAppetiteFair = model.ClientAppetiteFair,
+                ClientAppetiteFair_Value = model.ClientAppetiteFair_Value,
+                ClientAppetiteGood = model.ClientAppetiteGood,
+                ClientAppetiteGood_Value = model.ClientAppetiteGood_Value,
+                ClientAppetitepoor = model.ClientAppetitepoor,
+                ClientAppetitepoor_Value = model.ClientAppetitepoor_Value,
+                ClientBinges = model.ClientBinges,
+                ClientBinges_Value = model.ClientBinges_Value,
+                ClientDiarrhea = model.ClientDiarrhea,
+                ClientDiarrhea_Value = model.ClientDiarrhea_Value,
+                ClientEatsAlone = model.ClientEatsAlone,
+                ClientEatsAlone_Value = model.ClientEatsAlone_Value,
+                ClientEatsFew = model.ClientEatsFew,
+                ClientEatsFewer = model.ClientEatsFewer,
+                ClientEatsFewer_Value = model.ClientEatsFewer_Value,
+                ClientEatsFew_Value = model.ClientEatsFew_Value,
+                ClientFoodAllergies = model.ClientFoodAllergies,
+                ClientFoodAllergies_Value = model.ClientFoodAllergies_Value,
+                ClientHasHistory = model.ClientHasHistory,
+                ClientHasHistory_Value = model.ClientHasHistory_Value,
+                ClientHasIllnes = model.ClientHasIllnes,
+                ClientHasIllnes_Value = model.ClientHasIllnes_Value,
+                ClientHasTooth = model.ClientHasTooth,
+                ClientHasTooth_Value = model.ClientHasTooth_Value,
+                ClientTakes = model.ClientTakes,
+                ClientTakes_Value = model.ClientTakes_Value,
+                ClientVomits = model.ClientVomits,
+                ClientVomits_Value = model.ClientVomits_Value,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo,
+                WithoutWanting = model.WithoutWanting,
+                WithoutWanting_Value = model.WithoutWanting_Value
+
+            };
 
         }
 

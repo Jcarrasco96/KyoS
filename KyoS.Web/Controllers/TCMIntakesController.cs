@@ -3054,6 +3054,10 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMNote)
                                                             .Include(n => n.TCMIntakeClientSignatureVerification)
                                                             .Include(n => n.TCMIntakeClientIdDocumentVerification)
+                                                            .Include(n => n.TCMIntakePainScreen)
+                                                            .Include(n => n.TCMIntakeColumbiaSuicide)
+                                                            .Include(n => n.TCMIntakeNutritionalScreen)
+                                                            .Include(n => n.TCMIntakePersonalWellbeing)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
            // List<DocumentEntity> listDocument = await _context.Documents
@@ -4218,6 +4222,446 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeClientIdDocumentVerification", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakePainScreen(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakePainScreenViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakePainScreenEntity painScreen = _context.TCMIntakePainScreen
+                                                                   .Include(n => n.TcmClient)
+                                                                   .ThenInclude(n => n.Client)
+                                                                   .ThenInclude(n => n.LegalGuardian)
+                                                                   .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (painScreen == null)
+                    {
+                        model = new TCMIntakePainScreenViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            AlwayasThere = false,
+                            ComesAndGoes = false,
+                            CurrentPainScore = 0,
+                            DidYouUse = false,
+                            DoesYourPainEffect = string.Empty,
+                            DoYouBelieve = false,
+                            DoYouFell = false,
+                            DoYouSuffer = false,
+                            WereYourDrugs = false,
+                            WhatCauses = string.Empty,
+                            WhereIs = string.Empty
+
+                        };
+                        
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakePainScreenViewModel(painScreen);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakePainScreen(TCMIntakePainScreenViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakePainScreenEntity painScreen = _converterHelper.ToTCMIntakePainScreenEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (painScreen.Id == 0)
+                {
+                    painScreen.TcmClient = null;
+                    _context.TCMIntakePainScreen.Add(painScreen);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    painScreen.TcmClient = null;
+                    _context.TCMIntakePainScreen.Update(painScreen);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakePainScreen", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakeColumbiaSuicide(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeColumbiaSuicideViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeColumbiaSuicideEntity columbiaCuicide = _context.TCMIntakeColumbiaSuicide
+                                                                             .Include(n => n.TcmClient)
+                                                                             .ThenInclude(n => n.Client)
+                                                                             .ThenInclude(n => n.LegalGuardian)
+                                                                             .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (columbiaCuicide == null)
+                    {
+                        model = new TCMIntakeColumbiaSuicideViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            IdHaveYouWishedPastMonth_Value = 0,
+                            IdHaveYouWishedLifeTime_Value = 0,
+                            IdHaveYouActuallyPastMonth_Value = 0,
+                            IdHaveYouActuallyLifeTime_Value = 0,
+                            IdHaveYouBeenPastMonth_Value = 0,
+                            IdHaveYouBeenLifeTime_Value = 0,
+                            IdHaveYouHadPastMonth_Value = 0,
+                            IdHaveYouHadLifeTime_Value = 0,
+                            IdHaveYouStartedPastMonth_Value = 0,
+                            IdHaveYouStartedLifeTime_Value = 0,
+                            IdHaveYouEver_Value = 0,
+                            IdHaveYouEverIfYes_Value = 0,
+                            RiskList = _combosHelper.GetComboRisk()
+
+                        };
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeColumbiaSuicideViewModel(columbiaCuicide);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakeColumbiaSuicide(TCMIntakeColumbiaSuicideViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeColumbiaSuicideEntity columbiaSuicide = _converterHelper.ToTCMIntakeColumbiaSuicideEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (columbiaSuicide.Id == 0)
+                {
+                    columbiaSuicide.TcmClient = null;
+                    _context.TCMIntakeColumbiaSuicide.Add(columbiaSuicide);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    columbiaSuicide.TcmClient = null;
+                    _context.TCMIntakeColumbiaSuicide.Update(columbiaSuicide);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeColumbiaCuicide", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakePersonalWellbeing(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakePersonalWellbeingViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakePersonalWellbeingEntity personalWellbeing = _context.TCMIntakePersonalWellbeing
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (personalWellbeing == null)
+                    {
+                        model = new TCMIntakePersonalWellbeingViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                           
+                        };
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakePersonalWellbeingViewModel(personalWellbeing);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakePersonalWellbeing(TCMIntakePersonalWellbeingViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakePersonalWellbeingEntity personalWellbeing = _converterHelper.ToTCMIntakePersonalWellbeingEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (personalWellbeing.Id == 0)
+                {
+                    personalWellbeing.TcmClient = null;
+                    _context.TCMIntakePersonalWellbeing.Add(personalWellbeing);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    personalWellbeing.TcmClient = null;
+                    _context.TCMIntakePersonalWellbeing.Update(personalWellbeing);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakePersonalWellbeing", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMIntakeNutritionalScreen(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeNutritionalScreenViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeNutritionalScreenEntity nutritionalScreen = _context.TCMIntakeNutritionalScreen
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (nutritionalScreen == null)
+                    {
+                        model = new TCMIntakeNutritionalScreenViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+
+                        };
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeNutritionalScreenViewModel(nutritionalScreen);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMIntakeNutritionalScreen(TCMIntakeNutritionalScreenViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeNutritionalScreenEntity nutritionalScreen = _converterHelper.ToTCMIntakeNutritionalScreenEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (nutritionalScreen.Id == 0)
+                {
+                    nutritionalScreen.TcmClient = null;
+                    _context.TCMIntakeNutritionalScreen.Add(nutritionalScreen);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    nutritionalScreen.TcmClient = null;
+                    _context.TCMIntakeNutritionalScreen.Update(nutritionalScreen);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = IntakeViewModel.IdTCMClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.TcmClient = _context.TCMClient.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeNutritionalScreen", IntakeViewModel) });
         }
 
     }
