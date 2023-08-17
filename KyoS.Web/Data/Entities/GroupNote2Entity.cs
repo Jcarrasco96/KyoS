@@ -91,5 +91,6 @@ namespace KyoS.Web.Data.Entities
 
         public int? MTPId { get; set; }
         public SchemaTypeGroup Schema { get; set; }
+        public string Setting { get; set; }
     }
 }

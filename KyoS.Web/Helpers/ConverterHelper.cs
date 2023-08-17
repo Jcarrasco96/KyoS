@@ -875,7 +875,8 @@ namespace KyoS.Web.Helpers
                 UsesSessions = model.UsesSessions,
                 Variable = model.Variable,
 
-                Schema = model.Schema
+                Schema = model.Schema,
+                Setting = model.Setting
             };
         }
 
@@ -931,7 +932,8 @@ namespace KyoS.Web.Helpers
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention,
-                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule)
+                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule),
+                Setting = model.Setting
             };
         }
 
@@ -977,7 +979,8 @@ namespace KyoS.Web.Helpers
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
-                Other_Intervention = model.Other_Intervention
+                Other_Intervention = model.Other_Intervention,
+                Setting = model.Setting
             };
         }        
 
@@ -6405,6 +6408,7 @@ namespace KyoS.Web.Helpers
                 Guarded = model.Guarded,
                 Withdrawn = model.Withdrawn,
                 Hostile = model.Hostile,
+                Setting = model.Setting,
 
                 Adequated = model.Adequated,
                 Assigned = model.Assigned,
@@ -6476,6 +6480,7 @@ namespace KyoS.Web.Helpers
                 Guarded = model.Guarded,
                 Withdrawn = model.Withdrawn,
                 Hostile = model.Hostile,
+                Setting = model.Setting,
 
                 Adequated = model.Adequated,
                 Assigned = model.Assigned,

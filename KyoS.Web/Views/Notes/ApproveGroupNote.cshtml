@@ -36,8 +36,10 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="Setting" />
             <partial name="_GroupMCSReadOnly" />
-            <partial name="_GroupNotesReadOnly" />            
+            <partial name="_GroupNotesReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor"))
                 {
