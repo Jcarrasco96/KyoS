@@ -853,5 +853,164 @@ namespace KyoS.Web.Controllers
             return availableUnits;
         }
         #endregion
+
+        public async Task<IActionResult> CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            HealthInsuranceViewModel entity = new HealthInsuranceViewModel()
+            {
+                SignedDate = DateTime.Now,
+                DurationTime = 12,
+                Active = true
+            };
+            return View(entity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(HealthInsuranceViewModel healthInsuranceViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                HealthInsuranceEntity insurance = await _context.HealthInsurances
+                                                                .FirstOrDefaultAsync(c => (c.Name == healthInsuranceViewModel.Name && c.Clinic.Id == user_logged.Clinic.Id));
+                if (insurance == null)
+                {
+                    string documentPath = string.Empty;
+                    if (healthInsuranceViewModel.DocumentFile != null)
+                    {
+                        documentPath = await _imageHelper.UploadFileAsync(healthInsuranceViewModel.DocumentFile, "Insurances");
+                    }
+
+                    healthInsuranceViewModel.IdClinic = user_logged.Clinic.Id;
+
+                    HealthInsuranceEntity healthEnsuranceEntity = await _converterHelper.ToHealthInsuranceEntity(healthInsuranceViewModel, true, user_logged.Id, documentPath);
+                    _context.Add(healthEnsuranceEntity);
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
+
+                                                                                         .OrderBy(d => d.Name)
+                                                                                         .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the health insurance: {healthEnsuranceEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", healthInsuranceViewModel) });
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", healthInsuranceViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            HealthInsuranceEntity entity = await _context.HealthInsurances
+                                                         .Include(hi => hi.Clinic)
+                                                         .FirstOrDefaultAsync(hi => hi.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            HealthInsuranceViewModel healthInsuranceViewModel = _converterHelper.ToHealthInsuranceViewModel(entity);
+            return View(healthInsuranceViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, HealthInsuranceViewModel healthInsuranceViewModel)
+        {
+            if (id != healthInsuranceViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                string path = healthInsuranceViewModel.DocumentPath;
+
+                if (healthInsuranceViewModel.DocumentFile != null)
+                {
+                    path = await _imageHelper.UploadFileAsync(healthInsuranceViewModel.DocumentFile, "Insurances");
+                }
+
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                HealthInsuranceEntity healthInsuranceEntity = await _converterHelper.ToHealthInsuranceEntity(healthInsuranceViewModel, false, user_logged.Id, path);
+                _context.Update(healthInsuranceEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
+
+                                                                                        .OrderBy(d => d.Name)
+                                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the health insurance: {healthInsuranceEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", healthInsuranceViewModel) });
+        }
     }
 }
