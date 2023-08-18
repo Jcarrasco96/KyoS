@@ -18,9 +18,11 @@
 
 <br />
 
-<div class="col-md-12">
-    <pre>  
-            <strong>Type of Document</strong>                           <strong>Number</strong> 
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Type of Document</strong>                           <strong>Number</strong> 
 
             State ID or Driver’s License                <input asp-for="Id_DriverLicense">
             Social Security Card                        <input asp-for="Social">
@@ -30,30 +32,69 @@
             Passport/Residence Card                     <input asp-for="Passport_Resident">
             Other:  <input asp-for="Other_Name">              <input asp-for="Other_Identification">
     </pre>
-</div>
+    </div>
 
-<div class="col-md-12">
-    <pre>
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Client/parent/legal guardian signature</strong>    <input asp-for="DateSignatureLegalGuardianOrClient">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name) / @Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>     
+        <strong>Client/parent/legal guardian signature</strong>    <input asp-for="DateSignatureLegalGuardianOrClient">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name) / @Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>     
     
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    @*<div class="form-group col-md-12">
-            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-            <label asp-for="Documents" class="forgot">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-            </label>
-        </div>*@
-</div>
-<br />
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Type of Document</strong>                           <strong>Number</strong> 
 
+            State ID or Driver’s License                <input asp-for="Id_DriverLicense" disabled>
+            Social Security Card                        <input asp-for="Social" disabled>
+            Medicaid Recipient ID Card                  <input asp-for="MedicaidId" disabled>
+            Medicare Card                               <input asp-for="MedicareCard" disabled>
+            Health Plan (HMO) Member ID Card            <input asp-for="HealthPlan" disabled>
+            Passport/Residence Card                     <input asp-for="Passport_Resident" disabled>
+            Other:  <input asp-for="Other_Name" disabled>              <input asp-for="Other_Identification" disabled>
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Client/parent/legal guardian signature</strong>    <input asp-for="DateSignatureLegalGuardianOrClient" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name) / @Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>     
+    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
 
 

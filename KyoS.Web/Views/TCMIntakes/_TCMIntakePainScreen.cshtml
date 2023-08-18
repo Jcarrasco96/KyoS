@@ -1,69 +1,141 @@
 ﻿@model KyoS.Web.Models.TCMIntakePainScreenViewModel
-<div class="col-md-12">
-    <pre>  
-                                                                        <strong>Case Number</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.CaseNumber))</strong>
-    <strong>PAIN SCREEN</strong>                                                                                     
-    Do you suffer from chronic pain?                                    <input type="checkbox" asp-for="DoYouSuffer" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>
-    Did you use drugs or alcohol to cope with pain?                     <input type="checkbox" asp-for="DidYouUse" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>
-    Were your drug abuse problems made worse                            <input type="checkbox" asp-for="DidYouUse" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>
-    by your need for pain medication? 
-    Do you feel concerned that your pain management                     <input type="checkbox" asp-for="DoYouFell" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>
-    needs will not be addressed?
-    Do you believe you will always need narcotic pain medications?      <input type="checkbox" asp-for="DoYouBelieve" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Case Number</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.CaseNumber))</strong>
+        <strong>PAIN SCREEN</strong>                                                                                     
+        Do you suffer from chronic pain?                                    <input type="checkbox" asp-for="DoYouSuffer" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>
+        Did you use drugs or alcohol to cope with pain?                     <input type="checkbox" asp-for="DidYouUse" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>
+        Were your drug abuse problems made worse                            <input type="checkbox" asp-for="DidYouUse" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>
+        by your need for pain medication? 
+        Do you feel concerned that your pain management                     <input type="checkbox" asp-for="DoYouFell" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>
+        needs will not be addressed?
+        Do you believe you will always need narcotic pain medications?      <input type="checkbox" asp-for="DoYouBelieve" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>
 
     </pre>
-</div>
+    </div>
 
-<div class="col-md-12">
-    <pre>  
-    <strong>Where is your pain located? </strong>
-    <textarea asp-for="WhereIs" rows="3" style="width:90%"></textarea>
+    <div class="col-md-12">
+        <pre>  
+        <strong>Where is your pain located? </strong>
+        <textarea asp-for="WhereIs" rows="3" style="width:90%"></textarea>
     </pre>
-</div>
-<div class="col-md-12">
-    <pre>  
-    <strong>What causes your pain? </strong>
-    <textarea asp-for="WhatCauses" rows="3" style="width:90%"></textarea>
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        <strong>What causes your pain? </strong>
+        <textarea asp-for="WhatCauses" rows="3" style="width:90%"></textarea>
     </pre>
-</div>
-<div class="col-md-12">
-    <pre>  
-    <strong>Does your pain effect your daily functioning? If so what? (i.e. sleep, school/work,  mood, relationships, eating/drinking, etc..) </strong>
-    <textarea asp-for="DoesYourPainEffect" rows="3" style="width:90%"></textarea>
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        <strong>Does your pain effect your daily functioning? If so what? (i.e. sleep, school/work,  mood, relationships, eating/drinking, etc..) </strong>
+        <textarea asp-for="DoesYourPainEffect" rows="3" style="width:90%"></textarea>
     </pre>
-</div>
-<div class="col-md-12">
-    <pre>  
-    Duration of pain?      <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" />  Always There    <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" />  Comes and Goes
-    <strong>Current Pain Score: ( 0-­ no pain, 5-­ moderate pain, 10-­ severe pain ) </strong>  <input asp-for="CurrentPainScore">
-    <span asp-validation-for="CurrentPainScore" class="text-danger"></span>
-    <strong>Score Range</strong>            <strong>Assessment</strong>                     <strong>Plan</strong>
-      0 - 4                 Low Risk               Reassess if other issues arise
-      5 ­‐ 10                High Risk              Refer client to a Physician
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        Duration of pain?      <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" />  Always There    <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" />  Comes and Goes
+        <strong>Current Pain Score: ( 0-­ no pain, 5-­ moderate pain, 10-­ severe pain ) </strong>  <input asp-for="CurrentPainScore">
+        <span asp-validation-for="CurrentPainScore" class="text-danger"></span>
+        <strong>Score Range</strong>            <strong>Assessment</strong>                     <strong>Plan</strong>
+        0 - 4                 Low Risk               Reassess if other issues arise
+        5 ­‐ 10                High Risk              Refer client to a Physician
 
-    Referred to: <input asp-for="ReferredTo" style="width:20%">           Date of Referral <input asp-for="DateOfReferral">
+        Referred to: <input asp-for="ReferredTo" style="width:20%">           Date of Referral <input asp-for="DateOfReferral">
     </pre>
-</div>
+    </div>
 
-<div class="col-md-12">
-    <pre>
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    @*<div class="form-group col-md-12">
-            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-            <label asp-for="Documents" class="forgot">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-            </label>
-        </div>*@
-</div>
-<br />
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Case Number</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.CaseNumber))</strong>
+        <strong>PAIN SCREEN</strong>                                                                                     
+        Do you suffer from chronic pain?                                    <input type="checkbox" asp-for="DoYouSuffer" class="form-check-input" disabled id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101" disabled><strong> NO </strong>
+        Did you use drugs or alcohol to cope with pain?                     <input type="checkbox" asp-for="DidYouUse" class="form-check-input" disabled id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102" disabled><strong> NO </strong>
+        Were your drug abuse problems made worse                            <input type="checkbox" asp-for="DidYouUse" class="form-check-input" disabled id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103" disabled><strong> NO </strong>
+        by your need for pain medication? 
+        Do you feel concerned that your pain management                     <input type="checkbox" asp-for="DoYouFell" class="form-check-input" disabled id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104" disabled><strong> NO </strong>
+        needs will not be addressed?
+        Do you believe you will always need narcotic pain medications?      <input type="checkbox" asp-for="DoYouBelieve" class="form-check-input" disabled id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105" disabled><strong> NO </strong>
+
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>  
+        <strong>Where is your pain located? </strong>
+        <textarea asp-for="WhereIs" rows="3" style="width:90%" disabled></textarea>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        <strong>What causes your pain? </strong>
+        <textarea asp-for="WhatCauses" rows="3" style="width:90%" disabled></textarea>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        <strong>Does your pain effect your daily functioning? If so what? (i.e. sleep, school/work,  mood, relationships, eating/drinking, etc..) </strong>
+        <textarea asp-for="DoesYourPainEffect" rows="3" style="width:90%" disabled></textarea>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        <pre>  
+        Duration of pain?      <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" disabled/>  Always There    <input type="checkbox" asp-for="AlwayasThere" class="form-check-input" disabled/>  Comes and Goes
+        <strong>Current Pain Score: ( 0-­ no pain, 5-­ moderate pain, 10-­ severe pain ) </strong>  <input asp-for="CurrentPainScore" disabled>
+        <span asp-validation-for="CurrentPainScore" class="text-danger"></span>
+        <strong>Score Range</strong>            <strong>Assessment</strong>                     <strong>Plan</strong>
+        0 - 4                 Low Risk               Reassess if other issues arise
+        5 ­‐ 10                High Risk              Refer client to a Physician
+
+        Referred to: <input asp-for="ReferredTo" style="width:20%" disabled>           Date of Referral <input asp-for="DateOfReferral" disabled>
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee" disabled>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
+
 <script>
 
     check1.addEventListener('change', (e) => {

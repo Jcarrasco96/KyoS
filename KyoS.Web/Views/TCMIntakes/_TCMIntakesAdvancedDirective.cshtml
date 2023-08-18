@@ -15,48 +15,96 @@
 <div class="col-md-12">
     <hr />
 </div>
-<div class="col-md-12">
-    <pre>
-    <strong>MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</strong> 
-    <u>(ADULT CLIENTS ONLY)</u>
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>
+        <strong>MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</strong> 
+        <u>(ADULT CLIENTS ONLY)</u>
 
     A <i>Mental Health Advance Directive</i> is a legal document that lets you name another individual as agent to make health care decisions for you if you become incapable of making
     your own decisions, or if you want someone else to make those decisions for you even though you are still capable.
-    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> does not require you to have a Mental Health Advance Directive, however <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will follow the terms of any 
+        <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> does not require you to have a Mental Health Advance Directive, however <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will follow the terms of any 
     Advance Directive that you may have executed, to the extent permitted by the law.
     If you already have a Mental Health Advance Directive, please provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> with a copy.
 
-    <input type="checkbox" asp-for="IHave" class="form-check-input">  I HAVE executed a Mental Health Advance Directive and will provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> 
+        <input type="checkbox" asp-for="IHave" class="form-check-input">  I HAVE executed a Mental Health Advance Directive and will provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> 
     
-    <input asp-for="TcmClient.Client.EmergencyContact.Name" readonly style="width:15%">     <input asp-for="TcmClient.Client.EmergencyContact.Telephone" readonly style="width:15%">     <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" readonly style="width:15%">
-     <strong>Name</strong>                            <strong>Phone Number</strong>                    <strong>Relationship</strong> 
+        <input asp-for="TcmClient.Client.EmergencyContact.Name" readonly style="width:15%">     <input asp-for="TcmClient.Client.EmergencyContact.Telephone" readonly style="width:15%">     <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" readonly style="width:15%">
+        <strong>Name</strong>                            <strong>Phone Number</strong>                    <strong>Relationship</strong> 
     
-    <input type="checkbox" asp-for="IHaveNot" class="form-check-input"> I HAVE NOT executed a Mental Health Advance Directive, however I have read or been explained, and understand my rights to have a Mental Health Advance Directive.
+        <input type="checkbox" asp-for="IHaveNot" class="form-check-input"> I HAVE NOT executed a Mental Health Advance Directive, however I have read or been explained, and understand my rights to have a Mental Health Advance Directive.
    
 </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
-    
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    <div class="form-group col-md-12">
-        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-        <label asp-for="Documents" class="forgot">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-        </label>
     </div>
-</div>
-<br />
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>
+        <strong>MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT</strong> 
+        <u>(ADULT CLIENTS ONLY)</u>
+
+    A <i>Mental Health Advance Directive</i> is a legal document that lets you name another individual as agent to make health care decisions for you if you become incapable of making
+    your own decisions, or if you want someone else to make those decisions for you even though you are still capable.
+        <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> does not require you to have a Mental Health Advance Directive, however <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will follow the terms of any 
+    Advance Directive that you may have executed, to the extent permitted by the law.
+    If you already have a Mental Health Advance Directive, please provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> with a copy.
+
+        <input type="checkbox" asp-for="IHave" class="form-check-input" disabled>  I HAVE executed a Mental Health Advance Directive and will provide <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> 
+    
+        <input asp-for="TcmClient.Client.EmergencyContact.Name" disabled style="width:15%">     <input asp-for="TcmClient.Client.EmergencyContact.Telephone" disabled style="width:15%">     <input asp-for="TcmClient.Client.RelationShipOfEmergencyContact" disabled style="width:15%">
+        <strong>Name</strong>                            <strong>Phone Number</strong>                    <strong>Relationship</strong> 
+    
+        <input type="checkbox" asp-for="IHaveNot" class="form-check-input" disabled> I HAVE NOT executed a Mental Health Advance Directive, however I have read or been explained, and understand my rights to have a Mental Health Advance Directive.
+   
+</pre>
+    </div>
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" disabled> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
 
 
 

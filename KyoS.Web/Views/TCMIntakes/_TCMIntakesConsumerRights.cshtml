@@ -77,26 +77,55 @@
     I have read and understood my rights as a Person Served of <strong>___@Html.DisplayFor(modelItem => Model.ServedOf)____</strong>
 </pre>
 </div>
-<div class="col-md-12">
-    <pre>
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
     
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    <div class="form-group col-md-12">
-        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-        <label asp-for="Documents" class="forgot">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-        </label>
     </div>
-</div>
-<br />
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" disabled> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+
+}
 

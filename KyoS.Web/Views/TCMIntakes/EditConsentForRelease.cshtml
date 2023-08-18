@@ -32,8 +32,16 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakesConsentForRelease" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="ListConsentForrelease" asp-route-id="@Model.TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-success">Back</a>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="ListConsentForrelease" asp-route-id="@Model.TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <input type="submit" value="Save" class="btn btn-primary" disabled/>
+                    <a asp-action="ListConsentForrelease" asp-route-id="@Model.TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
