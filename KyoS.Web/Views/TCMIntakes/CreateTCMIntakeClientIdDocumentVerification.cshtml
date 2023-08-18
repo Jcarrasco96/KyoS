@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
             </li>
             <li class="active">
                 Mental Health Targeted Case Management Program
@@ -37,8 +44,16 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakeClientIdDocumentVerification" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Sign" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    <input type="submit" value="Sign" class="btn btn-primary" />
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <input type="submit" value="Sign" class="btn btn-primary" disabled/>
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient.Id" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

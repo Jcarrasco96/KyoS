@@ -1,8 +1,11 @@
 ﻿@model KyoS.Web.Models.TCMIntakeNutritionalScreenViewModel
-<div class="col-md-12">
-    <pre>  
-    <strong>Circle the score for each identified area:</strong>                                              
-    <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Circle the score for each identified area:</strong>                                              
+        <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
    
     The client has an illness or condition that made him/her change the type        <input type="checkbox" asp-for="ClientHasIllnes" class="form-check-input">    <input asp-for="ClientHasIllnes_Value">
     and/or amount of food he/she eats
@@ -26,34 +29,93 @@
     The client’s appetite is poor                                                   <input type="checkbox" asp-for="ClientAppetitepoor" class="form-check-input">    <input asp-for="ClientAppetitepoor_Value">
     The client has food allergies                                                   <input type="checkbox" asp-for="ClientFoodAllergies" class="form-check-input">    <input asp-for="ClientFoodAllergies_Value">
 
-    <strong>Score Range                   Assessment                          Plan</strong>
+        <strong>Score Range                   Assessment                          Plan</strong>
       0-15                        Low Risk                            Reassess if other issues arise
       16-24                       Moderate Risk                       Monitor eating habits, provide education on nutrition and reassess within 30 days
       25 or more                  High Risk                           Refer client to a Nutritionist
 
   </pre>
-</div>
+    </div>
 
 
-<div class="col-md-12">
-    <pre>
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    @*<div class="form-group col-md-12">
-            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-            <label asp-for="Documents" class="forgot">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-            </label>
-        </div>*@
-</div>
-<br />
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Circle the score for each identified area:</strong>                                              
+        <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+   
+    The client has an illness or condition that made him/her change the type        <input type="checkbox" asp-for="ClientHasIllnes" class="form-check-input" disabled>    <input asp-for="ClientHasIllnes_Value" disabled>
+    and/or amount of food he/she eats
+    The client has a history of an eating disorder                                  <input type="checkbox" asp-for="ClientHasHistory" class="form-check-input" disabled>    <input asp-for="ClientHasHistory_Value" disabled>
+    The client eats fewer than 2 meals per day                                      <input type="checkbox" asp-for="ClientEatsFewer" class="form-check-input" disabled>    <input asp-for="ClientEatsFewer_Value" disabled>
+    The client eats few fruits, vegetables, or milk products                        <input type="checkbox" asp-for="ClientEatsFew" class="form-check-input" disabled>    <input asp-for="ClientEatsFew_Value" disabled>
+    The client has tooth or mouth problems that make it hard for him/her to eat     <input type="checkbox" asp-for="ClientHasTooth" class="form-check-input" disabled>    <input asp-for="ClientHasTooth_Value" disabled>
+    (Dental problems)                        
+    The client eats alone most of the time                                          <input type="checkbox" asp-for="ClientEatsAlone" class="form-check-input" disabled>    <input asp-for="ClientEatsAlone_Value" disabled>
+    The client takes 3 or more different prescribed or over the counter             <input type="checkbox" asp-for="ClientTakes" class="form-check-input" disabled>    <input asp-for="ClientTakes_Value" disabled>
+    medications per day                                         
+    Without wanting to, the client has lost over gained 10 pounds in                <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" disabled>    <input asp-for="WithoutWanting_Value" disabled>
+    the last 3 months
+    The client is always hungry                                                     <input type="checkbox" asp-for="ClientAlwaysHungry" class="form-check-input" disabled>    <input asp-for="ClientAlwaysHungry_Value" disabled>
+    The client is always thirsty                                                    <input type="checkbox" asp-for="ClientAlwaysThirsty" class="form-check-input" disabled>    <input asp-for="ClientAlwaysThirsty_Value" disabled>
+    The client vomits on a daily basis                                              <input type="checkbox" asp-for="ClientVomits" class="form-check-input" disabled>    <input asp-for="ClientVomits_Value" disabled>
+    The client had diarrhea, constipation, or nausea on a daily basis               <input type="checkbox" asp-for="ClientDiarrhea" class="form-check-input" disabled>    <input asp-for="ClientDiarrhea_Value" disabled>
+    The client binges and purges on a weekly basis                                  <input type="checkbox" asp-for="ClientBinges" class="form-check-input"disabled>    <input asp-for="ClientBinges_Value" disabled>
+    The client’s appetite is good                                                   <input type="checkbox" asp-for="ClientAppetiteGood" class="form-check-input" disabled>    <input asp-for="ClientAppetiteGood_Value" disabled>
+    The client’s appetite is fair                                                   <input type="checkbox" asp-for="ClientAppetiteFair" class="form-check-input" disabled>    <input asp-for="ClientAppetiteFair_Value" disabled>
+    The client’s appetite is poor                                                   <input type="checkbox" asp-for="ClientAppetitepoor" class="form-check-input" disabled>    <input asp-for="ClientAppetitepoor_Value" disabled>
+    The client has food allergies                                                   <input type="checkbox" asp-for="ClientFoodAllergies" class="form-check-input" disabled>    <input asp-for="ClientFoodAllergies_Value" disabled>
+
+        <strong>Score Range                   Assessment                          Plan</strong>
+      0-15                        Low Risk                            Reassess if other issues arise
+      16-24                       Moderate Risk                       Monitor eating habits, provide education on nutrition and reassess within 30 days
+      25 or more                  High Risk                           Refer client to a Nutritionist
+
+  </pre>
+    </div>
+
+
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee" disabled>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
 <script>
 
     check1.addEventListener('change', (e) => {

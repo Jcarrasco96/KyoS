@@ -468,16 +468,44 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
+                        if (User.IsInRole("Manager"))
+                        {
+                            List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                                .Include(i => i.UserCreatedBy)
+                                                                                .ThenInclude(u => u.Clinic)
+                                                                                .Include(i => i.client)
+                                                                                .Include(i => i.UserAsigned)
+                                                                                .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)
+                                                                                .ToListAsync();
 
-                        List<IncidentEntity> Incidents_List = await _context.Incidents
-                                                                            .Include(i => i.UserCreatedBy)
-                                                                            .ThenInclude(u => u.Clinic)
-                                                                            .Include(i => i.client)
-                                                                            .Include(i => i.UserAsigned)
+                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                                .Include(i => i.UserCreatedBy)
+                                                                                .ThenInclude(u => u.Clinic)
+                                                                                .Include(i => i.client)
+                                                                                .Include(i => i.UserAsigned)
+                                                                                .ToListAsync();
 
-                                                                            .ToListAsync();
+                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                            }
+                            else
+                            {
+                                List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                                .Include(i => i.UserCreatedBy)
+                                                                                .ThenInclude(u => u.Clinic)
+                                                                                .Include(i => i.client)
+                                                                                .Include(i => i.UserAsigned)
+                                                                                .Where(i => i.UserCreatedBy.Id == user_logged.Id || i.UserAsigned.Id == user_logged.Id)
+                                                                                .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                            }
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -580,15 +608,44 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    List<IncidentEntity> Incidents_List = await _context.Incidents
-                                                                             .Include(i => i.UserCreatedBy)
-                                                                             .ThenInclude(u => u.Clinic)
-                                                                             .Include(i => i.client)
-                                                                             .Include(i => i.UserAsigned)
+                    if (User.IsInRole("Manager"))
+                    {
+                        List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                            .Include(i => i.UserCreatedBy)
+                                                                            .ThenInclude(u => u.Clinic)
+                                                                            .Include(i => i.client)
+                                                                            .Include(i => i.UserAsigned)
+                                                                            .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)
+                                                                            .ToListAsync();
 
-                                                                             .ToListAsync();
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                    }
+                    else
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                            .Include(i => i.UserCreatedBy)
+                                                                            .ThenInclude(u => u.Clinic)
+                                                                            .Include(i => i.client)
+                                                                            .Include(i => i.UserAsigned)
+                                                                            .ToListAsync();
 
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                        }
+                        else
+                        {
+                            List<IncidentEntity> Incidents_List = await _context.Incidents
+                                                                            .Include(i => i.UserCreatedBy)
+                                                                            .ThenInclude(u => u.Clinic)
+                                                                            .Include(i => i.client)
+                                                                            .Include(i => i.UserAsigned)
+                                                                            .Where(i => i.UserCreatedBy.Id == user_logged.Id || i.UserAsigned.Id == user_logged.Id)
+                                                                            .ToListAsync();
+
+                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
+                        }
+                    }
                 }
                 catch (System.Exception ex)
                 {

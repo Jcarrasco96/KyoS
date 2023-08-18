@@ -1,66 +1,134 @@
 ﻿@model KyoS.Web.Models.TCMIntakeColumbiaSuicideViewModel
-<div class="col-md-12">
-    <pre>  
-    <strong>Client's Name:</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
-    <strong>Ask questions that are bolded and underlined.</strong>                                                             <strong>Past Month</strong>                                 <strong>Lifetime</strong>
-    <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>                        <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" readonly id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check108"><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" asp-items="Model.RiskList"></select>
-                                                                                                                            <span asp-validation-for="IdHaveYouWishedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouWishedLifeTime_Value" class="text-danger"></span>                                         
-    <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                               <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" readonly id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check109"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" asp-items="Model.RiskList"></select> 
-                                                                                                                            <span asp-validation-for="IdHaveYouActuallyPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouActuallyLifeTime_Value" class="text-danger"></span>
-    <strong>If YES to 2, ask questions 3, 4, 5, and 6. If NO to 2, go directly to question 6.</strong>
-    <strong>3) Have you been thinking about how you might do this?</strong>                                                   <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" readonly id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check110"><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" asp-items="Model.RiskList"></select> 
+
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Client's Name:</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        <strong>Ask questions that are bolded and underlined.</strong>                                                             <strong>Past Month</strong>                                 <strong>Lifetime</strong>
+        <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>                        <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" readonly id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check108"><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" asp-items="Model.RiskList"></select>
+        <span asp-validation-for="IdHaveYouWishedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouWishedLifeTime_Value" class="text-danger"></span>                                         
+        <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                               <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" readonly id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check109"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" asp-items="Model.RiskList"></select> 
+        <span asp-validation-for="IdHaveYouActuallyPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouActuallyLifeTime_Value" class="text-danger"></span>
+        <strong>If YES to 2, ask questions 3, 4, 5, and 6. If NO to 2, go directly to question 6.</strong>
+        <strong>3) Have you been thinking about how you might do this?</strong>                                                   <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" readonly id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check110"><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" asp-items="Model.RiskList"></select> 
             E.g. “I thought about taking an overdose but I never made a specific plan                                       <span asp-validation-for="IdHaveYouBeenPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouBeenLifeTime_Value" class="text-danger"></span>
             as to when where or how I would actually do it….and I would never go
             through with it.”
-    <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                                 <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" readonly id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check111"><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" asp-items="Model.RiskList"></select> 
+        <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                                 <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" readonly id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check111"><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" asp-items="Model.RiskList"></select> 
             As opposed to “I have the thoughts but I definitely will not do anything                                        <span asp-validation-for="IdHaveYouHadPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouHadLifeTime_Value" class="text-danger"></span>
             about them.”
-    <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>                       <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" readonly id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check112"><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" asp-items="Model.RiskList"></select> 
+        <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>                       <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" asp-items="Model.RiskList"></select>   <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" readonly id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check112"><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" asp-items="Model.RiskList"></select> 
         Do you intend to carry out this plan?                                                                               <span asp-validation-for="IdHaveYouStartedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouStartedLifeTime_Value" class="text-danger"></span>
     
         How long ago did the Worst Point Ideation occur?
-    <strong>6) Have you ever done anything, started to do anything, or prepared to do anything</strong>                       <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" readonly id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check106"><strong> NO </strong>   <select asp-for="IdHaveYouEver_Value" asp-items="Model.RiskList"></select>
+        <strong>6) Have you ever done anything, started to do anything, or prepared to do anything</strong>                       <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" readonly id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check106"><strong> NO </strong>   <select asp-for="IdHaveYouEver_Value" asp-items="Model.RiskList"></select>
          to end your life?                                                                                                  <span asp-validation-for="IdHaveYouEver_Value" class="text-danger"></span>              
         Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note,
         took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed
         from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot
         yourself, cut yourself, tried to hang yourself, etc.
-    <strong>If YES, ask: Was this within the past three months?</strong>                                                      <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" readonly id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check107"><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" asp-items="Model.RiskList"></select>
-                                                                                                                            <span asp-validation-for="IdHaveYouEverIfYes_Value" class="text-danger"></span>
-    </pre>                                                                                                                             
-</div>
+        <strong>If YES, ask: Was this within the past three months?</strong>                                                      <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" readonly id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check107"><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" asp-items="Model.RiskList"></select>
+        <span asp-validation-for="IdHaveYouEverIfYes_Value" class="text-danger"></span>
+    </pre>
+    </div>
 
-
-<div class="col-md-12">
-    <pre>  
-                                         <span class="label label-warning">Low Risk</span>        <span class="label label-warning">Moderate Risk</span>           <span class="label label-danger">High Risk</span>
+    <div class="col-md-12">
+        <pre>  
+        <span class="label label-warning">Low Risk</span>        <span class="label label-warning">Moderate Risk</span>           <span class="label label-danger">High Risk</span>
 
                                 For inquiries and training information contact: Kelly Posner, Ph.D.
         New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu
                                     © 2008 The Research Foundation for Mental Hygiene, Inc.
                                                                                     My Florida Case Manager Service LLC. Form 2020.
 </pre>
-</div>
+    </div>
 
-<div class="col-md-12">
-    <pre>
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    @*<div class="form-group col-md-12">
-            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-            <label asp-for="Documents" class="forgot">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-            </label>
-        </div>*@
-</div>
-<br />
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+
+}
+else
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>Client's Name:</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        <strong>Ask questions that are bolded and underlined.</strong>                                                             <strong>Past Month</strong>                                 <strong>Lifetime</strong>
+        <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>                        <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" disabled id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101" disabled><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" asp-items="Model.RiskList" disabled></select>   <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" disabled id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check108" disabled><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" asp-items="Model.RiskList" disabled></select>
+        <span asp-validation-for="IdHaveYouWishedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouWishedLifeTime_Value" class="text-danger"></span>                                         
+        <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                               <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" disabled id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102" disabled><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" asp-items="Model.RiskList" disabled></select>   <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" disabled id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check109" disabled><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" asp-items="Model.RiskList" disabled></select> 
+        <span asp-validation-for="IdHaveYouActuallyPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouActuallyLifeTime_Value" class="text-danger"></span>
+        <strong>If YES to 2, ask questions 3, 4, 5, and 6. If NO to 2, go directly to question 6.</strong>
+        <strong>3) Have you been thinking about how you might do this?</strong>                                                   <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" disabled id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103" disabled><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" asp-items="Model.RiskList" disabled></select>   <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" disabled id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check110" disabled><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" asp-items="Model.RiskList" disabled></select> 
+            E.g. “I thought about taking an overdose but I never made a specific plan                                       <span asp-validation-for="IdHaveYouBeenPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouBeenLifeTime_Value" class="text-danger"></span>
+            as to when where or how I would actually do it….and I would never go
+            through with it.”
+        <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                                 <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" disabled id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104" disabled><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" asp-items="Model.RiskList" disabled></select>   <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" disabled id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check111" disabled><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" asp-items="Model.RiskList" disabled></select> 
+            As opposed to “I have the thoughts but I definitely will not do anything                                        <span asp-validation-for="IdHaveYouHadPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouHadLifeTime_Value" class="text-danger"></span>
+            about them.”
+        <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>                       <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" disabled id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105" disabled><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" asp-items="Model.RiskList" disabled></select>   <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" disabled id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check112" disabled><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" asp-items="Model.RiskList" disabled></select> 
+        Do you intend to carry out this plan?                                                                               <span asp-validation-for="IdHaveYouStartedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouStartedLifeTime_Value" class="text-danger"></span>
+    
+        How long ago did the Worst Point Ideation occur?
+        <strong>6) Have you ever done anything, started to do anything, or prepared to do anything</strong>                       <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" disabled id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check106" disabled><strong> NO </strong>   <select asp-for="IdHaveYouEver_Value" asp-items="Model.RiskList" disabled></select>
+         to end your life?                                                                                                  <span asp-validation-for="IdHaveYouEver_Value" class="text-danger"></span>              
+        Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note,
+        took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed
+        from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot
+        yourself, cut yourself, tried to hang yourself, etc.
+        <strong>If YES, ask: Was this within the past three months?</strong>                                                      <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" disabled id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check107" disabled><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" asp-items="Model.RiskList" disabled></select>
+        <span asp-validation-for="IdHaveYouEverIfYes_Value" class="text-danger"></span>
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>  
+        <span class="label label-warning">Low Risk</span>        <span class="label label-warning">Moderate Risk</span>           <span class="label label-danger">High Risk</span>
+
+                                For inquiries and training information contact: Kelly Posner, Ph.D.
+        New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu
+                                    © 2008 The Research Foundation for Mental Hygiene, Inc.
+                                                                                    My Florida Case Manager Service LLC. Form 2020.
+</pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Date</strong>                <input asp-for="DateSignatureEmployee" disabled>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        @*<div class="form-group col-md-12">
+                <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+                <label asp-for="Documents" class="forgot">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+                </label>
+            </div>*@
+    </div>
+    <br />
+}
 <script>
 
     check1.addEventListener('change', (e) => {
@@ -326,5 +394,5 @@
     } else {
         check112.checked = true;
     }
-    //-------------------------------
+        //-------------------------------
 </script>

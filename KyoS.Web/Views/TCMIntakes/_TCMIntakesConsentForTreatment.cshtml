@@ -1,18 +1,20 @@
 ﻿@model KyoS.Web.Models.TCMIntakeConsentForTreatmentViewModel
-<div class="col-md-push-12">
-    <div class="container-fluid col-md-12">
-    <pre>
-    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong> an applicant for the services of Mental Health and if applicable;
-    <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name)</strong> representative/guardian of the above named applicant:
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-push-12">
+        <div class="container-fluid col-md-12">
+            <pre>
+            <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong> an applicant for the services of Mental Health and if applicable;
+            <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name)</strong> representative/guardian of the above named applicant:
 
-    <input type="checkbox" asp-for="AuthorizeStaff" /> I, Authorize the staff of <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> to provide services. 
-    <input type="checkbox" asp-for="AuthorizeRelease" class="form-check-input" id="AuthorizeRelease"> I, Authorize release of necessary information from my service record to any insurer, compensation carrier, 
+            <input type="checkbox" asp-for="AuthorizeStaff" /> I, Authorize the staff of <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> to provide services. 
+            <input type="checkbox" asp-for="AuthorizeRelease" class="form-check-input" id="AuthorizeRelease"> I, Authorize release of necessary information from my service record to any insurer, compensation carrier, 
     or other agency providing financial assistance for treatment / services Information from clinical records may be used by The Department of Children and Families, 
     and/or Human Rights Advocacy Committee for the purpose of monitoring facility, activity and complaints concerning the facility.
         
-    <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand"> I, Understand that, except for the above case, all information that you furnish to <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will be kept in strictest confidence, 
+            <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand"> I, Understand that, except for the above case, all information that you furnish to <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will be kept in strictest confidence, 
     as required by Florida law, and will not be shared with any agency or person outside the facility, unless so requested by you.
-    <input type="checkbox" asp-for="Aggre" class="form-check-input" id="Aggre"> I, Agree that I could be treated with certain psychotropic medications only after I have been informed of my right to accept or refuse such medications 
+            <input type="checkbox" asp-for="Aggre" class="form-check-input" id="Aggre"> I, Agree that I could be treated with certain psychotropic medications only after I have been informed of my right to accept or refuse such medications 
     and have consented to the administration of such medications . I have been provided with sufficient information by the physician prescribing such medications, 
     which shall include the following:
         • The nature of my emotional problem.
@@ -25,37 +27,101 @@
         particular case.
     Required medications will be registered by my assigned psychiatrist in the medical records and medication management will be performed upon requirement.
 
-    <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1"> I, Agree that <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> staff may contact me after the completion of treatment/service in order to evaluate its effectiveness.
-    <input type="checkbox" asp-for="Certify" class="form-check-input" id="Certify"> Certify that I will be responsible for all charges for treatment/services, commensurate with my ability to pay. 
+            <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1"> I, Agree that <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> staff may contact me after the completion of treatment/service in order to evaluate its effectiveness.
+            <input type="checkbox" asp-for="Certify" class="form-check-input" id="Certify"> Certify that I will be responsible for all charges for treatment/services, commensurate with my ability to pay. 
     </pre>
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="container-fluid col-md-12">
-    <pre>        
-    <input type="checkbox" asp-for="Certify1" class="form-check-input" id="Certify1"> Certify that I have read and fully understand the above.
+    <div class="col-md-push-12">
+        <div class="container-fluid col-md-12">
+            <pre>        
+            <input type="checkbox" asp-for="Certify1" class="form-check-input" id="Certify1"> Certify that I have read and fully understand the above.
     </pre>
+        </div>
     </div>
-</div>
-<div class="col-md-12">
-    <pre>
+    <div class="col-md-12">
+        <pre>
     
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
     
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">      
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">      
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    <div class="form-group col-md-12">
-        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-        <label asp-for="Documents" class="forgot">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-        </label>
     </div>
-</div>
-<br />
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-push-12">
+        <div class="container-fluid col-md-12">
+            <pre>
+            <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong> an applicant for the services of Mental Health and if applicable;
+            <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name)</strong> representative/guardian of the above named applicant:
+
+            <input type="checkbox" asp-for="AuthorizeStaff" disabled/> I, Authorize the staff of <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> to provide services. 
+            <input type="checkbox" asp-for="AuthorizeRelease" class="form-check-input" id="AuthorizeRelease" disabled> I, Authorize release of necessary information from my service record to any insurer, compensation carrier, 
+    or other agency providing financial assistance for treatment / services Information from clinical records may be used by The Department of Children and Families, 
+    and/or Human Rights Advocacy Committee for the purpose of monitoring facility, activity and complaints concerning the facility.
+        
+            <input type="checkbox" asp-for="Underestand" class="form-check-input" id="Underestand" disabled> I, Understand that, except for the above case, all information that you furnish to <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> will be kept in strictest confidence, 
+    as required by Florida law, and will not be shared with any agency or person outside the facility, unless so requested by you.
+            <input type="checkbox" asp-for="Aggre" class="form-check-input" id="Aggre" disabled> I, Agree that I could be treated with certain psychotropic medications only after I have been informed of my right to accept or refuse such medications 
+    and have consented to the administration of such medications . I have been provided with sufficient information by the physician prescribing such medications, 
+    which shall include the following:
+        • The nature of my emotional problem.
+        • The reasons for me to take such medication, including the likelihood of my improving or not improving without such
+        medication and my consent, once given may be withdrawn at any time by me stating such intention to any member of
+        the treating staff.
+        • The reasonable alternative treatments available, if any.
+        • The type, range of frequency and amount, method (oral or injection) of taking the medications.
+        • The probable side effects of these drugs known to commonly occur and any particular side effects likely to occur in my
+        particular case.
+    Required medications will be registered by my assigned psychiatrist in the medical records and medication management will be performed upon requirement.
+
+            <input type="checkbox" asp-for="Aggre1" class="form-check-input" id="Aggre1" disabled> I, Agree that <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong> staff may contact me after the completion of treatment/service in order to evaluate its effectiveness.
+            <input type="checkbox" asp-for="Certify" class="form-check-input" id="Certify" disabled> Certify that I will be responsible for all charges for treatment/services, commensurate with my ability to pay. 
+    </pre>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="container-fluid col-md-12">
+            <pre>        
+            <input type="checkbox" asp-for="Certify1" class="form-check-input" id="Certify1" disabled> Certify that I have read and fully understand the above.
+    </pre>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <pre>
+    
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" readonly>      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" readonly>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" readonly>      
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" readonly> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
