@@ -20370,6 +20370,177 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ClientIndForWeek", list/*, new { weekId = weekId, facilitatorId = facilitatorId }*/) });
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        public async Task<IActionResult> AuditNotes()
+        {
+            UserEntity user_logged = _context.Users
 
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditNotes> auditNotes_List = new List<AuditNotes>();
+            AuditNotes auditNote = new AuditNotes();
+
+            List<Workday_Client> workDay_List = new List<Workday_Client>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                workDay_List = _context.Workdays_Clients
+                                       .Include(m => m.Client)
+                                       .ThenInclude(m => m.Clients_Diagnostics)
+                                       .Include(m => m.Workday)
+                                       .Include(m => m.Note)
+                                       .Include(m => m.NoteP)
+                                       .Include(m => m.GroupNote)
+                                       .Include(m => m.GroupNote2)
+                                       .Include(m => m.IndividualNote)
+                                       .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                       .ToList();
+
+            }
+            else
+            {
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                    workDay_List = _context.Workdays_Clients
+                                           .Include(m => m.Client)
+                                           .ThenInclude(m => m.Clients_Diagnostics)
+                                           .Include(m => m.Workday)
+                                           .Include(m => m.Note)
+                                           .Include(m => m.NoteP)
+                                           .Include(m => m.GroupNote)
+                                           .Include(m => m.GroupNote2)
+                                           .Include(m => m.IndividualNote)
+                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                               && n.Facilitator.Id == facilitator.Id )
+                                      .ToList();
+
+                }
+
+            }
+
+            foreach (var item in workDay_List)
+            {
+                if (item.CodeBill == null || item.CodeBill == string.Empty)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no CTP code";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Client.Id == 0)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no Client Id";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Client.Clients_Diagnostics.Count(n => n.Principal == true) > 0)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no Dx";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Note != null)
+                {
+                    if (item.Note.Setting == null || item.Note.Setting == string.Empty)
+                    {
+                        auditNote.NameClient = item.Client.Name;
+                        auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                        auditNote.Description = "The client has no Setting";
+                        auditNote.Active = 0;
+
+                        auditNotes_List.Add(auditNote);
+                        auditNote = new AuditNotes();
+                    }
+                    
+                }
+                else
+                {
+                    if (item.NoteP != null)
+                    {
+                        if (item.NoteP.Setting == null || item.NoteP.Setting == string.Empty)
+                        {
+                            auditNote.NameClient = item.Client.Name;
+                            auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                            auditNote.Description = "The client has no Setting";
+                            auditNote.Active = 0;
+
+                            auditNotes_List.Add(auditNote);
+                            auditNote = new AuditNotes();
+                        }
+                    }
+                    else
+                    {
+                        if (item.GroupNote != null)
+                        {
+                            if (item.GroupNote.Setting == null || item.GroupNote.Setting == string.Empty)
+                            {
+                                auditNote.NameClient = item.Client.Name;
+                                auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                auditNote.Description = "The client has no Setting";
+                                auditNote.Active = 0;
+
+                                auditNotes_List.Add(auditNote);
+                                auditNote = new AuditNotes();
+                            }
+                        }
+                        else
+                        {
+                            if (item.GroupNote2 != null)
+                            {
+                                if (item.GroupNote2.Setting == null || item.GroupNote2.Setting == string.Empty)
+                                {
+                                    auditNote.NameClient = item.Client.Name;
+                                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                    auditNote.Description = "The client has no Setting";
+                                    auditNote.Active = 0;
+
+                                    auditNotes_List.Add(auditNote);
+                                    auditNote = new AuditNotes();
+                                }
+                            }
+                            else
+                            {
+                                if (item.IndividualNote != null)
+                                {
+                                    if (item.IndividualNote.Setting == null || item.IndividualNote.Setting == string.Empty)
+                                    {
+                                        auditNote.NameClient = item.Client.Name;
+                                        auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                        auditNote.Description = "The client has no Setting";
+                                        auditNote.Active = 0;
+
+                                        auditNotes_List.Add(auditNote);
+                                        auditNote = new AuditNotes();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+           
+            return View(auditNotes_List);
+        }
     }
 }
