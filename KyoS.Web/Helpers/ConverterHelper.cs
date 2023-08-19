@@ -1417,7 +1417,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 MHProblems = model.MHProblems,
-                TCMSupervisorEdit = model.TCMSupervisorEdit
+                TCMSupervisorEdit = model.TCMSupervisorEdit,
+                BillSemanalMH = model.BillSemanalMH
             };
         }
 
@@ -1437,7 +1438,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 MHProblems = model.MHProblems,
-                TCMSupervisorEdit = model.TCMSupervisorEdit
+                TCMSupervisorEdit = model.TCMSupervisorEdit,
+                BillSemanalMH = model.BillSemanalMH
             };
         }
 

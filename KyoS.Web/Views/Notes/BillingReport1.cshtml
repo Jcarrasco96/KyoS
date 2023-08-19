@@ -58,6 +58,27 @@
                     <td>
                         <a onclick="showInPopupLg('@Url.Action("AuditOverlapin", "Notes", new { idWeek = Model.IdWeek}, Context.Request.Scheme)','Bill Audit')" class="btn btn-danger" title="Overlapping bill audit"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Bill Audit</a>
                     </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        @if (Model.Weeks.Count() > 0)
+                        {
+                            @if (Model.Weeks.ElementAtOrDefault(0).Clinic.Setting.BillSemanalMH == true)
+                            {
+                                <a onclick="showInPopup('@Url.Action("UpdateBillFullWeek", "Notes", new { idWeek = Model.IdWeek }, Context.Request.Scheme)','Bill of week')" class="btn btn-info" title="Week's bill"><i class="glyphicon glyphicon-check"></i>&nbsp;&nbsp;Week's bill</a>
+                            }
+                            else
+                            {
+                                <a onclick="showInPopup('@Url.Action("UpdateBillFullWeek", "Notes", new { idWeek = Model.IdWeek }, Context.Request.Scheme)','Bill of week')" class="btn btn-info disabled" title="Week's bill"><i class="glyphicon glyphicon-check"></i>&nbsp;&nbsp;Week's bill</a>
+                            }
+
+                        }
+                        else
+                        {
+                            <a onclick="showInPopup('@Url.Action("UpdateBillFullWeek", "Notes", new { idWeek = Model.IdWeek}, Context.Request.Scheme)','Bill of week')" class="btn btn-info disabled" title="Week's bill"><i class="glyphicon glyphicon-check"></i>&nbsp;&nbsp;Week's bill</a>
+                        }
+                    </td>
                 </tr>                
             </table>
         </div>        
@@ -439,6 +460,7 @@
 
 <partial name="_DeleteDialog" />
 <partial name="_ModalPopupLg" />
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

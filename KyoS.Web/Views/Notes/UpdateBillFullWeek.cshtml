@@ -1,0 +1,44 @@
+﻿@model KyoS.Web.Models.UpdateBillViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="UpdateBillFullWeek" onsubmit="return jQueryAjaxPostWorkdayClient(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdWeek" />
+            <div>
+                <div class="col-md-12 form-group">
+                    <strong>Week for update: </strong>
+                    @Html.DisplayFor(modelItem => Model.DateLong)</br>
+                    </br>
+                    <strong>Notes PSR: </strong>
+                    @Html.DisplayFor(modelItem => Model.CountNotesPSR)</br>
+                    <strong>Notes Ind: </strong>
+                    @Html.DisplayFor(modelItem => Model.CountNotesInd)</br>
+                    <strong>Notes Group: </strong>
+                    @Html.DisplayFor(modelItem => Model.CountNotesGroup)</br>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-8 form-group">
+                    <input type="submit" value="Update Bill" class="btn btn-primary" />
+                    <a asp-action="BillingReport1" asp-route-idWeek="@Model.IdWeek" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+
