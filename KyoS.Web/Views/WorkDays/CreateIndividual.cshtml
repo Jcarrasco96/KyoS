@@ -43,7 +43,7 @@
                 </div>
             }
         </div>
-        <form asp-action="CreateIndividual" enctype="multipart/form-data">
+        <form asp-action="CreateIndividual" enctype="multipart/form-data" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="col-md-4 form-group">
                 <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
@@ -58,20 +58,20 @@
                        data-multiple-dates="7"
                        data-multiple-dates-separator=","
                        style="width:100%;"
-                       data-position="right top" />
+                       data-position="right top" id="txtWorkdays" />
             </div>
             <div class="col-md-3 form-group">
                 &nbsp;
             </div>
             <div class="col-md-9 form-group">
                 <label class="control-label">Facilitators</label>&nbsp;*
-                @Html.ListBox("facilitators", ViewData["facilitators"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
+                @Html.ListBox("facilitators", ViewData["facilitators"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;", @id = "txtFacilitators" })
             </div>
             <div class="col-md-12 form-group">
                 <strong>Note: </strong> Corresponding notes of clients related to this therapy will be generated.
             </div>
             <div class="col-md-12 form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" id="btnSave"/>
                 <a asp-action="IndividualWorkdays" class="btn btn-success">Back</a>
             </div>
         </form>
@@ -85,6 +85,17 @@
         <script src="~/js/chosen.jquery.js" type="text/javascript"></script>
         <script src="~/js/prism.js" type="text/javascript" charset="utf-8"></script>
         <script src="~/js/init.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#btnSave").click(function () {
+                    if (($("#txtWorkdays").val() != "") && ($("#txtFacilitators").val() != ""))
+                    {
+                        $("#btnSave").prop('disabled', true);
+                        form1.submit();
+                    }
+                });
+            });
+        </script>
     }
 </body>
 </html>

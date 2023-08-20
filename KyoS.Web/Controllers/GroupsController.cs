@@ -405,6 +405,10 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GroupViewModel model, IFormCollection form)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 switch (form["Meridian"])
@@ -439,10 +443,7 @@ namespace KyoS.Web.Controllers
                         }
                     default:
                         break;
-                }
-
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                }                
 
                 model.Service = Common.Enums.ServiceType.PSR;
                 GroupEntity group = await _converterHelper.ToGroupEntity(model, false);
@@ -568,16 +569,32 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            GroupEntity groupEntity = await _context.Groups.Include(g => g.Facilitator)
-                                                           .Include(g => g.Clients).FirstOrDefaultAsync(g => g.Id == model.Id);
+            GroupEntity groupEntity = await _context.Groups
+                                                    .Include(g => g.Facilitator)
+                                                    .Include(g => g.Clients)
+                                                    .FirstOrDefaultAsync(g => g.Id == model.Id);
+
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
             ViewData["am"] = groupViewModel.Am ? "true" : "false";
 
-            //List<ClientEntity> list = await (from cl in _context.Clients
-            //                                 join g in groupViewModel.Clients on cl.Id equals g.Id
-            //                                 select cl).ToListAsync();
+            List<ClientEntity> clients_list = await _context.Clients
 
-            MultiSelectList client_list = new MultiSelectList(await _context.Clients.ToListAsync(), "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
+                                                            .Include(c => c.MTPs)
+
+                                                            .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                      && c.Status == Common.Enums.StatusType.Open
+                                                                      && c.Service == Common.Enums.ServiceType.PSR
+                                                                      && c.Group == null))
+                                                            .OrderBy(c => c.Name)
+                                                            .ToListAsync();
+
+            clients_list = clients_list.Where(c => c.MTPs.Count > 0).ToList();
+            foreach (ClientEntity item in groupViewModel.Clients)
+            {
+                clients_list.Add(item);
+            }
+
+            MultiSelectList client_list = new MultiSelectList(clients_list, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
             ViewData["clients"] = client_list;
 
             return View(groupViewModel);
@@ -965,8 +982,8 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditGT(GroupViewModel model, IFormCollection form)
         {
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
@@ -1007,8 +1024,7 @@ namespace KyoS.Web.Controllers
                 {
                     string[] clients = form["clients"].ToString().Split(',');
                     ClientEntity client;
-                    List<ClientEntity> client_List = new List<ClientEntity>();
-               
+                                   
                     foreach (string value in clients)
                     {
                         client = await _context.Clients
@@ -1021,26 +1037,23 @@ namespace KyoS.Web.Controllers
                         List<Workday_Client> workday_Client_PSR;
                         List<Workday_Client> workday_client = new List<Workday_Client>();
 
-                        if (client != null && client_List.Exists(n => n.Id == client.Id) == false)
+                        if (client != null)
                         {
-                            client_List.Add(client);
                             client.Group = group;
                             client.IdFacilitatorGroup = group.Facilitator.Id;
+
                             _context.Update(client);
 
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
-                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
-
-                            //aqui cargo todas las notas de PSR para ver las fechas y que en esas fechas no se generen notas de GROUP
+                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;                            
                             workdays = await _context.Workdays
-
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
-
                                                      .Where(w => (w.Date >= developed_date
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
+                            //aqui cargo todas las notas de PSR para ver las fechas y que en esas fechas no se generen notas de GROUP
                             workday_Client_PSR = await _context.Workdays_Clients
                                                                .Include(w => w.Workday)
 
@@ -1092,7 +1105,6 @@ namespace KyoS.Web.Controllers
                             {
                                 _context.AddRange(workday_client);
                             }
-
                         }
                     }
                 }
@@ -1123,14 +1135,13 @@ namespace KyoS.Web.Controllers
             GroupViewModel groupViewModel = _converterHelper.ToGroupViewModel(groupEntity);
             ViewData["am"] = groupViewModel.Am ? "true" : "false";
 
-            List<ClientEntity> clients_list = await _context.Clients
-
-                                                            .Include(c => c.MTPs)
+            List<ClientEntity> clients_list = await _context.Clients                                                            
 
                                                             .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                                       && c.Status == Common.Enums.StatusType.Open
                                                                       && c.Service == Common.Enums.ServiceType.Group))
-                                                            .OrderBy(c => c.Name).ToListAsync();
+                                                            .OrderBy(c => c.Name)
+                                                            .ToListAsync();
 
             MultiSelectList client_list = new MultiSelectList(clients_list, "Id", "Name", groupViewModel.Clients.Select(c => c.Id));
             ViewData["clients"] = client_list;
@@ -1400,8 +1411,8 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditIndividualGroup(GroupViewModel model, IFormCollection form)
         {
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
