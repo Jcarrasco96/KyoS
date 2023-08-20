@@ -12290,6 +12290,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
+                                                       .ThenInclude(w => w.Setting)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -12358,6 +12359,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
+                                                       .ThenInclude(w => w.Setting)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -20545,6 +20547,119 @@ namespace KyoS.Web.Controllers
             }
            
             return View(auditNotes_List);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult UpdateBillFullWeek(int idWeek = 0)
+        {
+            if (idWeek > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                List<Workday_Client> worday_client = _context.Workdays_Clients
+                                                             .Include(n => n.Workday)
+                                                             .Where(n => n.Workday.Week.Id == idWeek
+                                                                      && n.BilledDate == null
+                                                                      && n.Present == true
+                                                                      && n.Client != null)
+                                                             .ToList();
+                WeekEntity week = _context.Weeks.First(n => n.Id == idWeek);
+                if (worday_client.Count() > 0)
+                {
+                    UpdateBillViewModel model = new UpdateBillViewModel
+                    {
+                        IdWeek = idWeek,
+                        CountNotesPSR = worday_client.Where(n => n.Workday.Service == ServiceType.PSR).Count(),
+                        CountNotesGroup = worday_client.Where(n => n.Workday.Service == ServiceType.Group).Count(),
+                        CountNotesInd = worday_client.Where(n => n.Workday.Service == ServiceType.Individual).Count(),
+                        DateLong = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString()
+                    };
+
+                    return View(model);
+                }
+                else
+                {
+                    UpdateBillViewModel model = new UpdateBillViewModel
+                    {
+                        IdWeek = idWeek,
+                        CountNotesPSR = 0,
+                        CountNotesGroup = 0,
+                        CountNotesInd = 0,
+                        DateLong = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString()
+                    };
+
+                    return View(model);
+                }
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> UpdateBillFullWeek(UpdateBillViewModel updateBillWeekViewModel)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.BillSemanalMH)
+            {
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+            }
+
+            List<Workday_Client> workday_Clients = new List<Workday_Client>();
+            List<Workday_Client> salida = new List<Workday_Client>();
+           
+            if (User.IsInRole("Manager"))
+            {
+                workday_Clients = _context.Workdays_Clients
+                                          .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                             && n.Workday.Week.Id == updateBillWeekViewModel.IdWeek
+                                             && n.BilledDate == null
+                                             && n.Present == true
+                                             && n.Client != null)
+                                          .ToList();
+
+            }
+
+            if (workday_Clients.Count() > 0)
+            {
+                foreach (var item in workday_Clients)
+                {
+                    item.BilledDate = DateTime.Now;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"TEXT ");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
         }
     }
 }
