@@ -20456,7 +20456,7 @@ namespace KyoS.Web.Controllers
                     auditNotes_List.Add(auditNote);
                     auditNote = new AuditNotes();
                 }
-                if (item.Client.Clients_Diagnostics.Count(n => n.Principal == true) > 0)
+                if (item.Client.Clients_Diagnostics.Count(n => n.Principal == true) == 0)
                 {
                     auditNote.NameClient = item.Client.Name;
                     auditNote.NoteDate = item.Workday.Date.ToShortDateString();
