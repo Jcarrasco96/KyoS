@@ -31,5 +31,15 @@ namespace KyoS.Web.Data.Entities
         public List<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
 
         public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? BilledDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PaymentDate { get; set; }
+
+        public bool DeniedBill { get; set; }
+
+        public string CodeBill { get; set; }
     }
 }

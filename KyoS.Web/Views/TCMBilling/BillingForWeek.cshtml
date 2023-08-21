@@ -40,42 +40,159 @@
             &nbsp;
         </div>
         <div class="col-md-12">
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+            @*<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+                <button type="submit" asp-route-billed="0" class="btn btn-success"><i class="icon-usd"></i> Bill</button>*@
+            <button type="submit" asp-route-billed="2" class="btn btn-success"><i class="icon-usd"></i> Billed</button>
+            <button type="submit" asp-route-billed="1" class="btn btn-danger"><i class="icon-usd "></i> No Billed</button>
+            <button type="submit" asp-route-billed="3" class="btn btn-info"><i class="icon-usd "></i> Payment Pending</button>
         </div>
     </form>
     <div class="col-md-12">
-        <hr />
+        </br>
     </div>
     <div class="col-md-12">
         <div class="col-md-4">
             &nbsp;
         </div>
-        <div class="col-md-1">
-            <div class="thumbnail list-group-item list-group-item-success">
-                <p style="text-align:center">Notes</p>
-                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
-            </div>
+        <div class="col-md-3">
+            <center>
+                <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update Bill"><i class="glyphicon glyphicon-refresh"></i> Update services pending billing</a>
+                <hr />
+            </center>
         </div>
-        <div class="col-md-1">
-            <div class="thumbnail list-group-item list-group-item-success">
-                <p style="text-align:center">Units</p>
-                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
-            </div>
+        <div class="col-md-5">
+            &nbsp;
         </div>
-        <div class="col-md-2">
-            <div class="thumbnail list-group-item list-group-item-warning">
-                <p style="text-align:center">Estimated Income</p>
-                @if (ViewBag.Money == "0")
-                {
-                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
-                }
-                else
-                {
-                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>                   
-                }
-            </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            &nbsp;
         </div>
-        <div class="col-md-4">
+        @if (ViewData["billed"].ToString() == "1")
+        {
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Clients</p>
+                    <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Notes</p>
+                    <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Services</p>
+                    <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Units</p>
+                    <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="thumbnail list-group-item list-group-item-warning">
+                    <p style="text-align:center">Estimated Income</p>
+                    @if (ViewBag.Money == "0")
+                    {
+                        <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                    }
+                    else
+                    {
+                        <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            @if (ViewData["billed"].ToString() == "2")
+            {
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <p style="text-align:center">Clients</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <p style="text-align:center">Notes</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <p style="text-align:center">Services</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <p style="text-align:center">Units</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="thumbnail list-group-item list-group-item-warning">
+                        <p style="text-align:center">Estimated Income</p>
+                        @if (ViewBag.Money == "0")
+                        {
+                            <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                        }
+                        else
+                        {
+                            <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-info">
+                        <p style="text-align:center">Clients</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-info">
+                        <p style="text-align:center">Notes</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-info">
+                        <p style="text-align:center">Services</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="thumbnail list-group-item list-group-item-info">
+                        <p style="text-align:center">Units</p>
+                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="thumbnail list-group-item list-group-item-warning">
+                        <p style="text-align:center">Estimated Income</p>
+                        @if (ViewBag.Money == "0")
+                        {
+                            <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                        }
+                        else
+                        {
+                            <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                        }
+                    </div>
+                </div>
+            }
+
+        }
+        <div class="col-md-3">
             &nbsp;
         </div>
     </div>
@@ -91,27 +208,34 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 Case Manager
                             </th>
                             <th class="col-md-3">
                                 TCM Client
                             </th>
                             <th class="col-md-2" style="text-align:center">
-                                Medicaid ID
+                                Health Insurance
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
                                 Diagnostic
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Date Of Service
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
                             </th>
+
                             <th class="col-md-1" style="text-align:center;">
                                 Units
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Money
-                            </th>                            
+                                Amount
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billed
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paid
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,7 +263,10 @@
                                     @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.MedicaidID)
+                                    @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                    }
                                 </td>
                                 <td align="center">
                                     @if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
@@ -149,7 +276,7 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateOfService)
-                                </td>                                
+                                </td>
                                 <td align="center">
                                     @if (@residuo > 7)
                                     {
@@ -170,20 +297,44 @@
                                         @(valor * 12);
                                     }
                                 </td>
+                                <td align="center">
+                                    @if (item.BilledDate == null)
+                                    {
+                                        <span class="label label-danger">No</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.BilledDate)
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.BilledDate == null)
+                                    {
+                                        @if (item.PaymentDate == null)
+                                        {
+                                            <span class="label label-danger">No</span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (item.PaymentDate == null)
+                                        {
+                                            <span class="label label-info">No</span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                        }
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <td align="center" style="font-weight:bold;">Total:</td>
-                            <td align="center" style="font-weight:bold">Total:</td>
-                        </tr>
-                    </tfoot>
+                    
                 </table>
             </div>
         </div>
@@ -203,25 +354,7 @@
                 "order": [[0, "asc"]],
                 "pageLength": 100,
                 "footerCallback": function ( row, data, start, end, display ) {        
-                    total = this.api()
-                                .column(5)//numero de columna a sumar
-                                //.column(1, {page: 'current'})//para sumar solo la pagina actual
-                                .data()
-                                .reduce(function (a, b) {
-                                    return parseInt(a) + parseInt(b);
-                                }, 0 );
-
-                    $(this.api().column(5).footer()).html(total);          
-
-                    total = this.api()
-                                .column(6)//numero de columna a sumar
-                                //.column(1, {page: 'current'})//para sumar solo la pagina actual
-                                .data()
-                                .reduce(function (a, b) {
-                                    return parseInt(a) + parseInt(b);
-                                }, 0 );
-
-                    $(this.api().column(6).footer()).html(total);    
+                    
                 }
             });
         });

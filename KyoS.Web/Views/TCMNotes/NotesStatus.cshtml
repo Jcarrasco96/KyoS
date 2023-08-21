@@ -292,7 +292,7 @@
                                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 }
 
-                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Review and Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)

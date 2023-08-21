@@ -16,12 +16,14 @@ namespace KyoS.Web.Controllers
     public class TCMBillingController : Controller
     {
         private readonly DataContext _context;        
-        private readonly ICombosHelper _combosHelper;        
+        private readonly ICombosHelper _combosHelper;
+        private readonly IRenderHelper _renderHelper;
 
-        public TCMBillingController(DataContext context, ICombosHelper combosHelper)
+        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IRenderHelper renderHelper)
         {
             _context = context;
-            _combosHelper = combosHelper;            
+            _combosHelper = combosHelper;
+            _renderHelper = renderHelper;
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -276,45 +278,166 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0)
+        public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0, int billed = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            ViewBag.Clients = "0";
             ViewBag.Notes = "0";
+            ViewBag.Services = "0";
             ViewBag.Units = "0";
             ViewBag.Money = "0";
+            ViewData["billed"] = billed;
             List<TCMNoteEntity> list = new List<TCMNoteEntity>();
+
+            if (dateInterval == string.Empty)
+            {
+                dateInterval = DateTime.Today.AddDays(-30).ToShortDateString() + " - " + DateTime.Today.ToShortDateString();
+            }
             if (dateInterval != string.Empty)
             {
                 string[] date = dateInterval.Split(" - ");
-                IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                          .Include(t => t.TCMClient)
-                                                          .ThenInclude(c => c.Client)
-                                                          .ThenInclude(cl => cl.Clients_Diagnostics)
-                                                          .ThenInclude(cd => cd.Diagnostic)
-
-                                                          .Include(t => t.TCMClient.Casemanager)
-                                                          .Include(t => t.TCMNoteActivity)
-
-                                                          .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
-
-                if (idCaseManager != 0)
-                    query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                if (idClient != 0)
-                    query = query.Where(t => t.TCMClient.Id == idClient);
-
-                try
+                if (billed == 0)
                 {
-                    list = query.ToList();
+                    IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                              .ThenInclude(cd => cd.Diagnostic)
+
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                              .ThenInclude(cd => cd.HealthInsurance)
+
+                                                              .Include(t => t.TCMClient.Casemanager)
+                                                              .Include(t => t.TCMNoteActivity)
+
+                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
+
+                    if (idCaseManager != 0)
+                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                    if (idClient != 0)
+                        query = query.Where(t => t.TCMClient.Id == idClient);
+
+                    try
+                    {
+                        list = query.ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction(nameof(BillingForWeek));
+                    }
                 }
-                catch (Exception)
+                if (billed == 1)
                 {
-                    return RedirectToAction(nameof(BillingForWeek));
-                }                
+                    IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                              .ThenInclude(cd => cd.Diagnostic)
 
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                              .ThenInclude(cd => cd.HealthInsurance)
+
+                                                              .Include(t => t.TCMClient.Casemanager)
+                                                              .Include(t => t.TCMNoteActivity)
+
+                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
+                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                        && t.BilledDate == null));
+
+                    if (idCaseManager != 0)
+                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                    if (idClient != 0)
+                        query = query.Where(t => t.TCMClient.Id == idClient);
+
+                    try
+                    {
+                        list = query.ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction(nameof(BillingForWeek));
+                    }
+                }
+                if (billed == 2)
+                {
+                    IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                              .ThenInclude(cd => cd.Diagnostic)
+
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                              .ThenInclude(cd => cd.HealthInsurance)
+
+                                                              .Include(t => t.TCMClient.Casemanager)
+                                                              .Include(t => t.TCMNoteActivity)
+
+                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                        && t.BilledDate != null));
+
+                    if (idCaseManager != 0)
+                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                    if (idClient != 0)
+                        query = query.Where(t => t.TCMClient.Id == idClient);
+
+                    try
+                    {
+                        list = query.ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction(nameof(BillingForWeek));
+                    }
+                }
+                if (billed == 3)
+                {
+                    IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                              .ThenInclude(cd => cd.Diagnostic)
+
+                                                              .Include(t => t.TCMClient)
+                                                              .ThenInclude(c => c.Client)
+                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                              .ThenInclude(cd => cd.HealthInsurance)
+
+                                                              .Include(t => t.TCMClient.Casemanager)
+                                                              .Include(t => t.TCMNoteActivity)
+
+                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                        && t.BilledDate != null
+                                                                        && t.PaymentDate == null));
+
+                    if (idCaseManager != 0)
+                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                    if (idClient != 0)
+                        query = query.Where(t => t.TCMClient.Id == idClient);
+
+                    try
+                    {
+                        list = query.ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction(nameof(BillingForWeek));
+                    }
+                }
                 int minutes;
                 int totalUnits = 0;
                 int value;
@@ -326,7 +449,9 @@ namespace KyoS.Web.Controllers
                     mod = minutes % 15;
                     totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
                 }
+                ViewBag.Clients = list.GroupBy(n => n.TCMClient).Count().ToString();
                 ViewBag.Notes = list.Count().ToString();
+                ViewBag.Services = list.Sum(n => n.TCMNoteActivity.Count()).ToString();
                 ViewBag.Units = totalUnits.ToString();
                 ViewBag.Money = (totalUnits * 12).ToString();
             }
@@ -347,7 +472,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public IActionResult BillingForWeek(TCMBillingReportViewModel model)
+        public IActionResult BillingForWeek(TCMBillingReportViewModel model, int billed = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -355,7 +480,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(BillingForWeek), new { dateInterval = model.DateIterval, idCaseManager = model.IdCaseManager, idClient = model.IdClient});
+                return RedirectToAction(nameof(BillingForWeek), new { dateInterval = model.DateIterval, idCaseManager = model.IdCaseManager, idClient = model.IdClient, billed = billed});
             }     
             
             return View(model);            
@@ -809,6 +934,530 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> UpdateBill(int billed = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ViewBag.Clients = "0";
+            ViewBag.Notes = "0";
+            ViewBag.Services = "0";
+            ViewBag.Units = "0";
+            ViewBag.Money = "0";
+            ViewData["billed"] = billed;
+            List<TCMClientEntity> list = new List<TCMClientEntity>();
+
+            if (billed == 1)
+            {
+                list = await _context.TCMClient
+                                     .Include(c => c.Client)
+                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                     .Include(c => c.Client)
+                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                     .Include(t => t.Casemanager)
+                                     .Include(c => c.TCMNote)
+                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null).Count() > 0)
+                                     .ToListAsync();
+
+            }
+            if (billed == 2)
+            {
+                list = await _context.TCMClient
+                                    .Include(c => c.Client)
+                                    .ThenInclude(cl => cl.Clients_Diagnostics)
+                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                    .Include(c => c.Client)
+                                    .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                    .ThenInclude(cl => cl.HealthInsurance)
+
+                                    .Include(t => t.Casemanager)
+                                    .Include(c => c.TCMNote)
+                                    .ThenInclude(t => t.TCMNoteActivity)
+
+                                    .Where(t => t.TCMNote.Where(n => n.PaymentDate == null
+                                                                  && n.BilledDate != null).Count() > 0)
+                                    .ToListAsync();
+
+            }
+            if (billed == 0)
+            {
+                list = await _context.TCMClient
+                                     .Include(c => c.Client)
+                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                     .Include(c => c.Client)
+                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                     .Include(t => t.Casemanager)
+                                     .Include(c => c.TCMNote)
+                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                     .ToListAsync();
+
+            }
+            int minutes;
+            int totalUnits = 0;
+            int value;
+            int mod;
+            int notes = 0;
+            int services = 0;
+            foreach (TCMClientEntity item in list)
+            {
+                if (billed == 1)
+                {
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
+                    {
+                        minutes = note.TCMNoteActivity.Sum(t => t.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        notes++;
+                        services += note.TCMNoteActivity.Count();
+                    }
+                }
+                if (billed == 2)
+                {
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                    {
+                        minutes = note.TCMNoteActivity.Sum(t => t.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        notes++;
+                        services += note.TCMNoteActivity.Count();
+                    }
+                }
+            }
+            
+            ViewBag.Clients = list.Count().ToString();
+            ViewBag.Notes = notes;
+            ViewBag.Services = services;
+            ViewBag.Units = totalUnits.ToString();
+            ViewBag.Money = (totalUnits * 12).ToString();
+
+            return View(list);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillTCMNoteToday(int id = 0)
+        {
+            if (id != 0)
+            {
+                TCMNoteEntity note = await _context.TCMNote
+                                                   .Where(wc => wc.Id == id)
+                                                   .FirstOrDefaultAsync();
+
+                note.BilledDate = DateTime.Now;
+                _context.Update(note);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 1 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotTMCNoteBill(int id = 0)
+        {
+            if (id != 0)
+            {
+                TCMNoteEntity note = await _context.TCMNote
+                                                   .Where(wc => wc.Id == id)
+                                                   .FirstOrDefaultAsync();
+
+                note.BilledDate = null;
+                _context.Update(note);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 2});
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillTCMClientToday(int id = 0)
+        {
+            if (id != 0)
+            {
+                List<TCMNoteEntity> notes = await _context.TCMNote
+                                                          .Where(n => n.TCMClient.Id == id
+                                                                   && n.BilledDate == null)
+                                                          .ToListAsync();
+
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (var item in notes)
+                {
+                    item.BilledDate = DateTime.Today;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 1 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> NotTCMClientToday(int id = 0)
+        {
+            if (id != 0)
+            {
+                List<TCMNoteEntity> notes = await _context.TCMNote
+                                                          .Where(n => n.TCMClient.Id == id
+                                                                   && n.BilledDate != null
+                                                                   && n.PaymentDate == null)
+                                                          .ToListAsync();
+
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (var item in notes)
+                {
+                    item.BilledDate = null;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 2 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PayTCMNoteToday(int id = 0)
+        {
+            if (id != 0)
+            {
+                TCMNoteEntity note = await _context.TCMNote
+                                                   .Where(wc => wc.Id == id)
+                                                   .FirstOrDefaultAsync();
+
+                note.PaymentDate = DateTime.Now;
+                _context.Update(note);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 2 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PayTCMClientToday(int id = 0)
+        {
+            if (id != 0)
+            {
+                List<TCMNoteEntity> notes = await _context.TCMNote
+                                                          .Where(n => n.TCMClient.Id == id
+                                                                   && n.BilledDate != null
+                                                                   && n.PaymentDate == null)
+                                                          .ToListAsync();
+
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (var item in notes)
+                {
+                    item.PaymentDate = DateTime.Today;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateBill", "TCMBilling", new { billed = 2 });
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillTCMNote(int id, int week = 0, int abilled = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        {
+
+            if (abilled == 1)
+            {
+                TCMNoteEntity note =  _context.TCMNote
+                                              .Where(wc => wc.Id == model.Id)
+                                              .FirstOrDefault();
+
+                note.BilledDate = model.BilledDate;
+                _context.Update(note);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null).Count() > 0)
+                                                     .ToList();
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+            if (abilled == 2)
+            {
+                TCMNoteEntity note = _context.TCMNote
+                                             .Where(wc => wc.Id == model.Id)
+                                             .FirstOrDefault();
+
+                note.BilledDate = model.BilledDate;
+                _context.Update(note);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null).Count() > 0)
+                                                     .ToList();
+
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult BillTCMClient(int id, int abilled = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> BillTCMClient(BillViewModel model, int abilled = 0)
+        {
+
+            if (abilled == 1)
+            {
+                List<TCMNoteEntity> notes = _context.TCMNote
+                                                    .Where(n => n.TCMClient.Id == model.Id
+                                                             && n.BilledDate == null)
+                                                    .ToList();
+                
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (TCMNoteEntity item in notes)
+                {
+                    item.BilledDate = model.BilledDate;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null).Count() > 0)
+                                                     .ToList();
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+            if (abilled == 2)
+            {
+                List<TCMNoteEntity> notes = _context.TCMNote
+                                                    .Where(n => n.TCMClient.Id == model.Id
+                                                             && n.BilledDate != null
+                                                             && n.PaymentDate == null)
+                                                    .ToList();
+
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (TCMNoteEntity item in notes)
+                {
+                    item.BilledDate = model.BilledDate;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate != null 
+                                                                                   && n.PaymentDate == null).Count() > 0)
+                                                     .ToList();
+
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult PayTCMNote(int id, int week = 0, int abilled = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        {
+            if (abilled == 2)
+            {
+                TCMNoteEntity note = _context.TCMNote
+                                             .Where(wc => wc.Id == model.Id)
+                                             .FirstOrDefault();
+
+                note.PaymentDate = model.BilledDate;
+                _context.Update(note);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null).Count() > 0)
+                                                     .ToList();
+
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult PayTCMClient(int id, int abilled = 0)
+        {
+            BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
+            ViewData["Billed"] = abilled;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> PayTCMClient(BillViewModel model, int abilled = 0)
+        {
+            if (abilled == 2)
+            {
+                List<TCMNoteEntity> notes = _context.TCMNote
+                                                    .Where(n => n.TCMClient.Id == model.Id
+                                                             && n.BilledDate != null
+                                                             && n.PaymentDate == null)
+                                                    .ToList();
+
+                List<TCMNoteEntity> salida = new List<TCMNoteEntity>();
+
+                foreach (TCMNoteEntity item in notes)
+                {
+                    item.PaymentDate = model.BilledDate;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                _context.SaveChanges();
+
+                List<TCMClientEntity> list = _context.TCMClient
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                     .ThenInclude(cd => cd.Diagnostic)
+
+                                                     .Include(c => c.Client)
+                                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                     .ThenInclude(cl => cl.HealthInsurance)
+
+                                                     .Include(t => t.Casemanager)
+                                                     .Include(c => c.TCMNote)
+                                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                                     .Where(t => t.TCMNote.Where(n => n.BilledDate != null
+                                                                                   && n.PaymentDate == null).Count() > 0)
+                                                     .ToList();
+
+                ViewData["billed"] = abilled;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotes", list) });
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
+        }
 
     }
 }

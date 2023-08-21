@@ -1,0 +1,227 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+@{
+    ViewData["Title"] = "TCM Billing Report";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datepicker.min.css">
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Billing", "BillingForWeek", "TCMBilling")
+        </li>
+        <li class="active">TCM Update Billing Report</li>
+    </ul><!--.breadcrumb-->
+</div>
+@if (ViewData["billed"].ToString() == "1")
+{
+    <div class="col-md-12">
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+        <div class="col-md-4">
+            <center>
+                LIST OF SERVICES THAT HAVE NOT BEEN BILLED
+                <hr />
+            </center>
+        </div>
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+    </div>
+}
+@if (ViewData["billed"].ToString() == "2")
+{
+    <div class="col-md-12">
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+        <div class="col-md-4">
+            <center>
+                LIST OF SERVICES THAT HAVE NOT BEEN PAID
+                <hr />
+            </center>
+        </div>
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+    </div>
+}
+<div class="col-md-12">
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+    @if (ViewData["billed"].ToString() == "1")
+    {
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Clients</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Notes</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Services</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Estimated Income</p>
+                @if (ViewBag.Money == "0")
+                {
+                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                }
+                else
+                {
+                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-info">
+                <p style="text-align:center">Clients</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-info">
+                <p style="text-align:center">Notes</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-info">
+                <p style="text-align:center">Services</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-info">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Estimated Income</p>
+                @if (ViewBag.Money == "0")
+                {
+                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                }
+                else
+                {
+                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                }
+            </div>
+        </div>
+    }
+    <div class="col-md-3">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <form asp-action="UpdateBill" enctype="multipart/form-data">
+    </form>
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div class="col-md-4">
+        <center>
+            @if (ViewData["Billed"].ToString() == "1")
+            {
+                <a class="btn btn-default" asp-controller="TCMBilling" asp-action="UpdateBill" asp-route-billed="2" role="button"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Switch to UnPaymented Clients</a>
+            }
+            else
+            {
+                @if (ViewData["Billed"].ToString() == "2")
+                {
+                    <a class="btn btn-default" asp-controller="TCMBilling" asp-action="UpdateBill" asp-route-billed="1" role="button"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Switch to Unbilled Clients</a>
+                }
+            }
+        </center>
+        @*<h4 style="font-weight:bold;"><span class="label label-default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h4>*@
+        @*<h5>&nbsp;<b>Init Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.InitDate.ToShortDateString()&nbsp;&nbsp;<b>Final Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.FinalDate.ToShortDateString()</h5>*@
+        <hr />
+    </div>
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div id="view-tcmnotes">
+        @await Html.PartialAsync("_ViewNotes", Model)
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100,
+                "footerCallback": function (row, data, start, end, display) {
+                    total = this.api()
+                        .column(5)//numero de columna a sumar
+                        //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseInt(a) + parseInt(b);
+                        }, 0);
+
+                    $(this.api().column(5).footer()).html(total);
+
+                    total = this.api()
+                        .column(6)//numero de columna a sumar
+                        //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseInt(a) + parseInt(b);
+                        }, 0);
+
+                    $(this.api().column(6).footer()).html(total);
+                }
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+
+}
+

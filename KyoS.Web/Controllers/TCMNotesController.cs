@@ -320,6 +320,20 @@ namespace KyoS.Web.Controllers
 
                     }
                 }
+                else
+                {
+                    TCMNoteEntity TcmNote = _context.TCMNote
+                                                       .Include(b => b.TCMClient)
+                                                       .ThenInclude(b => b.Client)
+                                                       .Include(b => b.TCMClient)
+                                                       .ThenInclude(b => b.Casemanager)
+                                                       .Include(b => b.TCMNoteActivity)
+                                                       .ThenInclude(b => b.TCMDomain)
+                                                       .FirstOrDefault(m => m.Id == id
+                                                               && m.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName);
+
+                    return RedirectToAction("EditReadOnly", new { id = TcmNote.Id, origi = 4 });
+                }
             }
             model = new TCMNoteViewModel();
             return View(model);
@@ -1227,7 +1241,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("Notifications", "TCMMessages");
                     }
-
+                    if (origi == 4)
+                    {
+                        return RedirectToAction("TCMSupervisor", "TCMBilling");
+                    }
                 }
                 catch (System.Exception ex)
                 {

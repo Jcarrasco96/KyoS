@@ -1147,8 +1147,7 @@ namespace KyoS.Web.Helpers
 
             List<TCMClientEntity> tcmClients_Open = _context.TCMClient
                                                             .Include(g => g.Client)
-                                                            .Where(c => (c.Client.Clinic.Id == idClinic
-                                                                      && c.Status == StatusType.Open))
+                                                            .Where(c => (c.Client.Clinic.Id == idClinic))
                                                             .OrderBy(c => c.Client.Name)
                                                             .ToList();
 
