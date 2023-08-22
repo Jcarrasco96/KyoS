@@ -14,6 +14,7 @@ namespace KyoS.Web.Helpers
         byte[] ExportAllClients(List<ClientEntity> clients, string date);
         byte[] ExportBillHoldForWeekHelper(List<Workday_Client> workday_Client, string Periodo, string ClinicName, string data);
         byte[] ExportAllReferreds(List<Client_Referred> clients);
+        byte[] ExportBillTCMHelper(List<TCMNoteEntity> tcmNotes, string Periodo, string ClinicName, string data);
         #endregion
 
         #region Utils functions

@@ -45,6 +45,26 @@
                             var @valor = (@item.TCMNote.Where(b => b.BilledDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) / 15);
                             var @residuo = (@item.TCMNote.Where(b => b.BilledDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) % 15);
                             var @valorAumentado = valor + 1;
+                            var @unit = 0;
+
+                            foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
+                            {
+                                foreach (var activity in note.TCMNoteActivity)
+                                {
+                                    valor = (activity.Minutes) / 15;
+                                    residuo = (activity.Minutes) % 15;
+                                    valorAumentado = valor + 1;
+                                    @if (@residuo > 7)
+                                    {
+                                        unit = unit + valorAumentado;
+                                    }
+                                    else
+                                    {
+                                        unit = unit + valor;
+                                    }
+                                }
+                            }
+
                             <tr>
                                 <td>
                                     @if (item.TCMNote.Count() != 0)
@@ -70,33 +90,35 @@
                                             </tr>
                                             @foreach (var product in item.TCMNote.Where(n => n.BilledDate == null))
                                             {
-                                                var @valor1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) / 15;
-                                                var @residuo1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) % 15;
-                                                var @valorAumentado1 = valor1 + 1;
+                                                var @valor1 = 0;
+                                                var @residuo1 = 0;
+                                                var @valorAumentado1 = 0;
+                                                var @unit1 = 0;
+                                                foreach (var activity in product.TCMNoteActivity)
+                                                {
+                                                    valor1 = (activity.Minutes) / 15;
+                                                    residuo1 = (activity.Minutes) % 15;
+                                                    valorAumentado1 = valor1 + 1;
+                                                    @if (@residuo1 > 7)
+                                                    {
+                                                        unit1 = unit1 + valorAumentado1;
+                                                    }
+                                                    else
+                                                    {
+                                                        unit1 = unit1 + valor1;
+                                                    }
+                                                }
+
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td>@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
                                                     <td align="center">
-                                                        @if (@residuo1 > 7)
-                                                        {
-                                                            @valorAumentado1
-                                                        }
-                                                        else
-                                                        {
-                                                            @valor1
-                                                        }
+                                                        @unit1
                                                     </td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.DateOfService)</td>
                                                     <td align="center">
-                                                        @if (@residuo1 > 7)
-                                                        {
-                                                            @(valorAumentado1 * 12);
-                                                        }
-                                                        else
-                                                        {
-                                                            @(valor1 * 12);
-                                                        }
+                                                        @(unit1 * 12)
                                                     </td>
                                                     <td align="center">
                                                         @if (product.BilledDate == null)
@@ -160,24 +182,10 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @valorAumentado
-                                    }
-                                    else
-                                    {
-                                        @valor
-                                    }
+                                    @unit
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @(valorAumentado * 12);
-                                    }
-                                    else
-                                    {
-                                        @(valor * 12);
-                                    }
+                                    @(unit * 12)
                                 </td>
                                 <td align="right">
                                     <a asp-action="BillTCMClientToday" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
@@ -195,6 +203,26 @@
                             var @valor = (@item.TCMNote.Where(b => b.BilledDate != null && b.PaymentDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) / 15);
                             var @residuo = (@item.TCMNote.Where(b => b.BilledDate != null && b.PaymentDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) % 15);
                             var @valorAumentado = valor + 1;
+                            var @unit = 0;
+
+                            foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                            {
+                                foreach (var activity in note.TCMNoteActivity)
+                                {
+                                    valor = (activity.Minutes) / 15;
+                                    residuo = (activity.Minutes) % 15;
+                                    valorAumentado = valor + 1;
+                                    @if (@residuo > 7)
+                                    {
+                                        unit = unit + valorAumentado;
+                                    }
+                                    else
+                                    {
+                                        unit = unit + valor;
+                                    }
+                                }
+                            }
+
                             <tr>
                                 <td>
                                     @if (item.TCMNote.Count() != 0)
@@ -223,30 +251,31 @@
                                                 var @valor1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) / 15;
                                                 var @residuo1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) % 15;
                                                 var @valorAumentado1 = valor1 + 1;
+                                                var @unit1 = 0;
+                                                foreach (var activity in product.TCMNoteActivity)
+                                                {
+                                                    valor1 = (activity.Minutes) / 15;
+                                                    residuo1 = (activity.Minutes) % 15;
+                                                    valorAumentado1 = valor1 + 1;
+                                                    @if (@residuo1 > 7)
+                                                    {
+                                                        unit1 = unit1 + valorAumentado1;
+                                                    }
+                                                    else
+                                                    {
+                                                        unit1 = unit1 + valor1;
+                                                    }
+                                                }
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td>@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
                                                     <td align="center">
-                                                        @if (@residuo1 > 7)
-                                                        {
-                                                            @valorAumentado1
-                                                        }
-                                                        else
-                                                        {
-                                                            @valor1
-                                                        }
+                                                        @unit1
                                                     </td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.DateOfService)</td>
                                                     <td align="center">
-                                                        @if (@residuo1 > 7)
-                                                        {
-                                                            @(valorAumentado1 * 12);
-                                                        }
-                                                        else
-                                                        {
-                                                            @(valor1 * 12);
-                                                        }
+                                                        @(unit1 * 12)
                                                     </td>
                                                     <td align="center">
                                                         @if (product.BilledDate == null)
@@ -310,24 +339,10 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @valorAumentado
-                                    }
-                                    else
-                                    {
-                                        @valor
-                                    }
+                                    @unit
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @(valorAumentado * 12);
-                                    }
-                                    else
-                                    {
-                                        @(valor * 12);
-                                    }
+                                    @(unit * 12)
                                 </td>
                                 <td align="right">
                                     <a asp-action="NotTCMClientToday" asp-route-id="@item.Id" class="btn btn-danger" title="Not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>

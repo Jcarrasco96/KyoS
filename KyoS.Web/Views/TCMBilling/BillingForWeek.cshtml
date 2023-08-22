@@ -51,16 +51,18 @@
         </br>
     </div>
     <div class="col-md-12">
-        <div class="col-md-4">
+        <div class="col-md-3">
             &nbsp;
         </div>
-        <div class="col-md-3">
+        <div class="col-md-5">
             <center>
                 <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update Bill"><i class="glyphicon glyphicon-refresh"></i> Update services pending billing</a>
+                <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
+                <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export All Report</a>
                 <hr />
             </center>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             &nbsp;
         </div>
     </div>
@@ -244,6 +246,21 @@
                             var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
                             var @valorAumentado = valor + 1;
+                            var @unit = 0;
+                            foreach (var activity in item.TCMNoteActivity)
+                            {
+                                valor = (activity.Minutes) / 15;
+                                residuo = (activity.Minutes) % 15;
+                                valorAumentado = valor + 1;
+                                @if (@residuo > 7)
+                                {
+                                    unit = unit + valorAumentado;
+                                }
+                                else
+                                {
+                                    unit = unit + valor;
+                                }
+                            }
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
@@ -278,24 +295,10 @@
                                     @Html.DisplayFor(modelItem => item.DateOfService)
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @valorAumentado
-                                    }
-                                    else
-                                    {
-                                        @valor
-                                    }
+                                    @unit
                                 </td>
                                 <td align="center">
-                                    @if (@residuo > 7)
-                                    {
-                                        @(valorAumentado * 12);
-                                    }
-                                    else
-                                    {
-                                        @(valor * 12);
-                                    }
+                                    @(unit * 12)
                                 </td>
                                 <td align="center">
                                     @if (item.BilledDate == null)

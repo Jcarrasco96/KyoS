@@ -18,12 +18,16 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;        
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IFileHelper _fileHelper;
 
-        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IRenderHelper renderHelper)
+        public TCMBillingController(DataContext context, ICombosHelper combosHelper, IRenderHelper renderHelper, IExportExcellHelper exportExcelHelper, IFileHelper fileHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _renderHelper = renderHelper;
+            _exportExcelHelper = exportExcelHelper;
+            _fileHelper = fileHelper;
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -444,10 +448,15 @@ namespace KyoS.Web.Controllers
                 int mod;
                 foreach (TCMNoteEntity item in list)
                 {
-                    minutes = item.TCMNoteActivity.Sum(t => t.Minutes);
-                    value = minutes / 15;
-                    mod = minutes % 15;
-                    totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                    foreach (var activity in item.TCMNoteActivity)
+                    {
+                        minutes = activity.Minutes;
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                    }
+
+                    
                 }
                 ViewBag.Clients = list.GroupBy(n => n.TCMClient).Count().ToString();
                 ViewBag.Notes = list.Count().ToString();
@@ -1018,24 +1027,30 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
                     {
-                        minutes = note.TCMNoteActivity.Sum(t => t.Minutes);
-                        value = minutes / 15;
-                        mod = minutes % 15;
-                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        foreach (var activity in note.TCMNoteActivity)
+                        {
+                            minutes = activity.Minutes;
+                            value = minutes / 15;
+                            mod = minutes % 15;
+                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                            services ++;
+                        }
                         notes++;
-                        services += note.TCMNoteActivity.Count();
                     }
                 }
                 if (billed == 2)
                 {
                     foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
                     {
-                        minutes = note.TCMNoteActivity.Sum(t => t.Minutes);
-                        value = minutes / 15;
-                        mod = minutes % 15;
-                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        foreach (var activity in note.TCMNoteActivity)
+                        {
+                            minutes = activity.Minutes;
+                            value = minutes / 15;
+                            mod = minutes % 15;
+                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                            services++;
+                        }
                         notes++;
-                        services += note.TCMNoteActivity.Count();
                     }
                 }
             }
@@ -1458,6 +1473,128 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult EXCEL(string dateInterval = "", int all = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<TCMNoteEntity> tcmNotes = new List<TCMNoteEntity>();
+            string[] week = dateInterval.Split(" - ");
+            DateTime initial = DateTime.Parse(week[0]);
+            DateTime end = DateTime.Parse(week[1]);
+
+            if (week.Count() > 0)
+            {
+                string Periodo = "";
+                string ReportName = "SuperBill Report " + week[0] + " To " + week[1] + ".xlsx";
+                string data = "";
+                if (all == 0)
+                {
+                    tcmNotes = _context.TCMNote
+                                       .Include(f => f.TCMClient)
+                                       .ThenInclude(f => f.Casemanager)
+                                       
+                                       .Include(w => w.TCMClient)
+                                       .ThenInclude(w => w.Client)
+                                       
+                                       .ThenInclude(w => w.Clients_Diagnostics)
+                                       .ThenInclude(w => w.Diagnostic)
+
+                                       .Include(w => w.TCMClient)
+                                       .ThenInclude(w => w.Client)
+                                       .ThenInclude(w => w.Clients_HealthInsurances)
+                                       .ThenInclude(w => w.HealthInsurance)
+
+                                       .Include(w => w.TCMNoteActivity)
+
+                                       .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                && n.BilledDate == null
+                                                && n.DateOfService >= initial
+                                                && n.DateOfService <= end)
+                                       .OrderBy(n => n.TCMClient.Client.Name)
+                                       .ThenBy(n => n.DateOfService)
+                                       .ToList();
+
+                    Periodo = week[0] + " - " + week[1];
+                    data = "NOT BILLED";
+                }
+                else
+                {
+                    tcmNotes = _context.TCMNote
+                                        .Include(f => f.TCMClient)
+                                        .ThenInclude(f => f.Casemanager)
+
+                                        .Include(w => w.TCMClient)
+                                        .ThenInclude(w => w.Client)
+
+                                        .ThenInclude(w => w.Clients_Diagnostics)
+                                        .ThenInclude(w => w.Diagnostic)
+
+                                        .Include(w => w.TCMClient)
+                                        .ThenInclude(w => w.Client)
+                                        .ThenInclude(w => w.Clients_HealthInsurances)
+                                        .ThenInclude(w => w.HealthInsurance)
+
+                                        .Include(w => w.TCMNoteActivity)
+
+                                        .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                 && n.DateOfService >= initial
+                                                 && n.DateOfService <= end)
+                                        .OrderBy(n => n.TCMClient.Client.Name)
+                                        .ThenBy(n => n.DateOfService)
+                                        .ToList();
+
+                    Periodo = initial.ToLongDateString() + " - " + end.ToLongDateString();
+                    data = "ALL DATA";
+                }
+
+
+                byte[] content = _exportExcelHelper.ExportBillTCMHelper(tcmNotes, Periodo, user_logged.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+            }
+            else
+            {
+                string Periodo = "";
+                string ReportName = "SuperBill Unbilled Full Report.xlsx";
+                string data = "";
+                tcmNotes = _context.TCMNote
+                                      .Include(f => f.TCMClient)
+                                      .ThenInclude(f => f.Casemanager)
+
+                                      .Include(w => w.TCMClient)
+                                      .ThenInclude(w => w.Client)
+
+                                      .ThenInclude(w => w.Clients_Diagnostics)
+                                      .ThenInclude(w => w.Diagnostic)
+
+                                      .Include(w => w.TCMClient)
+                                      .ThenInclude(w => w.Client)
+                                      .ThenInclude(w => w.Clients_HealthInsurances)
+                                      .ThenInclude(w => w.HealthInsurance)
+
+                                      .Include(w => w.TCMNoteActivity)
+
+                                      .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                               && n.BilledDate == null)
+                                      .OrderBy(n => n.TCMClient.Client.Name)
+                                      .ThenBy(n => n.DateOfService)
+                                      .ToList();
+
+                Periodo = "Unbilled Full Report";
+                data = "NOT BILLED";
+
+
+                byte[] content = _exportExcelHelper.ExportBillTCMHelper(tcmNotes, Periodo, user_logged.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+                //return RedirectToAction("NotAuthorized", "Account");
+            }
+        }
+
 
     }
 }
