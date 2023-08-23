@@ -30,7 +30,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
         
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, CaseManager, Documents_Assistant, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, CaseManager, Documents_Assistant, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -90,7 +90,7 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
-            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant") || User.IsInRole("Frontdesk"))
             {
                 return View(await _context.Incidents
 
@@ -106,7 +106,7 @@ namespace KyoS.Web.Controllers
             return View(null);
         }
         
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> Create(int id = 0)
         {
             if (id == 1)
@@ -182,7 +182,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> Create(IncidentViewModel incidentViewModel)
         {
             if (ModelState.IsValid)
@@ -250,7 +250,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -310,7 +310,7 @@ namespace KyoS.Web.Controllers
             return View(incidentViewModel);
         }
 
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IncidentViewModel incidentViewModel)
@@ -348,7 +348,7 @@ namespace KyoS.Web.Controllers
             return View(incidentViewModel);
         }
 
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> CreateModal(int id = 0)
         {
             if (id == 1)
@@ -450,7 +450,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> CreateModal(IncidentViewModel incidentViewModel)
         {
             if (ModelState.IsValid)
@@ -527,7 +527,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", incidentViewModel) });
         }
 
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         public async Task<IActionResult> EditModal(int? id)
         {
             if (id == null)
@@ -587,7 +587,7 @@ namespace KyoS.Web.Controllers
             return View(incidentViewModel);
         }
 
-        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Frontdesk")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditModal(int id, IncidentViewModel incidentViewModel)

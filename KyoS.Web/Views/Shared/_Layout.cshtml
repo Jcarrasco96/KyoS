@@ -111,15 +111,15 @@
                                 &nbsp;Incidents&nbsp;&nbsp;
                             </a>
                             @*<ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                                <li role="separator" class="divider"></li>
-                            </ul>*@
+                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                    <li role="separator" class="divider"></li>
+                </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                     }
                     else
-           if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -137,7 +137,8 @@
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Create">Create Client</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Signatures">Clients' Signatures</a></li>
                                         </ul>
-                                    </li>                                    
+                                    </li>
+
                                 }
                                 else
                                 {
@@ -236,7 +237,7 @@
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
                                         </ul>
-                                    </li>                                    
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Topics / Activity", "Index", "Themes")</li>
                                     <li role="separator" class="divider"></li>
@@ -401,14 +402,14 @@
                                 &nbsp;Incidents&nbsp;&nbsp;
                             </a>
                             @*<ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                                <li role="separator" class="divider"></li>
-                            </ul>*@
+                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                    <li role="separator" class="divider"></li>
+                </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -507,14 +508,14 @@
                                 &nbsp;Incidents&nbsp;&nbsp;
                             </a>
                             @*<ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                                <li role="separator" class="divider"></li>
-                            </ul>*@
+                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                    <li role="separator" class="divider"></li>
+                </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Facilitator")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -642,14 +643,14 @@
                                 &nbsp;Incidents&nbsp;&nbsp;
                             </a>
                             @*<ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                                <li role="separator" class="divider"></li>
-                            </ul>*@
+                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                    <li role="separator" class="divider"></li>
+                </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                       if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("TCMSupervisor")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="TCMClients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -758,7 +759,7 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-                                           if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("CaseManager")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Themes" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -856,7 +857,48 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                     else
-           if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
+                    {
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Clients <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Documentation <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Intakes", "Index", "Intakes")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Fars Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Edition FARS", "EditionFars", "FarsForms")</li>
+                                        <li>@Html.ActionLink("All FARS Forms", "Index", "FarsForms")</li>
+                                    </ul>
+                                </li>
+                                <li>@Html.ActionLink("Medical History", "MedicalHistory", "Intakes")</li>
+                                <li>@Html.ActionLink("MTPs", "Index", "MTPs")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">BIOs / BRIEFs</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
+                                        <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
+                                    </ul>
+                                </li>
+                                <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
+                            </ul>
+                        </li>
+
+                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                    }
+                    else
+                   if (User.Identity.IsAuthenticated && (User.IsInRole("Frontdesk")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -1395,6 +1437,12 @@
                                         {
                                             <span class="label label-default">
                                                 Administrator
+                                            </span>
+                                        }
+                                        @if (User.IsInRole("Frontdesk"))
+                                        {
+                                            <span class="label label-default">
+                                                Front Desk
                                             </span>
                                         }
                                     </a>

@@ -30,7 +30,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -267,7 +267,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction(nameof(Create), new { id = medicationEntity.Client.Id});
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> MedicationForClient(int idClient = 0)
         {
             UserEntity user_logged = await _context.Users

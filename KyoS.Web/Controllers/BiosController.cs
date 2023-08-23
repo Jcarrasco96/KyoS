@@ -37,7 +37,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -58,7 +58,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
                                               .Include(g => g.Bio)
@@ -1159,7 +1159,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1229,7 +1229,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1459,7 +1459,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator, Frontdesk")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             BioEntity entity = _context.Bio
@@ -1584,7 +1584,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Pending(int idError = 0)
         {
             UserEntity user_logged = await _context.Users

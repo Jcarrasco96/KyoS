@@ -36,7 +36,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
         
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -496,7 +496,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient  = clientId});
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public IActionResult PrintDischarge(int id)
         {
             DischargeEntity entity = _context.Discharge
@@ -541,7 +541,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> ClientswithoutDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -794,7 +794,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk")]
         public async Task<IActionResult> PendingDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -848,7 +848,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> DischargeInEdit(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -1023,7 +1023,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> DischargeForClient(int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1104,7 +1104,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditDischarge()
         {
             UserEntity user_logged = _context.Users

@@ -146,7 +146,7 @@ namespace KyoS.Web.Controllers
                         PhoneNumber = string.Empty,
                         Address = string.Empty,
                         Document = string.Empty,
-                        UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : UserType.Admin,
+                        UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : (model.RoleId == 7) ? UserType.Admin : UserType.Frontdesk,
                         Active = model.Active,
                         Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null                    
                     };
@@ -155,7 +155,26 @@ namespace KyoS.Web.Controllers
                     {
                         await _userHelper.AddUserAsync(user, model.Password);
                         await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "User has been successfully created") });
+                        List<UserEntity> userList = _context.Users.Include(n => n.Clinic).ToList();
+
+                        List<Users_in_Role_ViewModel> list_User = new List<Users_in_Role_ViewModel>();
+                        foreach (var item in userList)
+                        {
+                            Users_in_Role_ViewModel temp = new Users_in_Role_ViewModel();
+                            temp.Active = item.Active;
+                            temp.Clinic = item.Clinic;
+                            temp.Email = item.Email;
+                            temp.Fullname = item.FullName;
+                            temp.Username = item.UserName;
+                            temp.UserId = item.Id;
+                            temp.Role = item.UserType.ToString();
+                            list_User.Add(temp);
+                        }
+
+                        ViewBag.StatusMessage = "User has been successfully created";
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewAccounts", list_User) });
+                        //return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "User has been successfully created") });
                     }
                     catch (System.Exception ex)
                     {
@@ -249,7 +268,7 @@ namespace KyoS.Web.Controllers
                 Email = user.Email,
                 RoleId = (user.UserType == UserType.Documents_Assistant) ? 1 : (user.UserType == UserType.Facilitator) ? 2 : (user.UserType == UserType.Supervisor) ? 3
                                                                      : (user.UserType == UserType.CaseManager) ? 4 : (user.UserType == UserType.TCMSupervisor) ? 5
-                                                                     : (user.UserType == UserType.Manager) ? 6 : (user.UserType == UserType.Admin) ? 7 : 0,
+                                                                     : (user.UserType == UserType.Manager) ? 6 : (user.UserType == UserType.Admin) ? 7 : (user.UserType == UserType.Frontdesk) ? 8 : 0,
                 Roles = _combosHelper.GetComboRoles(),
                 IdClinic = (user.Clinic != null) ? user.Clinic.Id : 0,
                 Clinics = _combosHelper.GetComboClinics(),
@@ -275,7 +294,7 @@ namespace KyoS.Web.Controllers
                     user.PhoneNumber = string.Empty;
                     user.Address = string.Empty;
                     user.Document = string.Empty;
-                    user.UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : UserType.Admin;
+                    user.UserType = (model.RoleId == 1) ? UserType.Documents_Assistant : (model.RoleId == 2) ? UserType.Facilitator : (model.RoleId == 3) ? UserType.Supervisor : (model.RoleId == 4) ? UserType.CaseManager : (model.RoleId == 5) ? UserType.TCMSupervisor : (model.RoleId == 6) ? UserType.Manager : (model.RoleId == 7) ? UserType.Admin : UserType.Frontdesk;
                     user.Active = model.Active;
                     user.Clinic = (model.IdClinic != 0) ? _context.Clinics.FirstOrDefault(c => c.Id == model.IdClinic) : null;
                     
@@ -287,8 +306,28 @@ namespace KyoS.Web.Controllers
                         await _userHelper.RemoveFromRolesAsync(user, roles);
                         await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
                         
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "The user has been successfully modified.") });
-                    }
+                        List<UserEntity> userList = _context.Users.Include(n => n.Clinic).ToList();
+                        
+                        List<Users_in_Role_ViewModel> list_User = new List<Users_in_Role_ViewModel>();
+                        foreach (var item in userList)
+                        {
+                            Users_in_Role_ViewModel temp = new Users_in_Role_ViewModel();
+                            temp.Active = item.Active;
+                            temp.Clinic = item.Clinic;
+                            temp.Email = item.Email;
+                            temp.Fullname = item.FullName;
+                            temp.Username = item.UserName;
+                            temp.UserId = item.Id;
+                            temp.Role = item.UserType.ToString();
+                            list_User.Add(temp);
+                        }
+
+                        ViewBag.StatusMessage = "The user has been successfully modified.";
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewAccounts", list_User) });
+
+                    //return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_Message", "The user has been successfully modified.") });
+                }
                     catch (System.Exception ex)
                     {
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);

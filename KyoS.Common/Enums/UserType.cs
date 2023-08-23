@@ -8,6 +8,7 @@
         Facilitator,
         CaseManager,
         TCMSupervisor,
-        Documents_Assistant
+        Documents_Assistant,
+        Frontdesk
     }
 }

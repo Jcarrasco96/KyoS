@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -51,7 +51,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
         public IActionResult IndexFacilitator()
         {
             UserEntity user_logged = _context.Users
@@ -130,7 +130,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
         public async Task<IActionResult> EventsFacilitator(string start, string end, int idFacilitator)
         {
             if (idFacilitator != 0)

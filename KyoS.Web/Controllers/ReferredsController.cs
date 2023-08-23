@@ -19,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, Frontdesk")]
     public class ReferredsController : Controller
     {
         private readonly DataContext _context;

@@ -6438,7 +6438,7 @@ namespace KyoS.Web.Controllers
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]        
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]        
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6539,7 +6539,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintNoteP(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6648,7 +6648,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6712,7 +6712,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6771,7 +6771,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintGroupNote2(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -10732,7 +10732,7 @@ namespace KyoS.Web.Controllers
             return Json(text = _translateHelper.TranslateText("es", "en", text));            
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public async Task<IActionResult> NotStartedNotes(string name, int id = 0, int expired = 0)
         {
             if (expired == 1)
@@ -11146,7 +11146,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> ApprovedNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -11500,7 +11500,7 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotNotesSummary()
         {
             UserEntity user_logged = await _context.Users
@@ -11536,7 +11536,7 @@ namespace KyoS.Web.Controllers
             return View(notStarted);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> EditingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11570,7 +11570,7 @@ namespace KyoS.Web.Controllers
             return View(editing);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> PendingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11605,7 +11605,7 @@ namespace KyoS.Web.Controllers
             return View(pending);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> ReviewSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11705,7 +11705,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotPresentNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -11784,7 +11784,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult NotPresentNotesClinic(NotPresentNotesClinicViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -11799,7 +11799,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11885,7 +11885,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11970,7 +11970,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -13456,7 +13456,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13549,7 +13549,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult NotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -13564,7 +13564,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> IndNotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13648,7 +13648,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult IndNotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -13663,7 +13663,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> GroupNotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13755,7 +13755,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult GroupNotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -15011,7 +15011,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditGroups()
         {
             UserEntity user_logged = _context.Users
@@ -15107,7 +15107,7 @@ namespace KyoS.Web.Controllers
             return View(auditGroup);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditGoalsObjective(int idMtp = 0, ServiceType service = ServiceType.PSR )
         {
             UserEntity user_logged = _context.Users
@@ -15289,7 +15289,7 @@ namespace KyoS.Web.Controllers
             return View(auditGoalsObjetive_List);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditGoalsObjectiveInd(int idMtp = 0)
         {
             UserEntity user_logged = _context.Users
@@ -19942,7 +19942,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public IActionResult AuditOverlapin(int idWeek = 0)
         {
             UserEntity user_logged = _context.Users
@@ -20376,7 +20376,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ClientIndForWeek", list/*, new { weekId = weekId, facilitatorId = facilitatorId }*/) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditNotes()
         {
             UserEntity user_logged = _context.Users

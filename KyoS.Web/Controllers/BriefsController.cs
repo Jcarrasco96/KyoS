@@ -37,7 +37,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -849,7 +849,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public IActionResult PrintBrief(int id)
         {
             BriefEntity entity = _context.Brief
@@ -1122,7 +1122,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator, Frontdesk")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             BriefEntity entity = _context.Brief
@@ -1247,7 +1247,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Pending(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1501,7 +1501,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Where(d => d.Client.Id == 0).ToList()) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditBrief()
         {
             UserEntity user_logged = _context.Users

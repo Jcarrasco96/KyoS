@@ -36,7 +36,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -58,7 +58,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
                                               .Include(f => f.FarsFormList)
@@ -446,7 +446,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -495,7 +495,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public async Task<IActionResult> ClientswithoutInitialFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -580,7 +580,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager, Frondesk")]
         public async Task<IActionResult> PendingFars(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -654,7 +654,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public async Task<IActionResult> FarsForClient(int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -785,7 +785,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
         public async Task<IActionResult> AuditFARS()
         {
             UserEntity user_logged = _context.Users
@@ -919,7 +919,7 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -972,7 +972,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frondesk")]
         public async Task<IActionResult> FARSMissingForClient()
         {
             UserEntity user_logged = await _context.Users
@@ -1008,7 +1008,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator, Frondesk")]
         public async Task<IActionResult> AuditFARSforId(int id = 0)
         {
             UserEntity user_logged = _context.Users
