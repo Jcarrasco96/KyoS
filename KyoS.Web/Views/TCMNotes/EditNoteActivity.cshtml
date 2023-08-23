@@ -17,7 +17,7 @@
                 <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.TCMNote.DateOfService.ToShortDateString() - @Model.TCMNote.TCMClient.Client.Name  </span></h4>
             </div>
         </div>
-        @if (User.IsInRole("CaseManager"))
+        @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
         {
             <div>
                 <div class=" col-md-3 form-group">
@@ -30,23 +30,6 @@
                 <div class=" col-md-3 form-group">
                     <label asp-for="EndTime" class="control-label">End Time</label>&nbsp;*
                     <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" />
-                    <span asp-validation-for="EndTime" class="text-danger"></span>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*
-                    <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" readonly />
-                    <span asp-validation-for="StartTime" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="EndTime" class="control-label">End Time</label>&nbsp;*
-                    <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" readonly />
                     <span asp-validation-for="EndTime" class="text-danger"></span>
                 </div>
             </div>

@@ -425,16 +425,20 @@ namespace KyoS.Web.Controllers
                         {
                             return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
                         }
-                        if (origin == 7)
-                        {
-                            return RedirectToAction("CorrectionNote");
-                        }
+                       
                     }
                     else
                     {
                         if (User.IsInRole("TCMSupervisor"))
                         {
-                            return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                            if (origin == 7)
+                            {
+                                return RedirectToAction("UpdateNote");
+                            }
+                            else
+                            {
+                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                            }
                         }
                     }
                     
@@ -1444,7 +1448,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> CorrectionNote(int id = 0)
+        public async Task<IActionResult> UpdateNote(int id = 0)
         {
             if (id == 1)
             {

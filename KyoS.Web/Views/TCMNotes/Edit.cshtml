@@ -43,7 +43,7 @@
                     }
                     @if (ViewData["origin"].ToString() == "7")
                     {
-                        @Html.ActionLink("Correction Note", "CorrectionNote", "TCMNotes")
+                        @Html.ActionLink("Update Notes", "UpdateNote", "TCMNotes")
                     }
                 }
 
@@ -120,7 +120,7 @@
                     {
                         @if (ViewData["origin"].ToString() == "7")
                         {
-                            <a asp-action="CorrectionNote" class="btn btn-success">Back</a>
+                            <a asp-action="UpdateNote" class="btn btn-success">Back</a>
                         }
                         else
                         {

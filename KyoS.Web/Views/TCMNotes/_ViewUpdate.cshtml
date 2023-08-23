@@ -5,20 +5,26 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Correction</h3>
+                <h3 class="panel-title">Notes for update</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.TCMClient.Casemanager)
                             </th>
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.TCMClient.Client.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Date of Service
+                            <th class="col-md-1" style="text-align:center;">
+                                Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Services
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Minutes
@@ -75,6 +81,32 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                    {
+                                        <span class="label label-success">
+                                            Approved
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                        {
+                                            <span class="label label-warning">
+                                                Edition
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.TCMNoteActivity.Count()
                                 </td>
                                 <td align="center">
                                     @item.TCMNoteActivity.Sum(n => n.Minutes)
