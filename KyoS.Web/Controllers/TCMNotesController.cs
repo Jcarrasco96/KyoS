@@ -249,7 +249,7 @@ namespace KyoS.Web.Controllers
                                                 .Include(u => u.Clinic)
                                                 .ThenInclude(u => u.Setting)
                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+          
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -307,7 +307,7 @@ namespace KyoS.Web.Controllers
                         else
                         {
                             //redirect to note print report
-                            if (TcmNote.Status == NoteStatus.Approved)
+                            if (TcmNote.Status == NoteStatus.Approved && origin != 7)
                             {
                                 return RedirectToAction("PrintNote", new { id = TcmNote.Id });
                             }
@@ -424,6 +424,10 @@ namespace KyoS.Web.Controllers
                         if (origin == 6)
                         {
                             return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                        }
+                        if (origin == 7)
+                        {
+                            return RedirectToAction("CorrectionNote");
                         }
                     }
                     else
@@ -759,6 +763,9 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(n => n.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            int units = 0;
+            int residuo = 0;
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -782,6 +789,13 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMNoteActivityViewModel(NoteActivity);
 
+                        units = model.Minutes / 15;
+                        residuo = model.Minutes % 15;
+                        if (residuo > 7)
+                            model.Units = units + 1;
+                        else
+                            model.Units = units;
+                        
                         return View(model);
                     }
 
@@ -811,6 +825,13 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMNoteActivityViewModel(NoteActivity);
 
+                        units = model.Minutes / 15;
+                        residuo = model.Minutes % 15;
+                        if (residuo > 7)
+                            model.Units = units + 1;
+                        else
+                            model.Units = units;
+                      
                         return View(model);
                     }
 
@@ -1081,6 +1102,19 @@ namespace KyoS.Web.Controllers
             int hora = (end - start).Hours;
             int minutes = (end - start).Minutes + (hora * 60);
             return Json(minutes);
+        }
+
+        public JsonResult CalcularUnits(DateTime start, DateTime end)
+        {
+            int hora = (end - start).Hours;
+            int minutes = (end - start).Minutes + (hora * 60);
+            int units = minutes / 15;
+            int residuo = minutes % 15;
+
+            if(residuo > 7)
+             return Json(units+1);
+            else
+                return Json(units);
         }
 
         public JsonResult GetListActivity(int idDomain)
@@ -1409,6 +1443,48 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> CorrectionNote(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.FinishEdition = "Y";
+            }
+
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                return View(await _context.TCMNote
+                                          .Include(n => n.TCMClient)
+                                          .ThenInclude(n => n.Casemanager)
+                                          .Include(n => n.TCMClient)
+                                          .ThenInclude(n => n.Client)
+                                          .ThenInclude(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
+                                          .Include(n => n.TCMNoteActivity)
+                                          .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && w.TCMClient.Casemanager.TCMSupervisor.Id == tcmSupervisor.Id
+                                                    && w.Status == NoteStatus.Approved))
+                                          .ToListAsync());
+            }
+            else
+            {
+                return View();
+            }
+        }
 
     }
 }

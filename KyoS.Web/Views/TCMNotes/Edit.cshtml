@@ -37,6 +37,14 @@
                     {
                         @Html.ActionLink("Inbox", "MessagesOfNotes", "TCMMessages")
                     }
+                    @if (ViewData["origin"].ToString() == "6")
+                    {
+                        @Html.ActionLink("Notes in Edition", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Edition })
+                    }
+                    @if (ViewData["origin"].ToString() == "7")
+                    {
+                        @Html.ActionLink("Correction Note", "CorrectionNote", "TCMNotes")
+                    }
                 }
 
             </li>
@@ -92,8 +100,9 @@
                         }
                         @if (ViewData["origin"].ToString() == "6")
                         {
-                           <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
+                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
                         }
+
                     }
                     @if (Model.Status == KyoS.Common.Enums.NoteStatus.Edition)
                     {
@@ -109,8 +118,16 @@
                 {
                     @if (User.IsInRole("TCMSupervisor"))
                     {
-                        <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
-                        <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
+                        @if (ViewData["origin"].ToString() == "7")
+                        {
+                            <a asp-action="CorrectionNote" class="btn btn-success">Back</a>
+                        }
+                        else
+                        {
+                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
+                            <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
+                        }
+
                     }
                 }
 

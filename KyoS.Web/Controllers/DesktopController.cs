@@ -583,13 +583,13 @@ namespace KyoS.Web.Controllers
                                                                     || g.TcmServicePlan.Approved != 2
                                                                     || g.TCMAssessment == null
                                                                     || g.TCMAssessment.Approved != 2
-                                                                //  || g.TcmIntakeAppendixJ == null
+                                                              //    || g.TcmIntakeAppendixJ == null
                                                                     || g.TcmIntakeAcknowledgementHipa == null
                                                                     || g.TCMIntakeAdvancedDirective == null
                                                                     || g.TcmIntakeConsentForRelease == null
                                                                     || g.TcmIntakeConsentForTreatment == null
                                                                     || g.TcmIntakeConsumerRights == null
-                                                                    || g.TCMIntakeCoordinationCare == null
+                                                               //     || g.TCMIntakeCoordinationCare == null
                                                                     || g.TCMIntakeForeignLanguage == null
                                                                     || g.TCMIntakeForm == null
                                                                     || g.TCMIntakeOrientationChecklist == null

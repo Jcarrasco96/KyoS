@@ -34,5 +34,7 @@ namespace KyoS.Web.Models
         public string DescriptionTemp { get; set; }
 
         public DateTime DateOfServiceNote { get; set; }
+
+        public int Units { get; set; }
     }
 }

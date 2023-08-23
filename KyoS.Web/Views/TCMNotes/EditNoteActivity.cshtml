@@ -39,14 +39,14 @@
             <div>
                 <div class=" col-md-3 form-group">
                     <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*
-                    <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" readonly/>
+                    <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" readonly />
                     <span asp-validation-for="StartTime" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class=" col-md-3 form-group">
                     <label asp-for="EndTime" class="control-label">End Time</label>&nbsp;*
-                    <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" readonly/>
+                    <input asp-for="EndTime" class="form-control" id="Time_End" onchange="getMinute();" readonly />
                     <span asp-validation-for="EndTime" class="text-danger"></span>
                 </div>
             </div>
@@ -59,7 +59,14 @@
             </div>
         </div>
         <div>
-            <div class=" col-md-4 form-group">
+            <div class=" col-md-2 form-group">
+                <label asp-for="Units" class="control-label">Units</label>
+                <textarea asp-for="Units" id="lbUnits" class="form-control" rows="1" readonly></textarea>
+                <span asp-validation-for="Units" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class=" col-md-2 form-group">
                 <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
                 <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
                 <span asp-validation-for="IdSetting" class="text-danger"></span>
@@ -118,7 +125,9 @@
 
     function getMinute() {
             var url = "@Url.Action("CalcularMinutes", "TCMNotes")";
-            $.get(url, { start: $("#Time_Start").val(), end: $("#Time_End").val() }, function (data) { $("#lbMinutes").text(data); });
+        $.get(url, { start: $("#Time_Start").val(), end: $("#Time_End").val() }, function (data) { $("#lbMinutes").text(data); });
+              url = "@Url.Action("CalcularUnits", "TCMNotes")";
+        $.get(url, { start: $("#Time_Start").val(), end: $("#Time_End").val() }, function (data) { $("#lbUnits").text(data); });
     }
 
     function getActivity() {
