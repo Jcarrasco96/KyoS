@@ -180,6 +180,12 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakeAcknowledgementHippa(TCMIntakeAcknowledgementHippaEntity intakeAcknowledgement);
         Stream TCMIntakeForeignLanguage(TCMIntakeForeignLanguageEntity intakeForeignLanguage);
         Stream TCMIntakeWelcome(TCMIntakeWelcomeEntity intakeWelcome);
+        Stream TCMIntakeClientSignatureVerification(TCMIntakeClientSignatureVerificationEntity intakeSignature);
+        Stream TCMIntakeClientDocumentVerification(TCMIntakeClientIdDocumentVerificationEntity intakeDocument);
+        Stream TCMIntakeNutritionalScreen(TCMIntakeNutritionalScreenEntity intakeNutritional);
+        Stream TCMIntakePersonalWellbeing(TCMIntakePersonalWellbeingEntity intakeWellbeing);
+        Stream TCMIntakeColumbiaSuicide(TCMIntakeColumbiaSuicideEntity intakeColumbia);
+        Stream TCMIntakePainScreen(TCMIntakePainScreenEntity intakePain);
         #endregion
 
         #region TCM Binder Section #4
