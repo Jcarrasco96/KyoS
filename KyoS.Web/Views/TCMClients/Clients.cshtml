@@ -106,18 +106,16 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (User.IsInRole("CaseManager"))
-                                    {
-                                        @*<td align="right">
-                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        </td>
-                                    }
-                                    else
-                                    {*@
-                                        <td align="right">
-                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        </td>
-                                    }
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                                        {
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        }
+                                    </td>
                                 </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -158,18 +156,16 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (User.IsInRole("CaseManager"))
-                                    {
-                                        @*<td align="right">
-                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                       </td>
-                                    }
-                                    else
-                                    {*@
-                                        <td align="right">
-                                            <a asp-action="Details" asp-controller="Clients" asp-route-origin="1" asp-route-id="@item.Client.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        </td>
-                                    }
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                                        {
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                        }
+                                    </td>
                                 </tr>
                             }
                         }

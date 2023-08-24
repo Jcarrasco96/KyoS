@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace KyoS.Web.Controllers
 {
@@ -579,6 +580,168 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", caseMannagerViewModel) });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> Edit(int id, TCMSupervisorViewModel tcmSupervisorViewModel)
+        {
+            if (id != tcmSupervisorViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (tcmSupervisorViewModel.IdUser == "0")
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        tcmSupervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+                        tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
+                        tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    }
+                    else
+                    {
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = user_logged.Clinic.Name,
+                            Value = $"{user_logged.Clinic.Id}"
+                        });
+                        tcmSupervisorViewModel.Clinics = list;
+                        tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
+                        tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    }
+
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmSupervisorViewModel) });
+                }
+
+                string path = tcmSupervisorViewModel.SignaturePath;
+                if (tcmSupervisorViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(tcmSupervisorViewModel.SignatureFile, "Signatures");
+                }
+                TCMSupervisorEntity tcmSupervisorEntity = await _converterHelper.ToTCMsupervisorEntity(tcmSupervisorViewModel, path, false, user_logged.UserName);
+                _context.Update(tcmSupervisorEntity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMSupervisorEntity> tcmSupervisor = await _context.TCMSupervisors
+
+                                                                            .Include(s => s.Clinic)
+
+                                                                            .OrderBy(f => f.Name)
+                                                                            .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the TCM supervisor: {tcmSupervisorEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            //recovery data
+            if (User.IsInRole("Admin"))
+            {
+                tcmSupervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+                tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
+            }
+            else
+            {
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = user_logged.Clinic.Name,
+                    Value = $"{user_logged.Clinic.Id}"
+                });
+
+                tcmSupervisorViewModel.Clinics = list;
+                tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmSupervisorViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+
+            return View(await _context.CaseManagers
+
+                                      .Include(c => c.Clinic)
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseMannagerEntity casemanagerEntity = await _context.CaseManagers
+                                                                 .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (casemanagerEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            CaseMannagerViewModel casemanagerViewModel = _converterHelper.ToCaseMannagerViewModel(casemanagerEntity, user_logged.Clinic.Id);
+
+            return View(casemanagerViewModel);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<JsonResult> SaveCaseManagerSignature(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "CaseMannager");
+
+            CaseMannagerEntity casemanager = await _context.CaseManagers
+                                                           .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (casemanager != null)
+            {
+                casemanager.SignaturePath = signPath;
+                _context.Update(casemanager);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "CaseMannager") });
+        }
+
 
     }
 }

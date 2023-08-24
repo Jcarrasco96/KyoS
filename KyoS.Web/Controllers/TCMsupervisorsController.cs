@@ -423,5 +423,69 @@ namespace KyoS.Web.Controllers
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmSupervisorViewModel) });
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> Signatures()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+
+            return View(await _context.TCMSupervisors
+
+                                      .Include(c => c.Clinic)
+                                      .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                      .OrderBy(c => c.Name).ToListAsync());
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisorEntity tcmSupervisorEntity = await _context.TCMSupervisors
+                                                                    .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (tcmSupervisorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSupervisorViewModel tcmSupervisorViewModel = _converterHelper.ToTCMsupervisorViewModel(tcmSupervisorEntity, user_logged.Clinic.Id);
+
+            return View(tcmSupervisorViewModel);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<JsonResult> SaveTCMSupervisorSignature(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "TCMsupervisors");
+
+            TCMSupervisorEntity tcmSupervisor = await _context.TCMSupervisors
+                                                              .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (tcmSupervisor != null)
+            {
+                tcmSupervisor.SignaturePath = signPath;
+                _context.Update(tcmSupervisor);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "TCMsupervisors") });
+        }
+
     }
 }

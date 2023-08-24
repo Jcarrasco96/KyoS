@@ -774,7 +774,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)

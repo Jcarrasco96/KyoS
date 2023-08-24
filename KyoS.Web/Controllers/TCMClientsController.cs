@@ -712,7 +712,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor")]
         public async Task<IActionResult> Clients(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -730,11 +730,23 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            return View(await _context.TCMClient
-                                      .Include(c => c.Client)
-                                      .ThenInclude(c => c.Clinic)
-                                      .Where(c => c.Casemanager.LinkedUser == user_logged.UserName)
-                                      .OrderBy(c => c.Client.Name).ToListAsync());
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMClient
+                                          .Include(c => c.Client)
+                                          .ThenInclude(c => c.Clinic)
+                                          .Where(c => c.Casemanager.LinkedUser == user_logged.UserName)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                return View(await _context.TCMClient
+                                          .Include(c => c.Client)
+                                          .ThenInclude(c => c.Clinic)
+                                          .Where(c => c.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+            return View();
         }
     }
 }

@@ -341,8 +341,13 @@
                                     TCM <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Supervisors", "Index", "TCMSupervisors")</li>
-                                    <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Employees &nbsp;</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Supervisors", "Index", "TCMSupervisors")</li>
+                                            <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
+                                        </ul>
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Services / Stages", "Index", "TCMServices")</li>
                                     <li role="separator" class="divider"></li>
@@ -666,7 +671,7 @@
                                     </ul>
                                 </li>
                                 <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
-
+                                <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
