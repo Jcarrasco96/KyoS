@@ -112,6 +112,10 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (_context.TCMDateBlocked.Any(n => n.DateBlocked.Day == dateTime.Day) == true)
+            {
+                return RedirectToAction("Index", "TCMBilling", new { id = 1});
+            }
 
             CaseMannagerEntity caseManager = _context.CaseManagers
                                                      .FirstOrDefault(cm => cm.LinkedUser == user_logged.UserName);

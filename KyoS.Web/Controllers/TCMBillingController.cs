@@ -31,8 +31,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Index()
+        public IActionResult Index(int id = 0)
         {
+            if (id == 1)
+            {
+                ViewBag.DateBlocked = "B";
+            }
+
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);

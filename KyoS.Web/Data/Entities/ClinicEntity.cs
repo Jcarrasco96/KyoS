@@ -78,5 +78,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of FARS")]
         public string CodeFARS { get; set; }
+
+        public ICollection<TCMDateBlockedEntity> TCMDateBlockeds { get; set; }
     }
 }

@@ -211,5 +211,7 @@ namespace KyoS.Web.Helpers
         TCMIntakePersonalWellbeingViewModel ToTCMIntakePersonalWellbeingViewModel(TCMIntakePersonalWellbeingEntity model);
         TCMIntakeNutritionalScreenEntity ToTCMIntakeNutritionalScreenEntity(TCMIntakeNutritionalScreenViewModel model, bool isNew, string userId);
         TCMIntakeNutritionalScreenViewModel ToTCMIntakeNutritionalScreenViewModel(TCMIntakeNutritionalScreenEntity model);
+        Task<TCMDateBlockedEntity> ToTCMDateBlockedEntity(TCMDateBlockedViewModel model, bool isNew, string userId);
+        TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model);
     }
 }

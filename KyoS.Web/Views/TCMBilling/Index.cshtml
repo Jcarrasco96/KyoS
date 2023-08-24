@@ -13,7 +13,18 @@
         <li class="active">Billing</li>
     </ul><!--.breadcrumb-->
 </div>
-
+@if (ViewBag.DateBlocked == "B")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. Date blocked for the Manager, this date are unavailable for create notes.
+        </strong>
+    </div>
+}
 <div class="row">
     <div class="col-md-3">
         <label asp-for="IdClient" class="control-label"></label>
@@ -52,10 +63,10 @@
     </div>
 </div>
 <div class="row">
-    <div class = "col-md-12">
+    <div class="col-md-12">
         <hr />
     </div>
-    
+
 </div>
 
 <div class="row">

@@ -7120,5 +7120,36 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public async Task<TCMDateBlockedEntity> ToTCMDateBlockedEntity(TCMDateBlockedViewModel model, bool isNew, string userId)
+        {
+            return new TCMDateBlockedEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DateBlocked = model.DateBlocked,
+                Description = model.Description
+            };
+        }
+
+        public TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model)
+        {
+            return new TCMDateBlockedViewModel
+            {
+                Id = model.Id,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DateBlocked = model.DateBlocked,
+                Description = model.Description
+            };
+        }
+
     }
 }
