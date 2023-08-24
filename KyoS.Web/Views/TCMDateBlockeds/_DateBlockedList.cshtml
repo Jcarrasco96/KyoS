@@ -35,8 +35,16 @@
                                     @item.CreatedOn.ToShortDateString()
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("Edit", "TCMDateBlockeds", new { id = item.Id }, Context.Request.Scheme)','Edit date blocked')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete Facilitator"><i class="glyphicon glyphicon-trash"></i></button>
+                                    @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMDateBlockeds", new { id = item.Id }, Context.Request.Scheme)','Edit date blocked')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete Facilitator"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMDateBlockeds", new { id = item.Id }, Context.Request.Scheme)','Edit date blocked')" class="btn btn-warning disabled" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger disabled deleteItem" title="Delete Facilitator"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
                                 </td>
                             </tr>                           
                         }

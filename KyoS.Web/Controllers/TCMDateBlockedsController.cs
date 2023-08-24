@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager, TCMSupervisor, Casemanager")]
+    [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
     public class TCMDateBlockedsController : Controller
     {
         private readonly DataContext _context;
@@ -58,7 +58,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 TCMDateBlockedEntity dateBlocked = await _context.TCMDateBlocked
-                                                                 .FirstOrDefaultAsync(s => s.Clinic.Id == model.IdClinic);
+                                                                 .FirstOrDefaultAsync(s => s.DateBlocked.Day == model.DateBlocked.Day);
                 if (dateBlocked == null)
                 {
                     UserEntity user_logged = _context.Users
