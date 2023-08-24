@@ -2310,6 +2310,12 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (servicePlan.TCMSupervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
     }

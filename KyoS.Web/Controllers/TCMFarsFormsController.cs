@@ -442,6 +442,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.TCMDreamsMentalHealthFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.TCMClient.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.TCMSapphireMHCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
