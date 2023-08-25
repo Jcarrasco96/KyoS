@@ -2066,12 +2066,17 @@ namespace KyoS.Web.Controllers
                                         .Where(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                   && m.Client.Status == StatusType.Open
                                                   && m.Active == true
-                                                  && (m.Client.IdFacilitatorPSR == facilitator.Id || m.Client.IdFacilitatorGroup == facilitator.Id)
+                                                  && ((m.Client.IdFacilitatorPSR == facilitator.Id && m.Client.Service == ServiceType.PSR)
                                                   && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
                                                                                && o.Goal.Service == m.Client.Service
                                                                                && o.Compliment == false).Count() > 0
                                                                      ).Count() == 0
-                                                 ))
+                                                     || (m.Client.IdFacilitatorGroup == facilitator.Id && m.Client.Service == ServiceType.Group)
+                                                      && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                               && o.Goal.Service == m.Client.Service
+                                                                               && o.Compliment == false).Count() > 0
+                                                                     ).Count() == 0)  
+                                              ))
                                         .ToListAsync();
                   
                 }
