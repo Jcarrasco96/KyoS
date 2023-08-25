@@ -915,6 +915,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }

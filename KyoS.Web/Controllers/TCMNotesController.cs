@@ -1373,6 +1373,12 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (note.TCMClient.Casemanager.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
         

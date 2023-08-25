@@ -6645,6 +6645,19 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.SouthFloridaMHRNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.SouthFloridaMHRNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
@@ -6709,6 +6722,12 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 
@@ -6886,6 +6905,22 @@ namespace KyoS.Web.Controllers
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.SouthFloridaMHRGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.SouthFloridaMHRGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 
@@ -11881,6 +11916,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -11967,6 +12007,12 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Facilitator.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 
@@ -12050,6 +12096,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
             {
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12213,7 +12264,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-2) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
 
                 BillingReportViewModel model = new BillingReportViewModel
                 {

@@ -2015,6 +2015,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -2632,6 +2637,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
             {
                 Stream stream = _reportHelper.SapphireMHCAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -3254,6 +3264,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
             {
                 Stream stream = _reportHelper.SapphireMHCMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
+            {
+                Stream stream = _reportHelper.SouthFloridaMHRMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
