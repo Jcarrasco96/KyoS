@@ -537,7 +537,9 @@ namespace KyoS.Web.Controllers
                     EndTime = StartTime.AddMinutes(15),
                     DateOfServiceNote = note.DateOfService,
                     ServiceName = "",
-                    IdTCMActivity = 0
+                    IdTCMActivity = 0,
+                    Units = 1,
+                    TimeEnd = StartTime.AddMinutes(15).ToShortTimeString()
                 };
                 if (model.TCMNote.TCMNoteActivity == null)
                     model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();
@@ -557,6 +559,8 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TcmNotesViewModel.EndTime = TcmNotesViewModel.StartTime.AddMinutes(TcmNotesViewModel.Minutes);
+
             if (ModelState.IsValid)
             {
                 TCMNoteActivityEntity IndividualEntity = _context.TCMNoteActivity.Find(TcmNotesViewModel.Id);
@@ -566,6 +570,7 @@ namespace KyoS.Web.Controllers
 
                     TCMNoteEntity note = await _context.TCMNote
                                                        .FirstOrDefaultAsync(n => n.Id == TcmNotesViewModel.IdTCMNote);
+
                     TcmNotesViewModel.StartTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
                     TcmNotesViewModel.EndTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, TcmNotesViewModel.EndTime.Hour, TcmNotesViewModel.EndTime.Minute, 0);
 
@@ -860,12 +865,15 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            NoteActivityViewModel.EndTime = NoteActivityViewModel.StartTime.AddMinutes(NoteActivityViewModel.Minutes);
+
             if (ModelState.IsValid)
             {
                 NoteActivityViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain).Code);
 
                 TCMNoteEntity note = await _context.TCMNote
                                                    .FirstOrDefaultAsync(n => n.Id == NoteActivityViewModel.IdTCMNote);
+
                 NoteActivityViewModel.StartTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.StartTime.Hour, NoteActivityViewModel.StartTime.Minute, 0);
                 NoteActivityViewModel.EndTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.EndTime.Hour, NoteActivityViewModel.EndTime.Minute, 0);
 
@@ -1026,8 +1034,10 @@ namespace KyoS.Web.Controllers
                             }
                         
                         }
+
                         tcmNote.Status = NoteStatus.Approved;
                         _context.Update(tcmNote);
+                        
                         try
                         {
                             await _context.SaveChangesAsync();
@@ -1112,10 +1122,8 @@ namespace KyoS.Web.Controllers
             return Json(minutes);
         }
 
-        public JsonResult CalcularUnits(DateTime start, DateTime end)
+        public JsonResult CalcularUnits(DateTime start, int minutes)
         {
-            int hora = (end - start).Hours;
-            int minutes = (end - start).Minutes + (hora * 60);
             int units = minutes / 15;
             int residuo = minutes % 15;
 
@@ -1224,16 +1232,20 @@ namespace KyoS.Web.Controllers
                 {
 
                     TCMNoteEntity TcmNote = _context.TCMNote
+
                                                     .Include(b => b.TCMClient)
                                                     .ThenInclude(b => b.Client)
                                                     .ThenInclude(b => b.Clinic)
                                                     .ThenInclude(b => b.Setting)
+
                                                     .Include(b => b.TCMClient)
                                                     .ThenInclude(b => b.Casemanager)
                                                     .ThenInclude(b => b.Clinic)
                                                     .ThenInclude(b => b.Setting)
+
                                                     .Include(b => b.TCMNoteActivity)
                                                     .ThenInclude(b => b.TCMDomain)
+
                                                     .FirstOrDefault(m => m.Id == id);
                     if (TcmNote == null)
                     {
@@ -1258,44 +1270,73 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditReadOnly(TCMNoteViewModel tcmNotesViewModel, int origi = 1)
+        public async Task<IActionResult> EditReadOnly(TCMNoteViewModel tcmNotesViewModel, int id, int origi = 0)
         {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMNoteEntity tcmNote = _context.TCMNote
+                                           .Include(u => u.TCMNoteActivity)
+                                           .ThenInclude(u => u.TCMDomain)
+                                           .Include(u => u.TCMClient)
+                                           .ThenInclude(u => u.Casemanager)
+                                           .ThenInclude(u => u.Clinic)
+                                           .ThenInclude(u => u.Setting)
+                                           .FirstOrDefault(u => u.Id == id);
 
-            if (ModelState.IsValid)
+            if (tcmNote != null)
             {
-                TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
-                _context.TCMNote.Update(tcmNotesEntity);
-                try
+                if (User.IsInRole("TCMSupervisor"))
                 {
-                    await _context.SaveChangesAsync();
-                    if (origi == 1)
-                    {
-                        return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
-                    }
-                    if (origi == 2)
-                    {
-                        return RedirectToAction("NotesWithReview");
-                    }
-                    if (origi == 3)
-                    {
-                        return RedirectToAction("Notifications", "TCMMessages");
-                    }
-                    if (origi == 4)
-                    {
-                        return RedirectToAction("TCMSupervisor", "TCMBilling");
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                }
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                    if (user_logged.Clinic != null)
+                    {
+                        TCMDomainEntity domain = new TCMDomainEntity();
+                        foreach (var item in tcmNote.TCMNoteActivity)
+                        {
+                            domain = await _context.TCMDomains.FindAsync(item.TCMDomain.Id);
+
+                            if (domain != null)
+                            {
+                                domain.Used = true;
+                                _context.Update(domain);
+                                domain = new TCMDomainEntity();
+                            }
+
+                        }
+
+                        tcmNote.Outcome = tcmNotesViewModel.Outcome;
+                        tcmNote.NextStep = tcmNotesViewModel.NextStep;
+                        tcmNote.Status = NoteStatus.Approved;
+                        _context.Update(tcmNote);
+
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            if (origi == 0)
+                            {
+                                return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNote.TCMClient.Id });
+                            }
+                            if (origi == 1)
+                            {
+                                return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                            }
+                            if (origi == 2)
+                            {
+                                return RedirectToAction("NotesWithReview");
+                            }
+                            if (origi == 3)  ///viene de la pagina Notifications
+                                return RedirectToAction("Notifications", "TCMMessages");
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditReadOnly", tcmNotesViewModel) });
+            return RedirectToAction("TCMNotesForCase");
         }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
@@ -1492,6 +1533,79 @@ namespace KyoS.Web.Controllers
             {
                 return View();
             }
+        }
+
+        public JsonResult GetNeedIdentified(int idDomain)
+        {
+            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(o => o.Id == idDomain);
+            string text = "Select Domain";
+            if (domain != null)
+            {
+                text = domain.NeedsIdentified;
+            }
+            return Json(text);
+        }
+
+        public JsonResult CalcularDateEnd(DateTime start, int minutes)
+        {
+            DateTime end = new DateTime();
+            end = start;
+            end = end.AddMinutes(minutes);
+            string test = end.ToShortTimeString().ToString();
+            return Json(test);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditNoteActivityReadOnly(int id = 0)
+        {
+            TCMNoteActivityViewModel model;
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(n => n.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            int units = 0;
+            int residuo = 0;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMNoteActivityEntity NoteActivity = _context.TCMNoteActivity
+                                                                 .Include(m => m.TCMDomain)
+                                                                 .Include(m => m.TCMNote)
+                                                                 .ThenInclude(m => m.TCMClient)
+                                                                 .ThenInclude(m => m.Client)
+                                                                 .ThenInclude(m => m.Clinic)
+                                                                 .ThenInclude(m => m.Setting)
+                                                                 .Include(m => m.TCMServiceActivity)
+                                                                 .FirstOrDefault(m => m.Id == id);
+                    if (NoteActivity == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToTCMNoteActivityViewModel(NoteActivity);
+
+                        units = model.Minutes / 15;
+                        residuo = model.Minutes % 15;
+                        if (residuo > 7)
+                            model.Units = units + 1;
+                        else
+                            model.Units = units;
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new TCMNoteActivityViewModel();
+            return View(model);
         }
 
     }

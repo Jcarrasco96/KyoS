@@ -3,7 +3,7 @@
     Layout = null;
 }
 <div class="row">
-    <form asp-action="CreateNoteActivity" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
+    <form asp-action="EditNoteActivityReadOnly" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="IdTCMNote" />
@@ -12,6 +12,10 @@
         <input type="hidden" asp-for="Setting" />
         <input type="hidden" asp-for="IdTCMClient" />
         <input type="hidden" asp-for="DateOfServiceNote" />
+        <input type="hidden" asp-for="EndTime" />
+        <input type="hidden" asp-for="IdSetting" />
+        <input type="hidden" asp-for="IdTCMDomain" />
+        <input type="hidden" asp-for="IdTCMActivity" />
         <div>
             <div class="container-fluid">
                 <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.TCMNote.DateOfService.ToShortDateString() - @Model.TCMNote.TCMClient.Client.Name  </span></h4>
@@ -20,14 +24,14 @@
         <div>
             <div class=" col-md-3 form-group">
                 <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*
-                <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" />
+                <input asp-for="StartTime" class="form-control" id="Time_Start" readonly />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class=" col-md-2 form-group">
                 <label asp-for="Minutes" class="control-label">Minutes</label>
-                <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" />
+                <input asp-for="Minutes" id="lbMinutes" class="form-control" readonly />
                 <span asp-validation-for="Minutes" class="text-danger"></span>
             </div>
         </div>
@@ -48,27 +52,27 @@
         <div>
             <div class=" col-md-3 form-group">
                 <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
+                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control" readonly></select>
                 <span asp-validation-for="IdSetting" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class=" col-md-6 form-group">
                 <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
-                <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>
+                <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain" readonly></select>
                 <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class=" col-md-6 form-group">
                 <label asp-for="IdTCMActivity" class="control-label"></label>&nbsp;*
-                <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities"></select>
+                <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities" readonly></select>
                 <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class=" col-md-12 form-group">
-                <label asp-for="NeedIdentified" class="control-label">Need Identified in domain selected</label>
+                <label asp-for="NeedIdentified" class="control-label">Need Identified</label>
                 <textarea asp-for="NeedIdentified" class="form-control" rows="2" readonly id="cbNeed"></textarea>
                 <span asp-validation-for="NeedIdentified" class="text-danger"></span>
             </div>
@@ -82,21 +86,21 @@
         </div>
         <div>
             <div class=" col-md-12 form-group">
-                <label asp-for="ServiceName" class="control-label">Description of service(s) &nbsp;*</label>
-                <textarea asp-for="ServiceName" class="form-control" rows="1"></textarea>
+                <label asp-for="ServiceName" class="control-label">Name of service(s) &nbsp;*</label>
+                <textarea asp-for="ServiceName" class="form-control" rows="1" readonly></textarea>
                 <span asp-validation-for="ServiceName" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class=" col-md-12 form-group">
                 <label asp-for="DescriptionOfService" class="control-label">Description of service(s) &nbsp;*</label>
-                <textarea asp-for="DescriptionOfService" class="form-control" rows="6"></textarea>
+                <textarea asp-for="DescriptionOfService" class="form-control" rows="6" readonly></textarea>
                 <span asp-validation-for="DescriptionOfService" class="text-danger"></span>
             </div>
         </div>
         <div>
             <div class="col-md-offset-10">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" disabled />
                 &nbsp;
                 <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
@@ -104,52 +108,12 @@
     </form>
 </div>
 
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
 <script type="text/javascript">
 
-    function getMinute() {
-             var url = "@Url.Action("CalcularDateEnd", "TCMNotes")";
-        $.get(url, { start: $("#Time_Start").val(), minutes: $("#lbMinutes").val() }, function (data) { $("#lbTimeEnd").text(data); });
-              url = "@Url.Action("CalcularUnits", "TCMNotes")";
-        $.get(url, { start: $("#Time_Start").val(), minutes: $("#lbMinutes").val() }, function (data) { $("#lbUnits").text(data); });
-    }
-
-    function getActivity() {
-            var url = "@Url.Action("CalcularMinutes", "TCMNotes")";
-            $.get(url, { codeDomain: $("#GetCode").val() }, function (data) { $("#lblDomain").text(data); });
-    }
-
-    $("#cbDomain").change(function () {
-        var url = "@Url.Action("GetListActivity", "TCMNotes")";
-        $.get(url, { idDomain: $("#cbDomain").val() }, function (data) {
-            $("#cbActivities").empty();
-            $.each(data, function (index, row) {
-                $("#cbActivities").append("<option value='" + row.value + "'>" + row.text + "</option>")
-            });
-
-            url = "@Url.Action("GetNeedIdentified", "TCMNotes")";
-            $.get(url, { idDomain: $("#cbDomain").val() }, function (data) { $("#cbNeed").text(data); });
-
-            //actualizo el label con la sugerencia de la actividad
-            url = "@Url.Action("GetSuggestion", "TCMNotes")";
-            $.get(url, { idActivity: $("#cbActivities").val() }, function (data) {
-                $("#Description").text(data);
-            });
-        });
-    })
-
-    $("#cbActivities").change(function () {
-        var url = "@Url.Action("GetSuggestion", "TCMNotes")";
-            $.get(url, { idActivity: $("#cbActivities").val() }, function (data) {
-                $("#Description").text(data);
-            });
-    })
+   
 
 </script>
-
-
-

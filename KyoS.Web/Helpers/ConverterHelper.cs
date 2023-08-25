@@ -5885,7 +5885,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DescriptionOfService = model.DescriptionOfService,
-                EndTime = model.EndTime,
+                EndTime = model.StartTime.AddMinutes(model.Minutes),
                 Minutes = model.Minutes,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
@@ -5923,7 +5923,8 @@ namespace KyoS.Web.Helpers
                 DateOfServiceNote = model.TCMNote.DateOfService,
                 ServiceName = model.ServiceName,
                 IdTCMActivity = model.TCMServiceActivity.Id,
-                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description
+                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description,
+                TimeEnd = model.EndTime.ToShortTimeString()
         };
 
             return salida;

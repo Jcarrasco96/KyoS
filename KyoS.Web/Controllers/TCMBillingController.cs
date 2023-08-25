@@ -286,7 +286,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
         public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -463,6 +463,7 @@ namespace KyoS.Web.Controllers
 
                     
                 }
+                
                 ViewBag.Clients = list.GroupBy(n => n.TCMClient).Count().ToString();
                 ViewBag.Notes = list.Count().ToString();
                 ViewBag.Services = list.Sum(n => n.TCMNoteActivity.Count()).ToString();
@@ -476,16 +477,26 @@ namespace KyoS.Web.Controllers
                 IdCaseManager = idCaseManager,
                 CaseManagers = _combosHelper.GetComboCaseMannagersByClinicFilter(user_logged.Clinic.Id),
                 IdClient = idClient,
-                Clients = _combosHelper.GetComboClientsForTCMCaseOpenFilter(user_logged.Clinic.Id),
+                Clients = _combosHelper.GetComboTCMClientsByClinic(user_logged.Clinic.Id),
                 TCMNotes = list
             };
+            if (User.IsInRole("CaseManager"))
+            {
+                model.Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName);
+            }
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                model.CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName);
+                model.Clients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName);
+                
+            }
 
             return View(model);                   
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor")]
         public IActionResult BillingForWeek(TCMBillingReportViewModel model, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1599,7 +1610,6 @@ namespace KyoS.Web.Controllers
                 //return RedirectToAction("NotAuthorized", "Account");
             }
         }
-
 
     }
 }

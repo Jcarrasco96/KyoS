@@ -1,4 +1,21 @@
 ﻿@model KyoS.Web.Models.TCMNoteViewModel
+@if (User.IsInRole("TCMSupervisor") == true && Model.TCMClient.Casemanager.Clinic.Setting.TCMSupervisorEdit == true)
+{
+<div class="col-md-push-12">
+    <div class="form-group col-md-6">
+        <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+        <textarea asp-for="Outcome" class="form-control" rows="5" ></textarea>
+        <span asp-validation-for="Outcome" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+        <textarea asp-for="NextStep" class="form-control" rows="5" ></textarea>
+        <span asp-validation-for="NextStep" class="text-danger"></span>
+    </div>
+</div>
+}
+else
+{ 
 <div class="col-md-push-12">
     <div class="form-group col-md-6">
         <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
@@ -11,6 +28,7 @@
         <span asp-validation-for="NextStep" class="text-danger"></span>
     </div>
 </div>
+}
 @*<div class="col-md-12">
                 <pre>
                     @Html.DisplayFor(modelItem => Model.CaseManager.Name)                                                        @Html.DisplayFor(modelItem => Model.CaseManager.Credentials)                      @Html.DisplayFor(modelItem => Model.CaseManagerDate)

@@ -22,14 +22,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IReportHelper _reportHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IImageHelper _imageHelper;
 
-        public TCMClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper)
+        public TCMClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
             _renderHelper = renderHelper;
+            _imageHelper = imageHelper;
         }
 
         [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
@@ -748,5 +750,48 @@ namespace KyoS.Web.Controllers
             }
             return View();
         }
+
+        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        public async Task<IActionResult> EditSignature(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ClientEntity clientEntity = await _context.Clients
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (clientEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ClientViewModel clientViewModel = await _converterHelper.ToClientViewModel(clientEntity, user_logged.Id);
+
+            return View(clientViewModel);
+        }
+
+        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        public async Task<JsonResult> SaveClientSignature(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Clients");
+
+            ClientEntity client = await _context.Clients
+                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (client != null)
+            {
+                client.SignPath = signPath;
+                _context.Update(client);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Clients", "TCMClients") });
+        }
+
     }
 }

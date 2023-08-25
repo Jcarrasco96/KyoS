@@ -26,11 +26,14 @@
                    data-language="en"
                    class="form-control datepicker-here" />
         </div>
-        <div class="form-group col-md-3">
-            <label asp-for="IdCaseManager" class="control-label">Select case manager</label>
-            <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control"></select>
-            <span asp-validation-for="IdCaseManager" class="text-danger"></span>
-        </div>
+        @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+        {
+            <div class="form-group col-md-3">
+                <label asp-for="IdCaseManager" class="control-label">Select case manager</label>
+                <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control"></select>
+                <span asp-validation-for="IdCaseManager" class="text-danger"></span>
+            </div>
+        }
         <div class="form-group col-md-3">
             <label asp-for="IdClient" class="control-label">Select client</label>
             <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
@@ -41,7 +44,7 @@
         </div>
         <div class="col-md-12">
             @*<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
-                <button type="submit" asp-route-billed="0" class="btn btn-success"><i class="icon-usd"></i> Bill</button>*@
+            <button type="submit" asp-route-billed="0" class="btn btn-success"><i class="icon-usd"></i> Bill</button>*@
             <button type="submit" asp-route-billed="2" class="btn btn-success"><i class="icon-usd"></i> Billed</button>
             <button type="submit" asp-route-billed="1" class="btn btn-danger"><i class="icon-usd "></i> No Billed</button>
             <button type="submit" asp-route-billed="3" class="btn btn-info"><i class="icon-usd "></i> Payment Pending</button>
@@ -50,22 +53,25 @@
     <div class="col-md-12">
         </br>
     </div>
-    <div class="col-md-12">
-        <div class="col-md-3">
-            &nbsp;
+    @if (User.IsInRole("Manager"))
+    { 
+        <div class="col-md-12">
+            <div class="col-md-3">
+                &nbsp;
+            </div>
+            <div class="col-md-5">
+                <center>
+                    <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update Bill"><i class="glyphicon glyphicon-refresh"></i> Update services pending billing</a>
+                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
+                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export All Report</a>
+                    <hr />
+                </center>
+            </div>
+            <div class="col-md-4">
+                &nbsp;
+            </div>
         </div>
-        <div class="col-md-5">
-            <center>
-                <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update Bill"><i class="glyphicon glyphicon-refresh"></i> Update services pending billing</a>
-                <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
-                <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export All Report</a>
-                <hr />
-            </center>
-        </div>
-        <div class="col-md-4">
-            &nbsp;
-        </div>
-    </div>
+    }
     <div class="col-md-12">
         <div class="col-md-3">
             &nbsp;

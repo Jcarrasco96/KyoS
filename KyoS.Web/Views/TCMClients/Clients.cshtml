@@ -54,13 +54,16 @@
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.AdmisionDate)
                             </th>
-                           <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Case TCM
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
+                                Signature
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -88,7 +91,6 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
                                     </td>
-                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>
@@ -106,13 +108,29 @@
                                             </span>
                                         }
                                     </td>
+                                    <td align="center">
+                                        @if (item.Client.SignPath == string.Empty || item.Client.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                                         {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
                                             <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
                                         else
-                                        { 
+                                        {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
                                             <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
                                     </td>
@@ -156,13 +174,29 @@
                                             </span>
                                         }
                                     </td>
+                                    <td align="center">
+                                        @if (item.Client.SignPath == string.Empty || item.Client.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                                         {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
                                             <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
                                         else
                                         {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
                                             <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                         }
                                     </td>
