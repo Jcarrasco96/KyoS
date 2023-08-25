@@ -41,5 +41,8 @@ namespace KyoS.Web.Data.Entities
         public bool DeniedBill { get; set; }
 
         public string CodeBill { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? ApprovedDate { get; set; }
     }
 }

@@ -310,141 +310,292 @@ namespace KyoS.Web.Controllers
                 string[] date = dateInterval.Split(" - ");
                 if (billed == 0)
                 {
-                    IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
-                                                              .ThenInclude(cd => cd.Diagnostic)
-
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                                              .ThenInclude(cd => cd.HealthInsurance)
-
-                                                              .Include(t => t.TCMClient.Casemanager)
-                                                              .Include(t => t.TCMNoteActivity)
-
-                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
-
-                    if (idCaseManager != 0)
-                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                    if (idClient != 0)
-                        query = query.Where(t => t.TCMClient.Id == idClient);
-
-                    try
+                    if (User.IsInRole("Manager"))
                     {
-                        list = query.ToList();
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
-                    catch (Exception)
+                    if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor")) 
                     {
-                        return RedirectToAction(nameof(BillingForWeek));
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) && t.ApprovedDate <= Convert.ToDateTime(date[1])));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
                 }
                 if (billed == 1)
                 {
-                    IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
-                                                              .ThenInclude(cd => cd.Diagnostic)
-
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                                              .ThenInclude(cd => cd.HealthInsurance)
-
-                                                              .Include(t => t.TCMClient.Casemanager)
-                                                              .Include(t => t.TCMNoteActivity)
-
-                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
-                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                        && t.BilledDate == null));
-
-                    if (idCaseManager != 0)
-                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                    if (idClient != 0)
-                        query = query.Where(t => t.TCMClient.Id == idClient);
-
-                    try
+                    if (User.IsInRole("Manager"))
                     {
-                        list = query.ToList();
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate == null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
-                    catch (Exception)
+                    if(User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                     {
-                        return RedirectToAction(nameof(BillingForWeek));
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
+                                                                            && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate == null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
                 }
                 if (billed == 2)
                 {
-                    IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
-                                                              .ThenInclude(cd => cd.Diagnostic)
-
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                                              .ThenInclude(cd => cd.HealthInsurance)
-
-                                                              .Include(t => t.TCMClient.Casemanager)
-                                                              .Include(t => t.TCMNoteActivity)
-
-                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
-                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                        && t.BilledDate != null));
-
-                    if (idCaseManager != 0)
-                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                    if (idClient != 0)
-                        query = query.Where(t => t.TCMClient.Id == idClient);
-
-                    try
+                    if (User.IsInRole("Manager"))
                     {
-                        list = query.ToList();
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate != null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
-                    catch (Exception)
+                    if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                     {
-                        return RedirectToAction(nameof(BillingForWeek));
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                      .Include(t => t.TCMClient)
+                                                                      .ThenInclude(c => c.Client)
+                                                                      .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                      .ThenInclude(cd => cd.Diagnostic)
+
+                                                                      .Include(t => t.TCMClient)
+                                                                      .ThenInclude(c => c.Client)
+                                                                      .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                      .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                      .Include(t => t.TCMClient.Casemanager)
+                                                                      .Include(t => t.TCMNoteActivity)
+
+                                                                      .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
+                                                                                && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                                && t.BilledDate != null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
                 }
                 if (billed == 3)
                 {
-                    IQueryable<TCMNoteEntity> query = _context.TCMNote
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_Diagnostics)
-                                                              .ThenInclude(cd => cd.Diagnostic)
-
-                                                              .Include(t => t.TCMClient)
-                                                              .ThenInclude(c => c.Client)
-                                                              .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                                              .ThenInclude(cd => cd.HealthInsurance)
-
-                                                              .Include(t => t.TCMClient.Casemanager)
-                                                              .Include(t => t.TCMNoteActivity)
-
-                                                              .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
-                                                                        && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                        && t.BilledDate != null
-                                                                        && t.PaymentDate == null));
-
-                    if (idCaseManager != 0)
-                        query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                    if (idClient != 0)
-                        query = query.Where(t => t.TCMClient.Id == idClient);
-
-                    try
+                    if (User.IsInRole("Manager"))
                     {
-                        list = query.ToList();
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate != null
+                                                                            && t.PaymentDate == null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
-                    catch (Exception)
+                    if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                     {
-                        return RedirectToAction(nameof(BillingForWeek));
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
+                                                                            && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate != null
+                                                                            && t.PaymentDate == null));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
                     }
                 }
                 int minutes;

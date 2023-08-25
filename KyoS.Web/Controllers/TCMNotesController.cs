@@ -1036,6 +1036,7 @@ namespace KyoS.Web.Controllers
                         }
 
                         tcmNote.Status = NoteStatus.Approved;
+                        tcmNote.ApprovedDate = DateTime.Today;
                         _context.Update(tcmNote);
                         
                         try
@@ -1307,6 +1308,7 @@ namespace KyoS.Web.Controllers
                         tcmNote.Outcome = tcmNotesViewModel.Outcome;
                         tcmNote.NextStep = tcmNotesViewModel.NextStep;
                         tcmNote.Status = NoteStatus.Approved;
+                        tcmNote.ApprovedDate = DateTime.Today;
                         _context.Update(tcmNote);
 
                         try

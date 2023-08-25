@@ -228,10 +228,18 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Diagnostic
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Service
-                            </th>
-
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <th class="col-md-1" style="text-align:center;">
+                                    Service
+                                </th>
+                            }
+                            else
+                            {
+                                <th class="col-md-1" style="text-align:center;">
+                                    Approved
+                                </th>
+                            }
                             <th class="col-md-1" style="text-align:center;">
                                 Units
                             </th>
@@ -298,7 +306,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        @Html.DisplayFor(modelItem => item.DateOfService)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.ApprovedDate)
+                                    }
                                 </td>
                                 <td align="center">
                                     @unit
