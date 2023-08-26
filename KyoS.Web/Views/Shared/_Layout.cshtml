@@ -768,6 +768,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Dates Blocked", "Index", "TCMDateBlockeds")</li>
                                 <li>@Html.ActionLink("Update Note", "UpdateNote", "TCMNotes")</li>
+                                <li>@Html.ActionLink("Update Service Plan", "UpdateServicePlan", "TCMServicePlans")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
@@ -781,6 +782,7 @@
                                 Cases <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Cases</a>
                                     <ul class="dropdown-menu">
@@ -790,7 +792,6 @@
                                         <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -922,7 +923,6 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
