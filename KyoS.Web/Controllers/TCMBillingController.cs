@@ -299,6 +299,11 @@ namespace KyoS.Web.Controllers
             ViewBag.Units = "0";
             ViewBag.Money = "0";
             ViewData["billed"] = billed;
+            if (User.IsInRole("CaseManager"))
+            {
+                ViewBag.Salary = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Money.ToString();
+            }
+
             List<TCMNoteEntity> list = new List<TCMNoteEntity>();
 
             if (dateInterval == string.Empty)
@@ -581,7 +586,7 @@ namespace KyoS.Web.Controllers
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
                                                                             && t.PaymentDate == null));
-
+                        
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
 
@@ -619,7 +624,17 @@ namespace KyoS.Web.Controllers
                 ViewBag.Notes = list.Count().ToString();
                 ViewBag.Services = list.Sum(n => n.TCMNoteActivity.Count()).ToString();
                 ViewBag.Units = totalUnits.ToString();
-                ViewBag.Money = (totalUnits * 12).ToString();
+                decimal money = 0;
+                if (User.IsInRole("CaseManager"))
+                {
+                    money = (totalUnits * (_context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Money / 4));
+                    ViewBag.Money = money;
+                }
+                else
+                {
+                    ViewBag.Money = (totalUnits * 12).ToString();
+                }
+                
             }
             
             TCMBillingReportViewModel model = new TCMBillingReportViewModel
