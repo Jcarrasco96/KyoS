@@ -1,0 +1,164 @@
+﻿@model KyoS.Web.Models.TCMObjetiveViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditObjetiveReadOnly" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" asp-route-idAddendum="@ViewData["idAddendum"]" onsubmit="return jQueryAjaxPostTCMDomainLg(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Origi" />
+            <input type="hidden" asp-for="Id_Domain" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <div class="form-group">
+                <div class=" col-md-12">
+                    <h4 style="font-weight:bold;"> <span class="label label-info">Service: @Model.TcmDomain.Code - @Model.TcmDomain.Name</span></h4>
+                </div>
+            </div>
+            @if (Model.TcmDomain.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            {
+                <div class="">
+                    <div class="form-group col-md-3">
+                        <label asp-for="IdObjetive" class="control-label">Obj. Number</label>
+                        <input asp-for="IdObjetive" class="form-control" readonly />
+                        <span asp-validation-for="IdObjetive" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
+                        <input asp-for="StartDate" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="TargetDate" class="control-label">Target Date</label>&nbsp;*
+                        <input asp-for="TargetDate" class="form-control" />
+                        <span asp-validation-for="TargetDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="EndDate" class="control-label">End Date</label>&nbsp;
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="Id_Stage" class="control-label">Stages</label>
+                        <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" id="Code_Name" onchange="getCode();"></select>
+                        <span asp-validation-for="Id_Stage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="descriptionStages" class="control-label">Description of stage</label>
+                        <textarea asp-for="descriptionStages" class="form-control" rows="2" readonly></textarea>
+                        <span asp-validation-for="descriptionStages" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="form-group col-md-6">
+                        <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
+                        <textarea asp-for="task" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="task" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>*
+                        <textarea asp-for="Responsible" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Responsible" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-offset-9">
+                        @if (Model.Origi == 0) //viene de la pagina Index de las notas
+                        {
+                            <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-origi="0" />
+
+                        }
+                        @if (Model.Origi == 1) //viene de la pagina Index de las notas
+                        {
+                            <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-origi="1" />
+
+                        }
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="">
+                    <div class="form-group col-md-3">
+                        <label asp-for="IdObjetive" class="control-label">Obj. Number</label>
+                        <input asp-for="IdObjetive" class="form-control" readonly />
+                        <span asp-validation-for="IdObjetive" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
+                        <input asp-for="StartDate" class="form-control" readonly/>
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="TargetDate" class="control-label">Target Date</label>&nbsp;*
+                        <input asp-for="TargetDate" class="form-control" readonly />
+                        <span asp-validation-for="TargetDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="EndDate" class="control-label">End Date</label>&nbsp;
+                        <input asp-for="EndDate" class="form-control" readonly/>
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="Id_Stage" class="control-label">Stages</label>
+                        <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" disabled id="Code_Name" onchange="getCode();"></select>
+                        <span asp-validation-for="Id_Stage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="descriptionStages" class="control-label">Description of stage</label>
+                        <textarea asp-for="descriptionStages" class="form-control" rows="2" readonly></textarea>
+                        <span asp-validation-for="descriptionStages" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="form-group col-md-6">
+                        <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
+                        <textarea asp-for="task" class="form-control" rows="5" readonly></textarea>
+                        <span asp-validation-for="task" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>*
+                        <textarea asp-for="Responsible" class="form-control" rows="5" readonly></textarea>
+                        <span asp-validation-for="Responsible" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-offset-9">
+                        @if (Model.Origi == 0) //viene de la pagina Index de las notas
+                        {
+                            <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="0" />
+
+                        }
+                        @if (Model.Origi == 1) //viene de la pagina Index de las notas
+                        {
+                            <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="1" />
+
+                        }
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>    
+}
+
+

@@ -32,6 +32,10 @@
             {
                 @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
             }
+            @if (@ViewData["origin"].ToString() == "6")
+            {
+                @Html.ActionLink("Update Service Plan", "UpdateServicePlan", "TCMServicePlans")
+            }
         </li>
         <li class="active">Edit</li>
     </ul><!--.breadcrumb-->
@@ -88,7 +92,14 @@
             <partial name="TCMServicePlan" />
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
+                    @if (User.IsInRole("CaseManager"))
+                    {
+                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new { id = Model.Id }, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>    
+                    }
+                    else
+                    { 
+                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success disabled" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
+                    }
                 </div>
                 <div class="col-md-12">
                     <div id="view-TCMdomain">
@@ -105,7 +116,7 @@
                         <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" asp-controller="TCMServicePlans" class="btn btn-warning">Finish Edition</a>
                     }
                     else
-                    { 
+                    {
                         <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMServicePlans" class="btn btn-warning">Finish Edition</a>
                     }
 
@@ -137,6 +148,10 @@
                 @if (@ViewData["origin"].ToString() == "5")
                 {
                     <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                }
+                @if (@ViewData["origin"].ToString() == "6")
+                {
+                    <a asp-action="UpdateServicePlan" asp-controller="TCMServicePlans" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
