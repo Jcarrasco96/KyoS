@@ -10,19 +10,21 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="CreatedDate" />
             <input type="hidden" asp-for="IdUserCreatedBy" />
+            <input type="hidden" asp-for="IdUserAssigned" />
+            <input type="hidden" asp-for="IdClient" />
             @if (ViewData["CreatedBy"].ToString() == "1")
             {
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdClient" class="control-label"></label>&nbsp;*
-                        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
+                        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" disabled></select>
                         <span asp-validation-for="IdClient" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
-                        <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control"></select>
+                        <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control" disabled></select>
                         <span asp-validation-for="IdUserAssigned" class="text-danger"></span>
                     </div>
                 </div>
@@ -57,7 +59,7 @@
                     &nbsp;
                 </div>
             }
-            @if (ViewData["Assigned"].ToString() == "1" || User.IsInRole("Admin") || User.IsInRole("Manager"))
+            @if (ViewData["Assigned"].ToString() == "1" || User.IsInRole("Admin") || User.IsInRole("Manager") || (ViewData["CreatedBy"].ToString() == "1"))
             {
                 <div class="col-md-12">
                     <label asp-for="Status" class="control-label"></label>&nbsp;*

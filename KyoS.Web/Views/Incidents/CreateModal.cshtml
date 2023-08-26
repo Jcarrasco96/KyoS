@@ -14,7 +14,7 @@
                     <span asp-validation-for="IdClient" class="text-danger"></span>
                 </div>
             </div>
-            @if (User.IsInRole("Admin") == true || User.IsInRole("Manager") == true)
+            @if (User.IsInRole("Admin") == true || User.IsInRole("Manager") == true || User.IsInRole("Supervisor") == true || User.IsInRole("TCMSupervisor") == true)
             {
                 <div class="col-md-6">
                     <div class="form-group">

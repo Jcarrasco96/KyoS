@@ -22,12 +22,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly ICombosHelper _combosHelper;
 
-        public IncidentsController(DataContext context, IConverterHelper converterHelper, IRenderHelper renderHelper)
+        public IncidentsController(DataContext context, IConverterHelper converterHelper, IRenderHelper renderHelper, ICombosHelper combosHelper)
         {
             _context = context;            
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
+            _combosHelper = combosHelper;
         }
         
         [Authorize(Roles = "Admin, Manager, Supervisor, Facilitator, CaseManager, Documents_Assistant, TCMSupervisor, Frontdesk")]
@@ -86,7 +88,8 @@ namespace KyoS.Web.Controllers
                                           .Include(i => i.client)
                                           .Include(i => i.UserAsigned)
 
-                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)                                          
+                                          .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id
+                                                   && i.UserCreatedBy.Clinic != null)                                          
                                           .ToListAsync());
             }
 
@@ -370,6 +373,11 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            TCMSupervisorEntity tcmSupervisor = new TCMSupervisorEntity();
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            }
 
             IncidentViewModel model = new IncidentViewModel();
             List<SelectListItem> list = new List<SelectListItem>();
@@ -392,7 +400,7 @@ namespace KyoS.Web.Controllers
                     list = _context.TCMClient.Include(n => n.Client).Where(n => n.Casemanager.Id == casemanager.Id).OrderBy(n => n.Client.Name).Select(c => new SelectListItem
                     {
                         Text = $"{c.Client.Name + " | " + c.DataOpen.ToShortDateString()}",
-                        Value = $"{c.Id}"
+                        Value = $"{c.Client.Id}"
                     }).ToList();
 
                 }
@@ -400,11 +408,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (User.IsInRole("TCMSupervisor"))
                     {
-                        CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                        list = _context.TCMClient.Include(n => n.Client).OrderBy(n => n.Client.Name).Select(c => new SelectListItem
+                        list = _context.TCMClient.Include(n => n.Client).Where(n => n.Casemanager.TCMSupervisor.Id == tcmSupervisor.Id).OrderBy(n => n.Client.Name).Select(c => new SelectListItem
                         {
                             Text = $"{c.Client.Name + " | " + c.DataOpen.ToShortDateString()}",
-                            Value = $"{c.Id}"
+                            Value = $"{c.Client.Id}"
                         }).ToList();
 
                     }
@@ -425,17 +432,35 @@ namespace KyoS.Web.Controllers
                 Value = "0"
             });
 
-            List<SelectListItem> list_user = _context.Users.OrderBy(n => n.FirstName).Select(c => new SelectListItem
+            List<SelectListItem> list_user = new List<SelectListItem>();
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
             {
-                Text = $"{c.FullName}",
-                Value = $"{c.Id}"
-            }).ToList();
+                list_user = _context.Users.OrderBy(n => n.FirstName).Select(c => new SelectListItem
+                {
+                    Text = $"{c.FullName}",
+                    Value = $"{c.Id}"
+                }).ToList();
 
-            list_user.Insert(0, new SelectListItem
+                list_user.Insert(0, new SelectListItem
+                {
+                    Text = "[All User...]",
+                    Value = "0"
+                });
+            }
+            if (User.IsInRole("TCMSupervisor"))
             {
-                Text = "[Select a person to assign this incident...]",
-                Value = "0"
-            });
+                list_user = _context.Users.Where(n => n.UserType == UserType.CaseManager).OrderBy(n => n.FirstName).Select(c => new SelectListItem
+                {
+                    Text = $"{c.FullName}",
+                    Value = $"{c.Id}"
+                }).ToList();
+
+                list_user.Insert(0, new SelectListItem
+                {
+                    Text = "[All CaseManager...]",
+                    Value = "0"
+                });
+            }
 
             model = new IncidentViewModel()
             {
@@ -545,7 +570,7 @@ namespace KyoS.Web.Controllers
                                                           .Include(i => i.UserCreatedBy)
                                                             .ThenInclude(u => u.Clinic)
                                                           .FirstOrDefaultAsync(i => i.Id == id);
-
+            
             if (incidentEntity.UserAsigned != null)
             {
                 if (incidentEntity.UserAsigned.Id == user_logged.Id)
@@ -600,6 +625,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 UserEntity user_logged = _context.Users
+                                                 .Include(n => n.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 IncidentEntity incidentEntity = await _converterHelper.ToIncidentEntity(incidentViewModel, false, user_logged.Id);
@@ -615,7 +641,8 @@ namespace KyoS.Web.Controllers
                                                                             .ThenInclude(u => u.Clinic)
                                                                             .Include(i => i.client)
                                                                             .Include(i => i.UserAsigned)
-                                                                            .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id)
+                                                                            .Where(i => i.UserCreatedBy.Clinic.Id == user_logged.Clinic.Id
+                                                                                     && i.UserCreatedBy.Clinic != null)
                                                                             .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIncidents", Incidents_List) });
