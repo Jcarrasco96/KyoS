@@ -904,6 +904,10 @@ namespace KyoS.Web.Controllers
                                                         && g.Status == StatusType.Open
                                                         && g.Client.Clinic.Id == user_logged.Clinic.Id));
             }
+            if (User.IsInRole("Frontdesk"))
+            {
+                return RedirectToAction("Schedule", "Calendar");
+            }
             return View();
         }
 
