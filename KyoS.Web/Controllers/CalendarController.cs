@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -51,7 +51,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Facilitator")]
         public IActionResult IndexFacilitator()
         {
             UserEntity user_logged = _context.Users
@@ -88,6 +88,50 @@ namespace KyoS.Web.Controllers
                     }
                 };
             }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Frontdesk")]
+        public IActionResult Schedule()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                                .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            CalendarCMH model = new CalendarCMH
+            {
+                IdFacilitator = 0,
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Frontdesk")]
+        public IActionResult AddSchedule(int id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                                .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            CalendarCMH model = new CalendarCMH
+            {
+                IdFacilitator = 0,
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
+            };
 
             return View(model);
         }
@@ -159,6 +203,32 @@ namespace KyoS.Web.Controllers
                 events.AddRange(reviews);
                 events.AddRange(fars);
 
+                return new JsonResult(events);
+            }
+            else
+            {
+                var events = new List<Workday_Client>();
+                return new JsonResult(events);
+            }
+        }
+
+        [Authorize(Roles = "Frontdesk")]
+        public async Task<IActionResult> EventsSchedule(string start, string end, int idFacilitator)
+        {
+            if (idFacilitator != 0)
+            {
+                DateTime initDate = Convert.ToDateTime(start);
+                DateTime finalDate = Convert.ToDateTime(end);
+
+                Task<List<object>> notesTask = NotesIndByFacilitator(idFacilitator, initDate, finalDate);
+                
+                await Task.WhenAll(notesTask);
+
+                var notes = await notesTask;
+                
+                List<object> events = new List<object>();
+                events.AddRange(notes);
+                
                 return new JsonResult(events);
             }
             else
@@ -386,6 +456,55 @@ namespace KyoS.Web.Controllers
                                   new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
                                               (wc.Schedule) != null ? wc.Schedule.EndTime.Hour : 0, (wc.Schedule) != null ? wc.Schedule.EndTime.Minute : 0, 0)
                                               .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                        backgroundColor = (wc.Workday.Service == ServiceType.PSR) ? "#fcf8e3" :
+                                                                    (wc.Workday.Service == ServiceType.Group) ? "#d9edf7" :
+                                                                        (wc.Workday.Service == ServiceType.Individual) ? "#dff0d8" : "#dff0d8",
+                        textColor = (wc.Workday.Service == ServiceType.PSR) ? "#9e7d67" :
+                                                                (wc.Workday.Service == ServiceType.Group) ? "#487c93" :
+                                                                    (wc.Workday.Service == ServiceType.Individual) ? "#417c49" : "#417c49",
+                        borderColor = (wc.Workday.Service == ServiceType.PSR) ? "#9e7d67" :
+                                                                (wc.Workday.Service == ServiceType.Group) ? "#487c93" :
+                                                                    (wc.Workday.Service == ServiceType.Individual) ? "#417c49" : "#417c49"
+                    })
+                    .Distinct()
+                    .ToList<object>();
+        }
+
+        private async Task<List<object>> NotesIndByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<Workday_Client> listWorkdayClient;
+
+            using (DataContext db = new DataContext(options))
+            {
+                listWorkdayClient = await db.Workdays_Clients
+
+                                            .Include(wc => wc.Schedule)
+                                            .Include(wc => wc.Workday)
+
+                                            .Include(wc => wc.IndividualNote)
+                                                .ThenInclude(i => i.SubSchedule)
+
+                                            .Include(wc => wc.Client)
+
+                                            .Where(wc => (wc.Workday.Date >= initDate && wc.Workday.Date <= finalDate && wc.Present == true &&
+                                                          wc.Facilitator.Id == idFacilitator && wc.Workday.Service == ServiceType.Individual))
+
+                                            .ToListAsync();
+            }
+
+            return listWorkdayClient
+                    .Select(wc => new
+                    {
+                        title = (wc.Client == null) ? "Individual Therapy - No client" :
+                                (wc.Client != null) ? $"Individual Therapy - {wc.Client.Name}" :
+                                                string.Empty,
+                        start = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Minute : 0, 0)
+                                                    .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
+                        end = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
+                                              (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Minute : 0, 0)
+                                                  .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
                         backgroundColor = (wc.Workday.Service == ServiceType.PSR) ? "#fcf8e3" :
                                                                     (wc.Workday.Service == ServiceType.Group) ? "#d9edf7" :
                                                                         (wc.Workday.Service == ServiceType.Individual) ? "#dff0d8" : "#dff0d8",
