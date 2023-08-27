@@ -1,0 +1,76 @@
+﻿@model KyoS.Web.Models.CiteViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCite(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="IdFacilitator" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdFacilitator" asp-items="Model.FacilitatorsList" class="form-control" id="lbFacilitator"></select>
+                    <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdClient" asp-items="Model.ClientsList" class="form-control" id="lbClient"></select>
+                    <span asp-validation-for="IdClient" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdSchedule" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSchedule" asp-items="Model.SchedulesList" class="form-control"></select>
+                    <span asp-validation-for="IdSchedule" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="IdClinic" class="control-label"></label>
+                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
+                    <span asp-validation-for="IdClinic" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label asp-for="EventNote" class="control-label"></label>&nbsp;*
+                <textarea asp-for="EventNote" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="EventNote" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-12">
+                <label asp-for="PatientNote" class="control-label"></label>&nbsp;*
+                <textarea asp-for="PatientNote" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="PatientNote" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-12">
+                <label asp-for="Copay" class="control-label"></label>
+                <input asp-for="Copay" class="form-control" />
+                <span asp-validation-for="Copay" class="text-danger"></span>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

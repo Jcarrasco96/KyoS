@@ -400,6 +400,7 @@ namespace KyoS.Web.Helpers
                 HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
                 Annotations = clientEntity.Annotations
+                
             };
         }
 
@@ -7151,6 +7152,58 @@ namespace KyoS.Web.Helpers
                 Description = model.Description
             };
         }
+
+        public async Task<CiteEntity> ToCiteEntity(CiteViewModel model,bool isNew, string userId)
+        {
+            return new CiteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Status = CiteUtils.GetCiteByIndex(model.IdStatus),
+                Client = await _context.Clients.FindAsync(model.IdClient),
+                Date = model.Date,
+                Copay = model.Copay,
+                EventNote = model.EventNote,
+                PatientNote = model.PatientNote,
+                Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
+                Schedule = await _context.Schedule.FindAsync(model.IdSchedule),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+
+            };
+        }
+
+        public CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic)
+        {
+            return new CiteViewModel
+            {
+                Id = model.Id,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                Worday_CLient = model.Worday_CLient,
+                PatientNote = model.PatientNote,
+                Copay = model.Copay,
+                Date = model.Date,
+                Clinic = model.Clinic,
+                Client = model.Client,
+                EventNote = model.EventNote,
+                Facilitator = model.Facilitator,
+                IdClient = model.Client.Id,
+                IdFacilitator = model.Facilitator.Id,
+                Service = "Therapy Private",
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                IdSchedule = model.Schedule.Id,
+                SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(model.Clinic.Id, ServiceType.Individual),
+                Schedule = model.Schedule,
+                IdStatus = (model.Status == CiteStatus.S) ? 1 : (model.Status == CiteStatus.C) ? 2 : (model.Status == CiteStatus.R) ? 3 : (model.Status == CiteStatus.NS) ? 4 : (model.Status == CiteStatus.AR) ? 5 : (model.Status == CiteStatus.CO) ? 6 : (model.Status == CiteStatus.A) ? 7 : (model.Status == CiteStatus.X) ? 8 : 0,
+                Status = model.Status,
+                StatusList = _combosHelper.GetComboSiteStatus(),
+            };
+        }
+
 
     }
 }

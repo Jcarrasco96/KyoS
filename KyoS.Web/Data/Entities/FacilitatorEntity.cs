@@ -36,5 +36,7 @@ namespace KyoS.Web.Data.Entities
         public string RaterEducation { get; set; }
 
         public string RaterFMHCertification { get; set; }
+
+        public List<CiteEntity> CiteList { get; set; }
     }
 }

@@ -213,5 +213,7 @@ namespace KyoS.Web.Helpers
         TCMIntakeNutritionalScreenViewModel ToTCMIntakeNutritionalScreenViewModel(TCMIntakeNutritionalScreenEntity model);
         Task<TCMDateBlockedEntity> ToTCMDateBlockedEntity(TCMDateBlockedViewModel model, bool isNew, string userId);
         TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model);
+        Task<CiteEntity> ToCiteEntity(CiteViewModel model, bool isNew, string userId);
+        CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic);
     }
 }

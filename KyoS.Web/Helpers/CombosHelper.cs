@@ -2029,5 +2029,74 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboSiteStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = CiteStatus.S.ToString(), Value = "1"},
+                                  new SelectListItem { Text = CiteStatus.C.ToString(), Value = "2"},
+                                  new SelectListItem { Text = CiteStatus.R.ToString(), Value = "3"},
+                                  new SelectListItem { Text = CiteStatus.NS.ToString(), Value = "4"},
+                                  new SelectListItem { Text = CiteStatus.AR.ToString(), Value = "5"},
+                                  new SelectListItem { Text = CiteStatus.CO.ToString(), Value = "6"},
+                                  new SelectListItem { Text = CiteStatus.A.ToString(), Value = "7"},
+                                  new SelectListItem { Text = CiteStatus.X.ToString(), Value = "8"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select status...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientByIndfacilitator(FacilitatorEntity  facilitator, int idClinic)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (facilitator != null)
+            {
+                list = _context.Clients.Where(u => u.IndividualTherapyFacilitator.Id == facilitator.Id).Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+            else
+            {
+                list = _context.Clients.Where(u => u.Clinic.Id == idClinic).Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select client...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service)
+        {
+            List<SelectListItem> list = _context.Schedule.Include(m => m.SubSchedules).Where(n => n.Clinic.Id == idClinic && n.Service == service).OrderBy(f => f.InitialTime).Select(f => new SelectListItem
+            {
+                Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()} ({f.SubSchedules.Count()})",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Schedule...]",
+                Value = "0"
+            });
+
+
+            return list;
+        }
+
     }
 }

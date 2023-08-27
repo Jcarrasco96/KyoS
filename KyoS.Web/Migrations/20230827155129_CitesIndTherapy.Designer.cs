@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230827155129_CitesIndTherapy")]
+    partial class CitesIndTherapy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1229,12 +1231,6 @@ namespace KyoS.Web.Migrations
                     b.Property<decimal>("Copay")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
@@ -1243,12 +1239,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("PatientNote")
                         .HasColumnType("nvarchar(max)");
@@ -1274,7 +1264,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("Worday_CLientId");
 
-                    b.ToTable("Cites");
+                    b.ToTable("Cite");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ClassificationEntity", b =>
@@ -10824,7 +10814,7 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.CiteEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithMany("CiteList")
+                        .WithMany()
                         .HasForeignKey("ClientId");
 
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -10832,7 +10822,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
 
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
-                        .WithMany("CiteList")
+                        .WithMany()
                         .HasForeignKey("FacilitatorId");
 
                     b.HasOne("KyoS.Web.Data.Entities.ScheduleEntity", "Schedule")
@@ -12502,8 +12492,6 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Brief");
 
-                    b.Navigation("CiteList");
-
                     b.Navigation("Client_Referred");
 
                     b.Navigation("Clients_Diagnostics");
@@ -12591,8 +12579,6 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>
                 {
-                    b.Navigation("CiteList");
-
                     b.Navigation("ClientsFromIndividualTherapy");
 
                     b.Navigation("Groups");

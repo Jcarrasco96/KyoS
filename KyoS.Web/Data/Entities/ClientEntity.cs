@@ -212,5 +212,6 @@ namespace KyoS.Web.Data.Entities
 
         public string Annotations { get; set; }
 
+        public List<CiteEntity> CiteList { get; set; }
     }
 }
