@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data.Contracts;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -14,7 +13,7 @@ namespace KyoS.Web.Data.Entities
         public ScheduleEntity Schedule { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
 
         public CiteStatus Status { get; set; }
         public string EventNote { get; set; }

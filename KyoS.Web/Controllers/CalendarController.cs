@@ -220,7 +220,7 @@ namespace KyoS.Web.Controllers
                 DateTime initDate = Convert.ToDateTime(start);
                 DateTime finalDate = Convert.ToDateTime(end);
 
-                Task<List<object>> notesTask = NotesIndByFacilitator(idFacilitator, initDate, finalDate);
+                Task<List<object>> notesTask = AppointmentsByFacilitator(idFacilitator, initDate, finalDate);
                 
                 await Task.WhenAll(notesTask);
 
@@ -470,50 +470,42 @@ namespace KyoS.Web.Controllers
                     .ToList<object>();
         }
 
-        private async Task<List<object>> NotesIndByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
+        private async Task<List<object>> AppointmentsByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
         {
             var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
-            List<Workday_Client> listWorkdayClient;
+            List<CiteEntity> listAppointments;
 
             using (DataContext db = new DataContext(options))
             {
-                listWorkdayClient = await db.Workdays_Clients
+                listAppointments = await db.Cites
 
-                                            .Include(wc => wc.Schedule)
-                                            .Include(wc => wc.Workday)
+                                            .Include(c => c.Schedule)
+                                            .Include(c => c.Worday_CLient)
 
-                                            .Include(wc => wc.IndividualNote)
-                                                .ThenInclude(i => i.SubSchedule)
+                                            .Include(c => c.Client)                                                
 
-                                            .Include(wc => wc.Client)
-
-                                            .Where(wc => (wc.Workday.Date >= initDate && wc.Workday.Date <= finalDate && wc.Present == true &&
-                                                          wc.Facilitator.Id == idFacilitator && wc.Workday.Service == ServiceType.Individual))
+                                            .Where(c => (c.Date >= initDate && c.Date <= finalDate && c.Facilitator.Id == idFacilitator))
 
                                             .ToListAsync();
             }
 
-            return listWorkdayClient
-                    .Select(wc => new
+            return listAppointments
+                    .Select(c => new
                     {
-                        title = (wc.Client == null) ? "Individual Therapy - No client" :
-                                (wc.Client != null) ? $"Individual Therapy - {wc.Client.Name}" :
+                        title = (c.Client == null) ? "No client" :
+                                (c.Client != null) ? $"Private Therapy - {c.Client.Name}" :
                                                 string.Empty,
-                        start = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
-                                                (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.InitialTime.Minute : 0, 0)
+                        start = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
+                                                c.Schedule.InitialTime.Hour, c.Schedule.InitialTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
-                        end = new DateTime(wc.Workday.Date.Year, wc.Workday.Date.Month, wc.Workday.Date.Day,
-                                              (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Hour : 0, (wc.IndividualNote != null && wc.IndividualNote.SubSchedule != null) ? wc.IndividualNote.SubSchedule.EndTime.Minute : 0, 0)
-                                                  .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
-                        backgroundColor = (wc.Workday.Service == ServiceType.PSR) ? "#fcf8e3" :
-                                                                    (wc.Workday.Service == ServiceType.Group) ? "#d9edf7" :
-                                                                        (wc.Workday.Service == ServiceType.Individual) ? "#dff0d8" : "#dff0d8",
-                        textColor = (wc.Workday.Service == ServiceType.PSR) ? "#9e7d67" :
-                                                                (wc.Workday.Service == ServiceType.Group) ? "#487c93" :
-                                                                    (wc.Workday.Service == ServiceType.Individual) ? "#417c49" : "#417c49",
-                        borderColor = (wc.Workday.Service == ServiceType.PSR) ? "#9e7d67" :
-                                                                (wc.Workday.Service == ServiceType.Group) ? "#487c93" :
-                                                                    (wc.Workday.Service == ServiceType.Individual) ? "#417c49" : "#417c49"
+                        end = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
+                                              c.Schedule.EndTime.Hour, c.Schedule.EndTime.Minute, 0)
+                                                    .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
+                        backgroundColor = "#dff0d8",
+                        textColor = "#417c49",
+                        borderColor = "#417c49",
+                        url = Url.Action("EditModal", "Cites", new { id = c.Id }),
+                        //url = $"showInPopup({Url.Action("EditModal", "Cites", new { id = c.Id })},Edit Appointment (Private Therapy))"
                     })
                     .Distinct()
                     .ToList<object>();
