@@ -11,7 +11,7 @@ namespace KyoS.Web.Data.Entities
         public int Id { get; set; }
         public ClientEntity Client { get; set; }
         public FacilitatorEntity Facilitator { get; set; }
-        public ScheduleEntity Schedule { get; set; }
+        public SubScheduleEntity SubSchedule { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }

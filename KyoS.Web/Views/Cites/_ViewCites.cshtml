@@ -20,10 +20,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Date
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
                                 Start Time
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
                                 End Time
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -60,11 +60,11 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Date)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Schedule.InitialTime)
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.SubSchedule.InitialTime)
                                 </td>
-                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Schedule.EndTime)
+                                 <td align="center"> 
+                                    @Html.DisplayFor(modelItem => item.SubSchedule.EndTime)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Status)

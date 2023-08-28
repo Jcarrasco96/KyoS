@@ -60,7 +60,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.Clinic)
                                           .Include(c => c.Client)
                                           .Include(c => c.Facilitator)
-                                          .Include(c => c.Schedule)
+                                          .Include(c => c.SubSchedule)
                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Date).ToListAsync());
             }
@@ -70,7 +70,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Frontdesk")]
-        public IActionResult CreateModal(int id = 0)
+        public IActionResult CreateModal(DateTime date, int id = 0)
         {
             if (id == 1)
             {
@@ -117,11 +117,11 @@ namespace KyoS.Web.Controllers
                         ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id),
                         IdFacilitator = 0,
                         FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false),
-                        IdSchedule = 0,
-                        SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, 0),
+                        IdSubSchedule = 0,
+                        SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, 0,date),
                         Worday_CLient = null,
                         Copay = 0,
-                        Date = DateTime.Today,
+                        Date = date,
                         EventNote = string.Empty,
                         PatientNote = string.Empty,
                         Service = "Therapy Private",
@@ -150,11 +150,11 @@ namespace KyoS.Web.Controllers
                                                 .FirstOrDefaultAsync(f => (f.Clinic.Id == citeViewModel.IdClinic
                                                                        && f.Date == citeViewModel.Date
                                                                        && ((f.Client.Id == citeViewModel.IdClient)
-                                                                       || ( f.Schedule.Id == citeViewModel.IdSchedule
+                                                                       || ( f.SubSchedule.Id == citeViewModel.IdSubSchedule
                                                                          && f.Facilitator.Id == citeViewModel.IdFacilitator))));
 
-                if (cite == null && VerifyNotesAtSameTime(citeViewModel.IdClient, citeViewModel.IdSchedule, citeViewModel.Date) == false
-                            && VerifyFreeTimeOfFacilitator(citeViewModel.IdFacilitator,citeViewModel.Date,citeViewModel.IdSchedule) == false)
+                if (cite == null && VerifyNotesAtSameTime(citeViewModel.IdClient, citeViewModel.IdSubSchedule, citeViewModel.Date) == false
+                            && VerifyFreeTimeOfFacilitator(citeViewModel.IdFacilitator,citeViewModel.Date,citeViewModel.IdSubSchedule) == false)
                 {
                    
                     cite = await _converterHelper.ToCiteEntity(citeViewModel, true, user_logged.UserName);
@@ -168,7 +168,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(c => c.Clinic)
                                                                     .Include(c => c.Client)
                                                                     .Include(c => c.Facilitator)
-                                                                    .Include(c => c.Schedule)
+                                                                    .Include(c => c.SubSchedule)
                                                                     .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                                                     .OrderBy(c => c.Date)
                                                                     .ToListAsync();
@@ -202,7 +202,7 @@ namespace KyoS.Web.Controllers
                     citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                     citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                     citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
-                    citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
+                    citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.Date);
 
                     ViewBag.Creado = "E";
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
@@ -223,7 +223,7 @@ namespace KyoS.Web.Controllers
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
-                citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
+                citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.Date);
 
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
@@ -266,7 +266,7 @@ namespace KyoS.Web.Controllers
             CiteEntity citeEntity = await _context.Cites
                                                   .Include(c => c.Client)
                                                   .Include(f => f.Facilitator)
-                                                  .Include(sc => sc.Schedule)
+                                                  .Include(sc => sc.SubSchedule)
 
                                                   .FirstOrDefaultAsync(c => c.Id == id);
             if (citeEntity == null)
@@ -314,7 +314,7 @@ namespace KyoS.Web.Controllers
                                                                .Include(c => c.Clinic)
                                                                .Include(c => c.Client)
                                                                .Include(c => c.Facilitator)
-                                                               .Include(c => c.Schedule)
+                                                               .Include(c => c.SubSchedule)
                                                                .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                                                .OrderBy(c => c.Date).ToListAsync();
 
@@ -347,7 +347,7 @@ namespace KyoS.Web.Controllers
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
-                citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
+                citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.Date);
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", citeViewModel) });
         }
