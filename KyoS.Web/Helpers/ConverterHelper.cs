@@ -7181,7 +7181,7 @@ namespace KyoS.Web.Helpers
             {
                 Id = model.Id,
                 IdClinic = model.Clinic.Id,
-                Clinics = _combosHelper.GetComboClinics(),
+                //Clinics = _combosHelper.GetComboClinics(),
                 Worday_CLient = model.Worday_CLient,
                 PatientNote = model.PatientNote,
                 Copay = model.Copay,

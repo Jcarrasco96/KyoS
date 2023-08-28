@@ -13,27 +13,27 @@
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="IdFacilitator" />
             <div>
-                <div class="col-md-12 form-group">
+                <div class="col-md-8 form-group">
                     <label asp-for="Facilitator.Name" class="control-label">Facilitator </label>
                     <input asp-for="Facilitator.Name" class="form-control" readonly />
                     <span asp-validation-for="Facilitator.Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class="col-md-4 form-group">
-                    <label asp-for="Client.Name" class="control-label">Client</label>
-                    <input asp-for="Client.Name" class="form-control" readonly />
-                    <span asp-validation-for="Client.Name" class="text-danger"></span>
-                </div>
-                <div class="col-md-4 form-group">
-                    <label asp-for="IdSchedule" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdSchedule" asp-items="Model.SchedulesList" class="form-control"></select>
-                    <span asp-validation-for="IdSchedule" class="text-danger"></span>
                 </div>
                 <div class="col-md-4 form-group">
                     <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                     <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="Client.Name" class="control-label">Client</label>
+                    <input asp-for="Client.Name" class="form-control" readonly />
+                    <span asp-validation-for="Client.Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="IdSchedule" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSchedule" asp-items="Model.SchedulesList" class="form-control"></select>
+                    <span asp-validation-for="IdSchedule" class="text-danger"></span>
                 </div>
             </div>
             <div>

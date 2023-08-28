@@ -194,7 +194,7 @@ namespace KyoS.Web.Controllers
                     CiteViewModel.Clinics = list;
                     CiteViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                     CiteViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
-                    CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
+                    CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
                     CiteViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", CiteViewModel) });
@@ -214,7 +214,7 @@ namespace KyoS.Web.Controllers
                 CiteViewModel.Clinics = list;
                 CiteViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 CiteViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
-                CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
+                CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
                 CiteViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
 
             }
@@ -267,7 +267,14 @@ namespace KyoS.Web.Controllers
             }
 
             CiteViewModel citeViewModel = _converterHelper.ToCiteViewModel(citeEntity, user_logged.Clinic.Id);
-
+           
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Insert(0, new SelectListItem
+            {
+                Text = user_logged.Clinic.Name,
+                Value = $"{user_logged.Clinic.Id}"
+            });
+            citeViewModel.Clinics = list;
             return View(citeViewModel);
         }
 
@@ -334,7 +341,7 @@ namespace KyoS.Web.Controllers
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
                 citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
             }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", citeViewModel) });
         }
 
         [Authorize(Roles = "Frontdesk")]
