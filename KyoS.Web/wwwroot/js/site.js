@@ -2651,9 +2651,9 @@ jQueryAjaxCite = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-cites').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
@@ -2673,7 +2673,7 @@ jQueryAjaxCite = form => {
                     });
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)

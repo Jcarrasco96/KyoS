@@ -2080,13 +2080,26 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service)
+        public IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service, int idFacilitator, DateTime date)
         {
-            List<SelectListItem> list = _context.Schedule.Include(m => m.SubSchedules).Where(n => n.Clinic.Id == idClinic && n.Service == service).OrderBy(f => f.InitialTime).Select(f => new SelectListItem
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(n => n.Groups)
+                                                    .ThenInclude(n => n.Schedule)
+                                                    .ThenInclude(n => n.SubSchedules)
+                                                    .FirstOrDefault(n => n.Id == idFacilitator);
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (facilitator != null && facilitator.Groups.Count() > 0)
             {
-                Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()} ({f.SubSchedules.Count()})",
-                Value = $"{f.Id}"
-            }).ToList();
+                List<SubScheduleEntity> aux = SubScheduleAvailable(idFacilitator, date);
+
+
+                list = aux.OrderBy(n => n.InitialTime).Select(f => new SelectListItem
+                                                    {
+                                                        Text = $"{f.InitialTime.ToShortTimeString()} - {f.EndTime.ToShortTimeString()}",
+                                                        Value = $"{f.Id}"
+                                                    }).ToList();
+
+            }
 
             list.Insert(0, new SelectListItem
             {
@@ -2096,6 +2109,34 @@ namespace KyoS.Web.Helpers
 
 
             return list;
+        }
+
+        public List<SubScheduleEntity> SubScheduleAvailable(int idFacilitator, DateTime date)
+        {
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(n => n.Groups)
+                                                    .ThenInclude(n => n.Schedule)
+                                                    .ThenInclude(n => n.SubSchedules)
+                                                    .FirstOrDefault(n => n.Id == idFacilitator);
+
+            List<SubScheduleEntity> subSchedule = facilitator.Groups
+                                                             .FirstOrDefault(n => n.Service == ServiceType.Individual)
+                                                             .Schedule
+                                                             .SubSchedules
+                                                             .ToList();
+
+            List<CiteEntity> cites = _context.Cites
+                                             .Include(n => n.SubSchedule)
+                                             .Where(n => n.Facilitator.Id == idFacilitator 
+                                                      && n.Date == date)
+                                             .ToList();
+
+            foreach (var item in cites)
+            {
+                subSchedule.Remove(item.SubSchedule);
+            }
+
+            return subSchedule;
         }
 
     }

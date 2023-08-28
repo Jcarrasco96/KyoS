@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace KyoS.Web.Models
 {
@@ -26,7 +27,7 @@ namespace KyoS.Web.Models
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Schedule")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a schedule.")]
-        public int IdSchedule { get; set; }
+        public int IdSubSchedule { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Facilitator")]
@@ -41,7 +42,7 @@ namespace KyoS.Web.Models
 
         public IEnumerable<SelectListItem> FacilitatorsList { get; set; }
 
-        public IEnumerable<SelectListItem> SchedulesList { get; set; }
+        public IEnumerable<SelectListItem> SubSchedulesList { get; set; }
 
         public string Service { get; set; }
     }
