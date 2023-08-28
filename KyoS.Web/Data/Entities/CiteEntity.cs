@@ -14,7 +14,7 @@ namespace KyoS.Web.Data.Entities
         public ScheduleEntity Schedule { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
 
         public CiteStatus Status { get; set; }
         public string EventNote { get; set; }

@@ -104,6 +104,8 @@ namespace KyoS.Web.Controllers
                         Text = clinic.Name,
                         Value = $"{clinic.Id}"
                     });
+                    ClientEntity client = new ClientEntity();
+                    client.Name = "-";
 
                     model = new CiteViewModel
                     {
@@ -116,13 +118,15 @@ namespace KyoS.Web.Controllers
                         IdFacilitator = 0,
                         FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false),
                         IdSchedule = 0,
-                        SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual),
+                        SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, 0),
                         Worday_CLient = null,
                         Copay = 0,
                         Date = DateTime.Today,
                         EventNote = string.Empty,
                         PatientNote = string.Empty,
-                        Service = "Therapy Private"
+                        Service = "Therapy Private",
+                        Client = client
+                        
 
                     };
                     return View(model);
@@ -135,7 +139,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Frontdesk")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateModal(CiteViewModel CiteViewModel)
+        public async Task<IActionResult> CreateModal(CiteViewModel citeViewModel)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -143,14 +147,17 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 CiteEntity cite = await _context.Cites
-                                                .FirstOrDefaultAsync(f => f.Facilitator.Id == CiteViewModel.IdFacilitator
-                                                                       && f.Client.Id == CiteViewModel.IdClient
-                                                                       && f.Clinic.Id == CiteViewModel.IdClinic
-                                                                       && f.Schedule.Id == CiteViewModel.IdSchedule);
-                if (cite == null)
+                                                .FirstOrDefaultAsync(f => (f.Clinic.Id == citeViewModel.IdClinic
+                                                                       && f.Date == citeViewModel.Date
+                                                                       && ((f.Client.Id == citeViewModel.IdClient)
+                                                                       || ( f.Schedule.Id == citeViewModel.IdSchedule
+                                                                         && f.Facilitator.Id == citeViewModel.IdFacilitator))));
+
+                if (cite == null && VerifyNotesAtSameTime(citeViewModel.IdClient, citeViewModel.IdSchedule, citeViewModel.Date) == false
+                            && VerifyFreeTimeOfFacilitator(citeViewModel.IdFacilitator,citeViewModel.Date,citeViewModel.IdSchedule) == false)
                 {
                    
-                    cite = await _converterHelper.ToCiteEntity(CiteViewModel, true, user_logged.UserName);
+                    cite = await _converterHelper.ToCiteEntity(citeViewModel, true, user_logged.UserName);
 
                     _context.Add(cite);
                     try
@@ -172,7 +179,7 @@ namespace KyoS.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {CiteViewModel.Id}");
+                            ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {citeViewModel.Id}");
                         }
                         else
                         {
@@ -190,14 +197,15 @@ namespace KyoS.Web.Controllers
                         Value = $"{clinic.Id}"
                     });
 
-                    CiteViewModel.IdClinic = clinic.Id;
-                    CiteViewModel.Clinics = list;
-                    CiteViewModel.StatusList = _combosHelper.GetComboSiteStatus();
-                    CiteViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
-                    CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
-                    CiteViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
+                    citeViewModel.IdClinic = clinic.Id;
+                    citeViewModel.Clinics = list;
+                    citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
+                    citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
+                    citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
+                    citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
 
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", CiteViewModel) });
+                    ViewBag.Creado = "E";
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
                 }
             }
             else
@@ -210,15 +218,15 @@ namespace KyoS.Web.Controllers
                     Value = $"{clinic.Id}"
                 });
 
-                CiteViewModel.IdClinic = clinic.Id;
-                CiteViewModel.Clinics = list;
-                CiteViewModel.StatusList = _combosHelper.GetComboSiteStatus();
-                CiteViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
-                CiteViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
-                CiteViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
+                citeViewModel.IdClinic = clinic.Id;
+                citeViewModel.Clinics = list;
+                citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
+                citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
+                citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
+                citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
 
             }
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", CiteViewModel) });
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
         }
 
         [Authorize(Roles = "Frontdesk")]
@@ -339,7 +347,7 @@ namespace KyoS.Web.Controllers
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
-                citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual);
+                citeViewModel.SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator);
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", citeViewModel) });
         }
@@ -371,6 +379,100 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        #region Utils Functions     
+        private bool VerifyFreeTimeOfFacilitator(int idFacilitator, DateTime date, int idSchedule)
+        {
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == idFacilitator);
+            List<Workday_Client> workday_client = _context.Workdays_Clients
+                                                          .Include(n => n.Workday)
+                                                          .Include(n => n.Note)
+                                                          .Include(n => n.NoteP)
+                                                          .Include(n => n.GroupNote)
+                                                          .Include(n => n.GroupNote2)
+                                                          .Include(n => n.IndividualNote)
+                                                          .Include(n => n.Schedule)
+                                                          .ThenInclude(n => n.SubSchedules)
+                                                          .Where(wc => (wc.Facilitator.Id == idFacilitator
+                                                                     && wc.Workday.Date == date))
+                                                          .ToList();
+
+            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == idSchedule);
+            foreach (var item in workday_client)
+            {
+                if (item.Workday.Service == ServiceType.Individual)
+                {
+                    if (item.IndividualNote != null)
+                    {
+                        if (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
+                    {
+                        if (item.Schedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
+                          || item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            
+            return false;
+        }
+
+        [Authorize(Roles = "Manager")]
+        private bool VerifyNotesAtSameTime(int idClient, int idSchedule, DateTime date)
+        {
+            //PSR notes
+            ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == idClient);
+            
+            List<Workday_Client> workday_client = _context.Workdays_Clients
+                                                   .Include(n => n.Workday)
+                                                   .Include(n => n.Note)
+                                                   .Include(n => n.NoteP)
+                                                   .Include(n => n.GroupNote)
+                                                   .Include(n => n.GroupNote2)
+                                                   .Include(n => n.IndividualNote)
+                                                   .Include(n => n.Schedule)
+                                                   .ThenInclude(n => n.SubSchedules)
+                                                   .Where(wc => (wc.Client.Id == idClient 
+                                                              && wc.Workday.Date == date))
+                                                   .ToList();
+            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == idSchedule);
+            foreach (var item in workday_client)
+            {
+                if (item.Workday.Service == ServiceType.Individual)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
+                    {
+                        if (item.Schedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
+                          || item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
 
     }
 }

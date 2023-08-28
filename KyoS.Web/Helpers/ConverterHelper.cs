@@ -7196,11 +7196,12 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 IdSchedule = model.Schedule.Id,
-                SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(model.Clinic.Id, ServiceType.Individual),
+                SchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(model.Clinic.Id, ServiceType.Individual, model.Facilitator.Id),
                 Schedule = model.Schedule,
                 IdStatus = (model.Status == CiteStatus.S) ? 1 : (model.Status == CiteStatus.C) ? 2 : (model.Status == CiteStatus.R) ? 3 : (model.Status == CiteStatus.NS) ? 4 : (model.Status == CiteStatus.AR) ? 5 : (model.Status == CiteStatus.CO) ? 6 : (model.Status == CiteStatus.A) ? 7 : (model.Status == CiteStatus.X) ? 8 : 0,
                 Status = model.Status,
                 StatusList = _combosHelper.GetComboSiteStatus(),
+               
             };
         }
 

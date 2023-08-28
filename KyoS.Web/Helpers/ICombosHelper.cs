@@ -92,6 +92,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboSiteStatus();
         IEnumerable<SelectListItem> GetComboClientByIndfacilitator(FacilitatorEntity facilitator, int idClinic);
-        IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service);
+        IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service, int idFacilitator);
     }
 }
