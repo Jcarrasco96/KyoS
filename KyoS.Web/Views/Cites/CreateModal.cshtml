@@ -20,10 +20,7 @@
 
     <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCite(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="IdClinic" />
-        <input type="hidden" asp-for="Client.Name" />
-        <input type="hidden" asp-for="Client.DateOfBirth" />
-
+        
         <div class="container-fluid">
             <div class="col-md-6 form-group">
                 <label asp-for="IdFacilitator" class="control-label"></label>&nbsp;*

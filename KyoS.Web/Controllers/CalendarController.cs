@@ -479,7 +479,7 @@ namespace KyoS.Web.Controllers
             {
                 listAppointments = await db.Cites
 
-                                            .Include(c => c.Schedule)
+                                            .Include(c => c.SubSchedule)
                                             .Include(c => c.Worday_CLient)
 
                                             .Include(c => c.Client)                                                
@@ -496,10 +496,10 @@ namespace KyoS.Web.Controllers
                                 (c.Client != null) ? $"Private Therapy - {c.Client.Name}" :
                                                 string.Empty,
                         start = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
-                                                c.Schedule.InitialTime.Hour, c.Schedule.InitialTime.Minute, 0)
+                                                c.SubSchedule.InitialTime.Hour, c.SubSchedule.InitialTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
                         end = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
-                                              c.Schedule.EndTime.Hour, c.Schedule.EndTime.Minute, 0)
+                                              c.SubSchedule.EndTime.Hour, c.SubSchedule.EndTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
                         backgroundColor = "#dff0d8",
                         textColor = "#417c49",

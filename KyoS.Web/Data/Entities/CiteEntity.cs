@@ -20,9 +20,6 @@ namespace KyoS.Web.Data.Entities
         public string PatientNote { get; set; }
 
         public decimal Copay { get; set; }
-        public Workday_Client Worday_CLient { get; set; }
-
-        public ClinicEntity Clinic { get; set; }
-
+        public Workday_Client Worday_CLient { get; set; }        
     }
 }

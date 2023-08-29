@@ -57,20 +57,18 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 return View(await _context.Cites
-                                          .Include(c => c.Clinic)
                                           .Include(c => c.Client)
                                           .Include(c => c.Facilitator)
                                           .Include(c => c.SubSchedule)
-                                          .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                          .Where(c => c.Facilitator.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Date).ToListAsync());
-            }
-           
+            }           
 
             return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Frontdesk")]
-        public IActionResult CreateModal(DateTime date, int id = 0)
+        public IActionResult CreateModal(string date, int id = 0, int idFacilitator = 0)
         {
             if (id == 1)
             {
@@ -87,53 +85,34 @@ namespace KyoS.Web.Controllers
                     ViewBag.Creado = "N";
                 }
             }
-
-            CiteViewModel model = new CiteViewModel();
-
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
-                {
-                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = clinic.Name,
-                        Value = $"{clinic.Id}"
-                    });
-                    ClientEntity client = new ClientEntity();
-                    client.Name = "-";
-
-                    model = new CiteViewModel
-                    {
-                        IdClinic = clinic.Id,
-                        Clinics = list,                        
-                        IdStatus = 0,
-                        StatusList = _combosHelper.GetComboSiteStatus(),
-                        IdClient = 0,
-                        ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id),
-                        IdFacilitator = 0,
-                        FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false),
-                        IdSubSchedule = 0,
-                        SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, 0,date),
-                        Worday_CLient = null,
-                        Copay = 0,
-                        Date = date,
-                        EventNote = string.Empty,
-                        PatientNote = string.Empty,
-                        Service = "Therapy Private",
-                        Client = client
                         
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            
+            if (user_logged.Clinic != null)
+            {
+                ClientEntity client = new ClientEntity();
+                client.Name = "-";
+                DateTime appoitmentDate = (date != null) ? Convert.ToDateTime(date) : DateTime.Now;
+                CiteViewModel model = new CiteViewModel
+                {
+                    IdStatus = 0,
+                    StatusList = _combosHelper.GetComboSiteStatus(),
+                    IdClient = 0,
+                    ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id),
+                    IdFacilitator = 0,
+                    FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false),
+                    IdSubSchedule = 0,
+                    SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, 0, appoitmentDate),
+                    Copay = 0,
+                    Date = appoitmentDate,                    
+                    Service = "Therapy Private"                    
+                };
+                return View(model);
+            }            
 
-                    };
-                    return View(model);
-                }
-            }
-
-            return View(model);
+            return View(null);
         }
 
         [HttpPost]
@@ -147,10 +126,9 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 CiteEntity cite = await _context.Cites
-                                                .FirstOrDefaultAsync(f => (f.Clinic.Id == citeViewModel.IdClinic
-                                                                       && f.Date == citeViewModel.Date
+                                                .FirstOrDefaultAsync(f => (f.Date == citeViewModel.Date
                                                                        && ((f.Client.Id == citeViewModel.IdClient)
-                                                                       || ( f.SubSchedule.Id == citeViewModel.IdSubSchedule
+                                                                       || (f.SubSchedule.Id == citeViewModel.IdSubSchedule
                                                                          && f.Facilitator.Id == citeViewModel.IdFacilitator))));
 
                 if (cite == null && VerifyNotesAtSameTime(citeViewModel.IdClient, citeViewModel.IdSubSchedule, citeViewModel.Date) == false
@@ -165,11 +143,10 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
 
                         List<CiteEntity> cites_List = await _context.Cites
-                                                                    .Include(c => c.Clinic)
                                                                     .Include(c => c.Client)
                                                                     .Include(c => c.Facilitator)
                                                                     .Include(c => c.SubSchedule)
-                                                                    .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                                    .Where(c => c.Facilitator.Clinic.Id == user_logged.Clinic.Id)
                                                                     .OrderBy(c => c.Date)
                                                                     .ToListAsync();
 
@@ -189,16 +166,6 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = clinic.Name,
-                        Value = $"{clinic.Id}"
-                    });
-
-                    citeViewModel.IdClinic = clinic.Id;
-                    citeViewModel.Clinics = list;
                     citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                     citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                     citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
@@ -210,21 +177,10 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                List<SelectListItem> list = new List<SelectListItem>();
-                list.Insert(0, new SelectListItem
-                {
-                    Text = clinic.Name,
-                    Value = $"{clinic.Id}"
-                });
-
-                citeViewModel.IdClinic = clinic.Id;
-                citeViewModel.Clinics = list;
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false);
                 citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.Date);
-
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", citeViewModel) });
         }
@@ -274,15 +230,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            CiteViewModel citeViewModel = _converterHelper.ToCiteViewModel(citeEntity, user_logged.Clinic.Id);
-           
-            List<SelectListItem> list = new List<SelectListItem>();
-            list.Insert(0, new SelectListItem
-            {
-                Text = user_logged.Clinic.Name,
-                Value = $"{user_logged.Clinic.Id}"
-            });
-            citeViewModel.Clinics = list;
+            CiteViewModel citeViewModel = _converterHelper.ToCiteViewModel(citeEntity, user_logged.Clinic.Id);          
+            
             return View(citeViewModel);
         }
 
@@ -310,12 +259,11 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    List<CiteEntity> cite_List = await _context.Cites
-                                                               .Include(c => c.Clinic)
+                    List<CiteEntity> cite_List = await _context.Cites                                                               
                                                                .Include(c => c.Client)
                                                                .Include(c => c.Facilitator)
                                                                .Include(c => c.SubSchedule)
-                                                               .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
+                                                               .Where(c => c.Facilitator.Clinic.Id == user_logged.Clinic.Id)
                                                                .OrderBy(c => c.Date).ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCites", cite_List) });
@@ -334,16 +282,6 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                List<SelectListItem> list = new List<SelectListItem>();
-                list.Insert(0, new SelectListItem
-                {
-                    Text = clinic.Name,
-                    Value = $"{clinic.Id}"
-                });
-
-                citeViewModel.IdClinic = clinic.Id;
-                citeViewModel.Clinics = list;
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(null, user_logged.Clinic.Id);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
