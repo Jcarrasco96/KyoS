@@ -680,7 +680,7 @@ namespace KyoS.Web.Controllers
                     IdTCMClient = idTCMClient,
                     DescriptionTemp = "",
                     StartTime = initDate,
-                    EndTime = initDate,
+                    TimeEnd = initDate.AddMinutes(15).ToShortTimeString(),
                     DateOfServiceNote = initDate
                 };
 
@@ -701,6 +701,8 @@ namespace KyoS.Web.Controllers
             
             if (ModelState.IsValid)
             {
+                TcmNotesViewModel.EndTime = TcmNotesViewModel.StartTime.AddMinutes(TcmNotesViewModel.Minutes);
+                 
                 TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain).Code);
 
                 TcmNotesViewModel.StartTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
