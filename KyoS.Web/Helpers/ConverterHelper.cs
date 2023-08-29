@@ -5925,7 +5925,8 @@ namespace KyoS.Web.Helpers
                 ServiceName = model.ServiceName,
                 IdTCMActivity = model.TCMServiceActivity.Id,
                 DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description,
-                TimeEnd = model.EndTime.ToShortTimeString()
+                TimeEnd = model.EndTime.ToShortTimeString(),
+                NeedIdentified = model.TCMDomain.NeedsIdentified
         };
 
             return salida;

@@ -48,10 +48,12 @@ else
     }
     
 }
-@*<div class="col-md-12">
+<div class="col-md-12">
                 <pre>
-                    @Html.DisplayFor(modelItem => Model.CaseManager.Name)                                                        @Html.DisplayFor(modelItem => Model.CaseManager.Credentials)                      @Html.DisplayFor(modelItem => Model.CaseManagerDate)
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                                                        @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                      @Html.DisplayFor(modelItem => Model.DateOfService)
                     <strong>_______________________</strong>         <strong>______________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
                     <strong>Case Manager Print Name</strong>         <strong>Case Manager Signature</strong>             <strong>Credentials</strong>                    <strong>Date</strong>
+                                                        <img class="img-responsive" id="targetImgSign" src="@Url.Content(Model.TCMClient.Client.SignPath)" width="25" />
+               
                 </pre>
-    </div>*@
+</div>

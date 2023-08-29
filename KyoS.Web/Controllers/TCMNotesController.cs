@@ -680,7 +680,7 @@ namespace KyoS.Web.Controllers
                     IdTCMClient = idTCMClient,
                     DescriptionTemp = "",
                     StartTime = initDate,
-                    EndTime = initDate.AddMinutes(15),
+                    EndTime = initDate,
                     DateOfServiceNote = initDate
                 };
 
