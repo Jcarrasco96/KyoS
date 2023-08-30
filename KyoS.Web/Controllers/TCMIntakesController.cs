@@ -1083,7 +1083,10 @@ namespace KyoS.Web.Controllers
                         Address = "",
                         CityStateZip = "",
                         PhoneNo = "",
-                        FaxNo = ""
+                        FaxNo = "",
+                        ConsentType = ConsentType.HURRICANE,
+                        OtherPurposeRequest = string.Empty,
+                        OtherAutorizedInformation = string.Empty
                     };
                    if (model.TcmClient.Client.LegalGuardian == null)
                        model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();

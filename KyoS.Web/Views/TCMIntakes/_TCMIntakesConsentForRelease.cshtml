@@ -47,21 +47,32 @@
         &nbsp;
     </div>
 </div>
+<div class="col-md-12">
+    <hr />
+</div>
+
 @if (User.IsInRole("CaseManager"))
 {
-    <div class="col-md-12">
-        <hr />
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="Idtype" class="control-label"></label>
+            <select asp-for="Idtype" asp-items="Model.ConsentList" class="form-control"></select>
+            <span asp-validation-for="Idtype" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
     </div>
     <div class="form-group col-md-12">
-<pre>    
-        <strong>THIS WILL AUTHORIZE:</strong>
-    Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
-    Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
+        <pre>    
+        <strong>THIS WILL AUTHORIZE:</strong>                                                                
+        Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
+        Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
     
         <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease"> to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statues 394, 
-    459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
+        459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
 
-</pre>
+        </pre>
     </div>
     <div class="col-md-push-12">
         <div class="form-group col-md-3">
@@ -98,7 +109,9 @@
         <strong>I understand that the specific reports disclosed might include: </strong>
         <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
         <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation"> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History"> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork"> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord"> Hospital Records
-        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)     <input asp-for="Other_Explain">
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)              <textarea asp-for="Other_Explain" style="width:70%" rows="1"></textarea>
+        <strong>Other Purpose Request</strong>           <textarea asp-for="OtherPurposeRequest" style="width:70%" rows="1"></textarea>
+        <strong>Other Authorized Information</strong>    <textarea asp-for="OtherAutorizedInformation" style="width:70%" rows="1"></textarea>
     </pre>
     </div>
     <div class="col-md-12">

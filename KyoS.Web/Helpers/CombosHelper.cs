@@ -2139,5 +2139,38 @@ namespace KyoS.Web.Helpers
             return subSchedule;
         }
 
+        public IEnumerable<SelectListItem> GetComboConsentType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = ConsentType.HURRICANE.ToString(), Value = "1"},
+                                  new SelectListItem { Text = ConsentType.PCP.ToString(), Value = "2"},
+                                  new SelectListItem { Text = ConsentType.PSYCHIATRIST.ToString(), Value = "3"},
+                                  new SelectListItem { Text = ConsentType.EMERGENCY_CONTACT.ToString(), Value = "4"},
+                                  new SelectListItem { Text = ConsentType.DCF.ToString(), Value = "5"},
+                                  new SelectListItem { Text = ConsentType.SSA.ToString(), Value = "6"},
+                                  new SelectListItem { Text = ConsentType.BANK.ToString(), Value = "7"},
+                                  new SelectListItem { Text = ConsentType.HOUSING_OFFICES.ToString(), Value = "8"},
+                                  new SelectListItem { Text = ConsentType.POLICE_STATION.ToString(), Value = "9"},
+                                  new SelectListItem { Text = ConsentType.PHARMACY.ToString(), Value = "10"},
+                                  new SelectListItem { Text = ConsentType.MEDICAL_INSURANCE.ToString(), Value = "11"},
+                                  new SelectListItem { Text = ConsentType.CAC.ToString(), Value = "12"},
+                                  new SelectListItem { Text = ConsentType.LIFELINESS_PROVIDERS.ToString(), Value = "13"},
+                                  new SelectListItem { Text = ConsentType.TAG_AGENCY.ToString(), Value = "14"},
+                                  new SelectListItem { Text = ConsentType.STS.ToString(), Value = "15"},
+                                  new SelectListItem { Text = ConsentType.DONATION_CENTERS.ToString(), Value = "16"},
+                                  new SelectListItem { Text = ConsentType.LTC.ToString(), Value = "17"},
+                                  new SelectListItem { Text = ConsentType.INTERNET_SERVICES.ToString(), Value = "18"},
+                                  new SelectListItem { Text = ConsentType.USCIS.ToString(), Value = "19"}
+                                };
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Classification...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }
