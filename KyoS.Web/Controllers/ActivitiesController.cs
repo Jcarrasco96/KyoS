@@ -359,7 +359,9 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            ActivityEntity activityEntity = await _context.Activities
+                                                          .Include(a => a.Theme)
+                                                          .FirstOrDefaultAsync(a => a.Id == id);
             if (activityEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -374,7 +376,14 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }
                 }
             }
             activityViewModel.Origin = origin;
