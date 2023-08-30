@@ -22,12 +22,14 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly ITranslateHelper _translateHelper;
-        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, ITranslateHelper translateHelper)
+        private readonly IRenderHelper _renderHelper;
+        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, ITranslateHelper translateHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _translateHelper = translateHelper;
+            _renderHelper = renderHelper;
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -1995,6 +1997,88 @@ namespace KyoS.Web.Controllers
             }
             return View(activityViewModel);
         }
+
+        public async Task<IActionResult> EditActivity3Modal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            if (activityEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                   /* if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }*/
+                }
+            }
+
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditActivity3Modal(ActivityViewModel activityViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<ActivityEntity> list = await _context.Activities
+                                                              .Include(a => a.Theme)
+                                                              .Include(a => a.Facilitator)
+                                                              .ThenInclude(t => t.Clinic)
+                                                              .Where(a => (a.Theme.Clinic.Id == user_logged.Clinic.Id 
+                                                                        && a.Status == ActivityStatus.Pending
+                                                                        && a.Theme.Day == null))
+                                                              .OrderBy(a => a.Theme.Name)
+                                                              .ToListAsync();
+
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewActivities", list) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator's intervention: {activityEntity.Theme.Name} - {activityEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
+
 
     }
 }

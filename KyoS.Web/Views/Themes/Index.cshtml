@@ -58,21 +58,21 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Day)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td  align="center">
-                                @Html.DisplayFor(modelItem => item.Clinic.Name)
-                            </td>
-                            <td align="right">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit topic"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete topic"><i class="glyphicon glyphicon-trash"></i></button>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Day)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td  align="center">
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit topic"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete topic"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

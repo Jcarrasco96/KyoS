@@ -154,7 +154,8 @@ namespace KyoS.Web.Helpers
                 Id = activityEntity.Id,
                 Name = activityEntity.Name,
                 Themes = _combosHelper.GetComboThemes(),
-                IdTheme = activityEntity.Theme.Id
+                IdTheme = activityEntity.Theme.Id,
+                Theme = activityEntity.Theme
             };
         }
 
