@@ -30,7 +30,7 @@ namespace KyoS.Web.Controllers
             _reportHelper = reportHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -67,6 +67,18 @@ namespace KyoS.Web.Controllers
 
                                               .Where(n => (n.Clinic.Id == user_logged.Clinic.Id)
                                                 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity document_Assisstant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    return View(await _context.Clients
+
+                                              .Include(f => f.MedicationList)
+
+                                              .Where(n => (n.Clinic.Id == user_logged.Clinic.Id)
+                                                && (n.Bio != null && n.Bio.DocumentsAssistant.Id == document_Assisstant.Id))
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -125,7 +137,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Create(MedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -172,7 +184,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", MedicationViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Edit(int id = 0)
         {
             MedicationViewModel model;
@@ -204,6 +216,35 @@ namespace KyoS.Web.Controllers
 
                 }
             }
+            if (User.IsInRole("Documents_Assistant") )
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    MedicationEntity Medication = _context.Medication
+                                                          .Include(m => m.Client)
+                                                          .ThenInclude(m => m.MedicationList)
+                                                          .FirstOrDefault(m => m.Id == id 
+                                                                            && m.Client.Bio != null 
+                                                                            && m.Client.Bio.DocumentsAssistant.Id == documentAssistant.Id);
+                    if (Medication == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToMedicationViewModel(Medication);
+
+                        return View(model);
+                    }
+
+                }
+            }
 
             model = new MedicationViewModel();
             return View(model);
@@ -211,7 +252,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Edit(MedicationViewModel medicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -237,7 +278,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Delete(int? id, int origin = 0)
         {
             if (id == null)
