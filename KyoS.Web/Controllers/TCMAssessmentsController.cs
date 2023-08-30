@@ -2485,11 +2485,49 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
-                if (id > 0)
+                if (referredTempViewModel.Name != null && referredTempViewModel.Name != string.Empty)
                 {
-                   Client_Referred Client_referred = new Client_Referred
+                    DateTime createdDate = DateTime.Now;
+                    ReferredViewModel referred = new ReferredViewModel
+                    {
+                        Id = 0,
+                        Address = referredTempViewModel.Address,
+                        Agency = referredTempViewModel.Agency,
+                        Email = referredTempViewModel.Email,
+                        Name = referredTempViewModel.Name,
+                        Telephone = referredTempViewModel.Telephone,
+                        Title = referredTempViewModel.Title,
+                        CreatedBy = user_logged.Id,
+                        CreatedOn = createdDate
+
+                    };
+
+                    //_context.Add(referred);
+                    ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referred, true, user_logged.Id);
+
+                    Client_Referred Client_referred = new Client_Referred
+                    {
+                        Id = 0,
+                        Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
+                        Referred = referred,//await _context.Referreds.FirstOrDefaultAsync(d => d.CreatedOn == createdDate),
+                        ReferredNote = referredTempViewModel.ReferredNote,
+                        Service = ServiceAgency.TCM
+
+                    };
+
+                    _context.Add(Client_referred);
+
+                }
+                else
+                {
+
+                    Client_Referred Client_referred = new Client_Referred
                     {
                         Id = 0,
                         Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
@@ -2497,19 +2535,41 @@ namespace KyoS.Web.Controllers
                         ReferredNote = referredTempViewModel.ReferredNote,
                         Service = ServiceAgency.TCM
 
-                   };
+                    };
                     _context.Add(Client_referred);
-                    await _context.SaveChangesAsync();
                 }
-                List <Client_Referred> clientList = await _context.Clients_Referreds
+                await _context.SaveChangesAsync();
+
+                List<Client_Referred> clientList = await _context.Clients_Referreds
                                                            .Include(m => m.Referred)
                                                            .Where(n => n.Client.Id == id && n.Service == ServiceAgency.TCM)
                                                            .ToListAsync();
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList)});
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
+            }
+            else
+            {
+                if (referredTempViewModel.Id_Referred > 0)
+                {
+                    Client_Referred Client_referred = new Client_Referred
+                    {
+                        Id = 0,
+                        Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
+                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == referredTempViewModel.Id_Referred),
+                        ReferredNote = referredTempViewModel.ReferredNote,
+                        Service = ServiceAgency.TCM
+
+                    };
+                    _context.Add(Client_referred);
+                    await _context.SaveChangesAsync();
+
+                    List<Client_Referred> clientList = await _context.Clients_Referreds
+                                                               .Include(m => m.Referred)
+                                                               .Where(n => n.Client.Id == id && n.Service == ServiceAgency.TCM)
+                                                               .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
+                }
             }
 
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             ReferredTempViewModel model = new ReferredTempViewModel
             {
                 IdReferred = 0,
