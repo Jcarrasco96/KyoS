@@ -18,13 +18,16 @@
                                 <th class="col-md-2">
                                     @Html.DisplayNameFor(model => model.Name)
                                 </th>
-                                <th class="col-md-3">
+                                <th class="col-md-2">
                                     @Html.DisplayNameFor(model => model.Agency)
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Type
                                 </th>
-                                <th class="col-md-4" style="text-align:center;">
+                                <th class="col-md-2" style="text-align:center;">
+                                    Telephone
+                                </th>
+                                <th class="col-md-3" style="text-align:center;">
                                     Referred Note
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
@@ -57,7 +60,10 @@
                                                 Out
                                             </span>
                                          }
-                                        </td>
+                                    </td>
+                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Telephone)
+                                    </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.ReferredNote)
                                     </td>
