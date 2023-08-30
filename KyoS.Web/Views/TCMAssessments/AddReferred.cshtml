@@ -4,7 +4,6 @@
 }
 
 <div class="row">
-
     <form asp-action="AddReferred" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostReferred1(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
@@ -30,12 +29,12 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <label asp-for="Name" class="control-label"></label>
                 <textarea asp-for="Name" id="lbName" class="form-control" rows="1" disabled />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label asp-for="Title" class="control-label"></label>
                 <textarea asp-for="Title" id="lbTitle" class="form-control" rows="1" disabled />
                 <span asp-validation-for="Title" class="text-danger"></span>
@@ -75,12 +74,10 @@
         <div class="col-md-12">
             &nbsp;
         </div>
-        <div class="">
-            <div class="">
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                </div>
+        <div class="col-md  -12">
+            <div class="col-md-offset-9">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
             </div>
         </div>
     </form>

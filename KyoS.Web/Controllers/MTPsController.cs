@@ -2545,9 +2545,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Pending 
-                                                            && (a.Mtp.Client.IdFacilitatorPSR == facilitator.Id
-                                                               || a.Mtp.Client.IndividualTherapyFacilitator.Id == facilitator.Id
-                                                               || a.Mtp.Client.IdFacilitatorGroup == facilitator.Id))
+                                                            && (a.Facilitator.Id == facilitator.Id))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -4971,6 +4969,71 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ViewAllGoals", "Notes", new { idMtp = dateUntilViewModel.IdMtp });
             
         }
+
+        [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
+        public async Task<IActionResult> AdendumInEdition(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        return View(await _context.Adendums
+
+                                                  .Include(a => a.Mtp)
+                                                  .ThenInclude(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == AdendumStatus.Edition
+                                                            && (a.Facilitator.Id == facilitator.Id))
+                                                  .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
+                    else
+                    {
+                        return View(await _context.Adendums
+
+                                                  .Include(a => a.Mtp)
+                                                  .ThenInclude(a => a.Client)
+                                                  .ThenInclude(a => a.Clinic)
+
+                                                  .Include(a => a.Goals)
+                                                  .ThenInclude(a => a.Objetives)
+
+                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                  .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
+                                                            && a.Status == AdendumStatus.Edition)
+                                                  .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
+
+                    }
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
 
     }
 }

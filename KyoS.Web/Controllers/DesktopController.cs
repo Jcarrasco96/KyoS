@@ -239,6 +239,15 @@ namespace KyoS.Web.Controllers
                                                                 || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
                                                                 && n.OnlyTCM == false);
 
+                ViewBag.AddemdunEdition = await _context.Adendums
+                                                        .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                       && m.Status == AdendumStatus.Edition
+                                                                       && m.CreatedBy == user_logged.UserName));
+                ViewBag.AddemdunPending = await _context.Adendums
+                                                        .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                       && m.Status == AdendumStatus.Pending
+                                                                       && m.CreatedBy == user_logged.UserName));
+
             }
             if (User.IsInRole("Supervisor"))
             {
