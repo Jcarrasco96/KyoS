@@ -5844,7 +5844,8 @@ namespace KyoS.Web.Helpers
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMNote.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                Sign = model.Sign
 
             };
         }
@@ -5869,8 +5870,9 @@ namespace KyoS.Web.Helpers
                 TCMClient = model.TCMClient,
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
-                IdTCMNote = model.Id
-                
+                IdTCMNote = model.Id,
+                Sign = model.Sign
+
             };
 
             return salida;

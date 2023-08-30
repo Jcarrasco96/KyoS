@@ -29,10 +29,26 @@ else
     </div>
 </div>
 }
-@*<div class="col-md-12">
+<div class="col-md-12" id="check110">
                 <pre>
-                    @Html.DisplayFor(modelItem => Model.CaseManager.Name)                                                        @Html.DisplayFor(modelItem => Model.CaseManager.Credentials)                      @Html.DisplayFor(modelItem => Model.CaseManagerDate)
-                    <strong>_______________________</strong>         <strong>______________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
-                    <strong>Case Manager Print Name</strong>         <strong>Case Manager Signature</strong>             <strong>Credentials</strong>                    <strong>Date</strong>
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                     <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1" disabled> Sign Here (Case Manager)                @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                   @Html.DisplayFor(modelItem => Model.DateOfService)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+                    
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Name)                  <input asp-for="SignSupervisor" type="checkbox" class="form-check-input" id="check2" > Sign Here (Supervisor)                  @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Code)                    @Html.DisplayFor(modelItem => Model.ApprovedDate)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Supervisor Print Name</strong>               <strong>Supervisor Signature</strong>                  <strong>Credentials</strong>                    <strong>Date</strong>
                 </pre>
-    </div>*@
+</div>
+@*<script>
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == false) {
+            document.getElementById('lbdate').disabled = true;
+          
+        } else {
+            document.getElementById('lbdate').disabled = false;
+           
+        }
+    })
+</script>
+    *@
