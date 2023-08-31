@@ -154,7 +154,8 @@ namespace KyoS.Web.Helpers
                 Id = activityEntity.Id,
                 Name = activityEntity.Name,
                 Themes = _combosHelper.GetComboThemes(),
-                IdTheme = activityEntity.Theme.Id
+                IdTheme = activityEntity.Theme.Id,
+                Theme = activityEntity.Theme
             };
         }
 
@@ -3924,7 +3925,10 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 CityStateZip = model.CityStateZip,
                 PhoneNo = model.PhoneNo,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                ConsentType = ConsentUtils.GetTypeByIndex(model.Idtype),
+                OtherAutorizedInformation = model.OtherAutorizedInformation,
+                OtherPurposeRequest = model.OtherPurposeRequest
             };
         }
 
@@ -3967,7 +3971,14 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                ConsentType = model.ConsentType,
+                OtherAutorizedInformation = model.OtherAutorizedInformation,
+                OtherPurposeRequest = model.OtherPurposeRequest,
+                ConsentList = _combosHelper.GetComboConsentType(),
+                Idtype = (model.ConsentType == ConsentType.HURRICANE) ? 1 : (model.ConsentType == ConsentType.PCP) ? 2 : (model.ConsentType == ConsentType.PSYCHIATRIST) ? 3 : (model.ConsentType == ConsentType.EMERGENCY_CONTACT) ? 4 : (model.ConsentType == ConsentType.DCF) ? 5 : (model.ConsentType == ConsentType.SSA) ? 6 : (model.ConsentType == ConsentType.BANK) ? 7 : (model.ConsentType == ConsentType.HOUSING_OFFICES) ? 8 : (model.ConsentType == ConsentType.POLICE_STATION) ? 9 : (model.ConsentType == ConsentType.PHARMACY) ? 10
+                : (model.ConsentType == ConsentType.MEDICAL_INSURANCE) ? 11 : (model.ConsentType == ConsentType.CAC) ? 12 : (model.ConsentType == ConsentType.LIFELINESS_PROVIDERS) ? 13 : (model.ConsentType == ConsentType.TAG_AGENCY) ? 14 : (model.ConsentType == ConsentType.STS) ? 15 : (model.ConsentType == ConsentType.DONATION_CENTERS) ? 16 : (model.ConsentType == ConsentType.LTC) ? 17 : (model.ConsentType == ConsentType.INTERNET_SERVICES) ? 18 : (model.ConsentType == ConsentType.USCIS) ? 19 : 0,
+                 
             };
         }
 
@@ -5844,7 +5855,8 @@ namespace KyoS.Web.Helpers
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMNote.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                Sign = model.Sign
 
             };
         }
@@ -5869,8 +5881,9 @@ namespace KyoS.Web.Helpers
                 TCMClient = model.TCMClient,
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
-                IdTCMNote = model.Id
-                
+                IdTCMNote = model.Id,
+                Sign = model.Sign
+
             };
 
             return salida;
@@ -5925,7 +5938,8 @@ namespace KyoS.Web.Helpers
                 ServiceName = model.ServiceName,
                 IdTCMActivity = model.TCMServiceActivity.Id,
                 DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description,
-                TimeEnd = model.EndTime.ToShortTimeString()
+                TimeEnd = model.EndTime.ToShortTimeString(),
+                NeedIdentified = model.TCMDomain.NeedsIdentified
         };
 
             return salida;

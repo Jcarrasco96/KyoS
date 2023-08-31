@@ -150,7 +150,10 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(n => n.Clinic)
                                              .FirstOrDefault(n => n.Id == IdTCMClient),
                         TCMNoteActivityTemp = _context.TCMNoteActivityTemp
-                                                      .Where(na => na.UserName == user_logged.UserName)
+                                                      .Where(na => na.UserName == user_logged.UserName),
+                        Sign = false
+
+
                     };
                     ViewData["origin"] = origin;
                     return View(model);
@@ -264,6 +267,7 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(b => b.Client)
                                                     .Include(b => b.TCMClient)
                                                     .ThenInclude(b => b.Casemanager)
+                                                    .ThenInclude(b => b.TCMSupervisor)
                                                     .Include(b => b.TCMNoteActivity)
                                                     .ThenInclude(b => b.TCMDomain)
                                                     .FirstOrDefault(m => m.Id == id);
@@ -299,6 +303,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(b => b.Client)
                                                         .Include(b => b.TCMClient)
                                                         .ThenInclude(b => b.Casemanager)
+                                                        .ThenInclude(b => b.TCMSupervisor)
                                                         .Include(b => b.TCMNoteActivity)
                                                         .ThenInclude(b => b.TCMDomain)
                                                         .FirstOrDefault(m => m.Id == id
@@ -331,6 +336,7 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(b => b.Client)
                                                        .Include(b => b.TCMClient)
                                                        .ThenInclude(b => b.Casemanager)
+                                                       .ThenInclude(b => b.TCMSupervisor)
                                                        .Include(b => b.TCMNoteActivity)
                                                        .ThenInclude(b => b.TCMDomain)
                                                        .FirstOrDefault(m => m.Id == id
@@ -680,8 +686,9 @@ namespace KyoS.Web.Controllers
                     IdTCMClient = idTCMClient,
                     DescriptionTemp = "",
                     StartTime = initDate,
-                    EndTime = initDate.AddMinutes(15),
-                    DateOfServiceNote = initDate
+                    TimeEnd = initDate.AddMinutes(15).ToShortTimeString(),
+                    DateOfServiceNote = initDate,
+                    Units = 1
                 };
 
                 return View(model);
@@ -701,6 +708,8 @@ namespace KyoS.Web.Controllers
             
             if (ModelState.IsValid)
             {
+                TcmNotesViewModel.EndTime = TcmNotesViewModel.StartTime.AddMinutes(TcmNotesViewModel.Minutes);
+                 
                 TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain).Code);
 
                 TcmNotesViewModel.StartTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
@@ -970,6 +979,7 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
                         tcmNote.Status = NoteStatus.Pending;
+                        tcmNote.Sign = true;
                         _context.Update(tcmNote);
                         try
                         {
@@ -1008,6 +1018,7 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(u => u.TCMDomain)
                                             .Include(u => u.TCMClient)
                                             .ThenInclude(u => u.Casemanager)
+                                            .ThenInclude(u => u.TCMSupervisor)
                                             .ThenInclude(u => u.Clinic)
                                             .ThenInclude(u => u.Setting)
                                             .FirstOrDefault(u => u.Id == id);
@@ -1244,6 +1255,10 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(b => b.Clinic)
                                                     .ThenInclude(b => b.Setting)
 
+                                                    .Include(b => b.TCMClient)
+                                                    .ThenInclude(b => b.Casemanager)
+                                                    .ThenInclude(b => b.TCMSupervisor)
+
                                                     .Include(b => b.TCMNoteActivity)
                                                     .ThenInclude(b => b.TCMDomain)
 
@@ -1257,6 +1272,7 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMNoteViewModel(TcmNote);
                         model.TCMClient = TcmNote.TCMClient;
+                        model.ApprovedDate = DateTime.Today;
                         ViewData["origi"] = origi;
                         return View(model);
                     }
@@ -1278,6 +1294,7 @@ namespace KyoS.Web.Controllers
                                            .ThenInclude(u => u.TCMDomain)
                                            .Include(u => u.TCMClient)
                                            .ThenInclude(u => u.Casemanager)
+                                           .ThenInclude(u => u.TCMSupervisor)
                                            .ThenInclude(u => u.Clinic)
                                            .ThenInclude(u => u.Setting)
                                            .FirstOrDefault(u => u.Id == id);
@@ -1527,6 +1544,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.TCMNote
                                           .Include(n => n.TCMClient)
                                           .ThenInclude(n => n.Casemanager)
+                                          .ThenInclude(n => n.TCMSupervisor)
                                           .Include(n => n.TCMClient)
                                           .ThenInclude(n => n.Client)
                                           .ThenInclude(n => n.Clinic)

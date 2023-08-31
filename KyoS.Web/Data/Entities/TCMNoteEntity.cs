@@ -44,5 +44,7 @@ namespace KyoS.Web.Data.Entities
 
         [DataType(DataType.Date)]
         public DateTime? ApprovedDate { get; set; }
+
+        public bool Sign { get; set; }
     }
 }

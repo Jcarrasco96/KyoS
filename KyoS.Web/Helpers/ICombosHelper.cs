@@ -93,5 +93,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboSiteStatus();
         IEnumerable<SelectListItem> GetComboClientByIndfacilitator(int idFacilitator);
         IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service, int idFacilitator, DateTime date);
+        IEnumerable<SelectListItem> GetComboConsentType();
     }
 }

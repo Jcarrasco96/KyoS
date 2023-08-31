@@ -437,7 +437,7 @@
                                 Topics / Activities <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Topics / Activity", "Index", "Themes")</li>
+                                <li>@Html.ActionLink("Topics / Activity", "Create3", "Themes")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions", "ActivitiesSupervision", "Activities")</li>
                             </ul>
                         </li>
@@ -540,8 +540,8 @@
                                 <li>@Html.ActionLink("Individual Groups", "Individual", "Groups")</li>
                                 <li>@Html.ActionLink("Group Therapy Groups", "Group", "Groups")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Topics / Activities", "Index", "Themes")</li>
-                                <li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>
+                                <li>@Html.ActionLink("Topics / Activities", "Create3", "Themes")</li>
+                                @*<li>@Html.ActionLink("Activities / Facilitator's Interventions", "Index", "Activities")</li>*@
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
                                 <li role="separator" class="divider"></li>
@@ -905,6 +905,7 @@
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("BIOs", "Index", "Bios")</li>
                                         <li>@Html.ActionLink("BRIEFs", "Index", "Briefs")</li>
+                                        <li>@Html.ActionLink("Medications", "Index", "Medications")</li>
                                     </ul>
                                 </li>
                                 <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>

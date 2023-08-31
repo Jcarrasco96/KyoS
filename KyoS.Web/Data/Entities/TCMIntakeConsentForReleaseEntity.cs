@@ -62,5 +62,9 @@ namespace KyoS.Web.Data.Entities
         public string CityStateZip { get; set; }
         public string PhoneNo { get; set; }
         public string FaxNo { get; set; }
+
+        public string OtherPurposeRequest { get; set; }
+        public string OtherAutorizedInformation { get; set; }
+        public ConsentType ConsentType { get; set; }
     }
 }

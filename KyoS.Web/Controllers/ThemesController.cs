@@ -720,7 +720,14 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }
                 }
             }
            
@@ -745,9 +752,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<ThemeEntity> list = await _context.Themes
-                                                         .Include(n => n.Activities)
-                                                         .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                                         .ToListAsync();
+                                                           .Include(n => n.Activities)
+                                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                                           .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTheme3", list) });
                 }
