@@ -2129,6 +2129,9 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Week)
 
+                                                                           .Include(wc => wc.Schedule)
+                                                                           .ThenInclude(c => c.SubSchedules)
+
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -2223,6 +2226,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);            
 
             if (note == null)   //la nota no está creada
@@ -2235,12 +2239,32 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
                     Workday_Cient = workday_Client,
-                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id),
                     IdClient = 0,
                     MTPId = 0,
                     CodeBill = user_logged.Clinic.CodeIndTherapy,
                     Setting = "53"
                 };
+                if (user_logged.Clinic.Setting.IndNoteForAppointment == true)
+                {
+                    ClientEntity clientAppointment = AppointmentIndNote(facilitator_logged.Id, workday_Client.Workday.Date, workday_Client.Schedule.Id, workday_Client.Session);
+
+                    if (clientAppointment  != null)
+                    {
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clientAppointment.Name,
+                            Value = $"{clientAppointment.Id}"
+                        });
+
+                        individualNoteViewModel.IdClient = clientAppointment.Id;
+                        individualNoteViewModel.Clients = list;
+                    }
+                }
+                else
+                {
+                    individualNoteViewModel.Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id);
+                }                
             }
             else
             {
@@ -20711,6 +20735,38 @@ namespace KyoS.Web.Controllers
                 }
             }
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        private ClientEntity AppointmentIndNote(int idFacilitator, DateTime date, int idSchedule, string session)
+        {
+            List<SubScheduleEntity> subSchedules = new List<SubScheduleEntity>();
+            SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
+            subSchedules = _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToList();
+
+            string time = session.Substring(0, 7);
+            foreach (var value in subSchedules)
+            {
+                if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                {
+                    subScheduleEntity = value;
+                }
+            }
+
+
+            CiteEntity cite = _context.Cites
+                                      .Include(n => n.Client)                    
+                                      .FirstOrDefault(n => n.Facilitator.Id == idFacilitator
+                                                        && n.DateCite.Date == date.Date
+                                                        && n.SubSchedule.Id == subScheduleEntity.Id);
+            if (cite != null)
+            {
+                return cite.Client;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
