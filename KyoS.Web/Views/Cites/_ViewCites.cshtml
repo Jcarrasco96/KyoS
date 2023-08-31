@@ -5,17 +5,17 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Cites</h3>
+                <h3 class="panel-title">Appointments</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
                             <th class="col-md-2">
-                                Facilitator Name
+                                Facilitator
                             </th>
                             <th class="col-md-3">
-                                Client Name
+                                Client
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Date
@@ -39,7 +39,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr style="color: darkgrey;">
+                            <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Facilitator.Name)
                                 </td>
@@ -58,7 +58,7 @@
                                     @Html.DisplayFor(modelItem => item.Client.Code)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Date)
+                                    @Html.DisplayFor(modelItem => item.DateCite)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.SubSchedule.InitialTime)

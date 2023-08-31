@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.CiteEntity>
 @{
-    ViewData["Title"] = "Cites";
+    ViewData["Title"] = "Appointments";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,13 +11,9 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Cites</li>
+        <li class="active">Appointments</li>
     </ul><!--.breadcrumb-->
 </div>
-
-<p>
-    <a onclick="showInPopupLg('@Url.Action("CreateModal","Cites",null,Context.Request.Scheme)','Create Appointment (Therapy Private)')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Appointment </a>
-</p>
 
 <div class="row">
     <div class="col-md-12">
@@ -28,12 +24,11 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the Cite
+                    Error. It is not posible delete the appointment
                 </strong>
             </div>
         }
     </div>
-
 </div>
 
 <div class="row">

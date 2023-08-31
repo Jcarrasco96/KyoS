@@ -10,11 +10,6 @@ namespace KyoS.Web.Models
     public class CiteViewModel : CiteEntity
     {
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Clinic")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a clinic.")]
-        public int IdClinic { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Status")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a status.")]
         public int IdStatus { get; set; }
@@ -37,8 +32,6 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> ClientsList { get; set; }
 
         public IEnumerable<SelectListItem> StatusList { get; set; }
-
-        public IEnumerable<SelectListItem> Clinics { get; set; }
 
         public IEnumerable<SelectListItem> FacilitatorsList { get; set; }
 

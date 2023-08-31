@@ -2650,27 +2650,12 @@ jQueryAjaxCite = form => {
             processData: false,
             success: function (res) {
                 if (res.isValid) {
-                    $('#view-cites').html(res.html)
-                    $('#form-modal-lg .modal-body').html('');
-                    $('#form-modal-lg .modal-title').html('');
-                    $('#form-modal-lg').modal('hide');
-
-                    $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Cites/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    var wwwUrlPath = window.document.location.href;
+                    var pathName = window.document.location.pathname;
+                    var pos = wwwUrlPath.indexOf(pathName);
+                    var localhostPath = wwwUrlPath.substring(0, pos);
+                    var url = 'Calendar/Schedule';                    
+                    window.location.href = localhostPath + '/' + url + '?facilitatorId=' + res.html;                    
                 }
                 else
                     $('#form-modal-lg .modal-body').html(res.html);

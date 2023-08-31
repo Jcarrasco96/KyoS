@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
 using KyoS.Web.Data.Contracts;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -14,16 +13,17 @@ namespace KyoS.Web.Data.Entities
         public SubScheduleEntity SubSchedule { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public DateTime DateCite { get; set; }
 
         public CiteStatus Status { get; set; }
+
+        [Display(Name = "Event Note")]
         public string EventNote { get; set; }
+
+        [Display(Name = "Patient Note")]
         public string PatientNote { get; set; }
 
         public decimal Copay { get; set; }
-        public Workday_Client Worday_CLient { get; set; }
-
-        public ClinicEntity Clinic { get; set; }
-
+        public Workday_Client Worday_CLient { get; set; }        
     }
 }

@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230828174548_ModifyCiteEntity")]
+    partial class ModifyCiteEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1223,6 +1225,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Copay")
                         .HasColumnType("decimal(18,2)");
 
@@ -1232,7 +1237,7 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateCite")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventNote")
@@ -1250,10 +1255,10 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("PatientNote")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("ScheduleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SubScheduleId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int?>("Worday_CLientId")
@@ -1263,9 +1268,11 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("ClinicId");
+
                     b.HasIndex("FacilitatorId");
 
-                    b.HasIndex("SubScheduleId");
+                    b.HasIndex("ScheduleId");
 
                     b.HasIndex("Worday_CLientId");
 
@@ -8379,9 +8386,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("CityStateZip")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ConsentType")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -8450,12 +8454,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Other")
                         .HasColumnType("bit");
-
-                    b.Property<string>("OtherAutorizedInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OtherPurposeRequest")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Other_Explain")
                         .HasColumnType("nvarchar(max)");
@@ -9754,9 +9752,6 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Sign")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -10834,13 +10829,17 @@ namespace KyoS.Web.Migrations
                         .WithMany("CiteList")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId");
+
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
                         .WithMany("CiteList")
                         .HasForeignKey("FacilitatorId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.SubScheduleEntity", "SubSchedule")
+                    b.HasOne("KyoS.Web.Data.Entities.ScheduleEntity", "Schedule")
                         .WithMany()
-                        .HasForeignKey("SubScheduleId");
+                        .HasForeignKey("ScheduleId");
 
                     b.HasOne("KyoS.Web.Data.Entities.Workday_Client", "Worday_CLient")
                         .WithMany()
@@ -10848,9 +10847,11 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Client");
 
+                    b.Navigation("Clinic");
+
                     b.Navigation("Facilitator");
 
-                    b.Navigation("SubSchedule");
+                    b.Navigation("Schedule");
 
                     b.Navigation("Worday_CLient");
                 });

@@ -91,7 +91,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user);
         IEnumerable<SelectListItem> GetComboTCMClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboSiteStatus();
-        IEnumerable<SelectListItem> GetComboClientByIndfacilitator(FacilitatorEntity facilitator, int idClinic);
+        IEnumerable<SelectListItem> GetComboClientByIndfacilitator(int idFacilitator);
         IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service, int idFacilitator, DateTime date);
         IEnumerable<SelectListItem> GetComboConsentType();
     }

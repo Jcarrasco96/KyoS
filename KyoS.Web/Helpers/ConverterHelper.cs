@@ -7171,11 +7171,10 @@ namespace KyoS.Web.Helpers
         {
             return new CiteEntity
             {
-                Id = isNew ? 0 : model.Id,
-                Clinic = await _context.Clinics.FindAsync(model.IdClinic),
+                Id = isNew ? 0 : model.Id,               
                 Status = CiteUtils.GetCiteByIndex(model.IdStatus),
                 Client = await _context.Clients.FindAsync(model.IdClient),
-                Date = model.Date,
+                DateCite = model.DateCite,
                 Copay = model.Copay,
                 EventNote = model.EventNote,
                 PatientNote = model.PatientNote,
@@ -7185,7 +7184,6 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
-
             };
         }
 
@@ -7193,14 +7191,11 @@ namespace KyoS.Web.Helpers
         {
             return new CiteViewModel
             {
-                Id = model.Id,
-                IdClinic = model.Clinic.Id,
-                //Clinics = _combosHelper.GetComboClinics(),
+                Id = model.Id,                
                 Worday_CLient = model.Worday_CLient,
                 PatientNote = model.PatientNote,
                 Copay = model.Copay,
-                Date = model.Date,
-                Clinic = model.Clinic,
+                DateCite = model.DateCite,                
                 Client = model.Client,
                 EventNote = model.EventNote,
                 Facilitator = model.Facilitator,
@@ -7210,15 +7205,13 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 IdSubSchedule = model.SubSchedule.Id,
-                SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(model.Clinic.Id, ServiceType.Individual, model.Facilitator.Id, model.Date),
+                SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(idClinic, ServiceType.Individual, model.Facilitator.Id, model.DateCite),
                 SubSchedule = model.SubSchedule,
                 IdStatus = (model.Status == CiteStatus.S) ? 1 : (model.Status == CiteStatus.C) ? 2 : (model.Status == CiteStatus.R) ? 3 : (model.Status == CiteStatus.NS) ? 4 : (model.Status == CiteStatus.AR) ? 5 : (model.Status == CiteStatus.CO) ? 6 : (model.Status == CiteStatus.A) ? 7 : (model.Status == CiteStatus.X) ? 8 : 0,
                 Status = model.Status,
-                StatusList = _combosHelper.GetComboSiteStatus(),
-               
+                StatusList = _combosHelper.GetComboSiteStatus()               
             };
         }
-
 
     }
 }
