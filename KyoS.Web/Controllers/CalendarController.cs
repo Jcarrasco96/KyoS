@@ -93,7 +93,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Frontdesk")]
-        public IActionResult Schedule()
+        public IActionResult Schedule(int facilitatorId = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -107,7 +107,7 @@ namespace KyoS.Web.Controllers
 
             CalendarCMH model = new CalendarCMH
             {
-                IdFacilitator = 0,
+                IdFacilitator = facilitatorId,
                 Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
             };
 
@@ -484,7 +484,7 @@ namespace KyoS.Web.Controllers
 
                                             .Include(c => c.Client)                                                
 
-                                            .Where(c => (c.Date >= initDate && c.Date <= finalDate && c.Facilitator.Id == idFacilitator))
+                                            .Where(c => (c.DateCite >= initDate && c.DateCite <= finalDate && c.Facilitator.Id == idFacilitator))
 
                                             .ToListAsync();
             }
@@ -495,16 +495,16 @@ namespace KyoS.Web.Controllers
                         title = (c.Client == null) ? "No client" :
                                 (c.Client != null) ? $"Private Therapy - {c.Client.Name}" :
                                                 string.Empty,
-                        start = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
+                        start = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
                                                 c.SubSchedule.InitialTime.Hour, c.SubSchedule.InitialTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
-                        end = new DateTime(c.Date.Year, c.Date.Month, c.Date.Day,
+                        end = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
                                               c.SubSchedule.EndTime.Hour, c.SubSchedule.EndTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
                         backgroundColor = "#dff0d8",
                         textColor = "#417c49",
                         borderColor = "#417c49",
-                        url = Url.Action("EditModal", "Cites", new { id = c.Id }),
+                        url = Url.Action("Edit", "Cites", new { id = c.Id })
                         //url = $"showInPopup({Url.Action("EditModal", "Cites", new { id = c.Id })},Edit Appointment (Private Therapy))"
                     })
                     .Distinct()

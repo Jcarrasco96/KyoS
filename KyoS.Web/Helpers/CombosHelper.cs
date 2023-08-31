@@ -2051,26 +2051,14 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboClientByIndfacilitator(FacilitatorEntity  facilitator, int idClinic)
+        public IEnumerable<SelectListItem> GetComboClientByIndfacilitator(int idFacilitator)
         {
-            List<SelectListItem> list = new List<SelectListItem>();
-            if (facilitator != null)
+            List<SelectListItem> list = _context.Clients.Where(u => u.IndividualTherapyFacilitator.Id == idFacilitator).Select(u => new SelectListItem
             {
-                list = _context.Clients.Where(u => u.IndividualTherapyFacilitator.Id == facilitator.Id).Select(u => new SelectListItem
-                {
-                    Text = $"{u.Name}",
-                    Value = $"{u.Id}"
-                }).ToList();
-            }
-            else
-            {
-                list = _context.Clients.Where(u => u.Clinic.Id == idClinic).Select(u => new SelectListItem
-                {
-                    Text = $"{u.Name}",
-                    Value = $"{u.Id}"
-                }).ToList();
-            }
-
+                Text = $"{u.Name}",
+                Value = $"{u.Id}"
+            }).ToList();        
+            
             list.Insert(0, new SelectListItem
             {
                 Text = "[Select client...]",
@@ -2128,7 +2116,7 @@ namespace KyoS.Web.Helpers
             List<CiteEntity> cites = _context.Cites
                                              .Include(n => n.SubSchedule)
                                              .Where(n => n.Facilitator.Id == idFacilitator 
-                                                      && n.Date == date)
+                                                      && n.DateCite == date)
                                              .ToList();
 
             foreach (var item in cites)

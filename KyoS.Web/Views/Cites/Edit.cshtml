@@ -1,0 +1,149 @@
+﻿@model KyoS.Web.Models.CiteViewModel
+@{
+    ViewData["Title"] = "Edit Appointment";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Schedule", "Calendar")
+        </li>
+        <li class="active">Edit Appointment</li>
+    </ul><!--.breadcrumb-->
+</div>
+<h4>Edit Appointment (Private Therapy)</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the appointment
+                </strong>
+            </div>
+        }
+    </div>
+</div>
+<div class="row">
+    <form asp-action="Edit" asp-route-id="@Model.Id">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedBy" />
+        <input type="hidden" asp-for="CreatedOn" />
+        <input type="hidden" asp-for="IdClient" />
+        <input type="hidden" asp-for="IdFacilitator" />
+        <input type="hidden" asp-for="IdSubSchedule" />
+
+        <div class="col-md-5 form-group">
+            <label asp-for="Facilitator.Name" class="control-label">Facilitator </label>
+            <input asp-for="Facilitator.Name" class="form-control" readonly />
+            <span asp-validation-for="Facilitator.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="DateCite" class="control-label">Date</label>
+            <input asp-for="DateCite" class="form-control" readonly />
+            <span asp-validation-for="DateCite" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 form-group">
+            <label asp-for="IdSubSchedule" class="control-label"></label>
+            <input value="@Model.SubSchedule.InitialTime.ToShortTimeString() - @Model.SubSchedule.EndTime.ToShortTimeString()" class="form-control" disabled />
+            <span asp-validation-for="IdSubSchedule" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+
+        <div class="col-md-5 form-group">
+            <label asp-for="Client.Name" class="control-label">Client</label>
+            <input asp-for="Client.Name" class="form-control" readonly />
+            <span asp-validation-for="Client.Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 form-group">
+            <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+            <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+            <span asp-validation-for="IdStatus" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Copay" class="control-label"></label>
+            <input asp-for="Copay" class="form-control" />
+            <span asp-validation-for="Copay" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+
+        <div class="col-md-2 form-group">
+            <label asp-for="Client.DateOfBirth" class="control-label">Client's Date of Birth</label>
+            <input asp-for="Client.DateOfBirth" class="form-control" disabled />
+            <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+        </div>
+        <div class="col-md-3 form-group">
+            <label asp-for="Client.Telephone" class="control-label">Client's Telephone</label>
+            <input asp-for="Client.Telephone" class="form-control" disabled />
+            <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="Client.FullAddress" class="control-label">Client's Full Address</label>
+            <input asp-for="Client.FullAddress" class="form-control" disabled />
+            <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+
+        <div class="form-group col-md-5">
+            <label asp-for="EventNote" class="control-label"></label>
+            <textarea asp-for="EventNote" class="form-control" rows="6"></textarea>
+            <span asp-validation-for="EventNote" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="PatientNote" class="control-label"></label>
+            <textarea asp-for="PatientNote" class="form-control" rows="6"></textarea>
+            <span asp-validation-for="PatientNote" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+
+        <div class="form-group col-md-12">
+            <input type="submit" value="Save" class="btn btn-primary" title="Save Appointment" />
+            <a asp-action="Schedule" asp-controller="Calendar" asp-route-facilitatorId="@Model.IdFacilitator" class="btn btn-success">Back</a>
+            <a onclick="ConfirmDelete(@Model.Id, @Model.IdFacilitator)" class="btn btn-danger" title="Delete Appointment">Delete</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script type="text/javascript">
+                        
+        function ConfirmDelete(e, f) {
+            Swal.fire({
+                title: 'Do you want delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteFromEdit", "Cites")";
+                    window.location.href = url + '?id=' + e + '&facilitatorId=' + f;
+                }
+            });
+        }
+        
+    </script>
+}

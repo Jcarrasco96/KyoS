@@ -13,10 +13,14 @@ namespace KyoS.Web.Data.Entities
         public SubScheduleEntity SubSchedule { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public DateTime DateCite { get; set; }
 
         public CiteStatus Status { get; set; }
+
+        [Display(Name = "Event Note")]
         public string EventNote { get; set; }
+
+        [Display(Name = "Patient Note")]
         public string PatientNote { get; set; }
 
         public decimal Copay { get; set; }
