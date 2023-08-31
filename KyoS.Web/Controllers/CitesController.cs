@@ -452,6 +452,8 @@ namespace KyoS.Web.Controllers
         }
 
         #region Utils Functions     
+
+        [Authorize(Roles = "Manager, Frontdesk")]
         private bool VerifyFreeTimeOfFacilitator(int idFacilitator, DateTime date, int idSchedule)
         {
             FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == idFacilitator);
@@ -465,20 +467,20 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Schedule)
                                                           .ThenInclude(n => n.SubSchedules)
                                                           .Where(wc => (wc.Facilitator.Id == idFacilitator
-                                                                     && wc.Workday.Date == date))
+                                                                     && wc.Workday.Date.Date == date.Date))
                                                           .ToList();
 
-            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == idSchedule);
+            SubScheduleEntity subSchedule = _context.SubSchedule.FirstOrDefault(n => n.Id == idSchedule);
             foreach (var item in workday_client)
             {
                 if (item.Workday.Service == ServiceType.Individual)
                 {
                     if (item.IndividualNote != null)
                     {
-                        if (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        if (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
+                            || item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
                         {
                             return true;
                         }
@@ -488,10 +490,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
                     {
-                        if (item.Schedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
-                          || item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        if (item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
+                          || item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
                         {
                             return true;
                         }
@@ -502,7 +504,7 @@ namespace KyoS.Web.Controllers
             return false;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         private bool VerifyNotesAtSameTime(int idClient, int idSchedule, DateTime date)
         {
             //PSR notes
@@ -520,10 +522,10 @@ namespace KyoS.Web.Controllers
                                                    .Where(wc => (wc.Client.Id == idClient 
                                                               && wc.Workday.Date == date))
                                                    .ToList();
-            ScheduleEntity schedule = _context.Schedule.FirstOrDefault(n => n.Id == idSchedule);
+            SubScheduleEntity subSchedule = _context.SubSchedule.FirstOrDefault(n => n.Id == idSchedule);
             foreach (var item in workday_client)
             {
-                if (item.Workday.Service == ServiceType.Individual)
+                if (item.Workday.Service == ServiceType.Individual && item.Client != null)
                 {
                     return true;
                 }
@@ -531,10 +533,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
                     {
-                        if (item.Schedule.InitialTime.TimeOfDay <= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= schedule.EndTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= schedule.EndTime.TimeOfDay
-                          || item.Schedule.EndTime.TimeOfDay >= schedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= schedule.EndTime.TimeOfDay)
+                        if (item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
+                          || item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
+                          || item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
                         {
                             return true;
                         }

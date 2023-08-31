@@ -14,5 +14,6 @@ namespace KyoS.Web.Data.Entities
         public bool MHProblems { get; set; }
         public bool TCMSupervisorEdit { get; set; }
         public bool BillSemanalMH { get; set; }
+        public bool IndNoteForAppointment { get; set; }
     }
 }

@@ -1420,7 +1420,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
-                BillSemanalMH = model.BillSemanalMH
+                BillSemanalMH = model.BillSemanalMH,
+                IndNoteForAppointment = model.IndNoteForAppointment
             };
         }
 
@@ -1441,7 +1442,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
-                BillSemanalMH = model.BillSemanalMH
+                BillSemanalMH = model.BillSemanalMH,
+                IndNoteForAppointment = model.IndNoteForAppointment
             };
         }
 
