@@ -18930,6 +18930,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("OtherPurposeRequest", typeof(string));
+            dt.Columns.Add("OtherAutorizedInformation", typeof(string));
 
             if (intakeConsentForRelease != null)
             {
@@ -18970,6 +18972,8 @@ namespace KyoS.Web.Helpers
                                             intakeConsentForRelease.CreatedOn,
                                             intakeConsentForRelease.LastModifiedBy,
                                             intakeConsentForRelease.LastModifiedOn,
+                                            intakeConsentForRelease.OtherPurposeRequest,
+                                            intakeConsentForRelease.OtherAutorizedInformation
                                         });
             }
             else
@@ -19010,7 +19014,9 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,                                            
-                                            new DateTime()
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty
                                        });
             }
 
