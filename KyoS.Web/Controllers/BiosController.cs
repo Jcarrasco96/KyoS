@@ -946,7 +946,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -986,6 +986,19 @@ namespace KyoS.Web.Controllers
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity document_Assisstant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    return View(await _context.Clients
+                                              .Include(f => f.Clients_Diagnostics)
+                                              .Include(g => g.Bio)
+                                              .Include(g => g.List_BehavioralHistory)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Bio.DocumentsAssistant.Id == document_Assisstant.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
