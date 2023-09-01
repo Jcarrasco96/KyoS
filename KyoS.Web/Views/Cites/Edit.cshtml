@@ -1,19 +1,7 @@
 ﻿@model KyoS.Web.Models.CiteViewModel
 @{
-    ViewData["Title"] = "Edit Appointment";
+    Layout = null;
 }
-
-<div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Schedule", "Calendar")
-        </li>
-        <li class="active">Edit Appointment</li>
-    </ul><!--.breadcrumb-->
-</div>
-<h4>Edit Appointment (Private Therapy)</h4>
-<hr />
 
 <div class="row">
     <div class="col-md-12">
@@ -31,7 +19,7 @@
     </div>
 </div>
 <div class="row">
-    <form asp-action="Edit" asp-route-id="@Model.Id">
+    <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCite(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="CreatedBy" />
@@ -40,92 +28,86 @@
         <input type="hidden" asp-for="IdFacilitator" />
         <input type="hidden" asp-for="IdSubSchedule" />
 
-        <div class="col-md-5 form-group">
-            <label asp-for="Facilitator.Name" class="control-label">Facilitator </label>
-            <input asp-for="Facilitator.Name" class="form-control" readonly />
-            <span asp-validation-for="Facilitator.Name" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="DateCite" class="control-label">Date</label>
-            <input asp-for="DateCite" class="form-control" readonly />
-            <span asp-validation-for="DateCite" class="text-danger"></span>
-        </div>
-        <div class="col-md-2 form-group">
-            <label asp-for="IdSubSchedule" class="control-label"></label>
-            <input value="@Model.SubSchedule.InitialTime.ToShortTimeString() - @Model.SubSchedule.EndTime.ToShortTimeString()" class="form-control" disabled />
-            <span asp-validation-for="IdSubSchedule" class="text-danger"></span>
+        <div class="container-fluid">
+            <div class="col-md-6 form-group">
+                <label asp-for="Facilitator.Name" class="control-label">Facilitator </label>
+                <input asp-for="Facilitator.Name" class="form-control" readonly />
+                <span asp-validation-for="Facilitator.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="DateCite" class="control-label">Date</label>
+                <input asp-for="DateCite" class="form-control" readonly />
+                <span asp-validation-for="DateCite" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="IdSubSchedule" class="control-label"></label>
+                <input value="@Model.SubSchedule.InitialTime.ToShortTimeString() - @Model.SubSchedule.EndTime.ToShortTimeString()" class="form-control" disabled />
+                <span asp-validation-for="IdSubSchedule" class="text-danger"></span>
+            </div>
         </div>
         <div class="container-fluid">
-            &nbsp;
-        </div>
-
-        <div class="col-md-5 form-group">
-            <label asp-for="Client.Name" class="control-label">Client</label>
-            <input asp-for="Client.Name" class="form-control" readonly />
-            <span asp-validation-for="Client.Name" class="text-danger"></span>
-        </div>
-        <div class="col-md-2 form-group">
-            <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-            <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-            <span asp-validation-for="IdStatus" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="Copay" class="control-label"></label>
-            <input asp-for="Copay" class="form-control" />
-            <span asp-validation-for="Copay" class="text-danger"></span>
+            <div class="col-md-6 form-group">
+                <label asp-for="Client.Name" class="control-label">Client</label>
+                <input asp-for="Client.Name" class="form-control" readonly />
+                <span asp-validation-for="Client.Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+                <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                <span asp-validation-for="IdStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Copay" class="control-label"></label>
+                <input asp-for="Copay" class="form-control" />
+                <span asp-validation-for="Copay" class="text-danger"></span>
+            </div>
         </div>
         <div class="container-fluid">
-            &nbsp;
-        </div>
-
-        <div class="col-md-2 form-group">
-            <label asp-for="Client.DateOfBirth" class="control-label">Client's Date of Birth</label>
-            <input asp-for="Client.DateOfBirth" class="form-control" disabled />
-            <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
-        </div>
-        <div class="col-md-3 form-group">
-            <label asp-for="Client.Telephone" class="control-label">Client's Telephone</label>
-            <input asp-for="Client.Telephone" class="form-control" disabled />
-            <span asp-validation-for="Client.Telephone" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 form-group">
-            <label asp-for="Client.FullAddress" class="control-label">Client's Full Address</label>
-            <input asp-for="Client.FullAddress" class="form-control" disabled />
-            <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+            <div class="col-md-3 form-group">
+                <label asp-for="Client.DateOfBirth" class="control-label">Client's Date of Birth</label>
+                <input asp-for="Client.DateOfBirth" class="form-control" disabled />
+                <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="Client.Telephone" class="control-label">Client's Telephone</label>
+                <input asp-for="Client.Telephone" class="form-control" disabled />
+                <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="Client.FullAddress" class="control-label">Client's Full Address</label>
+                <input asp-for="Client.FullAddress" class="form-control" disabled />
+                <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+            </div>
         </div>
         <div class="container-fluid">
-            &nbsp;
+            <div class="form-group col-md-6">
+                <label asp-for="EventNote" class="control-label"></label>
+                <textarea asp-for="EventNote" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="EventNote" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="PatientNote" class="control-label"></label>
+                <textarea asp-for="PatientNote" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="PatientNote" class="text-danger"></span>
+            </div>
         </div>
-
-        <div class="form-group col-md-5">
-            <label asp-for="EventNote" class="control-label"></label>
-            <textarea asp-for="EventNote" class="form-control" rows="6"></textarea>
-            <span asp-validation-for="EventNote" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="PatientNote" class="control-label"></label>
-            <textarea asp-for="PatientNote" class="form-control" rows="6"></textarea>
-            <span asp-validation-for="PatientNote" class="text-danger"></span>
+        <div class="col-md-12">
+            <div form-group">
+                <hr />
+            </div>
         </div>
         <div class="container-fluid">
-            &nbsp;
-        </div>
-
-        <div class="container-fluid">
-            &nbsp;
-        </div>
-
-        <div class="form-group col-md-12">
-            <input type="submit" value="Save" class="btn btn-primary" title="Save Appointment" />
-            <a asp-action="Schedule" asp-controller="Calendar" asp-route-facilitatorId="@Model.IdFacilitator" class="btn btn-success">Back</a>
-            <a onclick="ConfirmDelete(@Model.Id, @Model.IdFacilitator)" class="btn btn-danger" title="Delete Appointment">Delete</a>
+            <div class="col-md-offset-9 form-group">
+                <input type="submit" value="Save" class="btn btn-primary" title="Save Appointment" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <a onclick="ConfirmDelete(@Model.Id, @Model.IdFacilitator)" class="btn btn-danger" title="Delete Appointment">Delete</a>
+            </div>
         </div>
     </form>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
                         
         function ConfirmDelete(e, f) {
@@ -146,4 +128,4 @@
         }
         
     </script>
-}
+
