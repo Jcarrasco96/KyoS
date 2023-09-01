@@ -3089,7 +3089,7 @@ namespace KyoS.Web.Helpers
                 Appearance_Disheveled = model.Appearance_Disheveled,
                 Appearance_FairHygiene = model.Appearance_FairHygiene,
                 Appearance_WellGroomed = model.Appearance_WellGroomed,
-                Appetite = BioType.GetBioAppetiteByIndex(model.IdIfSexuallyActive),
+                Appetite = BioType.GetBioAppetiteByIndex(model.IdAppetite),
                 ApproximateDateReport = model.ApproximateDateReport,
                 ApproximateDateReport_Where = model.ApproximateDateReport_Where,
                 AReferral = model.AReferral,
