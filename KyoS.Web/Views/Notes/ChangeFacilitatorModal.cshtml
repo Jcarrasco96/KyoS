@@ -1,0 +1,50 @@
+﻿@model KyoS.Web.Models.FacilitatorSelectViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="ChangeFacilitatorModal" asp-route-id="@Model.IdWorkdayClient" onsubmit="return jQueryAjaxSelectFacilitator(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdWorkdayClient" id="cbWordayClient" />
+            <div class="col-md-12">
+                <div form-group">
+                    <h5><span class="label label-info">@ViewData["name"] </span></h5>
+                    <h5><span class="label label-info">@ViewData["date"] </span></h5>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="IdFacilitator" class="control-label"></label>
+                    <select asp-for="IdFacilitator" asp-items="Model.Facilitators" class="form-control" id="cbClient"></select>
+                    <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <h5><strong>Note: </strong> If the activities does not match, the note will be deleted.</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="ChangeFacilitator" asp-route-idClient="@Model.Workday_Client.Client.Id" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

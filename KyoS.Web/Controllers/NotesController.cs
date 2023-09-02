@@ -20768,5 +20768,286 @@ namespace KyoS.Web.Controllers
                 return null;
             }
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ChangeFacilitator(int idClient = 0)
+        {
+            //success
+           /* if (update)
+            {
+                ViewBag.Error = "1";
+                ViewBag.Text = $"Succesfully updated";
+            }
+           */
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            MultiSelectList clients_list;
+            List<ClientEntity> clients = await _context.Clients
+                                                       .Where(f => (f.Clinic.Id == user_logged.Clinic.Id && f.Status == StatusType.Open))
+                                                       .OrderBy(c => c.Name)
+                                                       .ToListAsync();
+
+            ClientEntity client = await _context.Clients
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Workday)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Note)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.NoteP)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.GroupNote)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.GroupNote2)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.IndividualNote)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Facilitator)
+                                                .FirstOrDefaultAsync(n => n.Id == idClient);
+
+            clients_list = new MultiSelectList(clients, "Id", "Name");
+
+            if (idClient == 0)
+            {
+                client = await _context.Clients
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Workday)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Note)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.NoteP)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.GroupNote)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.GroupNote2)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.IndividualNote)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Facilitator)
+                                       .FirstOrDefaultAsync(n => n.Id == clients.ElementAtOrDefault(0).Id);
+            }
+          
+            FacilitatorChanageViewModel model = new FacilitatorChanageViewModel
+            {
+                Clients = clients_list,
+                Client = client,
+                IdClient = idClient
+
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ChangeFacilitatorModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Client workday_client = await _context.Workdays_Clients
+                                                          .Include(f => f.Facilitator)
+                                                          .ThenInclude(f => f.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(f => f.Activity)
+                                                          .Include(f => f.Facilitator)
+                                                          .ThenInclude(f => f.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(f => f.Workday)
+                                                          .Include(f => f.Workday)
+                                                          .Include(f => f.Client)
+                                                          .FirstOrDefaultAsync(f => f.Id == id);
+            if (workday_client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<SelectListItem> facilitators_list = new List<SelectListItem>();
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Include(n => n.Workdays_Activities_Facilitators)
+                                                                 .ThenInclude(f => f.Activity)
+                                                                 .Where(n => n.Id != workday_client.Facilitator.Id)
+                                                                 .OrderBy(n => n.Name)
+                                                                 .ToListAsync();
+
+            FacilitatorSelectViewModel model = new FacilitatorSelectViewModel();
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                // facilitators_list = new MultiSelectList(facilitators, "Id", "Name");
+                List<SelectListItem> list = facilitators.Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+
+               
+                List<Workday_Activity_Facilitator> wprkdayActivityFacilitator = workday_client.Facilitator
+                                                                                              .Workdays_Activities_Facilitators
+                                                                                              .Where(n => n.Workday.Id == workday_client.Workday.Id)
+                                                                                              .ToList();
+
+                foreach (var product in list)
+                {
+                    bool flag = false;
+                    foreach (var item in wprkdayActivityFacilitator)
+                    {
+                        if (facilitators.FirstOrDefault(n => n.Id.ToString() == product.Value.ToString()).Workdays_Activities_Facilitators.Any(n => n.Activity.Id == item.Activity.Id && n.Workday.Id == workday_client.Workday.Id) == false)
+                        {
+                            flag = true;
+                        }
+                    }
+                    if (flag == true)
+                    {
+                        product.Text += " / Activities do not match";
+                    }
+                    else
+                    {
+                        product.Text += " / Perfect! Activities match";
+                    }
+                    facilitators_list.Add(product);
+                }
+
+                model = new FacilitatorSelectViewModel
+                {
+                    IdFacilitator = workday_client.Facilitator.Id,
+                    IdWorkdayClient = workday_client.Id,
+                    Workday_Client = workday_client,
+                    Facilitators = facilitators_list
+                };
+            }
+            else
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ViewData["name"] = "Client Name: " + workday_client.Client.Name;
+            ViewData["date"] = "Date: " + workday_client.Workday.Date.ToLongDateString();
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeFacilitatorModal(int id, FacilitatorSelectViewModel facilitatorViewModel)
+        {
+            if (id != facilitatorViewModel.IdWorkdayClient)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+                Workday_Client workdayClient = await _context.Workdays_Clients
+                                                             .Include(n => n.Note)
+                                                             .ThenInclude(n => n.Notes_Activities)
+                                                             .Include(n => n.NoteP)
+                                                             .ThenInclude(n => n.NotesP_Activities)
+                                                             .Include(n => n.GroupNote)
+                                                             .ThenInclude(n => n.GroupNotes_Activities)
+                                                             .Include(n => n.GroupNote2)
+                                                             .ThenInclude(n => n.GroupNotes2_Activities)
+                                                             .Include(n => n.Workday)
+                                                             .Include(n => n.Client)
+                                                             .Include(n => n.Facilitator)
+                                                             .FirstOrDefaultAsync(t => t.Id == facilitatorViewModel.IdWorkdayClient);
+                if (workdayClient == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                FacilitatorEntity Newfacilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == facilitatorViewModel.IdFacilitator);
+                List<Workday_Activity_Facilitator> group1 = await _context.Workdays_Activities_Facilitators.Include(n => n.Activity).Where(n => n.Facilitator.Id == Newfacilitator.Id && n.Workday.Id == workdayClient.Workday.Id).ToListAsync();
+                List<Workday_Activity_Facilitator> group2 = await _context.Workdays_Activities_Facilitators.Include(n => n.Activity).Where(n => n.Facilitator.Id == workdayClient.Facilitator.Id && n.Workday.Id == workdayClient.Workday.Id).ToListAsync();
+
+                try
+                {
+                    bool flag = false;
+                    foreach (var item in group2)
+                    {
+                        if (group1.Any(n => n.Activity.Id == item.Activity.Id) == false)
+                        {
+                            flag = true;
+                        }
+                    }
+
+                    if (flag == true)
+                    {
+                        if (workdayClient.NoteP != null)
+                        {
+                            _context.NotesP_Activities.RemoveRange(workdayClient.NoteP.NotesP_Activities);
+                            _context.NotesP.Remove(workdayClient.NoteP);
+                        }
+                        else
+                        {
+                            if (workdayClient.GroupNote2 != null)
+                            {
+                                _context.GroupNotes2_Activities.RemoveRange(workdayClient.GroupNote2.GroupNotes2_Activities);
+                                _context.GroupNotes2.Remove(workdayClient.GroupNote2);
+                            }
+                            else
+                            {
+                                if (workdayClient.Note != null)
+                                {
+                                    _context.Notes_Activities.RemoveRange(workdayClient.Note.Notes_Activities);
+                                    _context.Notes.Remove(workdayClient.Note);
+                                }
+                                else
+                                {
+                                    if (workdayClient.GroupNote != null)
+                                    {
+                                        _context.GroupNotes_Activities.RemoveRange(workdayClient.GroupNote.GroupNotes_Activities);
+                                        _context.GroupNotes.Remove(workdayClient.GroupNote);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    workdayClient.Facilitator = Newfacilitator;
+                   
+                    await _context.SaveChangesAsync();
+                    
+                    List<Workday_Client> List = await _context.Workdays_Clients
+                                                              .Include(n => n.Workday)
+                                                              .Include(n => n.Note)
+                                                              .Include(n => n.NoteP)
+                                                              .Include(n => n.GroupNote)
+                                                              .Include(n => n.GroupNote2)
+                                                              .Include(n => n.IndividualNote)
+                                                              .Include(n => n.Facilitator)
+                                                              .Include(n => n.Client)
+                                                              .Where(n => n.Client.Id == workdayClient.Client.Id)
+                                                              .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewClients", List) });
+                }
+                catch (System.Exception)
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangeFacilitator", null) });
+                }
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangeFacilitator", null) });
+        }
+
     }
 }
