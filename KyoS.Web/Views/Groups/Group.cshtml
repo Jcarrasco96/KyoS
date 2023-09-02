@@ -20,6 +20,14 @@
     {
         <a asp-action="CreateGT" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create GT Group</a>
     }
+    @if (ViewData["all"].ToString() == "0")
+    {
+        <a asp-action="Group" asp-route-all="1" class="btn btn-info"><i class="glyphicon glyphicon-list"></i> Only Group with clients</a>
+    }
+    @if (ViewData["all"].ToString() == "1")
+    {
+        <a asp-action="Group" asp-route-all="0" class="btn btn-info"><i class="glyphicon glyphicon-list"></i> All Groups</a>
+    }
 </p>
 
 <div class="row">
@@ -127,7 +135,7 @@
                                 <td align="right">
                                     @if (User.IsInRole("Manager"))
                                     {
-                                        <a asp-action="EditGT" asp-route-id="@item.Id" class="btn btn-warning" title="Edit GT group"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditGT" asp-route-id="@item.Id" asp-route-all="@ViewData["all"]" class="btn btn-warning" title="Edit GT group"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
                                 </td>
                             </tr>
