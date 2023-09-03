@@ -1929,7 +1929,6 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveMTPReviewModal", model) });
         }
 
-
         public IActionResult PrintMTP(int id)
         {
             MTPEntity mtpEntity = _context.MTPs.Include(m => m.Client)
@@ -1959,37 +1958,17 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.DavilaMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (mtpEntity.Client.Clinic.Name == "LARKIN BEHAVIOR")
-            {
-                Stream stream = _reportHelper.LarkinMTPReport(mtpEntity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (mtpEntity.Client.Clinic.Name == "SOL & VIDA")
-            {
-                Stream stream = _reportHelper.SolAndVidaMTPReport(mtpEntity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (mtpEntity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (mtpEntity.Client.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AdvancedGroupMCMTPReport(mtpEntity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (mtpEntity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (mtpEntity.Client.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AtlanticGroupMCMTPReport(mtpEntity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (mtpEntity.Client.Clinic.Name == "DEMO CLINIC SCHEMA 1")
             {
                 Stream stream = _reportHelper.DemoClinic1MTPReport(mtpEntity);
@@ -2018,6 +1997,11 @@ namespace KyoS.Web.Controllers
             if (mtpEntity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
             {
                 Stream stream = _reportHelper.SouthFloridaMHRMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -2647,6 +2631,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SouthFloridaMHRAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Mtp.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -3272,6 +3261,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
             {
                 Stream stream = _reportHelper.SouthFloridaMHRMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
