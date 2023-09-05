@@ -109,21 +109,17 @@
 
                             <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
                                 &nbsp;Incidents&nbsp;&nbsp;
-                            </a>
-                            @*<ul class="dropdown-menu" role="menu">
-                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                    <li role="separator" class="divider"></li>
-                </ul>*@
+                            </a>                            
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                DMS Bill <span class="caret"></span>
+                                DMS Payment <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
-                                <li>@Html.ActionLink("History Bill ", "Index", "BillDms")</li>
+                                <li>@Html.ActionLink("Invoice history", "Index", "BillDms")</li>
                             </ul>
                         </li>
                     }
@@ -416,21 +412,17 @@
 
                             <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
                                 &nbsp;Incidents&nbsp;&nbsp;
-                            </a>
-                            @*<ul class="dropdown-menu" role="menu">
-                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                    <li role="separator" class="divider"></li>
-                </ul>*@
+                            </a>                            
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                DMS Bill <span class="caret"></span>
+                                DMS Payment <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
-                                <li>@Html.ActionLink("Next Bill", "Index", "TCMSupervisors")</li>
-                                <li>@Html.ActionLink("History Bill ", "Index", "BillDms")</li>
+                                <li>@Html.ActionLink("Next invoice", "Create", "BillDms")</li>
+                                <li>@Html.ActionLink("Invoice history", "Index", "BillDms")</li>
                             </ul>
                         </li>
                     }
@@ -532,11 +524,7 @@
 
                             <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
                                 &nbsp;Incidents&nbsp;&nbsp;
-                            </a>
-                            @*<ul class="dropdown-menu" role="menu">
-                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                    <li role="separator" class="divider"></li>
-                </ul>*@
+                            </a>                            
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }

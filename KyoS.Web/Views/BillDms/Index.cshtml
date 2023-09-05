@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.BillDmsEntity>
 @{
-    ViewData["Title"] = "Bill DMS";
+    ViewData["Title"] = "Invoice history";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,16 +9,16 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "BillDms")
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">DMS Bills</li>
+        <li class="active">Invoice history</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
     @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
     {
-        <a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View Next Bill</a>
+        <a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View Next Invoice</a>
     }
 </p>
 

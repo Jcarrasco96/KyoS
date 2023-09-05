@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.BillDmsViewModel
 @{
-    ViewData["Title"] = "Bill DMS";
+    ViewData["Title"] = "DMS Invoice";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,9 +9,9 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("DMS Bills", "Index", "BillDms")
+            @Html.ActionLink("Invoice history", "Index", "BillDms")
         </li>
-        <li class="active">DMS Bill Details</li>
+        <li class="active">DMS Invoice Details</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -33,32 +33,29 @@
                     &nbsp;
                 </div>
                 <div class="col-md-2 form-group">
-                    <label asp-for="DateBillClose" class="control-label"> Date Bill Close</label>
+                    <label asp-for="DateBillClose" class="control-label"> Close Date</label>
                     <input asp-for="DateBillClose" class="form-control" id="cbDateClose" />
                     <span asp-validation-for="DateBillClose" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-2 form-group">
                     <br />
-                    <input type="submit" value="Generate Next Bill for this period" class="btn btn-success" />
-                    @*<a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-success"><i class="icon-dollar"></i> Generate Next Bill for this period</a>*@
+                    <input type="submit" value="Generate next invoice for this period" class="btn btn-success" />
                 </div>
                 <div class="col-md-4 form-group">
                     &nbsp;
                 </div>
-
-            </form>
-           
+            </form>           
         }
         else
         {
             @if (User.IsInRole("Manager"))
             {
-    <div class="col-md-5">
-        &nbsp;
-    </div>
+                <div class="col-md-5">
+                    &nbsp;
+                </div>
                 <div class="col-md-2 form-group">
-                    <label asp-for="DateBillClose" class="control-label"> Date Bill Close</label>
+                    <label asp-for="DateBillClose" class="control-label">Close Date</label>
                     <input asp-for="DateBillClose" class="form-control" id="cbDateClose" />
                     <span asp-validation-for="DateBillClose" class="text-danger"></span>
                 </div>
@@ -69,7 +66,7 @@
         }
     </div>
     <div class="col-md-12">
-        <div class="col-md-3">
+        <div class="col-md-2">
             &nbsp;
         </div>
         <div class="col-md-1">
@@ -78,15 +75,15 @@
                 <h4 style="text-align:center; font-weight:bold;">@Model.BillDmsDetails.GroupBy(n => n.NameClient).Count()</h4>
             </div>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div class="thumbnail list-group-item list-group-item-danger">
-                <p style="text-align:center">Notes CMH</p>
+                <p style="text-align:center">CMH Notes</p>
                 <h4 style="text-align:center; font-weight:bold;">@Model.AmountCMHNotes</h4>
             </div>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div class="thumbnail list-group-item list-group-item-danger">
-                <p style="text-align:center">Notes TCM</p>
+                <p style="text-align:center">TCM Notes</p>
                 <h4 style="text-align:center; font-weight:bold;">@Model.AmountTCMNotes</h4>
             </div>
         </div>
@@ -102,7 +99,7 @@
                 <h4 style="text-align:center; font-weight:bold;">@Model.Amount</h4>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             &nbsp;
         </div>
     </div>

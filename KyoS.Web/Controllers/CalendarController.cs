@@ -504,9 +504,28 @@ namespace KyoS.Web.Controllers
                         end = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
                                               c.SubSchedule.EndTime.Hour, c.SubSchedule.EndTime.Minute, 0)
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
-                        backgroundColor = "#dff0d8",
-                        textColor = "#417c49",
-                        borderColor = "#417c49"                        
+                        backgroundColor = (c.Status == CiteStatus.C) ? "#dff0d8" :
+                                            (c.Status == CiteStatus.S) ? "#76b5c5" :
+                                                (c.Status == CiteStatus.R) ? "#d0a190" :
+                                                    (c.Status == CiteStatus.NS) ? "#eab676" :
+                                                        (c.Status == CiteStatus.AR) ? "#fbffaa" :
+                                                            (c.Status == CiteStatus.A) ? "#0f8f05" :
+                                                                (c.Status == CiteStatus.X) ? "#a54237" : string.Empty,
+                        textColor = (c.Status == CiteStatus.C) ? "#417c49" :
+                                       (c.Status == CiteStatus.S) ? "#063970" :
+                                          (c.Status == CiteStatus.R) ? "#6a3b2a" :
+                                            (c.Status == CiteStatus.NS) ? "#873e23" :
+                                                (c.Status == CiteStatus.AR) ? "#aea724" :
+                                                    (c.Status == CiteStatus.A) ? "#010e00" :
+                                                        (c.Status == CiteStatus.X) ? "#390802" : string.Empty,
+
+                        borderColor = (c.Status == CiteStatus.C) ? "#417c49" :
+                                       (c.Status == CiteStatus.S) ? "#063970" :
+                                          (c.Status == CiteStatus.R) ? "#6a3b2a" :
+                                            (c.Status == CiteStatus.NS) ? "#873e23" :
+                                                (c.Status == CiteStatus.AR) ? "#e7f81e" :
+                                                    (c.Status == CiteStatus.A) ? "#010e00" :
+                                                        (c.Status == CiteStatus.X) ? "#390802" : string.Empty
                     })
                     .Distinct()
                     .ToList<object>();
