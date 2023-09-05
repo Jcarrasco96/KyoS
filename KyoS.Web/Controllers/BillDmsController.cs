@@ -770,5 +770,27 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Manager, Admin")]
+        public IActionResult EXCEL(int id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            BillDmsEntity billDms = _context.BillDms
+                                            .Include(n => n.BillDmsDetails)
+                                            .FirstOrDefault(n => n.Id == id);
+
+            string Periodo = "To: " + billDms.DateBillClose.ToShortDateString();
+            string ReportName = "Bill Report " + billDms.DateBillClose.ToShortDateString() + ".xlsx";
+            string data = "BILL";
+          
+            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+            
+        }
+
     }
 }

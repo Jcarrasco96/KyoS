@@ -1486,6 +1486,163 @@ namespace KyoS.Web.Helpers
             }
         }
 
+        public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data)
+        {
+            var billDms = abillDms;
+            int amount = 0;
+            int unit_total = 0;
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DMS Bill Report");
+                var currentRow = 4;
+
+                worksheet.Cells("A1").Value = "DMS BILLING REPORT";
+                worksheet.Cell(2, 1).Value = "BILL TO";
+                worksheet.Cell(3, 1).Value = ClinicName;
+                worksheet.Cell(4, 1).Value = Periodo;
+                worksheet.Cell(2, 1).Style.Font.FontColor = XLColor.BlueGray;
+                worksheet.Cell(2, 1).Style.Font.FontSize = 13;
+                worksheet.Cell(2, 1).Style.Font.Bold = true;
+                worksheet.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                worksheet.Cell(3, 1).Style.Font.FontColor = XLColor.BlueGray;
+                worksheet.Cell(3, 1).Style.Font.FontSize = 13;
+                worksheet.Cell(3, 1).Style.Font.Bold = true;
+                worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                worksheet.Cell(4, 1).Style.Font.FontColor = XLColor.BlueGray;
+                worksheet.Cell(4, 1).Style.Font.FontSize = 13;
+                worksheet.Cell(4, 1).Style.Font.Bold = true;
+                worksheet.Cell(4, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 5).Address);
+                range11.Style.Font.FontSize = 18;
+                range11.Style.Font.Bold = true;
+                range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range11.Style.Font.FontColor = XLColor.BlueGray;
+                range11.Merge();
+                IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 5).Address);
+                range21.Style.Font.FontSize = 16;
+                range21.Style.Font.Bold = false;
+                range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range21.Merge();
+                IXLRange range31 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 5).Address);
+                range31.Style.Font.FontSize = 14;
+                range31.Style.Font.Bold = false;
+                range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range31.Merge();
+                IXLRange range41 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 5).Address);
+                range41.Style.Font.FontSize = 14;
+                range41.Style.Font.Bold = false;
+                range41.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range41.Merge();
+
+                currentRow = 7;
+                worksheet.Cell(currentRow, 1).Value = "SERVICE";
+                worksheet.Cell(currentRow, 2).Value = "NOTES";
+                worksheet.Cell(currentRow, 3).Value = "UNITS";
+                worksheet.Cell(currentRow, 4).Value = "RATE";
+                worksheet.Cell(currentRow, 5).Value = "AMOUNT";
+            
+                IXLRange range0 = worksheet.Range(worksheet.Cell(7, 1).Address, worksheet.Cell(7, 5).Address);
+                range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range0.SetAutoFilter();
+                range0.Style.Font.Bold = true;
+                currentRow++;
+                unit_total = 0;
+                amount = 0;
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                worksheet.Cell(currentRow, 1).Value = "CMH";
+                worksheet.Cell(currentRow, 2).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.CMH).Count();
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Value = "0.20";
+                worksheet.Cell(currentRow, 5).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH).Sum(n => n.Amount);
+
+                currentRow++;
+
+                worksheet.Cell(currentRow, 1).Value = "TCM";
+                worksheet.Cell(currentRow, 2).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.TCM).Count();
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Value = "0.20";
+                worksheet.Cell(currentRow, 5).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM).Sum(n => n.Amount);
+
+                //-----------------------------------------------
+
+                worksheet = workbook.Worksheets.Add("Bill Details");
+                worksheet.Cells("A1").Value = "DMS Billing Report";
+                worksheet.Cell(2, 1).Value = ClinicName;
+                worksheet.Cell(3, 2).Value = Periodo;
+                worksheet.Cell(3, 5).Value = data;
+                worksheet.Cell(3, 5).Style.Font.FontColor = XLColor.Red;
+                worksheet.Cell(3, 5).Style.Font.FontSize = 16;
+                worksheet.Cell(3, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(3, 2).Style.Font.FontColor = XLColor.BlueGray;
+                worksheet.Cell(3, 2).Style.Font.FontSize = 16;
+                worksheet.Cell(3, 2).Style.Font.Bold = true;
+                worksheet.Cell(3, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+
+                currentRow = 4;
+                worksheet.Cell(currentRow, 1).Value = "Client Name";
+                worksheet.Cell(currentRow, 2).Value = "Date Service";
+                worksheet.Cell(currentRow, 3).Value = "Service";
+                worksheet.Cell(currentRow, 4).Value = "Units";
+                worksheet.Cell(currentRow, 5).Value = "Amount";
+               
+
+                worksheet.Style.Font.Bold = true;
+                IXLRange range = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 5).Address);
+                range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range.SetAutoFilter();
+                currentRow++;
+
+                foreach (var item in billDms.BillDmsDetails)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = item.NameClient;
+                    worksheet.Cell(currentRow, 2).Value = item.DateService;
+                    worksheet.Cell(currentRow, 3).Value = item.ServiceAgency;
+                    worksheet.Cell(currentRow, 4).Value = item.Unit;
+                    worksheet.Cell(currentRow, 5).Value = item.Amount;
+                    
+                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 5).Address);
+                    rangeCurrent.Style.Font.FontSize = 11;
+                    rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    rangeCurrent.Style.Font.Bold = false;
+
+                }
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 5).Address);
+                range1.Style.Font.FontSize = 18;
+                range1.Style.Font.Bold = false;
+                range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range1.Merge();
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 5).Address);
+                range2.Style.Font.FontSize = 16;
+                range2.Style.Font.Bold = false;
+                range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range2.Merge();
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 5).Address);
+                range3.Style.Font.FontSize = 14;
+                range3.Style.Font.Bold = false;
+                range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range3.Merge();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = ConvertStreamToByteArray(stream);
+                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    return stream.ToArray();
+                }
+            }
+        }
+
         #endregion
 
         #region Utils functions
