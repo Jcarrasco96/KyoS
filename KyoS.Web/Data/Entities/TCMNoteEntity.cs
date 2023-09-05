@@ -46,5 +46,8 @@ namespace KyoS.Web.Data.Entities
         public DateTime? ApprovedDate { get; set; }
 
         public bool Sign { get; set; }
+
+        public BillDmsEntity BillDms { get; set; }
+
     }
 }

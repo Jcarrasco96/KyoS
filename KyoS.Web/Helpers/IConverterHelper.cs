@@ -215,5 +215,9 @@ namespace KyoS.Web.Helpers
         TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model);
         Task<CiteEntity> ToCiteEntity(CiteViewModel model, bool isNew, string userId);
         CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic);
+        Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew);
+        BillDmsViewModel ToBillDMSViewModel(BillDmsEntity model);
+        Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew);
+        BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model);
     }
 }

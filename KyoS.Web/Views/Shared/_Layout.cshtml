@@ -80,7 +80,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
-                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+                  @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -117,6 +117,15 @@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                DMS Bill <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                <li>@Html.ActionLink("History Bill ", "Index", "BillDms")</li>
+                            </ul>
+                        </li>
                     }
                     else
                   if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
@@ -414,6 +423,16 @@
                 </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                DMS Bill <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                <li>@Html.ActionLink("Next Bill", "Index", "TCMSupervisors")</li>
+                                <li>@Html.ActionLink("History Bill ", "Index", "BillDms")</li>
+                            </ul>
+                        </li>
                     }
                     else
                   if (User.Identity.IsAuthenticated && (User.IsInRole("Supervisor")))
@@ -959,369 +978,19 @@
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="class=" dropdown open"">
-                                @if (counts_of_notification == 0)
-                                {
-                                    <span class="notifications-counter-cero">@counts_of_notification</span>
-                                }
-                                else
-                                {
-                                    <span class="notifications-counter">@counts_of_notification</span>
-                                }
-
-                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                    <i class="icon-bell">&nbsp;</i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="notice-header">
-                                        <i class="icon-bell pdd-right-10"></i>
-                                        <b><span class="text-gray">Last 3 notifications</span></b>
-                                    </li>
-                                    @foreach (var item in last3_notifications)
-                                    {
-                                        <li>
-                                            <a asp-controller="Messages" asp-action="Notifications">
-                                                <div class="info">
-                                                    <span class="title">
-                                                        @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
-                                                        {
-                                                            <span style="color:#0072c6;">@item.Title</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span>@item.Title</span>
-                                                        }
-                                                    </span>
-                                                    @{
-                                                        TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
-                                                    }
-                                                    @if (sustract.Days > 0)
-                                                    {
-                                                        <span class="sub-title">
-                                                            @sustract.Days days ago
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (sustract.Hours > 0)
-                                                        {
-                                                            <span class="sub-title">
-                                                                @sustract.Hours hours ago
-                                                            </span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="sub-title">
-                                                                @sustract.Minutes minutes ago
-                                                            </span>
-                                                        }
-                                                    }
-                                                </div>
-                                            </a>
-                                        </li>
-                                    }
-                                    @if (last3_notifications.Count() == 0)
-                                    {
-                                        <li>
-                                            <a asp-controller="Messages" asp-action="Notifications">
-                                                <div class="info">
-                                                    <span style="color:#0072c6;">No notifications for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    }
-                                    <li class="notice-footer">
-                                        <span>
-                                            <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="">
-                                    @if (User.IsInRole("Facilitator"))
-                                    {
-                                        <span class="label label-default">
-                                            Facilitator
-                                        </span>
-                                    }
-                                    @if (User.IsInRole("Supervisor"))
-                                    {
-                                        <span class="label label-default">
-                                            Supervisor
-                                        </span>
-                                    }
-                                    @if (User.IsInRole("Documents_Assistant"))
-                                    {
-                                        <span class="label label-default">
-                                            Documents Assistant
-                                        </span>
-                                    }
-                                </a>
-                            </li>
-                            <li class="class=" dropdown open"">
-                                <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                    @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                    @*<div class="user-info">*@
-                                    <span class="name pdd-right-5">@name</span>
-                                    @*<i class="ti-angle-down font-size-10"></i>*@
-                                    <span class="caret"></span>
-                                    @*</div>*@
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a asp-area="" asp-controller="Messages" asp-action="Index">
-                                            <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                            Inbox
-                                            @if (counts_of_message == 0)
-                                            {
-                                                <span class="message-counter-cero">@counts_of_message</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="message-counter">@counts_of_message</span>
-                                            }
-                                        </a>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li>
-                                        <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                            <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                            <span>Logout</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {
-                            @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
-                            {
-                                @if (User.IsInRole("CaseManager"))
-                                {
-                                    <li class="class=" dropdown open"">
-                                        @if (counts_of_messageTCM == 0)
-                                        {
-                                            <span class="message-counter-cero">@counts_of_messageTCM</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="message-counter">@counts_of_messageTCM</span>
-                                        }
-
-                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                            <i class="icon-envelope-alt">&nbsp;</i>
-                                        </a>
-                                         <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
-                                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                                    Inbox
-                                                    @if (counts_of_messageTCM == 0)
-                                                    {
-                                                        <span class="message-counter-cero">@counts_of_messageTCM</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="message-counter">@counts_of_messageTCM</span>
-                                                    }
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a class="">
-                                             <span class="label label-default">
-                                                 Case Manager
-                                             </span>
-                                        </a>
-                                    </li>
-                                    <li class="class=" dropdown open"">
-                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                            @*<div class="user-info">*@
-                                            <span class="name pdd-right-5">@name</span>
-                                            @*<i class="ti-angle-down font-size-10"></i>*@
-                                            <span class="caret"></span>
-                                            @*</div>*@
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
-                                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                                    Inbox
-                                                    @if (counts_of_messageTCM == 0)
-                                                    {
-                                                        <span class="message-counter-cero">@counts_of_messageTCM</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="message-counter">@counts_of_messageTCM</span>
-                                                    }
-                                                </a>
-                                            </li>
-                                            <li role="separator" class="divider"></li>
-                                            <li>
-                                                <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                                    <span>Logout</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                }
-                                @if (User.IsInRole("TCMSupervisor"))
-                                {
-                                    <li class="class=" dropdown open"">
-                                        @if (counts_of_notificationTCM == 0)
-                                        {
-                                            <span class="notifications-counter-cero">@counts_of_notificationTCM</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="notifications-counter">@counts_of_notificationTCM</span>
-                                        }
-
-                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                                            <i class="icon-bell">&nbsp;</i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li class="notice-header">
-                                                <i class="icon-bell pdd-right-10"></i>
-                                                <b><span class="text-gray">Last 3 notifications</span></b>
-                                            </li>
-                                            @foreach (var item in last3_notificationsTCM)
-                                            {
-                                                <li>
-                                                    <a asp-controller="TCMMessages" asp-action="Notifications">
-                                                        <div class="info">
-                                                            <span class="title">
-                                                                @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
-                                                                {
-                                                                    <span style="color:#0072c6;">@item.Title</span>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>@item.Title</span>
-                                                                }
-                                                            </span>
-                                                            @{
-                                                                TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
-                                                            }
-                                                            @if (sustract.Days > 0)
-                                                            {
-                                                                <span class="sub-title">
-                                                                    @sustract.Days days ago
-                                                                </span>
-                                                            }
-                                                            else
-                                                            {
-                                                                if (sustract.Hours > 0)
-                                                                {
-                                                                    <span class="sub-title">
-                                                                        @sustract.Hours hours ago
-                                                                    </span>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="sub-title">
-                                                                        @sustract.Minutes minutes ago
-                                                                    </span>
-                                                                }
-                                                            }
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            }
-                                            @if (last3_notificationsTCM.Count() == 0)
-                                            {
-                                                <li>
-                                                    <a asp-controller="TCMMessages" asp-action="Notifications">
-                                                        <div class="info">
-                                                            <span style="color:#0072c6;">No notifications for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            }
-                                            <li class="notice-footer">
-                                                <span>
-                                                    <a asp-controller="TCMMessages" asp-action="Notifications" class="text-gray">View all notifications &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a class="">
-                                            @if (User.IsInRole("Facilitator"))
-                                            {
-                                                <span class="label label-default">
-                                                    Facilitator
-                                                </span>
-                                            }
-                                            @if (User.IsInRole("CaseManager"))
-                                            {
-                                                <span class="label label-default">
-                                                    Case Manager
-                                                </span>
-                                            }
-                                            @if (User.IsInRole("TCMSupervisor"))
-                                            {
-                                                <span class="label label-default">
-                                                    TCM Supervisor
-                                                </span>
-                                            }
-                                        </a>
-                                    </li>
-                                    <li class="class=" dropdown open"">
-                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
-                                            @*<div class="user-info">*@
-                                            <span class="name pdd-right-5">@name</span>
-                                            @*<i class="ti-angle-down font-size-10"></i>*@
-                                            <span class="caret"></span>
-                                            @*</div>*@
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
-                                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
-                                                    Inbox
-                                                    @if (counts_of_messageTCM == 0)
-                                                    {
-                                                        <span class="message-counter-cero">@counts_of_messageTCM</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="message-counter">@counts_of_messageTCM</span>
-                                                    }
-                                                </a>
-                                            </li>
-                                            <li role="separator" class="divider"></li>
-                                            <li>
-                                                <a asp-area="" asp-controller="Account" asp-action="Logout">
-                                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
-                                                    <span>Logout</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                }
-                            }
-                            else
+                            @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
                             {
                                 <li class="class=" dropdown open"">
-                                    @if (counts_of_notification == 0 && counts_of_notificationTCM == 0)
+                                    @if (counts_of_notification == 0)
                                     {
-                                        <span class="notifications-counter-cero">@counts_of_notificationTOTAL</span>
+                                        <span class="notifications-counter-cero">@counts_of_notification</span>
                                     }
                                     else
                                     {
-                                        <span class="notifications-counter">@counts_of_notificationTOTAL</span>
+                                        <span class="notifications-counter">@counts_of_notification</span>
                                     }
 
                                     <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
@@ -1332,7 +1001,7 @@
                                             <i class="icon-bell pdd-right-10"></i>
                                             <b><span class="text-gray">Last 3 notifications</span></b>
                                         </li>
-                                        @foreach (var item in last3_notificationsTCM)
+                                        @foreach (var item in last3_notifications)
                                         {
                                             <li>
                                                 <a asp-controller="Messages" asp-action="Notifications">
@@ -1374,95 +1043,42 @@
                                                     </div>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a asp-controller="TCMMessages" asp-action="Notifications">
-                                                    <div class="info">
-                                                        <span class="title">
-                                                            @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
-                                                            {
-                                                                <span style="color:#0072c6;">@item.Title</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span>@item.Title</span>
-                                                            }
-                                                        </span>
-                                                        @{
-                                                            TimeSpan sustract1 = DateTime.Now.Subtract(item.DateCreated);
-                                                        }
-                                                        @if (sustract1.Days > 0)
-                                                        {
-                                                            <span class="sub-title">
-                                                                @sustract1.Days days ago
-                                                            </span>
-                                                        }
-                                                        else
-                                                        {
-                                                            if (sustract1.Hours > 0)
-                                                            {
-                                                                <span class="sub-title">
-                                                                    @sustract1.Hours hours ago
-                                                                </span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="sub-title">
-                                                                    @sustract1.Minutes minutes ago
-                                                                </span>
-                                                            }
-                                                        }
-                                                    </div>
-                                                </a>
-                                            </li>
                                         }
                                         @if (last3_notifications.Count() == 0)
                                         {
                                             <li>
                                                 <a asp-controller="Messages" asp-action="Notifications">
                                                     <div class="info">
-                                                        <span style="color:#0072c6;">No notifications MH for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        }
-                                        @if (last3_notificationsTCM.Count() == 0)
-                                        {
-                                            <li>
-                                                <a asp-controller="TCMMessages" asp-action="Notifications">
-                                                    <div class="info">
-                                                        <span style="color:#0072c6;">No notifications TCM for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                        <span style="color:#0072c6;">No notifications for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                     </div>
                                                 </a>
                                             </li>
                                         }
                                         <li class="notice-footer">
                                             <span>
-                                                <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications MH &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
-                                            </span>
-                                            <span>
-                                                <a asp-controller="TCMMessages" asp-action="Notifications" class="text-gray">View all notifications TCM &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                                <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
                                             </span>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
                                     <a class="">
-                                        @if (User.IsInRole("Manager"))
+                                        @if (User.IsInRole("Facilitator"))
                                         {
                                             <span class="label label-default">
-                                                Manager
+                                                Facilitator
                                             </span>
                                         }
-                                        @if (User.IsInRole("Admin"))
+                                        @if (User.IsInRole("Supervisor"))
                                         {
                                             <span class="label label-default">
-                                                Administrator
+                                                Supervisor
                                             </span>
                                         }
-                                        @if (User.IsInRole("Frontdesk"))
+                                        @if (User.IsInRole("Documents_Assistant"))
                                         {
                                             <span class="label label-default">
-                                                Front Desk
+                                                Documents Assistant
                                             </span>
                                         }
                                     </a>
@@ -1478,16 +1094,16 @@
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
+                                            <a asp-area="" asp-controller="Messages" asp-action="Index">
                                                 <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
                                                 Inbox
-                                                @if (counts_of_messageTCM == 0)
+                                                @if (counts_of_message == 0)
                                                 {
-                                                    <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                                    <span class="message-counter-cero">@counts_of_message</span>
                                                 }
                                                 else
                                                 {
-                                                    <span class="message-counter">@counts_of_messageTCM</span>
+                                                    <span class="message-counter">@counts_of_message</span>
                                                 }
                                             </a>
                                         </li>
@@ -1499,15 +1115,418 @@
                                             </a>
                                         </li>
                                     </ul>
-
                                 </li>
-
                             }
-                        }
+                            else
+                            {
+                                @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                                {
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
+                                        <li class="class=" dropdown open"">
+                                            @if (counts_of_messageTCM == 0)
+                                            {
+                                                <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="message-counter">@counts_of_messageTCM</span>
+                                            }
 
-                    }
-                </ul>
-            </div>
+                                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
+                                                <i class="icon-envelope-alt">&nbsp;</i>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
+                                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                                        Inbox
+                                                        @if (counts_of_messageTCM == 0)
+                                                        {
+                                                            <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="message-counter">@counts_of_messageTCM</span>
+                                                        }
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a class="">
+                                                <span class="label label-default">
+                                                    Case Manager
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="class=" dropdown open"">
+                                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                                                @*<div class="user-info">*@
+                                                <span class="name pdd-right-5">@name</span>
+                                                @*<i class="ti-angle-down font-size-10"></i>*@
+                                                <span class="caret"></span>
+                                                @*</div>*@
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
+                                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                                        Inbox
+                                                        @if (counts_of_messageTCM == 0)
+                                                        {
+                                                            <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="message-counter">@counts_of_messageTCM</span>
+                                                        }
+                                                    </a>
+                                                </li>
+                                                <li role="separator" class="divider"></li>
+                                                <li>
+                                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                                        <span>Logout</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("TCMSupervisor"))
+                                    {
+                                        <li class="class=" dropdown open"">
+                                            @if (counts_of_notificationTCM == 0)
+                                            {
+                                                <span class="notifications-counter-cero">@counts_of_notificationTCM</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="notifications-counter">@counts_of_notificationTCM</span>
+                                            }
+
+                                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
+                                                <i class="icon-bell">&nbsp;</i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li class="notice-header">
+                                                    <i class="icon-bell pdd-right-10"></i>
+                                                    <b><span class="text-gray">Last 3 notifications</span></b>
+                                                </li>
+                                                @foreach (var item in last3_notificationsTCM)
+                                                {
+                                                    <li>
+                                                        <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                            <div class="info">
+                                                                <span class="title">
+                                                                    @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                                    {
+                                                                        <span style="color:#0072c6;">@item.Title</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>@item.Title</span>
+                                                                    }
+                                                                </span>
+                                                                @{
+                                                                    TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
+                                                                }
+                                                                @if (sustract.Days > 0)
+                                                                {
+                                                                    <span class="sub-title">
+                                                                        @sustract.Days days ago
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (sustract.Hours > 0)
+                                                                    {
+                                                                        <span class="sub-title">
+                                                                            @sustract.Hours hours ago
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="sub-title">
+                                                                            @sustract.Minutes minutes ago
+                                                                        </span>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                @if (last3_notificationsTCM.Count() == 0)
+                                                {
+                                                    <li>
+                                                        <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                            <div class="info">
+                                                                <span style="color:#0072c6;">No notifications for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                <li class="notice-footer">
+                                                    <span>
+                                                        <a asp-controller="TCMMessages" asp-action="Notifications" class="text-gray">View all notifications &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a class="">
+                                                @if (User.IsInRole("Facilitator"))
+                                                {
+                                                    <span class="label label-default">
+                                                        Facilitator
+                                                    </span>
+                                                }
+                                                @if (User.IsInRole("CaseManager"))
+                                                {
+                                                    <span class="label label-default">
+                                                        Case Manager
+                                                    </span>
+                                                }
+                                                @if (User.IsInRole("TCMSupervisor"))
+                                                {
+                                                    <span class="label label-default">
+                                                        TCM Supervisor
+                                                    </span>
+                                                }
+                                            </a>
+                                        </li>
+                                        <li class="class=" dropdown open"">
+                                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                                @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                                                @*<div class="user-info">*@
+                                                <span class="name pdd-right-5">@name</span>
+                                                @*<i class="ti-angle-down font-size-10"></i>*@
+                                                <span class="caret"></span>
+                                                @*</div>*@
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
+                                                        <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                                        Inbox
+                                                        @if (counts_of_messageTCM == 0)
+                                                        {
+                                                            <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="message-counter">@counts_of_messageTCM</span>
+                                                        }
+                                                    </a>
+                                                </li>
+                                                <li role="separator" class="divider"></li>
+                                                <li>
+                                                    <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                                        <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                                        <span>Logout</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="class=" dropdown open"">
+                                        @if (counts_of_notification == 0 && counts_of_notificationTCM == 0)
+                                        {
+                                            <span class="notifications-counter-cero">@counts_of_notificationTOTAL</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="notifications-counter">@counts_of_notificationTOTAL</span>
+                                        }
+
+                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
+                                            <i class="icon-bell">&nbsp;</i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="notice-header">
+                                                <i class="icon-bell pdd-right-10"></i>
+                                                <b><span class="text-gray">Last 3 notifications</span></b>
+                                            </li>
+                                            @foreach (var item in last3_notificationsTCM)
+                                            {
+                                                <li>
+                                                    <a asp-controller="Messages" asp-action="Notifications">
+                                                        <div class="info">
+                                                            <span class="title">
+                                                                @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                                {
+                                                                    <span style="color:#0072c6;">@item.Title</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@item.Title</span>
+                                                                }
+                                                            </span>
+                                                            @{
+                                                                TimeSpan sustract = DateTime.Now.Subtract(item.DateCreated);
+                                                            }
+                                                            @if (sustract.Days > 0)
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract.Days days ago
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (sustract.Hours > 0)
+                                                                {
+                                                                    <span class="sub-title">
+                                                                        @sustract.Hours hours ago
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="sub-title">
+                                                                        @sustract.Minutes minutes ago
+                                                                    </span>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                        <div class="info">
+                                                            <span class="title">
+                                                                @if (item.Status == KyoS.Common.Enums.MessageStatus.NotRead)
+                                                                {
+                                                                    <span style="color:#0072c6;">@item.Title</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@item.Title</span>
+                                                                }
+                                                            </span>
+                                                            @{
+                                                                TimeSpan sustract1 = DateTime.Now.Subtract(item.DateCreated);
+                                                            }
+                                                            @if (sustract1.Days > 0)
+                                                            {
+                                                                <span class="sub-title">
+                                                                    @sustract1.Days days ago
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (sustract1.Hours > 0)
+                                                                {
+                                                                    <span class="sub-title">
+                                                                        @sustract1.Hours hours ago
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="sub-title">
+                                                                        @sustract1.Minutes minutes ago
+                                                                    </span>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (last3_notifications.Count() == 0)
+                                            {
+                                                <li>
+                                                    <a asp-controller="Messages" asp-action="Notifications">
+                                                        <div class="info">
+                                                            <span style="color:#0072c6;">No notifications MH for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (last3_notificationsTCM.Count() == 0)
+                                            {
+                                                <li>
+                                                    <a asp-controller="TCMMessages" asp-action="Notifications">
+                                                        <div class="info">
+                                                            <span style="color:#0072c6;">No notifications TCM for you &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            }
+                                            <li class="notice-footer">
+                                                <span>
+                                                    <a asp-controller="Messages" asp-action="Notifications" class="text-gray">View all notifications MH &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                                </span>
+                                                <span>
+                                                    <a asp-controller="TCMMessages" asp-action="Notifications" class="text-gray">View all notifications TCM &nbsp;<i class="icon-chevron-right pdd-left-5 font-size-10"></i></a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a class="">
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <span class="label label-default">
+                                                    Manager
+                                                </span>
+                                            }
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <span class="label label-default">
+                                                    Administrator
+                                                </span>
+                                            }
+                                            @if (User.IsInRole("Frontdesk"))
+                                            {
+                                                <span class="label label-default">
+                                                    Front Desk
+                                                </span>
+                                            }
+                                        </a>
+                                    </li>
+                                    <li class="class=" dropdown open"">
+                                        <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                            @*<img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">*@
+                                            @*<div class="user-info">*@
+                                            <span class="name pdd-right-5">@name</span>
+                                            @*<i class="ti-angle-down font-size-10"></i>*@
+                                            <span class="caret"></span>
+                                            @*</div>*@
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a asp-area="" asp-controller="TCMMessages" asp-action="Index">
+                                                    <i class="icon-envelope-alt" style="padding-right: 10px !important;"></i>
+                                                    Inbox
+                                                    @if (counts_of_messageTCM == 0)
+                                                    {
+                                                        <span class="message-counter-cero">@counts_of_messageTCM</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="message-counter">@counts_of_messageTCM</span>
+                                                    }
+                                                </a>
+                                            </li>
+                                            <li role="separator" class="divider"></li>
+                                            <li>
+                                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                                    <i class="icon-off" style="padding-right: 10px !important;"></i>
+                                                    <span>Logout</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+
+                                }
+                            }
+
+                        }
+                    </ul>
+                </div>
         </div>
     </nav>
     

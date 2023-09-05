@@ -7215,5 +7215,73 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew)
+        {
+            return new BillDmsEntity
+            {
+               Id = isNew ? 0 : model.Id,
+               Amount = model.Amount,
+               BillDmsDetails = model.BillDmsDetails,
+               DateBill = model.DateBill,
+               DateBillClose = model.DateBillClose,
+               DateBillPayment = model.DateBillPayment,
+               Different = model.Different,
+               StatusBill = StatusBillUtils.GetStatusBillByIndex(model.IdStatus),
+               TCMNotes = model.TCMNotes,
+               Units = model.Units,
+               Workday_Clients = model.Workday_Clients,
+               FinishEdition = model.FinishEdition
+            };
+        }
+
+        public BillDmsViewModel ToBillDMSViewModel(BillDmsEntity model)
+        {
+            return new BillDmsViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                BillDmsDetails = model.BillDmsDetails,
+                DateBill = model.DateBill,
+                DateBillClose = model.DateBillClose,
+                DateBillPayment = model.DateBillPayment,
+                Different = model.Different,
+                StatusBill = model.StatusBill,
+                TCMNotes = model.TCMNotes,
+                Units = model.Units,
+                Workday_Clients = model.Workday_Clients,
+                IdStatus = (model.StatusBill == StatusBill.Unbilled) ? 1 : (model.StatusBill == StatusBill.Billed) ? 2 : (model.StatusBill == StatusBill.Pending) ? 3 : (model.StatusBill == StatusBill.Paid) ? 4 : 0,
+                StatusList = _combosHelper.GetComboBillStatus(),
+                AmountCMHNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
+                AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
+                FinishEdition = model.FinishEdition
+            };
+        }
+
+        public async Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew)
+        {
+            return new BillDmsPaidEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Amount = model.Amount,
+                OrigePaid = PaidOrigiUtils.GetPaidOrigiByIndex(model.IdOrigi),
+                DatePaid = model.DatePaid,
+                Bill = _context.BillDms.FirstOrDefault(n => n.Id == model.IdBillDms)
+            };
+        }
+
+        public BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model)
+        {
+            return new BillDmsPaidViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                IdOrigi = (model.OrigePaid == PaidOrigi.Income) ? 1 : (model.OrigePaid == PaidOrigi.Difference) ? 2 : 0,
+                OrigiList = _combosHelper.GetComboBillPaid(),
+                DatePaid = model.DatePaid,
+                Bill = _context.BillDms.FirstOrDefault(n => n.Id == model.Bill.Id),
+                IdBillDms = model.Bill.Id
+            };
+        }
+
     }
 }

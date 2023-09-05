@@ -1,0 +1,271 @@
+﻿@model KyoS.Web.Models.BillDmsViewModel
+@{
+    ViewData["Title"] = "Bill DMS";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("DMS Bills", "Index", "BillDms")
+        </li>
+        <li class="active">DMS Bill Details</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-5 form-group">
+            &nbsp;
+        </div>
+        <div class="col-md-2 form-group">
+            @if (Model.FinishEdition == false)
+            {
+                <br />
+                <a asp-action="FinishEdition" asp-route-idBill="@Model.Id" class="btn btn-default">Finish editing billing for this period</a>
+            }
+            else
+            {
+                <br />
+                <a asp-action="FinishEdition" asp-route-idBill="@Model.Id" class="btn btn-default disabled">Finish editing billing for this period</a>
+            }
+            @*<a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-success"><i class="icon-dollar"></i> Generate Next Bill for this period</a>*@
+        </div>
+        <div class="col-md-5 form-group">
+            &nbsp;
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Clients</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.BillDmsDetails.GroupBy(n => n.NameClient).Count()</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Notes CMH</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.AmountCMHNotes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Notes TCM</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.AmountTCMNotes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-success">
+                <p style="text-align:center">Estimated Income</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Amount</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Pending</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Different</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">DMS Bill Details </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Client Name
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Date Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Services
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Amount
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paid
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BillDmsDetails.OrderBy(n => n.NameClient).ThenBy(m => m.DateService))
+                        {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NameClient)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateService)
+                                </td>
+                                <td align="center">
+                                    @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH)
+                                    {
+                                        <span class="label label-info">
+                                            CMH
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM)
+                                        {
+                                            <span class="label label-success">
+                                                TCM
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td align="center">
+                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
+                                    {
+                                        <span class="label label-default">
+                                            Unbilled
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                        {
+                                            <span class="label label-warning">
+                                                Billed
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
+                                                {
+                                                    <span class="label label-success">
+                                                        Paid
+                                                    </span>
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.PaidDate)
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+                                    {
+                                        @if (Model.FinishEdition == false)
+                                        {
+                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                            {
+                                                <a asp-action="ToPending" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pause"></i></a>
+                                            }
+                                            else
+                                            {
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
+                                                {
+                                                    <a asp-action="ToBill" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-play"></i></a>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                            {
+                                                <a asp-action="ToPending" asp-route-id="@item.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pause"></i></a>
+                                            }
+                                            else
+                                            {
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
+                                                {
+                                                    <a asp-action="ToBill" asp-route-id="@item.Id" class="btn btn-info disabled"><i class="glyphicon glyphicon-play"></i></a>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[3, "asc"]],
+                "pageLength": 100
+            });
+
+            $("#cbDateClose").change(function () {
+                var wwwUrlPath = window.document.location.href;
+                var pos = wwwUrlPath.indexOf('/BillDms/Create');
+                var localhostPath = wwwUrlPath.substring(0, pos);
+                var url = 'BillDms/Create';
+                window.location.href = localhostPath + '/' + url + '?dateBillclose=' + $("#cbDateClose").val();
+            })
+        })
+    </script>
+}
+

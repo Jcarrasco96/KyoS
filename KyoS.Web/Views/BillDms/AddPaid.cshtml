@@ -1,0 +1,52 @@
+﻿@model KyoS.Web.Models.BillDmsPaidViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddPaid" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxBillDms(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdBillDms" />
+            
+            <div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="IdOrigi" class="control-label">Bill Status </label>
+                    <select asp-for="IdOrigi" asp-items="Model.OrigiList" class="form-control"></select>
+                    <span asp-validation-for="IdOrigi" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Amount" class="control-label"> Date Bill Payment</label>
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="form-group col-md-12">
+                    <label asp-for="DatePaid" class="control-label"> Date Bill Payment</label>
+                    <input asp-for="DatePaid" class="form-control" />
+                    <span asp-validation-for="DatePaid" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

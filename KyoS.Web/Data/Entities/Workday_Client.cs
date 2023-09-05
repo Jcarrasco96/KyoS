@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -40,6 +42,8 @@ namespace KyoS.Web.Data.Entities
         public string CodeBill { get; set; }
         public GroupNote2Entity GroupNote2 { get; set; }
         public ScheduleEntity Schedule { get; set; }
+
+        public BillDmsEntity BillDms { get; set; }
 
     }
 }

@@ -2160,5 +2160,36 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboBillStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = StatusBill.Unbilled.ToString(), Value = "1"},
+                                  new SelectListItem { Text = StatusBill.Billed.ToString(), Value = "2"},
+                                  new SelectListItem { Text = StatusBill.Pending.ToString(), Value = "3"},
+                                  new SelectListItem { Text = StatusBill.Paid.ToString(), Value = "4"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select status...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboBillPaid()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = PaidOrigi.Income.ToString(), Value = "1"},
+                                  new SelectListItem { Text = PaidOrigi.Difference.ToString(), Value = "2"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Paid origi...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

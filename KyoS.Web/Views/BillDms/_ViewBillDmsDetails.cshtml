@@ -1,0 +1,119 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BillDmsDetailsEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">DMS Bill Details </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Client Name
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Date Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Services
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Amount
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paid
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(n => n.NameClient).ThenBy(m => m.DateService))
+                        {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NameClient)
+                                </td>
+                                <td  align="center">
+                                    @Html.DisplayFor(modelItem => item.DateService)
+                                </td>
+                                <td align="center">
+                                    @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH)
+                                    {
+                                        <span class="label label-info">
+                                            CMH
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM)
+                                        {
+                                            <span class="label label-success">
+                                               TCM
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td align="center">
+                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
+                                    {
+                                        <span class="label label-default">
+                                            Unbilled
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                        {
+                                            <span class="label label-warning">
+                                                Billed
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
+                                                {
+                                                    <span class="label label-success">
+                                                        Paid
+                                                    </span>
+                                                }
+                                               
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.PaidDate)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+
