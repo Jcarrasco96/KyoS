@@ -12,12 +12,8 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region PSR Absense Notes reports
-        Stream LarkinAbsenceNoteReport(Workday_Client workdayClient);
         Stream DreamsMentalHealthAbsenceNoteReport(Workday_Client workdayClient);
-        Stream SolAndVidaAbsenceNoteReport(Workday_Client workdayClient);
-        Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);
-        Stream AdvancedGroupMCAbsenceNoteReport(Workday_Client workdayClient);
-        Stream AtlanticGroupMCAbsenceNoteReport(Workday_Client workdayClient);
+        Stream DavilaAbsenceNoteReport(Workday_Client workdayClient);        
         Stream FloridaSocialHSAbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic1AbsenceNoteReport(Workday_Client workdayClient);
         Stream DemoClinic2AbsenceNoteReport(Workday_Client workdayClient);
@@ -25,6 +21,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIAbsenceNoteReport(Workday_Client workdayClient);
         Stream SapphireMHCAbsenceNoteReport(Workday_Client workdayClient);
         Stream SouthFloridaMHRAbsenceNoteReport(Workday_Client workdayClient);
+        Stream MedicalRehabAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -41,6 +38,8 @@ namespace KyoS.Web.Helpers
         Stream SapphireMHCNoteReportSchema3SS(Workday_Client workdayClient);
         Stream SouthFloridaMHRNoteReportSchema3(Workday_Client workdayClient);
         Stream SouthFloridaMHRNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream MedicalRehabNoteReportSchema3(Workday_Client workdayClient);
+        Stream MedicalRehabNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -51,6 +50,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIIndNoteReportSchema1(Workday_Client workdayClient);
         Stream SapphireMHCIndNoteReportSchema1(Workday_Client workdayClient);
         Stream SouthFloridaMHRIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream MedicalRehabIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -69,14 +69,12 @@ namespace KyoS.Web.Helpers
         Stream SapphireMHCGroupNoteReportSchema3(Workday_Client workdayClient);        
         Stream SouthFloridaMHRGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream SouthFloridaMHRGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream MedicalRehabGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream MedicalRehabGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
-        Stream LarkinMTPReport(MTPEntity mtp);
-        Stream SolAndVidaMTPReport(MTPEntity mtp);
-        Stream DreamsMentalHealthMTPReport(MTPEntity mtp);
-        Stream AdvancedGroupMCMTPReport(MTPEntity mtp);
-        Stream AtlanticGroupMCMTPReport(MTPEntity mtp);
+        Stream DreamsMentalHealthMTPReport(MTPEntity mtp);        
         Stream FloridaSocialHSMTPReport(MTPEntity mtp);
         Stream DavilaMTPReport(MTPEntity mtp);
         Stream DemoClinic1MTPReport(MTPEntity mtp);
@@ -85,6 +83,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIMTPReport(MTPEntity mtp);
         Stream SapphireMHCMTPReport(MTPEntity mtp);
         Stream SouthFloridaMHRMTPReport(MTPEntity mtp);
+        Stream MedicalRehabMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR Generics reports
@@ -101,6 +100,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIIntakeReport(IntakeScreeningEntity intake);
         Stream SapphireMHCIntakeReport(IntakeScreeningEntity intake);
         Stream SouthFloridaMHRIntakeReport(IntakeScreeningEntity intake);
+        Stream MedicalRehabIntakeReport(IntakeScreeningEntity intake);
         #endregion
 
         #region Fars reports
@@ -110,6 +110,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIFarsReport(FarsFormEntity intake);
         Stream SapphireMHCFarsReport(FarsFormEntity intake);
         Stream SouthFloridaMHRFarsReport(FarsFormEntity intake);
+        Stream MedicalRehabFarsReport(FarsFormEntity intake);
         #endregion
 
         #region Discharge reports
@@ -119,6 +120,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIDischargeReport(DischargeEntity intake);
         Stream SapphireMHCDischargeReport(DischargeEntity intake);
         Stream SouthFloridaMHRDischargeReport(DischargeEntity intake);
+        Stream MedicalRehabDischargeReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
@@ -128,6 +130,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIBioReport(BioEntity bio);
         Stream SapphireMHCBioReport(BioEntity bio);
         Stream SouthFloridaMHRBioReport(BioEntity bio);
+        Stream MedicalRehabBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
@@ -137,6 +140,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIAddendumReport(AdendumEntity addendum);
         Stream SapphireMHCAddendumReport(AdendumEntity addendum);
         Stream SouthFloridaMHRAddendumReport(AdendumEntity addendum);
+        Stream MedicalRehabAddendumReport(AdendumEntity addendum);
         #endregion
 
         #region MTP Review reports
@@ -146,6 +150,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIMTPReviewReport(MTPReviewEntity review);
         Stream SapphireMHCMTPReviewReport(MTPReviewEntity review);
         Stream SouthFloridaMHRMTPReviewReport(MTPReviewEntity review);
+        Stream MedicalRehabMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Medical History
@@ -155,6 +160,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream SapphireMHCMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream SouthFloridaMHRMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream MedicalRehabMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
         #region Brief reports
@@ -164,6 +170,7 @@ namespace KyoS.Web.Helpers
         Stream PrincipleCCIBriefReport(BriefEntity brief);
         Stream SapphireMHCBriefReport(BriefEntity brief);
         Stream SouthFloridaMHRBriefReport(BriefEntity brief);
+        Stream MedicalRehabBriefReport(BriefEntity brief);
         #endregion
 
         #region Utils functions

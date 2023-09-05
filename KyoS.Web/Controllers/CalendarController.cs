@@ -482,7 +482,9 @@ namespace KyoS.Web.Controllers
                                             .Include(c => c.SubSchedule)
                                             .Include(c => c.Worday_CLient)
 
-                                            .Include(c => c.Client)                                                
+                                            .Include(c => c.Client)  
+                                            
+                                            .Include(c => c.Facilitator)
 
                                             .Where(c => (c.DateCite >= initDate && c.DateCite <= finalDate && c.Facilitator.Id == idFacilitator))
 
@@ -492,8 +494,9 @@ namespace KyoS.Web.Controllers
             return listAppointments
                     .Select(c => new
                     {
-                        title = (c.Client == null) ? "No client" :
-                                (c.Client != null) ? $"Private Therapy - {c.Client.Name}" :
+                        id = c.Id,
+                        title = (c.Client == null) ? $"{c.Facilitator.Name} - No client" :
+                                (c.Client != null) ? $"{c.Facilitator.Name} - {c.Client.Name}" :
                                                 string.Empty,
                         start = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
                                                 c.SubSchedule.InitialTime.Hour, c.SubSchedule.InitialTime.Minute, 0)
@@ -503,9 +506,7 @@ namespace KyoS.Web.Controllers
                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
                         backgroundColor = "#dff0d8",
                         textColor = "#417c49",
-                        borderColor = "#417c49",
-                        url = Url.Action("Edit", "Cites", new { id = c.Id })
-                        //url = $"showInPopup({Url.Action("EditModal", "Cites", new { id = c.Id })},Edit Appointment (Private Therapy))"
+                        borderColor = "#417c49"                        
                     })
                     .Distinct()
                     .ToList<object>();

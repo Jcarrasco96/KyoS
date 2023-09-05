@@ -136,7 +136,6 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        //return RedirectToAction("Schedule", "Calendar", new { facilitatorId = citeViewModel.IdFacilitator});
                         return Json(new { isValid = true, html = citeViewModel.IdFacilitator.ToString() });
                     }
                     catch (System.Exception ex)
@@ -371,8 +370,8 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Schedule", "Calendar", new { facilitatorId = citeViewModel.IdFacilitator });
+                    return Json(new { isValid = true, html = citeViewModel.IdFacilitator.ToString() });
+                    //return RedirectToAction("Schedule", "Calendar", new { facilitatorId = citeViewModel.IdFacilitator });
                 }
                 catch (System.Exception ex)
                 {
@@ -391,9 +390,9 @@ namespace KyoS.Web.Controllers
                 citeViewModel.StatusList = _combosHelper.GetComboSiteStatus();
                 citeViewModel.ClientsList = _combosHelper.GetComboClientByIndfacilitator(citeViewModel.IdFacilitator);
                 citeViewModel.FacilitatorsList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, true);
-                citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.DateCite);
+                citeViewModel.SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(user_logged.Clinic.Id, ServiceType.Individual, citeViewModel.IdFacilitator, citeViewModel.DateCite);                
             }
-            return View(citeViewModel);
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", citeViewModel) });
         }
 
         [Authorize(Roles = "Frontdesk")]
