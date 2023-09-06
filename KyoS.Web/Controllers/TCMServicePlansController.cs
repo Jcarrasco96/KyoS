@@ -473,23 +473,40 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> AproveServicePlan(int id, int origi = 0)
+        public async Task<IActionResult> AproveServicePlan(int id, TCMServicePlanViewModel model, int origi = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
-                                                         .ThenInclude(u => u.Client)
-                                                         .FirstOrDefault(u => u.Id == id);
+            TCMServicePlanEntity tcmServicePlan = new TCMServicePlanEntity();
 
             if (tcmServicePlan != null)
             {
                 if (User.IsInRole("TCMSupervisor"))
                 {
-                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                    UserEntity user_logged = _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .ThenInclude(u => u.Setting)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                     if (user_logged.Clinic != null)
                     {
-                        tcmServicePlan.Approved = 2;
-                        tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        if (user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+                        {
+                            tcmServicePlan = await _converterHelper.ToTCMServicePlanEntity(model, false, user_logged.UserName);
+                            tcmServicePlan.Approved = 2;
+                            tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        }
+                        else
+                        {
+                            tcmServicePlan = _context.TCMServicePlans
+                                                     .Include(u => u.TcmClient)
+                                                     .ThenInclude(u => u.Client)
+                                                     .FirstOrDefault(u => u.Id == id);
+
+                            tcmServicePlan.Approved = 2;
+                            tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                            tcmServicePlan.DateSupervisorSignature = model.DateSupervisorSignature;
+                            tcmServicePlan.DateServicePlan = model.DateServicePlan;
+                        }
+                        
                         _context.Update(tcmServicePlan);
                         try
                         {
@@ -505,6 +522,10 @@ namespace KyoS.Web.Controllers
                             if (origi == 3)
                             {
                                 return RedirectToAction("Notifications", "TCMMessages");
+                            }
+                            if (origi == 4)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = tcmServicePlan.TcmClient.Id, section = 4 });
                             }
                         }
                         catch (System.Exception ex)
@@ -2106,7 +2127,8 @@ namespace KyoS.Web.Controllers
                             Approved = tcmServicePlan.Approved,
                             CreatedBy = tcmServicePlan.CreatedBy,
                             CreatedOn = tcmServicePlan.CreatedOn,
-                            TcmClient = tcmServicePlan.TcmClient
+                            TcmClient = tcmServicePlan.TcmClient,
+                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
 
                         };
 

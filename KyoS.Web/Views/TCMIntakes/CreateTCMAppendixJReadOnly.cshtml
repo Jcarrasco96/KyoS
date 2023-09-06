@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Pending Appendix J", "ApendiceJStatus", "TCMIntakes", new { approved = 1})
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("Pending Appendix J", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
+                }
             </li>
             <li class="active">TCM AppendixJ</li>
         </ul><!--.breadcrumb-->
@@ -24,7 +31,7 @@
     <h4>TCM AppendixJ</h4>
     <hr />
     <div class="row">
-        <form asp-action="AproveAppendixJ" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="AproveAppendixJ" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
@@ -35,7 +42,14 @@
             <div class="form-group col-md-12">
                 <input type="submit" value="Approve" class="btn btn-primary" />
                 <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
-                <a asp-action="ApendiceJStatus" asp-route-approved="1" class="btn btn-success">Back</a>
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    <a asp-action="ApendiceJStatus" asp-route-approved="1" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "1")
+                {
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient_FK" asp-route-section="4" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

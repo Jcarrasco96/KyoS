@@ -1546,7 +1546,9 @@ namespace KyoS.Web.Helpers
                 CaseNumber = tcmClientEntity.CaseNumber,
                 DataOpen = tcmClientEntity.DataOpen,
                 DataClose = tcmClientEntity.DataClose,
-                Period = tcmClientEntity.Period
+                Period = tcmClientEntity.Period,
+                CreatedOn = tcmClientEntity.CreatedOn,
+                CreatedBy = tcmClientEntity.CreatedBy,
             };
         }
 
@@ -1564,7 +1566,8 @@ namespace KyoS.Web.Helpers
                 Strengths = TcmServicePlanEntity.Strengths,
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2 ,
+                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature
             };
         }
 
@@ -1591,7 +1594,9 @@ namespace KyoS.Web.Helpers
                 Approved = model.Approved,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                DateSupervisorSignature = model.DateSupervisorSignature
+                
             };
         }
 

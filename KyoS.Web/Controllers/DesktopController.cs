@@ -882,7 +882,7 @@ namespace KyoS.Web.Controllers
                                                                    && g.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.AssesmentPending = await _context.TCMAssessment
-                                                         .CountAsync(g => (g.TcmClient.Casemanager.Id == user_logged.Clinic.Id
+                                                         .CountAsync(g => (g.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
                                                                         && g.Approved == 1
                                                                         && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 

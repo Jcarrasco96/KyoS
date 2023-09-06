@@ -17,13 +17,13 @@
            professional judgment, will last for a minimum of one year;
         7. Is not receiving duplicate case management services from another provider;
         8. Meets at least one of the following requirements (check all that apply):
-            a.  <input type="checkbox" asp-for="IsAwaiting" disabled/>  Is awaiting admission to or has been discharged from a state mental health treatment facility;
-            b.  <input type="checkbox" asp-for="HasBeen" disabled/>  Has been discharged from a mental health residential treatment facility;
-            c.  <input type="checkbox" asp-for="HasHad" disabled/>  Has had more than one admission to a crisis stabilization unit (CSU), short-term
+            a.  <input type="checkbox" asp-for="IsAwaiting" />  Is awaiting admission to or has been discharged from a state mental health treatment facility;
+            b.  <input type="checkbox" asp-for="HasBeen" />  Has been discharged from a mental health residential treatment facility;
+            c.  <input type="checkbox" asp-for="HasHad" />  Has had more than one admission to a crisis stabilization unit (CSU), short-term
                     residential facility (SRT), inpatient psychiatric unit, or any combination of these
                     facilities in the past 12 months;
-            d.  <input type="checkbox" asp-for="IsAt" disabled/>  Is at risk of institutionalization for mental health reasons (provide explanation);
-            e.  <input type="checkbox" asp-for="IsExperiencing" disabled/>  Is experiencing long-term or acute episodes of mental impairment that may put him or
+            d.  <input type="checkbox" asp-for="IsAt" />  Is at risk of institutionalization for mental health reasons (provide explanation);
+            e.  <input type="checkbox" asp-for="IsExperiencing" />  Is experiencing long-term or acute episodes of mental impairment that may put him or
                     her at risk of requiring more intensive services (provide explanation); or
 
 
@@ -37,9 +37,9 @@
 <div class="col-md-12">
     <pre>
     
-    <strong>Employee signature date</strong>         <input asp-for="Date" disabled>     <strong>Legal Guardian signature date</strong>    <input asp-for="SupervisorSignatureDate" disabled>
+    <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate">
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
-                                                                      
+                        
     </pre>
 </div>
 <div class="col-md-12">

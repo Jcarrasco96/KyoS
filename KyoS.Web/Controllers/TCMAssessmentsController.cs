@@ -808,7 +808,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "TCMSupervisor")]
         public async Task<IActionResult> ApproveAssessments(int id, int origi = 0)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
+            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment
+                                                        .Include(n => n.TcmClient)
+                                                        .FirstOrDefault(u => u.Id == id);
 
             if (tcmAssessment != null)
             {
@@ -832,6 +834,11 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("Notifications", "TCMMessages");
                             }
+                            if (origi == 2)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboardReadOnly", new { id = tcmAssessment.TcmClient.Id, section = 4 });
+                            }
+                            
                         }
                         catch (System.Exception ex)
                         {
@@ -2332,14 +2339,29 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            if (User.IsInRole("Manager"))
             {
                 List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Client)
                                                                         .Include(m => m.TcmMessages)
                                                                         .Where(m => m.Approved == approved
-                                                                            && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                                 && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                        .OrderBy(m => m.TcmClient.CaseNumber)
+                                                                        .ToListAsync();
+
+                return View(tcmAssessment);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Client)
+                                                                        .Include(m => m.TcmMessages)
+                                                                        .Where(m => m.Approved == approved
+                                                                                 && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                                 && m.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
                                                                         .ToListAsync();
 

@@ -58,14 +58,31 @@ namespace KyoS.Web.Controllers
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 ViewData["origin"] = origin.ToString();
-                if (User.IsInRole("Manager")|| User.IsInRole("TCMSupervisor"))
-                    return View(await _context.TCMClient
-                                              .Include(f => f.Client)
-                                              .Include(f => f.TCMFarsFormList)
+                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                {
+                    if (idTCMClient == 0)
+                    {
+                        return View(await _context.TCMClient
+                                                  .Include(f => f.Client)
+                                                  .Include(f => f.TCMFarsFormList)
 
-                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
+                                                  .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                  .OrderBy(f => f.Client.Name)
+                                                  .ToListAsync());
+                    }
+                    else
+                    {
+                        return View(await _context.TCMClient
+                                                  .Include(f => f.Client)
+                                                  .Include(f => f.TCMFarsFormList)
+
+                                                  .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                           && n.Id == idTCMClient)
+                                                  .OrderBy(f => f.Client.Name)
+                                                  .ToListAsync());
+                    }
+
+                }
 
                 if (User.IsInRole("CaseManager"))
                 {
