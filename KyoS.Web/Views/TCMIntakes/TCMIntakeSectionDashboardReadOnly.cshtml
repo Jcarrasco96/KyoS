@@ -605,6 +605,12 @@
                             </div>
                         </a>
                     }
+                    @if (Model.TCMAssessment.Approved == 0)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Case Manag.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assessment</h4>
+                        </div>
+                    }
                 }
                 else
                 {
@@ -635,15 +641,18 @@
                             </div>
                         </a>
                     }
-
+                    @if (Model.TcmIntakeAppendixJ.Approved == 0)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        </div>
+                    }
                 }
                 else
                 {
-
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                     </div>
-
                 }
             </div>
             <div class="col-sm-3 col-md-2">
@@ -660,7 +669,7 @@
                             </a>
                         </div>
                     }
-                  
+
                     @if (Model.TcmServicePlan.Approved == 1)
                     {
                         <a style="text-decoration: none;" asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.TcmServicePlan.Id" asp-route-origi="4" role="button">
@@ -669,15 +678,19 @@
                             </div>
                         </a>
                     }
+                    @if (Model.TcmServicePlan.Approved == 0)
+                    {
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plan</h4>
+                        </div>
+                    }
 
                 }
                 else
                 {
-
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plan</h4>
                     </div>
-
                 }
             </div>
             <div class="col-md-3">

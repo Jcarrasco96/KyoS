@@ -23,6 +23,10 @@
                 {
                     @Html.ActionLink("TCM Assessment Messages", "MessagesOfAssessment", "TCMMessages")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("Dashboard", "Index", "Desktop")
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->

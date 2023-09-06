@@ -478,7 +478,7 @@ namespace KyoS.Web.Controllers
             TCMServicePlanEntity tcmServicePlan = new TCMServicePlanEntity();
 
             if (tcmServicePlan != null)
-            {
+            { 
                 if (User.IsInRole("TCMSupervisor"))
                 {
                     UserEntity user_logged = _context.Users
@@ -2740,6 +2740,7 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomainReadOnly", tcmDomainViewModel) });
         }
+
 
     }
 }
