@@ -26,12 +26,12 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
-        private readonly IImageHelper _imageHelper;
+        //private readonly IImageHelper _imageHelper;
         private readonly IMimeType _mimeType;
         private readonly IExportExcellHelper _exportExcelHelper;
         private readonly IFileHelper _fileHelper;
         private readonly IReportHelper _reportHelper;
-        private readonly IWebHostEnvironment _webhostEnvironment;
+        //private readonly IWebHostEnvironment _webhostEnvironment;
 
         public IConfiguration Configuration { get; }
 
@@ -41,12 +41,12 @@ namespace KyoS.Web.Controllers
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
-            _imageHelper = imageHelper;
+           // _imageHelper = imageHelper;
             _mimeType = mimeType;
             _exportExcelHelper = exportExcelHelper;
             _fileHelper = fileHelper;
             _reportHelper = reportHelper;
-            _webhostEnvironment = webHostEnvironment;
+            //_webhostEnvironment = webHostEnvironment;
             Configuration = configuration;
         }
 
@@ -318,10 +318,6 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Admin")]
         public IActionResult BillDetails(int id = 0)
         {
-            List<BillDmsDetailsEntity> detailsBill = _context.BillDmsDetails
-                                                             .Where(n => n.Bill.Id == id)
-                                                             .ToList();
-
             BillDmsViewModel model = new BillDmsViewModel();
             BillDmsEntity entity = _context.BillDms
                                            .Include(n => n.BillDmsDetails)
