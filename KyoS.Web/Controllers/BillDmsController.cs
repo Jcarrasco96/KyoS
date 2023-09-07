@@ -209,25 +209,16 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.Workday.Service == ServiceType.Group)
+                                if (item.GroupNote2 != null)
                                 {
-                                    if (item.GroupNote2 != null)
-                                    {
-                                        Unit = item.GroupNote2.GroupNotes2_Activities.Count() * 4;
-                                        amount = (decimal)(item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 0.2);
-                                        notes++;
-                                    }
-                                    else
-                                    {
-                                        Unit = item.Schedule.SubSchedules.Count() * 4;
-                                        amount = (decimal)(item.Schedule.SubSchedules.Count() * 4 * 0.2);
-                                        notes++;
-                                    }
+                                    Unit = item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                    amount = (decimal)(item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 0.2);
+                                    notes++;
                                 }
                                 else
                                 {
-                                    Unit = 16;
-                                    amount = (decimal)(16 * 0.2);
+                                    Unit = item.Schedule.SubSchedules.Count() * 4;
+                                    amount = (decimal)(item.Schedule.SubSchedules.Count() * 4 * 0.2);
                                     notes++;
                                 }
 
@@ -389,7 +380,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                        return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                     }
                     catch (System.Exception ex)
                     {
@@ -405,10 +396,10 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                    return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                 }
             }
-            return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+            return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
         }
 
         [Authorize(Roles = "Manager, Admin")]
@@ -431,7 +422,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                        return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                     }
                     catch (System.Exception ex)
                     {
@@ -447,10 +438,10 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                    return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                 }
             }
-            return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+            return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
         }
 
         [Authorize(Roles = "Admin")]

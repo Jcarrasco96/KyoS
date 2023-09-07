@@ -36,7 +36,7 @@
                                 Detail Pending
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Status
+                                Paid Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Paid
@@ -115,16 +115,17 @@
                                     <td align="center">
                                         @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
                                         {
-                                            <span class="label label-default">
-                                               @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                            </span>
+                                            @if (item.DateBillPayment.ToShortDateString() == "01/01/0001")
+                                            {
+                                                <a> - </a>
+                                            }
                                         }
                                         else
                                         {
                                             @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
                                             {
                                                 <span class="label label-warning">
-                                                    @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                     @item.DateBillPayment.ToShortDateString()
                                                 </span>
                                             }
                                             else
@@ -132,7 +133,7 @@
                                                 @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
                                                 {
                                                     <span class="label label-info">
-                                                       @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                       @item.DateBillPayment.ToShortDateString()
                                                     </span>
                                                 }
                                                 else
@@ -140,7 +141,7 @@
                                                     @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
                                                     {
                                                         <span class="label label-success">
-                                                            @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                           @item.DateBillPayment.ToShortDateString()
                                                         </span>
                                                     }
 
@@ -195,16 +196,17 @@
                                     <td align="center">
                                         @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
                                         {
-                                            <span class="label label-default">
-                                               @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                            </span>
+                                            @if (item.DateBillPayment.ToShortDateString() == "01/01/0001")
+                                            {
+                                                <a> - </a>
+                                            }
                                         }
                                         else
                                         {
                                             @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
                                             {
                                                 <span class="label label-warning">
-                                                   @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                    @item.DateBillPayment.ToShortDateString()
                                                 </span>
                                             }
                                             else
@@ -212,7 +214,7 @@
                                                 @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
                                                 {
                                                     <span class="label label-info">
-                                                       @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                       @item.DateBillPayment.ToShortDateString()
                                                     </span>
                                                 }
                                                 else
@@ -220,7 +222,7 @@
                                                     @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
                                                     {
                                                         <span class="label label-success">
-                                                            @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                           @item.DateBillPayment.ToShortDateString()
                                                         </span>
                                                     }
 

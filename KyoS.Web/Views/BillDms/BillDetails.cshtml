@@ -129,72 +129,32 @@
                         {
                             <tr style="color: darkgrey;">
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.NameClient)
+                                    @item.NameClient
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DateService)
+                                    @item.DateService
                                 </td>
                                 <td align="center">
-                                    @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH)
+                                    @item.ServiceAgency
+                                </td>
+                                <td align="center">
+                                    @item.Unit
+                                </td>
+                                <td align="center">
+                                    @item.Amount
+                                </td>
+                                <td align="center">
+                                    @item.StatusBill
+                                </td>
+                                <td align="center">
+                                    @if (item.PaidDate.ToShortDateString() == "01/01/0001")
                                     {
-                                        <span class="label label-info">
-                                            CMH
-                                        </span>
+                                        <a> - </a>
                                     }
                                     else
                                     {
-                                        @if (item.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM)
-                                        {
-                                            <span class="label label-success">
-                                                TCM
-                                            </span>
-                                        }
+                                        @item.PaidDate.ToShortDateString()
                                     }
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Amount)
-                                </td>
-                                <td align="center">
-                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
-                                    {
-                                        <span class="label label-default">
-                                            Unbilled
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
-                                        {
-                                            <span class="label label-warning">
-                                                Billed
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
-                                            {
-                                                <span class="label label-info">
-                                                    Pending
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
-                                                {
-                                                    <span class="label label-success">
-                                                        Paid
-                                                    </span>
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.PaidDate)
                                 </td>
                                 <td align="right">
                                     @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
@@ -238,8 +198,6 @@
     </div>
 </div>
 
-<partial name="_ModalPopup" />
-<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -258,13 +216,7 @@
                 "pageLength": 100
             });
 
-            $("#cbDateClose").change(function () {
-                var wwwUrlPath = window.document.location.href;
-                var pos = wwwUrlPath.indexOf('/BillDms/Create');
-                var localhostPath = wwwUrlPath.substring(0, pos);
-                var url = 'BillDms/Create';
-                window.location.href = localhostPath + '/' + url + '?dateBillclose=' + $("#cbDateClose").val();
-            })
+          
         })
     </script>
 }
