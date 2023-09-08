@@ -622,8 +622,9 @@ namespace KyoS.Web.Controllers
                 CodeBill = bioViewModel.CodeBill,
                 Code90791 = false
             };
-            
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
+
+            return View(bioViewModel);
+            //return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -780,7 +781,8 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
+            return View(bioViewModel);
+            // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]

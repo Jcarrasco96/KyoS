@@ -928,10 +928,17 @@
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Clients <span class="caret"></span>
+                                General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>                                
+                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
+                                        <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

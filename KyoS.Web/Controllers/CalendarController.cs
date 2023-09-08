@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -51,7 +51,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
         public IActionResult IndexFacilitator()
         {
             UserEntity user_logged = _context.Users
@@ -65,7 +65,7 @@ namespace KyoS.Web.Controllers
             }
 
             CalendarCMH model = null;
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 model = new CalendarCMH
                 {
@@ -136,7 +136,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> Events(string start, string end, int idClient)
         {
             if (idClient != 0)

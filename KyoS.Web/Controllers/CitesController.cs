@@ -296,10 +296,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.IndividualNote != null)
                     {
-                        if (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
-                            || item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                        if ((item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay)
+                            || (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.IndividualNote.SubSchedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay)
+                            || (item.IndividualNote.SubSchedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                            || (item.IndividualNote.SubSchedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.IndividualNote.SubSchedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay))
                         {
                             return true;
                         }
@@ -309,10 +309,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
                     {
-                        if (item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
-                          || item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                        if ((item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay)
+                          || (item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay)
+                          || (item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                          || (item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay))
                         {
                             return true;
                         }
@@ -352,10 +352,10 @@ namespace KyoS.Web.Controllers
                 {
                     if (item.Workday.Service == ServiceType.PSR || item.Workday.Service == ServiceType.Group)
                     {
-                        if (item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay
-                          || item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay
-                          || item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                        if ((item.Schedule.InitialTime.TimeOfDay <= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay)
+                          || (item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay >= subSchedule.EndTime.TimeOfDay)
+                          || (item.Schedule.InitialTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.InitialTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay)
+                          || (item.Schedule.EndTime.TimeOfDay >= subSchedule.InitialTime.TimeOfDay && item.Schedule.EndTime.TimeOfDay <= subSchedule.EndTime.TimeOfDay))
                         {
                             return true;
                         }
