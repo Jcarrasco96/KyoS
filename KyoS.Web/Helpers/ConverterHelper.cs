@@ -1113,7 +1113,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 
@@ -1239,7 +1240,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 

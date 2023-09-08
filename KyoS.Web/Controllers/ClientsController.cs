@@ -3008,10 +3008,9 @@ namespace KyoS.Web.Controllers
             return View(await _context.Clients
 
                                       .Include(c => c.Clinic)
-                                      .Include(c => c.IndividualTherapyFacilitator)
                                       .Include(c => c.Clients_HealthInsurances)
                                         .ThenInclude(c => c.HealthInsurance)
-
+                                      .Include(c => c.LegalGuardian)
                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());       
         }
@@ -5275,5 +5274,48 @@ namespace KyoS.Web.Controllers
 
             return View(salida);
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> EditSignatureLegalGuardian(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (legalGuardian == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            LegalGuardianViewModel LegalViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardian);
+
+            return View(LegalViewModel);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<JsonResult> SaveSignatureLegalGuardian(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "LegalGuardian");
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (legalGuardian != null)
+            {
+                legalGuardian.SignPath = signPath;
+                _context.Update(legalGuardian);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
+        }
+
     }
 }
