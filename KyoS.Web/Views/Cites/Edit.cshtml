@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="row">
-    <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCite(this);">
+    <form asp-action="Edit" asp-route-id="@Model.Id" onsubmit="return RedirectToAppointments(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="CreatedBy" />
@@ -97,10 +97,9 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="col-md-offset-9 form-group">
+            <div class="col-md-offset-10 form-group">
                 <input type="submit" value="Save" class="btn btn-primary" title="Save Appointment" />
-                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                <a onclick="ConfirmDelete(@Model.Id, @Model.IdFacilitator)" class="btn btn-danger" title="Delete Appointment">Delete</a>
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>                
             </div>
         </div>
     </form>
@@ -108,24 +107,34 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript">
-                        
-        function ConfirmDelete(e, f) {
-            Swal.fire({
-                title: 'Do you want delete?',
-                text: "Note: All data related to this element will be deleted.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "@Url.Action("DeleteFromEdit", "Cites")";
-                    window.location.href = url + '?id=' + e + '&facilitatorId=' + f;
-                }
-            });
+    <script type="text/javascript">        
+
+        RedirectToAppointments = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {                            
+                            var url = "@Url.Action("Schedule", "Calendar")";
+                            window.location.href = url + '?facilitatorId=' + res.html;
+                        }
+                        else
+                            $('#form-modal-lg .modal-body').html(res.html);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
         }
-        
+
     </script>
 

@@ -213,7 +213,7 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank)
+        public IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank, bool all)
         {
             List<SelectListItem> list = _context.Facilitators.Where(f => f.Clinic.Id == idClinic).OrderBy(f => f.Name).Select(f => new SelectListItem
             {
@@ -221,22 +221,35 @@ namespace KyoS.Web.Helpers
                 Value = $"{f.Id}"
             }).ToList();
 
-            if (!blank)
+            if (all)
             {
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "[Select facilitator...]",
+                    Text = "[All facilitators are visualized...]",
                     Value = "0"
                 });
             }
             else
             {
-                list.Insert(0, new SelectListItem
+                if (!blank)
                 {
-                    Text = string.Empty,
-                    Value = "0"
-                });
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = "[Select facilitator...]",
+                        Value = "0"
+                    });
+                }
+                else
+                {
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = string.Empty,
+                        Value = "0"
+                    });
+                }
             }
+
+            
             
             return list;
         }

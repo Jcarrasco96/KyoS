@@ -20,7 +20,7 @@
         </div>
     }
 
-    <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCite(this);">
+    <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return RedirectToAppointments(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         
         <div class="container-fluid">
@@ -112,7 +112,7 @@
                 });
             });
 
-            url = "@Url.Action("GetSubSchedule", "Cites")";            
+            url = "@Url.Action("GetSubSchedule", "Cites")";
             $.get(url, { Facilitator: $("#cbFacilitator2").val(), DateOfAppoitment: $("#lbDateCite").val() }, function (data) {
                 $("#cbSubSchedule").empty();
                 $.each(data, function (index, row) {
@@ -142,6 +142,33 @@
             });
         })
     });
+
+    RedirectToAppointments = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            var url = "@Url.Action("Schedule", "Calendar")";
+                            window.location.href = url + '?facilitatorId=' + res.html;
+                        }
+                        else
+                            $('#form-modal-lg .modal-body').html(res.html);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
 </script>
 
 
