@@ -10881,16 +10881,39 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.MtpExpired = "E";
             }
-
-            return View(await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
+            List<Workday_ClientIndTherapyViewModel> models = new List<Workday_ClientIndTherapyViewModel>();
+            
+            List<Workday_Client> workday_Client = await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
                                                        .Include(wc => wc.Facilitator)
                                                        .Include(wc => wc.Client)
                                                        .Include(wc => wc.Workday)
                                                        .ThenInclude(w => w.Week)
+                                                       .Include(wc => wc.Schedule)
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                         && wc.IndividualNote == null && wc.Present == true
                                                                         && wc.Workday.Service == ServiceType.Individual))                                                       
-                                                       .ToListAsync());
+                                                       .ToListAsync();
+
+            List<CiteEntity> cites = await _context.Cites
+                                                   .Include(n => n.SubSchedule)
+                                                   .Include(n => n.Client)
+                                                   .Where(n => n.Facilitator.LinkedUser == User.Identity.Name
+                                                            && n.Status == CiteStatus.A)
+                                                   .ToListAsync();
+            ClientEntity client = new ClientEntity();
+            foreach (var item in workday_Client)
+            {
+                Workday_ClientIndTherapyViewModel model_temp = new Workday_ClientIndTherapyViewModel();
+                client = AppointmentIndNote(item.Facilitator.Id, item.Workday.Date, item.Schedule.Id, item.Session);
+                if (client != null)
+                {
+                    model_temp.NombreClient = client.Name;
+                }
+               
+                model_temp.workday_Client = item;
+                models.Add(model_temp);
+            }
+            return View(models);
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -20746,7 +20769,8 @@ namespace KyoS.Web.Controllers
                                       .Include(n => n.Client)                    
                                       .FirstOrDefault(n => n.Facilitator.Id == idFacilitator
                                                         && n.DateCite.Date == date.Date
-                                                        && n.SubSchedule.Id == subScheduleEntity.Id);
+                                                        && n.SubSchedule.Id == subScheduleEntity.Id
+                                                        && n.Status == CiteStatus.A);
             if (cite != null)
             {
                 return cite.Client;

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -365,6 +366,71 @@ namespace KyoS.Web.Controllers
             return false;
         }
         #endregion
+
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        public IActionResult AuditCites(DateTime date)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditCites> audit_List = new List<AuditCites>();
+            AuditCites audit = new AuditCites();
+            List<CiteEntity> cites_List = new List<CiteEntity>();
+
+            if (User.IsInRole("Facilitator"))
+            {
+                cites_List = _context.Cites
+                                     .Include(m => m.SubSchedule)
+                                     .Include(m => m.Client)
+                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                              && (n.DateCite.Date < date.Date)
+                                              && (n.Facilitator.LinkedUser == user_logged.UserName)
+                                              && (n.Status == CiteStatus.S
+                                               || (n.Status == CiteStatus.C)
+                                               || (n.Status == CiteStatus.R)
+                                               || (n.Status == CiteStatus.AR)
+                                               || (n.Status == CiteStatus.CO))))
+                                     .ToList();
+
+            }
+            else
+            {
+                cites_List = _context.Cites
+                                     .Include(m => m.SubSchedule)
+                                     .Include(m => m.Client)
+                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                              && (n.DateCite.Date < date.Date)
+                                              && (n.Status == CiteStatus.S
+                                               || (n.Status == CiteStatus.C)
+                                               || (n.Status == CiteStatus.R)
+                                               || (n.Status == CiteStatus.AR)
+                                               || (n.Status == CiteStatus.CO))))
+                                     .ToList();
+
+            }
+
+            foreach (var item in cites_List)
+            {
+                audit.ClientName = item.Client.Name;
+                audit.Date = item.DateCite;
+                audit.Status = item.Status.ToString();
+                audit.Description = "Check this appointment";
+                audit.Active = 1;
+
+                audit_List.Add(audit);
+                audit = new AuditCites();
+            }
+
+            return View(audit_List);
+        }
 
     }
 }
