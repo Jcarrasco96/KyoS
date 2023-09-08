@@ -108,7 +108,7 @@ namespace KyoS.Web.Controllers
             CalendarCMH model = new CalendarCMH
             {
                 IdFacilitator = facilitatorId,
-                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
+                Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false, true)
             };
 
             return View(model);
@@ -214,28 +214,20 @@ namespace KyoS.Web.Controllers
 
         [Authorize(Roles = "Frontdesk")]
         public async Task<IActionResult> EventsSchedule(string start, string end, int idFacilitator)
-        {
-            if (idFacilitator != 0)
-            {
-                DateTime initDate = Convert.ToDateTime(start);
-                DateTime finalDate = Convert.ToDateTime(end);
+        {            
+            DateTime initDate = Convert.ToDateTime(start);
+            DateTime finalDate = Convert.ToDateTime(end);
 
-                Task<List<object>> notesTask = AppointmentsByFacilitator(idFacilitator, initDate, finalDate);
+            Task<List<object>> notesTask = AppointmentsByFacilitator(idFacilitator, initDate, finalDate);
                 
-                await Task.WhenAll(notesTask);
+            await Task.WhenAll(notesTask);
 
-                var notes = await notesTask;
+            var notes = await notesTask;
                 
-                List<object> events = new List<object>();
-                events.AddRange(notes);
+            List<object> events = new List<object>();
+            events.AddRange(notes);
                 
-                return new JsonResult(events);
-            }
-            else
-            {
-                var events = new List<Workday_Client>();
-                return new JsonResult(events);
-            }
+            return new JsonResult(events);            
         }
 
         #region Utils
@@ -479,56 +471,60 @@ namespace KyoS.Web.Controllers
             {
                 listAppointments = await db.Cites
 
-                                            .Include(c => c.SubSchedule)
-                                            .Include(c => c.Worday_CLient)
+                                           .Include(c => c.SubSchedule)
+                                           .Include(c => c.Worday_CLient)
 
-                                            .Include(c => c.Client)  
-                                            
-                                            .Include(c => c.Facilitator)
+                                           .Include(c => c.Client)
 
-                                            .Where(c => (c.DateCite >= initDate && c.DateCite <= finalDate && c.Facilitator.Id == idFacilitator))
+                                           .Include(c => c.Facilitator)
 
-                                            .ToListAsync();
+                                           .Where(c => (c.DateCite >= initDate && c.DateCite <= finalDate))
+                                           .ToListAsync();
+                                     
+
+                if (idFacilitator != 0)
+                {
+                    listAppointments = listAppointments.Where(c => c.Facilitator.Id == idFacilitator).ToList();
+                }                                            
             }
 
             return listAppointments
-                    .Select(c => new
-                    {
-                        id = c.Id,
-                        title = (c.Client == null) ? $"{c.Facilitator.Name} - No client" :
-                                (c.Client != null) ? $"{c.Facilitator.Name} - {c.Client.Name}" :
-                                                string.Empty,
-                        start = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
-                                                c.SubSchedule.InitialTime.Hour, c.SubSchedule.InitialTime.Minute, 0)
-                                                    .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
-                        end = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
-                                              c.SubSchedule.EndTime.Hour, c.SubSchedule.EndTime.Minute, 0)
-                                                    .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
-                        backgroundColor = (c.Status == CiteStatus.C) ? "#dff0d8" :
-                                            (c.Status == CiteStatus.S) ? "#76b5c5" :
-                                                (c.Status == CiteStatus.R) ? "#d0a190" :
-                                                    (c.Status == CiteStatus.NS) ? "#eab676" :
-                                                        (c.Status == CiteStatus.AR) ? "#fbffaa" :
-                                                            (c.Status == CiteStatus.A) ? "#0f8f05" :
-                                                                (c.Status == CiteStatus.X) ? "#a54237" : string.Empty,
-                        textColor = (c.Status == CiteStatus.C) ? "#417c49" :
-                                       (c.Status == CiteStatus.S) ? "#063970" :
-                                          (c.Status == CiteStatus.R) ? "#6a3b2a" :
-                                            (c.Status == CiteStatus.NS) ? "#873e23" :
-                                                (c.Status == CiteStatus.AR) ? "#aea724" :
-                                                    (c.Status == CiteStatus.A) ? "#010e00" :
-                                                        (c.Status == CiteStatus.X) ? "#390802" : string.Empty,
-
-                        borderColor = (c.Status == CiteStatus.C) ? "#417c49" :
-                                       (c.Status == CiteStatus.S) ? "#063970" :
-                                          (c.Status == CiteStatus.R) ? "#6a3b2a" :
-                                            (c.Status == CiteStatus.NS) ? "#873e23" :
-                                                (c.Status == CiteStatus.AR) ? "#e7f81e" :
-                                                    (c.Status == CiteStatus.A) ? "#010e00" :
-                                                        (c.Status == CiteStatus.X) ? "#390802" : string.Empty
-                    })
-                    .Distinct()
-                    .ToList<object>();
+                        .Select(c => new
+                        {
+                            id = c.Id,
+                            title = (c.Client == null) ? $"{c.Facilitator.Name} - No client" :
+                                    (c.Client != null) ? $"{c.Facilitator.Name} - {c.Client.Name}" :
+                                                    string.Empty,
+                            start = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
+                                                    c.SubSchedule.InitialTime.Hour, c.SubSchedule.InitialTime.Minute, 0)
+                                                        .ToString("yyyy-MM-ddTHH:mm:ssK"),                                    
+                            end = new DateTime(c.DateCite.Year, c.DateCite.Month, c.DateCite.Day,
+                                                  c.SubSchedule.EndTime.Hour, c.SubSchedule.EndTime.Minute, 0)
+                                                        .ToString("yyyy-MM-ddTHH:mm:ssK"),                                  
+                            backgroundColor = (c.Status == CiteStatus.C) ? "#dff0d8" :
+                                                (c.Status == CiteStatus.S) ? "#76b5c5" :
+                                                    (c.Status == CiteStatus.R) ? "#d0a190" :
+                                                        (c.Status == CiteStatus.NS) ? "#eab676" :
+                                                            (c.Status == CiteStatus.AR) ? "#fbffaa" :
+                                                                (c.Status == CiteStatus.A) ? "#0f8f05" :
+                                                                    (c.Status == CiteStatus.X) ? "#a54237" : string.Empty,
+                            textColor = (c.Status == CiteStatus.C) ? "#417c49" :
+                                           (c.Status == CiteStatus.S) ? "#063970" :
+                                              (c.Status == CiteStatus.R) ? "#6a3b2a" :
+                                                (c.Status == CiteStatus.NS) ? "#873e23" :
+                                                    (c.Status == CiteStatus.AR) ? "#aea724" :
+                                                        (c.Status == CiteStatus.A) ? "#010e00" :
+                                                            (c.Status == CiteStatus.X) ? "#390802" : string.Empty,
+                            borderColor = (c.Status == CiteStatus.C) ? "#417c49" :
+                                           (c.Status == CiteStatus.S) ? "#063970" :
+                                              (c.Status == CiteStatus.R) ? "#6a3b2a" :
+                                                (c.Status == CiteStatus.NS) ? "#873e23" :
+                                                    (c.Status == CiteStatus.AR) ? "#aea724" :
+                                                        (c.Status == CiteStatus.A) ? "#010e00" :
+                                                            (c.Status == CiteStatus.X) ? "#390802" : string.Empty
+                        })
+                        .Distinct()
+                        .ToList<object>();
         }
 
         private async Task<List<object>> MTPsByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)

@@ -552,10 +552,6 @@ jQueryAjaxPostBIOBehavioral = form => {
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
 
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -598,11 +594,7 @@ jQueryAjaxPostMedication = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -780,11 +772,7 @@ jQueryAjaxPostTCMAssessmentIndividualAgency = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -827,11 +815,7 @@ jQueryAjaxPostTCMAssessmentHouseComposition = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -874,11 +858,7 @@ jQueryAjaxPostTCMAssessmentPastCurrent = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -921,11 +901,7 @@ jQueryAjaxPostTCMAssessmentMedication = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -968,11 +944,7 @@ jQueryAjaxPostTCMAssessmenHospital = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1015,11 +987,7 @@ jQueryAjaxPostTCMAssessmenDrug = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1062,11 +1030,7 @@ jQueryAjaxPostTCMAssessmenMedicalProblem = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1109,11 +1073,7 @@ jQueryAjaxPostTCMAssessmenSurgery = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1141,6 +1101,7 @@ jQueryAjaxPostTCMAssessmenSurgery = form => {
     }
 
 }
+
 jQueryAjaxPostTCMNoteActivity = form => {
     try {
         $.ajax({
@@ -1155,11 +1116,7 @@ jQueryAjaxPostTCMNoteActivity = form => {
                     $('#form-modal-lg .modal-body').html('');
                     $('#form-modal-lg .modal-title').html('');
                     $('#form-modal-lg').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1187,6 +1144,7 @@ jQueryAjaxPostTCMNoteActivity = form => {
     }
 
 }
+
 jQueryAjaxPostTCMNoteActivityTemp = form => {
     try {
         $.ajax({
@@ -1201,11 +1159,7 @@ jQueryAjaxPostTCMNoteActivityTemp = form => {
                     $('#form-modal-lg .modal-body').html('');
                     $('#form-modal-lg .modal-title').html('');
                     $('#form-modal-lg').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -1233,6 +1187,7 @@ jQueryAjaxPostTCMNoteActivityTemp = form => {
     }
 
 }
+
 jQueryAjaxPostTCMDomain = form => {
     try {
         $.ajax({
@@ -1279,6 +1234,7 @@ jQueryAjaxPostTCMDomain = form => {
     }
 
 }
+
 jQueryAjaxPostTCMDomainLg = form => {
     try {
         $.ajax({
@@ -1354,6 +1310,7 @@ jQueryAjaxPostReferred = form => {
         console.log(ex)
     }
 }
+
 jQueryAjaxPostReferred1 = form => {
     try {
         $.ajax({
@@ -1537,11 +1494,7 @@ jQueryAjaxPostAddClientDiagnostic = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-
-                    //$('#MyTable').DataTable({
-                    //    "order": [[1, "asc"]],
-                    //    "pageLength": 100
-                    //});
+                    
                     var item_to_delete;
                     $('.deleteItem').click((e) => {
                         item_to_delete = e.currentTarget.dataset.id;
@@ -2456,6 +2409,7 @@ jQueryAjaxPostWorkDay = form => {
         console.log(ex)
     }
 }
+
 jQueryAjaxPostWorkdayClient = form => {
     try {
         $.ajax({
@@ -2628,37 +2582,6 @@ jQueryAjaxTCMDateBlocked = form => {
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
-            },
-            error: function (err) {
-                console.log(err)
-            }
-        })
-        //to prevent default form submit event
-        return false;
-    } catch (ex) {
-        console.log(ex)
-    }
-}
-
-jQueryAjaxCite = form => {
-    try {
-        $.ajax({
-            type: 'POST',
-            url: form.action,
-            data: new FormData(form),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                if (res.isValid) {
-                    var wwwUrlPath = window.document.location.href;
-                    var pathName = window.document.location.pathname;
-                    var pos = wwwUrlPath.indexOf(pathName);
-                    var localhostPath = wwwUrlPath.substring(0, pos);
-                    var url = 'Calendar/Schedule';                    
-                    window.location.href = localhostPath + '/' + url + '?facilitatorId=' + res.html;                    
-                }
-                else
-                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)

@@ -16,7 +16,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic, ThemeType service);
         IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic, ThemeType service);
         IEnumerable<SelectListItem> GetComboFacilitators();
-        IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false);
+        IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false, bool all = false);
         IEnumerable<SelectListItem> GetComboClients();
         IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic);

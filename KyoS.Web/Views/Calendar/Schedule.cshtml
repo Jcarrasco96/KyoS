@@ -96,13 +96,6 @@
                     },
                 },
                 eventClick: function (info) {
-                    //alert('Event: ' + info.event.title);
-                    //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-                    //alert('View: ' + info.view.type);
-
-                    //// change the border color just for fun
-                    //info.el.style.borderColor = 'red';
-
                     $.ajax({
                         type: 'GET',
                         url: '@Url.Action("Edit", "Cites", null, Context.Request.Scheme)' + '?id=' + info.event.id,
