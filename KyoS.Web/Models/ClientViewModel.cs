@@ -114,6 +114,19 @@ namespace KyoS.Web.Models
         public string CreateByEmergencyContact { get; set; }
         public DateTime CreateOnEmergencyContact { get; set; }
 
-        
+        //legalGardian
+        public string NameLegalGuardian { get; set; }
+        public string AddressLegalGuardian { get; set; }
+        public string EmailLegalGuardian { get; set; }
+        public string PhoneLegalGuardian { get; set; }
+        public string PhoneSecundaryLegalGuardian { get; set; }
+        public string AddressLine2LegalGuardian { get; set; }
+        public string CountryLegalGuardian { get; set; }
+        public string CityLegalGuardian { get; set; }
+        public string StateLegalGuardian { get; set; }
+        public string ZipCodeLegalGuardian { get; set; }
+        public string CreateByLegalGuardian { get; set; }
+        public DateTime CreateOnLegalGuardian { get; set; }
+
     }
 }

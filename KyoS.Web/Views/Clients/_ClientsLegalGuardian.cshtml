@@ -1,0 +1,131 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="IdLegalGuardian" class="control-label"></label>
+        <select asp-for="IdLegalGuardian" asp-items="Model.LegalsGuardians" class="form-control" id="cbLG"></select>
+        <span asp-validation-for="IdLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="IdRelationship" class="control-label"></label>
+        <select asp-for="IdRelationship" asp-items="Model.Relationships" class="form-control" id="cbRLG"></select>
+        <span asp-validation-for="IdRelationship" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-12">
+    <input type="checkbox" class="form-check-input" id="chkNewLG">
+    <label class="control-label">New</label>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="NameLegalGuardian" class="control-label">Legal Guardian Name</label>&nbsp;*
+        <input asp-for="NameLegalGuardian" class="form-control" disabled id="nameLG"/>
+        <span asp-validation-for="NameLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="AddressLegalGuardian" class="control-label">Address</label>
+        <input asp-for="AddressLegalGuardian" class="form-control" disabled id="addressLG"/>
+        <span asp-validation-for="AddressLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CountryLegalGuardian" class="control-label">Country</label>
+        <input asp-for="CountryLegalGuardian" class="form-control" disabled id="countryLG"/>
+        <span asp-validation-for="CountryLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CityLegalGuardian" class="control-label">City</label>
+        <input asp-for="CityLegalGuardian" class="form-control" disabled id="cityLG"/>
+        <span asp-validation-for="CityLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="StateLegalGuardian" class="control-label">State</label>
+        <input asp-for="StateLegalGuardian" class="form-control" disabled id="stateLG"/>
+        <span asp-validation-for="StateLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="ZipCodeLegalGuardian" class="control-label">Zip Code</label>
+        <input asp-for="ZipCodeLegalGuardian" class="form-control" disabled id="zipLG"/>
+        <span asp-validation-for="ZipCodeLegalGuardian" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="AddressLine2LegalGuardian" class="control-label">Address Line 2</label>
+        <input asp-for="AddressLine2LegalGuardian" class="form-control" disabled id="address2LG"/>
+        <span asp-validation-for="AddressLine2LegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PhoneLegalGuardian" class="control-label">Telephone</label>
+        <input asp-for="PhoneLegalGuardian" class="form-control" disabled id="phoneLG"/>
+        <span asp-validation-for="PhoneLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PhoneSecundaryLegalGuardian" class="control-label">Telephone Secundary</label>
+        <input asp-for="PhoneSecundaryLegalGuardian" class="form-control" disabled id="phoneSecundaryLG"/>
+        <span asp-validation-for="PhoneSecundaryLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmailLegalGuardian" class="control-label">Email</label>
+        <input asp-for="EmailLegalGuardian" class="form-control" disabled id="emailLG"/>
+        <span asp-validation-for="EmailLegalGuardian" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    chkNewLG.addEventListener('change', (e) => {
+        if (chkNewLG.checked == true)
+        {
+            $("#cbLG").prop('selectedIndex', 0);
+            $("#cbLG").prop('disabled', true);
+            //$("#cbREC").prop('selectedIndex', 0);
+            //$("#cbREC").prop('disabled', true);
+
+            $("#nameLG").prop('disabled', false);
+            $("#addressLG").prop('disabled', false);
+            $("#countryLG").prop('disabled', false);
+            $("#cityLG").prop('disabled', false);
+            $("#stateLG").prop('disabled', false);
+            $("#zipLG").prop('disabled', false);
+            $("#address2LG").prop('disabled', false);
+            $("#phoneLG").prop('disabled', false);
+            $("#phoneSecundaryLG").prop('disabled', false);
+            $("#emailLG").prop('disabled', false);
+            $("#nameEC").focus();
+        }
+        else
+        {
+            $("#cbLG").prop('disabled', false);
+            /*$("#cbREC").prop('disabled', false);*/
+
+            $("#nameLG").val("");
+            $("#nameLG").prop('disabled', true);
+            $("#addressLG").val("");
+            $("#addressLG").prop('disabled', true);
+            $("#countryLG").val("");
+            $("#countryLG").prop('disabled', true);
+            $("#cityLG").val("");
+            $("#cityLG").prop('disabled', true);
+            $("#stateLG").val("");
+            $("#stateLG").prop('disabled', true);
+            $("#zipLG").val("");
+            $("#zipLG").prop('disabled', true);
+            $("#address2LG").val("");
+            $("#address2LG").prop('disabled', true);
+            $("#phoneLG").val("");
+            $("#phoneLG").prop('disabled', true);
+            $("#phoneSecundaryLG").val("");
+            $("#phoneSecundaryLG").prop('disabled', true);
+            $("#emailLG").val("");
+            $("#emailLG").prop('disabled', true);
+        }
+    })
+</script>

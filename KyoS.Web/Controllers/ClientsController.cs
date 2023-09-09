@@ -268,6 +268,41 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
 
+                //-------Legal Guardian Contact--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardian = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.LegalGuardian = legalGuardian;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+                }
+
+                _context.Add(clientEntity);
+
+
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
@@ -572,6 +607,44 @@ namespace KyoS.Web.Controllers
                     _context.Entry(clientEntity).Reference("Group").IsModified = true;
                 }
 
+                //-------Legal Guardian--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(legalGuardianContact);
+                        clientEntity.LegalGuardian = legalGuardianContact;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
+                }
+
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
@@ -607,30 +680,6 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    /*if (clientViewModel.NameEmergencyContact != string.Empty)
-                    {
-                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
-                        {
-                            Name = clientViewModel.NameEmergencyContact,
-                            Address = clientViewModel.AddressEmergencyContact,
-                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
-                            City = clientViewModel.CityEmergencyContact,
-                            Country = clientViewModel.CountryEmergencyContact,
-                            Email = clientViewModel.EmailEmergencyContact,
-                            State = clientViewModel.StateEmergencyContact,
-                            Telephone = clientViewModel.PhoneEmergencyContact,
-                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
-                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
-
-                        };
-                        //_context.Update(emergencyContact);
-                        
-
-                    }*/
                     clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
                 }
 
