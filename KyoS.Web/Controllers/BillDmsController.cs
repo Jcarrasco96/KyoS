@@ -769,8 +769,8 @@ namespace KyoS.Web.Controllers
                                             .Include(n => n.BillDmsDetails)
                                             .FirstOrDefault(n => n.Id == id);
 
-            string Periodo = "To: " + billDms.DateBillClose.ToShortDateString();
-            string ReportName = "Bill Report " + billDms.DateBillClose.ToShortDateString() + ".xlsx";
+            string Periodo = "Invoice until: " + billDms.DateBillClose.ToShortDateString();
+            string ReportName = "Invoice " + billDms.DateBillClose.ToShortDateString() + ".xlsx";
             string data = "BILL";
           
             byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data);
