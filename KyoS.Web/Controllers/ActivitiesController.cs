@@ -824,10 +824,6 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0, bool am = false, bool pm = false, string session = "AM")
         {
-            //The user must select at least one skill adressed per theme 
-            if (error == 1)
-                ViewBag.Error = "1";
-
             IEnumerable<SelectListItem> list1;
             IEnumerable<SelectListItem> list2;
             IEnumerable<SelectListItem> list3;
@@ -888,6 +884,25 @@ namespace KyoS.Web.Controllers
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
             if (activities_list.Count() == 0)
             {
+                ThemeEntity noTheme = await _context.Themes
+                                                    .FirstOrDefaultAsync(t => t.Name == "No theme");
+
+                List<SelectListItem> activitiesSLI = new List<SelectListItem>();
+                if (noTheme != null)
+                {
+                    List<ActivityEntity> activities = await _context.Activities
+                                                                .Where(a => (a.Theme.Id == noTheme.Id && a.Status == ActivityStatus.Approved))
+                                                                .ToListAsync();
+                    if (activities.Count() > 0)
+                    {
+                        activitiesSLI.Insert(0, new SelectListItem
+                        {
+                            Text = activities.First().Name.ToString(),
+                            Value = $"{activities.First().Id}"
+                        });
+                    }                    
+                }
+                
                 model = new Workday_Activity_Facilitator3ViewModel
                 {
                     IdWorkday = id,
@@ -906,9 +921,10 @@ namespace KyoS.Web.Controllers
                     Topics3 = list3,
                     Activities3 = null,
 
-                    IdTopic4 = 0,
+                    IdTopic4 = (noTheme == null) ? 0 : noTheme.Id,
                     Topics4 = list4,
-                    Activities4 = null,
+                    Activities4 = (noTheme == null) ? null : activitiesSLI,
+                    IdActivity4 = 0,
 
                     AM = true,
                     PM = true
@@ -1033,8 +1049,7 @@ namespace KyoS.Web.Controllers
                         PM = activities_list.ElementAtOrDefault(0).PM,
                         TitleNote = activities_list.ElementAtOrDefault(0).TitleNote
                     };
-                }
-                
+                }                
             }
 
             return View(model);
@@ -1052,15 +1067,7 @@ namespace KyoS.Web.Controllers
                     
                     return RedirectToAction("CreateActivitiesWeek","Activities", new { id = model.IdWorkday});
                 }
-                //The user must select at least one skill adressed per theme 
-                if ((!model.activityDailyLiving1 && !model.communityResources1 && !model.copingSkills1 && !model.diseaseManagement1 && !model.healthyLiving1 && !model.lifeSkills1 && !model.relaxationTraining1 && !model.socialSkills1 && !model.stressManagement1)
-                    || (!model.activityDailyLiving2 && !model.communityResources2 && !model.copingSkills2 && !model.diseaseManagement2 && !model.healthyLiving2 && !model.lifeSkills2 && !model.relaxationTraining2 && !model.socialSkills2 && !model.stressManagement2)
-                    || (!model.activityDailyLiving3 && !model.communityResources3 && !model.copingSkills3 && !model.diseaseManagement3 && !model.healthyLiving3 && !model.lifeSkills3 && !model.relaxationTraining3 && !model.socialSkills3 && !model.stressManagement3)
-                    || (!model.activityDailyLiving4 && !model.communityResources4 && !model.copingSkills4 && !model.diseaseManagement4 && !model.healthyLiving4 && !model.lifeSkills4 && !model.relaxationTraining4 && !model.socialSkills4 && !model.stressManagement4))
-                {
-                    return RedirectToAction(nameof(CreateActivitiesWeek3), new { id = model.IdWorkday, error = 1 });
-                }
-
+                
                 FacilitatorEntity facilitator_logged = await _context.Facilitators
 
                                                                      .Include(f => f.Clinic)
