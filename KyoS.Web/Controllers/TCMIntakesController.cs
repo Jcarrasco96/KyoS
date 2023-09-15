@@ -59,7 +59,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                if (User.IsInRole("Manager"))
                 {
                     List<TCMClientEntity> tcmClient = await _context.TCMClient
                                                                     .Include(n => n.TCMIntakeForm)
@@ -86,6 +86,47 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.Casemanager)
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                                        && n.Status == status))
+                                                                    .ToListAsync();
+
+                    if (status == StatusType.Open)
+                    {
+                        ViewData["open"] = "0";
+                    }
+                    else
+                    {
+                        ViewData["open"] = "1";
+                    }
+
+                    return View(tcmClient);
+                }
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                    .Include(n => n.TCMIntakeForm)
+                                                                    .Include(n => n.TcmIntakeConsentForTreatment)
+                                                                    .Include(n => n.TcmIntakeConsentForRelease)
+                                                                    .Include(n => n.TcmIntakeConsumerRights)
+                                                                    .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                                    .Include(n => n.TCMIntakeOrientationChecklist)
+                                                                    .Include(n => n.TCMIntakeAdvancedDirective)
+                                                                    .Include(n => n.TCMIntakeForeignLanguage)
+                                                                    .Include(n => n.TCMIntakeWelcome)
+                                                                    .Include(n => n.Client)
+                                                                    .ThenInclude(n => n.Clinic)
+                                                                    .Include(n => n.Client.IntakeFeeAgreement)
+                                                                    .Include(n => n.Client.IntakeMedicalHistory)
+                                                                    .Include(n => n.Client.MedicationList)
+                                                                    .Include(n => n.TCMIntakeNonClinicalLog)
+                                                                    .Include(n => n.TCMIntakeMiniMental)
+                                                                    .Include(n => n.TCMIntakeCoordinationCare)
+                                                                    .Include(n => n.TcmServicePlan)
+                                                                    .Include(n => n.TcmInterventionLog)
+                                                                    .Include(n => n.TCMFarsFormList)
+                                                                    .Include(n => n.TCMNote)
+                                                                    .Include(n => n.Casemanager)
+                                                                    .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                              && n.Status == status
+                                                                              && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
                                                                     .ToListAsync();
 
                     if (status == StatusType.Open)

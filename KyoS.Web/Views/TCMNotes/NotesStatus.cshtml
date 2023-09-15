@@ -87,8 +87,11 @@
                             <th class="col-md-1">
 
                             </th>
-                            <th class="col-md-3">
-                                TCM Client
+                            <th class="col-md-2">
+                                Client Name
+                            </th>
+                            <th class="col-md-2">
+                                TCM Name
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Date
@@ -102,7 +105,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Review
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Note Status
                             </th>
                             <th class="col-md-2" align="right">
@@ -181,6 +184,9 @@
                                         @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
                                         |
                                         @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfService)
@@ -391,6 +397,9 @@
                                         @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
                                         |
                                         @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfService)
