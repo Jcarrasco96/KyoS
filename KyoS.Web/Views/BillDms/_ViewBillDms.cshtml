@@ -122,29 +122,34 @@
                                         }
                                         else
                                         {
-                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                            @if (item.BillDmsPaids.Count() > 0)
                                             {
-                                                <span class="label label-warning">
-                                                     @item.DateBillPayment.ToShortDateString()
-                                                </span>
+                                                @if (item.BillDmsPaids.Sum(n => n.Amount) < item.Amount)
+                                                {
+                                                    <span class="label label-info">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
+                                                }
                                             }
                                             else
                                             {
                                                 @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
                                                 {
                                                     <span class="label label-info">
-                                                       @item.DateBillPayment.ToShortDateString()
+                                                        @item.DateBillPayment.ToShortDateString()
                                                     </span>
                                                 }
-                                                else
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
                                                 {
-                                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
-                                                    {
-                                                        <span class="label label-success">
-                                                           @item.DateBillPayment.ToShortDateString()
-                                                        </span>
-                                                    }
-
+                                                    <span class="label label-warning">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
                                                 }
                                             }
                                         }

@@ -17,18 +17,28 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="col-md-5 form-group">
+        <div class="col-md-3 form-group">
             &nbsp;
         </div>
-        <div class="col-md-2 form-group">
+        <div class="col-md-6 form-group" align="center">
             @if (Model.FinishEdition == false)
             {
                 <br />
+                @if (Model.BillDmsDetails.Where(n => n.MedicaidBill == false).Count() > 0)
+                {
+                    <a asp-action="UnbilledNotesToPendingPayments" asp-route-id="@Model.Id" class="btn btn-info">Unbilled Notes to Pending Payments</a>
+                }
+                else
+                {
+                    <a asp-action="UnbilledNotesToPendingPayments" asp-route-id="@Model.Id" class="btn btn-info disabled">Unbilled Notes to Pending Payments</a>
+                }
                 <a asp-action="FinishEdition" asp-route-idBill="@Model.Id" class="btn btn-default">Finish editing billing for this period</a>
+
             }
             else
             {
                 <br />
+                <a asp-action="UnbilledNotesToPendingPayments" asp-route-id="@Model.Id" class="btn btn-info disabled">Unbilled Notes to Pending Payments</a>
                 <a asp-action="FinishEdition" asp-route-idBill="@Model.Id" class="btn btn-default disabled">Finish editing billing for this period</a>
             }
             @*<a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-success"><i class="icon-dollar"></i> Generate Next Bill for this period</a>*@
@@ -71,13 +81,13 @@
         <div class="col-md-2">
             <div class="thumbnail list-group-item list-group-item-success">
                 <p style="text-align:center">Estimated Income</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Amount</h4>
+                <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
             </div>
         </div>
         <div class="col-md-1">
             <div class="thumbnail list-group-item list-group-item-danger">
                 <p style="text-align:center">Pending</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.Different</h4>
+                <h4 style="text-align:center; font-weight:bold;">$ @Model.Different</h4>
             </div>
         </div>
         <div class="col-md-3">
@@ -114,11 +124,14 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Amount
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Status
+                            <th class="col-md-1" style="text-align:center;">
+                                Billed
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Paid
+                                DMS Paid
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paid Date
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -132,7 +145,7 @@
                                     @item.NameClient
                                 </td>
                                 <td align="center">
-                                    @item.DateService
+                                    @item.DateService.ToShortDateString()
                                 </td>
                                 <td align="center">
                                     @item.ServiceAgency
@@ -142,6 +155,20 @@
                                 </td>
                                 <td align="center">
                                     @item.Amount
+                                </td>
+                                <td align="center">
+                                    @if (item.MedicaidBill == false)
+                                    {
+                                        <span class="label label-danger">
+                                            Not Billed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success">
+                                            Billed
+                                        </span>
+                                    }
                                 </td>
                                 <td align="center">
                                     @item.StatusBill

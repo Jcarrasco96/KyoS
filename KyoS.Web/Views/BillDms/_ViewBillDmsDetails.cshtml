@@ -26,11 +26,8 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Amount
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Status
-                            </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Paid
+                                Billed
                             </th>
                         </tr>
                     </thead>
@@ -53,7 +50,7 @@
                                 <td align="center">
                                     @item.Amount
                                 </td>
-                                <td align="center">
+                                @*<td align="center">
                                     @item.StatusBill
                                 </td>
                                 <td align="center">
@@ -64,6 +61,20 @@
                                     else
                                     {
                                         @item.PaidDate.ToShortDateString()
+                                    }
+                                </td>*@
+                                <td align="center">
+                                    @if (item.MedicaidBill == false)
+                                    {
+                                         <span class="label label-danger">
+                                                Not Billed
+                                         </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success">
+                                            Billed
+                                        </span>
                                     }
                                 </td>
                             </tr>

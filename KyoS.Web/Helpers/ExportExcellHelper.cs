@@ -1534,32 +1534,62 @@ namespace KyoS.Web.Helpers
                 amount = 0;
                 worksheet.ColumnsUsed().AdjustToContents();
 
-                worksheet.Cell(currentRow, 1).Value = "(* Units Medicaid codes)";
+                worksheet.Cell(currentRow, 1).Value = "(* Units to be invoiced)";
                 worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                 worksheet.Cell(currentRow, 2).Value = "CMH";
                 worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.CMH).Count();
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.CMH && n.StatusBill != Common.Enums.StatusBill.Pending).Count();
                 worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH && m.StatusBill != Common.Enums.StatusBill.Pending).Sum(n => n.Unit);
                 worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 5).Value = "0.20";
                 worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH && m.StatusBill != Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
                 worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right ;
 
                 currentRow++;
 
-                worksheet.Cell(currentRow, 1).Value = "(* Units Medicaid codes)";
+                worksheet.Cell(currentRow, 1).Value = "(* Units pending to be invoiced)";
                 worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                worksheet.Cell(currentRow, 2).Value = "TCM";
+                worksheet.Cell(currentRow, 2).Value = "CMH";
                 worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.TCM).Count();
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.CMH && n.StatusBill == Common.Enums.StatusBill.Pending).Count();
                 worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH && m.StatusBill == Common.Enums.StatusBill.Pending).Sum(n => n.Unit);
                 worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 5).Value = "0.20";
                 worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.CMH && m.StatusBill == Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                currentRow++;
+
+                worksheet.Cell(currentRow, 1).Value = "(* Units to be invoiced)";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "TCM";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.TCM && n.StatusBill != Common.Enums.StatusBill.Pending).Count();
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM && m.StatusBill != Common.Enums.StatusBill.Pending).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "0.20";
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM && m.StatusBill != Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                currentRow++;
+
+                worksheet.Cell(currentRow, 1).Value = "(* Units pending to be invoiced)";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "TCM";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = billDms.BillDmsDetails.Where(n => n.ServiceAgency == Common.Enums.ServiceAgency.TCM && n.StatusBill == Common.Enums.StatusBill.Pending).Count();
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM && m.StatusBill == Common.Enums.StatusBill.Pending).Sum(n => n.Unit);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "0.20";
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(m => m.ServiceAgency == Common.Enums.ServiceAgency.TCM && m.StatusBill == Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
                 worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
 
                 IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 6).Address);
@@ -1649,6 +1679,7 @@ namespace KyoS.Web.Helpers
                 range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range111.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range111.Merge();
+
                 //-----------------------------------------------
 
                 worksheet = workbook.Worksheets.Add("Invoice Details");
@@ -1667,7 +1698,6 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell("A4").Value = Periodo;
                 worksheet.Cell("A4").Style.Font.FontColor = XLColor.Black;
                
-
                 currentRow = 5;
                 worksheet.Cell(currentRow, 1).Value = "Client Name";
                 worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
@@ -1679,24 +1709,32 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 5).Value = "Amount";
                 worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-
+                worksheet.Cell(currentRow, 6).Value = "Amount";
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
 
                 worksheet.Style.Font.Bold = true;
-                IXLRange range = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 5).Address);
+                IXLRange range = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 6).Address);
                 range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range.SetAutoFilter();
                 currentRow++;
 
                 //Totales
                 worksheet.Cell(currentRow, 1).Value = "CLients (" + billDms.BillDmsDetails.GroupBy(n => n.NameClient).Count() + ")";
-                worksheet.Cell(currentRow, 2).Value = "";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Notes (" + billDms.BillDmsDetails.Count() +")";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 3).Value = "Services (" + billDms.BillDmsDetails.GroupBy(n => n.ServiceAgency).Count() + ")";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 4).Value = "Units (" + billDms.BillDmsDetails.Sum(n => n.Unit) + ")";
-                worksheet.Cell(currentRow, 5).Value = "$ " + billDms.BillDmsDetails.Sum(n => n.Amount);
-                
-                IXLRange rangeTotal = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 5).Address);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "$ " + billDms.BillDmsDetails.Where(n => n.StatusBill == Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 6).Value = "$ " + billDms.BillDmsDetails.Where(n => n.StatusBill != Common.Enums.StatusBill.Pending).Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange rangeTotal = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 6).Address);
                 rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
-                rangeTotal.Style.Font.FontSize = 14;
+                rangeTotal.Style.Font.FontSize = 12;
                 range.Style.Font.Bold = true;
                 currentRow++;
 
@@ -1711,10 +1749,24 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(currentRow, 4).Value = item.Unit;
                     worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    worksheet.Cell(currentRow, 5).Value = "$ " + item.Amount;
-                    worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                    if (item.StatusBill == Common.Enums.StatusBill.Pending)
+                    {
+                        worksheet.Cell(currentRow, 5).Value = "$ " + item.Amount;
+                        worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                        worksheet.Cell(currentRow, 5).Style.Font.FontColor = XLColor.Red;
+                        worksheet.Cell(currentRow, 6).Value = "$ 0.00" ;
+                        worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                    }
+                    else
+                    {
+                        worksheet.Cell(currentRow, 5).Value = "$ 0.00";
+                        worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                        worksheet.Cell(currentRow, 6).Value = "$ " + item.Amount;
+                        worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                    }
+                    
 
-                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 5).Address);
+                    IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 6).Address);
                     rangeCurrent.Style.Font.FontSize = 11;
                     rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     rangeCurrent.Style.Font.Bold = false;
@@ -1723,23 +1775,23 @@ namespace KyoS.Web.Helpers
 
                 worksheet.ColumnsUsed().AdjustToContents();
 
-                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 5).Address);
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 6).Address);
                 range1.Style.Font.FontSize = 20;
                 range1.Style.Font.Bold = true;
                 range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range1.Merge();
-                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 5).Address);
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 6).Address);
                 range2.Style.Font.FontSize = 16;
                 range2.Style.Font.Bold = true;
                 range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range2.Merge();
-                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 5).Address);
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 6).Address);
                 range3.Style.Font.FontSize = 14;
                 range3.Style.Font.Bold = false;
                 range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
                 range3.Merge();
-                IXLRange range4 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 5).Address);
+                IXLRange range4 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 6).Address);
                 range4.Style.Font.FontSize = 14;
                 range4.Style.Font.Bold = false;
                 range4.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
