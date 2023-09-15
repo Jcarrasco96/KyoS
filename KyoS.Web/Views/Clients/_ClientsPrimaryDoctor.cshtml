@@ -1,0 +1,110 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="IdDoctor" class="control-label"></label>
+        <select asp-for="IdDoctor" asp-items="Model.Doctors" class="form-control" id="cbPD"></select>
+        <span asp-validation-for="IdDoctor" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-12">
+    <input type="checkbox" class="form-check-input" id="chkNewPD">
+    <label class="control-label">New</label>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="NamePrimaryDoctor" class="control-label">Name Primary Doctor</label>&nbsp;*
+        <input asp-for="NamePrimaryDoctor" class="form-control" disabled id="namePD"/>
+        <span asp-validation-for="NamePrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="AddressPrimaryDoctor" class="control-label">Address</label>
+        <input asp-for="AddressPrimaryDoctor" class="form-control" disabled id="addressPD"/>
+        <span asp-validation-for="AddressPrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CityPrimaryDoctor" class="control-label">City</label>
+        <input asp-for="CityPrimaryDoctor" class="form-control" disabled id="cityPD"/>
+        <span asp-validation-for="CityPrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="StatePrimaryDoctor" class="control-label">State</label>
+        <input asp-for="StatePrimaryDoctor" class="form-control" disabled id="statePD"/>
+        <span asp-validation-for="StatePrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="ZipCodePrimaryDoctor" class="control-label">Zip Code</label>
+        <input asp-for="ZipCodePrimaryDoctor" class="form-control" disabled id="zipPD"/>
+        <span asp-validation-for="ZipCodePrimaryDoctor" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="PhonePrimaryDoctor" class="control-label">Telephone</label>
+        <input asp-for="PhonePrimaryDoctor" class="form-control" disabled id="phonePD" />
+        <span asp-validation-for="PhonePrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="FaxNumberPrimaryDoctor" class="control-label">Fax Number</label>
+        <input asp-for="FaxNumberPrimaryDoctor" class="form-control" disabled id="faxPD" />
+        <span asp-validation-for="FaxNumberPrimaryDoctor" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="EmailPrimaryDoctor" class="control-label">Email</label>
+        <input asp-for="EmailPrimaryDoctor" class="form-control" disabled id="emailPD" />
+        <span asp-validation-for="EmailPrimaryDoctor" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    chkNewPD.addEventListener('change', (e) => {
+        if (chkNewPD.checked == true)
+        {
+            $("#cbPD").prop('selectedIndex', 0);
+            $("#cbPD").prop('disabled', true);
+            //$("#cbREC").prop('selectedIndex', 0);
+            //$("#cbREC").prop('disabled', true);
+
+            $("#namePD").prop('disabled', false);
+            $("#addressPD").prop('disabled', false);
+            $("#cityPD").prop('disabled', false);
+            $("#statePD").prop('disabled', false);
+            $("#zipPD").prop('disabled', false);
+            $("#phonePD").prop('disabled', false);
+            $("#faxPD").prop('disabled', false);
+            $("#emailPD").prop('disabled', false);
+            $("#namePD").focus();
+        }
+        else
+        {
+            $("#cbPD").prop('disabled', false);
+            /*$("#cbREC").prop('disabled', false);*/
+
+            $("#namePD").val("");
+            $("#namePD").prop('disabled', true);
+            $("#addressPD").val("");
+            $("#addressPD").prop('disabled', true);
+            $("#cityPD").val("");
+            $("#cityPD").prop('disabled', true);
+            $("#statePD").val("");
+            $("#statePD").prop('disabled', true);
+            $("#zipPD").val("");
+            $("#zipPD").prop('disabled', true);
+            $("#phonePD").val("");
+            $("#phonePD").prop('disabled', true);
+            $("#faxPD").val("");
+            $("#faxPD").prop('disabled', true);
+            $("#emailPD").val("");
+            $("#emailPD").prop('disabled', true);
+        }
+    })
+</script>

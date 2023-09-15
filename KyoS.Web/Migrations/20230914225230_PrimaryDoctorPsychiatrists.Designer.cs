@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230914225230_PrimaryDoctorPsychiatrists")]
+    partial class PrimaryDoctorPsychiatrists
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,8 +312,8 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Appetite")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApproximateDateReport")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ApproximateDateReport")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ApproximateDateReport_Where")
                         .HasColumnType("nvarchar(max)");
@@ -358,8 +360,8 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DateAbuse")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateAbuse")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateBio")
                         .HasColumnType("datetime2");
@@ -502,7 +504,7 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("IDAH0031HO")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("If6_Date")
+                    b.Property<DateTime>("If6_Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("If6_ReferredTo")

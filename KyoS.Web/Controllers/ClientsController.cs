@@ -268,6 +268,71 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
 
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychistrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Psychiatrist = Psychistrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+
                 //-------Legal Guardian Contact--------------------------//
                 if (clientViewModel.IdLegalGuardian == 0)
                 {
@@ -300,7 +365,7 @@ namespace KyoS.Web.Controllers
                     }
                 }
 
-                _context.Add(clientEntity);
+               // _context.Add(clientEntity);
 
 
                 //-------Emergency Contact--------------------------//
@@ -605,6 +670,77 @@ namespace KyoS.Web.Controllers
                 {
                     _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
                     _context.Entry(clientEntity).Reference("Group").IsModified = true;
+                }
+
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(PrimaryDoctor);
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
+                }
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(Psychiatrists);
+                        clientEntity.Psychiatrist = Psychiatrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
                 }
 
                 //-------Legal Guardian--------------------------//

@@ -1091,7 +1091,11 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode
             };
         }
 
@@ -1200,8 +1204,13 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 Telephone = model.Telephone,
                 Email = model.Email,
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn
+
             };
         }
 
