@@ -1184,13 +1184,13 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboServicesNotUsed(int idServicePlan)
         {
             List<TCMServiceEntity> Services_Total = _context.TCMServices
-                                                                     .Include(n => n.Stages)
-                                                                     .OrderBy(n => n.Code)
-                                                                     .ToList();
+                                                            .Include(n => n.Stages)
+                                                            .OrderBy(n => n.Code)
+                                                            .ToList();
             List<TCMDomainEntity> Services_Domain = _context.TCMDomains
-                                                    .Include(d => d.TcmServicePlan)
-                                                 .Where(d => d.TcmServicePlan.Id == idServicePlan)
-                                                 .ToList();
+                                                            .Include(d => d.TcmServicePlan)
+                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                            .ToList();
             TCMServiceEntity Service = null;
 
             foreach (var item in Services_Domain)
@@ -2204,5 +2204,99 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboServicesAssessment(int idServicePlan)
+        {
+            TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.TcmServicePlan.Id == idServicePlan);
+
+            List<TCMServiceEntity> Services = _context.TCMServices
+                                                      .Include(n => n.Stages)
+                                                      .OrderBy(n => n.Code)
+                                                      .ToList();
+            List<TCMServiceEntity> Services_Total = new List<TCMServiceEntity>();
+
+            if (assessment.RecommendedMentalHealth == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("01")));
+            }
+            if (assessment.RecommendedPhysicalHealth == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("02")));
+            }
+            if (assessment.RecommendedVocation == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("03")));
+            }
+            if (assessment.RecommendedSchool == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("04")));
+            }
+            if (assessment.RecommendedRecreational == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("05")));
+            }
+            if (assessment.RecommendedActivities == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("06")));
+            }
+            if (assessment.RecommendedHousing == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("07")));
+            }
+            if (assessment.RecommendedEconomic == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("08")));
+            }
+            if (assessment.RecommendedBasicNeed == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("09")));
+            }
+            if (assessment.RecommendedTransportation == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("10")));
+            }
+            if (assessment.RecommendedLegalImmigration == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("11")));
+            }
+            if (assessment.RecommendedOther == true)
+            {
+                Services_Total.AddRange(Services.Where(n => n.Code.Contains("12")));
+            }
+
+            List<TCMDomainEntity> Services_Domain = _context.TCMDomains
+                                                            .Include(d => d.TcmServicePlan)
+                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                            .ToList();
+            TCMServiceEntity Service = null;
+
+            foreach (var item in Services_Domain)
+            {
+                if (item.TcmServicePlan != null)
+                {
+                    if (Services_Total.Exists(c => c.Code == item.Code))
+                    {
+                        Service = _context.TCMServices.FirstOrDefault(n => n.Code == item.Code);
+                        Services_Total.Remove(Service);
+                    }
+                }
+            }
+
+            List<SelectListItem> list = Services_Total.Select(c => new SelectListItem
+            {
+                Text = $"{c.Code + "-" + c.Name}",
+                Value = $"{c.Id}"
+            })
+                                                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select service...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }

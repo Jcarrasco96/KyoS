@@ -768,6 +768,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("Index", "DeskTop");
                     }
+                    if (origi == 4)
+                    {
+                        return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 0});
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -2388,6 +2392,7 @@ namespace KyoS.Web.Controllers
                                                                                  && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
                                                                         .ToListAsync();
+                ViewData["approved"] = approved;
 
                 return View(tcmAssessment);
             }
@@ -2404,6 +2409,7 @@ namespace KyoS.Web.Controllers
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
                                                                         .ToListAsync();
 
+                ViewData["approved"] = approved;
                 return View(tcmAssessment);
             }
 
@@ -2418,6 +2424,7 @@ namespace KyoS.Web.Controllers
                                                                              && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
                                                                          .OrderBy(m => m.TcmClient.CaseNumber)
                                                                          .ToListAsync();
+                ViewData["approved"] = approved;
                 return View(tcmAssessment);
 
             }

@@ -744,7 +744,8 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public IActionResult CreateDomain(int id = 0, int origin = 0, int aview = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(u => u.TcmClient)
                                                           .ThenInclude(u => u.Client)
                                                           .FirstOrDefault(u => u.Id == id);
             TCMDomainViewModel model = null; 
@@ -759,7 +760,7 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
 
-                        IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id);
+                        IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesAssessment(tcmServicePlan.Id);
 
                         model = new TCMDomainViewModel
                         {

@@ -1126,6 +1126,7 @@ namespace KyoS.Web.Controllers
                         PhoneNo = "",
                         FaxNo = "",
                         ConsentType = ConsentType.HURRICANE,
+                        ConsentList = _combosHelper.GetComboConsentType(),
                         OtherPurposeRequest = string.Empty,
                         OtherAutorizedInformation = string.Empty
                     };
