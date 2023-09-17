@@ -2833,7 +2833,7 @@ namespace KyoS.Web.Controllers
                     Objetives2 = objs,                    
 
                     Workday_Cient = workday_Client,
-                    Setting = "53"
+                    Setting = "10"
                 };
             }
             else
@@ -3385,7 +3385,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Schema = workday_Client.Client.Clinic.SchemaGroup,
                     Workday_Client_FK = workday_Client.Id,
-                    Setting = "53"
+                    Setting = "10"
                     
                 };
             }
@@ -3957,7 +3957,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
-                    Setting = "53",
+                    Setting = "10",
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
