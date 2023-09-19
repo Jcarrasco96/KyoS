@@ -160,7 +160,14 @@ namespace KyoS.Web.Controllers
                             Value = $"{c.Id}"
                         })
                             .ToList();
-
+                        string strendths = string.Empty;
+                        string weakness = string.Empty;
+                        TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == id);
+                        if (assessment != null)
+                        {
+                            strendths = assessment.ListClientCurrentPotencialStrngths;
+                            weakness = assessment.ListClientCurrentPotencialWeakness;
+                        }
                         model = new TCMServicePlanViewModel
                         {
                             ID_TcmClient = id,
@@ -175,7 +182,9 @@ namespace KyoS.Web.Controllers
                             DateServicePlan = DateTime.Now.Date,
                             DateIntake = DateTime.Now.Date,
                             DateAssessment = DateTime.Now.Date,
-                            DateCertification = DateTime.Now.Date
+                            DateCertification = DateTime.Now.Date,
+                            Strengths = strendths,
+                            Weakness = weakness
 
                         };
                         ViewData["origin"] = origin;
@@ -1529,6 +1538,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(u => u.TcmServicePlan)
                                                               .ThenInclude(g => g.TcmClient)
                                                               .ThenInclude(g => g.Client)
+                                                              .Include(u => u.TcmDomain)
                                                               .FirstOrDefaultAsync(s => s.Id == id);
             if (tcmadendumEntity == null)
             {

@@ -42,13 +42,13 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             if (user_logged.UserType.ToString() == "CaseManager")
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
-                {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }
-
                 CaseMannagerEntity caseManager = await _context.CaseManagers
                                                                .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
 
@@ -60,16 +60,26 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
-            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
+            if (user_logged.UserType.ToString() == "Manager" )
             {
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
-                {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }
+              
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
                                                                  .Include(g => g.Casemanager)
                                                                  .Include(g => g.Client)
                                                                  .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                 .OrderBy(g => g.Casemanager.Name)
+                                                                 .ToListAsync();
+                return View(tcmClient);
+            }
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                 .Include(g => g.Casemanager)
+                                                                 .Include(g => g.Client)
+                                                                 .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                 && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                                                  .OrderBy(g => g.Casemanager.Name)
                                                                  .ToListAsync();
                 return View(tcmClient);

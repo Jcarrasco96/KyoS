@@ -366,11 +366,19 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) && t.ApprovedDate <= Convert.ToDateTime(date[1])));
 
-                        if (idCaseManager != 0)
-                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+                        if (User.IsInRole("CaseManager"))
+                        {
+                            CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == casemanager.Id);
+                        }
+                        else
+                        {
+                            if (idCaseManager != 0)
+                                query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
 
-                        if (idClient != 0)
-                            query = query.Where(t => t.TCMClient.Id == idClient);
+                            if (idClient != 0)
+                                query = query.Where(t => t.TCMClient.Id == idClient);
+                        }
 
                         try
                         {
@@ -432,18 +440,26 @@ namespace KyoS.Web.Controllers
                                                                   .ThenInclude(cl => cl.Clients_HealthInsurances)
                                                                   .ThenInclude(cd => cd.HealthInsurance)
 
-                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(t => t.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate == null));
 
-                        if (idCaseManager != 0)
-                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+                        if (User.IsInRole("CaseManager"))
+                        {
+                            query = query.Where(t => t.TCMClient.Casemanager.LinkedUser == user_logged.UserName);
+                        }
+                        else
+                        {
+                            if (idCaseManager != 0)
+                                query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
 
-                        if (idClient != 0)
-                            query = query.Where(t => t.TCMClient.Id == idClient);
+                            if (idClient != 0)
+                                query = query.Where(t => t.TCMClient.Id == idClient);
+                        }
 
                         try
                         {
@@ -512,11 +528,20 @@ namespace KyoS.Web.Controllers
                                                                                 && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                                 && t.BilledDate != null));
 
-                        if (idCaseManager != 0)
-                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+                        if (User.IsInRole("CaseManager"))
+                        {
+                            CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == casemanager.Id);
+                        }
+                        else
+                        {
+                            if (idCaseManager != 0)
+                                query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
 
-                        if (idClient != 0)
-                            query = query.Where(t => t.TCMClient.Id == idClient);
+                            if (idClient != 0)
+                                query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        }
 
                         try
                         {
@@ -586,13 +611,22 @@ namespace KyoS.Web.Controllers
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
                                                                             && t.PaymentDate == null));
+
+                        if (User.IsInRole("CaseManager"))
+                        {
+                            CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == casemanager.Id);
+                        }
+                        else
+                        {
+                            if (idCaseManager != 0)
+                                query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                            if (idClient != 0)
+                                query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        }
                         
-                        if (idCaseManager != 0)
-                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
-
-                        if (idClient != 0)
-                            query = query.Where(t => t.TCMClient.Id == idClient);
-
                         try
                         {
                             list = query.ToList();

@@ -11,6 +11,7 @@ namespace KyoS.Web.Models
 {
     public class TCMAdendumViewModel : TCMAdendumEntity
     {
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime Date_Identified { get; set; }
 
