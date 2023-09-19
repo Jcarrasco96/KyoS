@@ -3405,7 +3405,16 @@ namespace KyoS.Web.Controllers
                             IsAwaiting = false,
                             IsExperiencing = false,
                             SupervisorSignatureDate = DateTime.Now,
-                            TcmSupervisor = new TCMSupervisorEntity()
+                            TcmSupervisor = new TCMSupervisorEntity(),
+                            HasAMental2 = true,
+                            HasAMental6 = true,
+                            HasRecolated = true,
+                            IsEnrolled = true,
+                            IsNotReceiving = true,
+                            Lacks = true,
+                            Meets = true,
+                            RequiresOngoing = true,
+                            RequiresServices = true
 
                         };
                         ViewData["origi"] = origi;

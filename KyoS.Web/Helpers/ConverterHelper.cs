@@ -4515,7 +4515,16 @@ namespace KyoS.Web.Helpers
                 IsExperiencing = model.IsExperiencing,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
-                TcmSupervisor = model.TcmSupervisor
+                TcmSupervisor = model.TcmSupervisor,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
             return salida;
@@ -4542,7 +4551,16 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
         }
