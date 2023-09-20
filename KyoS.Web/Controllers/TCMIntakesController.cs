@@ -205,6 +205,7 @@ namespace KyoS.Web.Controllers
                                                 .Include(n => n.Client.Doctor)
                                                 .Include(n => n.Client.Psychiatrist)
                                                 .Include(n => n.TCMIntakeCoordinationCare)
+                                                .Include(n => n.Casemanager)
                                                 .FirstOrDefault(n => n.Id == id);
             if (tcmClient.Client.Doctor == null)
                 tcmClient.Client.Doctor = new DoctorEntity();
@@ -324,18 +325,19 @@ namespace KyoS.Web.Controllers
                 IdTCMClient = id,
                 TcmClient_FK = id,
                 TcmClient = _context.TCMClient
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_Diagnostics)
-                                            .ThenInclude(m => m.Diagnostic)
-                                            .Include(m => m.Client)
-                                            .ThenInclude(m => m.Clients_HealthInsurances.Where(m => m.Active == true))
-                                            .ThenInclude(m => m.HealthInsurance)
-                                            .Include(m => m.Client.LegalGuardian)
-                                            .Include(n => n.Client.EmergencyContact)
-                                            .Include(n => n.Client.Client_Referred)
-                                            .Include(n => n.Client.Doctor)
-                                            .Include(n => n.Client.Psychiatrist)
-                                            .FirstOrDefault(n => n.Id == id),
+                                    .Include(m => m.Client)
+                                    .ThenInclude(m => m.Clients_Diagnostics)
+                                    .ThenInclude(m => m.Diagnostic)
+                                    .Include(m => m.Client)
+                                    .ThenInclude(m => m.Clients_HealthInsurances.Where(m => m.Active == true))
+                                    .ThenInclude(m => m.HealthInsurance)
+                                    .Include(m => m.Client.LegalGuardian)
+                                    .Include(n => n.Client.EmergencyContact)
+                                    .Include(n => n.Client.Client_Referred)
+                                    .Include(n => n.Client.Doctor)
+                                    .Include(n => n.Client.Psychiatrist)
+                                    .Include(n => n.Casemanager)
+                                    .FirstOrDefault(n => n.Id == id),
                 Agency = "",
                 CaseManagerNotes = "",
                 Elibigility = "",
@@ -715,6 +717,7 @@ namespace KyoS.Web.Controllers
                                                  .Include(n => n.TcmClient.Client.Client_Referred)
                                                  .Include(n => n.TcmClient.Client.Doctor)
                                                  .Include(n => n.TcmClient.Client.Psychiatrist)
+                                                 .Include(n => n.TcmClient.Casemanager)
                                                  .FirstOrDefault(i => i.TcmClient.Id == id);
             if (entity == null)
             {

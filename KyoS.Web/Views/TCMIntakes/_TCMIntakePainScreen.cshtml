@@ -43,11 +43,16 @@
     </div>
 
     <div class="col-md-12">
-    <pre>
-    
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    
-                                                                
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
+        <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    <input asp-for="DateSignatureEmployee">
     </pre>
     </div>
     <div class="col-md-12">
@@ -87,8 +92,8 @@ else
     </div>
     <div class="col-md-12">
     <pre>  
-    Duration of pain?      <input type="checkbox" asp-for="AlwayasThere" disabled class="form-check-input" />  Always There    <input type="checkbox" asp-for="AlwayasThere" disabled class="form-check-input" />  Comes and Goes
-        <strong>Current Pain Score: ( 0-­ no pain, 5-­ moderate pain, 10-­ severe pain ) </strong>  <input asp-for="CurrentPainScore">
+    Duration of pain?      <input type="checkbox" asp-for="AlwayasThere" disabled class="form-check-input" />  Always There    <input type="checkbox" asp-for="AlwayasThere" disabled class="form-check-input"/>  Comes and Goes
+        <strong>Current Pain Score: ( 0-­ no pain, 5-­ moderate pain, 10-­ severe pain ) </strong>  <input asp-for="CurrentPainScore" disabled>
         <span asp-validation-for="CurrentPainScore" class="text-danger"></span>
         <strong>Score Range</strong>                <strong>Assessment</strong>                           <strong>Plan</strong>
         0 - 4                     Low Risk               Reassess if other issues arise
@@ -99,11 +104,16 @@ else
     </div>
 
     <div class="col-md-12">
-    <pre>
-    
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    
-                                                                
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee" disabled>
+        <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    <input asp-for="DateSignatureEmployee" disabled>
     </pre>
     </div>    
     <br />
