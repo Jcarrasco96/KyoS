@@ -23,5 +23,8 @@ namespace KyoS.Web.Models
         public string PCP_Phone { get; set; }
         public string PCP_Address { get; set; }
         public string PCP_CityStateZip { get; set; }
+
+        public int IdYesNoNAWe { get; set; }
+        public IEnumerable<SelectListItem> YesNoNAs { get; set; }
     }
 }

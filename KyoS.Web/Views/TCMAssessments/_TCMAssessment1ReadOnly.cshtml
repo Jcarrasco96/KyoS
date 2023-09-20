@@ -46,7 +46,10 @@
 <div class="col-md-push-12">
     <div class="col-md-12">
         <pre>
-        *May we contact the non-custodial parent if necessary?  <input asp-for="MayWe" class="form-check-input" id="check5" disabled> Yes       <input type="checkbox" class="form-check-input" id="check105" disabled> No        <input asp-for="MayWeNA" class="form-check-input" disabled> N/A
+        <label asp-for="IdYesNoNAWe" class="control-label"></label>&nbsp;*
+        <select asp-for="IdYesNoNAWe" asp-items="Model.YesNoNAs" class="form-control"></select>
+        
+        *May we contact the non-custodial parent if necessary?  <input asp-for="MayWe" class="form-check-input" id="check5"> Yes       <input type="checkbox" class="form-check-input" id="check105"> No   
         </pre>
     </div>
 </div>

@@ -2298,5 +2298,17 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboYesNoNA()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = YesNoNA.Yes.ToString(), Value = "0"},
+                new SelectListItem { Text = YesNoNA.No.ToString(), Value = "1"},
+                new SelectListItem { Text = YesNoNA.NA.ToString(), Value = "2"}
+               
+            };
+
+            return list;
+        }
     }
 }
