@@ -10,6 +10,7 @@
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="IdMTPReview" />
             <input type="hidden" asp-for="IdMTPReviewOfView" />
+            <input type="hidden" asp-for="IdService" />
             <div class="container-fluid">
                 <h4 style="font-weight:bold;"> <span class="label label-info"> MTP - @Model.MTP.Client.Name </span></h4>
             </div>
@@ -47,7 +48,7 @@
                 <div>
                     <div class="col-md-6 form-group">
                         <label asp-for="Number" class="control-label"></label> &nbsp;
-                        <input asp-for="Number" class="form-control" readonly/>
+                        <input asp-for="Number" class="form-control" readonly />
                         <span asp-validation-for="Number" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-group">
@@ -66,7 +67,7 @@
                 <div>
                     <div class=" col-md-12 form-group">
                         <label asp-for="Name" class="control-label">Goal </label> <strong>@Model.Number</strong> &nbsp;
-                        <input asp-for="Name" class="form-control" id="name"/>
+                        <input asp-for="Name" class="form-control" id="name" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
@@ -97,7 +98,7 @@
                     {
                         <textarea asp-for="Compliment_Explain" class="form-control" rows="3" id="explain"></textarea>
                     }
-                    else 
+                    else
                     {
                         <textarea asp-for="Compliment_Explain" class="form-control" rows="3" id="explain" disabled></textarea>
                     }
@@ -106,7 +107,7 @@
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input onclick="GenderVerificationEGMRM()" type="submit" value="Save" class="btn btn-primary" id="save"/>
+                    <input onclick="GenderVerificationEGMRM()" type="submit" value="Save" class="btn btn-primary" id="save" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

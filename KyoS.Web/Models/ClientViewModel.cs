@@ -114,6 +114,42 @@ namespace KyoS.Web.Models
         public string CreateByEmergencyContact { get; set; }
         public DateTime CreateOnEmergencyContact { get; set; }
 
-        
+        //legalGardian
+        public string NameLegalGuardian { get; set; }
+        public string AddressLegalGuardian { get; set; }
+        public string EmailLegalGuardian { get; set; }
+        public string PhoneLegalGuardian { get; set; }
+        public string PhoneSecundaryLegalGuardian { get; set; }
+        public string AddressLine2LegalGuardian { get; set; }
+        public string CountryLegalGuardian { get; set; }
+        public string CityLegalGuardian { get; set; }
+        public string StateLegalGuardian { get; set; }
+        public string ZipCodeLegalGuardian { get; set; }
+        public string CreateByLegalGuardian { get; set; }
+        public DateTime CreateOnLegalGuardian { get; set; }
+
+        //PrimaryDoctor
+        public string NamePrimaryDoctor { get; set; }
+        public string AddressPrimaryDoctor { get; set; }
+        public string EmailPrimaryDoctor { get; set; }
+        public string PhonePrimaryDoctor { get; set; }
+        public string CityPrimaryDoctor { get; set; }
+        public string StatePrimaryDoctor { get; set; }
+        public string ZipCodePrimaryDoctor { get; set; }
+        public string FaxNumberPrimaryDoctor { get; set; }
+        public string CreateByPrimaryDoctor { get; set; }
+        public DateTime CreateOnPrimaryDoctor { get; set; }
+
+        //Psychiatrists
+        public string NamePsychiatrists { get; set; }
+        public string AddressPsychiatrists { get; set; }
+        public string EmailPsychiatrists { get; set; }
+        public string PhonePsychiatrists { get; set; }
+        public string CityPsychiatrists { get; set; }
+        public string StatePsychiatrists { get; set; }
+        public string ZipCodePsychiatrists { get; set; }
+        public string FaxNumberPsychiatrists { get; set; }
+        public string CreateByPsychiatrists { get; set; }
+        public DateTime CreateOnPsychiatrists { get; set; }
     }
 }

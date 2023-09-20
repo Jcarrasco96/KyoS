@@ -121,12 +121,7 @@
 @if (User.IsInRole("CaseManager"))
 {
     <div class="col-md-push-12">
-        <div class="form-group col-md-2">
-            <label asp-for="IntakeDate" class="control-label">Intake Date</label>
-            <input asp-for="IntakeDate" class="form-control">
-            <span asp-validation-for="IntakeDate" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
             <input asp-for="LegalGuardianName" class="form-control">
             <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
@@ -141,7 +136,7 @@
             <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control"></select>
             <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
             <input asp-for="LegalGuardianAddress" class="form-control">
             <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
@@ -409,18 +404,26 @@
             <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
         </div>
     </div>
+    <div class="col-md-12">
+        <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    <input asp-for="IntakeDate">
+    </pre>
+    </div>
 }
 else
 {
     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
     {
         <div class="col-md-push-12">
-            <div class="form-group col-md-2">
-                <label asp-for="IntakeDate" class="control-label">Intake Date</label>
-                <input asp-for="IntakeDate" class="form-control" readonly>
-                <span asp-validation-for="IntakeDate" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
                 <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
                 <input asp-for="LegalGuardianName" class="form-control" readonly>
                 <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
@@ -435,7 +438,7 @@ else
                 <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control" disabled></select>
                 <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
                 <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
                 <input asp-for="LegalGuardianAddress" class="form-control" readonly>
                 <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
@@ -702,6 +705,19 @@ else
                 <textarea asp-for="CaseManagerNotes" class="form-control" rows="2" readonly></textarea>
                 <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
+            <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    <input asp-for="IntakeDate" disabled>
+    </pre>
         </div>
     }
 }

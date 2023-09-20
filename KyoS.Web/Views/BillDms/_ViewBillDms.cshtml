@@ -36,7 +36,7 @@
                                 Detail Pending
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Status
+                                Paid Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Paid
@@ -115,35 +115,41 @@
                                     <td align="center">
                                         @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
                                         {
-                                            <span class="label label-default">
-                                               @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                            </span>
+                                            @if (item.DateBillPayment.ToShortDateString() == "01/01/0001")
+                                            {
+                                                <a> - </a>
+                                            }
                                         }
                                         else
                                         {
-                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                            @if (item.BillDmsPaids.Count() > 0)
                                             {
-                                                <span class="label label-warning">
-                                                    @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                                </span>
+                                                @if (item.BillDmsPaids.Sum(n => n.Amount) < item.Amount)
+                                                {
+                                                    <span class="label label-info">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
+                                                }
                                             }
                                             else
                                             {
                                                 @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
                                                 {
                                                     <span class="label label-info">
-                                                       @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                        @item.DateBillPayment.ToShortDateString()
                                                     </span>
                                                 }
-                                                else
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
                                                 {
-                                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
-                                                    {
-                                                        <span class="label label-success">
-                                                            @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                                        </span>
-                                                    }
-
+                                                    <span class="label label-warning">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
                                                 }
                                             }
                                         }
@@ -156,12 +162,12 @@
                                         {
                                             <a onclick="showInPopup('@Url.Action("AddPaid", "BillDms", new { id = @item.Id }, Context.Request.Scheme)','Add Paid')" class="btn btn-primary" title="Add Paid"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a asp-action="BillDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
-                                            <a asp-action="ExcellBillDms" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
+                                            <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
                                         }
                                         @if (User.IsInRole("Manager"))
                                         {
                                             <a asp-action="BillDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
-                                            <a asp-action="ExcellBillDms" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
+                                            <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -195,16 +201,17 @@
                                     <td align="center">
                                         @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
                                         {
-                                            <span class="label label-default">
-                                               @Html.DisplayFor(modelItem => item.DateBillPayment)
-                                            </span>
+                                            @if (item.DateBillPayment.ToShortDateString() == "01/01/0001")
+                                            {
+                                                <a> - </a>
+                                            }
                                         }
                                         else
                                         {
                                             @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
                                             {
                                                 <span class="label label-warning">
-                                                   @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                    @item.DateBillPayment.ToShortDateString()
                                                 </span>
                                             }
                                             else
@@ -212,7 +219,7 @@
                                                 @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
                                                 {
                                                     <span class="label label-info">
-                                                       @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                       @item.DateBillPayment.ToShortDateString()
                                                     </span>
                                                 }
                                                 else
@@ -220,7 +227,7 @@
                                                     @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
                                                     {
                                                         <span class="label label-success">
-                                                            @Html.DisplayFor(modelItem => item.DateBillPayment)
+                                                           @item.DateBillPayment.ToShortDateString()
                                                         </span>
                                                     }
 
@@ -236,12 +243,12 @@
                                         {
                                             <a onclick="showInPopup('@Url.Action("AddPaid", "BillDms", new { id = @item.Id }, Context.Request.Scheme)','Add Paid')" class="btn btn-primary" title="Add Paid"><i class="glyphicon glyphicon-plus "></i></a>
                                             <a asp-action="BillDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
-                                            <a asp-action="ExcellBillDms" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
+                                            <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
                                         }
                                         @if (User.IsInRole("Manager"))
                                         {
                                             <a asp-action="BillDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
-                                            <a asp-action="ExcellBillDms" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
+                                            <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
                                         }
                                     </td>
                                 </tr>

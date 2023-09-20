@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.Workday_Client>
+﻿@model IEnumerable<KyoS.Web.Models.Workday_ClientIndTherapyViewModel>
 @{
     ViewData["Title"] = "Not Started Individual Notes";
 }
@@ -26,6 +26,11 @@
         </strong>
     </div>
 }
+<div>
+    <a onclick="showInPopupLg('@Url.Action("AuditCites", "Cites", new {date = DateTime.Today }, Context.Request.Scheme)','Audit Appointments')" class="btn btn-danger" title="Audit Appointments"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Appointments</a>
+    <br />
+    &nbsp;
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -45,25 +50,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var day_client in Model.OrderBy(dc => dc.Workday.Date).OrderBy(dc => dc.Session))
+                        @foreach (var day_client in Model.OrderBy(dc => dc.workday_Client.Workday.Date).OrderBy(dc => dc.workday_Client.Session))
                         {
-                            @if (day_client.Present)
+                            @if (day_client.workday_Client.Present)
                             {
                                 <tr>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Workday.Date)
                                     </td>
                                     <td align="left">
-                                        @Html.DisplayFor(modelItem => day_client.Session)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Session)
                                     </td>
                                     <td>
-                                        @if (day_client.Client != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                        }
+                                        @day_client.NombreClient
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Present)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Present)
                                     </td>
                                     <td align="center">
                                         <span class="label label-danger">
@@ -71,8 +73,8 @@
                                         </span>
                                     </td>
                                     <td align="right">
-                                        <a asp-action="EditIndNote" asp-route-id="@day_client.Id" asp-route-origin="1" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                        <a asp-action="Present" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
+                                        <a asp-action="EditIndNote" asp-route-id="@day_client.workday_Client.Id" asp-route-origin="1" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a asp-action="Present" asp-route-id="@day_client.workday_Client.Id" asp-route-origin="3" class="btn btn-danger" title="Present or not present"><i class="glyphicon glyphicon-remove"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -80,19 +82,16 @@
                             {
                                 <tr style="color:darkgrey">
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Workday.Date)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Workday.Date)
                                     </td>
                                     <td align="left">
-                                        @Html.DisplayFor(modelItem => day_client.Session)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Session)
                                     </td>
                                     <td>
-                                        @if (day_client.Client != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => day_client.Client.Name)
-                                        }
+                                        @day_client.NombreClient
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => day_client.Present)
+                                        @Html.DisplayFor(modelItem => day_client.workday_Client.Present)
                                     </td>
                                     <td align="center">
                                         <span class="label label-danger">
@@ -100,8 +99,8 @@
                                         </span>
                                     </td>
                                     <td align="right">
-                                        <a asp-action="EditIndNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                        <a asp-action="Present" asp-route-id="@day_client.Id" asp-route-origin="3" class="btn btn-primary" title="Present or not present"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditIndNote" asp-route-id="@day_client.workday_Client.Id" class="btn btn-warning disabled" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a asp-action="Present" asp-route-id="@day_client.workday_Client.Id" asp-route-origin="3" class="btn btn-primary" title="Present or not present"><i class="glyphicon glyphicon-ok"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -113,6 +112,8 @@
     </div>
 
 </div>
+
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

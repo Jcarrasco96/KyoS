@@ -36,10 +36,16 @@
 
 
     <div class="col-md-12">
-    <pre>
-    
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee">
+        <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    <input asp-for="DateSignatureEmployee">                                                                
     </pre>
     </div>
     <div class="col-md-12">
@@ -54,23 +60,23 @@ else
     <strong>Circle the score for each identified area:</strong>                                              
     <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
    
-    The client has an illness or condition that made him/her change the type and/or amount of food he/she eats        <input type="checkbox" asp-for="ClientHasIllnes" class="form-check-input">    <input asp-for="ClientHasIllnes_Value">
-    The client has a history of an eating disorder                                                                    <input type="checkbox" asp-for="ClientHasHistory" class="form-check-input">    <input asp-for="ClientHasHistory_Value">
-    The client eats fewer than 2 meals per day                                                                        <input type="checkbox" asp-for="ClientEatsFewer" class="form-check-input">    <input asp-for="ClientEatsFewer_Value">
-    The client eats few fruits, vegetables, or milk products                                                          <input type="checkbox" asp-for="ClientEatsFew" class="form-check-input">    <input asp-for="ClientEatsFew_Value">
-    The client has tooth or mouth problems that make it hard for him/her to eat (Dental problems)                     <input type="checkbox" asp-for="ClientHasTooth" class="form-check-input">    <input asp-for="ClientHasTooth_Value">
-    The client eats alone most of the time                                                                            <input type="checkbox" asp-for="ClientEatsAlone" class="form-check-input">    <input asp-for="ClientEatsAlone_Value">
-    The client takes 3 or more different prescribed or over the counter medications per day                           <input type="checkbox" asp-for="ClientTakes" class="form-check-input">    <input asp-for="ClientTakes_Value">
-    Without wanting to, the client has lost over gained 10 pounds in the last 3 months                                <input type="checkbox" asp-for="WithoutWanting" class="form-check-input">    <input asp-for="WithoutWanting_Value">
-    The client is always hungry                                                                                       <input type="checkbox" asp-for="ClientAlwaysHungry" class="form-check-input">    <input asp-for="ClientAlwaysHungry_Value">
-    The client is always thirsty                                                                                      <input type="checkbox" asp-for="ClientAlwaysThirsty" class="form-check-input">    <input asp-for="ClientAlwaysThirsty_Value">
-    The client vomits on a daily basis                                                                                <input type="checkbox" asp-for="ClientVomits" class="form-check-input">    <input asp-for="ClientVomits_Value">
-    The client had diarrhea, constipation, or nausea on a daily basis                                                 <input type="checkbox" asp-for="ClientDiarrhea" class="form-check-input">    <input asp-for="ClientDiarrhea_Value">
-    The client binges and purges on a weekly basis                                                                    <input type="checkbox" asp-for="ClientBinges" class="form-check-input">    <input asp-for="ClientBinges_Value">
-    The client’s appetite is good                                                                                     <input type="checkbox" asp-for="ClientAppetiteGood" class="form-check-input">    <input asp-for="ClientAppetiteGood_Value">
-    The client’s appetite is fair                                                                                     <input type="checkbox" asp-for="ClientAppetiteFair" class="form-check-input">    <input asp-for="ClientAppetiteFair_Value">
-    The client’s appetite is poor                                                                                     <input type="checkbox" asp-for="ClientAppetitepoor" class="form-check-input">    <input asp-for="ClientAppetitepoor_Value">
-    The client has food allergies                                                                                     <input type="checkbox" asp-for="ClientFoodAllergies" class="form-check-input">    <input asp-for="ClientFoodAllergies_Value">
+    The client has an illness or condition that made him/her change the type and/or amount of food he/she eats        <input type="checkbox" asp-for="ClientHasIllnes" class="form-check-input" disabled>    <input asp-for="ClientHasIllnes_Value" disabled>
+    The client has a history of an eating disorder                                                                    <input type="checkbox" asp-for="ClientHasHistory" class="form-check-input" disabled>    <input asp-for="ClientHasHistory_Value" disabled>
+    The client eats fewer than 2 meals per day                                                                        <input type="checkbox" asp-for="ClientEatsFewer" class="form-check-input" disabled>    <input asp-for="ClientEatsFewer_Value" disabled>
+    The client eats few fruits, vegetables, or milk products                                                          <input type="checkbox" asp-for="ClientEatsFew" class="form-check-input" disabled>    <input asp-for="ClientEatsFew_Value" disabled>
+    The client has tooth or mouth problems that make it hard for him/her to eat (Dental problems)                     <input type="checkbox" asp-for="ClientHasTooth" class="form-check-input" disabled>    <input asp-for="ClientHasTooth_Value" disabled>
+    The client eats alone most of the time                                                                            <input type="checkbox" asp-for="ClientEatsAlone" class="form-check-input" disabled>    <input asp-for="ClientEatsAlone_Value" disabled>
+    The client takes 3 or more different prescribed or over the counter medications per day                           <input type="checkbox" asp-for="ClientTakes" class="form-check-input" disabled>    <input asp-for="ClientTakes_Value" disabled>
+    Without wanting to, the client has lost over gained 10 pounds in the last 3 months                                <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" disabled>    <input asp-for="WithoutWanting_Value" disabled>
+    The client is always hungry                                                                                       <input type="checkbox" asp-for="ClientAlwaysHungry" class="form-check-input" disabled>    <input asp-for="ClientAlwaysHungry_Value" disabled>
+    The client is always thirsty                                                                                      <input type="checkbox" asp-for="ClientAlwaysThirsty" class="form-check-input" disabled>    <input asp-for="ClientAlwaysThirsty_Value" disabled>
+    The client vomits on a daily basis                                                                                <input type="checkbox" asp-for="ClientVomits" class="form-check-input" disabled>    <input asp-for="ClientVomits_Value" disabled>
+    The client had diarrhea, constipation, or nausea on a daily basis                                                 <input type="checkbox" asp-for="ClientDiarrhea" class="form-check-input" disabled>    <input asp-for="ClientDiarrhea_Value" disabled>
+    The client binges and purges on a weekly basis                                                                    <input type="checkbox" asp-for="ClientBinges" class="form-check-input" disabled>    <input asp-for="ClientBinges_Value" disabled>
+    The client’s appetite is good                                                                                     <input type="checkbox" asp-for="ClientAppetiteGood" class="form-check-input" disabled>    <input asp-for="ClientAppetiteGood_Value" disabled>
+    The client’s appetite is fair                                                                                     <input type="checkbox" asp-for="ClientAppetiteFair" class="form-check-input" disabled>    <input asp-for="ClientAppetiteFair_Value" disabled>
+    The client’s appetite is poor                                                                                     <input type="checkbox" asp-for="ClientAppetitepoor" class="form-check-input" disabled>    <input asp-for="ClientAppetitepoor_Value" disabled>
+    The client has food allergies                                                                                     <input type="checkbox" asp-for="ClientFoodAllergies" class="form-check-input" disabled>    <input asp-for="ClientFoodAllergies_Value" disabled>
 
 
                  <strong>Score Range                   Assessment                                       Plan</strong>
@@ -83,10 +89,16 @@ else
 
 
     <div class="col-md-12">
-    <pre>
-    
-    <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    <strong>Date</strong>                <input asp-for="DateSignatureEmployee" disabled>
+        <pre>
+     @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>    <input asp-for="DateSignatureEmployee" disabled>                                                                 
     </pre>
     </div>
     <div class="col-md-12">

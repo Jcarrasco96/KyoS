@@ -26,12 +26,12 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
-        private readonly IImageHelper _imageHelper;
+        //private readonly IImageHelper _imageHelper;
         private readonly IMimeType _mimeType;
         private readonly IExportExcellHelper _exportExcelHelper;
         private readonly IFileHelper _fileHelper;
         private readonly IReportHelper _reportHelper;
-        private readonly IWebHostEnvironment _webhostEnvironment;
+        //private readonly IWebHostEnvironment _webhostEnvironment;
 
         public IConfiguration Configuration { get; }
 
@@ -41,12 +41,12 @@ namespace KyoS.Web.Controllers
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
-            _imageHelper = imageHelper;
+           // _imageHelper = imageHelper;
             _mimeType = mimeType;
             _exportExcelHelper = exportExcelHelper;
             _fileHelper = fileHelper;
             _reportHelper = reportHelper;
-            _webhostEnvironment = webHostEnvironment;
+            //_webhostEnvironment = webHostEnvironment;
             Configuration = configuration;
         }
 
@@ -209,25 +209,16 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (item.Workday.Service == ServiceType.Group)
+                                if (item.GroupNote2 != null)
                                 {
-                                    if (item.GroupNote2 != null)
-                                    {
-                                        Unit = item.GroupNote2.GroupNotes2_Activities.Count() * 4;
-                                        amount = (decimal)(item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 0.2);
-                                        notes++;
-                                    }
-                                    else
-                                    {
-                                        Unit = item.Schedule.SubSchedules.Count() * 4;
-                                        amount = (decimal)(item.Schedule.SubSchedules.Count() * 4 * 0.2);
-                                        notes++;
-                                    }
+                                    Unit = item.GroupNote2.GroupNotes2_Activities.Count() * 4;
+                                    amount = (decimal)(item.GroupNote2.GroupNotes2_Activities.Count() * 4 * 0.2);
+                                    notes++;
                                 }
                                 else
                                 {
-                                    Unit = 16;
-                                    amount = (decimal)(16 * 0.2);
+                                    Unit = item.Schedule.SubSchedules.Count() * 4;
+                                    amount = (decimal)(item.Schedule.SubSchedules.Count() * 4 * 0.2);
                                     notes++;
                                 }
 
@@ -247,6 +238,15 @@ namespace KyoS.Web.Controllers
                         Amount = amount
 
                     };
+
+                    if (item.BilledDate == null)
+                    {
+                        billDmsDetailsTemp.MedicaidBill = false;
+                    }
+                    else
+                    {
+                        billDmsDetailsTemp.MedicaidBill = true;
+                    }
 
                     UnitTotal += Unit;
                     Unit = 0;
@@ -318,10 +318,6 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Admin")]
         public IActionResult BillDetails(int id = 0)
         {
-            List<BillDmsDetailsEntity> detailsBill = _context.BillDmsDetails
-                                                             .Where(n => n.Bill.Id == id)
-                                                             .ToList();
-
             BillDmsViewModel model = new BillDmsViewModel();
             BillDmsEntity entity = _context.BillDms
                                            .Include(n => n.BillDmsDetails)
@@ -390,10 +386,18 @@ namespace KyoS.Web.Controllers
                     billDmsEntity.Different += (decimal)(detailEntity.Unit * 0.2);
                     billDmsEntity.Amount -= (decimal)(detailEntity.Unit * 0.2);
                     _context.Update(billDmsEntity);
+
+                    Workday_Client workday_Client = _context.Workdays_Clients.FirstOrDefault(n => n.Id == detailEntity.IdWorkddayClient);
+                    if (workday_Client != null)
+                    {
+                        workday_Client.Hold = true;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                        return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                     }
                     catch (System.Exception ex)
                     {
@@ -409,10 +413,10 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                    return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                 }
             }
-            return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+            return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
         }
 
         [Authorize(Roles = "Manager, Admin")]
@@ -432,10 +436,18 @@ namespace KyoS.Web.Controllers
                     billDmsEntity.Different -= (decimal)(detailEntity.Unit * 0.2);
                     billDmsEntity.Amount += (decimal)(detailEntity.Unit * 0.2);
                     _context.Update(detailEntity);
+
+                    Workday_Client workday_Client = _context.Workdays_Clients.FirstOrDefault(n => n.Id == detailEntity.IdWorkddayClient);
+                    if (workday_Client != null)
+                    {
+                        workday_Client.Hold = false;
+                        _context.Update(workday_Client);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                        return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                     }
                     catch (System.Exception ex)
                     {
@@ -451,10 +463,10 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+                    return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
                 }
             }
-            return RedirectToAction("BillDetails", new { id = detailEntity.Bill.Id });
+            return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
         }
 
         [Authorize(Roles = "Admin")]
@@ -770,5 +782,86 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Manager, Admin")]
+        public IActionResult EXCEL(int id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            BillDmsEntity billDms = _context.BillDms
+                                            .Include(n => n.BillDmsDetails)
+                                            .FirstOrDefault(n => n.Id == id);
+
+            string Periodo = "Invoice until: " + billDms.DateBillClose.ToShortDateString();
+            string ReportName = "Invoice " + billDms.DateBillClose.ToShortDateString() + ".xlsx";
+            string data = "BILL";
+          
+            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+            
+        }
+
+        [Authorize(Roles = "Manager, Admin")]
+        public async Task<IActionResult> UnbilledNotesToPendingPayments(int id = 0)
+        {
+            List<BillDmsDetailsEntity> detailBill_List = await _context.BillDmsDetails
+                                                                       .Include(n => n.Bill)
+                                                                       .Where(n => n.Bill.Id == id
+                                                                                && n.MedicaidBill == false)
+                                                                       .ToListAsync();
+
+            List<BillDmsDetailsEntity> salida = new List<BillDmsDetailsEntity>();
+            BillDmsEntity billDmsEntity = await _context.BillDms.FirstOrDefaultAsync(n => n.Id == id);
+
+            if (detailBill_List.Count() > 0)
+            {
+                foreach (var item in detailBill_List)
+                {
+                    if (item.StatusBill == StatusBill.Billed)
+                    {
+                        item.StatusBill = StatusBill.Pending;
+
+                        _context.Update(item);
+                        billDmsEntity.Different += (decimal)(item.Unit * 0.2);
+                        billDmsEntity.Amount -= (decimal)(item.Unit * 0.2);
+                        _context.Update(billDmsEntity);
+
+                        Workday_Client workday_Client = _context.Workdays_Clients.FirstOrDefault(n => n.Id == item.IdWorkddayClient);
+                        if (workday_Client != null)
+                        {
+                            workday_Client.Hold = true;
+                            _context.Update(workday_Client);
+                        }
+                    }
+                    
+                }
+               
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already not exists the Bil");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            else
+            {
+                return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
+            }
+            return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
+        }
+
     }
 }

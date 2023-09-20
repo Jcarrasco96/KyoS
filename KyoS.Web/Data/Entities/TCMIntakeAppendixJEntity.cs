@@ -37,5 +37,15 @@ namespace KyoS.Web.Data.Entities
         public int Approved { get; set; }
 
         public TCMSupervisorEntity TcmSupervisor { get; set; }
+
+        public bool IsEnrolled { get; set; }
+        public bool HasAMental2 { get; set; }
+        public bool RequiresServices { get; set; }
+        public bool Lacks { get; set; }
+        public bool RequiresOngoing { get; set; }
+        public bool HasAMental6 { get; set; }
+        public bool IsNotReceiving { get; set; }
+        public bool Meets { get; set; }
+        public bool HasRecolated { get; set; }
     }
 }

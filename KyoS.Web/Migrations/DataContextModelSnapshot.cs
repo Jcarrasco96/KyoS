@@ -144,6 +144,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdWorkddayClient")
                         .HasColumnType("int");
 
+                    b.Property<bool>("MedicaidBill")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NameClient")
                         .HasColumnType("nvarchar(max)");
 
@@ -310,8 +313,8 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Appetite")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ApproximateDateReport")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ApproximateDateReport")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApproximateDateReport_Where")
                         .HasColumnType("nvarchar(max)");
@@ -358,8 +361,8 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateAbuse")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("DateAbuse")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateBio")
                         .HasColumnType("datetime2");
@@ -502,7 +505,7 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("IDAH0031HO")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("If6_Date")
+                    b.Property<DateTime?>("If6_Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("If6_ReferredTo")
@@ -4682,6 +4685,9 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("SignPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
@@ -5806,6 +5812,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -5813,6 +5822,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FaxNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastModifiedBy")
@@ -5826,7 +5838,13 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Telephone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -6354,8 +6372,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("ColonCancer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("CongredatedHowOften")
-                        .HasColumnType("real");
+                    b.Property<string>("CongredatedHowOften")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CongredatedProvider")
                         .HasColumnType("nvarchar(max)");
@@ -6648,8 +6666,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Flooring")
                         .HasColumnType("bit");
 
-                    b.Property<float>("FoodPantryHowOften")
-                        .HasColumnType("real");
+                    b.Property<string>("FoodPantryHowOften")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FoodPantryProvider")
                         .HasColumnType("nvarchar(max)");
@@ -6657,8 +6675,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("FoodPantryReceive")
                         .HasColumnType("bit");
 
-                    b.Property<float>("FoodStampHowOften")
-                        .HasColumnType("real");
+                    b.Property<string>("FoodStampHowOften")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FoodStampProvider")
                         .HasColumnType("nvarchar(max)");
@@ -6729,8 +6747,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Hears")
                         .HasColumnType("bit");
 
-                    b.Property<float>("HomeDeliveredHowOften")
-                        .HasColumnType("real");
+                    b.Property<string>("HomeDeliveredHowOften")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomeDeliveredProvider")
                         .HasColumnType("nvarchar(max)");
@@ -6954,13 +6972,10 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Married")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("MayWe")
-                        .HasColumnType("bit");
+                    b.Property<int>("MayWe")
+                        .HasColumnType("int");
 
                     b.Property<bool>("MayWeLeaveSend")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("MayWeNA")
                         .HasColumnType("bit");
 
                     b.Property<string>("MentalHealth")
@@ -7017,8 +7032,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("OtherFinancial")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("OtherHowOften")
-                        .HasColumnType("real");
+                    b.Property<string>("OtherHowOften")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProvider")
                         .HasColumnType("nvarchar(max)");
@@ -8225,10 +8240,19 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("HasAMental2")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasAMental6")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("HasBeen")
                         .HasColumnType("bit");
 
                     b.Property<bool>("HasHad")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasRecolated")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsAt")
@@ -8237,7 +8261,16 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("IsAwaiting")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsEnrolled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsExperiencing")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNotReceiving")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Lacks")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
@@ -8245,6 +8278,15 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Meets")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequiresOngoing")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequiresServices")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("SupervisorSignatureDate")
                         .HasColumnType("datetime2");
@@ -10071,6 +10113,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateServicePlan")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSupervisorSignature")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DischargerCriteria")

@@ -96,5 +96,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboConsentType();
         IEnumerable<SelectListItem> GetComboBillStatus();
         IEnumerable<SelectListItem> GetComboBillPaid();
+        IEnumerable<SelectListItem> GetComboServicesAssessment(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboYesNoNA();
     }
 }

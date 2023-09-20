@@ -390,7 +390,7 @@
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>
-                                    <li>@Html.ActionLink("Dates blocked", "Index", "TCMDateBlockeds")</li>
+                                    <li>@Html.ActionLink("Dates locked", "Index", "TCMDateBlockeds")</li>
                                 </ul>
                             </li>
                         }
@@ -421,7 +421,6 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
-                                <li>@Html.ActionLink("Next invoice", "Create", "BillDms")</li>
                                 <li>@Html.ActionLink("Invoice history", "Index", "BillDms")</li>
                             </ul>
                         </li>
@@ -773,9 +772,10 @@
                                 Update <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Dates Blocked", "Index", "TCMDateBlockeds")</li>
+                                <li>@Html.ActionLink("Dates locked", "Index", "TCMDateBlockeds")</li>
                                 <li>@Html.ActionLink("Update Note", "UpdateNote", "TCMNotes")</li>
                                 <li>@Html.ActionLink("Update Service Plan", "UpdateServicePlan", "TCMServicePlans")</li>
+                                <li>@Html.ActionLink("Update Assessment", "UpdateAssessment", "TCMAssessments")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
@@ -928,10 +928,17 @@
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Clients <span class="caret"></span>
+                                General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>                                
+                                <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
+                                        <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

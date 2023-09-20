@@ -119,7 +119,7 @@
                                         @Html.DisplayFor(modelItem => item.Clinic.Name)
                                     </td>
                                      <td align="center">
-                                        @if (item.SignaturePath == null)
+                                        @if (item.SignaturePath == null || item.SignaturePath == string.Empty)
                                         {
                                             <span class="label label-danger">
                                                 No

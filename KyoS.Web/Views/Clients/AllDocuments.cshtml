@@ -136,11 +136,25 @@
                                         {
                                             @if (item.Bio != null)
                                             {
-                                                <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Bio.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintBio" asp-route-id="@item.Bio.Id" asp-controller="Bios" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                             }
                                             @if (item.Brief != null)
                                             {
-                                                <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" asp-controller="Briefs" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                @if (item.Brief.Status == KyoS.Common.Enums.BioStatus.Approved)
+                                                {
+                                                    <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" asp-controller="Briefs" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintBrief" asp-route-id="@item.Brief.Id" asp-controller="Briefs" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                }
                                             }
                                         }
 

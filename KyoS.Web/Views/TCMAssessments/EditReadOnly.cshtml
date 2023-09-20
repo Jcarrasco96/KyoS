@@ -15,13 +15,17 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if(@ViewData["origi"].ToString() == "0")
+                @if (@ViewData["origi"].ToString() == "0")
                 {
                     @Html.ActionLink("TCM Pending Assessments", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
                     @Html.ActionLink("TCM Assessments Notifications", "Notifications", "TCMMessages")
+                }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
                 }
             </li>
             <li class="active">Edit TCM Assessment</li>
@@ -34,101 +38,203 @@
         <form asp-action="ApproveAssessments" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TcmClient_FK" />
-            <partial name="_TCMAssessmentReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+            @if (Model.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            {
+                <partial name="_TCMAssessment" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentIndividual">
+                            @await Html.PartialAsync("_ViewIndividualAgency", Model.IndividualAgencyList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentIndividual">
-                        @await Html.PartialAsync("_ViewIndividualAgency", Model.IndividualAgencyList.ToList())
+                <partial name="_TCMAssessment1" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-Assessmenthouse">
+                            @await Html.PartialAsync("_ViewHouseComposition", Model.HouseCompositionList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment1ReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentPast">
+                            @await Html.PartialAsync("_ViewPastCurrent", Model.PastCurrentServiceList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-Assessmenthouse">
-                        @await Html.PartialAsync("_ViewHouseComposition", Model.HouseCompositionList.ToList())
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentMedication">
+                            @await Html.PartialAsync("_ViewMedication", Model.MedicationList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <partial name="_TCMAssessment2" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentHospital">
+                            @await Html.PartialAsync("_ViewHospital", Model.HospitalList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentPast">
-                        @await Html.PartialAsync("_ViewPastCurrent", Model.PastCurrentServiceList.ToList())
+                <partial name="_TCMAssessment3" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentDrug">
+                            @await Html.PartialAsync("_ViewDrug", Model.DrugList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
-                     </div>
-                </div>
-                <div class="">
-                    <div id="view-AssessmentMedication">
-                        @await Html.PartialAsync("_ViewMedication", Model.MedicationList.ToList())
+                <partial name="_TCMAssessment4" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentMedicalProblem">
+                            @await Html.PartialAsync("_ViewMedicalProblem", Model.MedicalProblemList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment2ReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <partial name="_TCMAssessment5" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentSurgery">
+                            @await Html.PartialAsync("_ViewSurgery", Model.SurgeryList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentHospital">
-                        @await Html.PartialAsync("_ViewHospital", Model.HospitalList.ToList())
+                <partial name="_TCMAssessment6" />
+            }
+            else
+            {
+                <partial name="_TCMAssessmentReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentIndividual">
+                            @await Html.PartialAsync("_ViewIndividualAgency", Model.IndividualAgencyList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment3ReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <partial name="_TCMAssessment1ReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-Assessmenthouse">
+                            @await Html.PartialAsync("_ViewHouseComposition", Model.HouseCompositionList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentDrug">
-                        @await Html.PartialAsync("_ViewDrug", Model.DrugList.ToList())
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentPast">
+                            @await Html.PartialAsync("_ViewPastCurrent", Model.PastCurrentServiceList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment4ReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentMedication">
+                            @await Html.PartialAsync("_ViewMedication", Model.MedicationList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentMedicalProblem">
-                        @await Html.PartialAsync("_ViewMedicalProblem", Model.MedicalProblemList.ToList())
+                <partial name="_TCMAssessment2ReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentHospital">
+                            @await Html.PartialAsync("_ViewHospital", Model.HospitalList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment5ReadOnly" />
-            <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
+                <partial name="_TCMAssessment3ReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentDrug">
+                            @await Html.PartialAsync("_ViewDrug", Model.DrugList.ToList())
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div id="view-AssessmentSurgery">
-                        @await Html.PartialAsync("_ViewSurgery", Model.SurgeryList.ToList())
+                <partial name="_TCMAssessment4ReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentMedicalProblem">
+                            @await Html.PartialAsync("_ViewMedicalProblem", Model.MedicalProblemList.ToList())
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_TCMAssessment6ReadOnly" />
+                <partial name="_TCMAssessment5ReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-AssessmentSurgery">
+                            @await Html.PartialAsync("_ViewSurgery", Model.SurgeryList.ToList())
+                        </div>
+                    </div>
+                </div>
+                <partial name="_TCMAssessment6ReadOnly" />
+            }
+
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 @if (User.IsInRole("TCMSupervisor"))
@@ -147,7 +253,10 @@
                 {
                     <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
-
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient_FK" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

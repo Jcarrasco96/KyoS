@@ -44,10 +44,10 @@
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="col-md-12">
+    <div class="form-group col-md-12">
         <pre>
-        *May we contact the non-custodial parent if necessary?  <input asp-for="MayWe" class="form-check-input" id="check5"> Yes       <input type="checkbox" class="form-check-input" id="check105"> No        <input asp-for="MayWeNA" class="form-check-input" > N/A
-        </pre>
+    *May we contact the non-custodial parent if necessary?  <select asp-for="IdYesNoNAWe" asp-items="Model.YesNoNAs"></select>
+   </pre>
     </div>
 </div>
 

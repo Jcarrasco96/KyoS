@@ -34,6 +34,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
                     <li role="presentation"><a href="#others" aria-controls="others" role="tab" data-toggle="tab">Others</a></li>
+                    <li role="presentation"><a href="#legalGuardian" aria-controls="legalGuardian" role="tab" data-toggle="tab">Legal Guardian</a></li>
                     <li role="presentation"><a href="#emergencyContact" aria-controls="emergencyContact" role="tab" data-toggle="tab">Emergency Contact</a></li>
                     <li role="presentation"><a href="#diagnostics" aria-controls="diagnostics" role="tab" data-toggle="tab">Diagnostics</a></li>
                     <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Documents</a></li>
@@ -61,11 +62,14 @@
                             @if (Model.Origin == 1) //viene de la pagina TCMClient/Clients de los TCM
                             {
                                 <a asp-action="Clients" asp-controller="TCMClients" class="btn btn-success">Back</a>
-                            }                           
+                            }
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="others">
                         <partial name="_ClientsOthersReadOnly" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="legalGuardian">
+                        <partial name="_ClientsLegalGuardianRO" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="emergencyContact">
                         <partial name="_ClientsEmergencyContactRO" />

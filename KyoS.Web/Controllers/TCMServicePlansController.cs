@@ -160,7 +160,14 @@ namespace KyoS.Web.Controllers
                             Value = $"{c.Id}"
                         })
                             .ToList();
-
+                        string strendths = string.Empty;
+                        string weakness = string.Empty;
+                        TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == id);
+                        if (assessment != null)
+                        {
+                            strendths = assessment.ListClientCurrentPotencialStrngths;
+                            weakness = assessment.ListClientCurrentPotencialWeakness;
+                        }
                         model = new TCMServicePlanViewModel
                         {
                             ID_TcmClient = id,
@@ -175,7 +182,9 @@ namespace KyoS.Web.Controllers
                             DateServicePlan = DateTime.Now.Date,
                             DateIntake = DateTime.Now.Date,
                             DateAssessment = DateTime.Now.Date,
-                            DateCertification = DateTime.Now.Date
+                            DateCertification = DateTime.Now.Date,
+                            Strengths = strendths,
+                            Weakness = weakness
 
                         };
                         ViewData["origin"] = origin;
@@ -473,23 +482,40 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> AproveServicePlan(int id, int origi = 0)
+        public async Task<IActionResult> AproveServicePlan(int id, TCMServicePlanViewModel model, int origi = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
-                                                         .ThenInclude(u => u.Client)
-                                                         .FirstOrDefault(u => u.Id == id);
+            TCMServicePlanEntity tcmServicePlan = new TCMServicePlanEntity();
 
             if (tcmServicePlan != null)
-            {
+            { 
                 if (User.IsInRole("TCMSupervisor"))
                 {
-                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                    UserEntity user_logged = _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .ThenInclude(u => u.Setting)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                     if (user_logged.Clinic != null)
                     {
-                        tcmServicePlan.Approved = 2;
-                        tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        if (user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+                        {
+                            tcmServicePlan = await _converterHelper.ToTCMServicePlanEntity(model, false, user_logged.UserName);
+                            tcmServicePlan.Approved = 2;
+                            tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        }
+                        else
+                        {
+                            tcmServicePlan = _context.TCMServicePlans
+                                                     .Include(u => u.TcmClient)
+                                                     .ThenInclude(u => u.Client)
+                                                     .FirstOrDefault(u => u.Id == id);
+
+                            tcmServicePlan.Approved = 2;
+                            tcmServicePlan.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                            tcmServicePlan.DateSupervisorSignature = model.DateSupervisorSignature;
+                            tcmServicePlan.DateServicePlan = model.DateServicePlan;
+                        }
+                        
                         _context.Update(tcmServicePlan);
                         try
                         {
@@ -505,6 +531,10 @@ namespace KyoS.Web.Controllers
                             if (origi == 3)
                             {
                                 return RedirectToAction("Notifications", "TCMMessages");
+                            }
+                            if (origi == 4)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = tcmServicePlan.TcmClient.Id, section = 4 });
                             }
                         }
                         catch (System.Exception ex)
@@ -723,7 +753,8 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public IActionResult CreateDomain(int id = 0, int origin = 0, int aview = 0)
         {
-            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(u => u.TcmClient)
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(u => u.TcmClient)
                                                           .ThenInclude(u => u.Client)
                                                           .FirstOrDefault(u => u.Id == id);
             TCMDomainViewModel model = null; 
@@ -738,7 +769,7 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
 
-                        IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesNotUsed(tcmServicePlan.Id);
+                        IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesAssessment(tcmServicePlan.Id);
 
                         model = new TCMDomainViewModel
                         {
@@ -1507,6 +1538,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(u => u.TcmServicePlan)
                                                               .ThenInclude(g => g.TcmClient)
                                                               .ThenInclude(g => g.Client)
+                                                              .Include(u => u.TcmDomain)
                                                               .FirstOrDefaultAsync(s => s.Id == id);
             if (tcmadendumEntity == null)
             {
@@ -2106,7 +2138,8 @@ namespace KyoS.Web.Controllers
                             Approved = tcmServicePlan.Approved,
                             CreatedBy = tcmServicePlan.CreatedBy,
                             CreatedOn = tcmServicePlan.CreatedOn,
-                            TcmClient = tcmServicePlan.TcmClient
+                            TcmClient = tcmServicePlan.TcmClient,
+                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
 
                         };
 
@@ -2718,6 +2751,7 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomainReadOnly", tcmDomainViewModel) });
         }
+
 
     }
 }

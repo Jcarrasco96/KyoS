@@ -169,13 +169,13 @@ namespace KyoS.Web.Data.Entities
         public bool ClientFamilyAbusoTrauma { get; set; }
 
         [Display(Name = "Date of Abuse")]
-        [DataType(DataType.Date)]
-        public DateTime DateAbuse { get; set; }
+        
+        public string DateAbuse { get; set; }
         public string PersonInvolved { get; set; }
 
         [Display(Name = "Date of Approximate Date Report")]
-        [DataType(DataType.Date)]
-        public DateTime ApproximateDateReport { get; set; }
+        
+        public string ApproximateDateReport { get; set; }
 
         public string ApproximateDateReport_Where { get; set; }
         public string RelationShips { get; set; }
@@ -224,7 +224,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Date If 6 or referred")]
         [DataType(DataType.Date)]
-        public DateTime If6_Date { get; set; }
+        public DateTime? If6_Date { get; set; }
         public Bio_Appetite Appetite { get; set; }
         public Bio_Hydration Hydration { get; set; }
         public Bio_RecentWeightChange RecentWeight { get; set; }

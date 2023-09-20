@@ -23,6 +23,10 @@
             {
                 @Html.ActionLink("TCM Services Plan Notifications", "Notifications", "TCMMessages")
             }
+            @if (ViewData["origi"].ToString() == "4")
+            {
+                @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.ID_TcmClient, section = 4 })
+            }
         </li>
         <li class="active">Approve service plan</li>
     </ul><!--.breadcrumb-->
@@ -71,19 +75,18 @@
         }
     </div>
     <div>
-        <form asp-action="AproveServicePlan" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" >
+        <form asp-action="AproveServicePlan" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Approved" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <partial name="TCMServicePlanReadOnly" />
             <div class="col-md-push-12">
-                <div class="col-md-12">
-                    <div id="view-TCMdomain">
-                        @await Html.PartialAsync("_ViewDomains", Model.TCMDomain.ToList())
-                    </div>
+                <div id="view-TCMdomain">
+                    @await Html.PartialAsync("_ViewDomains", Model.TCMDomain.ToList())
                 </div>
             </div>
+            <partial name="TCMServicePlan1ReadOnly" />
             <div class="form-group">
                 <input type="submit" value="Approve" class="btn btn-primary" />
                 @if (User.IsInRole("TCMSupervisor"))
@@ -109,6 +112,10 @@
                 @if (ViewData["origi"].ToString() == "3")
                 {
                     <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "4")
+                {
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

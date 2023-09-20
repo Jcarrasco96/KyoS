@@ -1,0 +1,50 @@
+﻿@model KyoS.Web.Models.TCMServicePlanViewModel
+@{
+    Layout = null;
+}
+
+<pre>
+    <strong>Employee signature date</strong>         <input asp-for="DateServicePlan">     <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
+</pre>
+<div class="col-md-12">
+    <hr />
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+                        //    jQueryAjaxPost = form => {
+                        //        try {
+                        //            $.ajax({
+                        //                type: 'POST',
+                        //                url: form.action,
+                        //                data: new FormData(form),
+                        //                contentType: false,
+                        //                processData: false,
+                        //                success: function (res) {
+                        //                    if (res.isValid) {
+                        //                        $('#view-all').html(res.html)
+                        //                        $('#form-modal .modal-body').html('');
+                        //                        $('#form-modal .modal-title').html('');
+                        //                        $('#form-modal').modal('hide');
+                        //                    }
+                        //                    else
+                        //                        $('#form-modal .modal-body').html(res.html);
+                        //                },
+                        //                error: function (err) {
+                        //                    console.log(err)
+                        //                }
+                        //            })
+                        //            //to prevent default form submit event
+                        //            return false;
+                        //        } catch (ex) {
+                        //            console.log(ex)
+                        //        }
+                        //}
+    </script>
+}
+

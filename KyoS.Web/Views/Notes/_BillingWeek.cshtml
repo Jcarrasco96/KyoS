@@ -283,9 +283,39 @@
                                                                             }
                                                                             else
                                                                             {
-                                                                                <span class="label label-danger">
-                                                                                    Not Started
-                                                                                </span>
+                                                                                @if (element.GroupNote2 != null)
+                                                                                {
+                                                                                    @if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                                                    {
+                                                                                        <span class="label label-success">
+                                                                                            Approved
+                                                                                        </span>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                                        {
+                                                                                            <span class="label label-info">
+                                                                                                Pending
+                                                                                            </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                            {
+                                                                                                <span class="label label-warning">
+                                                                                                    Edition
+                                                                                                </span>
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="label label-danger">
+                                                                                        Not Started
+                                                                                    </span>
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -579,9 +609,39 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <span class="label label-danger">
-                                                                                        Not Started
-                                                                                    </span>
+                                                                                    @if (element.GroupNote2 != null)
+                                                                                    {
+                                                                                        @if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                                                        {
+                                                                                            <span class="label label-success">
+                                                                                                Approved
+                                                                                            </span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                                                            {
+                                                                                                <span class="label label-info">
+                                                                                                    Pending
+                                                                                                </span>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (element.GroupNote2.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                                                                                {
+                                                                                                    <span class="label label-warning">
+                                                                                                        Edition
+                                                                                                    </span>
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span class="label label-danger">
+                                                                                            Not Started
+                                                                                        </span>
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }

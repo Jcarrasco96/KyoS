@@ -23,6 +23,14 @@
                 {
                     @Html.ActionLink("TCM Assessment Messages", "MessagesOfAssessment", "TCMMessages")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("Dashboard", "Index", "Desktop")
+                }
+                @if (ViewData["origi"].ToString() == "4")
+                {
+                    @Html.ActionLink("Assessments in edition", "TCMAssessmentApproved", "TCMAssessments")
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->
@@ -171,7 +179,10 @@
                 {
                     <a asp-action="MessagesOfAssessment" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
-
+                @if (ViewData["origi"].ToString() == "4")
+                {
+                    <a asp-action="TCMAssessmentApproved" asp-controller="TCMAssessments" asp-route-approved="0" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

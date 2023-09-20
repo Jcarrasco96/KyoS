@@ -1091,7 +1091,11 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode
             };
         }
 
@@ -1113,7 +1117,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 
@@ -1199,8 +1204,13 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 Telephone = model.Telephone,
                 Email = model.Email,
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn
+
             };
         }
 
@@ -1239,7 +1249,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 
@@ -1546,7 +1557,9 @@ namespace KyoS.Web.Helpers
                 CaseNumber = tcmClientEntity.CaseNumber,
                 DataOpen = tcmClientEntity.DataOpen,
                 DataClose = tcmClientEntity.DataClose,
-                Period = tcmClientEntity.Period
+                Period = tcmClientEntity.Period,
+                CreatedOn = tcmClientEntity.CreatedOn,
+                CreatedBy = tcmClientEntity.CreatedBy,
             };
         }
 
@@ -1564,7 +1577,8 @@ namespace KyoS.Web.Helpers
                 Strengths = TcmServicePlanEntity.Strengths,
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2 ,
+                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature
             };
         }
 
@@ -1591,7 +1605,9 @@ namespace KyoS.Web.Helpers
                 Approved = model.Approved,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                DateSupervisorSignature = model.DateSupervisorSignature
+                
             };
         }
 
@@ -4499,7 +4515,16 @@ namespace KyoS.Web.Helpers
                 IsExperiencing = model.IsExperiencing,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
-                TcmSupervisor = model.TcmSupervisor
+                TcmSupervisor = model.TcmSupervisor,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
             return salida;
@@ -4526,7 +4551,16 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
         }
@@ -4746,8 +4780,7 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
-                MayWe = model.MayWe,
-                MayWeNA = model.MayWeNA,
+                MayWe = YesNoNAType.GetYesNoNaByIndex(model.IdYesNoNAWe),
                 NeverMarried = model.NeverMarried,
                 Other = model.Other,
                 OtherExplain = model.OtherExplain,
@@ -5149,8 +5182,9 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
+                IdYesNoNAWe = (model.MayWe == YesNoNA.Yes) ? 0 : (model.MayWe == YesNoNA.No) ? 1 : 2,
+                YesNoNAs = _combosHelper.GetComboYesNoNA(),
                 MayWe = model.MayWe,
-                MayWeNA = model.MayWeNA,
                 NeverMarried = model.NeverMarried,
                 Other = model.Other,
                 OtherExplain = model.OtherExplain,

@@ -268,6 +268,106 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
 
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychistrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Psychiatrist = Psychistrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+
+                //-------Legal Guardian Contact--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardian = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.LegalGuardian = legalGuardian;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+                }
+
+               // _context.Add(clientEntity);
+
+
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
@@ -572,6 +672,115 @@ namespace KyoS.Web.Controllers
                     _context.Entry(clientEntity).Reference("Group").IsModified = true;
                 }
 
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(PrimaryDoctor);
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
+                }
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(Psychiatrists);
+                        clientEntity.Psychiatrist = Psychiatrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
+                }
+
+                //-------Legal Guardian--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(legalGuardianContact);
+                        clientEntity.LegalGuardian = legalGuardianContact;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
+                }
+
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
                 {
@@ -607,30 +816,6 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    /*if (clientViewModel.NameEmergencyContact != string.Empty)
-                    {
-                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
-                        {
-                            Name = clientViewModel.NameEmergencyContact,
-                            Address = clientViewModel.AddressEmergencyContact,
-                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
-                            City = clientViewModel.CityEmergencyContact,
-                            Country = clientViewModel.CountryEmergencyContact,
-                            Email = clientViewModel.EmailEmergencyContact,
-                            State = clientViewModel.StateEmergencyContact,
-                            Telephone = clientViewModel.PhoneEmergencyContact,
-                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
-                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
-
-                        };
-                        //_context.Update(emergencyContact);
-                        
-
-                    }*/
                     clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
                 }
 
@@ -3008,10 +3193,9 @@ namespace KyoS.Web.Controllers
             return View(await _context.Clients
 
                                       .Include(c => c.Clinic)
-                                      .Include(c => c.IndividualTherapyFacilitator)
                                       .Include(c => c.Clients_HealthInsurances)
                                         .ThenInclude(c => c.HealthInsurance)
-
+                                      .Include(c => c.LegalGuardian)
                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());       
         }
@@ -5275,5 +5459,48 @@ namespace KyoS.Web.Controllers
 
             return View(salida);
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> EditSignatureLegalGuardian(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (legalGuardian == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            LegalGuardianViewModel LegalViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardian);
+
+            return View(LegalViewModel);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<JsonResult> SaveSignatureLegalGuardian(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "LegalGuardian");
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (legalGuardian != null)
+            {
+                legalGuardian.SignPath = signPath;
+                _context.Update(legalGuardian);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
+        }
+
     }
 }

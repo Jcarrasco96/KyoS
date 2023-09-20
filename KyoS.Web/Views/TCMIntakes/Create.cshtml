@@ -33,9 +33,15 @@
             <input type="hidden" asp-for="PCP_FaxNumber" />
             <partial name="_TCMIntakesForm" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                @if (Model.Id == 0)
+                {
+                    <input type="submit" value="Sign and Save" class="btn btn-primary" />
+                }
+                else
+                {
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                }
                 <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
-
             </div>
         </form>
     </div>

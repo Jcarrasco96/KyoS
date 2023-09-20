@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                }
             </li>
             <li class="active">
                 The Mini Mental State Exam
@@ -38,7 +45,14 @@
             <partial name="_TCMIntakeMiniMental" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="3" class="btn btn-success">Back</a>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="3" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient.Id" asp-route-section="3" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>

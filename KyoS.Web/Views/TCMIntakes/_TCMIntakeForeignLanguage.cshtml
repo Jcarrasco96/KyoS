@@ -19,10 +19,25 @@
 {
     <div class="col-md-12">
         <pre>
-    
-        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
-    
+         @if (Model.TcmClient.Client.LegalGuardian.Name != "")
+        {
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" >
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        }
+        else
+        { 
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" >
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>
+        }
+
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
         <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
         <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
@@ -44,10 +59,25 @@ else
 {
     <div class="col-md-12">
         <pre>
-    
-        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
-        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
-    
+        @if (Model.TcmClient.Client.LegalGuardian.Name != "")
+        {
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        }
+        else
+        { 
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>
+        }
+
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
         <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
         <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>

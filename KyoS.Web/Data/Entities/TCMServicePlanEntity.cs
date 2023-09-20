@@ -52,5 +52,8 @@ namespace KyoS.Web.Data.Entities
         public TCMSupervisorEntity TCMSupervisor { get; set; }
 
         public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
+        
+        [DataType(DataType.Date)]
+        public DateTime DateSupervisorSignature { get; set; }
     }
 }

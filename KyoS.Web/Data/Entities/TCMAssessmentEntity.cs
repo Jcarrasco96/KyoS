@@ -73,8 +73,8 @@ namespace KyoS.Web.Data.Entities
         public string AreChildPhone { get; set; }
         public string AreChildAddress { get; set; }
         public string AreChildCity { get; set; }
-        public bool MayWe { get; set; }
-        public bool MayWeNA { get; set; }
+        public YesNoNA MayWe { get; set; }
+       
         public List<TCMAssessmentHouseCompositionEntity> HouseCompositionList { get; set; }
 
         //SECTION 5
@@ -406,24 +406,24 @@ namespace KyoS.Web.Data.Entities
         //9 BASIC NEEDS
 
         public bool FoodStampReceive { get; set; }
-        public float FoodStampHowOften { get; set; }
+        public string FoodStampHowOften { get; set; }
         public string FoodStampProvider { get; set; }
 
         public bool FoodPantryReceive { get; set; }
-        public float FoodPantryHowOften { get; set; }
+        public string FoodPantryHowOften { get; set; }
         public string FoodPantryProvider { get; set; }
 
         public bool HomeDeliveredReceive { get; set; }
-        public float HomeDeliveredHowOften { get; set; }
+        public string HomeDeliveredHowOften { get; set; }
         public string HomeDeliveredProvider { get; set; }
 
         public bool CongredatedReceive { get; set; }
-        public float CongredatedHowOften { get; set; }
+        public string CongredatedHowOften { get; set; }
         public string CongredatedProvider { get; set; }
 
         public bool OtherReceive { get; set; }
         public string OtherReceiveExplain { get; set; }
-        public float OtherHowOften { get; set; }
+        public string OtherHowOften { get; set; }
         public string OtherProvider { get; set; }
 
         public string DoesClientBasicNeed { get; set; }

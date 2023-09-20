@@ -26,5 +26,6 @@ namespace KyoS.Web.Data.Entities
 
         public string NameClient { get; set; }
         public decimal Amount { get; set; }
+        public bool MedicaidBill { get; set; }
     }
 }
