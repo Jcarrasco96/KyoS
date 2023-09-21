@@ -633,6 +633,7 @@ namespace KyoS.Web.Controllers
             BioEntity entity = _context.Bio
 
                                        .Include(m => m.Client)
+                                       .Include(n => n.Client.Doctor)
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
