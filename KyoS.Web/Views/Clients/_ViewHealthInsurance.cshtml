@@ -65,10 +65,16 @@
                                         @Html.DisplayFor(modelItem => item.Units)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        @if (User.IsInRole("Manager"))
                                         {
-                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient","Clients",new { id = item.Id},Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal","Clients",new { id = item.Id},Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal", "Clients", new { id = item.Id }, Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                            @*<button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                        }
+                                        else
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient","Clients",new { id = item.Id},Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil disabled"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal","Clients",new { id = item.Id},Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash disabled"></i></a>
                                             @*<button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>*@
                                         }
                                     </td>

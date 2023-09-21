@@ -1,0 +1,93 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Doctor.Name" class="control-label">Name Primary Doctor</label>&nbsp;*
+        <input asp-for="Doctor.Name" class="form-control" disabled id="namePD"/>
+        <span asp-validation-for="Doctor.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Doctor.Address" class="control-label">Address</label>
+        <input asp-for="Doctor.Address" class="form-control" disabled id="addressPD"/>
+        <span asp-validation-for="Doctor.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Doctor.City" class="control-label">City</label>
+        <input asp-for="Doctor.City" class="form-control" disabled id="cityPD"/>
+        <span asp-validation-for="Doctor.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Doctor.State" class="control-label">State</label>
+        <input asp-for="Doctor.State" class="form-control" disabled id="statePD"/>
+        <span asp-validation-for="Doctor.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Doctor.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="Doctor.ZipCode" class="form-control" disabled id="zipPD"/>
+        <span asp-validation-for="Doctor.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Doctor.Telephone" class="control-label">Telephone</label>
+        <input asp-for="Doctor.Telephone" class="form-control" disabled id="phonePD" />
+        <span asp-validation-for="Doctor.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Doctor.FaxNumber" class="control-label">Fax Number</label>
+        <input asp-for="Doctor.FaxNumber" class="form-control" disabled id="faxPD" />
+        <span asp-validation-for="Doctor.FaxNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Doctor.Email" class="control-label">Email</label>
+        <input asp-for="Doctor.Email" class="form-control" disabled id="emailPD" />
+        <span asp-validation-for="Doctor.Email" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    chkNewPD.addEventListener('change', (e) => {
+        if (chkNewPD.checked == true)
+        {
+            $("#cbPD").prop('selectedIndex', 0);
+            $("#cbPD").prop('disabled', true);
+            //$("#cbREC").prop('selectedIndex', 0);
+            //$("#cbREC").prop('disabled', true);
+
+            $("#namePD").prop('disabled', false);
+            $("#addressPD").prop('disabled', false);
+            $("#cityPD").prop('disabled', false);
+            $("#statePD").prop('disabled', false);
+            $("#zipPD").prop('disabled', false);
+            $("#phonePD").prop('disabled', false);
+            $("#faxPD").prop('disabled', false);
+            $("#emailPD").prop('disabled', false);
+            $("#namePD").focus();
+        }
+        else
+        {
+            $("#cbPD").prop('disabled', false);
+            /*$("#cbREC").prop('disabled', false);*/
+
+            $("#namePD").val("");
+            $("#namePD").prop('disabled', true);
+            $("#addressPD").val("");
+            $("#addressPD").prop('disabled', true);
+            $("#cityPD").val("");
+            $("#cityPD").prop('disabled', true);
+            $("#statePD").val("");
+            $("#statePD").prop('disabled', true);
+            $("#zipPD").val("");
+            $("#zipPD").prop('disabled', true);
+            $("#phonePD").val("");
+            $("#phonePD").prop('disabled', true);
+            $("#faxPD").val("");
+            $("#faxPD").prop('disabled', true);
+            $("#emailPD").val("");
+            $("#emailPD").prop('disabled', true);
+        }
+    })
+</script>

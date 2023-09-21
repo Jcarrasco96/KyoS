@@ -39,9 +39,13 @@
                                     </td>
                                     <td align="right">
                                         <a asp-action="OpenDocument" asp-route-id="@item.Id" class="btn btn-default" title="View document" target="_blank"><i class="glyphicon glyphicon-download-alt"></i></a>
-                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        @if (User.IsInRole("Manager"))
                                         {
                                             <button type="button" onclick="DeleteDocumentTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" onclick="DeleteDocumentTemp(@item.Id)" class="btn btn-danger deleteItem disabled" title="Delete document"><i class="glyphicon glyphicon-trash"></i></button>
                                         }
                                     </td>
                                 </tr>
