@@ -10994,6 +10994,14 @@ namespace KyoS.Web.Helpers
             {
                 nutritionScoreTotal++;
             }
+            if (bio.AnyFood)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.AnyEating)
+            {
+                nutritionScoreTotal++;
+            }
 
             WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
 
@@ -18746,7 +18754,7 @@ namespace KyoS.Web.Helpers
                                             bio.WhereRecord_Where,
                                             bio.HasTheClientVisitedPhysician,
                                             bio.HasTheClientVisitedPhysician_Reason,
-                                            bio.HasTheClientVisitedPhysician_Date,
+                                            Convert.ToDateTime(bio.HasTheClientVisitedPhysician_Date).ToShortDateString(),
                                             bio.DoesTheClientExperience,
                                             bio.DoesTheClientExperience_Where,
                                             bio.PleaseRatePain,
