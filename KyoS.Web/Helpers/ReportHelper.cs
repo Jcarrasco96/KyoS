@@ -19624,7 +19624,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
-            
+            dt.Columns.Add("TCMDomainName", typeof(string));
+
             foreach (TCMNoteActivityEntity item in activityList)
             {
 
@@ -19641,7 +19642,8 @@ namespace KyoS.Web.Helpers
                                             item.CreatedBy,
                                             item.CreatedOn,
                                             item.LastModifiedBy,
-                                            item.LastModifiedOn
+                                            item.LastModifiedOn,
+                                            item.TCMDomain.Name
                                         });
             }
 
