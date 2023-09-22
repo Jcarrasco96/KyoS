@@ -474,7 +474,8 @@ namespace KyoS.Web.Controllers
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
                         Units = item.Units,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
                     };
                     _context.Add(clientHealthInsurance);
                     _context.HealthInsuranceTemp.Remove(item);
@@ -922,7 +923,8 @@ namespace KyoS.Web.Controllers
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
                         Units = item.Units,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
                     };
                     _context.Add(clientHealthInsurance);
                     //_context.HealthInsuranceTemp.Remove(item);
@@ -2895,7 +2897,8 @@ namespace KyoS.Web.Controllers
                         Name = item.HealthInsurance.Name,
                         UserName = user_logged.UserName,
                         IdClient = client.Id,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -2949,8 +2952,10 @@ namespace KyoS.Web.Controllers
                     MemberId = string.Empty,
                     Units = 0,
                     IdClient = idClient,
-                    AuthorizationNumber = string.Empty
-                };
+                    AuthorizationNumber = "Not Need",
+                    IdAgencyService = 0,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
+                 };
                 return View(entity);
             }
             else
@@ -2965,7 +2970,9 @@ namespace KyoS.Web.Controllers
                     MemberId = string.Empty,
                     Units = 0,
                     IdClient = idClient,
-                    AuthorizationNumber = string.Empty
+                    AuthorizationNumber = string.Empty,
+                    IdAgencyService = 0,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
                 };
                 return View(entity);
             }
@@ -2991,8 +2998,15 @@ namespace KyoS.Web.Controllers
 
                     foreach (var item in healthInsuranceTempList)
                     {
-                        item.Active = false;
-                        _context.Update(item);
+                        if (item.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService))
+                        {
+                            item.Active = false;
+                            _context.Update(item);
+                        }
+                        else
+                        {
+                            _context.Update(item);
+                        }
                     }
 
                     HealthInsuranceEntity healthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(n => n.Id == HealthInsuranceModel.IdhealthInsurance);
@@ -3007,7 +3021,8 @@ namespace KyoS.Web.Controllers
                         Units = HealthInsuranceModel.Units,
                         Name = healthInsurance.Name,
                         IdClient = HealthInsuranceModel.IdClient,
-                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -5012,7 +5027,9 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Name = healthInsuranceTempEntity.Name,
                     Active = healthInsuranceTempEntity.Active,
-                    UserName = user_logged.UserName
+                    UserName = user_logged.UserName,
+                    IdAgencyService = (healthInsuranceTempEntity.Agency == ServiceAgency.CMH)? 0 : 1,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
                 };
                 return View(entity);
             }
@@ -5044,7 +5061,8 @@ namespace KyoS.Web.Controllers
                         Units = HealthInsuranceModel.Units,
                         Name = HealthInsuranceModel.Name,
                         IdClient = HealthInsuranceModel.IdClient,
-                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
                     };
                     _context.Update(healthInsuranceTemp);
                     await _context.SaveChangesAsync();

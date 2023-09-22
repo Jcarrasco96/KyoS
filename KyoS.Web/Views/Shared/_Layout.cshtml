@@ -161,7 +161,13 @@
 
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Units per Agency</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-controller="HealthInsurances" asp-action="UnitsAvailability" asp-route-agency="0">CMH</a></li>
+                                            <li><a asp-controller="HealthInsurances" asp-action="UnitsAvailability" asp-route-agency="1">TCM</a></li>
+                                        </ul>
+                                    </li>
                                 }
                                 else
                                 {

@@ -397,7 +397,7 @@ namespace KyoS.Web.Data.Entities
 
         //8  ECONOMIC / FINANCIAL
 
-        public int MonthlyFamilyIncome { get; set; }
+        public string MonthlyFamilyIncome { get; set; }
         public string WhatIsTheMainSource { get; set; }
         public string OtherFinancial { get; set; }
         public bool IsTheClientHavingFinancial { get; set; }

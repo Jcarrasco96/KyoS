@@ -293,7 +293,7 @@ namespace KyoS.Web.Controllers
                         MakingTotal = false,
                         Mammogram = "",
                         MayWeLeaveSend = false,
-                        MonthlyFamilyIncome = 0,
+                        MonthlyFamilyIncome = string.Empty,
                         NoAirCondition = false,
                         NoTelephone = false,
                         NotHot = false,

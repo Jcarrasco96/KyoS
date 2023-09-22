@@ -22,6 +22,8 @@ namespace KyoS.Web.Models
 
         public int UsedUnits { get; set; }
 
-        public bool Expired { get; set; }        
+        public bool Expired { get; set; }
+        public int IdAgencyService { get; set; }
+        public IEnumerable<SelectListItem> AgencyServices { get; set; }
     }
 }

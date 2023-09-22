@@ -1407,8 +1407,7 @@ namespace KyoS.Web.Helpers
                 DurationTime = model.DurationTime,
                 Units = model.Units,                
                 Active = model.Active,
-                IdClient = model.Client.Id,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
+                Client = model.Client,
                 IdHealthInsurance = model.HealthInsurance.Id,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(idClinic),
                 CreatedBy = model.CreatedBy,
@@ -1416,7 +1415,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 MemberId = model.MemberId,
-                AuthorizationNumber = model.AuthorizationNumber
+                AuthorizationNumber = model.AuthorizationNumber,
+                IdAgencyService = (model.Agency == ServiceAgency.CMH) ? 0 : 1,
+                AgencyServices = _combosHelper.GetComboServiceAgency(),
+                Agency = model.Agency
             };
         }
 

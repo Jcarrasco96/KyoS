@@ -49,7 +49,7 @@
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div id="view-NoteActivity">
-                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
+                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })
                 </div>
             </div>
             <partial name="_TCMNotes1ReadOnly" />

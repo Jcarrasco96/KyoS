@@ -12,11 +12,16 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="UserName" />
-            <div class="col-md-12">
-                <div class="form-group">
+            <div >
+                <div class="col-md-9 form-group">
                     <label asp-for="IdhealthInsurance" class="control-label"></label>&nbsp;*
                     <select asp-for="IdhealthInsurance" class="form-control" asp-items="Model.HealthInsurance"></select>
                     <span asp-validation-for="IdhealthInsurance" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="IdAgencyService" class="control-label">Agency</label>&nbsp;*
+                    <select asp-for="IdAgencyService" class="form-control" asp-items="Model.AgencyServices"></select>
+                    <span asp-validation-for="IdAgencyService" class="text-danger"></span>
                 </div>
             </div>
             <div>
