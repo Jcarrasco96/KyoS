@@ -19,62 +19,57 @@
 <div class="row">
     @if (ViewBag.Error == "0")
     {
-        <div class="alert alert-block alert-danger">
-            <i class="icon-ok red"></i>
-            <strong class="red">
-                Error. There are notes on this date. It´s not possible edit.
-            </strong>
-            <a asp-action="ActivitiesPerWeek">Back</a>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <div class="alert alert-block alert-danger">
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. There are notes on this date. It´s not possible edit.
+                    </strong>
+                    <a asp-action="ActivitiesPerWeek">Back</a>
+                </div>
+            </div>
         </div>
     }
     else
-    {
-        @if (ViewBag.Error == "1")
-        {
-            <div class="alert alert-block alert-danger">
-                <i class="icon-ok red"></i>
-                <strong class="red">
-                    Error. You must select at least one skill sets adressed per theme.
-                </strong>
-            </div>
-        }
-        <form asp-action="CreateActivitiesWeek3">
+    {       
+        <form asp-action="CreateActivitiesWeek3" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdWorkday" />
             <div class="col-md-push-12">
-                    @if (ViewData["edit"].ToString() == "1")
-                    {                        
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Sessions</label><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="AM" class="form-check-input">&nbsp;&nbsp;AM - Morning <br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="PM" class="form-check-input">&nbsp;&nbsp;PM - Afternoon<br />
-                            <hr />
-                        </div>                       
-                    }
-                    else
-                    {
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Sessions</label><br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="AM" class="form-check-input" disabled>&nbsp;&nbsp;AM - Morning<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="PM" class="form-check-input" disabled>&nbsp;&nbsp;PM - Afternoon<br />
-                            <hr />
-                        </div>                        
-                        <input type="hidden" asp-for="AM" />
-                        <input type="hidden" asp-for="PM" />
-                    }                
-            </div>            
-            <div class="col-md-push-12">      
-                <div class ="form-group col-md-12">
+                @if (ViewData["edit"].ToString() == "1")
+                {
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Sessions</label><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="AM" class="form-check-input">&nbsp;&nbsp;AM - Morning <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="PM" class="form-check-input">&nbsp;&nbsp;PM - Afternoon<br />
+                        <hr />
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Sessions</label><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="AM" class="form-check-input" disabled>&nbsp;&nbsp;AM - Morning<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="PM" class="form-check-input" disabled>&nbsp;&nbsp;PM - Afternoon<br />
+                        <hr />
+                    </div>
+                    <input type="hidden" asp-for="AM" />
+                    <input type="hidden" asp-for="PM" />
+                }
+            </div>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-12">
                     <a onclick="showInPopupLg('@Url.Action("SearchTopic", "Activities", null, Context.Request.Scheme)','Search Theme')" class="btn btn-info" title="Search Theme"><i class="glyphicon glyphicon-search"></i> Search Theme</a>
                 </div>
-            </div> 
+            </div>
             <div class="col-md-push-12">
                 <div class="form-group col-md-12">
                     <label asp-for="TitleNote" class="control-label">Note title</label>
                     <input asp-for="TitleNote" class="form-control" />
                     <span asp-validation-for="TitleNote" class="text-danger"></span>
                 </div>
-            </div> 
+            </div>
             <div class="col-md-push-12">
                 <div class="form-group col-md-6">
                     <label class="control-label">Group 1 Theme</label>
@@ -84,15 +79,15 @@
                 <div class="form-group col-md-6">
                     <label class="control-label">Skill Sets Addressed</label>
                     <br />
-                    <input type="checkbox" asp-for="copingSkills1" /> Coping Skills &nbsp;
-                    <input type="checkbox" asp-for="stressManagement1" /> Stress Management &nbsp;
-                    <input type="checkbox" asp-for="healthyLiving1" /> Healthy Living &nbsp;
-                    <input type="checkbox" asp-for="relaxationTraining1" /> Relaxation Training &nbsp;
-                    <input type="checkbox" asp-for="diseaseManagement1" /> Disease Management &nbsp;
-                    <input type="checkbox" asp-for="communityResources1" /> Community Resources &nbsp;
-                    <input type="checkbox" asp-for="activityDailyLiving1" /> Activities of Daily Living &nbsp;
-                    <input type="checkbox" asp-for="socialSkills1" /> Social Skills &nbsp;
-                    <input type="checkbox" asp-for="lifeSkills1" /> Life Skills &nbsp;
+                    <input type="checkbox" asp-for="copingSkills1" id="copingSkills1"/> Coping Skills &nbsp;
+                    <input type="checkbox" asp-for="stressManagement1" id="stressManagement1"/> Stress Management &nbsp;
+                    <input type="checkbox" asp-for="healthyLiving1" id="healthyLiving1"/> Healthy Living &nbsp;
+                    <input type="checkbox" asp-for="relaxationTraining1" id="relaxationTraining1"/> Relaxation Training &nbsp;
+                    <input type="checkbox" asp-for="diseaseManagement1" id="diseaseManagement1"/> Disease Management &nbsp;
+                    <input type="checkbox" asp-for="communityResources1" id="communityResources1"/> Community Resources &nbsp;
+                    <input type="checkbox" asp-for="activityDailyLiving1" id="activityDailyLiving1"/> Activities of Daily Living &nbsp;
+                    <input type="checkbox" asp-for="socialSkills1" id="socialSkills1"/> Social Skills &nbsp;
+                    <input type="checkbox" asp-for="lifeSkills1" id="lifeSkills1"/> Life Skills &nbsp;
                 </div>
             </div>
             <div class="col-md-push-12">
@@ -116,15 +111,15 @@
                 <div class="form-group col-md-6">
                     <label class="control-label">Skill Sets Addressed</label>
                     <br />
-                    <input type="checkbox" asp-for="copingSkills2" /> Coping Skills &nbsp;
-                    <input type="checkbox" asp-for="stressManagement2" /> Stress Management &nbsp;
-                    <input type="checkbox" asp-for="healthyLiving2" /> Healthy Living &nbsp;
-                    <input type="checkbox" asp-for="relaxationTraining2" /> Relaxation Training &nbsp;
-                    <input type="checkbox" asp-for="diseaseManagement2" /> Disease Management &nbsp;
-                    <input type="checkbox" asp-for="communityResources2" /> Community Resources &nbsp;
-                    <input type="checkbox" asp-for="activityDailyLiving2" /> Activities of Daily Living &nbsp;
-                    <input type="checkbox" asp-for="socialSkills2" /> Social Skills &nbsp;
-                    <input type="checkbox" asp-for="lifeSkills2" /> Life Skills &nbsp;
+                    <input type="checkbox" asp-for="copingSkills2" id="copingSkills2"/> Coping Skills &nbsp;
+                    <input type="checkbox" asp-for="stressManagement2" id="stressManagement2"/> Stress Management &nbsp;
+                    <input type="checkbox" asp-for="healthyLiving2" id="healthyLiving2"/> Healthy Living &nbsp;
+                    <input type="checkbox" asp-for="relaxationTraining2" id="relaxationTraining2"/> Relaxation Training &nbsp;
+                    <input type="checkbox" asp-for="diseaseManagement2" id="diseaseManagement2"/> Disease Management &nbsp;
+                    <input type="checkbox" asp-for="communityResources2" id="communityResources2"/> Community Resources &nbsp;
+                    <input type="checkbox" asp-for="activityDailyLiving2" id="activityDailyLiving2"/> Activities of Daily Living &nbsp;
+                    <input type="checkbox" asp-for="socialSkills2" id="socialSkills2"/> Social Skills &nbsp;
+                    <input type="checkbox" asp-for="lifeSkills2" id="lifeSkills2"/> Life Skills &nbsp;
                 </div>
             </div>
             <div class="col-md-push-12">
@@ -148,15 +143,15 @@
                 <div class="form-group col-md-6">
                     <label class="control-label">Skill Sets Addressed</label>
                     <br />
-                    <input type="checkbox" asp-for="copingSkills3" /> Coping Skills &nbsp;
-                    <input type="checkbox" asp-for="stressManagement3" /> Stress Management &nbsp;
-                    <input type="checkbox" asp-for="healthyLiving3" /> Healthy Living &nbsp;
-                    <input type="checkbox" asp-for="relaxationTraining3" /> Relaxation Training &nbsp;
-                    <input type="checkbox" asp-for="diseaseManagement3" /> Disease Management &nbsp;
-                    <input type="checkbox" asp-for="communityResources3" /> Community Resources &nbsp;
-                    <input type="checkbox" asp-for="activityDailyLiving3" /> Activities of Daily Living &nbsp;
-                    <input type="checkbox" asp-for="socialSkills3" /> Social Skills &nbsp;
-                    <input type="checkbox" asp-for="lifeSkills3" /> Life Skills &nbsp;
+                    <input type="checkbox" asp-for="copingSkills3" id="copingSkills3"/> Coping Skills &nbsp;
+                    <input type="checkbox" asp-for="stressManagement3" id="stressManagement3"/> Stress Management &nbsp;
+                    <input type="checkbox" asp-for="healthyLiving3" id="healthyLiving3"/> Healthy Living &nbsp;
+                    <input type="checkbox" asp-for="relaxationTraining3" id="relaxationTraining3"/> Relaxation Training &nbsp;
+                    <input type="checkbox" asp-for="diseaseManagement3" id="diseaseManagement3"/> Disease Management &nbsp;
+                    <input type="checkbox" asp-for="communityResources3" id="communityResources3"/> Community Resources &nbsp;
+                    <input type="checkbox" asp-for="activityDailyLiving3" id="activityDailyLiving3"/> Activities of Daily Living &nbsp;
+                    <input type="checkbox" asp-for="socialSkills3" id="socialSkills3"/> Social Skills &nbsp;
+                    <input type="checkbox" asp-for="lifeSkills3" id="lifeSkills3"/> Life Skills &nbsp;
                 </div>
             </div>
             <div class="col-md-push-12">
@@ -180,15 +175,15 @@
                 <div class="form-group col-md-6">
                     <label class="control-label">Skill Sets Addressed</label>
                     <br />
-                    <input type="checkbox" asp-for="copingSkills4" /> Coping Skills &nbsp;
-                    <input type="checkbox" asp-for="stressManagement4" /> Stress Management &nbsp;
-                    <input type="checkbox" asp-for="healthyLiving4" /> Healthy Living &nbsp;
-                    <input type="checkbox" asp-for="relaxationTraining4" /> Relaxation Training &nbsp;
-                    <input type="checkbox" asp-for="diseaseManagement4" /> Disease Management &nbsp;
-                    <input type="checkbox" asp-for="communityResources4" /> Community Resources &nbsp;
-                    <input type="checkbox" asp-for="activityDailyLiving4" /> Activities of Daily Living &nbsp;
-                    <input type="checkbox" asp-for="socialSkills4" /> Social Skills &nbsp;
-                    <input type="checkbox" asp-for="lifeSkills4" /> Life Skills &nbsp;
+                    <input type="checkbox" asp-for="copingSkills4" id="copingSkills4" disabled/> Coping Skills &nbsp;
+                    <input type="checkbox" asp-for="stressManagement4" id="stressManagement4" disabled/> Stress Management &nbsp;
+                    <input type="checkbox" asp-for="healthyLiving4" id="healthyLiving4" disabled/> Healthy Living &nbsp;
+                    <input type="checkbox" asp-for="relaxationTraining4" id="relaxationTraining4" disabled/> Relaxation Training &nbsp;
+                    <input type="checkbox" asp-for="diseaseManagement4" id="diseaseManagement4" disabled/> Disease Management &nbsp;
+                    <input type="checkbox" asp-for="communityResources4" id="communityResources4" disabled/> Community Resources &nbsp;
+                    <input type="checkbox" asp-for="activityDailyLiving4" id="activityDailyLiving4" disabled/> Activities of Daily Living &nbsp;
+                    <input type="checkbox" asp-for="socialSkills4" id="socialSkills4" disabled/> Social Skills &nbsp;
+                    <input type="checkbox" asp-for="lifeSkills4" id="lifeSkills4" disabled/> Life Skills &nbsp;
                 </div>
             </div>
             <div class="col-md-push-12">
@@ -200,10 +195,10 @@
             </div>
             &nbsp;
             <div class="col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" onclick="CheckModel()" />
                 <a asp-action="ActivitiesPerWeek" class="btn btn-success">Back</a>
             </div>
-            </form>
+        </form>
     }
 </div>
 
@@ -221,6 +216,39 @@
                         $("#cbActivity1").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
+
+                if ($("#cbTopic1 option:selected").text().includes("No theme") == true) {
+                    copingSkills1.checked = false;
+                    stressManagement1.checked = false;
+                    activityDailyLiving1.checked = false;
+                    communityResources1.checked = false;
+                    diseaseManagement1.checked = false;
+                    healthyLiving1.checked = false;
+                    lifeSkills1.checked = false;
+                    relaxationTraining1.checked = false;
+                    socialSkills1.checked = false;
+                    $("#copingSkills1").attr('disabled', true);
+                    $("#stressManagement1").attr('disabled', true);
+                    $("#activityDailyLiving1").attr('disabled', true);
+                    $("#communityResources1").attr('disabled', true);
+                    $("#diseaseManagement1").attr('disabled', true);
+                    $("#healthyLiving1").attr('disabled', true);
+                    $("#lifeSkills1").attr('disabled', true);
+                    $("#relaxationTraining1").attr('disabled', true);
+                    $("#socialSkills1").attr('disabled', true);
+                }
+                else
+                {
+                    $("#copingSkills1").attr('disabled', false);
+                    $("#stressManagement1").attr('disabled', false);
+                    $("#activityDailyLiving1").attr('disabled', false);
+                    $("#communityResources1").attr('disabled', false);
+                    $("#diseaseManagement1").attr('disabled', false);
+                    $("#healthyLiving1").attr('disabled', false);
+                    $("#lifeSkills1").attr('disabled', false);
+                    $("#relaxationTraining1").attr('disabled', false);
+                    $("#socialSkills1").attr('disabled', false);
+                }
             })
             $("#cbTopic2").change(function () {
                 var url = "@Url.Action("GetActivityList3", "Activities")";
@@ -230,6 +258,39 @@
                         $("#cbActivity2").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
+
+                if ($("#cbTopic2 option:selected").text().includes("No theme") == true) {
+                    copingSkills2.checked = false;
+                    stressManagement2.checked = false;
+                    activityDailyLiving2.checked = false;
+                    communityResources2.checked = false;
+                    diseaseManagement2.checked = false;
+                    healthyLiving2.checked = false;
+                    lifeSkills2.checked = false;
+                    relaxationTraining2.checked = false;
+                    socialSkills2.checked = false;
+                    $("#copingSkills2").attr('disabled', true);
+                    $("#stressManagement2").attr('disabled', true);
+                    $("#activityDailyLiving2").attr('disabled', true);
+                    $("#communityResources2").attr('disabled', true);
+                    $("#diseaseManagement2").attr('disabled', true);
+                    $("#healthyLiving2").attr('disabled', true);
+                    $("#lifeSkills2").attr('disabled', true);
+                    $("#relaxationTraining2").attr('disabled', true);
+                    $("#socialSkills2").attr('disabled', true);
+                }
+                else
+                {
+                    $("#copingSkills2").attr('disabled', false);
+                    $("#stressManagement2").attr('disabled', false);
+                    $("#activityDailyLiving2").attr('disabled', false);
+                    $("#communityResources2").attr('disabled', false);
+                    $("#diseaseManagement2").attr('disabled', false);
+                    $("#healthyLiving2").attr('disabled', false);
+                    $("#lifeSkills2").attr('disabled', false);
+                    $("#relaxationTraining2").attr('disabled', false);
+                    $("#socialSkills2").attr('disabled', false);
+                }
             })
             $("#cbTopic3").change(function () {
                 var url = "@Url.Action("GetActivityList3", "Activities")";
@@ -239,6 +300,39 @@
                         $("#cbActivity3").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
+
+                if ($("#cbTopic3 option:selected").text().includes("No theme") == true) {
+                    copingSkills3.checked = false;
+                    stressManagement3.checked = false;
+                    activityDailyLiving3.checked = false;
+                    communityResources3.checked = false;
+                    diseaseManagement3.checked = false;
+                    healthyLiving3.checked = false;
+                    lifeSkills3.checked = false;
+                    relaxationTraining3.checked = false;
+                    socialSkills3.checked = false;
+                    $("#copingSkills3").attr('disabled', true);
+                    $("#stressManagement3").attr('disabled', true);
+                    $("#activityDailyLiving3").attr('disabled', true);
+                    $("#communityResources3").attr('disabled', true);
+                    $("#diseaseManagement3").attr('disabled', true);
+                    $("#healthyLiving3").attr('disabled', true);
+                    $("#lifeSkills3").attr('disabled', true);
+                    $("#relaxationTraining3").attr('disabled', true);
+                    $("#socialSkills3").attr('disabled', true);
+                }
+                else
+                {
+                    $("#copingSkills3").attr('disabled', false);
+                    $("#stressManagement3").attr('disabled', false);
+                    $("#activityDailyLiving3").attr('disabled', false);
+                    $("#communityResources3").attr('disabled', false);
+                    $("#diseaseManagement3").attr('disabled', false);
+                    $("#healthyLiving3").attr('disabled', false);
+                    $("#lifeSkills3").attr('disabled', false);
+                    $("#relaxationTraining3").attr('disabled', false);
+                    $("#socialSkills3").attr('disabled', false);
+                }
             })
             $("#cbTopic4").change(function () {
                 var url = "@Url.Action("GetActivityList3", "Activities")";
@@ -248,8 +342,132 @@
                         $("#cbActivity4").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
+                
+                if ($("#cbTopic4 option:selected").text().includes("No theme") == true) {
+                    copingSkills4.checked = false;
+                    stressManagement4.checked = false;
+                    activityDailyLiving4.checked = false;
+                    communityResources4.checked = false;
+                    diseaseManagement4.checked = false;
+                    healthyLiving4.checked = false;
+                    lifeSkills4.checked = false;
+                    relaxationTraining4.checked = false;
+                    socialSkills4.checked = false;
+                    $("#copingSkills4").attr('disabled', true);
+                    $("#stressManagement4").attr('disabled', true);
+                    $("#activityDailyLiving4").attr('disabled', true);
+                    $("#communityResources4").attr('disabled', true);
+                    $("#diseaseManagement4").attr('disabled', true);
+                    $("#healthyLiving4").attr('disabled', true);
+                    $("#lifeSkills4").attr('disabled', true);
+                    $("#relaxationTraining4").attr('disabled', true);
+                    $("#socialSkills4").attr('disabled', true);
+                }
+                else
+                {
+                    $("#copingSkills4").attr('disabled', false);
+                    $("#stressManagement4").attr('disabled', false);
+                    $("#activityDailyLiving4").attr('disabled', false);
+                    $("#communityResources4").attr('disabled', false);
+                    $("#diseaseManagement4").attr('disabled', false);
+                    $("#healthyLiving4").attr('disabled', false);
+                    $("#lifeSkills4").attr('disabled', false);
+                    $("#relaxationTraining4").attr('disabled', false);
+                    $("#socialSkills4").attr('disabled', false);
+                }
             })
         });
+
+        function CheckModel()
+        {
+            if ($("#cbTopic1").val() != 0 && $("#cbTopic2").val() != 0 && $("#cbTopic3").val() != 0 && $("#cbTopic4").val() != 0
+                && $("#cbActivity1 option:selected").text() != "" && $("#cbActivity1 option:selected").text() != "[Select activity...]"
+                && $("#cbActivity2 option:selected").text() != "" && $("#cbActivity2 option:selected").text() != "[Select activity...]"
+                && $("#cbActivity3 option:selected").text() != "" && $("#cbActivity3 option:selected").text() != "[Select activity...]"
+                && $("#cbActivity4 option:selected").text() != "" && $("#cbActivity4 option:selected").text() != "[Select activity...]")
+            {
+                //The user must select at least one skill adressed per theme 
+                if (CheckSkillsPerTheme() == true)
+                {
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Select at least one skill sets adressed per theme.",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        showCancelButton: true,
+                        cancelButtonText: '    OK    '
+                    });
+                    return;
+                }
+
+                if (CheckNoTheme() == true)
+                {
+                    Swal.fire({
+                        title: 'Do you want to continue?',
+                        text: "You did not select all possible themes.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ec971f',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, continue!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form1.submit();
+                        }
+                    });
+                }
+                else
+                {
+                    form1.submit();
+                }
+            }            
+        }
+
+        function CheckNoTheme()
+        {
+            let theme1 = $("#cbTopic1 option:selected").text();
+            let theme2 = $("#cbTopic2 option:selected").text();
+            let theme3 = $("#cbTopic3 option:selected").text();
+            let theme4 = $("#cbTopic4 option:selected").text();
+
+            if (theme1.includes("No theme") == true || theme2.includes("No theme") == true || theme3.includes("No theme") == true || theme4.includes("No theme") == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        function CheckSkillsPerTheme()
+        {
+            let theme1 = $("#cbTopic1 option:selected").text();
+            let theme2 = $("#cbTopic2 option:selected").text();
+            let theme3 = $("#cbTopic3 option:selected").text();
+            let theme4 = $("#cbTopic4 option:selected").text();
+
+            if ((theme1.includes("No theme") == false && copingSkills1.checked == false && activityDailyLiving1.checked == false && communityResources1.checked == false
+                    && diseaseManagement1.checked == false && healthyLiving1.checked == false && lifeSkills1.checked == false && relaxationTraining1.checked == false
+                    && socialSkills1.checked == false && stressManagement1.checked == false) ||
+                (theme2.includes("No theme") == false && copingSkills2.checked == false && activityDailyLiving2.checked == false && communityResources2.checked == false
+                    && diseaseManagement2.checked == false && healthyLiving2.checked == false && lifeSkills2.checked == false && relaxationTraining2.checked == false
+                    && socialSkills2.checked == false && stressManagement2.checked == false) ||
+                (theme3.includes("No theme") == false && copingSkills3.checked == false && activityDailyLiving3.checked == false && communityResources3.checked == false
+                    && diseaseManagement3.checked == false && healthyLiving3.checked == false && lifeSkills3.checked == false && relaxationTraining3.checked == false
+                    && socialSkills3.checked == false && stressManagement3.checked == false) ||
+                (theme4.includes("No theme") == false && copingSkills4.checked == false && activityDailyLiving4.checked == false && communityResources4.checked == false
+                    && diseaseManagement4.checked == false && healthyLiving4.checked == false && lifeSkills4.checked == false && relaxationTraining4.checked == false
+                    && socialSkills4.checked == false && stressManagement4.checked == false))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     </script>    
 }
 

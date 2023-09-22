@@ -1211,7 +1211,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(n => n.Objetives)
                                     .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
-            //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
+            //----------compruebo que tenga algun objetivo que valide el servicio----------//
             if (mtp != null)
             {
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
@@ -1228,10 +1228,8 @@ namespace KyoS.Web.Controllers
                         return RedirectToAction("NotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
-
                 }
             }
-
            
             List<Workday_Activity_Facilitator> activities;
             if (am == true)
@@ -1644,9 +1642,7 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
                         }
                     }
-                    //Verify the client is not present in other services of notes at the same time
-                   
-
+                    
                     noteEntity = await _converterHelper.ToNotePEntity(model, true);
                     noteEntity.Setting = form["Setting"].ToString();
 
@@ -1673,7 +1669,7 @@ namespace KyoS.Web.Controllers
                         noteEntity.Attentive = true;
                     }
                                         
-                    // I will calculate teh real units of the note
+                    // I will calculate the real units of the note
                     int realUnits = 0;
                     realUnits = (model.Present1) ? realUnits + 4 : realUnits;
                     realUnits = (model.Present2) ? realUnits + 4 : realUnits;

@@ -10994,6 +10994,14 @@ namespace KyoS.Web.Helpers
             {
                 nutritionScoreTotal++;
             }
+            if (bio.AnyFood)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.AnyEating)
+            {
+                nutritionScoreTotal++;
+            }
 
             WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
 
@@ -18746,7 +18754,7 @@ namespace KyoS.Web.Helpers
                                             bio.WhereRecord_Where,
                                             bio.HasTheClientVisitedPhysician,
                                             bio.HasTheClientVisitedPhysician_Reason,
-                                            bio.HasTheClientVisitedPhysician_Date,
+                                            Convert.ToDateTime(bio.HasTheClientVisitedPhysician_Date).ToShortDateString(),
                                             bio.DoesTheClientExperience,
                                             bio.DoesTheClientExperience_Where,
                                             bio.PleaseRatePain,
@@ -19616,7 +19624,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
-            
+            dt.Columns.Add("TCMDomainName", typeof(string));
+
             foreach (TCMNoteActivityEntity item in activityList)
             {
 
@@ -19633,7 +19642,8 @@ namespace KyoS.Web.Helpers
                                             item.CreatedBy,
                                             item.CreatedOn,
                                             item.LastModifiedBy,
-                                            item.LastModifiedOn
+                                            item.LastModifiedOn,
+                                            item.TCMDomain.Name
                                         });
             }
 
