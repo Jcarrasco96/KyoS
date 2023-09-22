@@ -28,7 +28,10 @@
                             {
                                 <tr style="color: red;" title="Not available">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)
@@ -61,7 +64,10 @@
                             {
                                 <tr title="Valid">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)
@@ -94,7 +100,10 @@
                             {
                                 <tr style="color: darkgrey;" title="Expired">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)

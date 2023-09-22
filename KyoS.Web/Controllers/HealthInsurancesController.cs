@@ -13,7 +13,7 @@ using KyoS.Common.Enums;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, TCMSupervisor, CaseManager, Frontdesk")]
     public class HealthInsurancesController : Controller
     {
         private readonly DataContext _context;
@@ -249,9 +249,7 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-
                                                    .Include(u => u.Clinic)
-
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
@@ -290,31 +288,68 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
-
-                                                              .Include(wc => wc.Client)
-
-                                                              .Include(wc => wc.HealthInsurance)
-                                                              .ThenInclude(h => h.Clinic)
-
-                                                              .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id
-                                                                         && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)
-                                                                         && ch.Active == true))
-                                                              .ToListAsync();
+                List<TCMClientEntity> list = new List<TCMClientEntity>();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Status == StatusType.Open
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
+                                         .ToListAsync();
+                }
+                if (User.IsInRole("CaseManager"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Status == StatusType.Open
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Casemanager.LinkedUser == user_logged.UserName))
+                                         .ToListAsync();
+                }
+                if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                           && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Status == StatusType.Open))
+                                         .ToListAsync();
+                }
                 foreach (var item in list)
                 {
+                    Client_HealthInsurance client_health = item.Client.Clients_HealthInsurances
+                                                                      .FirstOrDefault(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM);
+                   
+                    if (client_health == null)
+                    {
+                        client_health = new Client_HealthInsurance();
+                    }
+                   
                     unitsList.Add(new UnitsAvailabilityViewModel
                     {
                         Id = item.Id,
-                        ApprovedDate = item.ApprovedDate,
-                        DurationTime = item.DurationTime,
-                        Units = item.Units,
-                        Active = item.Active,
+                        ApprovedDate = client_health.ApprovedDate,
+                        DurationTime = client_health.DurationTime,
+                        Units = client_health.Units,
+                        Active = client_health.Active,
                         Client = item.Client,
-                        HealthInsurance = item.HealthInsurance,
-                        Expired = (item.ApprovedDate.AddMonths(item.DurationTime) < DateTime.Now) ? true : false,
-                        UsedUnits = await this.UsedUnitsPerClientTCM(item.ApprovedDate, item.Client.Id),
-                        Agency = item.Agency
+                        HealthInsurance = client_health.HealthInsurance,
+                        Expired = (client_health.ApprovedDate.AddMonths(client_health.DurationTime) < DateTime.Now) ? true : false,
+                        UsedUnits = await this.UsedUnitsPerClientTCM(client_health.ApprovedDate, item.Client.Id),
+                        Agency = client_health.Agency
                     });
                 }
             }

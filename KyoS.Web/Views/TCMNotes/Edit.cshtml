@@ -62,6 +62,12 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Status" />
             <input type="hidden" asp-for="IdCaseManager" />
+            <input type="hidden" asp-for="ApprovedDate" />
+            @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
+            {
+                <input type="hidden" asp-for="Sign" />
+                <input type="hidden" asp-for="SignSupervisor" />
+            }
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">

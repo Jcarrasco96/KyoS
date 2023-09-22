@@ -189,7 +189,7 @@ namespace KyoS.Web.Controllers
                     {
                         noteActivity = new TCMNoteActivityEntity()
                         {
-                            TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == item.TCMDomainCode),
+                            TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Id == item.IdTCMDomain),
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             LastModifiedBy = string.Empty,
@@ -322,8 +322,12 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("PrintNote", new { id = TcmNote.Id });
                             }
-
+                            
                             model = _converterHelper.ToTCMNoteViewModel(TcmNote);
+                            if (TcmNote.Status == NoteStatus.Approved)
+                            {
+                                model.ApprovedDate = TcmNote.ApprovedDate;
+                            }
                             model.TCMClient = TcmNote.TCMClient;
                             ViewData["origin"] = origin;
                             ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
@@ -363,19 +367,16 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                
-                //tcmNotesEntity.TotalMinutes = GetTotalMinutes(tcmNotesEntity);
-                //tcmNotesEntity.TotalUnits = GetTotalUnit(tcmNotesEntity.TotalMinutes);
-
-               /* TCMNoteEntity tcmNote =  _context.TCMNote.FirstOrDefault(n => n.Id == tcmNotesViewModel.Id);
-
-                if (tcmNote == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Already not exists the TCM note");
-                }*/
-
                 TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
-
+                if (tcmNotesEntity.Status == NoteStatus.Pending)
+                {
+                    tcmNotesEntity.Sign = true;
+                }
+                if (User.IsInRole("TCMSupervisor") && tcmNotesEntity.Status == NoteStatus.Approved)
+                {
+                    tcmNotesEntity.ApprovedDate = tcmNotesViewModel.ApprovedDate;
+                    tcmNotesEntity.Sign = true;
+                }
                 List<TCMMessageEntity> messages = tcmNotesEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
                 //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
                 foreach (TCMMessageEntity value in messages)
@@ -714,7 +715,7 @@ namespace KyoS.Web.Controllers
             {
                 TcmNotesViewModel.EndTime = TcmNotesViewModel.StartTime.AddMinutes(TcmNotesViewModel.Minutes);
                  
-                TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Code == _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain).Code);
+                TcmNotesViewModel.TCMDomain = await _context.TCMDomains.FirstOrDefaultAsync(n => n.Id == TcmNotesViewModel.IdTCMDomain);
 
                 TcmNotesViewModel.StartTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.StartTime.Hour, TcmNotesViewModel.StartTime.Minute, 0);
                 TcmNotesViewModel.EndTime = new DateTime(TcmNotesViewModel.DateOfServiceNote.Year, TcmNotesViewModel.DateOfServiceNote.Month, TcmNotesViewModel.DateOfServiceNote.Day, TcmNotesViewModel.EndTime.Hour, TcmNotesViewModel.EndTime.Minute, 0);
