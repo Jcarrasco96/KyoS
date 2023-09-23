@@ -11,5 +11,8 @@ namespace KyoS.Web.Models
     public class TCMAssessmentPastCurrentServiceViewModel : TCMAssessmentPastCurrentServiceEntity
     {
         public int IdTCMAssessment { get; set; }
+
+        public int IdEffectivess { get; set; }
+        public IEnumerable<SelectListItem> EffectivessList { get; set; }
     }
 }

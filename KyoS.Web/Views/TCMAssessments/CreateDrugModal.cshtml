@@ -17,9 +17,9 @@
             </div>
             <div>
                 <div class=" col-md-8 form-group">
-                    <label asp-for="SustanceName" class="control-label">Type of Drug/Substance  </label>
-                    <input asp-for="SustanceName" class="form-control" />
-                    <span asp-validation-for="SustanceName" class="text-danger"></span>
+                    <label asp-for="IdDrugs" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdDrugs" asp-items="Model.DrugsList" class="form-control"></select>
+                    <span asp-validation-for="IdDrugs" class="text-danger"></span>
                 </div>
             </div>
             <div>

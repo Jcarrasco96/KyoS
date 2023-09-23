@@ -88,7 +88,7 @@
             </div>
             <partial name="TCMServicePlan1ReadOnly" />
             <div class="form-group">
-                <input type="submit" value="Approve" class="btn btn-primary" />
+                <input type="submit" value="Sign / Approve" class="btn btn-primary" />
                 @if (User.IsInRole("TCMSupervisor"))
                 {
                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>

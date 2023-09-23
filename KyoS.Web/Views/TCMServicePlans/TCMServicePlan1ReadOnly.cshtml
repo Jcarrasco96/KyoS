@@ -4,8 +4,27 @@
 }
 
 <pre>
-    <strong>Employee signature date</strong>         <input asp-for="DateServicePlan">     <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
-</pre>
+   @if (Model.Approved < 1)
+   {
+       <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+   }
+   else
+   { 
+       <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   }
+       <strong>Employee signature date</strong>      <input asp-for="DateServicePlan" disabled>   
+       <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br /> 
+   @if (Model.Approved < 2)
+   {
+       <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+   }
+   else
+   { 
+       <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   } 
+       <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
+       <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                        </pre>
 <div class="col-md-12">
     <hr />
 </div>

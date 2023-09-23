@@ -90,7 +90,7 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.TCMAssessment.Id" asp-route-origi="3" class="btn btn-success" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.TCMAssessment.Id" asp-route-origi="5" class="btn btn-success" title="Edit TCM Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a asp-action="PrintAssessment" asp-route-id="@item.TCMAssessment.Id" class="btn btn-success" title="Print TCM Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else

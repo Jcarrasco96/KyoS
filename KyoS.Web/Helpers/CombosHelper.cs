@@ -1607,7 +1607,8 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = EmploymentStatus.Disabled.ToString(), Value = "3"},
                 new SelectListItem { Text = EmploymentStatus.Homemaker.ToString(), Value = "4"},
                 new SelectListItem { Text = EmploymentStatus.Student.ToString(), Value = "5"},
-                new SelectListItem { Text = EmploymentStatus.Unemployed.ToString(), Value = "6"}
+                new SelectListItem { Text = EmploymentStatus.Unemployed.ToString(), Value = "6"},
+                new SelectListItem { Text = EmploymentStatus.N_A.ToString(), Value = "7"}
             };
 
             return list;
@@ -2302,10 +2303,66 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = new List<SelectListItem>
             {
-                new SelectListItem { Text = YesNoNA.Yes.ToString(), Value = "0"},
-                new SelectListItem { Text = YesNoNA.No.ToString(), Value = "1"},
-                new SelectListItem { Text = YesNoNA.NA.ToString(), Value = "2"}
+                new SelectListItem { Text = YesNoNAType.Yes.ToString(), Value = "0"},
+                new SelectListItem { Text = YesNoNAType.No.ToString(), Value = "1"},
+                new SelectListItem { Text = YesNoNAType.NA.ToString(), Value = "2"}
                
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboEffectiveness()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = EffectivenessType.Effective.ToString(), Value = "0"},
+                new SelectListItem { Text = EffectivenessType.Highly_effective.ToString(), Value = "1"},
+                new SelectListItem { Text = EffectivenessType.Somewhat_effective.ToString(), Value = "2"},
+                new SelectListItem { Text = EffectivenessType.slightly_effective.ToString(), Value = "3"},
+                new SelectListItem { Text = EffectivenessType.Not_at_all_effective.ToString(), Value = "4"},
+                new SelectListItem { Text = EffectivenessType.unable_to_evaluate.ToString(), Value = "5"},
+                new SelectListItem { Text = EffectivenessType.In_progress.ToString(), Value = "6"},
+                new SelectListItem { Text = EffectivenessType.Successful.ToString(), Value = "7"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboDrugs()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = DrugsType.Alcohol.ToString(), Value = "0"},
+                new SelectListItem { Text = DrugsType.Amphetamine_Meth.ToString(), Value = "1"},
+                new SelectListItem { Text = DrugsType.Barbiturates.ToString(), Value = "2"},
+                new SelectListItem { Text = DrugsType.Benzodiazepines.ToString(), Value = "3"},
+                new SelectListItem { Text = DrugsType.Caffeine.ToString(), Value = "4"},
+                new SelectListItem { Text = DrugsType.Cocaina_Crack.ToString(), Value = "5"},
+                new SelectListItem { Text = DrugsType.Hallucinogens.ToString(), Value = "6"},
+                new SelectListItem { Text = DrugsType.Heroin.ToString(), Value = "7"},
+                new SelectListItem { Text = DrugsType.Inhalants_Solvents.ToString(), Value = "8"},
+                new SelectListItem { Text = DrugsType.LSD.ToString(), Value = "9"},
+                new SelectListItem { Text = DrugsType.Marijuana_Hashish.ToString(), Value = "10"},
+                new SelectListItem { Text = DrugsType.MDMA_Ecstasy.ToString(), Value = "11"},
+                new SelectListItem { Text = DrugsType.Nicotne.ToString(), Value = "12"},
+                new SelectListItem { Text = DrugsType.Opium.ToString(), Value = "13"},
+                new SelectListItem { Text = DrugsType.PrescriptionDrugs.ToString(), Value = "14"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboFrecuencyActive()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+            {
+                new SelectListItem { Text = FrecuencyActive.Daily.ToString(), Value = "0"},
+                new SelectListItem { Text = FrecuencyActive.Three_Time_per_week_or_more.ToString(), Value = "1"},
+                new SelectListItem { Text = FrecuencyActive.Three_Time_per_week_or_less.ToString(), Value = "2"},
+                new SelectListItem { Text = FrecuencyActive.Once_per_week.ToString(), Value = "3"},
+                new SelectListItem { Text = FrecuencyActive.Rarely.ToString(), Value = "4"},
+                new SelectListItem { Text = FrecuencyActive.Never.ToString(), Value = "5"}
             };
 
             return list;

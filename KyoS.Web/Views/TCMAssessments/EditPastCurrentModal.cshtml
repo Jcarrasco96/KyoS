@@ -36,9 +36,9 @@
             </div>
             <div>
                 <div class=" col-md-6 form-group">
-                    <label asp-for="Efectiveness" class="control-label">Effectiveness</label>
-                    <input asp-for="Efectiveness" class="form-control" />
-                    <span asp-validation-for="Efectiveness" class="text-danger"></span>
+                    <label asp-for="IdEffectivess" class="control-label">Effectiveness</label>&nbsp;*
+                    <select asp-for="IdEffectivess" asp-items="Model.EffectivessList" class="form-control"></select>
+                    <span asp-validation-for="IdEffectivess" class="text-danger"></span>
                 </div>
             </div>
             <div>

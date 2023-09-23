@@ -236,7 +236,7 @@
             }
 
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sign / Approve" class="btn btn-primary" />
                 @if (User.IsInRole("TCMSupervisor"))
                 {
                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMAssessments",new {id = Model.Id, origi = 1},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Assessment due to problems">Review</a>

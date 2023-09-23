@@ -117,6 +117,8 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(n => n.Client_Referred)
                                                         .ThenInclude(n => n.Referred)
                                                         .Include(n => n.TCMIntakeForm)
+                                                        .Include(n => n.Casemanager)
+                                                        .ThenInclude(n => n.TCMSupervisor)
                                                         .FirstOrDefault(n => n.Id == id);
 
                     if (tcmClient.TCMIntakeForm == null)
@@ -227,7 +229,7 @@ namespace KyoS.Web.Controllers
                         EmployerCityState = "",
                         EmployerContactPerson = "",
                         EmployerPhone = "",
-                        EmploymentStatus = "",
+                        EmploymentStatuss = _combosHelper.GetComboEmployed(),
                         ExcessiveCluter = false,
                         FailToEelementary = false,
                         FailToHigh = false,
@@ -334,7 +336,7 @@ namespace KyoS.Web.Controllers
                         RelationshipMiddle = false,
                         RelationshipPreSchool = false,
                         Resident = false,
-                        ResidentStatus = "",
+                        ResidentStatuss = _combosHelper.GetComboResidential(),
                         SchoolAddress = "",
                         SchoolCityState = "",
                         SchoolDistrict = "",
@@ -425,7 +427,7 @@ namespace KyoS.Web.Controllers
                         Suicidal = false,
                         Status = TCMDocumentStatus.Edition,
                         DoesParanoia = false,
-                        HowActive = "",
+                        FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
                         TCMSupervisor = new TCMSupervisorEntity(),
                         DoesPoor = false,
                         DoesSadness = false,
@@ -467,8 +469,6 @@ namespace KyoS.Web.Controllers
                         HowWeelWithSome = false,
                         IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>(),
                         IsClientCurrently = false,
-                        IsClientPregnancy = false,
-                        IsClientPregnancyNA = false,
                         IsSheReceiving = false,
                         Issues = "",
                         LastModifiedBy = "",
@@ -646,6 +646,9 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.SurgeryList)
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.TCMIntakeForm)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
@@ -714,7 +717,7 @@ namespace KyoS.Web.Controllers
                 {
                     tcmAssessmentEntity.Approved = 0;
                 }
-                if (origi == 3)
+                if (origi == 5)
                 {
                     tcmAssessmentEntity.Approved = 2;
                 }
@@ -772,6 +775,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 0});
                     }
+                    if (origi == 5)
+                    {
+                        return RedirectToAction("UpdateAssessment", "TCMAssessments");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -786,7 +793,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.TcmClient.Id == id);
+            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
 
             if (tcmAssessment != null)
             {
@@ -1272,7 +1279,7 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        Efectiveness = "",
+                        EffectivessList = _combosHelper.GetComboEffectiveness(),
                         DateReceived = DateTime.Now,
                         ProviderAgency = "",
                         TypeService = ""
@@ -1294,7 +1301,7 @@ namespace KyoS.Web.Controllers
                 Id = 0,
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
-                Efectiveness = "",
+                EffectivessList = _combosHelper.GetComboEffectiveness(),
                 DateReceived = DateTime.Now,
                 ProviderAgency = "",
                 TypeService = ""
@@ -1836,7 +1843,7 @@ namespace KyoS.Web.Controllers
                         Frequency = "",
                         DateBegin = DateTime.Now,
                         LastTimeUsed = "",
-                        SustanceName = ""
+                        DrugsList = _combosHelper.GetComboDrugs()
                     };
                     if (model.TcmAssessment.DrugList == null)
                         model.TcmAssessment.DrugList = new List<TCMAssessmentDrugEntity>();
@@ -1859,7 +1866,7 @@ namespace KyoS.Web.Controllers
                 Frequency = "",
                 DateBegin = DateTime.Now,
                 LastTimeUsed = "",
-                SustanceName = ""
+                DrugsList = _combosHelper.GetComboDrugs()
 
             };
 
@@ -1937,10 +1944,10 @@ namespace KyoS.Web.Controllers
                 {
 
                     TCMAssessmentDrugEntity DrugEntity = _context.TCMAssessmentDrug
-                                                                           .Include(m => m.TcmAssessment)
-                                                                           .ThenInclude(m => m.TcmClient)
-                                                                           .ThenInclude(m => m.Client)
-                                                                           .FirstOrDefault(m => m.Id == id);
+                                                                 .Include(m => m.TcmAssessment)
+                                                                 .ThenInclude(m => m.TcmClient)
+                                                                 .ThenInclude(m => m.Client)
+                                                                 .FirstOrDefault(m => m.Id == id);
                     if (DrugEntity == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -1978,9 +1985,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<TCMAssessmentDrugEntity> DruglList = await _context.TCMAssessmentDrug
-                                                                                .Include(g => g.TcmAssessment)
-                                                                                .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
-                                                                                .ToListAsync();
+                                                                            .Include(g => g.TcmAssessment)
+                                                                            .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
+                                                                            .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", DruglList) });
                 }
@@ -2465,6 +2472,9 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Client)
                                                                 .ThenInclude(b => b.Clinic)
                                                                 .ThenInclude(b => b.Setting)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {

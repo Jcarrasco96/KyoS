@@ -11,5 +11,8 @@ namespace KyoS.Web.Models
     public class TCMAssessmentDrugViewModel : TCMAssessmentDrugEntity
     {
         public int IdTCMAssessment { get; set; }
+
+        public int IdDrugs { get; set; }
+        public IEnumerable<SelectListItem> DrugsList { get; set; }
     }
 }

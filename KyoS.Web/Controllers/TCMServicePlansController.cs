@@ -261,6 +261,9 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(f => f.Client)
                                                           .ThenInclude(f => f.Clinic)
                                                           .ThenInclude(f => f.Setting)
+                                                          .Include(n => n.TcmClient)
+                                                          .ThenInclude(n => n.Casemanager)
+                                                          .ThenInclude(n => n.TCMSupervisor)
                                                           .FirstOrDefault(u => u.Id == Id);
 
             UserEntity user_logged = _context.Users
@@ -276,9 +279,9 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     List<TCMClientEntity> tcmClient = _context.TCMClient
-                                                   .Include(u => u.Client)
-                                                   .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
-                                                   .ToList();
+                                                              .Include(u => u.Client)
+                                                              .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
+                                                              .ToList();
 
                     List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
                     {
@@ -288,8 +291,8 @@ namespace KyoS.Web.Controllers
                         .ToList();
 
                     List<ClinicEntity> clinic = _context.Clinics
-                                                     .Where(u => u.Id == user_logged.Clinic.Id)
-                                                     .ToList();
+                                                        .Where(u => u.Id == user_logged.Clinic.Id)
+                                                        .ToList();
 
                     List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
                     {
@@ -319,7 +322,9 @@ namespace KyoS.Web.Controllers
                         TCMDomain = tcmServicePlan.TCMDomain,
                         Approved = tcmServicePlan.Approved,
                         CreatedBy = tcmServicePlan.CreatedBy,
-                        CreatedOn = tcmServicePlan.CreatedOn
+                        CreatedOn = tcmServicePlan.CreatedOn,
+                        TcmClient = tcmServicePlan.TcmClient,
+                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
 
                     };
 
@@ -378,6 +383,10 @@ namespace KyoS.Web.Controllers
                     _context.Add(notification);
                 }
 
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    tcmServicePlanEntity.DateSupervisorSignature = serviceplanViewModel.DateSupervisorSignature;
+                }
                 _context.Update(tcmServicePlanEntity);
                   try
                   {
@@ -2081,6 +2090,9 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(f => f.Client)
                                                           .ThenInclude(f => f.Clinic)
                                                           .ThenInclude(f => f.Setting)
+                                                          .Include(f => f.TcmClient)
+                                                          .ThenInclude(f => f.Casemanager)
+                                                          .ThenInclude(f => f.TCMSupervisor)
                                                           .FirstOrDefault(u => u.Id == Id);
             TCMServicePlanViewModel model;
 

@@ -73,7 +73,7 @@ namespace KyoS.Web.Data.Entities
         public string AreChildPhone { get; set; }
         public string AreChildAddress { get; set; }
         public string AreChildCity { get; set; }
-        public YesNoNA MayWe { get; set; }
+        public YesNoNAType MayWe { get; set; }
        
         public List<TCMAssessmentHouseCompositionEntity> HouseCompositionList { get; set; }
 
@@ -170,8 +170,8 @@ namespace KyoS.Web.Data.Entities
         public bool HasNoUsefull { get; set; }
         public bool VisionNotDetermined { get; set; }
 
-        public bool IsClientPregnancy { get; set; }
-        public bool IsClientPregnancyNA { get; set; }
+        public YesNoNAType IsClientPregnancy { get; set; }
+        //public bool IsClientPregnancyNA { get; set; }
 
         public bool IsSheReceiving { get; set; }
         public bool DoesSheUnderstand { get; set; }
@@ -182,7 +182,7 @@ namespace KyoS.Web.Data.Entities
 
         public bool AreYouPhysician { get; set; }
         public string AreYouPhysicianSpecify { get; set; }
-        public string HowActive { get; set; }
+        public FrecuencyActive HowActive { get; set; }
 
         //PHYSICAL HEALTH / MEDICAL / DENTAL (Continued)-
         public string PhysicalExam { get; set; }
@@ -197,7 +197,7 @@ namespace KyoS.Web.Data.Entities
         //3. VOCATIONAL / EMPLOYMENT
         public string VocationalEmployment { get; set; }
         public bool IsClientCurrentlyEmployed { get; set; }
-        public string EmploymentStatus { get; set; }
+        public EmploymentStatus EmploymentStatus { get; set; }
         public string CurrentEmployer { get; set; }
         public string EmployerAddress { get; set; }
         public string EmployerCityState { get; set; }
@@ -360,7 +360,7 @@ namespace KyoS.Web.Data.Entities
 
         //7 HOUSING / LIVING ENVIRONMENT
 
-        public string ResidentStatus { get; set; }
+        public ResidentialStatus ResidentStatus { get; set; }
         public int NumberOfPersonLiving { get; set; }
         public int NumberOfBedrooms { get; set; }
         public float PersonPorBedrooms { get; set; }
