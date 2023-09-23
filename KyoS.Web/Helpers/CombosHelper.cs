@@ -1591,7 +1591,9 @@ namespace KyoS.Web.Helpers
                 new SelectListItem { Text = ResidentialStatus.AsistedLivingFacility.ToString(), Value = "3"},
                 new SelectListItem { Text = ResidentialStatus.FosterCare_GroupHome.ToString(), Value = "4"},
                 new SelectListItem { Text = ResidentialStatus.Hospital_NursingHome.ToString(), Value = "5"},
-                new SelectListItem { Text = ResidentialStatus.ResidentialProgram.ToString(), Value = "6"}
+                new SelectListItem { Text = ResidentialStatus.ResidentialProgram.ToString(), Value = "6"},
+                new SelectListItem { Text = ResidentialStatus.ResidentialProgram.ToString(), Value = "7"},
+                new SelectListItem { Text = ResidentialStatus.ResidentialProgram.ToString(), Value = "8"}
             };
 
             return list;

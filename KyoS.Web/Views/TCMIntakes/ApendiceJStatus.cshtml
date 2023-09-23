@@ -25,6 +25,9 @@
                     <thead>
                         <tr>
                             <th class="col-md-2">
+                                TCM Name
+                            </th>
+                            <th class="col-md-2">
                                 Case Number
                             </th>
                             <th class="col-md-2">
@@ -47,6 +50,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td >
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
+                                </td>
                                 <td>
                                     @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
                                     {
