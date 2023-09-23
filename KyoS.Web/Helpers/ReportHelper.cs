@@ -22445,7 +22445,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeWelcomeDS(intakeWelcome));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeOrientationCheckList");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeWelcome");
 
             //images                      
             string path = string.Empty;
@@ -22575,7 +22575,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeClientDocumentVerificationDS(intakeDocument));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeClientSignatureVerification");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeClientDocumentVerification");
 
             //images                      
             string path = string.Empty;
