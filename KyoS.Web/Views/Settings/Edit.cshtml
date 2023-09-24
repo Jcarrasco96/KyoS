@@ -68,6 +68,21 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <div>
+                            <div class=" col-md-6 ">
+                                <label asp-for="TCMInitialTime" class="control-label">Opening time of Notes</label>&nbsp;*
+                                <input asp-for="TCMInitialTime" class="form-control" />
+                                <span asp-validation-for="TCMInitialTime" class="text-danger"></span>
+                            </div>
+                            <div class=" col-md-6 ">
+                                <label asp-for="TCMEndTime" class="control-label">Closed time of Notes</label>&nbsp;*
+                                <input asp-for="TCMEndTime" class="form-control" />
+                                <span asp-validation-for="TCMEndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic

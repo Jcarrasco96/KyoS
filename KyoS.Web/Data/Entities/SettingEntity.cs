@@ -1,4 +1,9 @@
 ﻿using KyoS.Web.Data.Contracts;
+using KyoS.Common.Enums;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace KyoS.Web.Data.Entities
 {
@@ -15,5 +20,11 @@ namespace KyoS.Web.Data.Entities
         public bool TCMSupervisorEdit { get; set; }
         public bool BillSemanalMH { get; set; }
         public bool IndNoteForAppointment { get; set; }
+
+        [DataType(DataType.Time)]
+        public DateTime TCMInitialTime { get; set; }
+
+        [DataType(DataType.Time)]
+        public DateTime TCMEndTime { get; set; }
     }
 }

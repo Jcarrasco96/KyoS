@@ -1439,7 +1439,9 @@ namespace KyoS.Web.Helpers
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
                 BillSemanalMH = model.BillSemanalMH,
-                IndNoteForAppointment = model.IndNoteForAppointment
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime
             };
         }
 
@@ -1461,7 +1463,9 @@ namespace KyoS.Web.Helpers
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
                 BillSemanalMH = model.BillSemanalMH,
-                IndNoteForAppointment = model.IndNoteForAppointment
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime
             };
         }
 

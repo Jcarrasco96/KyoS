@@ -1410,7 +1410,17 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public bool CheckOverlappingMH(DateTime start, DateTime end, int idClient)
         {
-            List<WorkdayEntity> workday = _context.Workdays
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (start.TimeOfDay < user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || start.TimeOfDay >= user_logged.Clinic.Setting.TCMEndTime.TimeOfDay
+                || end.TimeOfDay <= user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || end.TimeOfDay > user_logged.Clinic.Setting.TCMEndTime.TimeOfDay)
+            {
+                return true;
+            }
+
+                List<WorkdayEntity> workday = _context.Workdays
                                                   .Where(n => n.Date == start.Date)
                                                   .ToList();
 
