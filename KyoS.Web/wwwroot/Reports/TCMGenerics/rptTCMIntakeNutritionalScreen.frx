@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/25/2023 13:13:24" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrg7Je8rwiD/i94rWwZynVRw==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeNutritionalScreen" DataType="System.Int32" Enabled="true" TableName="TCMIntakeNutritionalScreen">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="ClientHasIllnes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientHasIllnes_Value" DataType="System.Int32"/>
+        <Column Name="ClientHasHistory" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientHasHistory_Value" DataType="System.Int32"/>
+        <Column Name="ClientEatsFewer" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientEatsFewer_Value" DataType="System.Int32"/>
+        <Column Name="ClientEatsFew" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientEatsFew_Value" DataType="System.Int32"/>
+        <Column Name="ClientHasTooth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientHasTooth_Value" DataType="System.Int32"/>
+        <Column Name="ClientEatsAlone" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientEatsAlone_Value" DataType="System.Int32"/>
+        <Column Name="ClientTakes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientTakes_Value" DataType="System.Int32"/>
+        <Column Name="WithoutWanting" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WithoutWanting_Value" DataType="System.Int32"/>
+        <Column Name="ClientAlwaysHungry" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientAlwaysHungry_Value" DataType="System.Int32"/>
+        <Column Name="ClientAlwaysThirsty" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientAlwaysThirsty_Value" DataType="System.Int32"/>
+        <Column Name="ClientVomits" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientVomits_Value" DataType="System.Int32"/>
+        <Column Name="ClientDiarrhea" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientDiarrhea_Value" DataType="System.Int32"/>
+        <Column Name="ClientBinges" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientBinges_Value" DataType="System.Int32"/>
+        <Column Name="ClientAppetiteGood" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientAppetiteGood_Value" DataType="System.Int32"/>
+        <Column Name="ClientAppetiteFair" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientAppetiteFair_Value" DataType="System.Int32"/>
+        <Column Name="ClientAppetitepoor" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientAppetitepoor_Value" DataType="System.Int32"/>
+        <Column Name="ClientFoodAllergies" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ClientFoodAllergies_Value" DataType="System.Int32"/>
+        <Column Name="ReferredTo" DataType="System.String"/>
+        <Column Name="DateOfReferral" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAKgA1wDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiignAJoAKKqGd92R09KsRuHXPfvQOw+iiigQUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRSbhnHf0qrJKzEg8e1A0iy0ir1NQyTgqQoPNV6KQ7BT432Nnt3plFAzQByMiiq1vJg7T+FWaZLQUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACoppdgwPvU+R9i5/KqROTk0DSFDENu71LIvmKHTr3FQVdiTYuO/ekNkC27HqQKf8AZx/eNT0UxXZUeFl9x7VFWhUUkIbkcGkNMqVchfevPUVUZSpwRVi1UjJNAPYnooopkhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFW5bL47CoadIcufrTaRaFU4YH3q+DkcVn1LHMU46igTRboqD7QP7pprXB7CmKzLNFU2mc98fSmFiepNAWLxK9yKUEHpWfSgkdOKVx2L9FU1mde+frU8c4bg8GmKxLRRRQIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApGYKMscUySYJwOTVVmLHLGgaRK1wc/KMD3qaGTzF9+9UqtW6bVye9IbRNRRRTJKLjDn602pbhcSH35qKkWFFFFABRRRQAUUUUAFFFFABRRRQBPBLg7W6dqs1n1cgfcnPUUCaJKKKKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRQeBxyaAEYhRknAqvLOW4TgetRyOzN835UykUkFFFFAwq3bvuXB6iqlOVirAigGi9RSIwZcilpkEc6b046iqdaFVp4sfMvTvSKTIKKKKBhRRRQAUUUUAFFFFABRRRQAVLbtiTHrUVOj/wBYv1oBl6iiimQFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRTZJFTr+VKrBhkUALRRRQBXuI8fMPxqvWgRkYNUpU2N7dqRSYyiiigYUUUUASwSbGwehq3WfVq3kyNp60CaJqKKKZJDJAG5Xg1A0Tr1FXaKB3KFJWhx7UYHoKVh3KIVj0Bp4hc9sVbopiuVhbnuwp32cf3jU9FAXZUkhKDPUVFWgeRVBhhiPekNMSnxDMi/WmVParli3pQNlmiiimQFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUjMEGWNAC1BLPjhOT61HJKX4HAqKkUkKSScnk0qMUORTaKBlyKUP7H0qSqHTpViKfs/50yWieoT+8DIfvL0qaq0+UlDCgEQkYODSVYlUOvmL+NV6RQUUUUAFKpIORSUUAXo33rmnVThfY3t3q4DmmS0FI5whI9KWgjIwaBFAsSc55qeKfs/51FKmxsdu1MpF7mgDnpRVFHZOhqdbgfxD8qZNieimeah/iprTqOmTQFh8j7Fz+VUutTTDeocdO49KgpDQoGTgVdjXYgFRwRbfmbrU1MTYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAjml2cDrVRmLHJOaluVO/PY1EFJ6AmkUhKKUgjqMUlAwooooAKKKKAJYpSnB5FST4eMMvODValBIz70BYkgfa2D909aSZNjcdD0qOrUY82HB6jigRVopWBU4NJQMKKKKACrNvJ/CfwqtSg4PFAMv0UyJ96+/en0yBkqb1x37VTIwcGr9QXEefmH40DTK1FFL1pFCUVMsDHrgVItuB945oC6IrcndtxlT1qeOFUOep7U9VCjgYpaZLYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBroHGDVWSIp7j1q5QRnrQNMz6KsSwY5T8qr0irhRRRQAUUUUAFT2rYYj1qCnIdrA0AyxcR7huHUVVrQ61VuI9rZHQ0CTIaKKKBhRRRQA+N9jZ/OroORkVn1JHKyDA5oE0XKOtVVnYNzyKtA5GRTE1YqTRlGyOhpIFJkHoKudetAAHSgLhRRRQIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiimFtyHyzyKAFd1Tqaga4J+6MVCSSeetJSKsSGVz/ABGk81/7xplFAyVZ3HXBqVJ1P3uKq0UBY0Ac9KKpRyFDx09KtxyBxx19KZLQ6iiigREzmJvm5U9DSMiyjKnmpJFDrg1T+aNuOCKCkDKVOCKbVgSLIMSDHvUckZTkcr60h3I6KKKACiiigC5A26Me3FPZQykGq9q2GI9as0yXuUXUo2DTauTx7146iqdIpMKKKKACiip4oM8vwPSgCOOMueOnc1dAwMCgDAwOKKZLYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApruEHP5VHLMF4Xk1WYljknJoGkPklL+w9KSJ9jZ7d6ZRSKLMkW9gykYNNa3IHBzS28mPlP4VYpk3aKBGDg0lWriPI3Dr3qrSKTCiiigApVJU5HWkooAuxSB19+9PqijFGBFXUYMoIpktC1FcR7lyOoqWigRn1Pbv/A3Q9KS4j2tkdDUNIvcsSwd0/Kq9XIJN689R1oliD89DQK/cp0U5lKnDCm0DHI21wavVn1cgbdGPbigTJCcDmqMhBckdKtXGfLOKp0AgpyIXOFFSRwluW4FWVUKMAYFANjI4gnPU+tSUUUyQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAEZgoyaqyzF+BwKkus4HpVakUkFFFFAwooooAKuQyb156jrVOnRsUbIoBovVUnj2NkdDVpSGGRQ6hlwaZKdihRTnUqxBptIoKKKKACprd9rYPQ1DRQBoUU2Jt6A06mQIwDKQapSKUbBq9Ucyb19xQNMqoxRgRV1WDKCKoVJHIU6cj0pDaLbKGGDVSSIp7ipvtC+hpyzIxx0+tMSuinU9q3zFfWllg7p+VNgjbcG6AetIfQtU0IoOQop1FMkKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAAjIwaaI0HRRTqKAKtxHtOR0qGr7AMMGqUilGwaRSY2iiigYUUUUATW8m07T0NWqz6twSblweooE0E8e5cjqKqVoVVuI9p3DoaATIaKKKBhRRRQBYtW5K/jViqcBxKKuUyWFFFFAinMMSGo6fM26QmmUiwpVBZgB1p0cbP04HrVuNAg4/OgTY4dKKKKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVHMm9fcdKkooAz6KsXEePmH41XpFhRRRQAU5WKsCKbRQBfRgygihgGGDVWCTY2D0NW6ZLVijIhRsGm1cmTevuOlVOlIpMSiiigB8X+sX61dqnCMyrVymSwoPSiigRSaNg2ME1LHB3f8qsUUDuA46UUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooACMjBqlKmxsdu1XaZKm9cd+1A0ylRSkYODSUigooooAKtW8mRtPUdKq0qkg5FAMv1WuUx8w/Gp433rkUk5AiOaZK3KVFFFIontVyxb0qzTIl2IB370+mSwooooEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBBcR/xD8arVodapzJsb2PSkUmR0UUUDCiiigCSF9je3epLkE4I5Wq9WIG3KUb8KBPuV6sQRfxN+Ap8cIU5PJ7VLQDYUUUUyQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApsih1wadRQBQYFTg0lTXJBfjr3qGkWFFKBk4FWIoO7/AJUA2RRxF/YetWkQIMD86dRTJbCiiigQUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFGQEOc+tLHGznjp61cIB6gGl6dKRVxkcaoOOvrT6KKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH//Z" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="80.15">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="431.15" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="431.15" Height="22" CanGrow="true" Text="Mental Health Targeted Case Management Program" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="74.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="84" Width="778.3" Height="818.88" DataSource="CaseManagers">
+      <TextObject Name="Text304" Left="3" Top="53.7" Width="102.06" Height="17.01" Text="Client's Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text305" Left="106.95" Top="51.7" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text318" Left="170.1" Width="431.15" Height="22" CanGrow="true" Text="Nutritional Screen" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TableObject Name="Table1" Left="4.45" Top="85.05" Width="768.1" Height="425.25">
+        <TableColumn Name="Column1" Width="585.9"/>
+        <TableColumn Name="Column2" Width="97.15"/>
+        <TableColumn Name="Column6" Width="85.05"/>
+        <TableRow Name="Row1" Height="26.46">
+          <TableCell Name="Cell1" Border.Lines="All" Fill.Color="Silver" VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill.Color="Silver" Text="Yes (score)" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell67" Border.Lines="All" Fill.Color="Silver" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row2" Height="35.91">
+          <TableCell Name="Cell6" Border.Lines="All" Text="The client has an illness or condition that made him/her change the type and/or amount of food he/she eats" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell7" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox28" Left="22" Top="12.45" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientHasIllnes"/>
+            <TextObject Name="Text331" Left="36.9" Top="9.45" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell68" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text348" Left="13.45" Top="8.45" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientHasIllnes_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row3" Height="22.68">
+          <TableCell Name="Cell11" Border.Lines="All" Text="The client has a history of an eating disorder" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell12" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox29" Left="21.9" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientHasHistory"/>
+            <TextObject Name="Text332" Left="35.25" Top="2" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell69" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text349" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientHasHistory_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row4" Height="22.68">
+          <TableCell Name="Cell16" Border.Lines="All" Text="The client eats fewer than 2 meals per day" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell17" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox30" Left="21.9" Top="6.45" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientEatsFewer"/>
+            <TextObject Name="Text333" Left="35.15" Top="3.45" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell70" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text350" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientEatsFewer_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row8" Height="22.68">
+          <TableCell Name="Cell27" Border.Lines="All" Text="The client eats few fruits, vegetables, or milk products" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell28" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox31" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientEatsFew"/>
+            <TextObject Name="Text334" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell71" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text351" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientEatsFew_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row7" Height="22.68">
+          <TableCell Name="Cell25" Border.Lines="All" Text="The client has tooth or mouth problems that make it hard for him/her to eat (Dental problems)" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell26" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox32" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientHasTooth"/>
+            <TextObject Name="Text335" Left="35.15" Top="2" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell72" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text352" Left="13.45" Top="1" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientHasTooth_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row6" Height="22.68">
+          <TableCell Name="Cell23" Border.Lines="All" Text="The client eats alone most of the time" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell24" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox33" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientEatsAlone"/>
+            <TextObject Name="Text336" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell73" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text353" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientEatsAlone_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row5" Height="22.68">
+          <TableCell Name="Cell21" Border.Lines="All" Text="The client takes 3 or more different prescribed or over the counter medications per day" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell22" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox34" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientTakes"/>
+            <TextObject Name="Text337" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell74" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text354" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientTakes_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row9" Height="22.68">
+          <TableCell Name="Cell29" Border.Lines="All" Text="Without wanting to, the client has lost over gained 10 pounds in the last 3 months" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell30" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox35" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.WithoutWanting"/>
+            <TextObject Name="Text338" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell75" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text355" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.WithoutWanting_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row10" Height="22.68">
+          <TableCell Name="Cell31" Border.Lines="All" Text="The client is always hungry" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell32" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox36" Left="21.9" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientAlwaysHungry"/>
+            <TextObject Name="Text339" Left="35.15" Top="2" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell76" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text356" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientAlwaysHungry_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row11" Height="22.68">
+          <TableCell Name="Cell33" Border.Lines="All" Text="The client is always thirsty" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell34" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox37" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientAlwaysThirsty"/>
+            <TextObject Name="Text340" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell77" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text357" Left="13.45" Top="1.55" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientAlwaysThirsty_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row12" Height="22.68">
+          <TableCell Name="Cell35" Border.Lines="All" Text="The client vomits on a day basis" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell36" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox38" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientVomits"/>
+            <TextObject Name="Text341" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell78" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text358" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientVomits_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row13" Height="22.68">
+          <TableCell Name="Cell37" Border.Lines="All" Text="The client had diarrhea, constipation, or nausea on a daily basis" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell38" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox39" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientDiarrhea"/>
+            <TextObject Name="Text342" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell79" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text359" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientDiarrhea_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row14" Height="22.68">
+          <TableCell Name="Cell39" Border.Lines="All" Text="The client binges and purges on a weekly basis" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell40" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox40" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientBinges"/>
+            <TextObject Name="Text343" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell80" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text360" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientBinges_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row15" Height="22.68">
+          <TableCell Name="Cell41" Border.Lines="All" Text="The client's appetite is good" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell42" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox41" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientAppetiteGood"/>
+            <TextObject Name="Text344" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell81" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text361" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientAppetiteGood_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row16" Height="22.68">
+          <TableCell Name="Cell43" Border.Lines="All" Text="The client's appetite is fair" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell44" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox42" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientAppetiteFair"/>
+            <TextObject Name="Text345" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell82" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text362" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientAppetiteFair_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row17" Height="22.68">
+          <TableCell Name="Cell45" Border.Lines="All" Text="The client's appetite is poor" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell46" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox43" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientAppetitepoor"/>
+            <TextObject Name="Text346" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell83" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text363" Left="13.45" Top="2" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientAppetitepoor_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+        <TableRow Name="Row18" Height="22.68">
+          <TableCell Name="Cell47" Border.Lines="All" Text="The client has food allergies" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell48" Border.Lines="Left, Top, Bottom" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox44" Left="21.9" Top="6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeNutritionalScreen.ClientFoodAllergies"/>
+            <TextObject Name="Text347" Left="35.15" Top="3" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell84" Border.Lines="Right, Bottom" Font="Arial, 10pt">
+            <TextObject Name="Text364" Left="13.45" Top="1" Width="58.21" Height="18.9" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.ClientFoodAllergies_Value]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+      <PictureObject Name="Picture3" Left="166.12" Top="719.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="76.07" Top="794.25" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="344.67" Top="792.8" Width="-268.38"/>
+      <TextObject Name="Text317" Left="75.62" Top="773.9" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="169.12" Top="634.35" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="75.97" Top="709.3" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="345.67" Top="707.85" Width="-268.38"/>
+      <TextObject Name="Text325" Left="75.6" Top="688.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text291" Left="532.22" Top="709.47" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="687.42" Top="708.3" Width="-154.98"/>
+      <TextObject Name="Text292" Left="532.22" Top="689.06" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.DateOfReferral]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="532.22" Top="794.31" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="687.42" Top="792.14" Width="-154.98"/>
+      <TextObject Name="Text323" Left="532.22" Top="773.9" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text326" Left="10.45" Top="31.35" Width="706.86" Height="17.01" Text="Circle the score for each identified area:" VertAlign="Center" Font="Arial, 10pt"/>
+      <TableObject Name="Table2" Left="4.54" Top="519.75" Width="768.47" Height="94.5" Border.Lines="All">
+        <TableColumn Name="Column3" Width="151.2"/>
+        <TableColumn Name="Column4" Width="264.6"/>
+        <TableColumn Name="Column5" Width="352.67"/>
+        <TableRow Name="Row19">
+          <TableCell Name="Cell49" Border.Lines="All" Text="Score Range" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell50" Border.Lines="All" Text="Assessment" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell51" Border.Lines="All" Text="Plan" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row20">
+          <TableCell Name="Cell54" Border.Lines="All" Text="0-15" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="Low Risk" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell56" Border.Lines="All" Text="Reassess if other issues arise" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row21" Height="37.8">
+          <TableCell Name="Cell59" Border.Lines="All" Text="16-24" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell60" Border.Lines="All" Text="Moderate Risk" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell61" Border.Lines="All" Text="Monitor eating habits, provide education on nutrition and reassess within 30 days" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row22">
+          <TableCell Name="Cell64" Border.Lines="All" Text="25 or more" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell65" Border.Lines="All" Text="High Risk" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell66" Border.Lines="All" Text="Refer client to a Nutritionist" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+</Report>
