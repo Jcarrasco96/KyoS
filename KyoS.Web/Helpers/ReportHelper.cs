@@ -20801,6 +20801,165 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeNutritionalScreenDS(TCMIntakeNutritionalScreenEntity intakeNutritional)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeNutritionalScreen"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+
+            dt.Columns.Add("ClientHasIllnes", typeof(bool));
+            dt.Columns.Add("ClientHasIllnes_Value", typeof(int));
+            dt.Columns.Add("ClientHasHistory", typeof(bool));
+            dt.Columns.Add("ClientHasHistory_Value", typeof(int));
+            dt.Columns.Add("ClientEatsFewer", typeof(bool));
+            dt.Columns.Add("ClientEatsFewer_Value", typeof(int));
+            dt.Columns.Add("ClientEatsFew", typeof(bool));
+            dt.Columns.Add("ClientEatsFew_Value", typeof(int));
+            dt.Columns.Add("ClientHasTooth", typeof(bool));
+            dt.Columns.Add("ClientHasTooth_Value", typeof(int));
+            dt.Columns.Add("ClientEatsAlone", typeof(bool));
+            dt.Columns.Add("ClientEatsAlone_Value", typeof(int));
+            dt.Columns.Add("ClientTakes", typeof(bool));
+            dt.Columns.Add("ClientTakes_Value", typeof(int));
+            dt.Columns.Add("WithoutWanting", typeof(bool));
+            dt.Columns.Add("WithoutWanting_Value", typeof(int));
+            dt.Columns.Add("ClientAlwaysHungry", typeof(bool));
+            dt.Columns.Add("ClientAlwaysHungry_Value", typeof(int));
+            dt.Columns.Add("ClientAlwaysThirsty", typeof(bool));
+            dt.Columns.Add("ClientAlwaysThirsty_Value", typeof(int));
+            dt.Columns.Add("ClientVomits", typeof(bool));
+            dt.Columns.Add("ClientVomits_Value", typeof(int));
+            dt.Columns.Add("ClientDiarrhea", typeof(bool));
+            dt.Columns.Add("ClientDiarrhea_Value", typeof(int));
+            dt.Columns.Add("ClientBinges", typeof(bool));
+            dt.Columns.Add("ClientBinges_Value", typeof(int));
+            dt.Columns.Add("ClientAppetiteGood", typeof(bool));
+            dt.Columns.Add("ClientAppetiteGood_Value", typeof(int));
+            dt.Columns.Add("ClientAppetiteFair", typeof(bool));
+            dt.Columns.Add("ClientAppetiteFair_Value", typeof(int));
+            dt.Columns.Add("ClientAppetitepoor", typeof(bool));
+            dt.Columns.Add("ClientAppetitepoor_Value", typeof(int));
+            dt.Columns.Add("ClientFoodAllergies", typeof(bool));
+            dt.Columns.Add("ClientFoodAllergies_Value", typeof(int));
+            
+            dt.Columns.Add("ReferredTo", typeof(string));
+            dt.Columns.Add("DateOfReferral", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));   
+            
+            if (intakeNutritional != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeNutritional.Id,
+                                            0,
+                                            intakeNutritional.ClientHasIllnes,
+                                            intakeNutritional.ClientHasIllnes_Value,
+                                            intakeNutritional.ClientHasHistory,
+                                            intakeNutritional.ClientHasHistory_Value,
+                                            intakeNutritional.ClientEatsFewer,
+                                            intakeNutritional.ClientEatsFewer_Value,
+                                            intakeNutritional.ClientEatsFew,
+                                            intakeNutritional.ClientEatsFew_Value,
+                                            intakeNutritional.ClientHasTooth,
+                                            intakeNutritional.ClientHasTooth_Value,
+                                            intakeNutritional.ClientEatsAlone,
+                                            intakeNutritional.ClientEatsAlone_Value,
+                                            intakeNutritional.ClientTakes,
+                                            intakeNutritional.ClientTakes_Value,
+                                            intakeNutritional.WithoutWanting,
+                                            intakeNutritional.WithoutWanting_Value,
+                                            intakeNutritional.ClientAlwaysHungry,
+                                            intakeNutritional.ClientAlwaysHungry_Value,
+                                            intakeNutritional.ClientAlwaysThirsty,
+                                            intakeNutritional.ClientAlwaysThirsty_Value,
+                                            intakeNutritional.ClientVomits,
+                                            intakeNutritional.ClientVomits_Value,
+                                            intakeNutritional.ClientDiarrhea,
+                                            intakeNutritional.ClientDiarrhea_Value,
+                                            intakeNutritional.ClientBinges,
+                                            intakeNutritional.ClientBinges_Value,
+                                            intakeNutritional.ClientAppetiteGood,
+                                            intakeNutritional.ClientAppetiteGood_Value,
+                                            intakeNutritional.ClientAppetiteFair,
+                                            intakeNutritional.ClientAppetiteFair_Value,
+                                            intakeNutritional.ClientAppetitepoor,
+                                            intakeNutritional.ClientAppetitepoor_Value,
+                                            intakeNutritional.ClientFoodAllergies,
+                                            intakeNutritional.ClientFoodAllergies_Value,
+                                            intakeNutritional.ReferredTo,
+                                            intakeNutritional.DateOfReferral,
+                                            intakeNutritional.AdmissionedFor,
+                                            intakeNutritional.DateSignatureEmployee,
+                                            intakeNutritional.CreatedBy,
+                                            intakeNutritional.CreatedOn,
+                                            intakeNutritional.LastModifiedBy,
+                                            intakeNutritional.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
             DataTable dt = new DataTable
@@ -22445,7 +22604,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeWelcomeDS(intakeWelcome));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeOrientationCheckList");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeWelcome");
 
             //images                      
             string path = string.Empty;
@@ -22575,7 +22734,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetTCMIntakeClientDocumentVerificationDS(intakeDocument));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeClientSignatureVerification");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeClientDocumentVerification");
 
             //images                      
             string path = string.Empty;
@@ -22618,7 +22777,70 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeNutritionalScreen(TCMIntakeNutritionalScreenEntity intakeNutritional)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeNutritionalScreen.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeNutritional.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeNutritional.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeNutritional.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeNutritional.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeNutritionalScreenDS(intakeNutritional));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeNutritionalScreen");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeNutritional.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeNutritional.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeNutritional.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeNutritional.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(intakeNutritional.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeNutritional.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakePersonalWellbeing(TCMIntakePersonalWellbeingEntity intakeWellbeing)

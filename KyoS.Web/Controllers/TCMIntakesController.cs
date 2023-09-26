@@ -4248,6 +4248,114 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakeNutritionalScreen(int id)
+        {
+            TCMIntakeNutritionalScreenEntity entity = await _context.TCMIntakeNutritionalScreen
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+                                                                    .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Casemanager)
+                                                                    .ThenInclude(cm => cm.Clinic)
+
+                                                                    .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeNutritionalScreen(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakePersonalWellbeing(int id)
+        {
+            TCMIntakePersonalWellbeingEntity entity = await _context.TCMIntakePersonalWellbeing
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Client)
+                                                                    .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                    .Include(t => t.TcmClient)
+                                                                    .ThenInclude(c => c.Casemanager)
+                                                                    .ThenInclude(cm => cm.Clinic)
+
+                                                                    .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakePersonalWellbeing(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakeColumbiaSuicide(int id)
+        {
+            TCMIntakeColumbiaSuicideEntity entity = await _context.TCMIntakeColumbiaSuicide
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Client)
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                  .Include(t => t.TcmClient)
+                                                                  .ThenInclude(c => c.Casemanager)
+                                                                  .ThenInclude(cm => cm.Clinic)
+
+                                                                  .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeColumbiaSuicide(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakePainScreen(int id)
+        {
+            TCMIntakePainScreenEntity entity = await _context.TCMIntakePainScreen
+
+                                                             .Include(t => t.TcmClient)
+                                                             .ThenInclude(c => c.Client)
+
+                                                             .Include(t => t.TcmClient)
+                                                             .ThenInclude(c => c.Client)
+                                                             .ThenInclude(cl => cl.LegalGuardian)
+
+                                                             .Include(t => t.TcmClient)
+                                                             .ThenInclude(c => c.Casemanager)
+                                                             .ThenInclude(cm => cm.Clinic)
+
+                                                             .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakePainScreen(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public async Task<IActionResult> PrintTCMAppendixJ(int id)
         {
             TCMIntakeAppendixJEntity entity = await _context.TCMIntakeAppendixJ
