@@ -111,8 +111,8 @@
     Takes 3 or more different prescribed or over-the-counter drugs a day.           <input type="checkbox" asp-for="Takes3OrMore" class="form-check-input" id="check18" disabled> YES  <input type="checkbox" class="form-check-input" id="check118" disabled> NO
     Without wanting to. Has lost or gained 10 pounds in the last 6 months.          <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" id="check19" disabled> YES  <input type="checkbox" class="form-check-input" id="check119" disabled> NO
     Not always physically able to shop, cook and/or feed self.                      <input type="checkbox" asp-for="NotAlwaysPhysically" class="form-check-input" id="check20" disabled> YES  <input type="checkbox" class="form-check-input" id="check120" disabled> NO
-    Any Food, Medications, or environmental allergies.                              <input type="checkbox" asp-for="AnyFood" class="form-check-input" id="check26"> YES  <input type="checkbox" class="form-check-input" id="check126"> NO
-    Any eating desorder.                                                            <input type="checkbox" asp-for="AnyEating" class="form-check-input" id="check27"> YES  <input type="checkbox" class="form-check-input" id="check127"> NO
+    Any Food, Medications, or environmental allergies.                              <input type="checkbox" asp-for="AnyFood" class="form-check-input" id="check26" disabled> YES  <input type="checkbox" class="form-check-input" id="check126" disabled> NO
+    Any eating desorder.                                                            <input type="checkbox" asp-for="AnyEating" class="form-check-input" id="check27" disabled> YES  <input type="checkbox" class="form-check-input" id="check127" disabled> NO
     <strong>Total: </strong>   
     <strong>0-2 GOOD. </strong>As appropriate reassess and/or provide information based on situation.
     <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
@@ -130,10 +130,10 @@
 
     Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
     <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" disabled></textarea>   
-    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28"> YES  <input type="checkbox" class="form-check-input" id="check128"> NO
-    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4"></textarea>   
+    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28" disabled> YES  <input type="checkbox" class="form-check-input" id="check128" disabled> NO
+    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4" disabled></textarea>   
     <strong>VOCATIONAL ASSESMENT:</strong>
-    <textarea asp-for="VocationalAssesment" style="width:90%" rows="2"></textarea>
+    <textarea asp-for="VocationalAssesment" style="width:90%" rows="2" disabled></textarea>
     Legal History (specifying changes, date, convictions and incarcerations):
     <textarea asp-for="LegalHistory" style="width:90%" rows="2" disabled></textarea>  
     Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
