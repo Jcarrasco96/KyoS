@@ -20959,6 +20959,81 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
+                
+        private DataTable GetTCMIntakePersonalWellbeingDS(TCMIntakePersonalWellbeingEntity intakePersonal)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakePersonalWellbeing"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+
+            dt.Columns.Add("Living", typeof(int));
+            dt.Columns.Add("Health", typeof(int));
+            dt.Columns.Add("Life", typeof(int));
+            dt.Columns.Add("Relationships", typeof(int));
+            dt.Columns.Add("Feel", typeof(int));
+            dt.Columns.Add("Community", typeof(int));
+            dt.Columns.Add("Security", typeof(int));
+            dt.Columns.Add("Religion", typeof(int));           
+            
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakePersonal != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakePersonal.Id,
+                                            0,
+                                            intakePersonal.Living,
+                                            intakePersonal.Health,
+                                            intakePersonal.Life,
+                                            intakePersonal.Relationships,
+                                            intakePersonal.Feel,
+                                            intakePersonal.Community,
+                                            intakePersonal.Security,
+                                            intakePersonal.Religion,
+                                            intakePersonal.AdmissionedFor,
+                                            intakePersonal.DateSignatureEmployee,
+                                            intakePersonal.CreatedBy,
+                                            intakePersonal.CreatedOn,
+                                            intakePersonal.LastModifiedBy,
+                                            intakePersonal.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
 
         private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
@@ -22845,7 +22920,70 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakePersonalWellbeing(TCMIntakePersonalWellbeingEntity intakeWellbeing)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakePersonalWellbeing.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeWellbeing.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeWellbeing.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeWellbeing.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeWellbeing.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakePersonalWellbeingDS(intakeWellbeing));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakePersonalWellbeing");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeWellbeing.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeWellbeing.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeWellbeing.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeWellbeing.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(intakeWellbeing.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeWellbeing.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakeColumbiaSuicide(TCMIntakeColumbiaSuicideEntity intakeColumbia)

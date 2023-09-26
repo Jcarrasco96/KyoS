@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/26/2023 10:52:30" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/26/2023 13:15:58" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3bMFBu7/q6Zirc0kRr1Zmww==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3oeo26q1YkMc+cO4f70xjVw==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -916,11 +916,11 @@
       <TextObject Name="Text587" Left="28.35" Top="782.35" Width="743" Height="18.9" CanGrow="true" Text="Client and/or family denied any abuse or trauma history (physical, sexual, emotional abuse or financial exploitation)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox485" Left="15.45" Top="786.35" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.ClientFamilyAbusoTrauma"/>
       <TextObject Name="Text588" Left="12.45" Top="803.25" Width="100.4" Height="18.9" CanGrow="true" Text="Date of abuse:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text589" Left="105.85" Top="803.25" Width="132.3" Height="18.9" Text="[Bio.DateAbuse]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text589" Left="105.85" Top="803.25" Width="132.3" Height="18.9" Text="[IIf(Year([Bio.DateAbuse]) == 1,&quot;&quot;,[Bio.DateAbuse])]" Format="Date" Format.Format="d" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text590" Left="239.25" Top="803.25" Width="138.2" Height="18.9" CanGrow="true" Text="Person(s) involved:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
       <TextObject Name="Text591" Left="363.1" Top="803.25" Width="406.35" Height="18.9" Text="[Bio.PersonInvolved]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text592" Left="12.45" Top="829.15" Width="223.25" Height="18.9" CanGrow="true" Text="Approximate date report was filed:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text593" Left="229.7" Top="829.15" Width="103.95" Height="18.9" Text="[Bio.ApproximateDateReport]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text593" Left="229.7" Top="829.15" Width="103.95" Height="18.9" Text="[IIf(Year([Bio.ApproximateDateReport]) == 1,&quot;&quot;,[Bio.ApproximateDateReport])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text594" Left="337.2" Top="829.15" Width="53.15" Height="18.9" CanGrow="true" Text="Where:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
       <TextObject Name="Text595" Left="382" Top="829.15" Width="387.45" Height="18.9" Text="[Bio.ApproximateDateReport_Where]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text596" Left="12.45" Top="855.05" Width="223.25" Height="18.9" CanGrow="true" Text="Relationship of the abuser to client:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
@@ -1087,7 +1087,7 @@
       <TextObject Name="Text664" Left="7.45" Top="1696.55" Width="221.13" Height="18.9" CanGrow="true" Text="IF 6 OR HIGHER, REFERRED TO" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
       <TextObject Name="Text665" Left="224.8" Top="1696.55" Width="264.6" Height="18.9" Text="[Bio.If6_ReferredTo]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text666" Left="489.4" Top="1696.55" Width="52.92" Height="18.9" CanGrow="true" Text="DATE:" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
-      <TextObject Name="Text667" Left="536.65" Top="1696.55" Width="94.5" Height="18.9" Text="[Bio.If6_Date]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text667" Left="536.65" Top="1696.55" Width="94.5" Height="18.9" Text="[IIf(Year([Bio.If6_Date]) == 1,&quot;&quot;,[Bio.If6_Date])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
       <TableObject Name="Table58" Left="9.45" Top="1729.35" Width="756" Height="151.14">
         <TableColumn Name="Column200" Width="252"/>
         <TableColumn Name="Column201" Width="252"/>
@@ -1109,7 +1109,7 @@
             <TextObject Name="Text669" Left="31.8" Top="31.35" Width="77.49" Height="18.9" Text="Increased" VertAlign="Center" Font="Arial, 9pt"/>
             <CheckBoxObject Name="CheckBox517" Left="18.9" Top="34.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 1,true,false)"/>
             <TextObject Name="Text670" Left="31.8" Top="53.25" Width="77.49" Height="18.9" Text="WNL" VertAlign="Center" Font="Arial, 9pt"/>
-            <CheckBoxObject Name="CheckBox518" Left="18.9" Top="56.7" Width="11.34" Height="11.34" Border.Lines="All" Checked="false"/>
+            <CheckBoxObject Name="CheckBox518" Left="18.9" Top="56.7" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 2,true,false)"/>
             <TextObject Name="Text671" Left="31.8" Top="75.15" Width="77.49" Height="18.9" Text="Anorexia" VertAlign="Center" Font="Arial, 9pt"/>
             <CheckBoxObject Name="CheckBox519" Left="18.9" Top="78.6" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.Appetite] == 3,true,false)"/>
           </TableCell>
