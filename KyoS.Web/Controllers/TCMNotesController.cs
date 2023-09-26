@@ -900,7 +900,10 @@ namespace KyoS.Web.Controllers
                                                                              && ((na.StartTime <= NoteActivityViewModel.StartTime && na.EndTime > NoteActivityViewModel.StartTime)
                                                                                 || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
                                                                            .ToListAsync();
-                if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).Client.Id) == true)
+                int clientId = _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).Client.Id;
+                if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, clientId) == true
+                     || (user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(note.TCMClient.Id) + CalculateUnits(NoteActivityViewModel.Minutes)) < 0)
+                     || CheckTimeRange(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime, clientId))
                 {
                     TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                            .Include(n => n.TCMClient)
@@ -1410,17 +1413,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public bool CheckOverlappingMH(DateTime start, DateTime end, int idClient)
         {
-            UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .ThenInclude(u => u.Setting)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            if (start.TimeOfDay < user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || start.TimeOfDay >= user_logged.Clinic.Setting.TCMEndTime.TimeOfDay
-                || end.TimeOfDay <= user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || end.TimeOfDay > user_logged.Clinic.Setting.TCMEndTime.TimeOfDay)
-            {
-                return true;
-            }
-
-                List<WorkdayEntity> workday = _context.Workdays
+            List<WorkdayEntity> workday = _context.Workdays
                                                   .Where(n => n.Date == start.Date)
                                                   .ToList();
 
@@ -1694,6 +1687,40 @@ namespace KyoS.Web.Controllers
 
         }
 
+        private int CalculateUnits(int minute = 0)
+        {
+            if (minute == 0)
+            {
+                return minute;
+            }
+            else
+            {
+                int factor = 15;
+                int unit = minute / factor;
+                double residuo = minute % factor;
+                if (residuo >= 8)
+                {
+                    unit++;
+                }
+                
+                return unit;
+            }
+        }
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public bool CheckTimeRange(DateTime start, DateTime end, int idClient)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (start.TimeOfDay < user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || start.TimeOfDay >= user_logged.Clinic.Setting.TCMEndTime.TimeOfDay
+                || end.TimeOfDay <= user_logged.Clinic.Setting.TCMInitialTime.TimeOfDay || end.TimeOfDay > user_logged.Clinic.Setting.TCMEndTime.TimeOfDay)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
     }
 }

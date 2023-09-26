@@ -1441,7 +1441,8 @@ namespace KyoS.Web.Helpers
                 BillSemanalMH = model.BillSemanalMH,
                 IndNoteForAppointment = model.IndNoteForAppointment,
                 TCMInitialTime = model.TCMInitialTime,
-                TCMEndTime = model.TCMEndTime
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits
             };
         }
 
@@ -1465,7 +1466,8 @@ namespace KyoS.Web.Helpers
                 BillSemanalMH = model.BillSemanalMH,
                 IndNoteForAppointment = model.IndNoteForAppointment,
                 TCMInitialTime = model.TCMInitialTime,
-                TCMEndTime = model.TCMEndTime
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits
             };
         }
 
