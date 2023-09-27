@@ -18,9 +18,8 @@ namespace KyoS.Web.Data.Entities
 
         public string ProviderAgency { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime DateReceived{ get; set; }
+        public string DateReceived{ get; set; }
 
-        public string Efectiveness { get; set; }
+        public EffectivenessType Efectiveness { get; set; }
     }
 }

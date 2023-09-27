@@ -1665,6 +1665,11 @@ namespace KyoS.Web.Controllers
                                                                               .Include(n => n.Client)
                                                                               .ThenInclude(n => n.MedicationList)
                                                                               .FirstOrDefault(n => n.Client.Id == id);
+                    DoctorEntity doctor = _context.Clients.FirstOrDefault(n => n.Id == id).Doctor;
+                    if (doctor == null)
+                    {
+                        doctor = new DoctorEntity();
+                    }
                     if (intakeMedicalHistory == null)
                     {
                         model = new IntakeMedicalHistoryViewModel
@@ -1678,7 +1683,7 @@ namespace KyoS.Web.Controllers
                             DateSignaturePerson = client.AdmisionDate,
                             Documents = true,
 
-                            AddressPhysician = "",
+                            AddressPhysician = doctor.Address,
                             AgeFirstTalked = "",
                             AgeFirstWalked = "",
                             AgeToiletTrained = "",
@@ -1706,7 +1711,7 @@ namespace KyoS.Web.Controllers
                             ChestPain = false,
                             ChronicCough = false,
                             ChronicIndigestion = false,
-                            City = "",
+                            City = doctor.City,
                             Complications = false,
                             Complications_Explain = "",
                             Comprehending = false,
@@ -1790,7 +1795,7 @@ namespace KyoS.Web.Controllers
                             PerformingCertainMotions = false,
                             Planned = false,
                             Poliomyelitis = false,
-                            PrimaryCarePhysician = "",
+                            PrimaryCarePhysician = doctor.Name,
                             ProblemWithBedWetting = false,
                             Reading = false,
                             RheumaticFever = false,
@@ -1801,7 +1806,7 @@ namespace KyoS.Web.Controllers
                             ShortnessOfBreath = false,
                             SkinTrouble = false,
                             Speaking = false,
-                            State = "",
+                            State = doctor.State,
                             StomachPain = false,
                             Surgery = false,
                             SwellingOfFeet = false,
@@ -1815,7 +1820,7 @@ namespace KyoS.Web.Controllers
                             WeightLoss = false,
                             WhoopingCough = false,
                             WritingSentence = false,
-                            ZipCode = "",
+                            ZipCode = doctor.ZipCode,
                             AgeOfFirstMenstruation = "",
                             DateOfLastBreastExam = "",
                             DateOfLastPelvic = "",

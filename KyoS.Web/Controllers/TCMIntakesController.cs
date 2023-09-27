@@ -3782,15 +3782,31 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                apendiceJ = await _context.TCMIntakeAppendixJ
-                                          .Include(w => w.TcmClient)
-                                          .ThenInclude(d => d.Client)
-                                          .ThenInclude(d => d.Clinic)
-                                          .Include(w => w.TcmClient)
-                                          .ThenInclude(d => d.Casemanager)
-                                          .Where(w => (w.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
-                                                    && w.Approved == approved))
-                                          .ToListAsync();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    apendiceJ = await _context.TCMIntakeAppendixJ
+                                              .Include(w => w.TcmClient)
+                                              .ThenInclude(d => d.Client)
+                                              .ThenInclude(d => d.Clinic)
+                                              .Include(w => w.TcmClient)
+                                              .ThenInclude(d => d.Casemanager)
+                                              .Where(w => (w.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                        && w.Approved == approved))
+                                              .ToListAsync();
+                }
+                else
+                {
+                    apendiceJ = await _context.TCMIntakeAppendixJ
+                                             .Include(w => w.TcmClient)
+                                             .ThenInclude(d => d.Client)
+                                             .ThenInclude(d => d.Clinic)
+                                             .Include(w => w.TcmClient)
+                                             .ThenInclude(d => d.Casemanager)
+                                             .Where(w => (w.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && w.Approved == approved))
+                                             .ToListAsync();
+                }
+               
             }
 
             return View(apendiceJ);

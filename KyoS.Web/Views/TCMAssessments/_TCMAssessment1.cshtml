@@ -17,7 +17,7 @@
         A. <strong>Parents Information </strong>(children only)
         What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" /> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" /> Child’s Father 
         Parent’s marital status: <input asp-for="Married" class="form-check-input" > Married         <input asp-for="Divorced" class="form-check-input"> Divorced        <input asp-for="Separated" class="form-check-input" > Separated       <input asp-for="NeverMarried" class="form-check-input" > Never married
-        Are child’s parents living together?        <input asp-for="AreChild" class="form-check-input" id="check4"> Yes       <input type="checkbox" class="form-check-input" id="check104"> No       If No, provide the following information for the non-custodial parent:
+        Are child’s parents living together?        <select asp-for="IdYesNoNAAreChild" asp-items="Model.YesNoNAs"></select>       If No, provide the following information for the non-custodial parent:
         </pre>
     </div>
 </div>

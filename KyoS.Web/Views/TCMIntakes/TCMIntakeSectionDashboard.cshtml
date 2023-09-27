@@ -696,7 +696,7 @@
                 }
                 else
                 {
-                    @if (Model.TCMAssessment != null && Model.TCMAssessment.Approved == 2)
+                    @if (Model.TCMAssessment != null)
                     {
                         <a style="text-decoration: none;" asp-action="Create" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">

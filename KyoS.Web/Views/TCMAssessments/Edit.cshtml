@@ -31,6 +31,10 @@
                 {
                     @Html.ActionLink("Assessments in edition", "TCMAssessmentApproved", "TCMAssessments")
                 }
+                @if (ViewData["origi"].ToString() == "5")
+                {
+                    @Html.ActionLink("Assessments Update", "UpdateAssessment", "TCMAssessments")
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->
@@ -165,12 +169,9 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
                 @if (Model.Approved == 0)
                 {
-                    <a asp-action="FinishEditing" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMAssessments" class="btn btn-warning">Finish Edition</a>
+                    <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-route-section="4" asp-controller="TCMAssessments" class="btn btn-warning">Sign / Finish Edition</a>
                 }
-                else
-                {
-                    <a asp-action="FinishEditing" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMAssessments" class="btn btn-warning disabled">Finish Edition</a>
-                }
+                
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
@@ -179,9 +180,17 @@
                 {
                     <a asp-action="MessagesOfAssessment" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="Index" asp-controller="Desktop" class="btn btn-success">Back</a>
+                }
                 @if (ViewData["origi"].ToString() == "4")
                 {
                     <a asp-action="TCMAssessmentApproved" asp-controller="TCMAssessments" asp-route-approved="0" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "5")
+                {
+                    <a asp-action="UpdateAssessment" asp-controller="TCMAssessments"  class="btn btn-success">Back</a>
                 }
             </div>
         </form>
@@ -263,47 +272,9 @@
         } else {
             check103.checked = true;
         }
+        
         //-----------------------------
-        check4.addEventListener('change', (e) => {
-            if (check4.checked == true) {
-                check104.checked = false;
-            } else {
-                check104.checked = true;
-            }
-        })
-        check104.addEventListener('change', (e) => {
-            if (check104.checked == true) {
-                check4.checked = false;
-            } else {
-                check4.checked = true;
-            }
-        })
-        if (check4.checked == true) {
-            check104.checked = false;
-        } else {
-            check104.checked = true;
-        }
-        //-----------------------------
-        check5.addEventListener('change', (e) => {
-            if (check5.checked == true) {
-                check105.checked = false;
-            } else {
-                check105.checked = true;
-            }
-        })
-        check105.addEventListener('change', (e) => {
-            if (check105.checked == true) {
-                check5.checked = false;
-            } else {
-                check5.checked = true;
-            }
-        })
-        if (check5.checked == true) {
-            check105.checked = false;
-        } else {
-            check105.checked = true;
-        }
-        //-----------------------------
+      
         check6.addEventListener('change', (e) => {
             if (check6.checked == true) {
                 check106.checked = false;
@@ -423,26 +394,7 @@
         } else {
             check111.checked = true;
         }
-        //-----------------------------
-        check12.addEventListener('change', (e) => {
-            if (check12.checked == true) {
-                check112.checked = false;
-            } else {
-                check112.checked = true;
-            }
-        })
-        check112.addEventListener('change', (e) => {
-            if (check112.checked == true) {
-                check12.checked = false;
-            } else {
-                check12.checked = true;
-            }
-        })
-        if (check12.checked == true) {
-            check112.checked = false;
-        } else {
-            check112.checked = true;
-        }
+        
         //-----------------------------
         check13.addEventListener('change', (e) => {
             if (check13.checked == true) {

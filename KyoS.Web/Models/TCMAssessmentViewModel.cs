@@ -26,5 +26,19 @@ namespace KyoS.Web.Models
 
         public int IdYesNoNAWe { get; set; }
         public IEnumerable<SelectListItem> YesNoNAs { get; set; }
+
+        public int IdResidentStatus { get; set; }
+        public IEnumerable<SelectListItem> ResidentStatuss { get; set; }
+        
+        public int IdEmploymentStatus { get; set; }
+        public IEnumerable<SelectListItem> EmploymentStatuss { get; set; }
+
+        public int IdFrecuencyActive { get; set; }
+        public IEnumerable<SelectListItem> FrecuencyActiveList { get; set; }
+
+        public int IdYesNoNAPregnancy { get; set; }
+
+        public int IdYesNoNAAreChild { get; set; }
+
     }
 }

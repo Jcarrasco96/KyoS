@@ -67,6 +67,21 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <div>
+                            <div class=" col-md-6 ">
+                                <label asp-for="TCMInitialTime" class="control-label">Start Time</label>&nbsp;*
+                                <input asp-for="TCMInitialTime" class="form-control" />
+                                <span asp-validation-for="TCMInitialTime" class="text-danger"></span>
+                            </div>
+                            <div class=" col-md-6 ">
+                                <label asp-for="TCMEndTime" class="control-label">End Time</label>&nbsp;*
+                                <input asp-for="TCMEndTime" class="form-control" />
+                                <span asp-validation-for="TCMEndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="checkbox" asp-for="TCMClinic" /> Enable TCM clinic
@@ -75,6 +90,11 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="checkbox" asp-for="TCMSupervisorEdit" /> Enable edit documents by TCM supervisor
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="LockTCMNoteForUnits" /> Lock create notes for unavaliable units
                             </div>
                         </div>
                     </div>

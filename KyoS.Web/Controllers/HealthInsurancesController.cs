@@ -9,10 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, TCMSupervisor, CaseManager, Frontdesk")]
     public class HealthInsurancesController : Controller
     {
         private readonly DataContext _context;
@@ -240,7 +241,7 @@ namespace KyoS.Web.Controllers
             return File(entity.DocumentPath, mimeType);
         }
 
-        public async Task<IActionResult> UnitsAvailability(int idError = 0)
+        public async Task<IActionResult> UnitsAvailability(int idError = 0, int agency = 0)
         {
             if (idError == 1) //Imposible to delete
             {
@@ -248,93 +249,26 @@ namespace KyoS.Web.Controllers
             }
 
             UserEntity user_logged = await _context.Users
-
                                                    .Include(u => u.Clinic)
-
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user_logged.Clinic == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
+            List<UnitsAvailabilityViewModel> unitsList = new List<UnitsAvailabilityViewModel>();
+            if (agency == 0)
+            {
+                List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
 
                                                               .Include(wc => wc.Client)
 
                                                               .Include(wc => wc.HealthInsurance)
                                                               .ThenInclude(h => h.Clinic)
 
-                                                              .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id))
+                                                              .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id
+                                                                    && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)))
                                                               .ToListAsync();
-
-            List<UnitsAvailabilityViewModel> unitsList = new List<UnitsAvailabilityViewModel>();
-            foreach (var item in list)
-            {
-                unitsList.Add(new UnitsAvailabilityViewModel { 
-                    Id = item.Id, 
-                    ApprovedDate = item.ApprovedDate,
-                    DurationTime = item.DurationTime,
-                    Units = item.Units,
-                    Active = item.Active,
-                    Client = item.Client,
-                    HealthInsurance = item.HealthInsurance,
-                    Expired = (item.ApprovedDate.AddMonths(item.DurationTime) < DateTime.Now) ? true : false,
-                    UsedUnits = await this.UsedUnitsPerClient(item.Id, item.Client.Id, item.HealthInsurance.Id)
-                });
-            }
-
-            return View(unitsList);
-        }
-
-        public async Task<IActionResult> CreateUnits()
-        {
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            UnitsAvailabilityViewModel entity = new UnitsAvailabilityViewModel()
-            {
-                ApprovedDate = DateTime.Now,
-                DurationTime = 12,
-                IdHealthInsurance = 0,
-                HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
-                IdClient = 0,
-                Clients = _combosHelper.GetComboActiveClientsPSRByClinic(user_logged.Clinic.Id),
-                AuthorizationNumber = string.Empty
-            };
-            return View(entity);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUnits(UnitsAvailabilityViewModel model)
-        {
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                //Si el cliente tiene unidades disponibles de la asignación anterior se le suman a esta asignación
-                int availableUnits = await this.AvailableUnitsPerClientInsurance(model.IdClient, model.IdHealthInsurance, model.ApprovedDate);
-                model.Units = model.Units + availableUnits;
-
-                Client_HealthInsurance entity = await _converterHelper.ToClientHealthInsuranceEntity(model, true, user_logged.Id);
-                _context.Add(entity);
-
-                await _context.SaveChangesAsync();
-
-                List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
-
-                                                                    .Include(wc => wc.Client)
-
-                                                                    .Include(wc => wc.HealthInsurance)
-                                                                    .ThenInclude(h => h.Clinic)
-
-                                                                    .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id))
-                                                                    .ToListAsync();
-
-                List<UnitsAvailabilityViewModel> unitsList = new List<UnitsAvailabilityViewModel>();
                 foreach (var item in list)
                 {
                     unitsList.Add(new UnitsAvailabilityViewModel
@@ -348,114 +282,84 @@ namespace KyoS.Web.Controllers
                         HealthInsurance = item.HealthInsurance,
                         Expired = (item.ApprovedDate.AddMonths(item.DurationTime) < DateTime.Now) ? true : false,
                         UsedUnits = await this.UsedUnitsPerClient(item.Id, item.Client.Id, item.HealthInsurance.Id),
-                        AuthorizationNumber = item.AuthorizationNumber
-                        
+                        Agency = item.Agency
                     });
                 }
-
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_UnitsAvailability", unitsList) });       
             }
-
-            UnitsAvailabilityViewModel originalEntity = new UnitsAvailabilityViewModel()
+            else
             {
-                ApprovedDate = model.ApprovedDate,
-                DurationTime = model.DurationTime,
-                IdHealthInsurance = model.IdHealthInsurance,
-                HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
-                IdClient = model.IdClient,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
-                AuthorizationNumber = model.AuthorizationNumber
-            };
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateUnits", originalEntity) });
-        }
-
-        public async Task<IActionResult> EditUnits(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            Client_HealthInsurance entity = await _context.Clients_HealthInsurances
-
-                                                          .Include(c => c.Client)
-
-                                                          .Include(c => c.HealthInsurance)
-
-                                                          .FirstOrDefaultAsync(hi => hi.Id == id);
-            if (entity == null)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-
-            UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-
-            UnitsAvailabilityViewModel model = _converterHelper.ToClientHealthInsuranceViewModel(entity, user_logged.Clinic.Id);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUnits(int id, UnitsAvailabilityViewModel model)
-        {
-            if (id != model.Id)
-            {
-                return RedirectToAction("Home/Error404");
-            }
-            UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-                Client_HealthInsurance entity = await _converterHelper.ToClientHealthInsuranceEntity(model, false, user_logged.Id);
-                _context.Update(entity);
-                await _context.SaveChangesAsync();
-
-                List<Client_HealthInsurance> list = await _context.Clients_HealthInsurances
-
-                                                                    .Include(wc => wc.Client)
-
-                                                                    .Include(wc => wc.HealthInsurance)
-                                                                    .ThenInclude(h => h.Clinic)
-
-                                                                    .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id))
-                                                                    .ToListAsync();
-
-                List<UnitsAvailabilityViewModel> unitsList = new List<UnitsAvailabilityViewModel>();
+                List<TCMClientEntity> list = new List<TCMClientEntity>();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Status == StatusType.Open
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
+                                         .ToListAsync();
+                }
+                if (User.IsInRole("CaseManager"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Status == StatusType.Open
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Casemanager.LinkedUser == user_logged.UserName))
+                                         .ToListAsync();
+                }
+                if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+                {
+                    list = await _context.TCMClient
+                                         .Include(wc => wc.Client)
+                                         .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                         .ThenInclude(wc => wc.HealthInsurance)
+                                         .Where(ch => (ch.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && ch.Client.Clients_HealthInsurances.Any(n => n.Active == true
+                                                                                           && n.Agency == ServiceAgency.TCM)
+                                                    && ch.Status == StatusType.Open))
+                                         .ToListAsync();
+                }
                 foreach (var item in list)
                 {
+                    Client_HealthInsurance client_health = item.Client.Clients_HealthInsurances
+                                                                      .FirstOrDefault(n => n.Active == true
+                                                                                        && n.Agency == ServiceAgency.TCM);
+                   
+                    if (client_health == null)
+                    {
+                        client_health = new Client_HealthInsurance();
+                    }
+                   
                     unitsList.Add(new UnitsAvailabilityViewModel
                     {
                         Id = item.Id,
-                        ApprovedDate = item.ApprovedDate,
-                        DurationTime = item.DurationTime,
-                        Units = item.Units,
-                        Active = item.Active,
+                        ApprovedDate = client_health.ApprovedDate,
+                        DurationTime = client_health.DurationTime,
+                        Units = client_health.Units,
+                        Active = client_health.Active,
                         Client = item.Client,
-                        HealthInsurance = item.HealthInsurance,
-                        Expired = (item.ApprovedDate.AddMonths(item.DurationTime) < DateTime.Now) ? true : false,
-                        UsedUnits = await this.UsedUnitsPerClient(item.Id, item.Client.Id, item.HealthInsurance.Id)
+                        HealthInsurance = client_health.HealthInsurance,
+                        Expired = (client_health.ApprovedDate.AddMonths(client_health.DurationTime) < DateTime.Now) ? true : false,
+                        UsedUnits = await this.UsedUnitsPerClientTCM(client_health.ApprovedDate, item.Client.Id),
+                        Agency = client_health.Agency
                     });
                 }
-
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_UnitsAvailability", unitsList) });
             }
 
-            UnitsAvailabilityViewModel originalEntity = new UnitsAvailabilityViewModel()
-            {
-                ApprovedDate = model.ApprovedDate,
-                DurationTime = model.DurationTime,
-                IdHealthInsurance = model.IdHealthInsurance,
-                HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
-                IdClient = model.IdClient,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id)
-            };
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditUnits", originalEntity) });
+            ViewData["agency"] = agency;
+            return View(unitsList);
         }
 
+      
+       
         public async Task<IActionResult> UnitsPerClientsInsurances()
         {
             UserEntity user_logged = await _context.Users
@@ -852,6 +756,41 @@ namespace KyoS.Web.Controllers
             }
             return availableUnits;
         }
+
+        private async Task<int> UsedUnitsPerClientTCM(DateTime dateApproved, int idClient)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            TCMClientEntity tcmClient = await _context.TCMClient
+                                                      .Include(n => n.TCMNote)
+                                                      .ThenInclude(n => n.TCMNoteActivity)
+                                                      .FirstOrDefaultAsync(n => n.Client.Id == idClient);
+
+            if (tcmClient != null)
+            {
+                List<TCMNoteEntity> notes = tcmClient.TCMNote.Where(n => n.DateOfService.Date >= dateApproved).ToList();
+                int count = 0;
+                foreach (var item in notes)
+                {
+                    int factor = 15;
+                    int unit = item.TCMNoteActivity.Sum(n => n.Minutes) / factor;
+                    double residuo = item.TCMNoteActivity.Sum(n => n.Minutes) % factor;
+                    if (residuo >= 8)
+                        unit++;
+                    count += unit;
+                }
+               
+                return count;
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
         #endregion
 
         public async Task<IActionResult> CreateModal(int id = 0)

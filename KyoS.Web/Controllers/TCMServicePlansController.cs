@@ -109,7 +109,8 @@ namespace KyoS.Web.Controllers
                                                      .Include(g => g.TcmClient)
                                                      .ThenInclude(f => f.Client)
                                                      .Include(t => t.TcmClient.Casemanager)
-                                                     .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id))
+                                                     .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
+                                                            && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
                                                      .OrderBy(g => g.TcmClient.CaseNumber)
                                                      .ToListAsync();
                 ViewData["origin"] = 0;
@@ -261,6 +262,9 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(f => f.Client)
                                                           .ThenInclude(f => f.Clinic)
                                                           .ThenInclude(f => f.Setting)
+                                                          .Include(n => n.TcmClient)
+                                                          .ThenInclude(n => n.Casemanager)
+                                                          .ThenInclude(n => n.TCMSupervisor)
                                                           .FirstOrDefault(u => u.Id == Id);
 
             UserEntity user_logged = _context.Users
@@ -276,9 +280,9 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     List<TCMClientEntity> tcmClient = _context.TCMClient
-                                                   .Include(u => u.Client)
-                                                   .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
-                                                   .ToList();
+                                                              .Include(u => u.Client)
+                                                              .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
+                                                              .ToList();
 
                     List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
                     {
@@ -288,8 +292,8 @@ namespace KyoS.Web.Controllers
                         .ToList();
 
                     List<ClinicEntity> clinic = _context.Clinics
-                                                     .Where(u => u.Id == user_logged.Clinic.Id)
-                                                     .ToList();
+                                                        .Where(u => u.Id == user_logged.Clinic.Id)
+                                                        .ToList();
 
                     List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
                     {
@@ -319,7 +323,9 @@ namespace KyoS.Web.Controllers
                         TCMDomain = tcmServicePlan.TCMDomain,
                         Approved = tcmServicePlan.Approved,
                         CreatedBy = tcmServicePlan.CreatedBy,
-                        CreatedOn = tcmServicePlan.CreatedOn
+                        CreatedOn = tcmServicePlan.CreatedOn,
+                        TcmClient = tcmServicePlan.TcmClient,
+                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
 
                     };
 
@@ -378,6 +384,10 @@ namespace KyoS.Web.Controllers
                     _context.Add(notification);
                 }
 
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    tcmServicePlanEntity.DateSupervisorSignature = serviceplanViewModel.DateSupervisorSignature;
+                }
                 _context.Update(tcmServicePlanEntity);
                   try
                   {
@@ -604,7 +614,8 @@ namespace KyoS.Web.Controllers
                                                      .ThenInclude(f => f.Client)
                                                      .Include(t => t.TcmClient.Casemanager)
                                                      .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                        && g.Approved == 2))
+                                                               && g.Approved == 2
+                                                               && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
                                                      .ToListAsync();
                 return View(servicePlan);
             }
@@ -1323,7 +1334,7 @@ namespace KyoS.Web.Controllers
                     ViewData["aview"] = aview;
                     return View(adendum);
                 }
-                if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
+                if (user_logged.UserType.ToString() == "Manager" )
                 {
                     List<TCMAdendumEntity> adendum = await _context.TCMAdendums
                                                        .Include(h => h.TcmDomain)
@@ -1341,7 +1352,24 @@ namespace KyoS.Web.Controllers
                     ViewData["aview"] = aview;
                     return View(adendum);
                 }
-               
+                if (user_logged.UserType.ToString() == "TCMSupervisor")
+                {
+                    List<TCMAdendumEntity> adendum = await _context.TCMAdendums
+                                                       .Include(h => h.TcmDomain)
+                                                       .ThenInclude(h => h.TCMObjetive)
+                                                       .Include(h => h.TcmServicePlan)
+                                                       .ThenInclude(h => (h.TcmClient))
+                                                       .Include(h => h.TcmServicePlan.TcmClient.Client)
+                                                       .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                       .Include(h => h.TCMMessages)
+                                                       .Where(h => h.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                       .ToListAsync();
+                    ViewData["tcmClientId"] = caseNumber;
+                    if (tcmClient != null)
+                        ViewData["Id"] = tcmClient.Id;
+                    ViewData["aview"] = aview;
+                    return View(adendum);
+                }
             }
             else
             {
@@ -1960,7 +1988,8 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(f => f.Client)
                                     .ThenInclude(g => g.Clinic)
                                     .ThenInclude(f => f.Setting)
-                                    .Where(g => g.Approved == approved)
+                                    .Where(g => g.Approved == approved
+                                      && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                     .OrderBy(g => g.TcmClient.CaseNumber)
                                     .ToListAsync();
                 foreach (var item in tcmSupervisor.CaseManagerList)
@@ -2060,7 +2089,7 @@ namespace KyoS.Web.Controllers
                                                    .Include(h => h.TcmServicePlan.TcmClient.Client)
                                                    .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
                                                    .Include(h => h.TCMMessages)
-                                                   .Where(h => h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id
+                                                   .Where(h => h.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
                                                         && h.Approved == approved)
                                                    .ToListAsync();
                 ViewData["aview"] = aview;
@@ -2081,6 +2110,9 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(f => f.Client)
                                                           .ThenInclude(f => f.Clinic)
                                                           .ThenInclude(f => f.Setting)
+                                                          .Include(f => f.TcmClient)
+                                                          .ThenInclude(f => f.Casemanager)
+                                                          .ThenInclude(f => f.TCMSupervisor)
                                                           .FirstOrDefault(u => u.Id == Id);
             TCMServicePlanViewModel model;
 

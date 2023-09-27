@@ -5,54 +5,49 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
-        <label asp-for="IdEmergencyContact" class="control-label"></label>
-        <select asp-for="IdEmergencyContact" asp-items="Model.EmergencyContacts" class="form-control" disabled></select>        
+        <label asp-for="EmergencyContact.Name" class="control-label">Emergency Contact Name</label>
+        <input asp-for="EmergencyContact.Name" class="form-control" disabled />
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
         <label asp-for="IdRelationshipEC" class="control-label"></label>
-        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>        
+        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>
     </div>
-    <div class="container-fluid">
-        &nbsp;
+    <div class="form-group col-md-3">
+        <label asp-for="EmergencyContact.Address" class="control-label">Address</label>
+        <input asp-for="EmergencyContact.Address" class="form-control" disabled />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContact.Country" class="control-label">Country</label>
+        <input asp-for="EmergencyContact.Country" class="form-control" disabled />
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContact.City" class="control-label">City</label>
+        <input asp-for="EmergencyContact.City" class="form-control" disabled />
     </div>
 </div>
 <div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="EmergencyContact.State" class="control-label">State</label>
+        <input asp-for="EmergencyContact.State" class="form-control" disabled />
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="EmergencyContact.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="EmergencyContact.ZipCode" class="form-control" disabled />
+    </div>
     <div class="form-group col-md-3">
-        <label asp-for="AddressEmergencyContact" class="control-label">Address</label>
-        <input asp-for="AddressEmergencyContact" class="form-control" disabled/>        
+        <label asp-for="EmergencyContact.Address" class="control-label">Address Line 2</label>
+        <input asp-for="EmergencyContact.Address" class="form-control" disabled />
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="CountryEmergencyContact" class="control-label">Country</label>
-        <input asp-for="CountryEmergencyContact" class="form-control" disabled/>        
+        <label asp-for="EmergencyContact.Telephone" class="control-label">Telephone</label>
+        <input asp-for="EmergencyContact.Telephone" class="form-control" disabled />
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="CityEmergencyContact" class="control-label">City</label>
-        <input asp-for="CityEmergencyContact" class="form-control" disabled/>        
+        <label asp-for="EmergencyContact.TelephoneSecondary" class="control-label">Telephone Secundary</label>
+        <input asp-for="EmergencyContact.TelephoneSecondary" class="form-control" disabled />
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="StateEmergencyContact" class="control-label">State</label>
-        <input asp-for="StateEmergencyContact" class="form-control" disabled/>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="ZipCodeEmergencyContact" class="control-label">Zip Code</label>
-        <input asp-for="ZipCodeEmergencyContact" class="form-control" disabled/>       
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="AddressLine2EmergencyContact" class="control-label">Address Line 2</label>
-        <input asp-for="AddressLine2EmergencyContact" class="form-control" disabled/>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PhoneEmergencyContact" class="control-label">Telephone</label>
-        <input asp-for="PhoneEmergencyContact" class="form-control" disabled/>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PhoneSecundaryEmergencyContact" class="control-label">Telephone Secundary</label>
-        <input asp-for="PhoneSecundaryEmergencyContact" class="form-control" disabled/>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="EmailEmergencyContact" class="control-label">Email</label>
-        <input asp-for="EmailEmergencyContact" class="form-control" disabled/>        
+        <label asp-for="EmergencyContact.Email" class="control-label">Email</label>
+        <input asp-for="EmergencyContact.Email" class="form-control" disabled />
     </div>
 </div>

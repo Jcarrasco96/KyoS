@@ -1607,6 +1607,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Agency")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ApprovedDate")
                         .HasColumnType("datetime2");
 
@@ -3276,6 +3279,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Agency")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ApprovedDate")
                         .HasColumnType("datetime2");
@@ -6030,6 +6036,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("LockTCMNoteForUnits")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("MHClassificationOfGoals")
                         .HasColumnType("bit");
 
@@ -6041,6 +6050,12 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("TCMClinic")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("TCMEndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TCMInitialTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("TCMSupervisorEdit")
                         .HasColumnType("bit");
@@ -6211,8 +6226,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("LastTimeUsed")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SustanceName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SustanceName")
+                        .HasColumnType("int");
 
                     b.Property<int?>("TcmAssessmentId")
                         .HasColumnType("int");
@@ -6279,8 +6294,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AreAllImmunizationExplain")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("AreChild")
-                        .HasColumnType("bit");
+                    b.Property<int>("AreChild")
+                        .HasColumnType("int");
 
                     b.Property<string>("AreChildAddress")
                         .HasColumnType("nvarchar(max)");
@@ -6624,8 +6639,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("EmployerPhone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmploymentStatus")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmploymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<bool>("ExcessiveCluter")
                         .HasColumnType("bit");
@@ -6759,8 +6774,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Homicidal")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HowActive")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HowActive")
+                        .HasColumnType("int");
 
                     b.Property<bool>("HowDoesByFollowing")
                         .HasColumnType("bit");
@@ -6852,11 +6867,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("IsClientInvolvedSpecify")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsClientPregnancy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsClientPregnancyNA")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsClientPregnancy")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsSheReceiving")
                         .HasColumnType("bit");
@@ -6981,8 +6993,8 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("MentalHealth")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MonthlyFamilyIncome")
-                        .HasColumnType("int");
+                    b.Property<string>("MonthlyFamilyIncome")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("NeedALot")
                         .HasColumnType("bit");
@@ -7155,8 +7167,8 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Resident")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ResidentStatus")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ResidentStatus")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Review")
                         .HasColumnType("bit");
@@ -7584,11 +7596,11 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateReceived")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Efectiveness")
+                    b.Property<string>("DateReceived")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Efectiveness")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -9899,9 +9911,11 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NextStep")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Outcome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PaymentDate")

@@ -98,5 +98,8 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBillPaid();
         IEnumerable<SelectListItem> GetComboServicesAssessment(int idServicePlan);
         IEnumerable<SelectListItem> GetComboYesNoNA();
+        IEnumerable<SelectListItem> GetComboEffectiveness();
+        IEnumerable<SelectListItem> GetComboDrugs();
+        IEnumerable<SelectListItem> GetComboFrecuencyActive();
     }
 }

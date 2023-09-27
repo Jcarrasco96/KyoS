@@ -53,13 +53,23 @@ namespace KyoS.Web.Controllers
             else
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                if (User.IsInRole("Manager") )
                     return View(await _context.TCMClient
 
                                               .Include(f => f.TCMAssessment)
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TCMAssessment)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
@@ -117,6 +127,8 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(n => n.Client_Referred)
                                                         .ThenInclude(n => n.Referred)
                                                         .Include(n => n.TCMIntakeForm)
+                                                        .Include(n => n.Casemanager)
+                                                        .ThenInclude(n => n.TCMSupervisor)
                                                         .FirstOrDefault(n => n.Id == id);
 
                     if (tcmClient.TCMIntakeForm == null)
@@ -126,7 +138,8 @@ namespace KyoS.Web.Controllers
                     {
                         Approved = 0,
                         TcmClient = tcmClient,
-                        AreChild = false,
+                        AreChild = YesNoNAType.NA,
+                        IdYesNoNAAreChild = 2,
                         AreChildAddress = "",
                         AreChildCity = "",
                         AreChildName = "",
@@ -227,7 +240,7 @@ namespace KyoS.Web.Controllers
                         EmployerCityState = "",
                         EmployerContactPerson = "",
                         EmployerPhone = "",
-                        EmploymentStatus = "",
+                        EmploymentStatuss = _combosHelper.GetComboEmployed(),
                         ExcessiveCluter = false,
                         FailToEelementary = false,
                         FailToHigh = false,
@@ -293,7 +306,7 @@ namespace KyoS.Web.Controllers
                         MakingTotal = false,
                         Mammogram = "",
                         MayWeLeaveSend = false,
-                        MonthlyFamilyIncome = 0,
+                        MonthlyFamilyIncome = string.Empty,
                         NoAirCondition = false,
                         NoTelephone = false,
                         NotHot = false,
@@ -334,7 +347,7 @@ namespace KyoS.Web.Controllers
                         RelationshipMiddle = false,
                         RelationshipPreSchool = false,
                         Resident = false,
-                        ResidentStatus = "",
+                        ResidentStatuss = _combosHelper.GetComboResidential(),
                         SchoolAddress = "",
                         SchoolCityState = "",
                         SchoolDistrict = "",
@@ -425,7 +438,7 @@ namespace KyoS.Web.Controllers
                         Suicidal = false,
                         Status = TCMDocumentStatus.Edition,
                         DoesParanoia = false,
-                        HowActive = "",
+                        FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
                         TCMSupervisor = new TCMSupervisorEntity(),
                         DoesPoor = false,
                         DoesSadness = false,
@@ -467,8 +480,6 @@ namespace KyoS.Web.Controllers
                         HowWeelWithSome = false,
                         IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>(),
                         IsClientCurrently = false,
-                        IsClientPregnancy = false,
-                        IsClientPregnancyNA = false,
                         IsSheReceiving = false,
                         Issues = "",
                         LastModifiedBy = "",
@@ -645,7 +656,9 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.MedicalProblemList)
                                                                 .Include(b => b.SurgeryList)
                                                                 .Include(b => b.TcmClient)
-                                                                .ThenInclude(b => b.TCMIntakeForm)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
@@ -714,7 +727,7 @@ namespace KyoS.Web.Controllers
                 {
                     tcmAssessmentEntity.Approved = 0;
                 }
-                if (origi == 3)
+                if (origi == 5)
                 {
                     tcmAssessmentEntity.Approved = 2;
                 }
@@ -772,6 +785,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 0});
                     }
+                    if (origi == 5)
+                    {
+                        return RedirectToAction("UpdateAssessment", "TCMAssessments");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -786,7 +803,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.TcmClient.Id == id);
+            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
 
             if (tcmAssessment != null)
             {
@@ -1272,8 +1289,8 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        Efectiveness = "",
-                        DateReceived = DateTime.Now,
+                        EffectivessList = _combosHelper.GetComboEffectiveness(),
+                        DateReceived = string.Empty,
                         ProviderAgency = "",
                         TypeService = ""
                     };
@@ -1294,8 +1311,8 @@ namespace KyoS.Web.Controllers
                 Id = 0,
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
-                Efectiveness = "",
-                DateReceived = DateTime.Now,
+                EffectivessList = _combosHelper.GetComboEffectiveness(),
+                DateReceived = string.Empty,
                 ProviderAgency = "",
                 TypeService = ""
                 
@@ -1836,7 +1853,7 @@ namespace KyoS.Web.Controllers
                         Frequency = "",
                         DateBegin = DateTime.Now,
                         LastTimeUsed = "",
-                        SustanceName = ""
+                        DrugsList = _combosHelper.GetComboDrugs()
                     };
                     if (model.TcmAssessment.DrugList == null)
                         model.TcmAssessment.DrugList = new List<TCMAssessmentDrugEntity>();
@@ -1859,7 +1876,7 @@ namespace KyoS.Web.Controllers
                 Frequency = "",
                 DateBegin = DateTime.Now,
                 LastTimeUsed = "",
-                SustanceName = ""
+                DrugsList = _combosHelper.GetComboDrugs()
 
             };
 
@@ -1937,10 +1954,10 @@ namespace KyoS.Web.Controllers
                 {
 
                     TCMAssessmentDrugEntity DrugEntity = _context.TCMAssessmentDrug
-                                                                           .Include(m => m.TcmAssessment)
-                                                                           .ThenInclude(m => m.TcmClient)
-                                                                           .ThenInclude(m => m.Client)
-                                                                           .FirstOrDefault(m => m.Id == id);
+                                                                 .Include(m => m.TcmAssessment)
+                                                                 .ThenInclude(m => m.TcmClient)
+                                                                 .ThenInclude(m => m.Client)
+                                                                 .FirstOrDefault(m => m.Id == id);
                     if (DrugEntity == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -1978,9 +1995,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<TCMAssessmentDrugEntity> DruglList = await _context.TCMAssessmentDrug
-                                                                                .Include(g => g.TcmAssessment)
-                                                                                .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
-                                                                                .ToListAsync();
+                                                                            .Include(g => g.TcmAssessment)
+                                                                            .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
+                                                                            .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", DruglList) });
                 }
@@ -2388,6 +2405,8 @@ namespace KyoS.Web.Controllers
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Client)
                                                                         .Include(m => m.TcmMessages)
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Casemanager)
                                                                         .Where(m => m.Approved == approved
                                                                                  && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
@@ -2403,6 +2422,8 @@ namespace KyoS.Web.Controllers
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Client)
                                                                         .Include(m => m.TcmMessages)
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Casemanager)
                                                                         .Where(m => m.Approved == approved
                                                                                  && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                                  && m.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
@@ -2419,6 +2440,8 @@ namespace KyoS.Web.Controllers
                                                                          .Include(m => m.TcmClient)
                                                                          .ThenInclude(m => m.Client)
                                                                          .Include(m => m.TcmMessages)
+                                                                         .Include(m => m.TcmClient)
+                                                                         .ThenInclude(m => m.Casemanager)
                                                                          .Where(m => m.Approved == approved
                                                                              && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                              && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
@@ -2465,6 +2488,9 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Client)
                                                                 .ThenInclude(b => b.Clinic)
                                                                 .ThenInclude(b => b.Setting)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {

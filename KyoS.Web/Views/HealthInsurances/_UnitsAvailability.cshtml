@@ -13,11 +13,12 @@
                         <tr>
                             <th class="col-md-2">Health Insurance</th>
                             <th class="col-md-3">Client Name</th>
+                            <th class="col-md-1" style="text-align:center;">Agency</th>
                             <th class="col-md-1" style="text-align:center;">Approved</th>
-                            <th class="col-md-2" style="text-align:center;">Duration (months)</th>
+                            <th class="col-md-1" style="text-align:center;">Expires</th>
                             <th class="col-md-1" style="text-align:center;">Units</th>
-                            <th class="col-md-2" style="text-align:center;">Used Units</th>
-                            <th class="col-md-1"></th>
+                            <th class="col-md-1" style="text-align:center;">Used Units</th>
+                            <th class="col-md-2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,16 +28,22 @@
                             {
                                 <tr style="color: red;" title="Not available">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @item.ApprovedDate.AddMonths(item.DurationTime).ToShortDateString()
                                     </td>
                                     <td align="center">
                                         <span class="label label-danger">
@@ -48,8 +55,8 @@
                                             @Html.DisplayFor(modelItem => item.UsedUnits)
                                         </span>
                                     </td>
-                                    <td align="center">
-                                        <a onclick="showInPopup('@Url.Action("EditUnits", "HealthInsurances", new { id = item.Id }, Context.Request.Scheme)','Edit units per client')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <td align="right">
+                                       
                                     </td>
                                 </tr>
                             }
@@ -57,16 +64,22 @@
                             {
                                 <tr title="Valid">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @item.ApprovedDate.AddMonths(item.DurationTime).ToShortDateString()
                                     </td>
                                     <td align="center">
                                         <span class="label label-success">
@@ -79,7 +92,7 @@
                                         </span>
                                     </td>
                                     <td align="center">
-                                        <a onclick="showInPopup('@Url.Action("EditUnits", "HealthInsurances", new { id = item.Id }, Context.Request.Scheme)','Edit units per client')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        
                                     </td>
                                 </tr>
                             }
@@ -87,16 +100,22 @@
                             {
                                 <tr style="color: darkgrey;" title="Expired">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        @if (item.HealthInsurance != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.HealthInsurance.Name)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @item.ApprovedDate.AddMonths(item.DurationTime).ToShortDateString()
                                     </td>
                                     <td align="center">
                                         <span class="label label-default">
@@ -109,7 +128,7 @@
                                         </span>
                                     </td>
                                     <td align="center">
-                                        <a onclick="showInPopup('@Url.Action("EditUnits", "HealthInsurances", new { id = item.Id }, Context.Request.Scheme)','Edit units per client')" class="btn btn-warning" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        
                                     </td>
                                 </tr>
                             }

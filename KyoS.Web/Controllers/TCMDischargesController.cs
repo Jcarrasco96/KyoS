@@ -659,7 +659,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            if (User.IsInRole("Manager"))
             {
                 List<TCMDischargeEntity> tcmDischarge = await _context.TCMDischarge
                                                                        .Include(m => m.TcmServicePlan)
@@ -675,6 +675,22 @@ namespace KyoS.Web.Controllers
                 return View(tcmDischarge);
             }
 
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMDischargeEntity> tcmDischarge = await _context.TCMDischarge
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Client)
+                                                                       .Include(n => n.TcmDischargeFollowUp)
+                                                                       .Include(n => n.TCMMessages)
+                                                                       .Where(m => m.Approved == approved
+                                                                                && m.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                                       .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
+                                                                       .ToListAsync();
+                ViewData["idTCMClient"] = idTCMClient;
+                return View(tcmDischarge);
+            }
+
             if (User.IsInRole("CaseManager"))
             {
 
@@ -684,6 +700,9 @@ namespace KyoS.Web.Controllers
                                                                        .ThenInclude(m => m.Client)
                                                                        .Include(n => n.TcmDischargeFollowUp)
                                                                        .Include(n => n.TCMMessages)
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Casemanager)
                                                                        .Where(m => m.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName
                                                                             && m.Approved == approved
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)

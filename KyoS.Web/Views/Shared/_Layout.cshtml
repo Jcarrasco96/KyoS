@@ -161,7 +161,13 @@
 
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
                                 {
-                                    <li>@Html.ActionLink("Units per Insurances / Clients", "UnitsAvailability", "HealthInsurances")</li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Authorizations</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-controller="HealthInsurances" asp-action="UnitsAvailability" asp-route-agency="0">  CMH</a></li>
+                                            <li><a asp-controller="HealthInsurances" asp-action="UnitsAvailability" asp-route-agency="1">  TCM</a></li>
+                                        </ul>
+                                    </li>
                                 }
                                 else
                                 {
@@ -679,6 +685,7 @@
                                 </li>
                                 <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
                                 <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
+                                <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new {agency = 1 })</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -799,6 +806,7 @@
                                         <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
                                     </ul>
                                 </li>
+                                <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

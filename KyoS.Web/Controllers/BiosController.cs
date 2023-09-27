@@ -633,6 +633,7 @@ namespace KyoS.Web.Controllers
             BioEntity entity = _context.Bio
 
                                        .Include(m => m.Client)
+                                       .Include(n => n.Client.Doctor)
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
@@ -1585,14 +1586,14 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Approve(int id, int origi = 0)
+        public async Task<IActionResult> Approve(BioViewModel model, int id, int origi = 0)
         {
 
             BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
 
 
             bio.Status = BioStatus.Approved;
-            bio.DateSignatureSupervisor = DateTime.Now;
+            bio.DateSignatureSupervisor = model.DateSignatureSupervisor;
             bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(bio);
 

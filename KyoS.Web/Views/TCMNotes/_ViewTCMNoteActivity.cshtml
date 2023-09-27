@@ -8,7 +8,7 @@
     var @value1 = value + 1;
     
     <div class="col-md-12">
-        <div class="col-md-3">
+        <div class="col-md-2">
             &nbsp;
         </div>
         <div class="col-md-2">            
@@ -37,8 +37,14 @@
                     }
                 </h4>
             </div>
-        </div>        
-        <div class="col-md-3">
+        </div>
+         <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-danger">                
+                <p style="text-align:center">Available units</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewData["Id"].ToString()</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
             &nbsp;
         </div>
     </div>
@@ -57,10 +63,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Setting
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Domain
                             </th>
-                            <th class="col-md-6" style="text-align:left;">
+                            <th class="col-md-5" style="text-align:left;">
                                 Description
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -86,7 +92,7 @@
                                     @Html.DisplayFor(modelItem => item.Setting)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TCMDomain.Code)
+                                    @Html.DisplayFor(modelItem => item.TCMDomain.Name)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DescriptionOfService)

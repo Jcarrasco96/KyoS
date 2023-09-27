@@ -14,7 +14,7 @@ namespace KyoS.Web.Data.Entities
 
         public TCMAssessmentEntity TcmAssessment { get; set; }
 
-        public string SustanceName { get; set; }
+        public DrugsType SustanceName { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime DateBegin { get; set; }

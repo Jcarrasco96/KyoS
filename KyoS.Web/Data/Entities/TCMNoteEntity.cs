@@ -20,8 +20,12 @@ namespace KyoS.Web.Data.Entities
 
         public NoteStatus Status { get; set; }
 
+        [Display(Name = "Outcome")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Outcome { get; set; }
 
+        [Display(Name = "Next Step")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string NextStep { get; set; }
 
         public TCMClientEntity TCMClient { get; set; }

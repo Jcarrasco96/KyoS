@@ -126,8 +126,8 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 SettingEntity setting = await _converterHelper.ToSettingEntity(model, false, user_logged.Id);
                 _context.Update(setting);

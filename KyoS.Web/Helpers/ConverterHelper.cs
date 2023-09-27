@@ -400,7 +400,12 @@ namespace KyoS.Web.Helpers
                 OnlyTCM = clientEntity.OnlyTCM,
                 HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
-                Annotations = clientEntity.Annotations
+                Annotations = clientEntity.Annotations,
+                Doctor = clientEntity.Doctor,
+                Psychiatrist = clientEntity.Psychiatrist,
+                LegalGuardian = clientEntity.LegalGuardian,
+                EmergencyContact = clientEntity.EmergencyContact
+
                 
             };
         }
@@ -1402,8 +1407,7 @@ namespace KyoS.Web.Helpers
                 DurationTime = model.DurationTime,
                 Units = model.Units,                
                 Active = model.Active,
-                IdClient = model.Client.Id,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
+                Client = model.Client,
                 IdHealthInsurance = model.HealthInsurance.Id,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(idClinic),
                 CreatedBy = model.CreatedBy,
@@ -1411,7 +1415,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 MemberId = model.MemberId,
-                AuthorizationNumber = model.AuthorizationNumber
+                AuthorizationNumber = model.AuthorizationNumber,
+                IdAgencyService = (model.Agency == ServiceAgency.CMH) ? 0 : 1,
+                AgencyServices = _combosHelper.GetComboServiceAgency(),
+                Agency = model.Agency
             };
         }
 
@@ -1432,7 +1439,10 @@ namespace KyoS.Web.Helpers
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
                 BillSemanalMH = model.BillSemanalMH,
-                IndNoteForAppointment = model.IndNoteForAppointment
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits
             };
         }
 
@@ -1454,7 +1464,10 @@ namespace KyoS.Web.Helpers
                 MHProblems = model.MHProblems,
                 TCMSupervisorEdit = model.TCMSupervisorEdit,
                 BillSemanalMH = model.BillSemanalMH,
-                IndNoteForAppointment = model.IndNoteForAppointment
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits
             };
         }
 
@@ -2665,7 +2678,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
 
-                AddressPhysician = model.AddressPhysician,
+                AddressPhysician = model.Client.Doctor.Address,
                 AgeFirstTalked = model.AgeFirstTalked,
                 AgeFirstWalked = model.AgeFirstWalked,
                 AgeToiletTrained = model.AgeToiletTrained,
@@ -2693,7 +2706,7 @@ namespace KyoS.Web.Helpers
                 ChestPain = model.ChestPain,
                 ChronicCough = model.ChronicCough,
                 ChronicIndigestion = model.ChronicIndigestion,
-                City = model.City,
+                City = model.Client.Doctor.City,
                 Complications = model.Complications,
                 Complications_Explain = model.Complications_Explain,
                 Comprehending = model.Comprehending,
@@ -2777,7 +2790,7 @@ namespace KyoS.Web.Helpers
                 PerformingCertainMotions = model.PerformingCertainMotions,
                 Planned = model.Planned,
                 Poliomyelitis = model.Poliomyelitis,
-                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                PrimaryCarePhysician = model.Client.Doctor.Name,
                 ProblemWithBedWetting = model.ProblemWithBedWetting,
                 Reading = model.Reading,
                 RheumaticFever = model.RheumaticFever,
@@ -2788,7 +2801,7 @@ namespace KyoS.Web.Helpers
                 ShortnessOfBreath = model.ShortnessOfBreath,
                 SkinTrouble = model.SkinTrouble,
                 Speaking = model.Speaking,
-                State = model.State,
+                State = model.Client.Doctor.State,
                 StomachPain = model.StomachPain,
                 Surgery = model.Surgery,
                 SwellingOfFeet = model.SwellingOfFeet,
@@ -2802,7 +2815,7 @@ namespace KyoS.Web.Helpers
                 WeightLoss = model.WeightLoss,
                 WhoopingCough = model.WhoopingCough,
                 WritingSentence = model.WritingSentence,
-                ZipCode = model.ZipCode,
+                ZipCode = model.Client.Doctor.ZipCode,
 
                 AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
                 DateOfLastBreastExam = model.DateOfLastBreastExam,
@@ -3739,7 +3752,7 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = ResidentialUtils.GetResidentialByIndex(model.IdResidentialStatus),
+                ResidentialStatus = ResidentialUtils.GetResidentialByIndex1(model.IdResidentialStatus),
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -4766,7 +4779,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Approved = model.Approved,
-                AreChild = model.AreChild,
+                AreChild = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAAreChild),
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
                 AreChildCity = model.AreChildCity,
@@ -4780,7 +4793,7 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
-                MayWe = YesNoNAType.GetYesNoNaByIndex(model.IdYesNoNAWe),
+                MayWe = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAWe),
                 NeverMarried = model.NeverMarried,
                 Other = model.Other,
                 OtherExplain = model.OtherExplain,
@@ -4866,11 +4879,10 @@ namespace KyoS.Web.Helpers
                 HearingNotDetermined = model.HearingNotDetermined,
                 Hears = model.Hears,
                 Homicidal = model.Homicidal,
-                HowActive = model.HowActive,
+                HowActive = FrecuencyActiveUtils.GetFrecuencyActiveByIndex(model.IdFrecuencyActive),
                 HowManyTimes = model.HowManyTimes,
                 IsClientCurrently = model.IsClientCurrently,
-                IsClientPregnancy = model.IsClientPregnancy,
-                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IsClientPregnancy = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAPregnancy),
                 IsSheReceiving = model.IsSheReceiving,
                 Issues = model.Issues,
                 LegalDecisionAddress = model.LegalDecisionAddress,
@@ -4977,7 +4989,7 @@ namespace KyoS.Web.Helpers
                 EmployerCityState = model.EmployerCityState,
                 EmployerContactPerson = model.EmployerContactPerson,
                 EmployerPhone = model.EmployerPhone,
-                EmploymentStatus = model.EmploymentStatus,
+                EmploymentStatus = EmployedUtils.GetEmployedByIndex(model.IdEmploymentStatus),
                 ExcessiveCluter = model.ExcessiveCluter,
                 FailToEelementary = model.FailToEelementary,
                 FailToHigh = model.FailToHigh,
@@ -5084,7 +5096,7 @@ namespace KyoS.Web.Helpers
                 RelationshipMiddle = model.RelationshipMiddle,
                 RelationshipPreSchool = model.RelationshipPreSchool,
                 Resident = model.Resident,
-                ResidentStatus = model.ResidentStatus,
+                ResidentStatus = ResidentialUtils.GetResidentialByIndex1(model.IdResidentStatus),
                 SchoolAddress = model.SchoolAddress,
                 SchoolCityState = model.SchoolCityState,
                 SchoolDistrict = model.SchoolDistrict,
@@ -5152,7 +5164,7 @@ namespace KyoS.Web.Helpers
                 TcmMessages = _context.TCMMessages
                                       .Where(n => n.TCMAssessment.Id == model.Id)
                                       .ToList()
-
+            
             };
         }
 
@@ -5168,6 +5180,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 Approved = model.Approved,
+                IdYesNoNAAreChild = (model.AreChild == YesNoNAType.Yes) ? 0 : (model.AreChild == YesNoNAType.No) ? 1 : 2,
                 AreChild = model.AreChild,
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
@@ -5182,7 +5195,7 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
-                IdYesNoNAWe = (model.MayWe == YesNoNA.Yes) ? 0 : (model.MayWe == YesNoNA.No) ? 1 : 2,
+                IdYesNoNAWe = (model.MayWe == YesNoNAType.Yes) ? 0 : (model.MayWe == YesNoNAType.No) ? 1 : 2,
                 YesNoNAs = _combosHelper.GetComboYesNoNA(),
                 MayWe = model.MayWe,
                 NeverMarried = model.NeverMarried,
@@ -5272,8 +5285,7 @@ namespace KyoS.Web.Helpers
                 HowActive = model.HowActive,
                 HowManyTimes = model.HowManyTimes,
                 IsClientCurrently = model.IsClientCurrently,
-                IsClientPregnancy = model.IsClientPregnancy,
-                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IdYesNoNAPregnancy = (model.IsClientPregnancy == YesNoNAType.Yes) ? 0 : (model.IsClientPregnancy == YesNoNAType.No) ? 1 : 2,
                 IsSheReceiving = model.IsSheReceiving,
                 Issues = model.Issues,
                 LegalDecisionAddress = model.LegalDecisionAddress, 
@@ -5381,6 +5393,8 @@ namespace KyoS.Web.Helpers
                 EmployerContactPerson = model.EmployerContactPerson,
                 EmployerPhone = model.EmployerPhone,
                 EmploymentStatus = model.EmploymentStatus,
+                IdEmploymentStatus = (model.EmploymentStatus == EmploymentStatus.EmployetFT) ? 0 : (model.EmploymentStatus == EmploymentStatus.EmployetPT) ? 1 : (model.EmploymentStatus == EmploymentStatus.Retired) ? 2 : (model.EmploymentStatus == EmploymentStatus.Disabled) ? 3 : (model.EmploymentStatus == EmploymentStatus.Homemaker) ? 4 : (model.EmploymentStatus == EmploymentStatus.Student) ? 5 : (model.EmploymentStatus == EmploymentStatus.Unemployed) ? 6 : 7,
+                EmploymentStatuss = _combosHelper.GetComboEmployed(),
                 ExcessiveCluter = model.ExcessiveCluter,
                 FailToEelementary = model.FailToEelementary,
                 FailToHigh = model.FailToHigh,
@@ -5487,6 +5501,8 @@ namespace KyoS.Web.Helpers
                 RelationshipMiddle = model.RelationshipMiddle,
                 RelationshipPreSchool = model.RelationshipPreSchool,
                 Resident = model.Resident,
+                IdResidentStatus = (model.ResidentStatus == ResidentialStatus.LivingAlone)? 0 : (model.ResidentStatus == ResidentialStatus.livingWithRelatives) ? 1 : (model.ResidentStatus == ResidentialStatus.livingWithNoRelatives) ? 2 : (model.ResidentStatus == ResidentialStatus.AsistedLivingFacility) ? 3 : (model.ResidentStatus == ResidentialStatus.FosterCare_GroupHome) ? 4 : (model.ResidentStatus == ResidentialStatus.Hospital_NursingHome) ? 5 : (model.ResidentStatus == ResidentialStatus.ResidentialProgram) ? 6 : (model.ResidentStatus == ResidentialStatus.Correctional_Facility) ? 7 : 8,
+                ResidentStatuss = _combosHelper.GetComboResidential(),
                 ResidentStatus = model.ResidentStatus,
                 SchoolAddress = model.SchoolAddress,
                 SchoolCityState = model.SchoolCityState,
@@ -5552,10 +5568,49 @@ namespace KyoS.Web.Helpers
                 OtherReceiveExplain = model.OtherReceiveExplain,
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
-                Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
-                
-            };
+                Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList(),
+                IdFrecuencyActive = (model.HowActive == FrecuencyActive.Daily) ? 0: (model.HowActive == FrecuencyActive.Three_Time_per_week_or_more) ? 1 : (model.HowActive == FrecuencyActive.Three_Time_per_week_or_less) ? 2 : (model.HowActive == FrecuencyActive.Once_per_week) ? 3 : (model.HowActive == FrecuencyActive.Rarely) ? 4 : 5,
+                FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
+                /*Psychiatrist_Name = (model.TcmClient.Client.Psychiatrist == null)? "": model.TcmClient.Client.Psychiatrist.Name,
+                Psychiatrist_Address = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.Address,
+                Psychiatrist_Phone = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.Telephone,
+                Psychiatrist_CityStateZip = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode,
 
+                PCP_Name = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.Name,
+                PCP_Address = (model.TcmClient.Client.Doctor == null) ? "": model.TcmClient.Client.Doctor.FullAddress,
+                PCP_Phone = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.Telephone,
+                PCP_CityStateZip = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.City + ", "+ model.TcmClient.Client.Doctor.State + ", "+ model.TcmClient.Client.Doctor.ZipCode
+                */
+            };
+            if (model.TcmClient.Client.Psychiatrist == null)
+            {
+                salida.Psychiatrist_Name = string.Empty;
+                salida.Psychiatrist_Address = string.Empty;
+                salida.Psychiatrist_Phone = string.Empty;
+                salida.Psychiatrist_CityStateZip = string.Empty;
+            }
+            else
+            {
+                salida.Psychiatrist_Name = model.TcmClient.Client.Psychiatrist.Name;
+                salida.Psychiatrist_Address = model.TcmClient.Client.Psychiatrist.Address;
+                salida.Psychiatrist_Phone = model.TcmClient.Client.Psychiatrist.Telephone;
+                salida.Psychiatrist_CityStateZip = model.TcmClient.Client.Psychiatrist.City + ", " + model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode;
+            }
+
+            if (model.TcmClient.Client.Doctor == null)
+            {
+                salida.PCP_Name = string.Empty;
+                salida.PCP_Address = string.Empty;
+                salida.PCP_Phone = string.Empty;
+                salida.PCP_CityStateZip = string.Empty;
+            }
+            else
+            {
+                salida.PCP_Name = model.TcmClient.Client.Doctor.Name;
+                salida.PCP_Address = model.TcmClient.Client.Doctor.Address;
+                salida.PCP_Phone = model.TcmClient.Client.Doctor.Telephone;
+                salida.PCP_CityStateZip = model.TcmClient.Client.Doctor.City + ", " + model.TcmClient.Client.Doctor.State + ", " + model.TcmClient.Client.Doctor.ZipCode;
+            }
             return salida;
 
         }
@@ -5690,7 +5745,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
                 DateReceived = model.DateReceived,
-                Efectiveness = model.Efectiveness,
+                Efectiveness = EffectivenessUtils.GetEffectivenessByIndex(model.IdEffectivess),
                 ProviderAgency = model.ProviderAgency,
                 TypeService = model.TypeService
             };
@@ -5711,7 +5766,9 @@ namespace KyoS.Web.Helpers
                 ProviderAgency = model.ProviderAgency,
                 Efectiveness = model.Efectiveness,
                 DateReceived = model.DateReceived,
-                IdTCMAssessment = model.TcmAssessment.Id
+                IdTCMAssessment = model.TcmAssessment.Id,
+                IdEffectivess = (model.Efectiveness == EffectivenessType.Effective) ? 0 : (model.Efectiveness == EffectivenessType.Highly_effective) ? 1 : (model.Efectiveness == EffectivenessType.Somewhat_effective) ? 2 : (model.Efectiveness == EffectivenessType.slightly_effective) ? 3 : (model.Efectiveness == EffectivenessType.Not_at_all_effective) ? 4 : (model.Efectiveness == EffectivenessType.unable_to_evaluate) ? 5 : (model.Efectiveness == EffectivenessType.In_progress) ? 6 : 7,
+                EffectivessList = _combosHelper.GetComboEffectiveness()
             };
 
             return salida;
@@ -5767,7 +5824,8 @@ namespace KyoS.Web.Helpers
                 DateBegin = model.DateBegin,
                 Frequency = model.Frequency,
                 LastTimeUsed = model.LastTimeUsed,
-                SustanceName = model.SustanceName
+                SustanceName = DrugsUtils.GetEffectivenessByIndex(model.IdDrugs)
+                
             };
         }
 
@@ -5787,7 +5845,11 @@ namespace KyoS.Web.Helpers
                 Frequency = model.Frequency,
                 LastTimeUsed = model.LastTimeUsed,
                 SustanceName = model.SustanceName,
-                IdTCMAssessment = model.TcmAssessment.Id
+                IdTCMAssessment = model.TcmAssessment.Id,
+                DrugsList = _combosHelper.GetComboDrugs(),
+                IdDrugs = (model.SustanceName == DrugsType.Alcohol) ? 0 : (model.SustanceName == DrugsType.Amphetamine_Meth) ? 1 : (model.SustanceName == DrugsType.Barbiturates) ? 2 : (model.SustanceName == DrugsType.Benzodiazepines) ? 3 : (model.SustanceName == DrugsType.Caffeine) ? 4 : (model.SustanceName == DrugsType.Cocaina_Crack) ? 5 : (model.SustanceName == DrugsType.Hallucinogens) ? 6 :
+                (model.SustanceName == DrugsType.Heroin) ? 7 : (model.SustanceName == DrugsType.Inhalants_Solvents) ? 8 : (model.SustanceName == DrugsType.LSD) ? 9 : (model.SustanceName == DrugsType.Marijuana_Hashish) ? 10 : (model.SustanceName == DrugsType.MDMA_Ecstasy) ? 11 : (model.SustanceName == DrugsType.Nicotne) ? 12 : (model.SustanceName == DrugsType.Opium) ? 13 : 14
+
             };
 
             return salida;

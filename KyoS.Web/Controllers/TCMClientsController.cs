@@ -479,26 +479,43 @@ namespace KyoS.Web.Controllers
 
                 CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
                 return View(await _context.TCMClient
-                                       .Include(g => g.Casemanager)
-                                       .Include(g => g.Client)
-                                       .Where(g => (g.Casemanager.Id == caseManager.Id
-                                          && g.Status == StatusType.Close))
-                                       .OrderBy(g => g.Client.Name)
-                                       .ToListAsync());
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                    && g.Status == StatusType.Close))
+                                          .OrderBy(g => g.Client.Name)
+                                          .ToListAsync());
             }
-            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "TCMSupervisor")
+            if (user_logged.UserType.ToString() == "Manager")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
                 {
                     return RedirectToAction("NotAuthorized", "Account");
                 }
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
-                                                          .Include(g => g.Casemanager)
-                                                          .Include(g => g.Client)
-                                                          .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                              && s.Status == StatusType.Close))
-                                                          .OrderBy(g => g.Casemanager.Name)
-                                                          .ToListAsync();
+                                                                .Include(g => g.Casemanager)
+                                                                .Include(g => g.Client)
+                                                                .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                          && s.Status == StatusType.Close))
+                                                                .OrderBy(g => g.Casemanager.Name)
+                                                                .ToListAsync();
+                return View(tcmClient);
+
+            }
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+                List<TCMClientEntity> tcmClient = await _context.TCMClient
+                                                                .Include(g => g.Casemanager)
+                                                                .Include(g => g.Client)
+                                                                .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                          && s.Status == StatusType.Close
+                                                                          && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
+                                                                .OrderBy(g => g.Casemanager.Name)
+                                                                .ToListAsync();
                 return View(tcmClient);
 
             }

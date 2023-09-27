@@ -127,7 +127,7 @@ namespace KyoS.Web.Controllers
                    HyperAffectScale = 0,
                    InterpersonalScale = 0,
                    MCOID = "",
-                   MedicaidProviderID = client.Clinic.ProviderMedicaidId,
+                   MedicaidProviderID = client.Clinic.ProviderTaxId,
                    MedicaidRecipientID = client.MedicaidID,
                    MedicalScale = 0,
                    M_GafScore = "",

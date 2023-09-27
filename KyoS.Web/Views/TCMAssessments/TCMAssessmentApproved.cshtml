@@ -34,13 +34,16 @@
                             <th class="col-md-1">
 
                             </th>
+                            <th class="col-md-2">
+                                TCM Name
+                            </th>
                             <th class="col-md-3">
                                 Client Name
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
                                 Open
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
                                 Assessment
                             </th>
                             <th class="col-md-1" style="text-align: center;">
@@ -105,6 +108,9 @@
                                             }
                                         </table>
                                     </div>
+                                </td>
+                                <td >
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
                                 </td>
                                 <td>
                                     @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
@@ -183,12 +189,12 @@
                                         @if (item.Approved == 0)
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origi="4" class="btn btn-warning" title="Edit Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing Assessment"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Sign / Finish Edition"><i class="glyphicon glyphicon-ok"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning disabled" title="Edit Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }

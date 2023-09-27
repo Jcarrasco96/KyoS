@@ -14,5 +14,8 @@ namespace KyoS.Web.Models
 
         [Display(Name = "Client")]
         public string ClientName { get; set; }
+
+        public int IdAgencyService { get; set; }
+        public IEnumerable<SelectListItem> AgencyServices { get; set; }
     }
 }

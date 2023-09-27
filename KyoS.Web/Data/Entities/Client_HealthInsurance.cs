@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Contracts;
 using System;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Common.Enums;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -30,5 +31,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Authorization Number")]
         public string AuthorizationNumber { get; set; }
+
+        public ServiceAgency Agency { get; set; }
+        
     }
 }
