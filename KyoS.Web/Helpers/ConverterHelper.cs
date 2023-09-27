@@ -5571,17 +5571,46 @@ namespace KyoS.Web.Helpers
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList(),
                 IdFrecuencyActive = (model.HowActive == FrecuencyActive.Daily) ? 0: (model.HowActive == FrecuencyActive.Three_Time_per_week_or_more) ? 1 : (model.HowActive == FrecuencyActive.Three_Time_per_week_or_less) ? 2 : (model.HowActive == FrecuencyActive.Once_per_week) ? 3 : (model.HowActive == FrecuencyActive.Rarely) ? 4 : 5,
                 FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
-                Psychiatrist_Name = model.TcmClient.Client.Psychiatrist.Name,
-                Psychiatrist_Address = model.TcmClient.Client.Psychiatrist.Address,
-                Psychiatrist_Phone = model.TcmClient.Client.Psychiatrist.Telephone,
-                Psychiatrist_CityStateZip = model.TcmClient.Client.Psychiatrist.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode,
+                /*Psychiatrist_Name = (model.TcmClient.Client.Psychiatrist == null)? "": model.TcmClient.Client.Psychiatrist.Name,
+                Psychiatrist_Address = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.Address,
+                Psychiatrist_Phone = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.Telephone,
+                Psychiatrist_CityStateZip = (model.TcmClient.Client.Psychiatrist == null) ? "" : model.TcmClient.Client.Psychiatrist.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode,
 
-                PCP_Name = model.TcmClient.Client.Name,
-                PCP_Address = model.TcmClient.Client.FullAddress,
-                PCP_Phone = model.TcmClient.Client.Telephone,
-                PCP_CityStateZip = model.TcmClient.Client.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", "+ model.TcmClient.Client.Psychiatrist.ZipCode
-        };
+                PCP_Name = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.Name,
+                PCP_Address = (model.TcmClient.Client.Doctor == null) ? "": model.TcmClient.Client.Doctor.FullAddress,
+                PCP_Phone = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.Telephone,
+                PCP_CityStateZip = (model.TcmClient.Client.Doctor == null) ? "" : model.TcmClient.Client.Doctor.City + ", "+ model.TcmClient.Client.Doctor.State + ", "+ model.TcmClient.Client.Doctor.ZipCode
+                */
+            };
+            if (model.TcmClient.Client.Psychiatrist == null)
+            {
+                salida.Psychiatrist_Name = string.Empty;
+                salida.Psychiatrist_Address = string.Empty;
+                salida.Psychiatrist_Phone = string.Empty;
+                salida.Psychiatrist_CityStateZip = string.Empty;
+            }
+            else
+            {
+                salida.Psychiatrist_Name = model.TcmClient.Client.Psychiatrist.Name;
+                salida.Psychiatrist_Address = model.TcmClient.Client.Psychiatrist.Address;
+                salida.Psychiatrist_Phone = model.TcmClient.Client.Psychiatrist.Telephone;
+                salida.Psychiatrist_CityStateZip = model.TcmClient.Client.Psychiatrist.City + ", " + model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode;
+            }
 
+            if (model.TcmClient.Client.Doctor == null)
+            {
+                salida.PCP_Name = string.Empty;
+                salida.PCP_Address = string.Empty;
+                salida.PCP_Phone = string.Empty;
+                salida.PCP_CityStateZip = string.Empty;
+            }
+            else
+            {
+                salida.PCP_Name = model.TcmClient.Client.Doctor.Name;
+                salida.PCP_Address = model.TcmClient.Client.Doctor.Address;
+                salida.PCP_Phone = model.TcmClient.Client.Doctor.Telephone;
+                salida.PCP_CityStateZip = model.TcmClient.Client.Doctor.City + ", " + model.TcmClient.Client.Doctor.State + ", " + model.TcmClient.Client.Doctor.ZipCode;
+            }
             return salida;
 
         }

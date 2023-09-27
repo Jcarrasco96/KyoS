@@ -592,7 +592,31 @@ namespace KyoS.Web.Controllers
                                                                                  && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
                                                                                     || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                .ToListAsync();
+                   
+                    //Verifico que la actividad este en el rango de fecha segun los setting
+                    if (CheckTimeRange(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime))
+                    {
+                        TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                    .Include(n => n.TCMClient)
+                                                    .ThenInclude(n => n.Client)
+                                                    .FirstOrDefaultAsync(m => m.Id == TcmNotesViewModel.IdTCMNote);
 
+                        TcmNotesViewModel.TCMNote = tcmNote1;
+                        TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        if (TcmNotesViewModel.IdTCMDomain != 0)
+                        {
+                            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                            TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                        }
+
+                        ModelState.AddModelError(string.Empty, $"Error.There are activities created in that authorized time");
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
+
+                    }
+
+
+                    //
                     if (noteActivities.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
@@ -736,6 +760,23 @@ namespace KyoS.Web.Controllers
                                                                                             || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                    .ToListAsync();
 
+                //verifico que la actividad este en el rango de fecha segun los setting
+                if (CheckTimeRange(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime))
+                {
+                    TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+
+                    if (TcmNotesViewModel.IdTCMDomain != 0)
+                    {
+                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                        TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                    }
+
+                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that authorized time");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
+                }
+
+                //check overlapin
                 if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
@@ -903,7 +944,7 @@ namespace KyoS.Web.Controllers
                 int clientId = _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).Client.Id;
                 if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, clientId) == true
                      || (user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(note.TCMClient.Id) + CalculateUnits(NoteActivityViewModel.Minutes)) < 0)
-                     || CheckTimeRange(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime, clientId))
+                     || CheckTimeRange(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime))
                 {
                     TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                            .Include(n => n.TCMClient)
@@ -1727,7 +1768,7 @@ namespace KyoS.Web.Controllers
             }
         }
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
-        public bool CheckTimeRange(DateTime start, DateTime end, int idClient)
+        public bool CheckTimeRange(DateTime start, DateTime end)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)

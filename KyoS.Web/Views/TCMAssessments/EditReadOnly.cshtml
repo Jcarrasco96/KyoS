@@ -38,6 +38,9 @@
         <form asp-action="ApproveAssessments" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TcmClient_FK" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="Approved" />
             @if (Model.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
             {
                 <partial name="_TCMAssessment" />

@@ -3791,8 +3791,7 @@ namespace KyoS.Web.Controllers
                                               .Include(w => w.TcmClient)
                                               .ThenInclude(d => d.Casemanager)
                                               .Where(w => (w.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                                        && w.Approved == approved
-                                                        && w.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
+                                                        && w.Approved == approved))
                                               .ToListAsync();
                 }
                 else

@@ -665,7 +665,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(m => m.Client)
                                                                 .Include(m => m.TcmMessages)
                                                                 .Where(m => m.Status == status
-                                                                            && m.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                                         && m.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                                                 .OrderBy(m => m.TCMClient.CaseNumber)
                                                                 .ToListAsync();
 
