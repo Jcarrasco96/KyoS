@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 13:29:36" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 15:20:31" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrtmUpykubCFqx9uAuHPjlwg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrRL7hKZDMlK5uR++bedtUZQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -145,7 +145,7 @@
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="84" Width="778.3" Height="789.8" DataSource="CaseManagers">
+    <DataBand Name="Data1" Top="84" Width="778.3" Height="931.55" DataSource="CaseManagers">
       <TextObject Name="Text318" Left="170.1" Width="431.15" Height="22" CanGrow="true" Text="Columbia - Suicide Severity Rating Scale" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Text326" Left="171.1" Top="21.9" Width="429.03" Height="17.01" Text="Screen Version - Recent" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Italic"/>
       <TableObject Name="Table3" Left="5.45" Top="43.25" Width="765.45" Height="595.35" Border.Lines="All">
@@ -185,17 +185,17 @@
         </TableRow>
         <TableRow Name="Row26" Height="47.25">
           <TableCell Name="Cell82" Border.Lines="All" Text="1) &lt;u&gt;Have you wished you were dead or wished you could go to sleep and not wake up? &lt;/u&gt;" VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell83" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell84" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell85" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell86" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell83" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouWishedPastMonth] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell84" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouWishedPastMonth] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell85" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouWishedLifeTime] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell86" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouWishedLifeTime] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
         <TableRow Name="Row28" Height="47.25">
           <TableCell Name="Cell92" Border.Lines="All" Text="2) &lt;u&gt;Have you actually had any thoughts of killing yourself?&lt;/u&gt; " VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell93" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell94" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell95" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell96" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell93" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouActuallyPastMonth] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell94" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouActuallyPastMonth] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell95" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouActuallyLifeTime] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell96" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouActuallyLifeTime] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
         <TableRow Name="Row29" Height="37.8">
           <TableCell Name="Cell97" Border.Lines="All" Text="     If YES to 2, ask questions 3, 4, 5, and 6.  If NO to 2, go directly to question 6." VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="5"/>
@@ -206,24 +206,24 @@
         </TableRow>
         <TableRow Name="Row30" Height="68.04">
           <TableCell Name="Cell102" Border.Lines="All" Text="     &lt;b&gt;3) &lt;u&gt;Have you been thinking  about  how you might do this?&lt;/u&gt;&lt;/b&gt; &#13;&#10;	E.g. “I thought about taking an overdose but I never made a specific plan &#13;&#10;	       as to when where or how I would actually do it….and I would never go &#13;&#10;	       through with it.”&#13;&#10;" VertAlign="Center" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell103" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell104" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell105" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell106" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell103" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouBeenPastMonth] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell104" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouBeenPastMonth] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell105" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouBeenLifeTime] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell106" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouBeenLifeTime] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
         <TableRow Name="Row27" Height="68.04">
           <TableCell Name="Cell87" Border.Lines="All" Text="     &lt;b&gt;4) &lt;u&gt;Have you had these thoughts and had some intention of acting on them?&lt;/u&gt;&lt;/b&gt;&#13;&#10;	As opposed to “I have the thoughts but I definitely will not do anything about 		              them.” " VertAlign="Center" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell88" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell89" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell90" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell91" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell88" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouHadPastMonth] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell89" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouHadPastMonth] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell90" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouHadLifeTime] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell91" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouHadLifeTime] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
         <TableRow Name="Row31" Height="49.14">
           <TableCell Name="Cell107" Border.Lines="All" Text="     5) &lt;u&gt;Have you started to work out or worked out the details of how to kill yourself? Do you intend to carry out this plan?&lt;/u&gt; " VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
-          <TableCell Name="Cell108" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell109" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell110" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell111" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell108" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouStartedPastMonth] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell109" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouStartedPastMonth] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell110" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouStartedLifeTime] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell111" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouStartedLifeTime] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
         <TableRow Name="Row32" Height="37.8">
           <TableCell Name="Cell112" Border.Lines="All" Text="How long ago did the Worst Point Ideation occur?" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold, Underline" ColSpan="5"/>
@@ -233,18 +233,25 @@
           <TableCell Name="Cell116" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row34" Height="37.8">
-          <TableCell Name="Cell122" Text="&lt;b&gt;&lt;i&gt;6) &lt;u&gt;Have you ever done anything, started to do anything, or prepared to do anything to end your life?&lt;/i&gt;&lt;/u&gt;&lt;/b&gt;&#13;&#10;&#13;&#10;Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note, took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot yourself, cut yourself, tried to hang yourself, etc.&#13;&#10;&#13;&#10;&lt;b&gt;If YES, ask: &lt;u&gt;&lt;i&gt;Was this within the past three months? &lt;/i&gt;&lt;/u&gt;&lt;/b&gt;" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="3" RowSpan="2"/>
+          <TableCell Name="Cell122" Text="&lt;b&gt;&lt;i&gt;6) &lt;u&gt;Have you ever done anything, started to do anything, or prepared to do anything to end your life?&lt;/i&gt;&lt;/u&gt;&lt;/b&gt;&#13;&#10;&#13;&#10;Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note, took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot yourself, cut yourself, tried to hang yourself, etc." VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="3" RowSpan="2"/>
           <TableCell Name="Cell123" Font="Arial, 10pt"/>
           <TableCell Name="Cell124" Font="Arial, 10pt"/>
           <TableCell Name="Cell125" Border.Lines="All" Text="YES" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
           <TableCell Name="Cell126" Border.Lines="All" Text="NO" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </TableRow>
-        <TableRow Name="Row33" Height="79.38">
+        <TableRow Name="Row33" Height="51.03">
           <TableCell Name="Cell117" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
           <TableCell Name="Cell118" Font="Arial, 10pt"/>
           <TableCell Name="Cell119" Font="Arial, 10pt"/>
-          <TableCell Name="Cell120" Border.Lines="All" Font="Arial, 10pt"/>
-          <TableCell Name="Cell121" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell120" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouEver] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell121" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouEver] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row35" Height="28.35">
+          <TableCell Name="Cell127" Text="&lt;b&gt;If YES, ask: &lt;u&gt;&lt;i&gt;Was this within the past three months? &lt;/i&gt;&lt;/u&gt;&lt;/b&gt;" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="3"/>
+          <TableCell Name="Cell128" Font="Arial, 10pt"/>
+          <TableCell Name="Cell129" Font="Arial, 10pt"/>
+          <TableCell Name="Cell130" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouEverIfYes] == true,&quot;X&quot;,&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
+          <TableCell Name="Cell131" Border.Lines="All" Text="[IIf([TCMIntakeColumbiaSuicide.HaveYouEverIfYes] == true,&quot;&quot;,&quot;X&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>
         </TableRow>
       </TableObject>
       <ShapeObject Name="Shape1" Left="9.45" Top="647.05" Width="15.12" Height="15.12" Fill.Color="Yellow"/>
@@ -253,7 +260,18 @@
       <TextObject Name="Text330" Left="26.7" Top="645.6" Width="75.6" Height="22.68" CanGrow="true" Text="Low Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text331" Left="27.35" Top="664.5" Width="103.95" Height="22.68" CanGrow="true" Text="Moderate Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text332" Left="27.35" Top="683.85" Width="103.95" Height="22.68" CanGrow="true" Text="High Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
-      <TextObject Name="Text333" Top="742.55" Width="774.9" Height="47.25" CanGrow="true" Text="For inquiries and training information contact: Kelly Posner, Ph.D. &#13;&#10;New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu &#13;&#10;© 2008 The Research Foundation for Mental Hygiene, Inc. " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text333" Top="884.3" Width="774.9" Height="47.25" CanGrow="true" Text="For inquiries and training information contact: Kelly Posner, Ph.D. &#13;&#10;New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu &#13;&#10;© 2008 The Research Foundation for Mental Hygiene, Inc. " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture3" Left="175.57" Top="774.8" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="85.52" Top="840.3" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="354.12" Top="838.85" Width="-268.38"/>
+      <TextObject Name="Text317" Left="85.07" Top="819.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="178.57" Top="693.4" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="85.42" Top="768.35" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="355.12" Top="766.9" Width="-268.38"/>
+      <TextObject Name="Text325" Left="85.05" Top="748" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="541.67" Top="840.36" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="696.87" Top="838.19" Width="-154.98"/>
+      <TextObject Name="Text323" Left="541.67" Top="819.95" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeColumbiaSuicide.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
 </Report>
