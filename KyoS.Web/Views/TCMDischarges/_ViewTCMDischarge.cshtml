@@ -47,13 +47,16 @@
                         <tr>
                             <th class="col-md-1">
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
+                                TCM
+                            </th>
+                            <th class="col-md-2">
                                 Client Name
                             </th>
                             <th class="col-md-2" style="text-align: center;">
                                 Open / Close
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
                                 Discharge Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -118,6 +121,9 @@
                                             }
                                         </table>
                                     </div>
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name)
                                 </td>
                                 <td>
                                     @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)

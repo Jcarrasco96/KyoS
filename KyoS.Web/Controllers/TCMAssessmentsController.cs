@@ -53,13 +53,23 @@ namespace KyoS.Web.Controllers
             else
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                if (User.IsInRole("Manager") )
                     return View(await _context.TCMClient
 
                                               .Include(f => f.TCMAssessment)
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TCMAssessment)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
@@ -128,7 +138,8 @@ namespace KyoS.Web.Controllers
                     {
                         Approved = 0,
                         TcmClient = tcmClient,
-                        AreChild = false,
+                        AreChild = YesNoNAType.NA,
+                        IdYesNoNAAreChild = 2,
                         AreChildAddress = "",
                         AreChildCity = "",
                         AreChildName = "",
@@ -645,7 +656,6 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.MedicalProblemList)
                                                                 .Include(b => b.SurgeryList)
                                                                 .Include(b => b.TcmClient)
-                                                                .ThenInclude(b => b.TCMIntakeForm)
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.Casemanager)
                                                                 .ThenInclude(b => b.TCMSupervisor)
@@ -1280,7 +1290,7 @@ namespace KyoS.Web.Controllers
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
                         EffectivessList = _combosHelper.GetComboEffectiveness(),
-                        DateReceived = DateTime.Now,
+                        DateReceived = string.Empty,
                         ProviderAgency = "",
                         TypeService = ""
                     };
@@ -1302,7 +1312,7 @@ namespace KyoS.Web.Controllers
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
                 EffectivessList = _combosHelper.GetComboEffectiveness(),
-                DateReceived = DateTime.Now,
+                DateReceived = string.Empty,
                 ProviderAgency = "",
                 TypeService = ""
                 

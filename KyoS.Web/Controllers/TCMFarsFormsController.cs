@@ -644,7 +644,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            if (User.IsInRole("Manager"))
             {
                 List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
                                                                 .Include(m => m.TCMClient)
@@ -655,6 +655,20 @@ namespace KyoS.Web.Controllers
                                                                 .OrderBy(m => m.TCMClient.CaseNumber)
                                                                 .ToListAsync();
                
+                return View(tcmFars);
+            }
+
+            if ((User.IsInRole("TCMSupervisor")))
+            {
+                List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
+                                                                .Include(m => m.TCMClient)
+                                                                .ThenInclude(m => m.Client)
+                                                                .Include(m => m.TcmMessages)
+                                                                .Where(m => m.Status == status
+                                                                            && m.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                                .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                .ToListAsync();
+
                 return View(tcmFars);
             }
 

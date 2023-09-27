@@ -37,6 +37,8 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> FrecuencyActiveList { get; set; }
 
         public int IdYesNoNAPregnancy { get; set; }
-        
+
+        public int IdYesNoNAAreChild { get; set; }
+
     }
 }

@@ -1222,18 +1222,38 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                note = await _context.TCMNote
-                                     .Include(w => w.TCMClient)
-                                     .ThenInclude(d => d.Client)
-                                     .ThenInclude(d => d.Clinic)
-                                     .ThenInclude(d => d.Setting)
-                                     .Include(w => w.TCMClient)
-                                     .ThenInclude(d => d.Casemanager)
-                                     .Include(w => w.TCMNoteActivity)
-                                     .Include(w => w.TCMMessages)
-                                     .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
-                                       && w.Status == status))
-                                     .ToListAsync();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    note = await _context.TCMNote
+                                         .Include(w => w.TCMClient)
+                                         .ThenInclude(d => d.Client)
+                                         .ThenInclude(d => d.Clinic)
+                                         .ThenInclude(d => d.Setting)
+                                         .Include(w => w.TCMClient)
+                                         .ThenInclude(d => d.Casemanager)
+                                         .Include(w => w.TCMNoteActivity)
+                                         .Include(w => w.TCMMessages)
+                                         .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                            && w.Status == status
+                                            && w.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
+                                         .ToListAsync();
+                }
+                else
+                {
+                    note = await _context.TCMNote
+                                        .Include(w => w.TCMClient)
+                                        .ThenInclude(d => d.Client)
+                                        .ThenInclude(d => d.Clinic)
+                                        .ThenInclude(d => d.Setting)
+                                        .Include(w => w.TCMClient)
+                                        .ThenInclude(d => d.Casemanager)
+                                        .Include(w => w.TCMNoteActivity)
+                                        .Include(w => w.TCMMessages)
+                                        .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                          && w.Status == status))
+                                        .ToListAsync();
+                }
+               
             }
 
             return View(note);

@@ -4779,7 +4779,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Approved = model.Approved,
-                AreChild = model.AreChild,
+                AreChild = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAAreChild),
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
                 AreChildCity = model.AreChildCity,
@@ -5180,6 +5180,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 Approved = model.Approved,
+                IdYesNoNAAreChild = (model.AreChild == YesNoNAType.Yes) ? 0 : (model.AreChild == YesNoNAType.No) ? 1 : 2,
                 AreChild = model.AreChild,
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
@@ -5569,8 +5570,17 @@ namespace KyoS.Web.Helpers
                 TCMSupervisor = model.TCMSupervisor,
                 Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList(),
                 IdFrecuencyActive = (model.HowActive == FrecuencyActive.Daily) ? 0: (model.HowActive == FrecuencyActive.Three_Time_per_week_or_more) ? 1 : (model.HowActive == FrecuencyActive.Three_Time_per_week_or_less) ? 2 : (model.HowActive == FrecuencyActive.Once_per_week) ? 3 : (model.HowActive == FrecuencyActive.Rarely) ? 4 : 5,
-                FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive()
-            };
+                FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
+                Psychiatrist_Name = model.TcmClient.Client.Psychiatrist.Name,
+                Psychiatrist_Address = model.TcmClient.Client.Psychiatrist.Address,
+                Psychiatrist_Phone = model.TcmClient.Client.Psychiatrist.Telephone,
+                Psychiatrist_CityStateZip = model.TcmClient.Client.Psychiatrist.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", " + model.TcmClient.Client.Psychiatrist.ZipCode,
+
+                PCP_Name = model.TcmClient.Client.Name,
+                PCP_Address = model.TcmClient.Client.FullAddress,
+                PCP_Phone = model.TcmClient.Client.Telephone,
+                PCP_CityStateZip = model.TcmClient.Client.City + ", "+ model.TcmClient.Client.Psychiatrist.State + ", "+ model.TcmClient.Client.Psychiatrist.ZipCode
+        };
 
             return salida;
 

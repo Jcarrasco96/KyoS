@@ -68,7 +68,7 @@ namespace KyoS.Web.Data.Entities
         public bool Divorced { get; set; }
         public bool Separated { get; set; }
         public bool NeverMarried { get; set; }
-        public bool AreChild { get; set; }
+        public YesNoNAType AreChild { get; set; }
         public string AreChildName { get; set; }
         public string AreChildPhone { get; set; }
         public string AreChildAddress { get; set; }
