@@ -21035,6 +21035,129 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeColumbiaSuicideDS(TCMIntakeColumbiaSuicideEntity intakeColumbia)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeColumbiaSuicide"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+
+            dt.Columns.Add("HaveYouWishedPastMonth", typeof(bool));
+            dt.Columns.Add("HaveYouWishedPastMonth_Value", typeof(int));
+            dt.Columns.Add("HaveYouWishedLifeTime", typeof(bool));
+            dt.Columns.Add("HaveYouWishedLifeTime_Value", typeof(int));
+            dt.Columns.Add("HaveYouActuallyPastMonth", typeof(bool));
+            dt.Columns.Add("HaveYouActuallyPastMonth_Value", typeof(int));
+            dt.Columns.Add("HaveYouActuallyLifeTime", typeof(bool));
+            dt.Columns.Add("HaveYouActuallyLifeTime_Value", typeof(int));
+            dt.Columns.Add("HaveYouBeenPastMonth", typeof(bool));
+            dt.Columns.Add("HaveYouBeenPastMonth_Value", typeof(int));
+            dt.Columns.Add("HaveYouBeenLifeTime", typeof(bool));
+            dt.Columns.Add("HaveYouBeenLifeTime_Value", typeof(int));
+            dt.Columns.Add("HaveYouHadPastMonth", typeof(bool));
+            dt.Columns.Add("HaveYouHadPastMonth_Value", typeof(int));
+            dt.Columns.Add("HaveYouHadLifeTime", typeof(bool));
+            dt.Columns.Add("HaveYouHadLifeTime_Value", typeof(int));            
+            dt.Columns.Add("HaveYouStartedPastMonth", typeof(bool));
+            dt.Columns.Add("HaveYouStartedPastMonth_Value", typeof(int));
+            dt.Columns.Add("HaveYouStartedLifeTime", typeof(bool));
+            dt.Columns.Add("HaveYouStartedLifeTime_Value", typeof(int));
+            dt.Columns.Add("HaveYouEver", typeof(bool));
+            dt.Columns.Add("HaveYouEver_Value", typeof(int));
+            dt.Columns.Add("HaveYouEverIfYes", typeof(bool));
+            dt.Columns.Add("HaveYouEverIfYes_Value", typeof(int));
+            
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (intakeColumbia != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeColumbia.Id,
+                                            0,
+                                            intakeColumbia.HaveYouWishedPastMonth,
+                                            intakeColumbia.HaveYouWishedPastMonth_Value,
+                                            intakeColumbia.HaveYouWishedLifeTime,
+                                            intakeColumbia.HaveYouWishedLifeTime_Value,
+                                            intakeColumbia.HaveYouActuallyPastMonth,
+                                            intakeColumbia.HaveYouActuallyPastMonth_Value,
+                                            intakeColumbia.HaveYouActuallyLifeTime,
+                                            intakeColumbia.HaveYouActuallyLifeTime_Value,
+                                            intakeColumbia.HaveYouBeenPastMonth,
+                                            intakeColumbia.HaveYouBeenPastMonth_Value,
+                                            intakeColumbia.HaveYouBeenLifeTime,
+                                            intakeColumbia.HaveYouBeenLifeTime_Value,
+                                            intakeColumbia.HaveYouHadPastMonth,
+                                            intakeColumbia.HaveYouHadPastMonth_Value,
+                                            intakeColumbia.HaveYouHadLifeTime,
+                                            intakeColumbia.HaveYouHadLifeTime_Value,
+                                            intakeColumbia.HaveYouStartedPastMonth,
+                                            intakeColumbia.HaveYouStartedPastMonth_Value,
+                                            intakeColumbia.HaveYouStartedLifeTime,
+                                            intakeColumbia.HaveYouStartedLifeTime_Value,
+                                            intakeColumbia.HaveYouEver,
+                                            intakeColumbia.HaveYouEver_Value,
+                                            intakeColumbia.HaveYouEverIfYes,
+                                            intakeColumbia.HaveYouEverIfYes_Value,
+                                            intakeColumbia.AdmissionedFor,
+                                            intakeColumbia.DateSignatureEmployee,
+                                            intakeColumbia.CreatedBy,
+                                            intakeColumbia.CreatedOn,
+                                            intakeColumbia.LastModifiedBy,
+                                            intakeColumbia.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,
+                                            false,
+                                            0,                                            
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
             DataTable dt = new DataTable
@@ -22988,7 +23111,70 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeColumbiaSuicide(TCMIntakeColumbiaSuicideEntity intakeColumbia)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeColumbiaSuicide.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeColumbia.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeColumbia.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeColumbia.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeColumbia.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeColumbiaSuicideDS(intakeColumbia));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeColumbiaSuicide");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeColumbia.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeColumbia.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeColumbia.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeColumbia.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(intakeColumbia.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeColumbia.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         public Stream TCMIntakePainScreen(TCMIntakePainScreenEntity intakePain)

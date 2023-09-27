@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 13:29:36" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrtmUpykubCFqx9uAuHPjlwg==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeColumbiaSuicide" DataType="System.Int32" Enabled="true" TableName="TCMIntakeColumbiaSuicide">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="HaveYouWishedPastMonth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouWishedPastMonth_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouWishedLifeTime" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouWishedLifeTime_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouActuallyPastMonth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouActuallyPastMonth_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouActuallyLifeTime" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouActuallyLifeTime_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouBeenPastMonth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouBeenPastMonth_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouBeenLifeTime" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouBeenLifeTime_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouHadPastMonth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouHadPastMonth_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouHadLifeTime" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouHadLifeTime_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouStartedPastMonth" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouStartedPastMonth_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouStartedLifeTime" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouStartedLifeTime_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouEver" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEver_Value" DataType="System.Int32"/>
+        <Column Name="HaveYouEverIfYes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEverIfYes_Value" DataType="System.Int32"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Image="/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAKgA1wDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiignAJoAKKqGd92R09KsRuHXPfvQOw+iiigQUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRSbhnHf0qrJKzEg8e1A0iy0ir1NQyTgqQoPNV6KQ7BT432Nnt3plFAzQByMiiq1vJg7T+FWaZLQUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACoppdgwPvU+R9i5/KqROTk0DSFDENu71LIvmKHTr3FQVdiTYuO/ekNkC27HqQKf8AZx/eNT0UxXZUeFl9x7VFWhUUkIbkcGkNMqVchfevPUVUZSpwRVi1UjJNAPYnooopkhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFW5bL47CoadIcufrTaRaFU4YH3q+DkcVn1LHMU46igTRboqD7QP7pprXB7CmKzLNFU2mc98fSmFiepNAWLxK9yKUEHpWfSgkdOKVx2L9FU1mde+frU8c4bg8GmKxLRRRQIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApGYKMscUySYJwOTVVmLHLGgaRK1wc/KMD3qaGTzF9+9UqtW6bVye9IbRNRRRTJKLjDn602pbhcSH35qKkWFFFFABRRRQAUUUUAFFFFABRRRQBPBLg7W6dqs1n1cgfcnPUUCaJKKKKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRQeBxyaAEYhRknAqvLOW4TgetRyOzN835UykUkFFFFAwq3bvuXB6iqlOVirAigGi9RSIwZcilpkEc6b046iqdaFVp4sfMvTvSKTIKKKKBhRRRQAUUUUAFFFFABRRRQAVLbtiTHrUVOj/wBYv1oBl6iiimQFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRTZJFTr+VKrBhkUALRRRQBXuI8fMPxqvWgRkYNUpU2N7dqRSYyiiigYUUUUASwSbGwehq3WfVq3kyNp60CaJqKKKZJDJAG5Xg1A0Tr1FXaKB3KFJWhx7UYHoKVh3KIVj0Bp4hc9sVbopiuVhbnuwp32cf3jU9FAXZUkhKDPUVFWgeRVBhhiPekNMSnxDMi/WmVParli3pQNlmiiimQFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUjMEGWNAC1BLPjhOT61HJKX4HAqKkUkKSScnk0qMUORTaKBlyKUP7H0qSqHTpViKfs/50yWieoT+8DIfvL0qaq0+UlDCgEQkYODSVYlUOvmL+NV6RQUUUUAFKpIORSUUAXo33rmnVThfY3t3q4DmmS0FI5whI9KWgjIwaBFAsSc55qeKfs/51FKmxsdu1MpF7mgDnpRVFHZOhqdbgfxD8qZNieimeah/iprTqOmTQFh8j7Fz+VUutTTDeocdO49KgpDQoGTgVdjXYgFRwRbfmbrU1MTYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAjml2cDrVRmLHJOaluVO/PY1EFJ6AmkUhKKUgjqMUlAwooooAKKKKAJYpSnB5FST4eMMvODValBIz70BYkgfa2D909aSZNjcdD0qOrUY82HB6jigRVopWBU4NJQMKKKKACrNvJ/CfwqtSg4PFAMv0UyJ96+/en0yBkqb1x37VTIwcGr9QXEefmH40DTK1FFL1pFCUVMsDHrgVItuB945oC6IrcndtxlT1qeOFUOep7U9VCjgYpaZLYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBroHGDVWSIp7j1q5QRnrQNMz6KsSwY5T8qr0irhRRRQAUUUUAFT2rYYj1qCnIdrA0AyxcR7huHUVVrQ61VuI9rZHQ0CTIaKKKBhRRRQA+N9jZ/OroORkVn1JHKyDA5oE0XKOtVVnYNzyKtA5GRTE1YqTRlGyOhpIFJkHoKudetAAHSgLhRRRQIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiimFtyHyzyKAFd1Tqaga4J+6MVCSSeetJSKsSGVz/ABGk81/7xplFAyVZ3HXBqVJ1P3uKq0UBY0Ac9KKpRyFDx09KtxyBxx19KZLQ6iiigREzmJvm5U9DSMiyjKnmpJFDrg1T+aNuOCKCkDKVOCKbVgSLIMSDHvUckZTkcr60h3I6KKKACiiigC5A26Me3FPZQykGq9q2GI9as0yXuUXUo2DTauTx7146iqdIpMKKKKACiip4oM8vwPSgCOOMueOnc1dAwMCgDAwOKKZLYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApruEHP5VHLMF4Xk1WYljknJoGkPklL+w9KSJ9jZ7d6ZRSKLMkW9gykYNNa3IHBzS28mPlP4VYpk3aKBGDg0lWriPI3Dr3qrSKTCiiigApVJU5HWkooAuxSB19+9PqijFGBFXUYMoIpktC1FcR7lyOoqWigRn1Pbv/A3Q9KS4j2tkdDUNIvcsSwd0/Kq9XIJN689R1oliD89DQK/cp0U5lKnDCm0DHI21wavVn1cgbdGPbigTJCcDmqMhBckdKtXGfLOKp0AgpyIXOFFSRwluW4FWVUKMAYFANjI4gnPU+tSUUUyQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAEZgoyaqyzF+BwKkus4HpVakUkFFFFAwooooAKuQyb156jrVOnRsUbIoBovVUnj2NkdDVpSGGRQ6hlwaZKdihRTnUqxBptIoKKKKACprd9rYPQ1DRQBoUU2Jt6A06mQIwDKQapSKUbBq9Ucyb19xQNMqoxRgRV1WDKCKoVJHIU6cj0pDaLbKGGDVSSIp7ipvtC+hpyzIxx0+tMSuinU9q3zFfWllg7p+VNgjbcG6AetIfQtU0IoOQop1FMkKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAAjIwaaI0HRRTqKAKtxHtOR0qGr7AMMGqUilGwaRSY2iiigYUUUUATW8m07T0NWqz6twSblweooE0E8e5cjqKqVoVVuI9p3DoaATIaKKKBhRRRQBYtW5K/jViqcBxKKuUyWFFFFAinMMSGo6fM26QmmUiwpVBZgB1p0cbP04HrVuNAg4/OgTY4dKKKKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVHMm9fcdKkooAz6KsXEePmH41XpFhRRRQAU5WKsCKbRQBfRgygihgGGDVWCTY2D0NW6ZLVijIhRsGm1cmTevuOlVOlIpMSiiigB8X+sX61dqnCMyrVymSwoPSiigRSaNg2ME1LHB3f8qsUUDuA46UUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooACMjBqlKmxsdu1XaZKm9cd+1A0ylRSkYODSUigooooAKtW8mRtPUdKq0qkg5FAMv1WuUx8w/Gp433rkUk5AiOaZK3KVFFFIontVyxb0qzTIl2IB370+mSwooooEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBBcR/xD8arVodapzJsb2PSkUmR0UUUDCiiigCSF9je3epLkE4I5Wq9WIG3KUb8KBPuV6sQRfxN+Ap8cIU5PJ7VLQDYUUUUyQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApsih1wadRQBQYFTg0lTXJBfjr3qGkWFFKBk4FWIoO7/AJUA2RRxF/YetWkQIMD86dRTJbCiiigQUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFGQEOc+tLHGznjp61cIB6gGl6dKRVxkcaoOOvrT6KKZIUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH//Z" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="80.15">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="431.15" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="431.15" Height="22" CanGrow="true" Text="Mental Health Targeted Case Management Program" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="74.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="84" Width="778.3" Height="789.8" DataSource="CaseManagers">
+      <TextObject Name="Text318" Left="170.1" Width="431.15" Height="22" CanGrow="true" Text="Columbia - Suicide Severity Rating Scale" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text326" Left="171.1" Top="21.9" Width="429.03" Height="17.01" Text="Screen Version - Recent" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Italic"/>
+      <TableObject Name="Table3" Left="5.45" Top="43.25" Width="765.45" Height="595.35" Border.Lines="All">
+        <TableColumn Name="Column6" Width="538.65"/>
+        <TableColumn Name="Column7" Width="56.7"/>
+        <TableColumn Name="Column8" Width="56.7"/>
+        <TableColumn Name="Column9" Width="56.7"/>
+        <TableColumn Name="Column10" Width="56.7"/>
+        <TableRow Name="Row23" Height="47.25">
+          <TableCell Name="Cell67" Border.Lines="All" Font="Arial, 10pt">
+            <TextObject Name="Text304" Left="3" Top="15.9" Width="111.51" Height="17.01" Text="Client's Name:" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TextObject Name="Text305" Left="116.4" Top="12.9" Width="313.36" Height="22.68" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableCell>
+          <TableCell Name="Cell68" Border.Lines="All" Font="Arial, 10pt" ColSpan="2">
+            <TextObject Name="Text327" Left="4" Top="2.45" Width="102.06" Height="43.47" Text="Past&#13;&#10;Month" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell69" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell70" Border.Lines="All" Font="Arial, 10pt" ColSpan="2">
+            <TextObject Name="Text328" Left="7" Top="8" Width="102.06" Height="15.12" Text="Lifetime" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold"/>
+            <TextObject Name="Text329" Left="7" Top="25.9" Width="102.06" Height="15.12" Text="(Worst Point)" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          </TableCell>
+          <TableCell Name="Cell71" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row24" Height="37.8">
+          <TableCell Name="Cell72" Border.Lines="All" Text="     Ask questions  that  are bolded  and &lt;u&gt;underlined.&lt;/u&gt;" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell73" Border.Lines="All" Text="YES" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell74" Border.Lines="All" Text="NO" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell75" Border.Lines="All" Text="YES" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell76" Border.Lines="All" Text="NO" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row25" Height="37.8">
+          <TableCell Name="Cell77" Border.Lines="All" Text="     Ask Questions 1 and 2" VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="5"/>
+          <TableCell Name="Cell78" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell79" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell80" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell81" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row26" Height="47.25">
+          <TableCell Name="Cell82" Border.Lines="All" Text="1) &lt;u&gt;Have you wished you were dead or wished you could go to sleep and not wake up? &lt;/u&gt;" VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell83" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell84" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell85" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell86" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row28" Height="47.25">
+          <TableCell Name="Cell92" Border.Lines="All" Text="2) &lt;u&gt;Have you actually had any thoughts of killing yourself?&lt;/u&gt; " VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell93" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell94" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell95" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell96" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row29" Height="37.8">
+          <TableCell Name="Cell97" Border.Lines="All" Text="     If YES to 2, ask questions 3, 4, 5, and 6.  If NO to 2, go directly to question 6." VertAlign="Center" Font="Arial, 10pt, style=Bold" ColSpan="5"/>
+          <TableCell Name="Cell98" Border.Lines="All" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell99" Border.Lines="All" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell100" Border.Lines="All" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell101" Border.Lines="All" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row30" Height="68.04">
+          <TableCell Name="Cell102" Border.Lines="All" Text="     &lt;b&gt;3) &lt;u&gt;Have you been thinking  about  how you might do this?&lt;/u&gt;&lt;/b&gt; &#13;&#10;	E.g. “I thought about taking an overdose but I never made a specific plan &#13;&#10;	       as to when where or how I would actually do it….and I would never go &#13;&#10;	       through with it.”&#13;&#10;" VertAlign="Center" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell103" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell104" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell105" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell106" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row27" Height="68.04">
+          <TableCell Name="Cell87" Border.Lines="All" Text="     &lt;b&gt;4) &lt;u&gt;Have you had these thoughts and had some intention of acting on them?&lt;/u&gt;&lt;/b&gt;&#13;&#10;	As opposed to “I have the thoughts but I definitely will not do anything about 		              them.” " VertAlign="Center" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell88" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell89" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell90" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell91" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row31" Height="49.14">
+          <TableCell Name="Cell107" Border.Lines="All" Text="     5) &lt;u&gt;Have you started to work out or worked out the details of how to kill yourself? Do you intend to carry out this plan?&lt;/u&gt; " VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell108" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell109" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell110" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell111" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row32" Height="37.8">
+          <TableCell Name="Cell112" Border.Lines="All" Text="How long ago did the Worst Point Ideation occur?" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold, Underline" ColSpan="5"/>
+          <TableCell Name="Cell113" Font="Arial, 10pt"/>
+          <TableCell Name="Cell114" Font="Arial, 10pt"/>
+          <TableCell Name="Cell115" Font="Arial, 10pt"/>
+          <TableCell Name="Cell116" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row34" Height="37.8">
+          <TableCell Name="Cell122" Text="&lt;b&gt;&lt;i&gt;6) &lt;u&gt;Have you ever done anything, started to do anything, or prepared to do anything to end your life?&lt;/i&gt;&lt;/u&gt;&lt;/b&gt;&#13;&#10;&#13;&#10;Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note, took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot yourself, cut yourself, tried to hang yourself, etc.&#13;&#10;&#13;&#10;&lt;b&gt;If YES, ask: &lt;u&gt;&lt;i&gt;Was this within the past three months? &lt;/i&gt;&lt;/u&gt;&lt;/b&gt;" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="3" RowSpan="2"/>
+          <TableCell Name="Cell123" Font="Arial, 10pt"/>
+          <TableCell Name="Cell124" Font="Arial, 10pt"/>
+          <TableCell Name="Cell125" Border.Lines="All" Text="YES" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell126" Border.Lines="All" Text="NO" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row33" Height="79.38">
+          <TableCell Name="Cell117" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell118" Font="Arial, 10pt"/>
+          <TableCell Name="Cell119" Font="Arial, 10pt"/>
+          <TableCell Name="Cell120" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell121" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <ShapeObject Name="Shape1" Left="9.45" Top="647.05" Width="15.12" Height="15.12" Fill.Color="Yellow"/>
+      <ShapeObject Name="Shape2" Left="9.45" Top="665.95" Width="15.12" Height="15.12" Fill.Color="Gold"/>
+      <ShapeObject Name="Shape3" Left="9.45" Top="684.85" Width="15.12" Height="15.12" Fill.Color="Red"/>
+      <TextObject Name="Text330" Left="26.7" Top="645.6" Width="75.6" Height="22.68" CanGrow="true" Text="Low Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text331" Left="27.35" Top="664.5" Width="103.95" Height="22.68" CanGrow="true" Text="Moderate Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text332" Left="27.35" Top="683.85" Width="103.95" Height="22.68" CanGrow="true" Text="High Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text333" Top="742.55" Width="774.9" Height="47.25" CanGrow="true" Text="For inquiries and training information contact: Kelly Posner, Ph.D. &#13;&#10;New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu &#13;&#10;© 2008 The Research Foundation for Mental Hygiene, Inc. " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
