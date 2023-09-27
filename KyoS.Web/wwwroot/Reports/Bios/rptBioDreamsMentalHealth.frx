@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 15:43:26" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 15:57:04" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3TAQ50nXc7d6sbtX6QfdL1g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cNDXgvfYw6OJ+KFjupyjUA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -958,7 +958,7 @@
       <TextObject Name="Text617" Left="76.05" Top="1058.4" Width="695.52" Height="18.9" Text="No (if no, provide client with education on preventive health measures and offer to refer to a physician) " VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text618" Left="20.9" Top="1058.4" Width="39.69" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text619" Left="9.45" Top="1077.3" Width="185.22" Height="18.9" Text="If yes, give reason and date:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text620" Left="194.45" Top="1077.3" Width="576.45" Height="18.9" Text="[Bio.HasTheClientVisitedPhysician_Reason]" Font="Arial, 10pt"/>
+      <TextObject Name="Text620" Left="194.45" Top="1077.3" Width="576.45" Height="18.9" Text="[Bio.HasTheClientVisitedPhysician_Reason] - [Bio.HasTheClientVisitedPhysician_Date] " Font="Arial, 10pt"/>
       <TextObject Name="Text621" Top="1153.9" Width="242.15" Height="18.9" CanGrow="true" Text="Does the client experience any pain?    " Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox491" Left="9.45" Top="1176.8" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.DoesTheClientExperience"/>
       <CheckBoxObject Name="CheckBox492" Left="64.15" Top="1176.25" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.DoesTheClientExperience] == true,false,true)"/>

@@ -18754,7 +18754,7 @@ namespace KyoS.Web.Helpers
                                             bio.WhereRecord_Where,
                                             bio.HasTheClientVisitedPhysician,
                                             bio.HasTheClientVisitedPhysician_Reason,
-                                            Convert.ToDateTime(bio.HasTheClientVisitedPhysician_Date).ToShortDateString(),
+                                            bio.HasTheClientVisitedPhysician_Date,
                                             bio.DoesTheClientExperience,
                                             bio.DoesTheClientExperience_Where,
                                             bio.PleaseRatePain,
