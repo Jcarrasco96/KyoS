@@ -21158,6 +21158,96 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakePainScreenDS(TCMIntakePainScreenEntity intakePain)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakePainScreen"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+
+            dt.Columns.Add("DoYouSuffer", typeof(bool));
+            dt.Columns.Add("DidYouUse", typeof(bool));
+            dt.Columns.Add("WereYourDrugs", typeof(bool));
+            dt.Columns.Add("DoYouFell", typeof(bool));
+            dt.Columns.Add("DoYouBelieve", typeof(bool));
+            dt.Columns.Add("WhereIs", typeof(string));
+            dt.Columns.Add("WhatCauses", typeof(string));
+            dt.Columns.Add("DoesYourPainEffect", typeof(string));
+            dt.Columns.Add("AlwayasThere", typeof(bool));
+            dt.Columns.Add("ComesAndGoes", typeof(bool));
+            dt.Columns.Add("CurrentPainScore", typeof(int));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("DateOfReferral", typeof(DateTime));
+            dt.Columns.Add("ReferredTo", typeof(string));   
+            
+            if (intakePain != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakePain.Id,
+                                            0,
+                                            intakePain.DoYouSuffer,
+                                            intakePain.DidYouUse,
+                                            intakePain.WereYourDrugs,
+                                            intakePain.DoYouFell,
+                                            intakePain.DoYouBelieve,
+                                            intakePain.WhereIs,
+                                            intakePain.WhatCauses,
+                                            intakePain.DoesYourPainEffect,
+                                            intakePain.AlwayasThere,
+                                            intakePain.ComesAndGoes,
+                                            intakePain.CurrentPainScore,
+                                            intakePain.AdmissionedFor,
+                                            intakePain.DateSignatureEmployee,
+                                            intakePain.CreatedBy,
+                                            intakePain.CreatedOn,
+                                            intakePain.LastModifiedBy,
+                                            intakePain.LastModifiedOn,
+                                            intakePain.DateOfReferral,
+                                            intakePain.ReferredTo
+                                    });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            false,                                           
+                                            false,                                            
+                                            false,                                           
+                                            false,                                            
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty                                            
+                                       });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMIntakeAppendixJDS(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
             DataTable dt = new DataTable
@@ -23179,7 +23269,70 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakePainScreen(TCMIntakePainScreenEntity intakePain)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakePainScreen.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakePain.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakePain.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakePain.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakePain.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakePainScreenDS(intakePain));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakePainScreen");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakePain.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakePain.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakePain.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakePain.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(intakePain.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakePain.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         #endregion
