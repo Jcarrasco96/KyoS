@@ -83,6 +83,19 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <div>
+                            <div class=" col-md-6 ">
+                                <label asp-for="UnitsForDayForClient" class="control-label">Maximum units per day per client</label>&nbsp;*
+                                <input asp-for="UnitsForDayForClient" class="form-control" />
+                                <span asp-validation-for="UnitsForDayForClient" class="text-danger"></span>
+                            </div>
+                            <div class=" col-md-6 ">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            &nbsp;
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic

@@ -1442,7 +1442,8 @@ namespace KyoS.Web.Helpers
                 IndNoteForAppointment = model.IndNoteForAppointment,
                 TCMInitialTime = model.TCMInitialTime,
                 TCMEndTime = model.TCMEndTime,
-                LockTCMNoteForUnits = model.LockTCMNoteForUnits
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits,
+                UnitsForDayForClient = model.UnitsForDayForClient
             };
         }
 
@@ -1467,7 +1468,8 @@ namespace KyoS.Web.Helpers
                 IndNoteForAppointment = model.IndNoteForAppointment,
                 TCMInitialTime = model.TCMInitialTime,
                 TCMEndTime = model.TCMEndTime,
-                LockTCMNoteForUnits = model.LockTCMNoteForUnits
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits,
+                UnitsForDayForClient = model.UnitsForDayForClient
             };
         }
 

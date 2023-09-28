@@ -2737,5 +2737,60 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        public IActionResult Details(int id = 0, int origi = 0)
+        {
+            TCMAssessmentViewModel model;
+
+            
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMAssessmentEntity TcmAssessment = _context.TCMAssessment
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clients_Diagnostics)
+                                                                .ThenInclude(b => b.Diagnostic)
+                                                                .Include(b => b.TcmClient.Client.Client_Referred)
+                                                                .Include(b => b.TcmClient.Client.Doctor)
+                                                                .Include(b => b.TcmClient.Client.Psychiatrist)
+                                                                .Include(b => b.IndividualAgencyList)
+                                                                .Include(b => b.HouseCompositionList)
+                                                                .Include(b => b.MedicationList)
+                                                                .Include(b => b.PastCurrentServiceList)
+                                                                .Include(b => b.HospitalList)
+                                                                .Include(b => b.DrugList)
+                                                                .Include(b => b.MedicalProblemList)
+                                                                .Include(b => b.SurgeryList)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clinic)
+                                                                .ThenInclude(b => b.Setting)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
+                                                                .FirstOrDefault(m => m.Id == id);
+                    if (TcmAssessment == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+
+                    }
+
+               
+            }
+
+            model = new TCMAssessmentViewModel();
+            return View(model);
+        }
     }
 }

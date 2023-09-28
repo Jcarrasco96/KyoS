@@ -159,10 +159,12 @@
                                 <td align="right">
                                     @if (item.Approved == 2)
                                     {
+                                        <a asp-action="Details" asp-route-id="@item.Id" asp-route-origin="0" class="btn btn-info" title="View TCM Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                         <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
                                     else
                                     {
+                                        <a asp-action="Details" asp-route-id="@item.Id" asp-route-origin="0" class="btn btn-info disabled" title="View TCM Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                         <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success disabled"><i class="glyphicon glyphicon-print"></i></a>
                                     }
                                 </td>
