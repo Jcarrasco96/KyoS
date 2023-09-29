@@ -598,8 +598,9 @@ namespace KyoS.Web.Controllers
                                                                                     || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
                                                                                .ToListAsync();
 
+                    int cantidad = _context.TCMNoteActivity.Where(n => n.TCMNote.TCMClient.Id == TcmNotesViewModel.IdTCMClient && n.TCMNote.DateOfService.Date == TcmNotesViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes);
                     //Verifico la cantidad de unidades por cliente segun los setting
-                    if (user_logged.Clinic.Setting.UnitsForDayForClient < CalculateUnits(TcmNotesViewModel.Minutes + _context.TCMNoteActivity.Where(n => n.TCMNote.TCMClient.Id == TcmNotesViewModel.IdTCMClient && n.TCMNote.DateOfService.Date == TcmNotesViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes)))
+                    if (user_logged.Clinic.Setting.UnitsForDayForClient < CalculateUnits(TcmNotesViewModel.Minutes + cantidad))
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                                .Include(n => n.TCMClient)
@@ -904,7 +905,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public IActionResult EditNoteActivity(int id = 0)
+        public IActionResult EditNoteActivity(int id = 0, int unitsAvaliable = 0)
         {
             TCMNoteActivityViewModel model;
 
@@ -945,7 +946,7 @@ namespace KyoS.Web.Controllers
                             model.Units = units + 1;
                         else
                             model.Units = units;
-                        
+                        ViewData["unitsAvaliable"] = unitsAvaliable;
                         return View(model);
                     }
 
@@ -981,7 +982,7 @@ namespace KyoS.Web.Controllers
                             model.Units = units + 1;
                         else
                             model.Units = units;
-                      
+                        ViewData["unitsAvaliable"] = unitsAvaliable;
                         return View(model);
                     }
 
@@ -995,7 +996,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> EditNoteActivity(TCMNoteActivityViewModel NoteActivityViewModel)
+        public async Task<IActionResult> EditNoteActivity(TCMNoteActivityViewModel NoteActivityViewModel, int unitsAvaliable = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -1015,18 +1016,10 @@ namespace KyoS.Web.Controllers
                 NoteActivityViewModel.StartTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.StartTime.Hour, NoteActivityViewModel.StartTime.Minute, 0);
                 NoteActivityViewModel.EndTime = new DateTime(note.DateOfService.Year, note.DateOfService.Month, note.DateOfService.Day, NoteActivityViewModel.EndTime.Hour, NoteActivityViewModel.EndTime.Minute, 0);
 
-                //casemanager overlapping validation
-                List<TCMNoteActivityEntity> noteActivities = await _context.TCMNoteActivity
-                                                                           .Where(na => (na.CreatedBy == user_logged.UserName
-                                                                             && na.Id != NoteActivityViewModel.Id
-                                                                             && na.TCMNote.DateOfService.Date == NoteActivityViewModel.DateOfServiceNote.Date
-                                                                             && ((na.StartTime <= NoteActivityViewModel.StartTime && na.EndTime > NoteActivityViewModel.StartTime)
-                                                                                || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
-                                                                           .ToListAsync();
                 int clientId = _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).Client.Id;
 
                 //Verifico la cantidad de unidades por cliente segun los setting
-                if (user_logged.Clinic.Setting.UnitsForDayForClient < CalculateUnits(NoteActivityViewModel.Minutes + _context.TCMNoteActivity.Where(n => n.TCMNote.TCMClient.Id == NoteActivityViewModel.IdTCMClient && n.TCMNote.DateOfService.Date == NoteActivityViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes)))
+                if (user_logged.Clinic.Setting.UnitsForDayForClient < CalculateUnits(NoteActivityViewModel.Minutes + _context.TCMNoteActivity.Where(n => n.TCMNote.TCMClient.Id == NoteActivityViewModel.IdTCMClient && n.Id != NoteActivityViewModel.Id && n.TCMNote.DateOfService.Date == NoteActivityViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes)))
                 {
                     TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                            .Include(n => n.TCMClient)
@@ -1043,32 +1036,37 @@ namespace KyoS.Web.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, $"Error.The amount of units exceeds the setting's value");
+                    ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
 
                 }
-
+                
                 //Lock tcmnotes for unavaliable units
-                if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(note.TCMClient.Id) - CalculateUnits(NoteActivityViewModel.Minutes)) < 0))
+                if (user_logged.Clinic.Setting.LockTCMNoteForUnits == true)
                 {
-                    TCMNoteEntity tcmNote1 = await _context.TCMNote
-                                                           .Include(n => n.TCMClient)
-                                                           .ThenInclude(n => n.Client)
-                                                           .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
-
-                    NoteActivityViewModel.TCMNote = tcmNote1;
-                    NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
-                    if (NoteActivityViewModel.IdTCMDomain != 0)
+                    if ((unitsAvaliable - (CalculateUnits(NoteActivityViewModel.Minutes))) < 0)
                     {
-                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
-                        NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                        TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                               .Include(n => n.TCMClient)
+                                                               .ThenInclude(n => n.Client)
+                                                               .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
+
+                        NoteActivityViewModel.TCMNote = tcmNote1;
+                        NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                        NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                        if (NoteActivityViewModel.IdTCMDomain != 0)
+                        {
+                            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
+                            NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                        }
+
+                        ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
+                        ViewData["unitsAvaliable"] = unitsAvaliable;
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                     }
-
-                    ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
-                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
-
+                    
                 }
-
+                
                 //verifica que la nota este en el rango de fecha segun los setting
                 if (CheckTimeRange(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime))
                 {
@@ -1087,10 +1085,19 @@ namespace KyoS.Web.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, $"Error.There are activities created in that authorized time");
+                    ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
 
                 }
 
+                //casemanager overlapping validation
+                List<TCMNoteActivityEntity> noteActivities = await _context.TCMNoteActivity
+                                                                           .Where(na => (na.CreatedBy == user_logged.UserName
+                                                                             && na.Id != NoteActivityViewModel.Id
+                                                                             && na.TCMNote.DateOfService.Date == NoteActivityViewModel.DateOfServiceNote.Date
+                                                                             && ((na.StartTime <= NoteActivityViewModel.StartTime && na.EndTime > NoteActivityViewModel.StartTime)
+                                                                                || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
+                                                                           .ToListAsync();
                 //check overlapin
                 if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, clientId) == true)
                 {
@@ -1109,6 +1116,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
+                    ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                    
                 }
@@ -1948,11 +1956,12 @@ namespace KyoS.Web.Controllers
             return false;
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Delete(int id = 0)
         {
             TCMNoteEntity tcmNotes = _context.TCMNote
                                              .Include(m => m.TCMNoteActivity)
+                                             .Include(m => m.TCMMessages)
                                              .FirstOrDefault(m => m.Id == id);
             if (tcmNotes == null)
             {
@@ -1970,6 +1979,31 @@ namespace KyoS.Web.Controllers
 
             }
             return RedirectToAction("Index", "TCMBilling");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> Delete1(int id = 0)
+        {
+            TCMNoteEntity tcmNotes = _context.TCMNote
+                                             .Include(m => m.TCMNoteActivity)
+                                             .Include(m => m.TCMMessages)
+                                             .FirstOrDefault(m => m.Id == id);
+            if (tcmNotes == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMNoteActivity.RemoveRange(tcmNotes.TCMNoteActivity);
+                _context.TCMNote.Remove(tcmNotes);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("NotesStatus", "TCMNotes", new { status = NoteStatus.Pending });
         }
     }
 }

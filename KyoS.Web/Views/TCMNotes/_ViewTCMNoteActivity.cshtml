@@ -109,14 +109,14 @@
                                 <td align="right">
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id, unitsAvaliable = @ViewData["Id"]}, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
                                         @if (User.IsInRole("TCMSupervisor") == true && item.TCMNote.TCMClient.Casemanager.Clinic.Setting.TCMSupervisorEdit == true)
                                         {
-                                            <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id, unitsAvaliable = @ViewData["Id"] }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
                                         }
                                         else

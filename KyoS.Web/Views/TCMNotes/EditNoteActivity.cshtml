@@ -3,7 +3,7 @@
     Layout = null;
 }
 <div class="row">
-    <form asp-action="EditNoteActivity" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
+    <form asp-action="EditNoteActivity" asp-route-unitsAvaliable="@ViewData["unitsAvaliable"]" onsubmit="return jQueryAjaxPostTCMNoteActivity(this);">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="IdTCMNote" />

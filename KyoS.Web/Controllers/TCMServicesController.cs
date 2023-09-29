@@ -798,7 +798,8 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("PendingActivity", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(PendingActivity));
+            return RedirectToAction("ServiceActivity", new { idError = 0 });
         }
+       
     }
 }

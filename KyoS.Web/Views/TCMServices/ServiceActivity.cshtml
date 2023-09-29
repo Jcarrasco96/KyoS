@@ -63,6 +63,21 @@
                 $(this).closest("tr").next().remove();
             });
         });
-
+         function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteActivity", "TCMServices")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
