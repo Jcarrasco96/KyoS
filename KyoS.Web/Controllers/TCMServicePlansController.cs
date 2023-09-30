@@ -302,6 +302,7 @@ namespace KyoS.Web.Controllers
                     })
                         .ToList();
 
+                    TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == tcmServicePlan.TcmClient.Id);
                     model = new TCMServicePlanViewModel
                     {
                         ID_TcmClient = tcmServicePlan.TcmClient.Id,
@@ -325,7 +326,19 @@ namespace KyoS.Web.Controllers
                         CreatedBy = tcmServicePlan.CreatedBy,
                         CreatedOn = tcmServicePlan.CreatedOn,
                         TcmClient = tcmServicePlan.TcmClient,
-                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
+                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature,
+                        Domain1 = assessment.RecommendedMentalHealth,
+                        Domain2 = assessment.RecommendedPhysicalHealth,
+                        Domain3 = assessment.RecommendedVocation,
+                        Domain4 = assessment.RecommendedSchool,
+                        Domain5 = assessment.RecommendedRecreational,
+                        Domain6 = assessment.RecommendedActivities,
+                        Domain7 = assessment.RecommendedHousing,
+                        Domain8 = assessment.RecommendedEconomic,
+                        Domain9 = assessment.RecommendedBasicNeed,
+                        Domain10 = assessment.RecommendedTransportation,
+                        Domain11 = assessment.RecommendedLegalImmigration,
+                        Domain12 = assessment.RecommendedOther,
 
                     };
 
@@ -932,11 +945,13 @@ namespace KyoS.Web.Controllers
            
             TCMObjetiveViewModel model = null;
             TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                .Include(g => g.TCMObjetive)
-                                                .Include(h => h.TcmServicePlan)
-                                                .ThenInclude(h => h.TCMService)
-                                                .ThenInclude(h => h.Stages)
-                                                .FirstOrDefaultAsync(m => m.Id == id);
+                                                      .Include(g => g.TCMObjetive)
+                                                      .Include(h => h.TcmServicePlan)
+                                                      .ThenInclude(h => h.TCMService)
+                                                      .ThenInclude(h => h.Stages)
+                                                      .Include(h => h.TcmServicePlan)
+                                                      .ThenInclude(h => h.TcmClient)
+                                                      .FirstOrDefaultAsync(m => m.Id == id);
 
             if (User.IsInRole("CaseManager"))
             {
@@ -957,8 +972,8 @@ namespace KyoS.Web.Controllers
                         Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = tcmdomain.Id,
                         IdObjetive = tcmdomain.TCMObjetive.Count() + 1,
-                        StartDate = DateTime.Today.Date,
-                        TargetDate = DateTime.Today.Date,
+                        StartDate = tcmdomain.TcmServicePlan.DateServicePlan,
+                        TargetDate = tcmdomain.TcmServicePlan.DateServicePlan.AddMonths(tcmdomain.TcmServicePlan.TcmClient.Period),
                         //EndDate = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
                         Origi = Origin,
@@ -2147,7 +2162,7 @@ namespace KyoS.Web.Controllers
                             Value = $"{c.Id}"
                         })
                             .ToList();
-
+                        TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == tcmServicePlan.TcmClient.Id);
                         model = new TCMServicePlanViewModel
                         {
                             ID_TcmClient = tcmServicePlan.TcmClient.Id,
@@ -2171,7 +2186,19 @@ namespace KyoS.Web.Controllers
                             CreatedBy = tcmServicePlan.CreatedBy,
                             CreatedOn = tcmServicePlan.CreatedOn,
                             TcmClient = tcmServicePlan.TcmClient,
-                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
+                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature,
+                            Domain1 = assessment.RecommendedMentalHealth,
+                            Domain2 = assessment.RecommendedPhysicalHealth,
+                            Domain3 = assessment.RecommendedVocation,
+                            Domain4 = assessment.RecommendedSchool,
+                            Domain5 = assessment.RecommendedRecreational,
+                            Domain6 = assessment.RecommendedActivities,
+                            Domain7 = assessment.RecommendedHousing,
+                            Domain8 = assessment.RecommendedEconomic,
+                            Domain9 = assessment.RecommendedBasicNeed,
+                            Domain10 = assessment.RecommendedTransportation,
+                            Domain11 = assessment.RecommendedLegalImmigration,
+                            Domain12 = assessment.RecommendedOther
 
                         };
 

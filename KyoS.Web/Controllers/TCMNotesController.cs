@@ -1981,7 +1981,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMBilling");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Delete1(int id = 0)
         {
             TCMNoteEntity tcmNotes = _context.TCMNote
