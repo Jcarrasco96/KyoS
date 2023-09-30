@@ -502,7 +502,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0)
+        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0, int unitsAvaliable = 0)
         {
             UserEntity user_logged = _context.Users
 
@@ -559,19 +559,22 @@ namespace KyoS.Web.Controllers
                 if (model.TCMNote.TCMNoteActivity == null)
                     model.TCMNote.TCMNoteActivity = new List<TCMNoteActivityEntity>();
 
+                ViewData["unitsAvaliable"] = unitsAvaliable;
                 return View(model);
             }
 
+            ViewData["unitsAvaliable"] = unitsAvaliable;
             return View(null);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> CreateNoteActivity(TCMNoteActivityViewModel TcmNotesViewModel)
+        public async Task<IActionResult> CreateNoteActivity(TCMNoteActivityViewModel TcmNotesViewModel, int unitsAvaliable = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TcmNotesViewModel.EndTime = TcmNotesViewModel.StartTime.AddMinutes(TcmNotesViewModel.Minutes);
@@ -644,7 +647,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     //Lock tcmnotes for unavaliable units
-                    if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(TcmNotesViewModel.IdTCMClient) - CalculateUnits(TcmNotesViewModel.Minutes)) < 0))
+                    if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (unitsAvaliable - CalculateUnits(TcmNotesViewModel.Minutes)) < 0))
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                     .Include(n => n.TCMClient)
