@@ -5351,7 +5351,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefaultAsync(n => n.Id == model.Id);
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
 
             _context.Update(note);
@@ -5483,7 +5483,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
@@ -5816,7 +5816,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
@@ -5981,7 +5981,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
