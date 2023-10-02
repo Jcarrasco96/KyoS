@@ -28,21 +28,21 @@
                     <thead>
                         <tr>
                             <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Casemanager.Name)
+                            </th>
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.Code)
+                            <th class="col-md-1" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.CaseNumber)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Client.AdmisionDate)
+                                @Html.DisplayNameFor(model => model.DataOpen)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                MH Therapy
-                            </th>
-                            <th class="col-md-1" align="right">
+                            <th class="col-md-2" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -52,6 +52,9 @@
                             @if ((item.TCMAssessment.Approved == 2))
                             {
                                 <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Casemanager.Name)
+                                    </td>
                                     <td>
                                         @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
@@ -65,10 +68,10 @@
                                         @Html.DisplayFor(modelItem => item.Client.Name)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Code)
+                                        @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
+                                        @Html.DisplayFor(modelItem => item.DataOpen)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -83,9 +86,6 @@
                                                 Close
                                             </span>
                                         }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Client.Service)
                                     </td>
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))

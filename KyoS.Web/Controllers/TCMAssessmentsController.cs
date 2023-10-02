@@ -2727,6 +2727,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.TCMAssessment)
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
+                                              .Include(f => f.Casemanager)
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                        && n.Casemanager.TCMSupervisor.Id == _context.TCMSupervisors.FirstOrDefault(m => m.LinkedUser == user_logged.UserName).Id
                                                        && n.TCMAssessment.Approved == 2)

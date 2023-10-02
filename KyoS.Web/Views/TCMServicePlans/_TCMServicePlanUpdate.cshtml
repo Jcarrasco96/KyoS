@@ -162,13 +162,13 @@
                                     {
                                         @if (item.Approved == 2)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="6" class="btn btn-warning" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="6" class="btn btn-success" title="Edit TCM Service Plan"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServiceplans", new { id = item.Id, aview = 2 }, Context.Request.Scheme)','Create TCM Domain')" class="btn btn-info" title="Create TCM Domain"><i class="glyphicon glyphicon-plus"></i></a>
                                             <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-info disabled glyphicon glyphicon-plus"></i>
                                             <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
