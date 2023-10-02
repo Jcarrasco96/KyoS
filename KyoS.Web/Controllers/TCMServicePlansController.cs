@@ -302,6 +302,7 @@ namespace KyoS.Web.Controllers
                     })
                         .ToList();
 
+                    TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == tcmServicePlan.TcmClient.Id);
                     model = new TCMServicePlanViewModel
                     {
                         ID_TcmClient = tcmServicePlan.TcmClient.Id,
@@ -325,7 +326,19 @@ namespace KyoS.Web.Controllers
                         CreatedBy = tcmServicePlan.CreatedBy,
                         CreatedOn = tcmServicePlan.CreatedOn,
                         TcmClient = tcmServicePlan.TcmClient,
-                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
+                        DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature,
+                        Domain1 = assessment.RecommendedMentalHealth,
+                        Domain2 = assessment.RecommendedPhysicalHealth,
+                        Domain3 = assessment.RecommendedVocation,
+                        Domain4 = assessment.RecommendedSchool,
+                        Domain5 = assessment.RecommendedRecreational,
+                        Domain6 = assessment.RecommendedActivities,
+                        Domain7 = assessment.RecommendedHousing,
+                        Domain8 = assessment.RecommendedEconomic,
+                        Domain9 = assessment.RecommendedBasicNeed,
+                        Domain10 = assessment.RecommendedTransportation,
+                        Domain11 = assessment.RecommendedLegalImmigration,
+                        Domain12 = assessment.RecommendedOther,
 
                     };
 
@@ -932,11 +945,13 @@ namespace KyoS.Web.Controllers
            
             TCMObjetiveViewModel model = null;
             TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                .Include(g => g.TCMObjetive)
-                                                .Include(h => h.TcmServicePlan)
-                                                .ThenInclude(h => h.TCMService)
-                                                .ThenInclude(h => h.Stages)
-                                                .FirstOrDefaultAsync(m => m.Id == id);
+                                                      .Include(g => g.TCMObjetive)
+                                                      .Include(h => h.TcmServicePlan)
+                                                      .ThenInclude(h => h.TCMService)
+                                                      .ThenInclude(h => h.Stages)
+                                                      .Include(h => h.TcmServicePlan)
+                                                      .ThenInclude(h => h.TcmClient)
+                                                      .FirstOrDefaultAsync(m => m.Id == id);
 
             if (User.IsInRole("CaseManager"))
             {
@@ -957,8 +972,8 @@ namespace KyoS.Web.Controllers
                         Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain),
                         Id_Domain = tcmdomain.Id,
                         IdObjetive = tcmdomain.TCMObjetive.Count() + 1,
-                        StartDate = DateTime.Today.Date,
-                        TargetDate = DateTime.Today.Date,
+                        StartDate = tcmdomain.TcmServicePlan.DateServicePlan,
+                        TargetDate = tcmdomain.TcmServicePlan.DateServicePlan.AddMonths(tcmdomain.TcmServicePlan.TcmClient.Period),
                         //EndDate = DateTime.Today.Date,
                         task = "es para que veas el problema del textarea",
                         Origi = Origin,
@@ -2147,7 +2162,7 @@ namespace KyoS.Web.Controllers
                             Value = $"{c.Id}"
                         })
                             .ToList();
-
+                        TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == tcmServicePlan.TcmClient.Id);
                         model = new TCMServicePlanViewModel
                         {
                             ID_TcmClient = tcmServicePlan.TcmClient.Id,
@@ -2171,7 +2186,19 @@ namespace KyoS.Web.Controllers
                             CreatedBy = tcmServicePlan.CreatedBy,
                             CreatedOn = tcmServicePlan.CreatedOn,
                             TcmClient = tcmServicePlan.TcmClient,
-                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
+                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature,
+                            Domain1 = assessment.RecommendedMentalHealth,
+                            Domain2 = assessment.RecommendedPhysicalHealth,
+                            Domain3 = assessment.RecommendedVocation,
+                            Domain4 = assessment.RecommendedSchool,
+                            Domain5 = assessment.RecommendedRecreational,
+                            Domain6 = assessment.RecommendedActivities,
+                            Domain7 = assessment.RecommendedHousing,
+                            Domain8 = assessment.RecommendedEconomic,
+                            Domain9 = assessment.RecommendedBasicNeed,
+                            Domain10 = assessment.RecommendedTransportation,
+                            Domain11 = assessment.RecommendedLegalImmigration,
+                            Domain12 = assessment.RecommendedOther
 
                         };
 
@@ -2784,6 +2811,91 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomainReadOnly", tcmDomainViewModel) });
         }
 
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
+        public IActionResult Details(int Id = 0, int origi = 0)
+        {
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                          .Include(f => f.TCMDomain)
+                                                          .ThenInclude(f => f.TCMObjetive)
+                                                          .Include(f => f.TcmClient)
+                                                          .ThenInclude(f => f.Client)
+                                                          .ThenInclude(f => f.Clinic)
+                                                          .ThenInclude(f => f.Setting)
+                                                          .Include(f => f.TcmClient)
+                                                          .ThenInclude(f => f.Casemanager)
+                                                          .ThenInclude(f => f.TCMSupervisor)
+                                                          .FirstOrDefault(u => u.Id == Id);
+            TCMServicePlanViewModel model;
+
+            if (tcmServicePlan != null && tcmServicePlan.Approved == 2)
+            {
+               
+               
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic != null)
+                    {
+                        List<TCMClientEntity> tcmClient = _context.TCMClient
+                                                                  .Include(u => u.Client)
+                                                                  .Where(u => u.Id == tcmServicePlan.TcmClient.Id)
+                                                                  .ToList();
+
+                        List<SelectListItem> list_Client = tcmClient.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Client.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        List<ClinicEntity> clinic = _context.Clinics
+                                                         .Where(u => u.Id == user_logged.Clinic.Id)
+                                                         .ToList();
+
+                        List<SelectListItem> list_Clinins = clinic.Select(c => new SelectListItem
+                        {
+                            Text = $"{c.Name}",
+                            Value = $"{c.Id}"
+                        })
+                            .ToList();
+
+                        model = new TCMServicePlanViewModel
+                        {
+                            ID_TcmClient = tcmServicePlan.TcmClient.Id,
+                            TcmClients = list_Client,
+                            ID_Clinic = user_logged.Clinic.Id,
+                            Clinics = list_Clinins,
+                            Status = tcmServicePlan.Status,
+                            ID_Status = (tcmServicePlan.Status == StatusType.Open) ? 1 : 2,
+                            status = _combosHelper.GetComboClientStatus(),
+                            CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == tcmServicePlan.TcmClient.Id).CaseNumber,
+                            DateServicePlan = tcmServicePlan.DateServicePlan,
+                            DateIntake = tcmServicePlan.DateIntake,
+                            DateAssessment = tcmServicePlan.DateAssessment,
+                            DateCertification = tcmServicePlan.DateCertification,
+                            Strengths = tcmServicePlan.Strengths,
+                            Weakness = tcmServicePlan.Weakness,
+                            DischargerCriteria = tcmServicePlan.DischargerCriteria,
+                            Id = Id,
+                            TCMDomain = tcmServicePlan.TCMDomain,
+                            Approved = tcmServicePlan.Approved,
+                            CreatedBy = tcmServicePlan.CreatedBy,
+                            CreatedOn = tcmServicePlan.CreatedOn,
+                            TcmClient = tcmServicePlan.TcmClient,
+                            DateSupervisorSignature = tcmServicePlan.DateSupervisorSignature
+
+                        };
+
+                        model.TCMDomain = model.TCMDomain.Where(n => (n.Origin == "Service Plan")).ToList();
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+               
+            }
+
+            return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
+        }
 
     }
 }

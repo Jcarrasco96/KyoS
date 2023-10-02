@@ -27,5 +27,7 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Time)]
         public DateTime TCMEndTime { get; set; }
         public bool LockTCMNoteForUnits { get; set; }
+
+        public int UnitsForDayForClient { get; set; }
     }
 }

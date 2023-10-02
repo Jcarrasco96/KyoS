@@ -275,7 +275,7 @@
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -286,6 +286,7 @@
                                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                             {
@@ -300,12 +301,14 @@
 
                                                 <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Review and Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                         }
                                         @if (User.IsInRole("Manager"))
@@ -479,17 +482,19 @@
                                                 <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="FinishEditingNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
                                             {
                                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -497,8 +502,8 @@
                                         {
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id"  class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                <a asp-action="FinishEditingNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Finish Editing TCM Notes"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
@@ -506,12 +511,14 @@
                                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
                                                 <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success disabled" title="Print TCM Notes"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Approve TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                             }
                                         }
                                         @if (User.IsInRole("Manager"))
@@ -531,7 +538,7 @@
                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
                                             {
                                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
+                <a asp-action="ApprovedNote" asp-route-id="@item.Id" class="btn btn-success disabled" title="Edit TCM Note"><i class="glyphicon glyphicon-ok"></i></a>*@
                                                 <a asp-action="PrintNote" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success " title="Print TCM Notes" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -585,6 +592,22 @@
                 $(this).closest("tr").next().remove();
             });
         });
+         function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete1", "TCMNotes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
 

@@ -56,6 +56,12 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12">
+    <pre>
+    <strong>Date Signature Licensed </strong> <input asp-for="SupervisorDate">                                                   
+    </pre>
+            </div>
+            <br />
             <div class="form-group col-md-12">
                 <input type="submit" value="Approve MTP" class="btn btn-primary" />
                 <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageMtpEntity","MTPs",new {id = Model.Id, origin = @ViewData["origi"]},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>

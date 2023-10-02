@@ -90,6 +90,17 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <partial name="TCMServicePlan" />
+            
+    <pre>
+    <strong>ASSESSMENT RECOMMENDED SERVICES</strong>
+    <input asp-for="Domain1" class="form-check-input" disabled> Mental Health / Substance Abuse                  <input asp-for="Domain7" class="form-check-input" disabled> Housing / Shelter
+    <input asp-for="Domain2" class="form-check-input" disabled> Physical Health / Medical / Dental               <input asp-for="Domain8" class="form-check-input" disabled> Economic / Financial
+    <input asp-for="Domain3" class="form-check-input" disabled> Vocational / Employment / Job Training           <input asp-for="Domain9" class="form-check-input" disabled> Basic Needs (food, clothing, furniture, etc.)
+    <input asp-for="Domain4" class="form-check-input" disabled> School / Education                               <input asp-for="Domain10" class="form-check-input" disabled> Transportation
+    <input asp-for="Domain5" class="form-check-input" disabled> Recreational / Social Support                    <input asp-for="Domain11" class="form-check-input" disabled> Legal / Immigration
+    <input asp-for="Domain6" class="form-check-input" disabled> Activities of Daily Living (ADL and IADL)        <input asp-for="Domain12" class="form-check-input" disabled> Other (specify):>
+    </pre>
+            
             <div class="row">
                 <div class="col-md-12 form-group">
                     @if (User.IsInRole("CaseManager"))
@@ -111,23 +122,23 @@
             @if (User.IsInRole("CaseManager"))
             {
                 <div class="col-md-push-12">
-                    
-                        <pre>
+
+                    <pre>
                             @if (Model.Approved < 1)
                             {
-    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
                             }
                             else
                             {            
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
                             }
-    <strong>Employee signature date</strong>        <input asp-for="DateServicePlan" disabled>   
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br />  
-    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-    <strong>Supervisor signature date</strong>      <input asp-for="DateSupervisorSignature" disabled>
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                    <strong>Employee signature date</strong>        <input asp-for="DateServicePlan" disabled>   
+                    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br />  
+                    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                    <strong>Supervisor signature date</strong>      <input asp-for="DateSupervisorSignature" disabled>
+                    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
                         </pre>
-                    
+
                 </div>
                 <div class="col-md-push-12">
                     <div class="col-md-12">
@@ -138,30 +149,30 @@
             else
             {
                 <div class="col-md-push-12">
-                    
-                        <pre>
-                            @if (Model.Approved < 1)
-                            {
-    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-                            }
-                            else
-                            { 
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-                            }
-    <strong>Employee signature date</strong>      <input asp-for="DateServicePlan" disabled>   
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br /> 
-                            @if (Model.Approved < 2)
-                            {
-    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-                            }
-                            else
-                            { 
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-                            } 
-    <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
-                        </pre>
-                   
+
+                    <pre>
+                    @if (Model.Approved < 1)
+                    {
+                    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                    }
+                    else
+                    { 
+                    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                    }
+                    <strong>Employee signature date</strong>      <input asp-for="DateServicePlan">   
+                    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br /> 
+                    @if (Model.Approved < 2)
+                    {
+                    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                    }
+                    else
+                    { 
+                    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                    } 
+                    <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
+                    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                    </pre>
+
                 </div>
                 <div class="col-md-push-12">
                     <div class="col-md-12">
@@ -184,7 +195,7 @@
                     }
 
                 }
-               
+
                 @if (@ViewData["origin"].ToString() == "0")
                 {
                     <a asp-action="TCMIntakeSectionDashboard" asp-route-id=" @Model.ID_TcmClient" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>

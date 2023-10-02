@@ -71,7 +71,7 @@
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient, unitsAvaliable = @ViewData["available"]}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })
@@ -118,7 +118,7 @@
                     {
                         <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
                     }
-
+                    <button onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</button>
                 }
                 else
                 {
@@ -133,7 +133,7 @@
                             <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
                             <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
                         }
-
+                        <button onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</button>
                     }
                 }
 
@@ -152,7 +152,22 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-
+         function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
 

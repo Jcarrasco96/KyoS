@@ -3696,14 +3696,14 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Approve(int id, int origi = 0)
+        public async Task<IActionResult> Approve(int id, MTPViewModel model, int origi = 0)
         {
 
             MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(n => n.Id == id);
 
 
             mtp.Status = MTPStatus.Approved;
-            mtp.SupervisorDate = DateTime.Now;
+            mtp.SupervisorDate = model.SupervisorDate;
             mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(mtp);
 

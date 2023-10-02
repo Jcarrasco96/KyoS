@@ -3879,7 +3879,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMIntakeAppendixJEntity tcmAppendixJ = await _converterHelper.ToTCMIntakeAppendixJEntity(model, false, user_logged.UserName);
-
+            
             if (tcmAppendixJ != null)
             {
                 if (User.IsInRole("TCMSupervisor"))
@@ -3889,6 +3889,7 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
                         tcmAppendixJ.Approved = 2;
+                        tcmAppendixJ.TcmSupervisor = tcmAppendixJ.TcmClient.Casemanager.TCMSupervisor;
                         
                         _context.Update(tcmAppendixJ);
                         try
