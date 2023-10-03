@@ -42,24 +42,18 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            var @valor1 = 0;
-                            var @residuo1 = 0;
-                            var @valorAumentado1 = 0;
+                            var @minute = item.TCMNoteActivity.Sum(n => n.Minutes);
+                            var @valor1 = minute / 15;
+                            var @residuo1 = minute % 15;
+                            var @valorAumentado1 = valor1 + 1;
                             var @unit1 = 0;
-
-                            foreach(var activity in item.TCMNoteActivity)
+                            if(@residuo1 > 7)
                             {
-                                valor1 = (activity.Minutes) / 15;
-                                residuo1 = (activity.Minutes) % 15;
-                                valorAumentado1 = valor1 + 1;
-                                @if (@residuo1 > 7)
-                                {
-                                    unit1 = unit1 + valorAumentado1;
-                                }
-                                else
-                                {
-                                    unit1 = unit1 + valor1;
-                                }
+                                unit1 = valorAumentado1;
+                            }
+                            else
+                            {
+                                unit1 = valor1;
                             }
                             <tr style="color: darkgrey;">
                                 <td>
@@ -115,7 +109,7 @@
                                     @unit1
                                 </td>
                                 <td align="center">
-                                    @if (item.BilledDate == null)
+                                    @if (item.BilledDate != null)
                                     {
                                         <span class="label label-success">
                                             Yes

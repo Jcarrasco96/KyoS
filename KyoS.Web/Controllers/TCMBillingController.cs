@@ -1199,7 +1199,8 @@ namespace KyoS.Web.Controllers
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
 
-                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null).Count() > 0)
+                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null 
+                                                                   && n.Status == Common.Enums.NoteStatus.Approved).Count() > 0)
                                      .ToListAsync();
 
             }
@@ -1219,6 +1220,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(t => t.TCMNoteActivity)
 
                                     .Where(t => t.TCMNote.Where(n => n.PaymentDate == null
+                                                                  && n.Status == Common.Enums.NoteStatus.Approved
                                                                   && n.BilledDate != null).Count() > 0)
                                     .ToListAsync();
 
@@ -1251,7 +1253,7 @@ namespace KyoS.Web.Controllers
             {
                 if (billed == 1)
                 {
-                    foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate == null && n.TCMNoteActivity.Count() > 0 && n.Status == Common.Enums.NoteStatus.Approved))
                     {
                         minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
                         value = minutes / 15;
@@ -1263,7 +1265,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 2)
                 {
-                    foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null && n.TCMNoteActivity.Count() > 0 && n.Status == Common.Enums.NoteStatus.Approved))
                     {
                         minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
                         value = minutes / 15;

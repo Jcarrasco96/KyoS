@@ -5956,7 +5956,10 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMNote.Id == model.Id)
                                       .ToList(),
-                Sign = model.Sign
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate
 
             };
         }
@@ -5982,7 +5985,10 @@ namespace KyoS.Web.Helpers
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id,
-                Sign = model.Sign
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate
 
             };
 
