@@ -331,7 +331,9 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
-                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -364,7 +366,9 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
-                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) && t.ApprovedDate <= Convert.ToDateTime(date[1])));
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) 
+                                                                            && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -410,7 +414,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate == null));
+                                                                            && t.BilledDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -446,7 +451,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate == null));
+                                                                            && t.BilledDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -491,7 +497,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate != null));
+                                                                            && t.BilledDate != null
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -526,7 +533,8 @@ namespace KyoS.Web.Controllers
 
                                                                       .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                                 && t.ApprovedDate <= Convert.ToDateTime(date[1])
-                                                                                && t.BilledDate != null));
+                                                                                && t.BilledDate != null
+                                                                                && t.TCMNoteActivity.Count() > 0));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -574,7 +582,8 @@ namespace KyoS.Web.Controllers
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
-                                                                            && t.PaymentDate == null));
+                                                                            && t.PaymentDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -610,7 +619,8 @@ namespace KyoS.Web.Controllers
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
-                                                                            && t.PaymentDate == null));
+                                                                            && t.PaymentDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0));
 
                         if (User.IsInRole("CaseManager"))
                         {
