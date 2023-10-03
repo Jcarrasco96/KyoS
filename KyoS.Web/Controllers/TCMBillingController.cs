@@ -57,14 +57,14 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             AddProgressNoteViewModel model = new AddProgressNoteViewModel();
-
+            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
             if (User.IsInRole("CaseManager"))
             {
                 model = new AddProgressNoteViewModel
                 {
-                    Date = (date != null) ? Convert.ToDateTime(date) : new DateTime(),
+                    Date = datetemp,
                     IdClient = 0,
-                    Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName)
+                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp)
                 };
             }            
 
@@ -1243,14 +1243,11 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
                     {
-                        foreach (var activity in note.TCMNoteActivity)
-                        {
-                            minutes = activity.Minutes;
-                            value = minutes / 15;
-                            mod = minutes % 15;
-                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                            services ++;
-                        }
+                        minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        services += note.TCMNoteActivity.Count();
                         notes++;
                     }
                 }
@@ -1258,14 +1255,11 @@ namespace KyoS.Web.Controllers
                 {
                     foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
                     {
-                        foreach (var activity in note.TCMNoteActivity)
-                        {
-                            minutes = activity.Minutes;
-                            value = minutes / 15;
-                            mod = minutes % 15;
-                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                            services++;
-                        }
+                        minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        services += note.TCMNoteActivity.Count();
                         notes++;
                     }
                 }

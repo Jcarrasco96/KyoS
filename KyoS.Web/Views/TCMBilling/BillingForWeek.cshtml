@@ -299,7 +299,15 @@
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
                             var @valorAumentado = valor + 1;
                             var @unit = 0;
-                            foreach (var activity in item.TCMNoteActivity)
+                            if(@residuo > 7)
+                            {
+                                unit = valorAumentado;
+                            }
+                            else
+                            {
+                                unit = valor;
+                            }
+                            /*foreach (var activity in item.TCMNoteActivity)
                             {
                                 valor = (activity.Minutes) / 15;
                                 residuo = (activity.Minutes) % 15;
@@ -312,7 +320,7 @@
                                 {
                                     unit = unit + valor;
                                 }
-                            }
+                            }*/
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)

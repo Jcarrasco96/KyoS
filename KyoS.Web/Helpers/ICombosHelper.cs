@@ -69,7 +69,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMNoteSetting();
         IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
         IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
-        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerActives(string user, DateTime dateTCMNote);
         IEnumerable<SelectListItem> GetComboServiceAgency();
         IEnumerable<SelectListItem> GetComboResidential();
         IEnumerable<SelectListItem> GetComboEmployed();
@@ -101,5 +101,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboEffectiveness();
         IEnumerable<SelectListItem> GetComboDrugs();
         IEnumerable<SelectListItem> GetComboFrecuencyActive();
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
     }
 }
