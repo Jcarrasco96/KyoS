@@ -113,21 +113,6 @@
     input/suggestions. A copy of this plan has been offered to  <input type="checkbox" asp-for="TheTreatmentPlan" class="form-check-input" id="check1"> YES  <input type="checkbox" class="form-check-input" id="check101"> NO
     </pre>
 </div>
-<div class="form-group col-md-12">
-    <pre>
-    <strong>Person served signature date</strong>                               <input asp-for="DateSignaturePerson">                         
-    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Name))</strong>     
-        
-    <strong>Therapist Name / Signature </strong>                                <input asp-for="DateTherapist">
-    <strong>(@Html.DisplayFor(modelItem => Model.Therapist))</strong> 
-
-    <strong>Licensed Practitioner Name / Signature </strong>                    <input asp-for="DateLicensedPractitioner">
-    <strong>(@Html.DisplayFor(modelItem => Model.LicensedPractitioner))</strong>
-
-    <strong>Clinical Director / Reviewer Name / Signature </strong>             <input asp-for="DateClinicalDirector">
-    <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector))</strong>
-    </pre>
-</div>
 
 <script>
 
