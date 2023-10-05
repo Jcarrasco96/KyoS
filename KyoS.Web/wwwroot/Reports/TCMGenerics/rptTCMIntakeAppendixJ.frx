@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="08/23/2023 09:58:11" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/02/2023 12:20:28" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+Puzc7cs4cOe5jhJsGBUlJ">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+2a6QXVhMxiRb2sjPEVCLC">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -115,6 +115,15 @@
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="HasAMental2" DataType="System.Boolean" PropName="Column"/>
+        <Column Name="HasAMental6" DataType="System.Boolean" PropName="Column1"/>
+        <Column Name="HasRecolated" DataType="System.Boolean" PropName="Column2"/>
+        <Column Name="IsEnrolled" DataType="System.Boolean" PropName="Column3"/>
+        <Column Name="IsNotReceiving" DataType="System.Boolean" PropName="Column4"/>
+        <Column Name="Lacks" DataType="System.Boolean" PropName="Column5"/>
+        <Column Name="Meets" DataType="System.Boolean" PropName="Column6"/>
+        <Column Name="RequiresOngoing" DataType="System.Boolean" PropName="Column7"/>
+        <Column Name="RequiresServices" DataType="System.Boolean" PropName="Column8"/>
       </TableDataSource>
       <TableDataSource Name="TCMSupervisors" DataType="System.Int32" Enabled="true" TableName="TCMSupervisors">
         <Column Name="Id" DataType="System.Int32"/>
@@ -145,7 +154,7 @@
       <TextObject Name="Text322" Left="132.3" Top="49.25" Width="535.1" Height="22" CanGrow="true" Text="ADULT CERTIFICATION" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text323" Left="132.3" Top="67.6" Width="535.1" Height="22" CanGrow="true" Text="ADULT MENTAL HEALTH TARGETED CASE MANAGEMENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="93.6" Width="778.3" Height="878.85" DataSource="TCMIntakeAppendixJ">
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="878.85" Guides="226.8" DataSource="TCMIntakeAppendixJ">
       <TextObject Name="Text40" Top="37.8" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text41" Left="481.95" Top="37.8" Width="94.5" Height="18.9" Text="Medicaid ID#:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text44" Left="114.4" Top="37.8" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -172,17 +181,26 @@
       <TextObject Name="Text313" Left="82.05" Top="380.45" Width="652.05" Height="20.79" Text="Is at risk of institutionalization for mental health reasons (provide explanation);&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox31" Left="70.15" Top="405.35" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.IsExperiencing"/>
       <TextObject Name="Text314" Left="82.05" Top="402.9" Width="652.05" Height="39.69" Text="Is experiencing long-term or acute episodes of mental impairment that may put him or her at risk of requiring more intensive services (provide explanation); or&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text315" Left="28.35" Top="100.5" Width="746.55" Height="189" Text="&lt;b&gt;1.&lt;/b&gt; Is enrolled in a Department of Children and Families adult mental health target population&#13;&#10;&lt;b&gt;2.&lt;/b&gt; Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy for and coordination of services to maintain or improve level of functioning;&#13;&#10;&lt;b&gt;3.&lt;/b&gt; Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work and social environments of choice;&#13;&#10;&lt;b&gt;4.&lt;/b&gt; Lacks a natural support system with the ability to access needed medical, social, educational and other services;&#13;&#10;&lt;b&gt;5.&lt;/b&gt; Requires ongoing assistance to access or maintain needed care consistently within the service delivery system;&#13;&#10;&lt;b&gt;6.&lt;/b&gt; Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon professional judgment, will last for a minimum of one year;&#13;&#10;&lt;b&gt;7.&lt;/b&gt; Is not receiving duplicate case management services from another provider;&#13;&#10;&lt;b&gt;8.&lt;/b&gt; Meets at least one of the following requirements &lt;i&gt;(check all that apply)&lt;/i&gt;:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text315" Left="28.35" Top="100.5" Width="746.55" Height="189" Text="&lt;b&gt;1.&lt;/b&gt;      Is enrolled in a Department of Children and Families adult mental health target population&#13;&#10;&lt;b&gt;2.&lt;/b&gt;      Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy for and coordination of services to maintain or improve level of functioning;&#13;&#10;&lt;b&gt;3.&lt;/b&gt;     Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work and social environments of choice;&#13;&#10;&lt;b&gt;4.&lt;/b&gt;      Lacks a natural support system with the ability to access needed medical, social, educational and other services;&#13;&#10;&lt;b&gt;5.&lt;/b&gt;      Requires ongoing assistance to access or maintain needed care consistently within the service delivery system;&#13;&#10;&lt;b&gt;6.&lt;/b&gt;     Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon professional judgment, will last for a minimum of one year;&#13;&#10;&lt;b&gt;7.&lt;/b&gt;      Is not receiving duplicate case management services from another provider;&#13;&#10;&lt;b&gt;8.&lt;/b&gt;      Meets at least one of the following requirements &lt;i&gt;(check all that apply)&lt;/i&gt;:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text316" Left="42.7" Top="281.05" Width="18.9" Height="20.79" Text="a.&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text317" Left="42.8" Top="304.4" Width="18.9" Height="20.79" Text="b." HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text318" Left="43.25" Top="328.75" Width="18.9" Height="20.79" Text="c." HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text319" Left="42.8" Top="380" Width="18.9" Height="20.79" Text="d.&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text320" Left="43.25" Top="402.35" Width="18.9" Height="20.79" Text="e.&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text321" Left="28.35" Top="447.6" Width="727.65" Height="56.7" Text="&lt;b&gt;9.&lt;/b&gt; Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case management services." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text321" Left="28.35" Top="447.6" Width="727.65" Height="56.7" Text="&lt;b&gt;9.&lt;/b&gt;      Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case management services." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text324" Left="28.35" Top="613.25" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text325" Left="28.35" Top="698.85" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture4" Left="274.05" Top="656.05" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text326" Left="28.35" Top="803.25" Width="727.65" Height="75.6" Text="Form must be filed in the recipient’s case record. &#10;AHCA-Med Serv Form 030, July 2006 (incorporated by reference in 59G-4.199, F.A.C.)&#13;&#10;&#13;&#10;&#13;&#10;July 2006" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox32" Left="48.25" Top="102.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.IsEnrolled"/>
+      <CheckBoxObject Name="CheckBox33" Left="48.38" Top="118.4" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasAMental2"/>
+      <CheckBoxObject Name="CheckBox34" Left="48.25" Top="149.2" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.RequiresServices"/>
+      <CheckBoxObject Name="CheckBox35" Left="48.38" Top="178.55" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.Lacks"/>
+      <CheckBoxObject Name="CheckBox36" Left="48.38" Top="194" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.RequiresOngoing"/>
+      <CheckBoxObject Name="CheckBox37" Left="48.38" Top="209.9" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasAMental6"/>
+      <CheckBoxObject Name="CheckBox38" Left="48.38" Top="239.25" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.IsNotReceiving"/>
+      <CheckBoxObject Name="CheckBox39" Left="48.38" Top="255.15" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.Meets"/>
+      <CheckBoxObject Name="CheckBox40" Left="48.38" Top="449.15" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasRecolated"/>
     </DataBand>
   </ReportPage>
 </Report>

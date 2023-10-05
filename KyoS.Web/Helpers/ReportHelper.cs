@@ -21272,7 +21272,16 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
-
+            dt.Columns.Add("HasAMental2", typeof(bool));
+            dt.Columns.Add("HasAMental6", typeof(bool));
+            dt.Columns.Add("HasRecolated", typeof(bool));
+            dt.Columns.Add("IsEnrolled", typeof(bool));
+            dt.Columns.Add("IsNotReceiving", typeof(bool));
+            dt.Columns.Add("Lacks", typeof(bool));
+            dt.Columns.Add("Meets", typeof(bool));
+            dt.Columns.Add("RequiresOngoing", typeof(bool));
+            dt.Columns.Add("RequiresServices", typeof(bool));         
+                        
             if (intakeAppendixJ != null)
             {
                 dt.Rows.Add(new object[]
@@ -21292,8 +21301,17 @@ namespace KyoS.Web.Helpers
                                             intakeAppendixJ.CreatedBy,
                                             intakeAppendixJ.CreatedOn,
                                             intakeAppendixJ.LastModifiedBy,
-                                            intakeAppendixJ.LastModifiedOn
-                                        });
+                                            intakeAppendixJ.LastModifiedOn,
+                                            intakeAppendixJ.HasAMental2,
+                                            intakeAppendixJ.HasAMental6,
+                                            intakeAppendixJ.HasRecolated,
+                                            intakeAppendixJ.IsEnrolled,
+                                            intakeAppendixJ.IsNotReceiving,
+                                            intakeAppendixJ.Lacks,
+                                            intakeAppendixJ.Meets,
+                                            intakeAppendixJ.RequiresOngoing,
+                                            intakeAppendixJ.RequiresServices
+            });
             }
             else
             {
@@ -21314,7 +21332,16 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,
-                                            new DateTime()
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false
                                        });
             }
 
