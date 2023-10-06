@@ -28,12 +28,15 @@
 
                             </th>
                             <th class="col-md-3">
-                                Name
+                                Client Name
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
+                            <th class="col-md-2">
+                                Facilitator Name
                             </th>
                             <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
                                 Identified Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -42,7 +45,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Review
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 MH Therapy
                             </th>
                         </tr>
@@ -178,6 +181,23 @@
                                     @Html.DisplayFor(modelItem => item.Mtp.Client.Name)
                                     |
                                     @Html.DisplayFor(modelItem => item.Mtp.Client.Code)
+                                </td>
+                                <td >
+                                    @if (item.Facilitator != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                    }
+                                    else
+                                    {
+                                        @if (item.Supervisor != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Supervisor.Name)
+                                        }
+                                        else
+                                        { 
+                                        <a> - </a>
+                                        }
+                                    }
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Mtp.Client.AdmisionDate)

@@ -292,10 +292,17 @@
                                         <a class="test" tabindex="-1" href="#">MTPs</a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-submenu">
-                                                <a class="test" tabindex="-1" href="#">MTPs / Reviews</a>
+                                                <a class="test" tabindex="-1" href="#">MTPs</a>
                                                 <ul class="dropdown-menu">
                                                     <li>@Html.ActionLink("Clients without MTP", "ClientsWithoutMTP", "Clients")</li>
                                                     <li>@Html.ActionLink("Pending MTP", "Pending", "MTPs")</li>
+                                                    <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a class="test" tabindex="-1" href="#">MTP Reviews</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>@Html.ActionLink("MTPR in edition", "MTPRinEditList", "MTPs")</li>
                                                     <li>@Html.ActionLink("Pending MTP Reviews", "PendingMtpReview", "MTPs")</li>
                                                     <li>@Html.ActionLink("All MTPs", "Index", "MTPs")</li>
                                                 </ul>
@@ -303,6 +310,7 @@
                                             <li class="dropdown-submenu">
                                                 <a class="test" tabindex="-1" href="#">Addendums</a>
                                                 <ul class="dropdown-menu">
+                                                    <li>@Html.ActionLink("Addendums in Edition", "AdendumInEdition", "MTPs")</li>
                                                     <li>@Html.ActionLink("Pending Addendums", "PendingAdendum", "MTPs")</li>
                                                     <li>@Html.ActionLink("All Addendums", "IndexAdendum", "MTPs")</li>
                                                 </ul>

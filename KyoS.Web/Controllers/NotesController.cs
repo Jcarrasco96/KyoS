@@ -5327,7 +5327,9 @@ namespace KyoS.Web.Controllers
                     Confused4 = (note_Activity.Count > 3) ? note_Activity[3].Confused : false,
                     Aggresive4 = (note_Activity.Count > 3) ? note_Activity[3].Aggresive : false,
                     Resistant4 = (note_Activity.Count > 3) ? note_Activity[3].Resistant : false,
-                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false
+                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
                 };
             }
             
@@ -5395,8 +5397,11 @@ namespace KyoS.Web.Controllers
                                                       .ThenInclude(wc => wc.Setting)
 
                                                       .Include(n => n.Workday_Cient)
-                                                      .ThenInclude(wc => wc.Facilitator)   
-                                                      
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Workday)
+
                                                       .Include(n => n.Objective)
                                                       .ThenInclude(o => o.Goal)
                                                       .ThenInclude(o => o.MTP)
@@ -5462,7 +5467,8 @@ namespace KyoS.Web.Controllers
                 Goal1 = (note.Objective == null) ? string.Empty : note.Objective.Goal.Number.ToString(),
                 Objetive1 = (note.Objective == null) ? string.Empty : note.Objective.Objetive,                
                 Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
-                MTPId = note.Objective.Goal.MTP.Id
+                MTPId = note.Objective.Goal.MTP.Id,
+                DateOfApprove = note.Workday_Cient.Workday.Date
             };           
 
             return View(individualNoteViewModel);
@@ -5525,6 +5531,9 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(wc => wc.Client)
                                                  .ThenInclude(c => c.Group)
                                                  .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Workday)
 
                                                  .Include(n => n.GroupNotes_Activities)
                                                  .ThenInclude(na => na.Activity)
@@ -5619,7 +5628,9 @@ namespace KyoS.Web.Controllers
                 AnswerClient2 = note_Activity[1].AnswerClient,
                 AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
                 Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty                
+                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+                
+                DateOfApprove = note.Workday_Cient.Workday.Date
             };           
 
             return View(noteViewModel);
@@ -5693,6 +5704,9 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(wc => wc.Client)
                                                  .ThenInclude(c => c.Group)
                                                  .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Workday)
 
                                                  .Include(n => n.GroupNotes2_Activities)
                                                  .ThenInclude(na => na.Activity)
@@ -5788,7 +5802,9 @@ namespace KyoS.Web.Controllers
                     Activity2 = note_Activity[1].Activity.Name,
                     AnswerClient2 = note_Activity[1].AnswerClient,
                     Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
-                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
                 };
                 return View(noteViewModel);
             }
@@ -5863,6 +5879,9 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(wc => wc.Client)
                                                   .ThenInclude(c => c.Clinic)
                                                   .ThenInclude(g => g.Setting)
+
+                                                  .Include(n => n.Workday_Cient)
+                                                  .ThenInclude(wc => wc.Workday)
 
                                                   .Include(n => n.GroupNotes2_Activities)
                                                   .ThenInclude(na => na.Activity)
@@ -5956,7 +5975,9 @@ namespace KyoS.Web.Controllers
                     AnswerClient1 = note_Activity[0].AnswerClient,
                     Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
-                    MTPId = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.MTP.Id : 0
+                    MTPId = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.MTP.Id : 0,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
 
                 };
                

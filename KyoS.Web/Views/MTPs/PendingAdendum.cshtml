@@ -165,13 +165,12 @@
                                                                 @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                                 {
                                                                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new { id = element.Id, origin = 1 }, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                                    <a asp-action="ApproveAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                                 }
                                                                 else
                                                                 {
                                                                     <a class="btn btn-warning disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                                    <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                                 }
+                                                                <a asp-action="ApproveAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
                                                             }
                                                             else
                                                             {
@@ -187,8 +186,8 @@
                                                                     }
                                                                 }
                                                                 else
-                                                                { 
-                                                                
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                 }
                                                             }
                                                         </td>

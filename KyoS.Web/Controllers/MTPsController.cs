@@ -2486,8 +2486,6 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexAdendum));
         }
 
-        [Authorize(Roles = "Supervisor")]
-       
         [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk")]
         public async Task<IActionResult> PendingAdendum(int idError = 0)
         {
@@ -4987,7 +4985,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Mtp)
                                                   .ThenInclude(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
-
+                                                  .Include(a => a.Facilitator)
+                                                  .Include(a => a.Supervisor)
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
@@ -5006,7 +5005,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Mtp)
                                                   .ThenInclude(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
-
+                                                  .Include(a => a.Facilitator)
+                                                  .Include(a => a.Supervisor)
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
@@ -5065,6 +5065,7 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToAdendumViewModel(Adendum);
                         model.Origin = origin;
+                        model.DateOfApprove = model.Dateidentified;
                         ViewData["Supervisor"] = user_logged.FullName;
                         return View(model);
                     }
@@ -5161,5 +5162,40 @@ namespace KyoS.Web.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id });
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> MTPRinEditList(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
+
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            if (clinic != null)
+            {
+                List<MTPReviewEntity> mtpr = await _context.MTPReviews
+                                                           
+                                                           .Include(m => m.Mtp)
+                                                           .ThenInclude(m => m.Goals)
+                                                           .ThenInclude(m => m.Objetives)
+                                                           .Include(m => m.Mtp)
+                                                           .ThenInclude(m => m.Client)
+                                                           .Where(m => m.Mtp.Client.Clinic.Id == clinic.Id
+                                                                    && m.Status == AdendumStatus.Edition)
+                                                           .OrderBy(m => m.Mtp.Client.Name)
+                                                           .ToListAsync();
+
+                return View(mtpr);
+            }
+            else
+                return View(null);
+        }
+
     }
 }
