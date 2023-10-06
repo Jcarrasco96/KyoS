@@ -1593,7 +1593,8 @@ namespace KyoS.Web.Helpers
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
                 ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2 ,
-                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature
+                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature,
+                DateTcmSignature = TcmServicePlanEntity.DateTcmSignature
             };
         }
 
@@ -1621,7 +1622,8 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
                                       .ToList(),
-                DateSupervisorSignature = model.DateSupervisorSignature
+                DateSupervisorSignature = model.DateSupervisorSignature,
+                DateTcmSignature = model.DateTcmSignature
                 
             };
         }
@@ -3576,7 +3578,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null,
+                DateOfApprove = model.DateOfApprove
             };
         }
 
@@ -3593,13 +3596,14 @@ namespace KyoS.Web.Helpers
                 Status = model.Status,
                 Unit = model.Unit,
                 IdMTP = model.Mtp.Id,
-                Facilitator = model.Facilitator,
+                Facilitator = model.Facilitator,  
                 Goals = model.Goals,
                 Mtp = model.Mtp,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                DateOfApprove = model.DateOfApprove
 
             };
             if (model.Facilitator != null)

@@ -48,5 +48,9 @@ namespace KyoS.Web.Data.Entities
         public AdendumStatus Status { get; set; }
 
         public IEnumerable<MessageEntity> Messages { get; set; }
+        
+        [DataType(DataType.Date)]
+
+        public DateTime DateOfApprove { get; set; }
     }
 }

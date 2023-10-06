@@ -55,5 +55,8 @@ namespace KyoS.Web.Data.Entities
         
         [DataType(DataType.Date)]
         public DateTime DateSupervisorSignature { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime DateTcmSignature { get; set; }
     }
 }

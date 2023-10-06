@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.AdendumViewModel
 @{
-    ViewData["Title"] = "Edit Addendum";
+    ViewData["Title"] = "Edit Addendum Read Only";
 }
 
 <!DOCTYPE html>
@@ -16,22 +16,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (Model.Origin == 0)
-                {
-                    @Html.ActionLink("Adendums", "IndexAdendum", "MTPs")
-                }
-                @if (Model.Origin == 1)
-                {
-                    @Html.ActionLink("Messages", "MessagesOfAddendums", "Messages")
-                }
-                @if (Model.Origin == 2)
-                {
-                    @Html.ActionLink("Adendums in Edition", "AdendumInEdition", "MTPs")
-                }
-                @if (Model.Origin == 3)
-                {
-                    @Html.ActionLink("Pending Adendums", "PendingAdendum", "MTPs")
-                }
+                @Html.ActionLink("Pending Adendums", "PendingAdendum", "MTPs")
             </li>
             <li class="active">Edit Addendum</li>
         </ul><!--.breadcrumb-->
@@ -40,7 +25,7 @@
     <h4>Edit Addendum</h4>
     <hr />
     <div class="row">
-        <form asp-action="EditAdendum" asp-route-id="@Model.Id" enctype="multipart/form-data" onsubmit="return false;" id="formEdit">
+        <form asp-action="ApproveAdendum" enctype="multipart/form-data" onsubmit="return false;" id="formEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="IdFacilitator" />
@@ -51,10 +36,11 @@
             <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="Id" />
             <partial name="_Adendums" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopup('@Url.Action("CreateGoalModal", "MTPs", new {id =  @Model.IdMTP, idAdendum = @Model.Id}, Context.Request.Scheme)','Create goal of addendum')" class="btn btn-success" title="Create Goal of this addendum"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
+                    <a onclick="showInPopup('@Url.Action("CreateGoalModal", "MTPs", new {id =  @Model.IdMTP, idAdendum = @Model.Id}, Context.Request.Scheme)','Create goal of addendum')" class="btn btn-success disabled" title="Create Goal of this addendum"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
                 </div>
                 <div class="col-md-12">
                     <div id="view-goals">
@@ -63,29 +49,22 @@
                 </div>
             </div>
             <br />
+            <div class="col-md-push-12">
+                <div class="col-md-12">
+                    <pre>
+        <strong>Facilitator' Name:      </strong> @Html.DisplayFor(modelItem => Model.Facilitator.Name)    <br />                                              
+        <strong>Date Signature Licensed </strong> <input asp-for="DateOfApprove">   
+        <strong>(@ViewData["Supervisor"])</strong> 
+        </pre>
+                </div>
+            </div>
             <div class="form-group col-md-12">
-                <input onclick="GenderVerification()" type="submit" value="Save All" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Approve" class="btn btn-primary" />
                 @if (User.IsInRole("Supervisor"))
                 {
                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new {id = @Model.Id, origin = 0}, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems">Review</a>
-                    <a asp-action="ApproveAdendum" asp-route-id="@Model.Id" class="btn btn-default" title="Approve Addendum">Approve</a>
                 }
-                @if (Model.Origin == 0)
-                {
-                    <a asp-action="IndexAdendum" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 1)
-                {
-                    <a asp-action="MessagesOfAddendums" asp-controller="Messages" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 2)
-                {
-                    <a asp-action="AdendumInEdition" class="btn btn-success">Back</a>
-                }
-                @if (Model.Origin == 3)
-                {
-                    <a asp-action="PendingAdendum" class="btn btn-success">Back</a>
-                }
+                <a asp-action="PendingAdendum" class="btn btn-success"> Back </a>
             </div>
         </form>
     </div>

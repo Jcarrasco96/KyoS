@@ -70,7 +70,8 @@
                                                     <th class="col-md-1" style="text-align:center">Unit</th>
                                                     <th class="col-md-2" style="text-align:center"> Frecuency</th>
                                                     <th class="col-md-1" style="text-align:center">Duration (month)</th>
-                                                    <th class="col-md-4" style="text-align:center">Problem Statement</th>
+                                                    <th class="col-md-3" style="text-align:center">Problem Statement</th>
+                                                    <th class="col-md-1" style="text-align:center">Status</th>
                                                     <th class="col-md-2"></th>
                                                 </tr>
                                                @foreach (var element in item.Mtp.AdendumList)
@@ -139,15 +140,56 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => element.Duration)</td>
                                                         <td align="left">@Html.DisplayFor(modelItem => element.ProblemStatement)</td>
                                                         <td align="center">
-                                                            @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending && User.IsInRole("Supervisor"))
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
                                                             {
-                                                                <a  class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new {id = element.Id, origin = 1}, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                                <a asp-action="ApproveAdendum" asp-route-id="@element.Id" asp-route-origin="1" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                <span class="label label-info">
+                                                                    Pending
+                                                                </span>
+                                                            }
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    Edition
+                                                                </span>
+                                                            }
+                                                            @if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Approved
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            @if (User.IsInRole("Supervisor"))
+                                                            {
+                                                                @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                {
+                                                                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddAddendumMessageEntity", "MTPs", new { id = element.Id, origin = 1 }, Context.Request.Scheme)','Add message to document creator')" title="Not approved document due to problems"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                    <a asp-action="ApproveAdendum" asp-route-id="@element.Id" class="btn btn-success" title="Approve Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="btn btn-warning disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                                    <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                <a class="btn btn-warning disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                                <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                @if (User.IsInRole("Facilitator"))
+                                                                {
+                                                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    {
+                                                                        <a asp-action="EditAdendum" asp-route-id="@element.Id" asp-route-origin="3" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-warning disabled" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                { 
+                                                                
+                                                                }
                                                             }
                                                         </td>
                                                     </tr>

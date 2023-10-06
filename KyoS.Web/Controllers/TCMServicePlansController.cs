@@ -339,7 +339,7 @@ namespace KyoS.Web.Controllers
                         Domain10 = assessment.RecommendedTransportation,
                         Domain11 = assessment.RecommendedLegalImmigration,
                         Domain12 = assessment.RecommendedOther,
-
+                        DateTcmSignature = tcmServicePlan.DateTcmSignature
                     };
 
                     ViewData["origin"] = origin;
@@ -2198,7 +2198,8 @@ namespace KyoS.Web.Controllers
                             Domain9 = assessment.RecommendedBasicNeed,
                             Domain10 = assessment.RecommendedTransportation,
                             Domain11 = assessment.RecommendedLegalImmigration,
-                            Domain12 = assessment.RecommendedOther
+                            Domain12 = assessment.RecommendedOther,
+                            DateTcmSignature = tcmServicePlan.DateTcmSignature
 
                         };
 
