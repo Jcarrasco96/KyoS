@@ -280,13 +280,26 @@ namespace KyoS.Web.Controllers
                             client.IdFacilitatorPSR = group.Facilitator.Id;
                            
                             _context.Update(client);
-
+                            //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
+                            List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.Service == ServiceType.PSR)
+                                                                                  .ToList();
+                            DateTime initialgoal = new DateTime();
+                            if (listObjetive.Count() > 0)
+                            {
+                                initialgoal = listObjetive.Min(n => n.DateOpened);
+                            }
+                            else
+                            {
+                                initialgoal = DateTime.Today;
+                            }
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
                             developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
                                                      .Where(w => (w.Date >= developed_date
+                                                               && w.Date >= initialgoal
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
@@ -529,13 +542,26 @@ namespace KyoS.Web.Controllers
                             client.IdFacilitatorPSR = group.Facilitator.Id;
                            
                             _context.Update(client);
-
+                            //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
+                            List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.Service == ServiceType.PSR)
+                                                                                  .ToList();
+                            DateTime initialgoal = new DateTime();
+                            if (listObjetive.Count() > 0)
+                            {
+                                initialgoal = listObjetive.Min(n => n.DateOpened);
+                            }
+                            else
+                            {
+                                initialgoal = DateTime.Today;
+                            }
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
                             developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
                                                      .Where(w => (w.Date >= developed_date
+                                                               && w.Date >= initialgoal
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.PSR))
                                                      .ToListAsync();
@@ -865,6 +891,20 @@ namespace KyoS.Web.Controllers
                          
                             _context.Update(client);
 
+                            //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
+                            List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.Service == ServiceType.Group)
+                                                                                  .ToList();
+                            DateTime initialgoal = new DateTime();
+                            if (listObjetive.Count() > 0)
+                            {
+                                initialgoal = listObjetive.Min(n => n.DateOpened);
+                            }
+                            else
+                            {
+                                initialgoal = DateTime.Today;
+                            }
+
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
                             developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
 
@@ -874,6 +914,7 @@ namespace KyoS.Web.Controllers
                                                      .ThenInclude(wc => wc.Client)
 
                                                      .Where(w => (w.Date >= developed_date
+                                                               && w.Date >= initialgoal
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();
@@ -1128,13 +1169,26 @@ namespace KyoS.Web.Controllers
                             client.IdFacilitatorGroup = group.Facilitator.Id;
 
                             _context.Update(client);
-
+                           //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
+                            List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.Service == ServiceType.Group)
+                                                                                  .ToList();
+                            DateTime initialgoal = new DateTime();
+                            if (listObjetive.Count() > 0)
+                            {
+                                initialgoal = listObjetive.Min(n => n.DateOpened);
+                            }
+                            else
+                            {
+                                initialgoal = DateTime.Today;
+                            }
                             //verifico que el cliente tenga la asistencia necesaria dada su fecha de desarrollo de notas
-                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;                            
+                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
                             workdays = await _context.Workdays
                                                      .Include(w => w.Workdays_Clients)
                                                      .ThenInclude(wc => wc.Client)
                                                      .Where(w => (w.Date >= developed_date
+                                                               && w.Date >= initialgoal
                                                                && w.Week.Clinic.Id == user_logged.Clinic.Id
                                                                && w.Service == Common.Enums.ServiceType.Group))
                                                      .ToListAsync();

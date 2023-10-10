@@ -2218,8 +2218,9 @@ namespace KyoS.Web.Controllers
         public IActionResult CreateAdendum(int id = 0)
         {
 
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             AdendumViewModel model = new AdendumViewModel();
 
@@ -2365,7 +2366,8 @@ namespace KyoS.Web.Controllers
 
                                                     .Include(a => a.Facilitator)
 
-                                                    .FirstOrDefault(a => a.Id == id);
+                                                    .FirstOrDefault(a => a.Id == id
+                                                                      && a.CreatedBy == user_logged.UserName);
                     if (Adendum == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -2439,7 +2441,18 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("MessagesOfAddendums", "Messages");
                     }
-                    return RedirectToAction("IndexAdendum", "MTPs");
+                    if (adendumViewModel.Origin == 2)
+                    {
+                        return RedirectToAction("AdendumInEdition", "MTPs");
+                    }
+                    if (adendumViewModel.Origin == 0)
+                    {
+                        return RedirectToAction("IndexAdendum", "MTPs");
+                    }
+                    if (adendumViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("PendingAdendum", "MTPs");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -2452,7 +2465,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
-        public async Task<IActionResult> FinishEditingAdendum(int id)
+        public async Task<IActionResult> FinishEditingAdendum(int id, int origin = 0)
         {
             AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
@@ -2468,28 +2481,10 @@ namespace KyoS.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(IndexAdendum));
-        }
-
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveAdendum(int id, int origin = 0)
-        {
-
-            AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
-
-
-            adendum.Status = AdendumStatus.Approved;
-            // adendum.DateOfApprove = DateTime.Now;
-            adendum.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
-            _context.Update(adendum);
-
-            await _context.SaveChangesAsync();
-
             if (origin == 1)
             {
-                return RedirectToAction(nameof(PendingAdendum));
+                return RedirectToAction(nameof(AdendumInEdition));
             }
-
             return RedirectToAction(nameof(IndexAdendum));
         }
 
@@ -2529,7 +2524,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Pending 
-                                                            && (a.Facilitator.Id == facilitator.Id))
+                                                            && (a.CreatedBy == user_logged.UserName))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -4992,7 +4987,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Mtp)
                                                   .ThenInclude(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
-
+                                                  .Include(a => a.Facilitator)
+                                                  .Include(a => a.Supervisor)
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
@@ -5000,7 +4996,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Edition
-                                                            && (a.Facilitator.Id == facilitator.Id))
+                                                            && (a.CreatedBy == user_logged.UserName))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -5011,7 +5007,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(a => a.Mtp)
                                                   .ThenInclude(a => a.Client)
                                                   .ThenInclude(a => a.Clinic)
-
+                                                  .Include(a => a.Facilitator)
+                                                  .Include(a => a.Supervisor)
                                                   .Include(a => a.Goals)
                                                   .ThenInclude(a => a.Objetives)
 
@@ -5028,6 +5025,179 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult ApproveAdendum(int id = 0, int origin = 0)
+        {
+            AdendumViewModel model;
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    AdendumEntity Adendum = _context.Adendums
+
+                                                    .Include(a => a.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                                    .Include(a => a.Goals)
+                                                    .ThenInclude(g => g.Objetives)
+
+                                                    .Include(a => a.Goals)
+                                                    .ThenInclude(g => g.MTP)
+
+                                                    .Include(a => a.Supervisor)
+
+                                                    .Include(a => a.Facilitator)
+
+                                                    .FirstOrDefault(a => a.Id == id);
+                    if (Adendum == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+
+                        model = _converterHelper.ToAdendumViewModel(Adendum);
+                        model.Origin = origin;
+                        model.DateOfApprove = model.Dateidentified;
+                        ViewData["Supervisor"] = user_logged.FullName;
+                        return View(model);
+                    }
+
+                }
+            }
+
+            model = new AdendumViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveAdendum(AdendumViewModel adendumViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+
+                AdendumEntity adendumEntity = await _converterHelper.ToAdendumEntity(adendumViewModel, false, user_logged.Id);
+
+                adendumEntity.Status = AdendumStatus.Approved;
+                adendumEntity.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+
+                _context.Adendums.Update(adendumEntity);
+                try
+                {
+                    List<MessageEntity> messages = adendumEntity.Messages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
+                    //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
+                    foreach (MessageEntity value in messages)
+                    {
+                        value.Status = MessageStatus.Read;
+                        value.DateRead = DateTime.Now;
+                        _context.Update(value);
+
+                        //I generate a notification to supervisor
+                        MessageEntity notification = new MessageEntity
+                        {
+                            Workday_Client = null,
+                            FarsForm = null,
+                            MTPReview = null,
+                            Addendum = adendumEntity,
+                            Discharge = null,
+                            Title = "Update on reviewed addendum",
+                            Text = $"The addendum of {adendumEntity.Mtp.Client.Name} that was created by {adendumEntity.CreatedBy} was rectified",
+                            From = value.To,
+                            To = value.From,
+                            DateCreated = DateTime.Now,
+                            Status = MessageStatus.NotRead,
+                            Notification = true
+                        };
+                        _context.Add(notification);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    if (adendumViewModel.Origin == 0)
+                    {
+                        return RedirectToAction("PendingAdendum", "MTPs");
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditAdendumReadOnly", adendumViewModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteAddendum(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            AdendumEntity addendum = await _context.Adendums
+                                                   .Include(n => n.Mtp)
+                                                   .ThenInclude(n => n.Client)
+                                                   .FirstOrDefaultAsync(t => t.Id == id);
+            if (addendum == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.Adendums.Remove(addendum);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> MTPRinEditList(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic == null)
+                return View(null);
+
+            ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+            if (clinic != null)
+            {
+                List<MTPReviewEntity> mtpr = await _context.MTPReviews
+                                                           
+                                                           .Include(m => m.Mtp)
+                                                           .ThenInclude(m => m.Goals)
+                                                           .ThenInclude(m => m.Objetives)
+                                                           .Include(m => m.Mtp)
+                                                           .ThenInclude(m => m.Client)
+                                                           .Where(m => m.Mtp.Client.Clinic.Id == clinic.Id
+                                                                    && m.Status == AdendumStatus.Edition)
+                                                           .OrderBy(m => m.Mtp.Client.Name)
+                                                           .ToListAsync();
+
+                return View(mtpr);
+            }
+            else
+                return View(null);
+        }
 
     }
 }

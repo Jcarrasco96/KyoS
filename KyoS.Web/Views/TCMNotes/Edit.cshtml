@@ -63,6 +63,9 @@
             <input type="hidden" asp-for="Status" />
             <input type="hidden" asp-for="IdCaseManager" />
             <input type="hidden" asp-for="ApprovedDate" />
+            <input type="hidden" asp-for="BilledDate" />
+            <input type="hidden" asp-for="PaymentDate" />
+            <input type="hidden" asp-for="BillDms" />
             @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
             {
                 <input type="hidden" asp-for="Sign" />

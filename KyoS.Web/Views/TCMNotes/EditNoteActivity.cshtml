@@ -15,7 +15,7 @@
         <input type="hidden" asp-for="EndTime" />
         @if (User.IsInRole("TCMSupervisor"))
         {
-            <input type="hidden" asp-for="IdSetting" />
+           
             <input type="hidden" asp-for="IdTCMDomain" />
             <input type="hidden" asp-for="IdTCMActivity" />
         }
@@ -55,15 +55,15 @@
                 <span asp-validation-for="Units" class="text-danger"></span>
             </div>
         </div>
+        <div>
+            <div class=" col-md-3 form-group">
+                <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
+                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control" ></select>
+                <span asp-validation-for="IdSetting" class="text-danger"></span>
+            </div>
+        </div>
         @if (User.IsInRole("TCMSupervisor"))
         {
-            <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control" disabled></select>
-                    <span asp-validation-for="IdSetting" class="text-danger"></span>
-                </div>
-            </div>
             <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
@@ -81,14 +81,7 @@
         }
         else
         {
-            <div>
-                <div class=" col-md-3 form-group">
-                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
-                    <span asp-validation-for="IdSetting" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
+           <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
                     <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>

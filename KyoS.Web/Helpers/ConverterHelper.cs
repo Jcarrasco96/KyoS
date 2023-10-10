@@ -1593,7 +1593,8 @@ namespace KyoS.Web.Helpers
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
                 ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2 ,
-                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature
+                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature,
+                DateTcmSignature = TcmServicePlanEntity.DateTcmSignature
             };
         }
 
@@ -1621,7 +1622,8 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
                                       .ToList(),
-                DateSupervisorSignature = model.DateSupervisorSignature
+                DateSupervisorSignature = model.DateSupervisorSignature,
+                DateTcmSignature = model.DateTcmSignature
                 
             };
         }
@@ -2680,7 +2682,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
 
-                AddressPhysician = model.Client.Doctor.Address,
+                AddressPhysician = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.Address,
                 AgeFirstTalked = model.AgeFirstTalked,
                 AgeFirstWalked = model.AgeFirstWalked,
                 AgeToiletTrained = model.AgeToiletTrained,
@@ -2708,7 +2710,7 @@ namespace KyoS.Web.Helpers
                 ChestPain = model.ChestPain,
                 ChronicCough = model.ChronicCough,
                 ChronicIndigestion = model.ChronicIndigestion,
-                City = model.Client.Doctor.City,
+                City = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.City,
                 Complications = model.Complications,
                 Complications_Explain = model.Complications_Explain,
                 Comprehending = model.Comprehending,
@@ -2792,7 +2794,7 @@ namespace KyoS.Web.Helpers
                 PerformingCertainMotions = model.PerformingCertainMotions,
                 Planned = model.Planned,
                 Poliomyelitis = model.Poliomyelitis,
-                PrimaryCarePhysician = model.Client.Doctor.Name,
+                PrimaryCarePhysician = (model.Client.Doctor == null) ? string.Empty: model.Client.Doctor.Name,
                 ProblemWithBedWetting = model.ProblemWithBedWetting,
                 Reading = model.Reading,
                 RheumaticFever = model.RheumaticFever,
@@ -2803,7 +2805,7 @@ namespace KyoS.Web.Helpers
                 ShortnessOfBreath = model.ShortnessOfBreath,
                 SkinTrouble = model.SkinTrouble,
                 Speaking = model.Speaking,
-                State = model.Client.Doctor.State,
+                State = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.State,
                 StomachPain = model.StomachPain,
                 Surgery = model.Surgery,
                 SwellingOfFeet = model.SwellingOfFeet,
@@ -2817,7 +2819,7 @@ namespace KyoS.Web.Helpers
                 WeightLoss = model.WeightLoss,
                 WhoopingCough = model.WhoopingCough,
                 WritingSentence = model.WritingSentence,
-                ZipCode = model.Client.Doctor.ZipCode,
+                ZipCode = (model.Client.Doctor == null)? string.Empty : model.Client.Doctor.ZipCode,
 
                 AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
                 DateOfLastBreastExam = model.DateOfLastBreastExam,
@@ -2828,7 +2830,7 @@ namespace KyoS.Web.Helpers
 
                 AdmissionedFor = model.AdmissionedFor,
                 InformationProvided = model.InformationProvided,
-                IdDoctor = model.Client.Doctor == null ? 0 : model.Client.Doctor.Id
+                IdDoctor = (model.Client.Doctor == null) ? 0 : model.Client.Doctor.Id
                 
             };
 
@@ -3576,7 +3578,8 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null,
+                DateOfApprove = model.DateOfApprove
             };
         }
 
@@ -3593,13 +3596,14 @@ namespace KyoS.Web.Helpers
                 Status = model.Status,
                 Unit = model.Unit,
                 IdMTP = model.Mtp.Id,
-                Facilitator = model.Facilitator,
+                Facilitator = model.Facilitator,  
                 Goals = model.Goals,
                 Mtp = model.Mtp,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                DateOfApprove = model.DateOfApprove
 
             };
             if (model.Facilitator != null)
@@ -5956,7 +5960,10 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMNote.Id == model.Id)
                                       .ToList(),
-                Sign = model.Sign
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate
 
             };
         }
@@ -5982,7 +5989,10 @@ namespace KyoS.Web.Helpers
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
                 IdTCMNote = model.Id,
-                Sign = model.Sign
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate
 
             };
 

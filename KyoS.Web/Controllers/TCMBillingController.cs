@@ -57,14 +57,14 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
             AddProgressNoteViewModel model = new AddProgressNoteViewModel();
-
+            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
             if (User.IsInRole("CaseManager"))
             {
                 model = new AddProgressNoteViewModel
                 {
-                    Date = (date != null) ? Convert.ToDateTime(date) : new DateTime(),
+                    Date = datetemp,
                     IdClient = 0,
-                    Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName)
+                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp)
                 };
             }            
 
@@ -331,7 +331,10 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
-                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) && t.DateOfService <= Convert.ToDateTime(date[1])));
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -364,7 +367,10 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
-                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) && t.ApprovedDate <= Convert.ToDateTime(date[1])));
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) 
+                                                                            && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -410,7 +416,9 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate == null));
+                                                                            && t.BilledDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -446,7 +454,9 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate == null));
+                                                                            && t.BilledDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -491,7 +501,9 @@ namespace KyoS.Web.Controllers
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
-                                                                            && t.BilledDate != null));
+                                                                            && t.BilledDate != null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -526,7 +538,9 @@ namespace KyoS.Web.Controllers
 
                                                                       .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                                 && t.ApprovedDate <= Convert.ToDateTime(date[1])
-                                                                                && t.BilledDate != null));
+                                                                                && t.BilledDate != null
+                                                                                && t.TCMNoteActivity.Count() > 0
+                                                                                && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -574,7 +588,9 @@ namespace KyoS.Web.Controllers
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
-                                                                            && t.PaymentDate == null));
+                                                                            && t.PaymentDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (idCaseManager != 0)
                             query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
@@ -610,7 +626,9 @@ namespace KyoS.Web.Controllers
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
-                                                                            && t.PaymentDate == null));
+                                                                            && t.PaymentDate == null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved));
 
                         if (User.IsInRole("CaseManager"))
                         {
@@ -1189,7 +1207,8 @@ namespace KyoS.Web.Controllers
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
 
-                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null).Count() > 0)
+                                     .Where(t => t.TCMNote.Where(n => n.BilledDate == null 
+                                                                   && n.Status == Common.Enums.NoteStatus.Approved).Count() > 0)
                                      .ToListAsync();
 
             }
@@ -1209,6 +1228,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(t => t.TCMNoteActivity)
 
                                     .Where(t => t.TCMNote.Where(n => n.PaymentDate == null
+                                                                  && n.Status == Common.Enums.NoteStatus.Approved
                                                                   && n.BilledDate != null).Count() > 0)
                                     .ToListAsync();
 
@@ -1241,31 +1261,25 @@ namespace KyoS.Web.Controllers
             {
                 if (billed == 1)
                 {
-                    foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate == null && n.TCMNoteActivity.Count() > 0 && n.Status == Common.Enums.NoteStatus.Approved))
                     {
-                        foreach (var activity in note.TCMNoteActivity)
-                        {
-                            minutes = activity.Minutes;
-                            value = minutes / 15;
-                            mod = minutes % 15;
-                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                            services ++;
-                        }
+                        minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        services += note.TCMNoteActivity.Count();
                         notes++;
                     }
                 }
                 if (billed == 2)
                 {
-                    foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                    foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null && n.TCMNoteActivity.Count() > 0 && n.Status == Common.Enums.NoteStatus.Approved))
                     {
-                        foreach (var activity in note.TCMNoteActivity)
-                        {
-                            minutes = activity.Minutes;
-                            value = minutes / 15;
-                            mod = minutes % 15;
-                            totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                            services++;
-                        }
+                        minutes = note.TCMNoteActivity.Sum(m => m.Minutes);
+                        value = minutes / 15;
+                        mod = minutes % 15;
+                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
+                        services += note.TCMNoteActivity.Count();
                         notes++;
                     }
                 }

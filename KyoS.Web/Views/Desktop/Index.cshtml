@@ -422,8 +422,8 @@
                 @if (ViewBag.AddemdunEdition == 0)
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendums<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
-                        <span class="message-counter-cero">@ViewBag.MTPReviewEdition</span>
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Addendums<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
+                        <span class="message-counter-cero">@ViewBag.AddemdunEdition</span>
                     </div>
                 }
                 else
@@ -431,7 +431,7 @@
                     <a style="text-decoration: none;" asp-controller="MTPs" asp-action="AdendumInEdition" role="button">
                         <div class="thumbnail list-group-item list-group-item-warning">
                             <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Addendums<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in Edit</h4>
-                            <span class="message-counter-warning">@ViewBag.MTPReviewEdition</span>
+                            <span class="message-counter-warning">@ViewBag.AddemdunEdition</span>
                         </div>
                     </a>
                 }
@@ -441,7 +441,7 @@
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
-                        <span class="message-counter-cero">@ViewBag.MTPReviewPending</span>
+                        <span class="message-counter-cero">@ViewBag.AddemdunPending</span>
                     </div>
                 }
                 else
@@ -449,7 +449,7 @@
                     <a style="text-decoration: none;" asp-controller="MTPs" asp-action="PendingAdendum" role="button">
                         <div class="thumbnail list-group-item list-group-item-info">
                             <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addendums</h4>
-                            <span class="message-counter-info">@ViewBag.MTPReviewPending</span>
+                            <span class="message-counter-info">@ViewBag.AddemdunPending</span>
                         </div>
                     </a>
                 }

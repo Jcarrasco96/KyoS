@@ -45,12 +45,12 @@
         <pre>
         @if (Model.TcmClient.Client.LegalGuardian.Name != "")
         {
-        <strong>Person served signature date</strong>    <input asp-for="DateSignatureLegalGuardianOrClient" disabled>
+        <strong>Person served signature date</strong>    <input asp-for="DateSignatureLegalGuardianOrClient" >
         <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
         }
         else
         { 
-        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardianOrClient" disabled>
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardianOrClient" >
         <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>
         }
 
@@ -62,7 +62,7 @@
         { 
         <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
         }
-        <strong>Employee signature date</strong>                   <input asp-for="DateSignatureEmployee">
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
         <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
     </div>
@@ -108,7 +108,7 @@ else
         { 
         <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
         }
-        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+        <strong>Employee signature date</strong>     <input asp-for="DateSignatureEmployee" disabled>
         <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
     </div>

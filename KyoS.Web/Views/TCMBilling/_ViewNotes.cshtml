@@ -42,12 +42,9 @@
                     {
                         @foreach (var item in Model.OrderBy(m => m.Client.Name))
                         {
-                            var @valor = (@item.TCMNote.Where(b => b.BilledDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) / 15);
-                            var @residuo = (@item.TCMNote.Where(b => b.BilledDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) % 15);
-                            var @valorAumentado = valor + 1;
                             var @unit = 0;
-
-                            foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
+                           
+                            /*foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
                             {
                                 foreach (var activity in note.TCMNoteActivity)
                                 {
@@ -63,7 +60,7 @@
                                         unit = unit + valor;
                                     }
                                 }
-                            }
+                            }*/
 
                             <tr>
                                 <td>
@@ -90,11 +87,21 @@
                                             </tr>
                                             @foreach (var product in item.TCMNote.Where(n => n.BilledDate == null))
                                             {
-                                                var @valor1 = 0;
-                                                var @residuo1 = 0;
-                                                var @valorAumentado1 = 0;
+                                                var @valor1 = product.TCMNoteActivity.Sum(m => m.Minutes) / 15;
+                                                var @residuo1 = product.TCMNoteActivity.Sum(m => m.Minutes) % 15;
+                                                var @valorAumentado1 = valor1 + 1;
                                                 var @unit1 = 0;
-                                                foreach (var activity in product.TCMNoteActivity)
+                                                if(@residuo1 > 7)
+                                                {
+                                                    unit1 = valorAumentado1;
+                                                    unit += valorAumentado1;
+                                                }
+                                                else
+                                                {
+                                                    unit1 = valor1;
+                                                    unit += valor1;
+                                                }
+                                                /*foreach (var activity in product.TCMNoteActivity)
                                                 {
                                                     valor1 = (activity.Minutes) / 15;
                                                     residuo1 = (activity.Minutes) % 15;
@@ -107,7 +114,7 @@
                                                     {
                                                         unit1 = unit1 + valor1;
                                                     }
-                                                }
+                                                }*/
 
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
@@ -200,12 +207,8 @@
                     {
                         @foreach (var item in Model.OrderBy(m => m.Client.Name))
                         {
-                            var @valor = (@item.TCMNote.Where(b => b.BilledDate != null && b.PaymentDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) / 15);
-                            var @residuo = (@item.TCMNote.Where(b => b.BilledDate != null && b.PaymentDate == null).Sum(n => n.TCMNoteActivity.Sum(a => a.Minutes)) % 15);
-                            var @valorAumentado = valor + 1;
                             var @unit = 0;
-
-                            foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                            /*foreach (var note in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
                             {
                                 foreach (var activity in note.TCMNoteActivity)
                                 {
@@ -221,7 +224,7 @@
                                         unit = unit + valor;
                                     }
                                 }
-                            }
+                            }*/
 
                             <tr>
                                 <td>
@@ -248,11 +251,21 @@
                                             </tr>
                                             @foreach (var product in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
                                             {
-                                                var @valor1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) / 15;
-                                                var @residuo1 = (product.TCMNoteActivity.Sum(a => a.Minutes)) % 15;
-                                                var @valorAumentado1 = valor1 + 1;
+                                                var @valor1 = product.TCMNoteActivity.Sum(a => a.Minutes) / 15;
+                                                var @residuo1 = product.TCMNoteActivity.Sum(a => a.Minutes) % 15;
+                                                var @valorAumentado1 = @valor1 + 1;
                                                 var @unit1 = 0;
-                                                foreach (var activity in product.TCMNoteActivity)
+                                                if (@residuo1 > 7)
+                                                {
+                                                    unit1 = valorAumentado1;
+                                                    unit += valorAumentado1;
+                                                }
+                                                else
+                                                {
+                                                    unit1 = valor1;
+                                                    unit += valor1;
+                                                }
+                                                /*foreach (var activity in product.TCMNoteActivity)
                                                 {
                                                     valor1 = (activity.Minutes) / 15;
                                                     residuo1 = (activity.Minutes) % 15;
@@ -265,7 +278,7 @@
                                                     {
                                                         unit1 = unit1 + valor1;
                                                     }
-                                                }
+                                                }*/
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td>@Html.DisplayFor(modelItem => product.CodeBill)</td>
