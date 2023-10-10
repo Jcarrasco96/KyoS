@@ -2682,7 +2682,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
 
-                AddressPhysician = model.Client.Doctor.Address,
+                AddressPhysician = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.Address,
                 AgeFirstTalked = model.AgeFirstTalked,
                 AgeFirstWalked = model.AgeFirstWalked,
                 AgeToiletTrained = model.AgeToiletTrained,
@@ -2710,7 +2710,7 @@ namespace KyoS.Web.Helpers
                 ChestPain = model.ChestPain,
                 ChronicCough = model.ChronicCough,
                 ChronicIndigestion = model.ChronicIndigestion,
-                City = model.Client.Doctor.City,
+                City = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.City,
                 Complications = model.Complications,
                 Complications_Explain = model.Complications_Explain,
                 Comprehending = model.Comprehending,
@@ -2794,7 +2794,7 @@ namespace KyoS.Web.Helpers
                 PerformingCertainMotions = model.PerformingCertainMotions,
                 Planned = model.Planned,
                 Poliomyelitis = model.Poliomyelitis,
-                PrimaryCarePhysician = model.Client.Doctor.Name,
+                PrimaryCarePhysician = (model.Client.Doctor == null) ? string.Empty: model.Client.Doctor.Name,
                 ProblemWithBedWetting = model.ProblemWithBedWetting,
                 Reading = model.Reading,
                 RheumaticFever = model.RheumaticFever,
@@ -2805,7 +2805,7 @@ namespace KyoS.Web.Helpers
                 ShortnessOfBreath = model.ShortnessOfBreath,
                 SkinTrouble = model.SkinTrouble,
                 Speaking = model.Speaking,
-                State = model.Client.Doctor.State,
+                State = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.State,
                 StomachPain = model.StomachPain,
                 Surgery = model.Surgery,
                 SwellingOfFeet = model.SwellingOfFeet,
@@ -2819,7 +2819,7 @@ namespace KyoS.Web.Helpers
                 WeightLoss = model.WeightLoss,
                 WhoopingCough = model.WhoopingCough,
                 WritingSentence = model.WritingSentence,
-                ZipCode = model.Client.Doctor.ZipCode,
+                ZipCode = (model.Client.Doctor == null)? string.Empty : model.Client.Doctor.ZipCode,
 
                 AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
                 DateOfLastBreastExam = model.DateOfLastBreastExam,
@@ -2830,7 +2830,7 @@ namespace KyoS.Web.Helpers
 
                 AdmissionedFor = model.AdmissionedFor,
                 InformationProvided = model.InformationProvided,
-                IdDoctor = model.Client.Doctor == null ? 0 : model.Client.Doctor.Id
+                IdDoctor = (model.Client.Doctor == null) ? 0 : model.Client.Doctor.Id
                 
             };
 
