@@ -2218,8 +2218,9 @@ namespace KyoS.Web.Controllers
         public IActionResult CreateAdendum(int id = 0)
         {
 
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             AdendumViewModel model = new AdendumViewModel();
 
@@ -2365,7 +2366,8 @@ namespace KyoS.Web.Controllers
 
                                                     .Include(a => a.Facilitator)
 
-                                                    .FirstOrDefault(a => a.Id == id);
+                                                    .FirstOrDefault(a => a.Id == id
+                                                                      && a.CreatedBy == user_logged.UserName);
                     if (Adendum == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -2522,7 +2524,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Pending 
-                                                            && (a.Facilitator.Id == facilitator.Id))
+                                                            && (a.CreatedBy == user_logged.UserName))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }
@@ -4994,7 +4996,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Where(a => (a.Mtp.Client.Clinic.Id == clinic.Id)
                                                             && a.Status == AdendumStatus.Edition
-                                                            && (a.Facilitator.Id == facilitator.Id))
+                                                            && (a.CreatedBy == user_logged.UserName))
                                                   .OrderBy(a => a.Mtp.Client.Clinic.Name).ToListAsync());
 
                     }

@@ -176,7 +176,7 @@
                                                             {
                                                                 @if (User.IsInRole("Facilitator"))
                                                                 {
-                                                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && @element.Status == KyoS.Common.Enums.AdendumStatus.Pending && User.Identity.Name == item.CreatedBy)
                                                                     {
                                                                         <a asp-action="EditAdendum" asp-route-id="@element.Id" asp-route-origin="3" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                     }
