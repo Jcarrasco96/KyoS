@@ -14900,7 +14900,11 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Address", typeof(string));
             dt.Columns.Add("Telephone", typeof(string));
-            dt.Columns.Add("Email", typeof(string));            
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("FaxNumber", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));            
 
             if (psychiatrist != null)
             {
@@ -14914,7 +14918,11 @@ namespace KyoS.Web.Helpers
                                             psychiatrist.Name,
                                             psychiatrist.Address,
                                             psychiatrist.Telephone,
-                                            psychiatrist.Email
+                                            psychiatrist.Email,
+                                            psychiatrist.City,
+                                            psychiatrist.FaxNumber,
+                                            psychiatrist.State,
+                                            psychiatrist.ZipCode
                                             });
             }
             else
@@ -14929,7 +14937,11 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             string.Empty,
-                                            string.Empty                                            
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty
                                             });
             }
 
@@ -15011,6 +15023,10 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Address", typeof(string));
             dt.Columns.Add("Telephone", typeof(string));
             dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("FaxNumber", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));
 
             if (doctor != null)
             {
@@ -15024,7 +15040,11 @@ namespace KyoS.Web.Helpers
                                             doctor.Name,
                                             doctor.Address,
                                             doctor.Telephone,
-                                            doctor.Email
+                                            doctor.Email,
+                                            doctor.City,
+                                            doctor.FaxNumber,
+                                            doctor.State,
+                                            doctor.ZipCode
             });
             }
             else
@@ -15036,6 +15056,10 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             string.Empty,
                                             new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty,
                                             string.Empty,
@@ -21158,6 +21182,1476 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeAssessmentDS(TCMAssessmentEntity intakeAssessment)
+        {
+           DataTable dt = new DataTable
+           {
+                TableName = "TCMAssessment"
+           };
+
+           // Create columns
+           dt.Columns.Add("Id", typeof(int));
+           dt.Columns.Add("TcmClient_FK", typeof(int));
+           dt.Columns.Add("DateAssessment", typeof(DateTime));
+           dt.Columns.Add("ClientInput", typeof(bool));
+           dt.Columns.Add("Family", typeof(bool));
+           dt.Columns.Add("Referring", typeof(bool));
+           dt.Columns.Add("School", typeof(bool));
+           dt.Columns.Add("Treating", typeof(bool));
+           dt.Columns.Add("Caregiver", typeof(bool));           
+           dt.Columns.Add("Review", typeof(bool));
+           dt.Columns.Add("Other", typeof(bool));
+           dt.Columns.Add("OtherExplain", typeof(string));
+           dt.Columns.Add("PresentingProblems", typeof(string));
+           dt.Columns.Add("DateOfOnSetPresentingProblem", typeof(DateTime));
+           dt.Columns.Add("PresentingProblemPrevious", typeof(bool));
+           dt.Columns.Add("ChildMother", typeof(string));
+           dt.Columns.Add("ChildFather", typeof(string));
+           dt.Columns.Add("Married", typeof(bool));
+           dt.Columns.Add("Divorced", typeof(bool));
+           dt.Columns.Add("Separated", typeof(bool));
+           dt.Columns.Add("NeverMarried", typeof(bool));
+           dt.Columns.Add("AreChild", typeof(bool));
+           dt.Columns.Add("AreChildName", typeof(string));
+           dt.Columns.Add("AreChildPhone", typeof(string));
+           dt.Columns.Add("AreChildAddress", typeof(string));
+           dt.Columns.Add("AreChildCity", typeof(string));
+           dt.Columns.Add("MayWe", typeof(bool));
+           dt.Columns.Add("HowDoesByFollowing", typeof(bool));
+           dt.Columns.Add("HowDoesPill", typeof(bool));
+           dt.Columns.Add("HowDoesFamily", typeof(bool));
+           dt.Columns.Add("HowDoesCalendar", typeof(bool));
+           dt.Columns.Add("HowDoesElectronic", typeof(bool));
+           dt.Columns.Add("HowDoesRNHHA", typeof(bool));        
+           dt.Columns.Add("HowDoesKeeping", typeof(bool));
+           dt.Columns.Add("HowDoesDaily", typeof(bool));
+           dt.Columns.Add("HowDoesOther", typeof(bool));
+           dt.Columns.Add("HowDoesOtherExplain", typeof(string));
+           dt.Columns.Add("HowWeelWithNo", typeof(bool));
+           dt.Columns.Add("HowWeelWithALot", typeof(bool));
+           dt.Columns.Add("HowWeelWithSome", typeof(bool));
+           dt.Columns.Add("HowWeelEnable", typeof(bool));
+           dt.Columns.Add("HasTheClient", typeof(bool));
+           dt.Columns.Add("WhatPharmacy", typeof(string));
+           dt.Columns.Add("PharmacyPhone", typeof(string));
+           dt.Columns.Add("AnyOther", typeof(string));
+           dt.Columns.Add("Approved", typeof(int));
+           dt.Columns.Add("CreatedBy", typeof(string));
+           dt.Columns.Add("CreatedOn", typeof(DateTime));
+           dt.Columns.Add("LastModifiedBy", typeof(string));
+           dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+           dt.Columns.Add("IsClientCurrently", typeof(bool));
+           dt.Columns.Add("LegalDecisionAdLitem", typeof(bool));
+           dt.Columns.Add("LegalDecisionAddress", typeof(string));
+           dt.Columns.Add("LegalDecisionAttomey", typeof(bool));
+           dt.Columns.Add("LegalDecisionCityStateZip", typeof(string));
+           dt.Columns.Add("LegalDecisionLegal", typeof(bool));
+           dt.Columns.Add("LegalDecisionName", typeof(string));
+           dt.Columns.Add("LegalDecisionNone", typeof(bool));
+           dt.Columns.Add("LegalDecisionOther", typeof(bool));
+           dt.Columns.Add("LegalDecisionOtherExplain", typeof(string));
+           dt.Columns.Add("LegalDecisionParent", typeof(bool));
+           dt.Columns.Add("LegalDecisionPhone", typeof(string));
+           dt.Columns.Add("NeedOfSpecial", typeof(bool));
+           dt.Columns.Add("NeedOfSpecialSpecify", typeof(string));
+           dt.Columns.Add("TypeOfAssessmentAnnual", typeof(bool));
+           dt.Columns.Add("TypeOfAssessmentInitial", typeof(bool));
+           dt.Columns.Add("TypeOfAssessmentOther", typeof(bool));
+           dt.Columns.Add("TypeOfAssessmentOtherExplain", typeof(string));
+           dt.Columns.Add("TypeOfAssessmentSignificant", typeof(bool));
+           dt.Columns.Add("AbuseViolence", typeof(bool));
+           dt.Columns.Add("Allergy", typeof(bool));
+           dt.Columns.Add("AllergySpecify", typeof(string));
+           dt.Columns.Add("AreAllImmunization", typeof(bool));
+           dt.Columns.Add("AreAllImmunizationExplain", typeof(string));
+           dt.Columns.Add("AreYouPhysician", typeof(bool));
+           dt.Columns.Add("AreYouPhysicianSpecify", typeof(string));
+           dt.Columns.Add("DateMostRecent", typeof(string));
+           dt.Columns.Add("DescribeAnyOther", typeof(string));
+           dt.Columns.Add("DescribeAnyRisk", typeof(string));
+           dt.Columns.Add("DoesAggressiveness", typeof(bool));
+           dt.Columns.Add("DoesAnxiety", typeof(bool));
+           dt.Columns.Add("DoesDelusions", typeof(bool));
+           dt.Columns.Add("DoesDepression", typeof(bool));
+           dt.Columns.Add("DoesFearfulness", typeof(bool));
+           dt.Columns.Add("DoesHallucinations", typeof(bool));
+           dt.Columns.Add("DoesHelplessness", typeof(bool));
+           dt.Columns.Add("DoesHopelessness", typeof(bool));
+           dt.Columns.Add("DoesHyperactivity", typeof(bool));
+           dt.Columns.Add("DoesImpulsivity", typeof(bool));
+           dt.Columns.Add("DoesIrritability", typeof(bool));
+           dt.Columns.Add("DoesLoss", typeof(bool));
+           dt.Columns.Add("DoesLow", typeof(bool));
+           dt.Columns.Add("DoesMood", typeof(bool));
+           dt.Columns.Add("DoesNegative", typeof(bool));
+           dt.Columns.Add("DoesNervousness", typeof(bool));
+           dt.Columns.Add("DoesObsessive", typeof(bool));
+           dt.Columns.Add("DoesPanic", typeof(bool));
+           dt.Columns.Add("DoesParanoia", typeof(bool));
+           dt.Columns.Add("DoesPoor", typeof(bool));
+           dt.Columns.Add("DoesSadness", typeof(bool));
+           dt.Columns.Add("DoesSelfNeglect", typeof(bool));
+           dt.Columns.Add("DoesSheUnderstand", typeof(bool));
+           dt.Columns.Add("DoesSleep", typeof(bool));
+           dt.Columns.Add("DoesTheClientFeel", typeof(bool));
+           dt.Columns.Add("DoesWithdrawal", typeof(bool));
+           dt.Columns.Add("HasClientUndergone", typeof(bool));
+           dt.Columns.Add("HasDifficultySeeingLevel", typeof(bool));
+           dt.Columns.Add("HasDifficultySeeingObjetive", typeof(bool));
+           dt.Columns.Add("HasNoImpairment", typeof(bool));
+           dt.Columns.Add("HasNoUsefull", typeof(bool));
+           dt.Columns.Add("HaveYouEverBeenToAny", typeof(bool));
+           dt.Columns.Add("HaveYouEverUsedAlcohol", typeof(bool));
+           dt.Columns.Add("HearingDifficulty", typeof(bool));
+           dt.Columns.Add("HearingImpairment", typeof(bool));
+           dt.Columns.Add("HearingNotDetermined", typeof(bool));
+           dt.Columns.Add("Hears", typeof(bool));
+           dt.Columns.Add("Homicidal", typeof(bool));
+           dt.Columns.Add("HowActive", typeof(int));
+           dt.Columns.Add("HowManyTimes", typeof(string));
+           dt.Columns.Add("IsClientPregnancy", typeof(int));
+           dt.Columns.Add("IsSheReceiving", typeof(bool));
+           dt.Columns.Add("Issues", typeof(string));
+           dt.Columns.Add("MentalHealth", typeof(string));
+           dt.Columns.Add("NoHearing", typeof(bool));
+           dt.Columns.Add("NoUseful", typeof(bool));
+           dt.Columns.Add("Outcome", typeof(string));
+           dt.Columns.Add("Provider", typeof(string));
+           dt.Columns.Add("Suicidal", typeof(bool));
+           dt.Columns.Add("VisionImpairment", typeof(bool));
+           dt.Columns.Add("VisionNotDetermined", typeof(bool));
+           dt.Columns.Add("WhenWas", typeof(string));
+           dt.Columns.Add("AHomeVisit", typeof(bool));
+           dt.Columns.Add("AHomeVisitOn", typeof(string));
+           dt.Columns.Add("AcademicEelementary", typeof(bool));
+           dt.Columns.Add("AcademicHigh", typeof(bool));
+           dt.Columns.Add("AcademicMiddle", typeof(bool));
+           dt.Columns.Add("AcademicPreSchool", typeof(bool));
+           dt.Columns.Add("AdditionalInformation", typeof(string));
+           dt.Columns.Add("AdditionalInformationMigration", typeof(string));
+           dt.Columns.Add("Appliances", typeof(bool));
+           dt.Columns.Add("AttendanceEelementary", typeof(bool));
+           dt.Columns.Add("AttendanceHigh", typeof(bool));
+           dt.Columns.Add("AttendanceMiddle", typeof(bool));
+           dt.Columns.Add("AttendancePreSchool", typeof(bool));
+           dt.Columns.Add("BathingAssistive", typeof(bool));
+           dt.Columns.Add("BathingIndependent", typeof(bool));
+           dt.Columns.Add("BathingPhysical", typeof(bool));
+           dt.Columns.Add("BathingSupervision", typeof(bool));
+           dt.Columns.Add("BathingTotal", typeof(bool));
+           dt.Columns.Add("Bathtub", typeof(bool));
+           dt.Columns.Add("BehaviorEelementary", typeof(bool));
+           dt.Columns.Add("BehaviorHigh", typeof(bool));
+           dt.Columns.Add("BehaviorMiddle", typeof(bool));
+           dt.Columns.Add("BehaviorPreSchool", typeof(bool));
+           dt.Columns.Add("Briefly", typeof(string));
+           dt.Columns.Add("CaseManagerWas", typeof(bool));
+           dt.Columns.Add("CaseManagerWasDueTo", typeof(string));
+           dt.Columns.Add("Citizen", typeof(bool));
+           dt.Columns.Add("ColonCancer", typeof(string));
+           dt.Columns.Add("CongredatedHowOften", typeof(string));
+           dt.Columns.Add("CongredatedProvider", typeof(string));
+           dt.Columns.Add("CongredatedReceive", typeof(bool));
+           dt.Columns.Add("ContinueToLive", typeof(bool));
+           dt.Columns.Add("ContinueToLiveOnly", typeof(bool));
+           dt.Columns.Add("CookingAssistive", typeof(bool));
+           dt.Columns.Add("CookingIndependent", typeof(bool));
+           dt.Columns.Add("CookingPhysical", typeof(bool));
+           dt.Columns.Add("CookingSupervision", typeof(bool));
+           dt.Columns.Add("CookingTotal", typeof(bool));
+           dt.Columns.Add("CountryOfBirth", typeof(string));
+           dt.Columns.Add("CurrentEmployer", typeof(string));
+           dt.Columns.Add("DentalExam", typeof(string));
+           dt.Columns.Add("DescribeAnySchool", typeof(string));
+           dt.Columns.Add("DescribeClientCultural", typeof(string));
+           dt.Columns.Add("DescribeClientEducation", typeof(string));
+           dt.Columns.Add("DescribeClientLiving", typeof(string));
+           dt.Columns.Add("DescribeClientRelationship", typeof(string));
+           dt.Columns.Add("DescribeNeighborhood", typeof(string));
+           dt.Columns.Add("DescribeOtherNeedConcerns", typeof(string));
+           dt.Columns.Add("DoesClientBasicNeed", typeof(string));
+           dt.Columns.Add("DoesClientCurrently", typeof(bool));
+           dt.Columns.Add("DoesClientCurrentlyExplain", typeof(string));
+           dt.Columns.Add("DoesClientFeel", typeof(bool));
+           dt.Columns.Add("DoesClientFeelExplain", typeof(string));
+           dt.Columns.Add("DoesClientNeedAssistance", typeof(bool));
+           dt.Columns.Add("DoesClientNeedAssistanceEducational", typeof(bool));
+           dt.Columns.Add("DoesClientNeedAssistanceEducationalExplain", typeof(string));
+           dt.Columns.Add("DoesClientNeedAssistanceExplain", typeof(string));
+           dt.Columns.Add("DoesNotKnow", typeof(bool));
+           dt.Columns.Add("DoingAssistive", typeof(bool));
+           dt.Columns.Add("DoingIndependent", typeof(bool));
+           dt.Columns.Add("DoingPhysical", typeof(bool));
+           dt.Columns.Add("DoingSupervision", typeof(bool));
+           dt.Columns.Add("DoingTotal", typeof(bool));
+           dt.Columns.Add("DressingAssistive", typeof(bool));
+           dt.Columns.Add("DressingIndependent", typeof(bool));
+           dt.Columns.Add("DressingPhysical", typeof(bool));
+           dt.Columns.Add("DressingSupervision", typeof(bool));
+           dt.Columns.Add("DressingTotal", typeof(bool));
+           dt.Columns.Add("Drives", typeof(bool));
+           dt.Columns.Add("Electrical", typeof(bool));
+           dt.Columns.Add("EmployerAddress", typeof(string));
+           dt.Columns.Add("EmployerCityState", typeof(string));
+           dt.Columns.Add("EmployerContactPerson", typeof(string));
+           dt.Columns.Add("EmployerPhone", typeof(string));
+           dt.Columns.Add("EmploymentStatus", typeof(int));
+           dt.Columns.Add("ExcessiveCluter", typeof(bool));
+           dt.Columns.Add("FailToEelementary", typeof(bool));
+           dt.Columns.Add("FailToHigh", typeof(bool));
+           dt.Columns.Add("FailToMiddle", typeof(bool));
+           dt.Columns.Add("FailToPreSchool", typeof(bool));
+           dt.Columns.Add("FeedingAssistive", typeof(bool));
+           dt.Columns.Add("FeedingIndependent", typeof(bool));
+           dt.Columns.Add("FeedingPhysical", typeof(bool));
+           dt.Columns.Add("FeedingSupervision", typeof(bool));
+           dt.Columns.Add("FeedingTotal", typeof(bool));
+           dt.Columns.Add("FireHazards", typeof(bool));
+           dt.Columns.Add("Flooring", typeof(bool));
+           dt.Columns.Add("FoodPantryHowOften", typeof(string));
+           dt.Columns.Add("FoodPantryProvider", typeof(string));
+           dt.Columns.Add("FoodPantryReceive", typeof(bool));
+           dt.Columns.Add("FoodStampHowOften", typeof(string));
+           dt.Columns.Add("FoodStampProvider", typeof(string));
+           dt.Columns.Add("FoodStampReceive", typeof(bool));
+           dt.Columns.Add("FriendOrFamily", typeof(bool));
+           dt.Columns.Add("GroomingAssistive", typeof(bool));
+           dt.Columns.Add("GroomingIndependent", typeof(bool));
+           dt.Columns.Add("GroomingPhysical", typeof(bool));
+           dt.Columns.Add("GroomingSupervision", typeof(bool));
+           dt.Columns.Add("GroomingTotal", typeof(bool));
+           dt.Columns.Add("HasClientEverArrest", typeof(bool));
+           dt.Columns.Add("HasClientEverArrestLastTime", typeof(string));
+           dt.Columns.Add("HasClientEverArrestManyTime", typeof(string));
+           dt.Columns.Add("HomeDeliveredHowOften", typeof(string));
+           dt.Columns.Add("HomeDeliveredProvider", typeof(string));
+           dt.Columns.Add("HomeDeliveredReceive", typeof(bool));
+           dt.Columns.Add("IfThereAnyHousing", typeof(string));
+           dt.Columns.Add("IfYesWereCriminal", typeof(bool));
+           dt.Columns.Add("IfYesWhatArea", typeof(string));
+           dt.Columns.Add("ImmigrationOther", typeof(bool));
+           dt.Columns.Add("ImmigrationOtherExplain", typeof(string));
+           dt.Columns.Add("Insect", typeof(bool));
+           dt.Columns.Add("IsClientCurrentlyEmployed", typeof(bool));
+           dt.Columns.Add("IsClientCurrentlySchool", typeof(bool));
+           dt.Columns.Add("IsClientCurrentlySchoolExplain", typeof(string));
+           dt.Columns.Add("IsClientInterested", typeof(bool));
+           dt.Columns.Add("IsClientInvolved", typeof(bool));
+           dt.Columns.Add("IsClientInvolvedSpecify", typeof(string));
+           dt.Columns.Add("IsTheClientAbleWork", typeof(bool));
+           dt.Columns.Add("IsTheClientAbleWorkLimitation", typeof(bool));
+           dt.Columns.Add("IsTheClientHavingFinancial", typeof(bool));
+           dt.Columns.Add("IsTheClientHavingFinancialExplain", typeof(string));
+           dt.Columns.Add("IsThereAnyAide", typeof(bool));
+           dt.Columns.Add("IsThereAnyAideName", typeof(string));
+           dt.Columns.Add("IsThereAnyAidePhone", typeof(string));
+           dt.Columns.Add("IsThereAnyCurrentLegalProcess", typeof(bool));
+           dt.Columns.Add("LabWorks", typeof(string));
+           dt.Columns.Add("LearningEelementary", typeof(bool));
+           dt.Columns.Add("LearningHigh", typeof(bool));
+           dt.Columns.Add("LearningMiddle", typeof(bool));
+           dt.Columns.Add("LearningPreSchool", typeof(bool));
+           dt.Columns.Add("ListAnyNeed", typeof(string));
+           dt.Columns.Add("ListClientCurrentPotencialStrngths", typeof(string));
+           dt.Columns.Add("ListClientCurrentPotencialWeakness", typeof(string));
+           dt.Columns.Add("MakingAssistive", typeof(bool));
+           dt.Columns.Add("MakingIndependent", typeof(bool));
+           dt.Columns.Add("MakingPhysical", typeof(bool));
+           dt.Columns.Add("MakingSupervision", typeof(bool));
+           dt.Columns.Add("MakingTotal", typeof(bool));
+           dt.Columns.Add("Mammogram", typeof(string));
+           dt.Columns.Add("MayWeLeaveSend", typeof(bool));
+           dt.Columns.Add("MonthlyFamilyIncome", typeof(string));
+           dt.Columns.Add("NoAirCondition", typeof(bool));
+           dt.Columns.Add("NoTelephone", typeof(bool));
+           dt.Columns.Add("NotHot", typeof(bool));
+           dt.Columns.Add("NumberOfBedrooms", typeof(int));
+           dt.Columns.Add("NumberOfPersonLiving", typeof(int));
+           dt.Columns.Add("OtherFinancial", typeof(string));
+           dt.Columns.Add("OtherHowOften", typeof(string));
+           dt.Columns.Add("OtherProvider", typeof(string));
+           dt.Columns.Add("OtherReceive", typeof(bool));
+           dt.Columns.Add("PapAndHPV", typeof(string));
+           dt.Columns.Add("ParticipationEelementary", typeof(bool));
+           dt.Columns.Add("ParticipationHigh", typeof(bool));
+           dt.Columns.Add("ParticipationMiddle", typeof(bool));
+           dt.Columns.Add("ParticipationPreSchool", typeof(bool));
+           dt.Columns.Add("PersonPorBedrooms", typeof(double));
+           dt.Columns.Add("PhysicalExam", typeof(string));
+           dt.Columns.Add("PhysicalOther", typeof(string));
+           dt.Columns.Add("Poor", typeof(bool));
+           dt.Columns.Add("PreferToLive", typeof(bool));
+           dt.Columns.Add("ProbationOfficer", typeof(bool));
+           dt.Columns.Add("ProbationOfficerName", typeof(string));
+           dt.Columns.Add("ProbationOfficerPhone", typeof(string));
+           dt.Columns.Add("RecommendedActivities", typeof(bool));
+           dt.Columns.Add("RecommendedBasicNeed", typeof(bool));
+           dt.Columns.Add("RecommendedEconomic", typeof(bool));
+           dt.Columns.Add("RecommendedHousing", typeof(bool));
+           dt.Columns.Add("RecommendedLegalImmigration", typeof(bool));
+           dt.Columns.Add("RecommendedMentalHealth", typeof(bool));
+           dt.Columns.Add("RecommendedOther", typeof(bool));
+           dt.Columns.Add("RecommendedOtherSpecify", typeof(string));
+           dt.Columns.Add("RecommendedPhysicalHealth", typeof(bool));
+           dt.Columns.Add("RecommendedRecreational", typeof(bool));
+           dt.Columns.Add("RecommendedSchool", typeof(bool));
+           dt.Columns.Add("RecommendedTransportation", typeof(bool));
+           dt.Columns.Add("RecommendedVocation", typeof(bool));
+           dt.Columns.Add("RelationshipEelementary", typeof(bool));
+           dt.Columns.Add("RelationshipHigh", typeof(bool));
+           dt.Columns.Add("RelationshipMiddle", typeof(bool));
+           dt.Columns.Add("RelationshipPreSchool", typeof(bool));
+           dt.Columns.Add("Resident", typeof(bool));
+           dt.Columns.Add("ResidentStatus", typeof(int));
+           dt.Columns.Add("SchoolAddress", typeof(string));
+           dt.Columns.Add("SchoolCityState", typeof(string));
+           dt.Columns.Add("SchoolDistrict", typeof(string));
+           dt.Columns.Add("SchoolGrade", typeof(string));
+           dt.Columns.Add("SchoolName", typeof(string));
+           dt.Columns.Add("SchoolProgramEBD", typeof(bool));
+           dt.Columns.Add("SchoolProgramESE", typeof(bool));
+           dt.Columns.Add("SchoolProgramESOL", typeof(bool));
+           dt.Columns.Add("SchoolProgramHHIP", typeof(bool));
+           dt.Columns.Add("SchoolProgramOther", typeof(bool));
+           dt.Columns.Add("SchoolProgramRegular", typeof(bool));
+           dt.Columns.Add("SchoolProgramTeacherName", typeof(string));
+           dt.Columns.Add("SchoolProgramTeacherPhone", typeof(string));
+           dt.Columns.Add("ShoppingAssistive", typeof(bool));
+           dt.Columns.Add("ShoppingIndependent", typeof(bool));
+           dt.Columns.Add("ShoppingPhysical", typeof(bool));
+           dt.Columns.Add("ShoppingSupervision", typeof(bool));
+           dt.Columns.Add("ShoppingTotal", typeof(bool));
+           dt.Columns.Add("Staff", typeof(bool));
+           dt.Columns.Add("Stairs", typeof(bool));
+           dt.Columns.Add("Structural", typeof(bool));
+           dt.Columns.Add("TakesABus", typeof(bool));
+           dt.Columns.Add("TransferringAssistive", typeof(bool));
+           dt.Columns.Add("TransferringIndependent", typeof(bool));
+           dt.Columns.Add("TransferringPhysical", typeof(bool));  
+           dt.Columns.Add("TransferringSupervision", typeof(bool));
+           dt.Columns.Add("TransferringTotal", typeof(bool));
+           dt.Columns.Add("TransportationOther", typeof(bool));
+           dt.Columns.Add("TransportationOtherExplain", typeof(string));
+           dt.Columns.Add("Tripping", typeof(bool));
+           dt.Columns.Add("Unsanitary", typeof(bool));
+           dt.Columns.Add("VocationalEmployment", typeof(string));
+           dt.Columns.Add("Walks", typeof(bool));
+           dt.Columns.Add("WhatActivityThings", typeof(string));
+           dt.Columns.Add("WhatIsCollegeGraduated", typeof(bool));
+           dt.Columns.Add("WhatIsElementary", typeof(bool));
+           dt.Columns.Add("WhatIsGED", typeof(bool));
+           dt.Columns.Add("WhatIsGraduated", typeof(bool));
+           dt.Columns.Add("WhatIsGraduatedDegree", typeof(bool));
+           dt.Columns.Add("WhatIsHighSchool", typeof(bool));
+           dt.Columns.Add("WhatIsMiddle", typeof(bool));
+           dt.Columns.Add("WhatIsNoSchool", typeof(bool));
+           dt.Columns.Add("WhatIsSomeCollege", typeof(bool));
+           dt.Columns.Add("WhatIsSomeHigh", typeof(bool));
+           dt.Columns.Add("WhatIsTheMainSource", typeof(string));
+           dt.Columns.Add("WhatIsTradeSchool", typeof(bool));
+           dt.Columns.Add("WhatIsUnknown", typeof(bool));
+           dt.Columns.Add("WouldLikeObtainJob", typeof(bool));
+           dt.Columns.Add("WouldLikeObtainJobNotAtThisTime", typeof(bool));
+           dt.Columns.Add("YearEnteredUsa", typeof(int));
+           dt.Columns.Add("OtherReceiveExplain", typeof(string));
+           dt.Columns.Add("CantDoItAtAll", typeof(bool));
+           dt.Columns.Add("DoesClientTranspotation", typeof(bool));
+           dt.Columns.Add("DoesClientTranspotationExplain", typeof(string));
+           dt.Columns.Add("NeedALot", typeof(bool));
+           dt.Columns.Add("NeedNoHelp", typeof(bool));
+           dt.Columns.Add("NeedSome", typeof(bool));
+           dt.Columns.Add("DateSignatureCaseManager", typeof(DateTime));
+           dt.Columns.Add("DateSignatureTCMSupervisor", typeof(DateTime));
+           dt.Columns.Add("HoweverOn", typeof(string));
+           dt.Columns.Add("HoweverVisitScheduler", typeof(DateTime));
+           dt.Columns.Add("Status", typeof(int));
+           dt.Columns.Add("TCMSupervisorId", typeof(int));
+
+            if (intakeAssessment != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            intakeAssessment.Id,
+                                            0,                                            
+                                            intakeAssessment.DateAssessment,
+                                            intakeAssessment.ClientInput,
+                                            intakeAssessment.Family,
+                                            intakeAssessment.Referring,
+                                            intakeAssessment.School,
+                                            intakeAssessment.Treating,
+                                            intakeAssessment.Caregiver,
+                                            intakeAssessment.Review,
+                                            intakeAssessment.Other,
+                                            intakeAssessment.OtherExplain,
+                                            intakeAssessment.PresentingProblems,
+                                            intakeAssessment.DateOfOnSetPresentingProblem,
+                                            intakeAssessment.PresentingProblemPrevious,
+                                            intakeAssessment.ChildMother,
+                                            intakeAssessment.ChildFather,
+                                            intakeAssessment.Married,
+                                            intakeAssessment.Divorced,
+                                            intakeAssessment.Separated,
+                                            intakeAssessment.NeverMarried,
+                                            intakeAssessment.AreChild,
+                                            intakeAssessment.AreChildName,
+                                            intakeAssessment.AreChildPhone,
+                                            intakeAssessment.AreChildAddress,
+                                            intakeAssessment.AreChildCity,
+                                            intakeAssessment.MayWe,
+                                            intakeAssessment.HowDoesByFollowing,
+                                            intakeAssessment.HowDoesPill,
+                                            intakeAssessment.HowDoesFamily,
+                                            intakeAssessment.HowDoesCalendar,
+                                            intakeAssessment.HowDoesElectronic,
+                                            intakeAssessment.HowDoesRNHHA,
+                                            intakeAssessment.HowDoesKeeping,
+                                            intakeAssessment.HowDoesDaily,
+                                            intakeAssessment.HowDoesOther,
+                                            intakeAssessment.HowDoesOtherExplain,
+                                            intakeAssessment.HowWeelWithNo,
+                                            intakeAssessment.HowWeelWithALot,
+                                            intakeAssessment.HowWeelWithSome,
+                                            intakeAssessment.HowWeelEnable,
+                                            intakeAssessment.HasTheClient,
+                                            intakeAssessment.WhatPharmacy,
+                                            intakeAssessment.PharmacyPhone,
+                                            intakeAssessment.AnyOther,
+                                            intakeAssessment.Approved,
+                                            intakeAssessment.CreatedBy,
+                                            intakeAssessment.CreatedOn,
+                                            intakeAssessment.LastModifiedBy,
+                                            intakeAssessment.LastModifiedOn,
+                                            intakeAssessment.IsClientCurrently,
+                                            intakeAssessment.LegalDecisionAdLitem,
+                                            intakeAssessment.LegalDecisionAddress,
+                                            intakeAssessment.LegalDecisionAttomey,
+                                            intakeAssessment.LegalDecisionCityStateZip,
+                                            intakeAssessment.LegalDecisionLegal,
+                                            intakeAssessment.LegalDecisionName,
+                                            intakeAssessment.LegalDecisionNone,
+                                            intakeAssessment.LegalDecisionOther,
+                                            intakeAssessment.LegalDecisionOtherExplain,
+                                            intakeAssessment.LegalDecisionParent,
+                                            intakeAssessment.LegalDecisionPhone,
+                                            intakeAssessment.NeedOfSpecial,
+                                            intakeAssessment.NeedOfSpecialSpecify,
+                                            intakeAssessment.TypeOfAssessmentAnnual,
+                                            intakeAssessment.TypeOfAssessmentInitial,
+                                            intakeAssessment.TypeOfAssessmentOther,
+                                            intakeAssessment.TypeOfAssessmentOtherExplain,
+                                            intakeAssessment.TypeOfAssessmentSignificant,
+                                            intakeAssessment.AbuseViolence,
+                                            intakeAssessment.Allergy,
+                                            intakeAssessment.AllergySpecify,
+                                            intakeAssessment.AreAllImmunization,
+                                            intakeAssessment.AreAllImmunizationExplain,
+                                            intakeAssessment.AreYouPhysician,
+                                            intakeAssessment.AreYouPhysicianSpecify,
+                                            intakeAssessment.DateMostRecent,
+                                            intakeAssessment.DescribeAnyOther,
+                                            intakeAssessment.DescribeAnyRisk,
+                                            intakeAssessment.DoesAggressiveness,
+                                            intakeAssessment.DoesAnxiety,
+                                            intakeAssessment.DoesDelusions,
+                                            intakeAssessment.DoesDepression,
+                                            intakeAssessment.DoesFearfulness,
+                                            intakeAssessment.DoesHallucinations,
+                                            intakeAssessment.DoesHelplessness,
+                                            intakeAssessment.DoesHopelessness,
+                                            intakeAssessment.DoesHyperactivity,
+                                            intakeAssessment.DoesImpulsivity,
+                                            intakeAssessment.DoesIrritability,
+                                            intakeAssessment.DoesLoss,
+                                            intakeAssessment.DoesLow,
+                                            intakeAssessment.DoesMood,
+                                            intakeAssessment.DoesNegative,
+                                            intakeAssessment.DoesNervousness,
+                                            intakeAssessment.DoesObsessive,
+                                            intakeAssessment.DoesPanic,
+                                            intakeAssessment.DoesParanoia,
+                                            intakeAssessment.DoesPoor,
+                                            intakeAssessment.DoesSadness,
+                                            intakeAssessment.DoesSelfNeglect,
+                                            intakeAssessment.DoesSheUnderstand,
+                                            intakeAssessment.DoesSleep,
+                                            intakeAssessment.DoesTheClientFeel,
+                                            intakeAssessment.DoesWithdrawal,
+                                            intakeAssessment.HasClientUndergone,
+                                            intakeAssessment.HasDifficultySeeingLevel,
+                                            intakeAssessment.HasDifficultySeeingObjetive,
+                                            intakeAssessment.HasNoImpairment,
+                                            intakeAssessment.HasNoUsefull,
+                                            intakeAssessment.HaveYouEverBeenToAny,
+                                            intakeAssessment.HaveYouEverUsedAlcohol,
+                                            intakeAssessment.HearingDifficulty,
+                                            intakeAssessment.HearingImpairment,
+                                            intakeAssessment.HearingNotDetermined,
+                                            intakeAssessment.Hears,
+                                            intakeAssessment.Homicidal,
+                                            intakeAssessment.HowActive,
+                                            intakeAssessment.HowManyTimes,
+                                            intakeAssessment.IsClientPregnancy,
+                                            intakeAssessment.IsSheReceiving,
+                                            intakeAssessment.Issues,
+                                            intakeAssessment.MentalHealth,
+                                            intakeAssessment.NoHearing,
+                                            intakeAssessment.NoUseful,
+                                            intakeAssessment.Outcome,
+                                            intakeAssessment.Provider,
+                                            intakeAssessment.Suicidal,
+                                            intakeAssessment.VisionImpairment,
+                                            intakeAssessment.VisionNotDetermined,
+                                            intakeAssessment.WhenWas,
+                                            intakeAssessment.AHomeVisit,
+                                            intakeAssessment.AHomeVisitOn,
+                                            intakeAssessment.AcademicEelementary,
+                                            intakeAssessment.AcademicHigh,
+                                            intakeAssessment.AcademicMiddle,
+                                            intakeAssessment.AcademicPreSchool,
+                                            intakeAssessment.AdditionalInformation,
+                                            intakeAssessment.AdditionalInformationMigration,
+                                            intakeAssessment.Appliances,
+                                            intakeAssessment.AttendanceEelementary,
+                                            intakeAssessment.AttendanceHigh,
+                                            intakeAssessment.AttendanceMiddle,
+                                            intakeAssessment.AttendancePreSchool,
+                                            intakeAssessment.BathingAssistive,
+                                            intakeAssessment.BathingIndependent,
+                                            intakeAssessment.BathingPhysical,
+                                            intakeAssessment.BathingSupervision,
+                                            intakeAssessment.BathingTotal,
+                                            intakeAssessment.Bathtub,
+                                            intakeAssessment.BehaviorEelementary,
+                                            intakeAssessment.BehaviorHigh,
+                                            intakeAssessment.BehaviorMiddle,
+                                            intakeAssessment.BehaviorPreSchool,
+                                            intakeAssessment.Briefly,
+                                            intakeAssessment.CaseManagerWas,
+                                            intakeAssessment.CaseManagerWasDueTo,
+                                            intakeAssessment.Citizen,
+                                            intakeAssessment.ColonCancer,
+                                            intakeAssessment.CongredatedHowOften,
+                                            intakeAssessment.CongredatedProvider,
+                                            intakeAssessment.CongredatedReceive,
+                                            intakeAssessment.ContinueToLive,
+                                            intakeAssessment.ContinueToLiveOnly,
+                                            intakeAssessment.CookingAssistive,
+                                            intakeAssessment.CookingIndependent,
+                                            intakeAssessment.CookingPhysical,
+                                            intakeAssessment.CookingSupervision,
+                                            intakeAssessment.CookingTotal,
+                                            intakeAssessment.CountryOfBirth,
+                                            intakeAssessment.CurrentEmployer,
+                                            intakeAssessment.DentalExam,
+                                            intakeAssessment.DescribeAnySchool,
+                                            intakeAssessment.DescribeClientCultural,
+                                            intakeAssessment.DescribeClientEducation,
+                                            intakeAssessment.DescribeClientLiving,
+                                            intakeAssessment.DescribeClientRelationship,
+                                            intakeAssessment.DescribeNeighborhood,
+                                            intakeAssessment.DescribeOtherNeedConcerns,
+                                            intakeAssessment.DoesClientBasicNeed,
+                                            intakeAssessment.DoesClientCurrently,
+                                            intakeAssessment.DoesClientCurrentlyExplain,
+                                            intakeAssessment.DoesClientFeel,
+                                            intakeAssessment.DoesClientFeelExplain,
+                                            intakeAssessment.DoesClientNeedAssistance,
+                                            intakeAssessment.DoesClientNeedAssistanceEducational,
+                                            intakeAssessment.DoesClientNeedAssistanceEducationalExplain,
+                                            intakeAssessment.DoesClientNeedAssistanceExplain,
+                                            intakeAssessment.DoesNotKnow,
+                                            intakeAssessment.DoingAssistive,
+                                            intakeAssessment.DoingIndependent,
+                                            intakeAssessment.DoingPhysical,
+                                            intakeAssessment.DoingSupervision,
+                                            intakeAssessment.DoingTotal,
+                                            intakeAssessment.DressingAssistive,
+                                            intakeAssessment.DressingIndependent,
+                                            intakeAssessment.DressingPhysical,
+                                            intakeAssessment.DressingSupervision,
+                                            intakeAssessment.DressingTotal,
+                                            intakeAssessment.Drives,
+                                            intakeAssessment.Electrical,
+                                            intakeAssessment.EmployerAddress,
+                                            intakeAssessment.EmployerCityState,
+                                            intakeAssessment.EmployerContactPerson,
+                                            intakeAssessment.EmployerPhone,
+                                            intakeAssessment.EmploymentStatus,
+                                            intakeAssessment.ExcessiveCluter,
+                                            intakeAssessment.FailToEelementary,
+                                            intakeAssessment.FailToHigh,
+                                            intakeAssessment.FailToMiddle,
+                                            intakeAssessment.FailToPreSchool,
+                                            intakeAssessment.FeedingAssistive,
+                                            intakeAssessment.FeedingIndependent,
+                                            intakeAssessment.FeedingPhysical,
+                                            intakeAssessment.FeedingSupervision,
+                                            intakeAssessment.FeedingTotal,
+                                            intakeAssessment.FireHazards,
+                                            intakeAssessment.Flooring,
+                                            intakeAssessment.FoodPantryHowOften,
+                                            intakeAssessment.FoodPantryProvider,
+                                            intakeAssessment.FoodPantryReceive,
+                                            intakeAssessment.FoodStampHowOften,
+                                            intakeAssessment.FoodStampProvider,
+                                            intakeAssessment.FoodStampReceive,
+                                            intakeAssessment.FriendOrFamily,
+                                            intakeAssessment.GroomingAssistive,
+                                            intakeAssessment.GroomingIndependent,
+                                            intakeAssessment.GroomingPhysical,
+                                            intakeAssessment.GroomingSupervision,
+                                            intakeAssessment.GroomingTotal,
+                                            intakeAssessment.HasClientEverArrest,
+                                            intakeAssessment.HasClientEverArrestLastTime,
+                                            intakeAssessment.HasClientEverArrestManyTime,
+                                            intakeAssessment.HomeDeliveredHowOften,
+                                            intakeAssessment.HomeDeliveredProvider,
+                                            intakeAssessment.HomeDeliveredReceive,
+                                            intakeAssessment.IfThereAnyHousing,
+                                            intakeAssessment.IfYesWereCriminal,
+                                            intakeAssessment.IfYesWhatArea,
+                                            intakeAssessment.ImmigrationOther,
+                                            intakeAssessment.ImmigrationOtherExplain,
+                                            intakeAssessment.Insect,
+                                            intakeAssessment.IsClientCurrentlyEmployed,
+                                            intakeAssessment.IsClientCurrentlySchool,
+                                            intakeAssessment.IsClientCurrentlySchoolExplain,
+                                            intakeAssessment.IsClientInterested,
+                                            intakeAssessment.IsClientInvolved,
+                                            intakeAssessment.IsClientInvolvedSpecify,
+                                            intakeAssessment.IsTheClientAbleWork,
+                                            intakeAssessment.IsTheClientAbleWorkLimitation,
+                                            intakeAssessment.IsTheClientHavingFinancial,
+                                            intakeAssessment.IsTheClientHavingFinancialExplain,
+                                            intakeAssessment.IsThereAnyAide,
+                                            intakeAssessment.IsThereAnyAideName,
+                                            intakeAssessment.IsThereAnyAidePhone,
+                                            intakeAssessment.IsThereAnyCurrentLegalProcess,
+                                            intakeAssessment.LabWorks,
+                                            intakeAssessment.LearningEelementary,
+                                            intakeAssessment.LearningHigh,
+                                            intakeAssessment.LearningMiddle,
+                                            intakeAssessment.LearningPreSchool,
+                                            intakeAssessment.ListAnyNeed,
+                                            intakeAssessment.ListClientCurrentPotencialStrngths,
+                                            intakeAssessment.ListClientCurrentPotencialWeakness,
+                                            intakeAssessment.MakingAssistive,
+                                            intakeAssessment.MakingIndependent,
+                                            intakeAssessment.MakingPhysical,
+                                            intakeAssessment.MakingSupervision,
+                                            intakeAssessment.MakingTotal,
+                                            intakeAssessment.Mammogram,
+                                            intakeAssessment.MayWeLeaveSend,
+                                            intakeAssessment.MonthlyFamilyIncome,
+                                            intakeAssessment.NoAirCondition,
+                                            intakeAssessment.NoTelephone,
+                                            intakeAssessment.NotHot,
+                                            intakeAssessment.NumberOfBedrooms,
+                                            intakeAssessment.NumberOfPersonLiving,
+                                            intakeAssessment.OtherFinancial,
+                                            intakeAssessment.OtherHowOften,
+                                            intakeAssessment.OtherProvider,
+                                            intakeAssessment.OtherReceive,
+                                            intakeAssessment.PapAndHPV,
+                                            intakeAssessment.ParticipationEelementary,
+                                            intakeAssessment.ParticipationHigh,
+                                            intakeAssessment.ParticipationMiddle,
+                                            intakeAssessment.ParticipationPreSchool,
+                                            intakeAssessment.PersonPorBedrooms,
+                                            intakeAssessment.PhysicalExam,
+                                            intakeAssessment.PhysicalOther,
+                                            intakeAssessment.Poor,
+                                            intakeAssessment.PreferToLive,
+                                            intakeAssessment.ProbationOfficer,
+                                            intakeAssessment.ProbationOfficerName,
+                                            intakeAssessment.ProbationOfficerPhone,
+                                            intakeAssessment.RecommendedActivities,
+                                            intakeAssessment.RecommendedBasicNeed,
+                                            intakeAssessment.RecommendedEconomic,
+                                            intakeAssessment.RecommendedHousing,
+                                            intakeAssessment.RecommendedLegalImmigration,
+                                            intakeAssessment.RecommendedMentalHealth,
+                                            intakeAssessment.RecommendedOther,
+                                            intakeAssessment.RecommendedOtherSpecify,
+                                            intakeAssessment.RecommendedPhysicalHealth,
+                                            intakeAssessment.RecommendedRecreational,
+                                            intakeAssessment.RecommendedSchool,
+                                            intakeAssessment.RecommendedTransportation,
+                                            intakeAssessment.RecommendedVocation,
+                                            intakeAssessment.RelationshipEelementary,
+                                            intakeAssessment.RelationshipHigh,
+                                            intakeAssessment.RelationshipMiddle,
+                                            intakeAssessment.RelationshipPreSchool,
+                                            intakeAssessment.Resident,
+                                            intakeAssessment.ResidentStatus,
+                                            intakeAssessment.SchoolAddress,
+                                            intakeAssessment.SchoolCityState,
+                                            intakeAssessment.SchoolDistrict,
+                                            intakeAssessment.SchoolGrade,
+                                            intakeAssessment.SchoolName,
+                                            intakeAssessment.SchoolProgramEBD,
+                                            intakeAssessment.SchoolProgramESE,
+                                            intakeAssessment.SchoolProgramESOL,
+                                            intakeAssessment.SchoolProgramHHIP,
+                                            intakeAssessment.SchoolProgramOther,
+                                            intakeAssessment.SchoolProgramRegular,
+                                            intakeAssessment.SchoolProgramTeacherName,
+                                            intakeAssessment.SchoolProgramTeacherPhone,
+                                            intakeAssessment.ShoppingAssistive,
+                                            intakeAssessment.ShoppingIndependent,
+                                            intakeAssessment.ShoppingPhysical,
+                                            intakeAssessment.ShoppingSupervision,
+                                            intakeAssessment.ShoppingTotal,
+                                            intakeAssessment.Staff,
+                                            intakeAssessment.Stairs,
+                                            intakeAssessment.Structural,
+                                            intakeAssessment.TakesABus,
+                                            intakeAssessment.TransferringAssistive,
+                                            intakeAssessment.TransferringIndependent,
+                                            intakeAssessment.TransferringPhysical,
+                                            intakeAssessment.TransferringSupervision,
+                                            intakeAssessment.TransferringTotal,
+                                            intakeAssessment.TransportationOther,
+                                            intakeAssessment.TransportationOtherExplain,
+                                            intakeAssessment.Tripping,
+                                            intakeAssessment.Unsanitary,
+                                            intakeAssessment.VocationalEmployment,
+                                            intakeAssessment.Walks,
+                                            intakeAssessment.WhatActivityThings,
+                                            intakeAssessment.WhatIsCollegeGraduated,
+                                            intakeAssessment.WhatIsElementary,
+                                            intakeAssessment.WhatIsGED,
+                                            intakeAssessment.WhatIsGraduated,
+                                            intakeAssessment.WhatIsGraduatedDegree,
+                                            intakeAssessment.WhatIsHighSchool,
+                                            intakeAssessment.WhatIsMiddle,
+                                            intakeAssessment.WhatIsNoSchool,
+                                            intakeAssessment.WhatIsSomeCollege,
+                                            intakeAssessment.WhatIsSomeHigh,
+                                            intakeAssessment.WhatIsTheMainSource,
+                                            intakeAssessment.WhatIsTradeSchool,
+                                            intakeAssessment.WhatIsUnknown,
+                                            intakeAssessment.WouldLikeObtainJob,
+                                            intakeAssessment.WouldLikeObtainJobNotAtThisTime,
+                                            intakeAssessment.YearEnteredUsa,
+                                            intakeAssessment.OtherReceiveExplain,
+                                            intakeAssessment.CantDoItAtAll,
+                                            intakeAssessment.DoesClientTranspotation,
+                                            intakeAssessment.DoesClientTranspotationExplain,
+                                            intakeAssessment.NeedALot,
+                                            intakeAssessment.NeedNoHelp,
+                                            intakeAssessment.NeedSome,
+                                            intakeAssessment.DateSignatureCaseManager,
+                                            intakeAssessment.DateSignatureTCMSupervisor,
+                                            intakeAssessment.HoweverOn,
+                                            intakeAssessment.HoweverVisitScheduler,
+                                            intakeAssessment.Status,
+                                            0
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            0,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            0,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),
+                                            0,
+                                            0
+            });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentDrugListDS(List<TCMAssessmentDrugEntity> assessmentDrug)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentDrug"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("SustanceName", typeof(int));
+            dt.Columns.Add("DateBegin", typeof(DateTime));
+            dt.Columns.Add("Age", typeof(int));
+            dt.Columns.Add("Frequency", typeof(string));
+            dt.Columns.Add("LastTimeUsed", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentDrugEntity item in assessmentDrug)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            0,
+                                            item.SustanceName,
+                                            item.DateBegin,
+                                            item.Age,
+                                            item.Frequency,
+                                            item.LastTimeUsed,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentHospitalListDS(List<TCMAssessmentHospitalEntity> assessmentHospital)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentHospital"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));           
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Reason", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentHospitalEntity item in assessmentHospital)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            0,
+                                            item.Name,
+                                            item.Date,
+                                            item.Reason,                                            
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentHouseCompositionListDS(List<TCMAssessmentHouseCompositionEntity> assessmentHouse)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentHouseComposition"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Age", typeof(int));
+
+            dt.Columns.Add("RelationShip", typeof(string));
+            dt.Columns.Add("Supporting", typeof(string));
+
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentHouseCompositionEntity item in assessmentHouse)
+            {
+                dt.Rows.Add(new object[]
+                {
+                                            item.Id,
+                                            0,
+                                            item.Name,
+                                            item.Age,
+                                            item.RelationShip,
+                                            item.Supporting,
+                                            item.CreatedBy,
+                                            item.CreatedOn,
+                                            item.LastModifiedBy,
+                                            item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentIndividualAgencyListDS(List<TCMAssessmentIndividualAgencyEntity> assessmentIndividual)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentIndividualAgency"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Agency", typeof(string));
+            dt.Columns.Add("RelationShip", typeof(string));           
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            foreach (TCMAssessmentIndividualAgencyEntity item in assessmentIndividual)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.Name,
+                    item.Agency,
+                    item.RelationShip,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentMedicalProblemListDS(List<TCMAssessmentMedicalProblemEntity> assessmentMedical)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentMedicalProblem"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+
+            dt.Columns.Add("MedicalProblem", typeof(string));
+            dt.Columns.Add("Client", typeof(bool));
+            dt.Columns.Add("Family", typeof(bool));
+            dt.Columns.Add("Comments", typeof(bool));
+
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentMedicalProblemEntity item in assessmentMedical)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.MedicalProblem,
+                    item.Client,
+                    item.Family,
+                    item.Comments,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentMedicationListDS(List<TCMAssessmentMedicationEntity> assessmentMedication)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentMedication"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("ReasonPurpose", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Dosage", typeof(string));
+            dt.Columns.Add("Frequency", typeof(string));
+            dt.Columns.Add("Prescriber", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentMedicationEntity item in assessmentMedication)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.ReasonPurpose,
+                    item.Name,
+                    item.Dosage,
+                    item.Frequency,
+                    item.Prescriber,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentPastCurrentServiceListDS(List<TCMAssessmentPastCurrentServiceEntity> assessmentPast)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentMedication"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("TypeService", typeof(string));
+            dt.Columns.Add("ProviderAgency", typeof(string));
+            dt.Columns.Add("DateReceived", typeof(string));
+            dt.Columns.Add("Efectiveness", typeof(int));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentPastCurrentServiceEntity item in assessmentPast)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.TypeService,
+                    item.ProviderAgency,
+                    item.DateReceived,
+                    item.Efectiveness,                    
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMIntakeAssessmentSurgeryListDS(List<TCMAssessmentSurgeryEntity> assessmentSurgery)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentSurgery"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("TypeSurgery", typeof(string));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Hospital", typeof(string));
+            dt.Columns.Add("Outcome", typeof(string));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentSurgeryEntity item in assessmentSurgery)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.TypeSurgery,
+                    item.Date,
+                    item.Hospital,
+                    item.Outcome,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }        
+
         private DataTable GetTCMIntakePainScreenDS(TCMIntakePainScreenEntity intakePain)
         {
             DataTable dt = new DataTable
@@ -23365,6 +24859,126 @@ namespace KyoS.Web.Helpers
         #endregion
 
         #region TCM Binder Section #4
+        public Stream TCMIntakeAssessment(TCMAssessmentEntity intakeAssessment)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeAssessment.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intakeAssessment.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(intakeAssessment.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intakeAssessment.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(intakeAssessment.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(intakeAssessment.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(intakeAssessment.TcmClient.Client.Client_Referred.ToList(), ServiceAgency.TCM));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetPsychiatristDS(intakeAssessment.TcmClient.Client.Psychiatrist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Psychiatrists");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(intakeAssessment.TcmClient.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(intakeAssessment.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentDS(intakeAssessment));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessment");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentDrugListDS(intakeAssessment.DrugList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentDrug");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentHospitalListDS(intakeAssessment.HospitalList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentHospital");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentHouseCompositionListDS(intakeAssessment.HouseCompositionList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentHouseComposition");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentIndividualAgencyListDS(intakeAssessment.IndividualAgencyList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentIndividualAgency");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentMedicalProblemListDS(intakeAssessment.MedicalProblemList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentMedicalProblem");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentMedicationListDS(intakeAssessment.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentMedication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentPastCurrentServiceListDS(intakeAssessment.PastCurrentServiceList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentPastCurrentService");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeAssessmentSurgeryListDS(intakeAssessment.SurgeryList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentSurgery");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intakeAssessment.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAssessment.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(intakeAssessment.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAssessment.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(intakeAssessment.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAssessment.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
         public Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ)
         {
             WebReport WebReport = new WebReport();

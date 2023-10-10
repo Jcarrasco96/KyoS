@@ -2,53 +2,27 @@
 
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        <strong>SECTION III: PRESENTING PROBLEMS </strong>
-        <textarea asp-for="PresentingProblems" rows="4" style="width:90%"> </textarea>
+    <pre>
+    <strong>SECTION III: PRESENTING PROBLEMS </strong>
+    <textarea asp-for="PresentingProblems" rows="4" style="width:90%"> </textarea>
 
-        Date of onset of present problem(s): <input asp-for="DateOfOnSetPresentingProblem">        Previous psychiatric problem(s):   <input type="checkbox" class="form-check-input" id="check103"> No        <input asp-for="PresentingProblemPrevious" class="form-check-input" id="check3"> Yes
+    Date of onset of present problem(s): <input asp-for="DateOfOnSetPresentingProblem">        Previous psychiatric problem(s):   <input type="checkbox" class="form-check-input" id="check103"> No        <input asp-for="PresentingProblemPrevious" class="form-check-input" id="check3"> Yes
     </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        <strong>SECTION IV: FAMILY INFORMATION </strong>
-        A. <strong>Parents Information </strong>(children only)
-        What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" /> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" /> Child’s Father 
-        Parent’s marital status: <input asp-for="Married" class="form-check-input" > Married         <input asp-for="Divorced" class="form-check-input"> Divorced        <input asp-for="Separated" class="form-check-input" > Separated       <input asp-for="NeverMarried" class="form-check-input" > Never married
-        Are child’s parents living together?        <select asp-for="IdYesNoNAAreChild" asp-items="Model.YesNoNAs"></select>       If No, provide the following information for the non-custodial parent:
-        </pre>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="AreChildName" class="control-label">Name</label>
-        <input asp-for="AreChildName" class="form-control" >
-        <span asp-validation-for="AreChildName" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="AreChildPhone" class="control-label">Phone No</label>
-        <input asp-for="AreChildPhone" class="form-control" >
-        <span asp-validation-for="AreChildPhone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="AreChildAddress" class="control-label">Address</label>
-        <input asp-for="AreChildAddress" class="form-control" >
-        <span asp-validation-for="AreChildAddress" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="AreChildCity" class="control-label">City, State, Zip</label>
-        <input asp-for="AreChildCity" class="form-control" >
-        <span asp-validation-for="AreChildCity" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <pre>
+    <pre>
+    <strong>SECTION IV: FAMILY INFORMATION </strong>
+    A. <strong>Parents Information </strong>(children only)
+    What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" /> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" /> Child’s Father 
+    
+    Parent’s marital status: <input asp-for="Married" class="form-check-input"> Married         <input asp-for="Divorced" class="form-check-input"> Divorced        <input asp-for="Separated" class="form-check-input"> Separated       <input asp-for="NeverMarried" class="form-check-input"> Never married
+    Are child’s parents living together?        <select asp-for="IdYesNoNAAreChild" asp-items="Model.YesNoNAs"></select>    If No, provide the following information for the non-custodial parent below:       
+    <label asp-for="AreChildName" class="control-label">Name</label>                                        <label asp-for="AreChildPhone" class="control-label">Phone No</label>                   <label asp-for="AreChildAddress" class="control-label">Address</label>                       <label asp-for="AreChildCity" class="control-label">City, State, Zip</label>
+    <input asp-for="AreChildName" style="width:20%">        <input asp-for="AreChildPhone" style="width:10%">         <input asp-for="AreChildAddress" style="width:10%">           <input asp-for="AreChildCity" style="width:10%">
+    <span asp-validation-for="AreChildName" class="text-danger"></span>         <span asp-validation-for="AreChildPhone" class="text-danger"></span>            <span asp-validation-for="AreChildAddress" class="text-danger"></span>              <span asp-validation-for="AreChildCity" class="text-danger"></span>
     *May we contact the non-custodial parent if necessary?  <select asp-for="IdYesNoNAWe" asp-items="Model.YesNoNAs"></select>
-   </pre>
+    </pre>
     </div>
 </div>
-
-

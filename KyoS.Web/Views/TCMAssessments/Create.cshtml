@@ -42,7 +42,9 @@
             <input type="hidden" asp-for="Psychiatrist_Phone" />
 
             <partial name="_TCMAssessment" />
-
+            <div class="container-fluid">
+                &nbsp;
+            </div>
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 @if (ViewData["origi"].ToString() == "0")

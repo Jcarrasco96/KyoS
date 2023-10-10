@@ -4346,6 +4346,69 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMAssessment(int id)
+        {
+            TCMAssessmentEntity entity = await _context.TCMAssessment
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+                                                        .ThenInclude(cl => cl.LegalGuardian)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+                                                        .ThenInclude(cl => cl.Doctor)
+
+                                                        .Include(t => t.TCMSupervisor)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+                                                        .ThenInclude(cl => cl.Client_Referred)
+                                                        .ThenInclude(cr => cr.Referred)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+                                                        .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                        .ThenInclude(cd => cd.Diagnostic)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Casemanager)
+                                                        .ThenInclude(cm => cm.Clinic)
+
+                                                        .Include(t => t.DrugList)
+
+                                                        .Include(t => t.HospitalList)
+
+                                                        .Include(t => t.HouseCompositionList)
+
+                                                        .Include(t => t.IndividualAgencyList)
+
+                                                        .Include(t => t.MedicalProblemList)
+
+                                                        .Include(t => t.MedicationList)
+
+                                                        .Include(t => t.PastCurrentServiceList)
+
+                                                        .Include(t => t.SurgeryList)
+
+                                                        .Include(t => t.TcmClient)
+                                                        .ThenInclude(c => c.Client)
+                                                        .ThenInclude(cl => cl.Psychiatrist)
+
+                                                        .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeAssessment(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public async Task<IActionResult> PrintTCMIntakePainScreen(int id)
         {
             TCMIntakePainScreenEntity entity = await _context.TCMIntakePainScreen
