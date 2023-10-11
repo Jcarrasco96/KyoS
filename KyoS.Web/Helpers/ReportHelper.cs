@@ -15415,7 +15415,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedBy", typeof(string));
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
-            dt.Columns.Add("LastModifiedOn", typeof(DateTime));            
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("DateOfApprove", typeof(DateTime));
 
             if (addendum != null)
             {
@@ -15434,7 +15435,8 @@ namespace KyoS.Web.Helpers
                                             addendum.CreatedBy,
                                             addendum.CreatedOn,
                                             addendum.LastModifiedBy,
-                                            addendum.LastModifiedOn
+                                            addendum.LastModifiedOn,
+                                            addendum.DateOfApprove
                                         });
             }
             else
@@ -15454,6 +15456,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,
+                                            new DateTime(),
                                             new DateTime()
                                         });
             }
@@ -22506,7 +22509,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("MedicalProblem", typeof(string));
             dt.Columns.Add("Client", typeof(bool));
             dt.Columns.Add("Family", typeof(bool));
-            dt.Columns.Add("Comments", typeof(bool));
+            dt.Columns.Add("Comments", typeof(string));
 
             dt.Columns.Add("CreatedBy", typeof(string));
             dt.Columns.Add("CreatedOn", typeof(DateTime));
