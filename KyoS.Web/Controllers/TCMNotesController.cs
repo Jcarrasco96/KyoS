@@ -410,6 +410,17 @@ namespace KyoS.Web.Controllers
                     };
                     _context.Add(notification);
                 }
+
+                List<TCMNoteActivityEntity> tcmNoteActivity = _context.TCMNoteActivity
+                                                                      .Where(n => n.TCMNote.Id == tcmNotesViewModel.IdTCMNote)
+                                                                      .ToList();
+                foreach (var item in tcmNoteActivity)
+                {
+                    item.StartTime = new DateTime(tcmNotesViewModel.DateOfService.Year, tcmNotesViewModel.DateOfService.Month, tcmNotesViewModel.DateOfService.Day,item.StartTime.Hour,item.StartTime.Minute,0);
+                    item.EndTime = new DateTime(tcmNotesViewModel.DateOfService.Year, tcmNotesViewModel.DateOfService.Month, tcmNotesViewModel.DateOfService.Day, item.EndTime.Hour, item.EndTime.Minute, 0);
+                    _context.TCMNoteActivity.Update(item);
+                }
+
                 _context.TCMNote.Update(tcmNotesEntity);
                 try
                 {
