@@ -254,8 +254,13 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public IActionResult Edit(int id = 0, int origin = 0)
+        public IActionResult Edit(int id = 0, int origin = 0, int error = 0)
         {
+            if (error == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             TCMNoteViewModel model;
             
             UserEntity user_logged = _context.Users
@@ -454,8 +459,7 @@ namespace KyoS.Web.Controllers
                         if (origin == 6)
                         {
                             return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
-                        }
-                       
+                        }                       
                     }
                     else
                     {
@@ -470,8 +474,7 @@ namespace KyoS.Web.Controllers
                                 return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
                             }
                         }
-                    }
-                    
+                    }                    
                 }
                 catch (System.Exception ex)
                 {
@@ -1971,18 +1974,19 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> Delete(int id = 0)
+        public async Task<IActionResult> Delete(int id = 0, int origin = 0)
         {
             TCMNoteEntity tcmNotes = _context.TCMNote
                                              .Include(m => m.TCMNoteActivity)
                                              .Include(m => m.TCMMessages)
+                                             .Include(m => m.TCMClient)
                                              .FirstOrDefault(m => m.Id == id);
             if (tcmNotes == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            try
+            try 
             {
                 _context.TCMNoteActivity.RemoveRange(tcmNotes.TCMNoteActivity);
                 _context.TCMNote.Remove(tcmNotes);
@@ -1990,8 +1994,55 @@ namespace KyoS.Web.Controllers
             }
             catch (Exception)
             {
-
+                return RedirectToAction("Edit", new { id = id, origin = origin, error = 1 });
             }
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (origin == 0)
+                {
+                    return RedirectToAction("TCMNotesForCase", new { idTCMClient = tcmNotes.TCMClient.Id });
+                }
+                if (origin == 1)
+                {
+                    return RedirectToAction("NotesStatus", new { status = NoteStatus.Edition });
+                }
+                if (origin == 2)
+                {
+                    return RedirectToAction("Index", "TCMBilling");
+                }
+                if (origin == 3)
+                {
+                    return RedirectToAction("NotesWithReview");
+                }
+                if (origin == 4)
+                {
+                    return RedirectToAction("MessagesOfNotes", "TCMMessages");
+                }
+                if (origin == 5)
+                {
+                    return RedirectToAction("FinishEditingNote", new { id = tcmNotes.Id, origin = 2 });
+                }
+                if (origin == 6)
+                {
+                    return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                }
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    if (origin == 7)
+                    {
+                        return RedirectToAction("UpdateNote");
+                    }
+                    else
+                    {
+                        return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                    }
+                }
+            }
+
             return RedirectToAction("Index", "TCMBilling");
         }
 
