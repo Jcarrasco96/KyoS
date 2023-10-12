@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
-
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
@@ -46,13 +45,24 @@
                         @Html.ActionLink("Update Notes", "UpdateNote", "TCMNotes")
                     }
                 }
-
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
     </div>
-
     <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Delete == "N")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible delete this TCM Note
+                    </strong>
+                </div>
+            }
+        </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
@@ -111,7 +121,6 @@
                         {
                             <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
                         }
-
                     }
                     @if (Model.Status == KyoS.Common.Enums.NoteStatus.Edition)
                     {
@@ -121,7 +130,7 @@
                     {
                         <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
                     }
-                    <button onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</button>
+                    <a onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</a>
                 }
                 else
                 {
@@ -136,11 +145,9 @@
                             <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
                             <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
                         }
-                        <button onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</button>
+                        <a onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</a>
                     }
                 }
-
-                @*<a asp-action="FinishEditingNote" asp-route-id="@Model.Id" asp-route-origin="2" class="btn btn-warning">Finish Editing</a>*@
             </div>
         </form>
     </div>
@@ -155,7 +162,7 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-         function ConfirmDelete(e) {
+        function ConfirmDelete(e) {            
             Swal.fire({
                 title: 'Do you want to delete?',
                 text: "Note: All data related to this element will be deleted.",
@@ -167,7 +174,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var url = "@Url.Action("Delete", "TCMNotes")";
-                    window.location.href = url + '/' + e;
+                    window.location.href = url + '?id=' + e + '&origin=' + @ViewData["origin"];
                 }
             });
         }
