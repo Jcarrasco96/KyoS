@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/02/2023 15:36:05" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/12/2023 17:13:47" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3E/AABt2cBqHoryH+CQLTig==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u35Z/nbRjJqLZRzw1jq2LpJQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -291,7 +291,7 @@
         <Column Name="Code90791" DataType="System.Boolean" PropName="Column" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u34B5iUjlinRYWxxMkpMhF+A==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3gsUtwIvxV8P2dCba8uqGFQ==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -305,7 +305,7 @@
       <TextObject Name="Text453" Left="160.65" Top="15.9" Width="459.5" Height="22" CanGrow="true" Text="Medical &amp; Rehab of Hillsborough Inc" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <ContainerObject Name="Container1" Left="161.65" Top="3.45" Width="614.25" Height="66.53" Border.Lines="All"/>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="79.6" Width="778.3" Height="808.92" CanGrow="true" CanShrink="true" CanBreak="true">
+    <DataBand Name="Data7" Top="79.45" Width="778.3" Height="808.92" CanGrow="true" CanShrink="true" CanBreak="true">
       <TextObject Name="Text454" Left="28.35" Top="9.45" Width="103.95" Height="18.9" Text="Client name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text455" Left="132.3" Top="9.45" Width="302.4" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
       <TextObject Name="Text456" Left="444.15" Top="9.45" Width="56.7" Height="18.9" Text="MR#:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
@@ -381,7 +381,7 @@
       <TextObject Name="Text483" Top="756" Width="771.35" Height="52.92" CanGrow="true" Text="&lt;b&gt;3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS)&lt;/b&gt; Document any serious behavior or physical illness, injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health treatment and document contact information for coordination of care." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text774" Top="37.8" Width="771.35" Height="34.02" CanGrow="true" Text="The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
     </DataBand>
-    <DataBand Name="Data1" Top="934.32" Width="778.3" Height="18.9" DataSource="Bio_BehavioralHistory">
+    <DataBand Name="Data1" Top="933.86" Width="778.3" Height="18.9" DataSource="Bio_BehavioralHistory">
       <TableObject Name="Table52" Width="774.53" Height="18.9" Border.Lines="All">
         <TableColumn Name="Column180" Width="628.24"/>
         <TableColumn Name="Column181" Width="146.29"/>
@@ -390,7 +390,7 @@
           <TableCell Name="Cell1060" Border.Lines="All" Text="[Bio_BehavioralHistory.Date]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="892.52" Width="778.3" Height="37.8">
+      <DataHeaderBand Name="DataHeader1" Top="892.21" Width="778.3" Height="37.8">
         <TableObject Name="Table51" Top="9.45" Width="774.81" Height="28.35">
           <TableColumn Name="Column178" Width="628.38"/>
           <TableColumn Name="Column179" Width="146.43"/>
@@ -401,7 +401,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data2" Top="1036.82" Width="778.3" Height="18.9" DataSource="Medication">
+    <DataBand Name="Data2" Top="1036.05" Width="778.3" Height="18.9" DataSource="Medication">
       <TableObject Name="Table54" Width="774.9" Height="18.9" Border.Lines="All">
         <TableColumn Name="Column186" Width="233.98"/>
         <TableColumn Name="Column187" Width="139.48"/>
@@ -414,7 +414,7 @@
           <TableCell Name="Cell1068" Border.Lines="All" Text="[Medication.Prescriber]" HorzAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader2" Top="957.22" Width="778.3" Height="75.6">
+      <DataHeaderBand Name="DataHeader2" Top="956.6" Width="778.3" Height="75.6">
         <TextObject Name="Text484" Top="16.9" Width="771.35" Height="24.57" CanGrow="true" Text="4. CURRENT MEDICATIONS (PSYCHOTROPIC, MEDICAL AND OVER THE COUNTER)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
         <TableObject Name="Table53" Top="47.25" Width="774.84" Height="28.35">
           <TableColumn Name="Column182" Width="233.85"/>
@@ -430,7 +430,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data3" Top="1059.72" Width="778.3" Height="847.5" CanGrow="true" CanShrink="true" CanBreak="true">
+    <DataBand Name="Data3" Top="1058.8" Width="778.3" Height="847.5" CanGrow="true" CanShrink="true" CanBreak="true">
       <TableObject Name="Table55" Top="68.15" Width="774.9" Height="359.1" CanBreak="false">
         <TableColumn Name="Column190" Width="141.75"/>
         <TableColumn Name="Column191" Width="132.3"/>
@@ -853,7 +853,7 @@
       <TextObject Name="Text616" Top="711.2" Width="774.9" Height="37.8" CanGrow="true" Text=" (Include and integrate if client is identified as high risk, past intensive services received, justify client’s need for services with need of a higher level of care)" Padding="2, 2, 2, 2" Font="Arial, 10pt"/>
       <TextObject Name="Text775" Top="751" Width="774.9" Height="94.5" CanGrow="true" CanShrink="true" Text="[Bio.SumanrOfFindings]" HorzAlign="Justify" Font="Arial, 10pt"/>
     </DataBand>
-    <DataBand Name="Data4" Top="1976.37" Width="778.3" Height="18.9" DataSource="Diagnostics">
+    <DataBand Name="Data4" Top="1975.14" Width="778.3" Height="18.9" DataSource="Diagnostics">
       <TableObject Name="Table60" Left="9.45" Width="755.94" Height="18.9">
         <TableColumn Name="Column205" Width="99.2"/>
         <TableColumn Name="Column206" Width="656.74"/>
@@ -862,7 +862,7 @@
           <TableCell Name="Cell1260" Border.Lines="All" Text="[Diagnostics.Description]Description" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader3" Top="1911.22" Width="778.3" Height="61.15">
+      <DataHeaderBand Name="DataHeader3" Top="1910.14" Width="778.3" Height="61.15">
         <TextObject Name="Text749" Top="13.9" Width="771.35" Height="24.57" CanGrow="true" Text="7. DIAGNOSTIC IMPRESSION&#13;&#10;" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
         <TableObject Name="Table59" Left="9.45" Top="42.25" Width="755.94" Height="18.9">
           <TableColumn Name="Column203" Width="99.2"/>
@@ -874,55 +874,65 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data5" Top="1999.27" Width="778.3" Height="721.87" DataSource="Clients">
+    <DataBand Name="Data5" Top="1997.89" Width="778.3" Height="740.77" DataSource="Clients">
       <TextObject Name="Text750" Top="11.9" Width="771.35" Height="24.57" CanGrow="true" Text="TREATMENT RECOMMENDATIONS:" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text751" Left="5.45" Top="37.8" Width="765.45" Height="18.9" CanGrow="true" Text="[Bio.Treatmentrecomendations]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text752" Top="150.75" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text753" Top="178.1" Width="771.35" Height="39.69" Text="This Licensed Clinical has completed a face to face interview with the client and has made appropriate treatment recommendations based on such interaction." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <LineObject Name="Line9" Left="254.7" Top="264.7" Width="-240.03"/>
-      <TextObject Name="Text35" Left="9.45" Top="269.6" Width="251.6" Height="24.57" CanGrow="true" Text="Licensed Practitioner &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line9" Left="160.2" Top="264.7" Width="-145.53"/>
+      <TextObject Name="Text35" Left="9.45" Top="269.6" Width="157.1" Height="24.57" CanGrow="true" Text="Licensed Practitioner" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line10" Left="556.1" Top="264.15" Width="-240.03"/>
       <TextObject Name="Text36" Left="300.4" Top="269.6" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text37" Left="614.25" Top="270.15" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text37" Left="623.7" Top="270.15" Width="128.75" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line11" Left="756.55" Top="264.7" Width="-136.08"/>
-      <TextObject Name="Text755" Left="606.8" Top="245.25" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Bio.DateSignatureLicensedPractitioner],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text755" Left="616.25" Top="245.25" Width="141.75" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Bio.DateSignatureLicensedPractitioner],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text756" Top="304.95" Width="771.35" Height="24.57" CanGrow="true" Text="UNLICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text757" Top="334.3" Width="771.35" Height="52.92" Text="This Unlicensed Clinical has complete a face to face interview with the client and has made appropriate treatment recommendations based on the interaction (Qualified Licensed Supervisor review and signature documented showing concurrence with diagnosis and treatment recommendations) " Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text762" Left="606.8" Top="420.35" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,&quot;&quot;,[Bio.DateSignatureUnlicensedTherapist])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line12" Left="254.7" Top="439.8" Width="-240.03"/>
+      <TextObject Name="Text762" Left="616.25" Top="420.35" Width="141.75" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,&quot;&quot;,[Bio.DateSignatureUnlicensedTherapist])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line12" Left="160.2" Top="439.8" Width="-145.53"/>
       <LineObject Name="Line13" Left="556.1" Top="439.25" Width="-240.03"/>
       <LineObject Name="Line14" Left="756.55" Top="439.8" Width="-136.08"/>
-      <TextObject Name="Text758" Left="9.45" Top="444.7" Width="251.6" Height="24.57" CanGrow="true" Text="Unlicensed Therapist &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text758" Left="9.45" Top="444.7" Width="157.1" Height="24.57" CanGrow="true" Text="Unlicensed Therapist" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text759" Left="300.4" Top="444.7" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text760" Left="614.25" Top="445.25" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text760" Left="623.7" Top="445.25" Width="128.75" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text763" Top="481.5" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text766" Left="606.8" Top="662.05" Width="160.65" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line15" Left="254.7" Top="681.5" Width="-240.03"/>
+      <TextObject Name="Text766" Left="616.25" Top="662.05" Width="141.75" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line15" Left="160.2" Top="681.5" Width="-145.53"/>
       <LineObject Name="Line16" Left="556.1" Top="680.95" Width="-240.03"/>
       <LineObject Name="Line17" Left="756.55" Top="681.5" Width="-136.08"/>
-      <TextObject Name="Text767" Left="1" Top="686.4" Width="270.5" Height="34.02" CanGrow="true" Text="Clinical Supervisor/Reviewer’s Signature &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text767" Left="1" Top="686.4" Width="166.55" Height="52.92" CanGrow="true" Text="Clinical Supervisor/Reviewer’s Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text768" Left="300.4" Top="686.4" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text769" Left="614.25" Top="686.95" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text769" Left="623.7" Top="686.95" Width="128.75" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <CheckBoxObject Name="CheckBox549" Left="8.9" Top="537.1" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IConcurWhitDiagnistic] == true,false,true)"/>
       <TextObject Name="Text770" Left="22.8" Top="533.65" Width="515.97" Height="18.9" Text="I do not concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text771" Left="22.35" Top="510.3" Width="389.34" Height="18.9" Text="I concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox550" Left="9.45" Top="513.75" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" DataColumn="Bio.IConcurWhitDiagnistic"/>
       <TextObject Name="Text772" Top="570.45" Width="402.57" Height="18.9" Text="ALTERNATIVE DIAGNOSIS AND/OR RECOMMENDATIONS" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text773" Left="7.45" Top="593.35" Width="763.56" Height="18.9" CanGrow="true" Text="[Bio.AlternativeDiagnosis]" HorzAlign="Justify" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="86.94" Top="380.55" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture3" Left="86.94" Top="207.45" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
-      <PictureObject Name="Picture2" Left="86.94" Top="623.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture4" Left="38.94" Top="380.55" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="38.94" Top="207.45" Width="95" Height="63.45" VisibleExpression="IIf([DocumentsAssistant.Id] == 0,true,false)" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture2" Left="38.94" Top="623.7" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text226" Left="300.51" Top="419.35" Width="270.65" Height="18.9" Text="[DocumentsAssistant.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text228" Left="300.4" Top="245.25" Width="270.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Name],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text227" Left="300.4" Top="660.5" Width="270.65" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line18" Left="254.7" Top="111.5" Width="-240.03"/>
-      <TextObject Name="Text776" Left="9.45" Top="116.4" Width="251.6" Height="24.57" CanGrow="true" Text="Client Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text777" Left="614.25" Top="116.95" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <LineObject Name="Line19" Left="756.55" Top="111.5" Width="-136.08"/>
-      <LineObject Name="Line20" Left="558.1" Top="111.95" Width="-240.03"/>
-      <TextObject Name="Text778" Left="302.4" Top="116.4" Width="270.5" Height="24.57" CanGrow="true" Text="Client Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text779" Left="309.85" Top="92.05" Width="255.15" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture5" Left="87.05" Top="55.7" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
+      <LineObject Name="Line18" Left="160.2" Top="114.5" Width="-145.53"/>
+      <TextObject Name="Text776" Left="9.45" Top="119.4" Width="157.1" Height="24.57" CanGrow="true" Text="Client Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text777" Left="623.7" Top="119.95" Width="128.75" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line19" Left="756.55" Top="114.5" Width="-136.08"/>
+      <LineObject Name="Line20" Left="558.1" Top="114.95" Width="-240.03"/>
+      <TextObject Name="Text778" Left="302.4" Top="119.4" Width="270.5" Height="24.57" CanGrow="true" Text="Client Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text779" Left="309.85" Top="95.05" Width="255.15" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <PictureObject Name="Picture5" Left="39.05" Top="59.72" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
+      <TextObject Name="Text781" Left="198.45" Top="269.5" Width="81.5" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line21" Left="277.6" Top="265.05" Width="-79.38"/>
+      <TextObject Name="Text784" Left="198.9" Top="245.7" Width="81.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Code],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text785" Left="198.9" Top="419.65" Width="81.65" Height="18.9" Text="[DocumentsAssistant.Code]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text782" Left="198.52" Top="444.6" Width="81.5" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text786" Left="198.9" Top="660.82" Width="81.65" Height="18.9" Text="[Supervisors.Code]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text783" Left="198.9" Top="686.45" Width="81.5" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line23" Left="278.05" Top="681.53" Width="-79.38"/>
+      <LineObject Name="Line24" Left="278.05" Top="439.24" Width="-79.38"/>
+      <TextObject Name="Text787" Left="616.14" Top="94.5" Width="141.75" Height="18.9" Text="[Bio.DateBio]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
   </ReportPage>
 </Report>
