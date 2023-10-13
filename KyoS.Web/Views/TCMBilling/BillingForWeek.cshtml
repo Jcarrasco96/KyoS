@@ -342,6 +342,8 @@
                                 <td align="center">
                                     @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
+                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
+                                        <a>|</a>
                                         @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
                                     }
                                 </td>
