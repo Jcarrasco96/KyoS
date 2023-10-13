@@ -152,7 +152,8 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(n => n.Id == IdTCMClient),
                         TCMNoteActivityTemp = _context.TCMNoteActivityTemp
                                                       .Where(na => na.UserName == user_logged.UserName),
-                        Sign = false
+                        Sign = false,
+                        CodeBill = user_logged.Clinic.CPTCode_TCM
 
 
                     };

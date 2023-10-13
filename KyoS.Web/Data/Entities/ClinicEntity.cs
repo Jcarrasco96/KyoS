@@ -80,5 +80,8 @@ namespace KyoS.Web.Data.Entities
         public string CodeFARS { get; set; }
 
         public ICollection<TCMDateBlockedEntity> TCMDateBlockeds { get; set; }
+
+        [Display(Name = "Bill code of TCM")]
+        public string CPTCode_TCM { get; set; }
     }
 }
