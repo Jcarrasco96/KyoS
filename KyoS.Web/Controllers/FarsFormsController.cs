@@ -525,7 +525,7 @@ namespace KyoS.Web.Controllers
                 
                 List<ClientEntity> ClientList = await _context.Clients
                                                               .Include(n => n.FarsFormList)
-                                                              .Where(n => n.FarsFormList.Count == 0 
+                                                              .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0 
                                                                  && n.Clinic.Id == user_logged.Clinic.Id
                                                                  && (n.IdFacilitatorPSR == facilitator.Id 
                                                                     || n.IndividualTherapyFacilitator.Id == facilitator.Id
@@ -539,7 +539,7 @@ namespace KyoS.Web.Controllers
             {
                 List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Count == 0 
+                                                          .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
                                                               && n.Clinic.Id == user_logged.Clinic.Id
                                                               && n.OnlyTCM == false)
                                                           .ToListAsync();
