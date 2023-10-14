@@ -78,6 +78,7 @@
                                                 <th class="col-md-1" style="text-align:center;">Birth Date</th>
                                                 <th class="col-md-1" style="text-align:center;">CPT code</th>
                                                 <th class="col-md-2">CaseManager</th>
+                                                <th class="col-md-1" style="text-align:center;">Setting</th>
                                                 <th class="col-md-1" style="text-align:center;">Units</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
                                                 <th class="col-md-1" style="text-align:center;">Amount</th>
@@ -118,8 +119,9 @@
 
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
-                                                    <td>@Html.DisplayFor(modelItem => product.CodeBill)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)</td>
                                                     <td align="center">
                                                         @unit1
                                                     </td>
@@ -179,6 +181,8 @@
                                 <td align="center">
                                     @if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
+                                        @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
+                                        <a>|</a>
                                         @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
                                     }
                                 </td>
@@ -242,6 +246,7 @@
                                                 <th class="col-md-1" style="text-align:center;">Birth Date</th>
                                                 <th class="col-md-1" style="text-align:center;">CPT code</th>
                                                 <th class="col-md-2">CaseManager</th>
+                                                <th class="col-md-1" style="text-align:center;">Setting</th>
                                                 <th class="col-md-1" style="text-align:center;">Units</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
                                                 <th class="col-md-1" style="text-align:center;">Amount</th>
@@ -281,8 +286,9 @@
                                                 }*/
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
-                                                    <td>@Html.DisplayFor(modelItem => product.CodeBill)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)</td>
                                                     <td align="center">
                                                         @unit1
                                                     </td>
@@ -342,6 +348,8 @@
                                 <td align="center">
                                     @if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
+                                        @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
+                                        <a>|</a>
                                         @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
                                     }
                                 </td>

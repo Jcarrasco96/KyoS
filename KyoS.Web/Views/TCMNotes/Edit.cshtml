@@ -76,6 +76,7 @@
             <input type="hidden" asp-for="BilledDate" />
             <input type="hidden" asp-for="PaymentDate" />
             <input type="hidden" asp-for="BillDms" />
+            <input type="hidden" asp-for="CodeBill" />
             @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
             {
                 <input type="hidden" asp-for="Sign" />

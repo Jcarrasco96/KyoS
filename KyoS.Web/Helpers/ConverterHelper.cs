@@ -49,7 +49,8 @@ namespace KyoS.Web.Helpers
                 CodeMTP = model.CodeMTP,
                 CodeBIO = model.CodeBIO,
                 CodeMTPR = model.CodeMTPR,
-                CodeFARS = model.CodeFARS
+                CodeFARS = model.CodeFARS,
+                CPTCode_TCM = model.CPTCode_TCM
 
             };
         }
@@ -78,7 +79,8 @@ namespace KyoS.Web.Helpers
                 CodeMTP = clinicEntity.CodeMTP,
                 CodeBIO = clinicEntity.CodeBIO,
                 CodeMTPR = clinicEntity.CodeMTPR,
-                CodeFARS = clinicEntity.CodeFARS
+                CodeFARS = clinicEntity.CodeFARS,
+                CPTCode_TCM = clinicEntity.CPTCode_TCM
 
             };
         }
@@ -5963,8 +5965,8 @@ namespace KyoS.Web.Helpers
                 Sign = model.Sign,
                 BillDms = model.BillDms,
                 BilledDate = model.BilledDate,
-                PaymentDate = model.PaymentDate
-
+                PaymentDate = model.PaymentDate,
+                CodeBill = model.CodeBill
             };
         }
 
@@ -5992,7 +5994,8 @@ namespace KyoS.Web.Helpers
                 Sign = model.Sign,
                 BillDms = model.BillDms,
                 BilledDate = model.BilledDate,
-                PaymentDate = model.PaymentDate
+                PaymentDate = model.PaymentDate,
+                CodeBill = model.CodeBill
 
             };
 

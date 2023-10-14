@@ -28,6 +28,7 @@
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CodeBill" />
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
@@ -51,7 +52,7 @@
                         <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
                     }
 
-                }             
+                }
             </div>
         </form>
     </div>
