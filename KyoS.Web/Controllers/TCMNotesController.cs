@@ -684,7 +684,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     //check overlapin
-                    if (noteActivities.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                    if (noteActivities.Count() > 0)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                     .Include(n => n.TCMClient)
@@ -701,6 +701,28 @@ namespace KyoS.Web.Controllers
                         }
 
                         ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
+
+                    }
+
+                    //check overlapin Mental Health
+                    if (CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                    {
+                        TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                    .Include(n => n.TCMClient)
+                                                    .ThenInclude(n => n.Client)
+                                                    .FirstOrDefaultAsync(m => m.Id == TcmNotesViewModel.IdTCMNote);
+
+                        TcmNotesViewModel.TCMNote = tcmNote1;
+                        TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        if (TcmNotesViewModel.IdTCMDomain != 0)
+                        {
+                            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                            TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                        }
+
+                        ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Health)");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -878,7 +900,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 //check overlapin
-                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 || CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 )
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                     TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
@@ -892,7 +914,23 @@ namespace KyoS.Web.Controllers
                     ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
-               
+
+                //check overlapin Mental Health
+                if (CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                {
+                    TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+
+                    if (TcmNotesViewModel.IdTCMDomain != 0)
+                    {
+                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                        TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                    }
+
+                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Helath)");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
+                }
+
                 _context.TCMNoteActivityTemp.Add(entity);
                 try
                 {
@@ -1117,7 +1155,7 @@ namespace KyoS.Web.Controllers
                                                                                 || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
                                                                            .ToListAsync();
                 //check overlapin
-                if (noteActivities.Count() > 0 || CheckOverlappingMH(NoteActivityViewModel.DateOfServiceNote, NoteActivityViewModel.DateOfServiceNote, clientId) == true)
+                if (noteActivities.Count() > 0 )
                 {
                     TCMNoteEntity tcmNote1 = await _context.TCMNote
                                                            .Include(n => n.TCMClient)
@@ -1137,6 +1175,29 @@ namespace KyoS.Web.Controllers
                     ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                    
+                }
+
+                //check overlapin Mental Health
+                if (CheckOverlappingMH(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime, clientId) == true)
+                {
+                    TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                           .Include(n => n.TCMClient)
+                                                           .ThenInclude(n => n.Client)
+                                                           .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
+
+                    NoteActivityViewModel.TCMNote = tcmNote1;
+                    NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                    if (NoteActivityViewModel.IdTCMDomain != 0)
+                    {
+                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
+                        NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                    }
+
+                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Health)");
+                    ViewData["unitsAvaliable"] = unitsAvaliable;
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
+
                 }
 
                 TCMNoteActivityEntity IndividualAgencyEntity = await _converterHelper.ToTCMNoteActivityEntity(NoteActivityViewModel, false, user_logged.UserName);
