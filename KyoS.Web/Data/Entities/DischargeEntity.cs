@@ -79,5 +79,35 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Date of Admission Service")]
         [DataType(DataType.Date)]
         public DateTime DateAdmissionService { get; set; }
+
+        //Join Commission
+        public bool JoinCommission { get; set; }
+        //1 Admission
+        public string SummaryOfPresentingProblems { get; set; }
+        public string TreatmentSummary { get; set; }
+        //2 Progress
+        public bool SignificantProgress { get; set; }
+        public bool MinimalProgress { get; set; }
+        public bool Regression { get; set; }
+        public bool ModerateProgress { get; set; }
+        public bool NoProgress { get; set; }
+        public bool UnableToDetermine { get; set; }
+
+        // 3 Discharge
+        //public bool PlanCompletely { get; set; }  -- Code Line 32 (CompletedTreatment field)
+        public bool PlanCompletePartially { get; set; }
+        //public bool VoluntarilyRefused { get; set; }  --code line 36(LeftBefore field)
+        //public bool NonComplianceRules { get; set; }  --code line 35(NonCompliant field)
+        public bool ClientMoveOutArea { get; set; }
+        //public bool ClientTransferred { get; set; }  --code line 34(ClientTransferred field)
+        public bool ExtendedHospitalization { get; set; }
+        //public bool ServiceNotCovered { get; set; }  --code line 33(Termination field)
+        //public bool Other { get; set; }  --code line 38(Other field)
+        //public string OtherExplain { get; set; }  --code line 39(Other field)
+
+        // 4 Follow up
+        public string Follow_up { get; set; }
+
+
     }
 }
