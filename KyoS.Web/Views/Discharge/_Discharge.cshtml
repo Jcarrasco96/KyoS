@@ -60,7 +60,15 @@
         <pre>
         <strong>PROGRAM:</strong>            <input type="checkbox" asp-for="ProgramPSR" class="form-check-input"> PSR     <input type="checkbox" asp-for="ProgramInd" class="form-check-input"> IND. THERAPY     <input type="checkbox" asp-for="ProgramGroup" class="form-check-input"> GROUP THERAPY     <input type="checkbox" asp-for="ProgramClubHouse" class="form-check-input"> CLUB HOUSE
         <strong>Type of Discharge: </strong> <input type="checkbox" asp-for="Planned" class="form-check-input" id="check1"> Planned        <input type="checkbox" class="form-check-input" id="check101">  Unplanned
-
+        </pre>
+    </div>
+</div>
+@if (Model.JoinCommission == false)
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <pre>
+           
         <strong>Circumstances of Discharge (Discharge Status)</strong>
         <input type="checkbox" asp-for="CompletedTreatment" class="form-check-input"> Completed Treatment
         <input type="checkbox" asp-for="Termination" class="form-check-input"> Termination of treatment due to end of insurance coverage to provide services
@@ -68,7 +76,7 @@
         <input type="checkbox" asp-for="NonCompliant" class="form-check-input"> Non-Compliant with CMHC Rules
         <input type="checkbox" asp-for="LeftBefore" class="form-check-input"> Left Before Completing Treatment
         <input type="checkbox" asp-for="Administrative" class="form-check-input"> Administrative Discharge
-        <input type="checkbox" asp-for="Other" class="form-check-input"> Other:     <input asp-for="Other_Explain"  style="width:50%">
+        <input type="checkbox" asp-for="Other" class="form-check-input"> Other:     <input asp-for="Other_Explain" style="width:50%">
 
         <strong>PROGNOSIS:</strong>    <input type="checkbox" asp-for="PrognosisGood" class="form-check-input"> Good     <input type="checkbox" asp-for="PrognosisFair" class="form-check-input"> Fair     <input type="checkbox" asp-for="PrognosisGuarded" class="form-check-input"> Guarded  <input type="checkbox" asp-for="PrognosisPoor" class="form-check-input"> Poor
 
@@ -77,17 +85,71 @@
         <strong>Referrals to: </strong>                         <input asp-for="ReferralsTo" style="width:40%">
 
         <strong>Discharge Diagnosis (ICD-10 / DSM 5): </strong> <input asp-for="DischargeDiagnosis" style="width:40%">
-        </pre>  
+        </pre>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <pre>
+        <strong>1. ADMISSION/DISCHARGE STATUS</strong>  
+           
+        Summary of Presenting Problems at Time of Admission:
+        <textarea asp-for="SummaryOfPresentingProblems" style="width:90%" rows="4"></textarea>
+
+        Treatment Summary/Status of Client at time of Discharge:
+        <textarea asp-for="TreatmentSummary" style="width:90%" rows="4"></textarea>
+        </pre>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <pre>
+        <strong>2. PROGRESS (Overall Treatment Progress)</strong>  
+
+        <input type="checkbox" asp-for="SignificantProgress" class="form-check-input"> Significant Progress            <input type="checkbox" asp-for="MinimalProgress" class="form-check-input"> Minimal Progress          <input type="checkbox" asp-for="Regression" class="form-check-input"> Regression 
+        <input type="checkbox" asp-for="ModerateProgress" class="form-check-input"> Moderate Progress               <input type="checkbox" asp-for="NoProgress" class="form-check-input"> No Progress               <input type="checkbox" asp-for="UnableToDetermine" class="form-check-input"> Unable to determine 
+        </pre>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <pre>
+        <strong>3.DISCHARGE (Reason for Discharge/Termination)</strong>  
+
+        <input type="checkbox" asp-for="CompletedTreatment" class="form-check-input"> Goals and Objectives on Treatment Plan Completely met.            
+        <input type="checkbox" asp-for="PlanCompletePartially" class="form-check-input"> Goals and Objectives on Treatment Plan Partially met. No other referral necessary.          
+        <input type="checkbox" asp-for="LeftBefore" class="form-check-input"> Client/Legal Guardian Voluntarily Refused Treatment/Service 
+        <input type="checkbox" asp-for="NonCompliant" class="form-check-input"> Non-Compliance with Program Rules and Regulations              
+        <input type="checkbox" asp-for="ClientMoveOutArea" class="form-check-input"> Client Moved Out of Area/Unable to Contact              
+        <input type="checkbox" asp-for="ClientTransferred" class="form-check-input"> Client Transferred/Referred to Another Service Provider/A Higher Level of Care is Required 
+        <input type="checkbox" asp-for="ExtendedHospitalization" class="form-check-input"> Extended Hospitalization: • Psychiatric Hospitalization • Medical Hospitalization
+        <input type="checkbox" asp-for="Termination" class="form-check-input"> Services not Covered under Client’s Current Insurance Plan
+        <input type="checkbox" asp-for="Other" class="form-check-input"> Other:     <input asp-for="Other_Explain" style="width:50%">
+        </pre>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <pre>
+        <strong>4- FOLLOW-UP/AFTER CARE</strong>  
+
+        Summary of Presenting Problems at Time of Admission:
+        <textarea asp-for="Follow_up" style="width:90%" rows="4"></textarea>
+        </pre>
+        </div>
+    </div>
+}
 <div class="col-md-12">
     <pre>
     
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      
-    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      
+        <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
     
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">    <strong>Supervisor signature date</strong>    <input asp-for="DateSignatureSupervisor">  
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">    <strong>Supervisor signature date</strong>    <input asp-for="DateSignatureSupervisor">  
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
     </pre>
 </div>
 <div class="col-md-12">

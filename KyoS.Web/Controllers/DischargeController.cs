@@ -95,6 +95,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DischargeViewModel model;
@@ -149,7 +150,8 @@ namespace KyoS.Web.Controllers
                         DateSignatureSupervisor = DateTime.Now,
                         TypeService = service,
                         Origin = origin,
-                        DateAdmissionService = client.AdmisionDate
+                        DateAdmissionService = client.AdmisionDate,
+                        JoinCommission = user_logged.Clinic.Setting.DischargeJoinCommission
                     };
                     if (model.Client.MedicationList == null)
                         model.Client.MedicationList = new List<MedicationEntity>();
@@ -210,7 +212,8 @@ namespace KyoS.Web.Controllers
                 DateSignatureSupervisor = DateTime.Now,
                 TypeService = service,
                 Origin = origin,
-                DateAdmissionService = client.AdmisionDate
+                DateAdmissionService = client.AdmisionDate,
+                JoinCommission = user_logged.Clinic.Setting.DischargeJoinCommission
             };
             return View(model);
         }
@@ -343,7 +346,7 @@ namespace KyoS.Web.Controllers
         public IActionResult Edit(int id = 0, int origin = 0)
         {
             DischargeViewModel model;
-
+             
             if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
             {
                 UserEntity user_logged = _context.Users
@@ -1290,6 +1293,6 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
-
+        
     }
 }

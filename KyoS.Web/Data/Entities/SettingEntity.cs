@@ -29,5 +29,7 @@ namespace KyoS.Web.Data.Entities
         public bool LockTCMNoteForUnits { get; set; }
 
         public int UnitsForDayForClient { get; set; }
+
+        public bool DischargeJoinCommission { get; set; }
     }
 }

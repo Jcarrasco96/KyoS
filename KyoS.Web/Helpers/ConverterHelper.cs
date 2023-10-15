@@ -1445,7 +1445,8 @@ namespace KyoS.Web.Helpers
                 TCMInitialTime = model.TCMInitialTime,
                 TCMEndTime = model.TCMEndTime,
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
-                UnitsForDayForClient = model.UnitsForDayForClient
+                UnitsForDayForClient = model.UnitsForDayForClient,
+                DischargeJoinCommission = model.DischargeJoinCommission
             };
         }
 
@@ -1471,7 +1472,8 @@ namespace KyoS.Web.Helpers
                 TCMInitialTime = model.TCMInitialTime,
                 TCMEndTime = model.TCMEndTime,
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
-                UnitsForDayForClient = model.UnitsForDayForClient
+                UnitsForDayForClient = model.UnitsForDayForClient,
+                DischargeJoinCommission = model.DischargeJoinCommission
             };
         }
 
@@ -2884,7 +2886,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TypeService = model.TypeService,
                 DateAdmissionService = model.DateAdmissionService,
-                Messages = !isNew ? await _context.Messages.Where(m => m.Discharge.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.Discharge.Id == model.Id).ToListAsync() : null,
+                ClientMoveOutArea = model.ClientMoveOutArea,
+                ExtendedHospitalization = model.ExtendedHospitalization,
+                Follow_up = model.Follow_up,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                NoProgress = model.NoProgress,
+                PlanCompletePartially = model.PlanCompletePartially,
+                Regression = model.Regression,
+                SignificantProgress = model.SignificantProgress,
+                SummaryOfPresentingProblems = model.SummaryOfPresentingProblems,
+                TreatmentSummary = model.TreatmentSummary,
+                UnableToDetermine = model.UnableToDetermine,
+                JoinCommission = model.JoinCommission
             };
         }
 
@@ -2935,7 +2950,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 TypeService = model.TypeService,
-                DateAdmissionService = model.DateAdmissionService
+                DateAdmissionService = model.DateAdmissionService,
+                ClientMoveOutArea = model.ClientMoveOutArea,
+                ExtendedHospitalization = model.ExtendedHospitalization,
+                Follow_up = model.Follow_up,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                NoProgress = model.NoProgress,
+                PlanCompletePartially = model.PlanCompletePartially,
+                Regression = model.Regression,
+                SignificantProgress = model.SignificantProgress,
+                SummaryOfPresentingProblems = model.SummaryOfPresentingProblems,
+                TreatmentSummary = model.TreatmentSummary,
+                UnableToDetermine = model.UnableToDetermine,
+                JoinCommission = model.JoinCommission
 
             };
 
