@@ -441,6 +441,9 @@ namespace KyoS.Web.Controllers
                         List<CaseMannagerEntity> caseManager_List = await _context.CaseManagers
                                                                                   .Include(n => n.Clinic)
                                                                                   .Include(n => n.TCMSupervisor)
+                                                                                  .Include(n => n.TCMClients)
+                                                                                  .ThenInclude(n => n.Client)
+                                                                                  .OrderBy(n => n.Name)
                                                                                   .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagers", caseManager_List) });
@@ -556,6 +559,9 @@ namespace KyoS.Web.Controllers
                     List<CaseMannagerEntity> caseManager_List = await _context.CaseManagers
                                                                               .Include(n => n.Clinic)
                                                                               .Include(n => n.TCMSupervisor)
+                                                                              .Include(n => n.TCMClients)
+                                                                              .ThenInclude(n => n.Client)
+                                                                              .OrderBy(n => n.Name)
                                                                               .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagers", caseManager_List) });

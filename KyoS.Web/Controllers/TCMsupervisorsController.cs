@@ -193,6 +193,9 @@ namespace KyoS.Web.Controllers
                         List<TCMSupervisorEntity> tcmSupervisor = await _context.TCMSupervisors
 
                                                                                 .Include(s => s.Clinic)
+                                                                                .Include(f => f.CaseManagerList)
+                                                                                .ThenInclude(f => f.TCMClients)
+                                                                                .ThenInclude(f => f.Client)
 
                                                                                 .OrderBy(t => t.Name)
                                                                                 .ToListAsync();
@@ -382,7 +385,9 @@ namespace KyoS.Web.Controllers
                     List<TCMSupervisorEntity> tcmSupervisor = await _context.TCMSupervisors
 
                                                                             .Include(s => s.Clinic)
-
+                                                                            .Include(f => f.CaseManagerList)
+                                                                            .ThenInclude(f => f.TCMClients)
+                                                                            .ThenInclude(f => f.Client)
                                                                             .OrderBy(f => f.Name)
                                                                             .ToListAsync();
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
