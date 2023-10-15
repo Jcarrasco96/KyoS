@@ -24957,9 +24957,9 @@ namespace KyoS.Web.Helpers
             byte[] stream1 = null;
             byte[] stream2 = null;
 
-            if (!string.IsNullOrEmpty(intakeAssessment.TcmClient.Client.SignPath))
+            if (!string.IsNullOrEmpty(intakeAssessment.TCMSupervisor.SignaturePath))
             {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAssessment.TcmClient.Client.SignPath)}");
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intakeAssessment.TCMSupervisor.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }
 
