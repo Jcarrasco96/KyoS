@@ -20017,6 +20017,10 @@ namespace KyoS.Web.Controllers
 
             if (group2 != null)
             {
+                List<GroupNote2_Activity> noteActivity = _context.GroupNotes2_Activities
+                                                                 .Where(n => n.GroupNote2.Id == group2.Id)
+                                                                 .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(group2);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
@@ -20027,6 +20031,10 @@ namespace KyoS.Web.Controllers
 
             if (note != null)
             {
+                List<Note_Activity> noteActivity = _context.Notes_Activities
+                                                           .Where(n => n.Note.Id == note.Id)
+                                                           .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(note);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
@@ -20037,6 +20045,10 @@ namespace KyoS.Web.Controllers
 
             if (noteP != null)
             {
+                List<NoteP_Activity> noteActivity = _context.NotesP_Activities
+                                                            .Where(n => n.NoteP.Id == noteP.Id)
+                                                            .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(noteP);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });

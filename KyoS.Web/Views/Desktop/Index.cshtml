@@ -2393,6 +2393,24 @@
             <div class="col-md-2">
             </div>
             <div class="col-md-2">
+                @if (ViewBag.AssesmentPending == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                        <span class="message-counter-cero">@ViewBag.AssesmentPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="TCMAssessments" asp-action="TCMAssessmentApproved" asp-route-approved="1" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
+                            <span class="message-counter-info">@ViewBag.AssesmentPending</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-2">
                 @if (ViewBag.ServicePlanPending == 0)
                 {
                     <div class="thumbnail list-group-item list-group-item-text">
@@ -2442,24 +2460,6 @@
                         <div class="thumbnail list-group-item list-group-item-info">
                             <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service Plan R.</h4>
                             <span class="message-counter-info">@ViewBag.ServicePlanReviewPending</span>
-                        </div>
-                    </a>
-                }
-            </div>
-            <div class="col-md-2">
-                @if (ViewBag.AssesmentPending == 0)
-                {
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
-                        <span class="message-counter-cero">@ViewBag.AssesmentPending</span>
-                    </div>
-                }
-                else
-                {
-                    <a style="text-decoration: none;" asp-controller="TCMAssessments" asp-action="TCMAssessmentApproved" asp-route-approved="1" role="button">
-                        <div class="thumbnail list-group-item list-group-item-info">
-                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assesment</h4>
-                            <span class="message-counter-info">@ViewBag.AssesmentPending</span>
                         </div>
                     </a>
                 }
