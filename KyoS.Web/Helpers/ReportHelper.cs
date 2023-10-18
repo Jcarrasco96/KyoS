@@ -10339,6 +10339,91 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream FloridaSocialHSDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeFloridaSocialHSJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+            
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream DreamsMentalHealthDischargeReport(DischargeEntity discharge)
         {
             WebReport WebReport = new WebReport();
@@ -10401,6 +10486,91 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream DreamsMentalHealthDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeDreamsMentalHealthJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
 
             WebReport.Report.Prepare();
 
@@ -10481,6 +10651,91 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream CommunityHTCDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeCommunityHTCJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream PrincipleCCIDischargeReport(DischargeEntity discharge)
         {
             WebReport WebReport = new WebReport();
@@ -10543,6 +10798,91 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream PrincipleCCIDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargePrincipleCCIJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
 
             WebReport.Report.Prepare();
 
@@ -10623,6 +10963,91 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream SapphireMHCDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeSapphireMHCJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream SouthFloridaMHRDischargeReport(DischargeEntity discharge)
         {
             WebReport WebReport = new WebReport();
@@ -10694,6 +11119,91 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream SouthFloridaMHRDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeSouthFloridaMHRJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream MedicalRehabDischargeReport(DischargeEntity discharge)
         {
             WebReport WebReport = new WebReport();
@@ -10756,6 +11266,91 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream MedicalRehabDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeMedicalRehabJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
 
             WebReport.Report.Prepare();
 
@@ -17056,6 +17651,20 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Other", typeof(bool));
             dt.Columns.Add("DateAdmissionService", typeof(DateTime));
 
+            dt.Columns.Add("ClientMoveOutArea", typeof(bool));
+            dt.Columns.Add("ExtendedHospitalization", typeof(bool));
+            dt.Columns.Add("Follow_up", typeof(string));
+            dt.Columns.Add("JoinCommission", typeof(bool));
+            dt.Columns.Add("MinimalProgress", typeof(bool));
+            dt.Columns.Add("ModerateProgress", typeof(bool));
+            dt.Columns.Add("NoProgress", typeof(bool));
+            dt.Columns.Add("PlanCompletePartially", typeof(bool));
+            dt.Columns.Add("Regression", typeof(bool));
+            dt.Columns.Add("SignificantProgress", typeof(bool));
+            dt.Columns.Add("SummaryOfPresentingProblems", typeof(string));
+            dt.Columns.Add("TreatmentSummary", typeof(string));
+            dt.Columns.Add("UnableToDetermine", typeof(bool));           
+
             if (discharge != null)
             {
                 dt.Rows.Add(new object[]
@@ -17101,7 +17710,20 @@ namespace KyoS.Web.Helpers
                                             discharge.LeftBefore,
                                             discharge.NonCompliant,
                                             discharge.Other,
-                                            discharge.DateAdmissionService
+                                            discharge.DateAdmissionService,
+                                            discharge.ClientMoveOutArea,
+                                            discharge.ExtendedHospitalization,
+                                            discharge.Follow_up,
+                                            discharge.JoinCommission,
+                                            discharge.MinimalProgress,
+                                            discharge.ModerateProgress,
+                                            discharge.NoProgress,
+                                            discharge.PlanCompletePartially,
+                                            discharge.Regression,
+                                            discharge.SignificantProgress,
+                                            discharge.SummaryOfPresentingProblems,
+                                            discharge.TreatmentSummary,
+                                            discharge.UnableToDetermine              
                                         });
             }
             else
@@ -17149,7 +17771,20 @@ namespace KyoS.Web.Helpers
                                             false,
                                             false,
                                             false,
-                                            new DateTime()
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            false
                                         });
             }
 

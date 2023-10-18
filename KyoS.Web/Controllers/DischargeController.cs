@@ -507,7 +507,7 @@ namespace KyoS.Web.Controllers
                                              .Include(d => d.Client)     
                                              .ThenInclude(c => c.Clinic)
                                              
-                                             .Include(d => d.Supervisor)
+                                             .Include(d => d.Supervisor)                                             
                                              
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
@@ -517,37 +517,79 @@ namespace KyoS.Web.Controllers
                         
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                Stream stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)                
+                    stream = _reportHelper.FloridaSocialHSDischargeReport(entity);                
+                else
+                    stream = _reportHelper.FloridaSocialHSDischargeJCReport(entity);
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                Stream stream = _reportHelper.DreamsMentalHealthDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.DreamsMentalHealthDischargeReport(entity);
+                else
+                    stream = _reportHelper.DreamsMentalHealthDischargeJCReport(entity);
+                
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
             {
-                Stream stream = _reportHelper.CommunityHTCDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.CommunityHTCDischargeReport(entity);
+                else
+                    stream = _reportHelper.CommunityHTCDischargeJCReport(entity);
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
             {
-                Stream stream = _reportHelper.PrincipleCCIDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.PrincipleCCIDischargeReport(entity);
+                else
+                    stream = _reportHelper.PrincipleCCIDischargeJCReport(entity);
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
             {
-                Stream stream = _reportHelper.SapphireMHCDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.SapphireMHCDischargeReport(entity);
+                else
+                    stream = _reportHelper.SapphireMHCDischargeJCReport(entity);
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
             {
-                Stream stream = _reportHelper.SouthFloridaMHRDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.SouthFloridaMHRDischargeReport(entity);
+                else
+                    stream = _reportHelper.SouthFloridaMHRDischargeJCReport(entity);
+                
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
-                Stream stream = _reportHelper.MedicalRehabDischargeReport(entity);
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.MedicalRehabDischargeReport(entity);
+                else
+                    stream = _reportHelper.MedicalRehabDischargeJCReport(entity);
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -1291,8 +1333,6 @@ namespace KyoS.Web.Controllers
             }
 
             return View(auditClient_List);
-        }
-
-        
+        }        
     }
 }

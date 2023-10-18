@@ -115,12 +115,19 @@ namespace KyoS.Web.Helpers
 
         #region Discharge reports
         Stream FloridaSocialHSDischargeReport(DischargeEntity intake);
+        Stream FloridaSocialHSDischargeJCReport(DischargeEntity intake);
         Stream DreamsMentalHealthDischargeReport(DischargeEntity intake);
+        Stream DreamsMentalHealthDischargeJCReport(DischargeEntity intake);
         Stream CommunityHTCDischargeReport(DischargeEntity intake);
+        Stream CommunityHTCDischargeJCReport(DischargeEntity intake);
         Stream PrincipleCCIDischargeReport(DischargeEntity intake);
+        Stream PrincipleCCIDischargeJCReport(DischargeEntity intake);
         Stream SapphireMHCDischargeReport(DischargeEntity intake);
+        Stream SapphireMHCDischargeJCReport(DischargeEntity intake);
         Stream SouthFloridaMHRDischargeReport(DischargeEntity intake);
+        Stream SouthFloridaMHRDischargeJCReport(DischargeEntity intake);
         Stream MedicalRehabDischargeReport(DischargeEntity intake);
+        Stream MedicalRehabDischargeJCReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
