@@ -1974,6 +1974,7 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> ClientList = await _context.Clients
                                                           .Include(n => n.IntakeMedicalHistory)
+                                                          .Include(n => n.Bio)
                                                           .Where(n => n.IntakeMedicalHistory == null 
                                                             && n.Clinic.Id == user_logged.Clinic.Id
                                                             && n.OnlyTCM == false)
