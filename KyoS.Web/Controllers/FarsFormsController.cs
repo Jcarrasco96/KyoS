@@ -538,11 +538,12 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
-                                                              && n.Clinic.Id == user_logged.Clinic.Id
-                                                              && n.OnlyTCM == false)
-                                                          .ToListAsync();
+                                                              .Include(n => n.FarsFormList)
+                                                              .Include(n => n.Bio)
+                                                              .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
+                                                                       && n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.OnlyTCM == false)
+                                                              .ToListAsync();
 
                 return View(ClientList);
             }

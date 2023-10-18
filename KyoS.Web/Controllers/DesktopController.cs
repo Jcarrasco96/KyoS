@@ -283,6 +283,8 @@ namespace KyoS.Web.Controllers
                 ViewBag.PendingInitialFars = await _context.Clients
                                                            .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                            && (wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0)
+                                                                           && (wc.Bio.CreatedBy == User.Identity.Name
+                                                                            || wc.Bio == null)
                                                                            && wc.OnlyTCM == false));
 
                 ViewBag.PendingFars = await _context.FarsForm
@@ -335,6 +337,8 @@ namespace KyoS.Web.Controllers
                 ViewBag.MedicalHistoryMissing = await _context.Clients
                                                               .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                               && wc.IntakeMedicalHistory == null
+                                                                              && (wc.Bio.CreatedBy == User.Identity.Name
+                                                                               || wc.Bio == null)
                                                                               && wc.OnlyTCM == false));
 
                 ViewBag.PendingMtp = await _context.MTPs
@@ -428,7 +432,7 @@ namespace KyoS.Web.Controllers
 
                     ViewBag.PendingInitialFars = await _context.Clients
                                                                .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                                               && wc.FarsFormList.Count == 0
+                                                                               && wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0
                                                                                && wc.OnlyTCM == false));
 
                     ViewBag.MedicalHistoryMissing = await _context.Clients
@@ -732,11 +736,15 @@ namespace KyoS.Web.Controllers
                 ViewBag.PendingInitialFars = await _context.Clients
                                                            .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                            && (wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0)
+                                                                           && (wc.Bio.CreatedBy == User.Identity.Name
+                                                                            || wc.Bio == null)
                                                                            && wc.OnlyTCM == false));
 
                 ViewBag.MedicalHistoryMissing = await _context.Clients
                                                               .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                               && wc.IntakeMedicalHistory == null
+                                                                              && (wc.Bio.CreatedBy == User.Identity.Name
+                                                                               || wc.Bio == null)
                                                                               && wc.OnlyTCM == false));
 
                 List<MTPEntity> MtpPending = await _context.MTPs                                                           

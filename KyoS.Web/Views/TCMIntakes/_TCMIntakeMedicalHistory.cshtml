@@ -6,11 +6,11 @@
 
     Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No: @ViewData["CaseNumber"].ToString()
             
-    Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%">
+    Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%" disabled>
             
-    Address Physician:      <input asp-for="AddressPhysician" style="width:20%">
+    Address Physician:      <input asp-for="AddressPhysician" style="width:20%" disabled>
             
-    City:                   <input asp-for="City" style="width:20%">                    State: <input asp-for="State">                Zip:  <input asp-for="ZipCode">
+    City:                   <input asp-for="City" style="width:20%" disabled>                    State: <input asp-for="State" disabled>                Zip:  <input asp-for="ZipCode" disabled>
     </pre>
 </div>
 <div class="col-md-12">
@@ -145,12 +145,39 @@
 </div>
 <div class="col-md-12">
     <pre>
-    
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+@if (Model.AdmissionedFor == User.Identity.Name)
+{
+    @if (Model.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">
     <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
-    
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name))</strong>     
+
+    }
     <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+}
+else
+{ 
+    @if (Model.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name))</strong>     
+
+    }
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+
+}
     </pre>
 </div>
 <div class="col-md-12">
