@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/27/2023 15:57:04" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/19/2023 15:53:48" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cNDXgvfYw6OJ+KFjupyjUA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38P3JMSGrLtzlDOitMF/r0g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -439,15 +439,15 @@
         </TableRow>
       </TableObject>
       <TextObject Name="Text468" Top="233.8" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;2. CLIENT’S PRESENTING PROBLEM(S):&lt;/b&gt; (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text469" Top="270.15" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.PresentingProblem]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text469" Top="270.15" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" Text="[Bio.PresentingProblem]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text475" Top="331.75" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;CLIENT’S ASSESSMENT OF SITUATION:&lt;/b&gt; (list how the client’s symptoms are affecting clients emotional functioning and use their own words)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text476" Top="368.55" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.ClientAssessmentSituation]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text476" Top="368.55" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" Text="[Bio.ClientAssessmentSituation]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text477" Top="429.7" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;FAMILY'S ASSESSMENT OF SITUATION:&lt;/b&gt; (if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text478" Top="466.5" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.FamilyAssessmentSituation]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text478" Top="466.5" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" Text="[Bio.FamilyAssessmentSituation]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text479" Top="527.2" Width="771.35" Height="34.02" CanGrow="true" Text="&lt;b&gt;FAMILY'S EMOTIONAL FUNCTIONING: &lt;/b&gt; (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text480" Top="566" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.FamilyEmotional]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text480" Top="566" Width="774.9" Height="56.7" CanGrow="true" CanShrink="true" Text="[Bio.FamilyEmotional]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text481" Top="626.15" Width="771.35" Height="24.57" CanGrow="true" Text="&lt;b&gt;LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION:&lt;/b&gt; (if applicable, in their own words)" Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text482" Top="654.5" Width="774.9" Height="94.5" CanGrow="true" CanShrink="true" CanBreak="false" Text="[Bio.LegalAssessment]" HorzAlign="Justify" Font="Arial, 10pt"/>
+      <TextObject Name="Text482" Top="654.5" Width="774.9" Height="94.5" CanGrow="true" CanShrink="true" Text="[Bio.LegalAssessment]" HorzAlign="Justify" Font="Arial, 10pt"/>
       <TextObject Name="Text483" Top="756" Width="771.35" Height="52.92" CanGrow="true" Text="&lt;b&gt;3. BEHAVIORAL HEALTH HISTORY (DATE OF ONSENT OF MENTAL ILLNESS)&lt;/b&gt; Document any serious behavior or physical illness, injures, operations or hospitalizations and indicate the year these occurred (give special attention to previous behavioral health treatment and document contact information for coordination of care." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text774" Top="37.8" Width="771.35" Height="34.02" CanGrow="true" Text="The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks." Padding="2, 2, 2, 2" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
     </DataBand>
