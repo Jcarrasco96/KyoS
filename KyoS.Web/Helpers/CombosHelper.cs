@@ -1548,21 +1548,21 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerActives(string user, DateTime dateTCMNote)
         {
-            List<SelectListItem> list = _context.TCMServicePlans
+            List<SelectListItem> list = _context.TCMClient
 
-                                                .Include(c => c.TcmClient)
-                                                .ThenInclude(c => c.Client)
+                                                .Include(c => c.Client)
 
-                                                .Where(c => (c.Approved == 2 && c.Status == 0
-                                                          && c.TcmClient.Casemanager.LinkedUser == user
-                                                          && c.TcmClient.DataOpen <= dateTCMNote
-                                                          && c.TcmClient.DataClose >= dateTCMNote))
-                                                .OrderBy(c => c.TcmClient.Client.Name)
+                                                .Where(c => (c.TcmServicePlan != null
+                                                          && c.TcmIntakeAppendixJ.Approved == 2 
+                                                          && c.Casemanager.LinkedUser == user
+                                                          && c.DataOpen <= dateTCMNote
+                                                          && c.DataClose >= dateTCMNote))
+                                                .OrderBy(c => c.Client.Name)
 
                                                 .Select(c => new SelectListItem
                                                 {
-                                                    Text = $"{c.TcmClient.Client.Name} | {c.TcmClient.CaseNumber}",
-                                                    Value = $"{c.TcmClient.Id}"
+                                                    Text = $"{c.Client.Name} | {c.CaseNumber}",
+                                                    Value = $"{c.Id}"
                                                 }).ToList();
 
             list.Insert(0, new SelectListItem
@@ -2374,19 +2374,19 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user)
         {
-            List<SelectListItem> list = _context.TCMServicePlans
+            List<SelectListItem> list = _context.TCMClient
 
-                                                .Include(c => c.TcmClient)
-                                                .ThenInclude(c => c.Client)
+                                                .Include(c => c.Client)
 
-                                                .Where(c => (c.Approved == 2 && c.Status == 0
-                                                          && c.TcmClient.Casemanager.LinkedUser == user))
-                                                .OrderBy(c => c.TcmClient.Client.Name)
+                                                .Where(c => (c.TcmServicePlan != null
+                                                          && c.TcmIntakeAppendixJ.Approved == 2
+                                                          && c.Casemanager.LinkedUser == user))
+                                                .OrderBy(c => c.Client.Name)
 
                                                 .Select(c => new SelectListItem
                                                 {
-                                                    Text = $"{c.TcmClient.Client.Name} | {c.TcmClient.CaseNumber}",
-                                                    Value = $"{c.TcmClient.Id}"
+                                                    Text = $"{c.Client.Name} | {c.CaseNumber}",
+                                                    Value = $"{c.Id}"
                                                 }).ToList();
 
             list.Insert(0, new SelectListItem
