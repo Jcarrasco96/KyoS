@@ -24,5 +24,11 @@ namespace KyoS.Web.Data.Entities
         public string NeedsIdentified { get; set; }
         public string LongTerm { get; set; }
         public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
+        
+        [DataType(DataType.Date)]
+        public DateTime DateTCMSign { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime DateTCMSupervisorSign { get; set; }
     }
 }

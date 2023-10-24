@@ -187,7 +187,7 @@
                                     }
                                     @if (item.Approved == 1)
                                     {
-                                        <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-aview="@ViewData["aview"]" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-aview="@ViewData["aview"]" class="btn btn-warning disabled" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                         <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                     }

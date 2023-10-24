@@ -46,7 +46,7 @@
 }
 <div class="row">
     <div id="view-tcmAdendum">
-        @await Html.PartialAsync("_TCMAdendum", Model.ToList())
+        @await Html.PartialAsync("_TCMAdendum", Model)
     </div>
 </div>
 
@@ -67,13 +67,7 @@
         // Delete item
         var item_to_delete;
 
-        $('.deleteItem').click((e) => {
-            item_to_delete = e.currentTarget.dataset.id;
-        });
-        $("#btnYesDelete").click(function () {
-            var url = "@Url.Action("DeleteAdendum", "TCMServicePlans")";
-            window.location.href = url + '/' + item_to_delete;
-        });
+        
     });
     $(function () {
 
