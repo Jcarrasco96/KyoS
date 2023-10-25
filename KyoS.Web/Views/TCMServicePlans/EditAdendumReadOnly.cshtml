@@ -1,16 +1,15 @@
 ﻿@model KyoS.Web.Models.TCMAdendumViewModel
 @{
-    ViewData["Title"] = "Edit Addendum";
+    ViewData["Title"] = "Approve Addendum";
     ViewData["idAddendum"] = Model.Id;
-
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
@@ -30,11 +29,11 @@
                     @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
                 }
             </li>
-            <li class="active">Approve</li>
+            <li class="active">Approve Addendum</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Approve new Addendum</h4>
+    <h4>Approve Addendum</h4>
     <hr />
 
     <div class="row">
@@ -47,9 +46,6 @@
                 <input type="hidden" asp-for="CreatedOn" />
                 <partial name="TCMAddendumReadOnly" />
                 <div class="col-md-push-12">
-                    <div class="col-md-12 form-group">
-                        @* <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>*@
-                    </div>
                     <div class="col-md-12">
                         <div id="view-TCMdomain">
                             @await Html.PartialAsync("_ViewDomainsAddendum", Model.TcmDomain, ViewData)

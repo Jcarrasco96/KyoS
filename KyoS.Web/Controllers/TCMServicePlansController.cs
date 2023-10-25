@@ -1465,22 +1465,10 @@ namespace KyoS.Web.Controllers
             CaseMannagerEntity caseManager = _context.CaseManagers
                                                      .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
-            if (tcmAdendumViewModel.ID_TcmServicePlan == 0)
-            {
-                ModelState.AddModelError(string.Empty, "You must select a TCM case");
-
-            }
-            else if (tcmAdendumViewModel.ID_TcmDominio == 0)
-            {
-                ModelState.AddModelError(string.Empty, "You must select a TCM services");
-
-            }
-            else
+            if(ModelState.IsValid)
             {
                 if (user_logged.UserType.ToString() == "CaseManager")
-                {
-                    if (ModelState.IsValid)
-                    {
+                {                    
                         TCMServiceEntity tcmService = await _context.TCMServices.FirstAsync(d => d.Id == tcmAdendumViewModel.ID_TcmDominio);
 
                         TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans
@@ -1505,51 +1493,39 @@ namespace KyoS.Web.Controllers
 
                             };
 
-                        }
-                        else
-                        {
-                            //tcmAdendumViewModel.Long_term = tcmDomain.LongTerm;
-                            //tcmAdendumViewModel.Needs_Identified = tcmDomain.NeedsIdentified;
-                        }
-                       
+                        }                       
                         
                          tcmAdendumViewModel.TcmServicePlan = tcmServicePlan;
                          tcmAdendumViewModel.TcmDomain = tcmDomain;
 
                          TCMAdendumEntity tcmAdendum = await _converterHelper.ToTCMAdendumEntity(tcmAdendumViewModel, true, user_logged.UserName);
-                            _context.Add(tcmAdendum);
+                         _context.Add(tcmAdendum);
                         try
                         {
                             await _context.SaveChangesAsync();
 
                             List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                       .Include(h => h.TcmDomain)
-                                                       .ThenInclude(h => h.TCMObjetive)
-                                                       .Include(h => h.TcmServicePlan)
-                                                       .ThenInclude(h => h.TcmClient)
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
-                                                       .Include(h => (h.TcmServicePlan.TcmClient.Client))
-                                                       .ToListAsync();
+                                                                           .Include(h => h.TcmDomain)
+                                                                           .ThenInclude(h => h.TCMObjetive)
+                                                                           .Include(h => h.TcmServicePlan)
+                                                                           .ThenInclude(h => h.TcmClient)
+                                                                           .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                                           .Include(h => (h.TcmServicePlan.TcmClient.Client))
+                                                                           .Include(h => h.TCMMessages)
+                                                                           .ToListAsync();
                             List<TCMAdendumEntity> salida = new List<TCMAdendumEntity>();
                             foreach (var item in adendum)
                             {
                                 if (item.TcmServicePlan.TcmClient.CaseNumber == tcmServicePlan.TcmClient.CaseNumber)
                                     salida.Add(item);
                             }
-
+                            
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_TCMAdendum", salida) });
-
                         }
                         catch (System.Exception ex)
                         {
                             ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                         }
-                    }
-                    else
-                    {
-                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAdendum", tcmAdendumViewModel) });
-                    }
-
                 }
                 else
                 {
