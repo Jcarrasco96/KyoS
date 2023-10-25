@@ -1,0 +1,61 @@
+﻿@model KyoS.Web.Models.TCMAdendumViewModel
+@{
+    Layout = null;
+}
+
+<div class="col-md-12">
+    <pre>
+    @if (User.IsInRole("CaseManager"))
+    { 
+    @if (Model.Approved < 1)
+   {
+    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+   }
+   else
+   { 
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   }
+    <strong>Employee signature date</strong>      <input asp-for="DateTCMSign">   
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+   @if (Model.Approved < 2)
+   {
+    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+   }
+   else
+   { 
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   } 
+    <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSign" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+    }
+    @if (User.IsInRole("TCMSupervisor"))
+    { 
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+    <strong>Employee signature date</strong>      <input asp-for="DateTCMSign">   
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+   @if (Model.Approved < 2)
+   {
+    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+   }
+   else
+   { 
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   } 
+    <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSign" >
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+    }
+    </pre>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+

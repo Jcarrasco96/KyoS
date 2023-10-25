@@ -62,6 +62,17 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.Delete == "Exists")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible change date of this TCM Note
+                    </strong>
+                </div>
+            }
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

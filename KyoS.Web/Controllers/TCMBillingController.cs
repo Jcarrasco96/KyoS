@@ -751,17 +751,27 @@ namespace KyoS.Web.Controllers
                                                      .ToList();
 
 
-                decimal totalMinutes = 0;
+                decimal totalUnits = 0;
+                int units = 0;
+                int residuo = 0;
+                int totalMinutes = 0;
                 decimal valor = new decimal(0.00);
                 decimal money = new decimal(0.00);
                 foreach (TCMNoteEntity item in notes)
                 {
-                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    units = totalMinutes / 15;
+                    residuo = totalMinutes % 15;
+                    if (residuo > 7)
+                        units++;
+
+                    totalUnits = totalUnits + units;
+                   
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
-                    money = totalMinutes * valor;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 4;
+                    money = totalUnits * valor;
                     return Json(decimal.Round(money, 2));
                 }
                 else
@@ -781,17 +791,26 @@ namespace KyoS.Web.Controllers
                                                               && t.DateOfService >= initDate && t.DateOfService <= finalDate))
                                                     .ToList();
 
-                decimal totalMinutes = 0;
+                decimal totalUnits = 0;
+                int units = 0;
+                int residuo = 0;
+                int totalMinutes = 0;
                 decimal valor = new decimal();
                 decimal money = new decimal();
                 foreach (TCMNoteEntity item in notes)
                 {
-                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    units = totalMinutes / 15;
+                    residuo = totalMinutes % 15;
+                    if (residuo > 7)
+                        units++;
+
+                    totalUnits = totalUnits + units;
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
-                    money = totalMinutes * valor;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 4;
+                    money = totalUnits * valor;
                     return Json(decimal.Round(money, 2));
                 }
                 else
@@ -979,17 +998,27 @@ namespace KyoS.Web.Controllers
                                                      .ToList();
 
 
-                decimal totalMinutes = 0;
+                decimal totalUnits = 0;
+                int units = 0;
+                int residuo = 0;
+                int totalMinutes = 0;
                 decimal valor = new decimal(0.00);
                 decimal money = new decimal(0.00);
                 foreach (TCMNoteEntity item in notes)
                 {
-                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    units = totalMinutes / 15;
+                    residuo = totalMinutes % 15;
+                    if (residuo > 7)
+                        units++;
+
+                    totalUnits = totalUnits + units;
+
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
-                    money = totalMinutes * valor;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 4;
+                    money = totalUnits * valor;
                     return Json(decimal.Round(money, 2));
                 }
                 else
@@ -1008,17 +1037,27 @@ namespace KyoS.Web.Controllers
                                                               && t.DateOfService >= initDate && t.DateOfService <= finalDate))
                                                     .ToList();
 
-                decimal totalMinutes = 0;
+                decimal totalUnits = 0;
+                int units = 0;
+                int residuo = 0;
+                int totalMinutes = 0;
                 decimal valor = new decimal();
                 decimal money = new decimal();
                 foreach (TCMNoteEntity item in notes)
                 {
-                    totalMinutes = totalMinutes + item.TCMNoteActivity.Sum(t => t.Minutes);
+                    totalMinutes = item.TCMNoteActivity.Sum(t => t.Minutes);
+                    units = totalMinutes / 15;
+                    residuo = totalMinutes % 15;
+                    if (residuo > 7)
+                        units++;
+
+                    totalUnits = totalUnits + units;
+
                 }
                 if (notes.Count() > 0)
                 {
-                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 60;
-                    money = totalMinutes * valor;
+                    valor = notes.ElementAt(0).TCMClient.Casemanager.Money / 4;
+                    money = totalUnits * valor;
                     return Json(decimal.Round(money, 2));
                 }
                 else

@@ -2187,7 +2187,9 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMAddendum.Id == model.Id)
                                       .ToList(),
-                Approved = model.Approved
+                Approved = model.Approved,
+                DateTCMSign = model.DateTCMSign,
+                DateTCMSupervisorSign = model.DateTCMSupervisorSign
 
             };
         }
@@ -2205,7 +2207,9 @@ namespace KyoS.Web.Helpers
                 LongTerm = TcmAdendumEntity.LongTerm,
                 NeedsIdentified = TcmAdendumEntity.NeedsIdentified,
                 CreatedOn = TcmAdendumEntity.CreatedOn,
-                CreatedBy = TcmAdendumEntity.CreatedBy
+                CreatedBy = TcmAdendumEntity.CreatedBy,
+                DateTCMSign = TcmAdendumEntity.DateTCMSign,
+                DateTCMSupervisorSign = TcmAdendumEntity.DateTCMSupervisorSign
             };
         }
 

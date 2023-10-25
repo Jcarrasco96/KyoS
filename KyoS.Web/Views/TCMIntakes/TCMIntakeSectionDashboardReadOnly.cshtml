@@ -938,23 +938,47 @@
                 &nbsp;
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (@Model.TCMNote.Count() == 0)
+                @if (@Model.TCMNote.Count() > 0)
                 {
-
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
-                            <span class="message-counter-cero">@Model.TCMNote.Count()</span>
-                        </div>
-                    
+                    @if (@Model.TCMNote.Where(m => m.Status == KyoS.Common.Enums.NoteStatus.Edition).Count() >= 0)
+                    {
+                        <a style="text-decoration: none;" asp-action="TCMNotesForCase" asp-controller="TCMNotes" asp-route-idTCMClient="@Model.Id" asp-route-origin=1 role="button">
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
+                                <span class="message-counter-warning">@Model.TCMNote.Count()</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        @if (@Model.TCMNote.Where(m => m.Status == KyoS.Common.Enums.NoteStatus.Pending).Count() >= 0)
+                        {
+                            <a style="text-decoration: none;" asp-action="TCMNotesForCase" asp-controller="TCMNotes" asp-route-idTCMClient="@Model.Id" asp-route-origin=1 role="button">
+                                <div class="thumbnail list-group-item list-group-item-info">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
+                                    <span class="message-counter-info">@Model.TCMNote.Count()</span>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a style="text-decoration: none;" asp-action="TCMNotesForCase" asp-controller="TCMNotes" asp-route-idTCMClient="@Model.Id" asp-route-origin=1 role="button">
+                                <div class="thumbnail list-group-item list-group-item-success">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
+                                    <span class="message-counter-success">@Model.TCMNote.Count()</span>
+                                </div>
+                            </a>
+                        }
+                    }
                 }
                 else
                 {
-                    
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
-                            <span class="message-counter-success">@Model.TCMNote.Count()</span>
-                        </div>
-                    
+
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Progress<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</h4>
+                        <span class="message-counter-success">@Model.TCMNote.Count()</span>
+                    </div>
+
                 }
             </div>
             <div class="col-md-4">

@@ -121,7 +121,16 @@
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
-                                                    <td align="center">@Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)</td>
+                                                    <td align="center">
+                                                        @if (product.TCMNoteActivity.Count() > 0)
+                                                        {
+                                                            @Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)
+                                                        }
+                                                        else
+                                                        { 
+                                                            <a>-</a>
+                                                        }
+                                                    </td>
                                                     <td align="center">
                                                         @unit1
                                                     </td>
@@ -288,7 +297,16 @@
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
-                                                    <td align="center">@Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)</td>
+                                                    <td align="center">
+                                                        @if (product.TCMNoteActivity.Count() > 0)
+                                                        {
+                                                            @Html.DisplayFor(modelItem => product.TCMNoteActivity.ElementAt(0).Setting)
+                                                        }
+                                                        else
+                                                        {
+                                                            <a>-</a>
+                                                        }
+                                                    </td>
                                                     <td align="center">
                                                         @unit1
                                                     </td>

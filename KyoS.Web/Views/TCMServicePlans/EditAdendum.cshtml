@@ -32,6 +32,14 @@
                 {
                     @Html.ActionLink("TCM Addendum Messages", "MessagesOfAddendum", "TCMMessages")
                 }
+                @if (ViewData["aview"].ToString() == "4")
+                {
+                    @Html.ActionLink("TCM Addendum", "Adendum", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = ViewData["aview"] })
+                }
+                @if (ViewData["aview"].ToString() == "5")
+                {
+                    @Html.ActionLink("Update Addendum", "UpdateAddendum", "TCMServicePlans")
+                }
             </li>
             <li class="active">Edit Addendum</li>
         </ul><!--.breadcrumb-->
@@ -56,6 +64,7 @@
                     </div>
                 </div>
                 <br />
+                <partial name="TCMAddendum1" />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
                     @if (ViewData["aview"].ToString() == "0")
@@ -73,6 +82,10 @@
                     @if (ViewData["aview"].ToString() == "3")
                     {
                         <a asp-action="MessagesOfAddendum" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["aview"].ToString() == "5")
+                    {
+                        <a asp-action="UpdateAddendum" asp-controller="TCMServicePlans" class="btn btn-success">Back</a>
                     }
                 </div>
             </div>
