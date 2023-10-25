@@ -507,16 +507,13 @@ namespace KyoS.Web.Controllers
                                                             .CountAsync(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
                                                                            && s.Status == StatusType.Open
                                                                            && (s.TcmServicePlan == null
-                                                                                || s.TcmServicePlan.Approved != 2
                                                                                 || s.TCMAssessment == null
-                                                                                || s.TCMAssessment.Approved != 2
-                                                                        //      || s.TcmIntakeAppendixJ == null
+                                                                                || s.TcmIntakeAppendixJ == null
                                                                                 || s.TcmIntakeAcknowledgementHipa == null
                                                                                 || s.TCMIntakeAdvancedDirective == null
                                                                                 || s.TcmIntakeConsentForRelease == null
                                                                                 || s.TcmIntakeConsentForTreatment == null
                                                                                 || s.TcmIntakeConsumerRights == null
-                                                                                || s.TCMIntakeCoordinationCare == null
                                                                                 || s.TCMIntakeForeignLanguage == null
                                                                                 || s.TCMIntakeForm == null
                                                                                 || s.TCMIntakeOrientationChecklist == null
@@ -599,16 +596,13 @@ namespace KyoS.Web.Controllers
                                                         .CountAsync(g => (g.Casemanager.Id == caseManager.Id
                                                                 && g.Status == StatusType.Open
                                                                 && (g.TcmServicePlan == null
-                                                                    || g.TcmServicePlan.Approved != 2
                                                                     || g.TCMAssessment == null
-                                                                    || g.TCMAssessment.Approved != 2
-                                                              //    || g.TcmIntakeAppendixJ == null
+                                                                    || g.TcmIntakeAppendixJ == null
                                                                     || g.TcmIntakeAcknowledgementHipa == null
                                                                     || g.TCMIntakeAdvancedDirective == null
                                                                     || g.TcmIntakeConsentForRelease == null
                                                                     || g.TcmIntakeConsentForTreatment == null
                                                                     || g.TcmIntakeConsumerRights == null
-                                                               //     || g.TCMIntakeCoordinationCare == null
                                                                     || g.TCMIntakeForeignLanguage == null
                                                                     || g.TCMIntakeForm == null
                                                                     || g.TCMIntakeOrientationChecklist == null
@@ -804,16 +798,16 @@ namespace KyoS.Web.Controllers
                                                                         && s.Status == StatusType.Open
                                                                         && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
                                                                         && (s.TcmServicePlan == null
-                                                                            || s.TcmServicePlan.Approved != 2
+                                                                            
                                                                             || s.TCMAssessment == null
-                                                                            || s.TCMAssessment.Approved != 2
-                                                                    //      || s.TcmIntakeAppendixJ == null
+                                                                            || s.TcmIntakeAppendixJ == null
+
                                                                             || s.TcmIntakeAcknowledgementHipa == null
                                                                             || s.TCMIntakeAdvancedDirective == null
                                                                             || s.TcmIntakeConsentForRelease == null
                                                                             || s.TcmIntakeConsentForTreatment == null
                                                                             || s.TcmIntakeConsumerRights == null
-                                                                            || s.TCMIntakeCoordinationCare == null
+                                                                           
                                                                             || s.TCMIntakeForeignLanguage == null
                                                                             || s.TCMIntakeForm == null
                                                                             || s.TCMIntakeOrientationChecklist == null
