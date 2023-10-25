@@ -399,8 +399,22 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (_context.TCMNote.Where(n => n.DateOfService == tcmNotesViewModel.DateOfService && n.TCMClient.Id == tcmNotesViewModel.IdTCMClient && n.Id != tcmNotesViewModel.IdTCMNote).Count() > 0)
+            {
+                ViewBag.Delete = "Exists";
+                ViewData["origin"] = origin;
+                ViewData["available"] = UnitsAvailable(tcmNotesViewModel.IdTCMClient);
+                tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity
+                                                            .Include(n => n.TCMDomain)
+                                                            .Where(n => n.TCMNote.Id == tcmNotesViewModel.IdTCMNote).ToList();
+                tcmNotesViewModel.TCMClient = _context.TCMClient.Include(n => n.Casemanager).FirstOrDefault(n => n.Id == tcmNotesViewModel.IdTCMClient);
+                return View(tcmNotesViewModel);
+            }
+
             if (ModelState.IsValid)
             {
+               
+               
                 TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
                 if (tcmNotesEntity.Status == NoteStatus.Pending)
                 {
