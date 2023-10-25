@@ -1,7 +1,8 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanViewModel
 @{
-    ViewData["Title"] = "Edit Service Plan";
+    ViewData["Title"] = "Approve Service Plan";
 }
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -13,26 +14,26 @@
             }
             @if (ViewData["origi"].ToString() == "1")
             {
-                @Html.ActionLink("TCM Services Plan pending", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })
+                @Html.ActionLink("Pending Services Plan", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })
             }
             @if (ViewData["origi"].ToString() == "2")
             {
-                @Html.ActionLink("TCM Services Plan with review", "TCMServicePlanWithReview", "TCMServicePlans")
+                @Html.ActionLink("Services Plan with review", "TCMServicePlanWithReview", "TCMServicePlans")
             }
             @if (ViewData["origi"].ToString() == "3")
             {
-                @Html.ActionLink("TCM Services Plan Notifications", "Notifications", "TCMMessages")
+                @Html.ActionLink("Services Plan Notifications", "Notifications", "TCMMessages")
             }
             @if (ViewData["origi"].ToString() == "4")
             {
                 @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.ID_TcmClient, section = 4 })
             }
         </li>
-        <li class="active">Approve service plan</li>
+        <li class="active">Approve Service Plan</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Approve service plan</h4>
+<h4>Approve Service Plan</h4>
 <hr />
 <div>
     <div>
@@ -81,7 +82,7 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <partial name="TCMServicePlanReadOnly" />
-            <div class="col-md-12">
+            <div class="col-md-push-12">
                 <pre>
     <strong>ASSESSMENT RECOMMENDED SERVICES</strong>
     <input asp-for="Domain1" class="form-check-input" disabled> Mental Health / Substance Abuse                  <input asp-for="Domain7" class="form-check-input" disabled> Housing / Shelter
@@ -144,7 +145,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
+                                "order": [[1, "asc"]],
                                 "pageLength": 100
                             });
 

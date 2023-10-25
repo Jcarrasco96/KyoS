@@ -23993,12 +23993,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             //To bind domains with services, and it includes objectives
-            List<TCMServiceEntity> services = _context.TCMServices.ToList();
+            List<TCMServiceEntity> services = _context.TCMServices.OrderBy(t => t.Code).ToList();
             int i = 1;
             TCMDomainEntity domain;
             foreach (var item in services)
             {
-                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Name == item.Name);
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Code == item.Code);
                 if (domain != null)
                 {
                     dataSet = new DataSet();
@@ -24017,18 +24017,24 @@ namespace KyoS.Web.Helpers
                         dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
                         WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
                     }
-                }
-                else
-                {
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMDomainDS(null));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+                    i++;
+                }          
+            }
 
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
-                }
-                i++;
+            ReportPage pageToDelete;            
+            //Create the empty datasets, it must be 20
+            for (int k = i; k < 21; k++)
+            {
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+
+                pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
+                pageToDelete.Visible = false;
             }
 
             //signatures images 
@@ -24048,7 +24054,7 @@ namespace KyoS.Web.Helpers
 
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");            
 
             WebReport.Report.Prepare();
 
@@ -24092,12 +24098,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             //To bind domains with services, and it includes objectives
-            List<TCMServiceEntity> services = _context.TCMServices.ToList();
+            List<TCMServiceEntity> services = _context.TCMServices.OrderBy(t => t.Code).ToList();
             int i = 1;
             TCMDomainEntity domain;
             foreach (var item in services)
             {
-                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Name == item.Name);
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Code == item.Code);
                 if (domain != null)
                 {
                     dataSet = new DataSet();
@@ -24116,18 +24122,24 @@ namespace KyoS.Web.Helpers
                         dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
                         WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
                     }
+                    i++;
                 }
-                else
-                {
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMDomainDS(null));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+            }
 
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
-                }
-                i++;
+            ReportPage pageToDelete;
+            //Create the empty datasets, it must be 20
+            for (int k = i; k < 21; k++)
+            {
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+
+                pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
+                pageToDelete.Visible = false;
             }
 
             //signatures images 
@@ -24191,12 +24203,12 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             //To bind domains with services, and it includes objectives
-            List<TCMServiceEntity> services = _context.TCMServices.ToList();
+            List<TCMServiceEntity> services = _context.TCMServices.OrderBy(t => t.Code).ToList();
             int i = 1;
             TCMDomainEntity domain;
             foreach (var item in services)
             {
-                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Name == item.Name);
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Code == item.Code);
                 if (domain != null)
                 {
                     dataSet = new DataSet();
@@ -24215,18 +24227,24 @@ namespace KyoS.Web.Helpers
                         dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
                         WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
                     }
+                    i++;
                 }
-                else
-                {
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMDomainDS(null));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+            }
 
-                    dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
-                }
-                i++;
+            ReportPage pageToDelete;
+            //Create the empty datasets, it must be 20
+            for (int k = i; k < 21; k++)
+            {
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+
+                pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
+                pageToDelete.Visible = false;
             }
 
             //signatures images 

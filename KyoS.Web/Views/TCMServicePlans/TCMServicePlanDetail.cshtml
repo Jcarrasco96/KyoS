@@ -127,21 +127,21 @@ else
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Strengths" class="control-label">Strengths</label>
-                <textarea asp-for="Strengths" class="form-control" rows="4" readonly></textarea>
+                <textarea asp-for="Strengths" class="form-control" rows="6" readonly></textarea>
                 <span asp-validation-for="Strengths" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Weakness" class="control-label">Weakness</label>
-                <textarea asp-for="Weakness" class="form-control" rows="4" readonly></textarea>
+                <textarea asp-for="Weakness" class="form-control" rows="6" readonly></textarea>
                 <span asp-validation-for="Weakness" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="DischargerCriteria" class="control-label">Discharger Criteria</label>
-                <textarea asp-for="DischargerCriteria" class="form-control" rows="4" readonly></textarea>
+                <textarea asp-for="DischargerCriteria" class="form-control" rows="6" readonly></textarea>
                 <span asp-validation-for="DischargerCriteria" class="text-danger"></span>
             </div>
         </div>
@@ -152,35 +152,7 @@ else
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
 
-    <script type="text/javascript">
-                    //    jQueryAjaxPost = form => {
-                    //        try {
-                    //            $.ajax({
-                    //                type: 'POST',
-                    //                url: form.action,
-                    //                data: new FormData(form),
-                    //                contentType: false,
-                    //                processData: false,
-                    //                success: function (res) {
-                    //                    if (res.isValid) {
-                    //                        $('#view-all').html(res.html)
-                    //                        $('#form-modal .modal-body').html('');
-                    //                        $('#form-modal .modal-title').html('');
-                    //                        $('#form-modal').modal('hide');
-                    //                    }
-                    //                    else
-                    //                        $('#form-modal .modal-body').html(res.html);
-                    //                },
-                    //                error: function (err) {
-                    //                    console.log(err)
-                    //                }
-                    //            })
-                    //            //to prevent default form submit event
-                    //            return false;
-                    //        } catch (ex) {
-                    //            console.log(ex)
-                    //        }
-                    //}
+    <script type="text/javascript">                    
     </script>
 }
 
