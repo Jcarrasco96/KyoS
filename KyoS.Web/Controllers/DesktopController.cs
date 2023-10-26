@@ -762,6 +762,14 @@ namespace KyoS.Web.Controllers
                                                                .ToListAsync();
                 ViewBag.BriefPending = BriefPending.Count().ToString();
 
+                ViewBag.ExpiredMTPs = await _context.MTPs
+                                                       .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && m.Client.Status == StatusType.Open
+                                                                      && m.Active == true
+                                                                      && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                                           && o.Goal.Service == m.Client.Service
+                                                                                                           && o.Compliment == false).Count() > 0).Count() == 0));
+
                 List<MTPEntity> MtpWithReview = await _context.MTPs
                                                               .Include(wc => wc.Messages)
                                                               .Where(wc => (wc.DocumentAssistant.LinkedUser == User.Identity.Name

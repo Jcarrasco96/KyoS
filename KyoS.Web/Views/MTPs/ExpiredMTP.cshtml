@@ -153,7 +153,7 @@
                                     }
 
                                 }*@
-                                @if (User.IsInRole("Facilitator"))
+                                @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
                                 {
                                     @if (item.TypeDocument == 0 && item.MtpReviewCount == 0)
                                     {
