@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:07:24" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/26/2023 11:04:28" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuCd8Q4E0om9cbLL5QNQ+yBE=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuAjnSY2K/oynsqpsMacj1hU=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1579,7 +1579,7 @@
       <TextObject Name="Text613" Left="7" Top="340.2" Width="766.58" Height="75.6" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeClientEducation]" Font="Arial, 9pt"/>
       <TextObject Name="Text614" Left="3" Top="420.7" Width="661.5" Height="18.9" Text="Describe any school based weaknesses, adjustment and/or educational placement problems: &lt;i&gt;(children only)&lt;/i&gt;" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text615" Left="7" Top="439.6" Width="766.58" Height="75.6" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeAnySchool]" Font="Arial, 9pt"/>
-      <TextObject Name="Text616" Top="524.1" Width="774.9" Height="18.9" Text="&lt;b&gt;A.&lt;/b&gt; ADULTS" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text616" Top="524.1" Width="774.9" Height="18.9" Text="&lt;b&gt;B.&lt;/b&gt; ADULTS" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text618" Left="22.9" Top="562.8" Width="132.3" Height="18.9" Text="No School&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox173" Left="11.45" Top="564.12" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.WhatIsNoSchool"/>
       <TextObject Name="Text619" Left="22.9" Top="581.7" Width="141.75" Height="18.9" Text="Elementary School&#13;&#10;&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
@@ -1618,10 +1618,10 @@
       <TextObject Name="Text637" Left="474.5" Top="683.75" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text638" Left="523.1" Top="683.75" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text639" Left="5.45" Top="700.65" Width="56.7" Height="18.9" Text="Explain:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text640" Left="9.45" Top="720.1" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeAnySchool]" Font="Arial, 9pt"/>
+      <TextObject Name="Text640" Left="9.45" Top="720.1" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DoesClientNeedAssistanceEducationalExplain]" Font="Arial, 9pt"/>
       <TextObject Name="Text641" Top="783.7" Width="776.03" Height="22.68" Fill.Color="Gray" Text="5. SOCIAL / SUPPORT  SYSTEM / RECREATIONAL" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
       <TextObject Name="Text642" Left="5.45" Top="808.6" Width="396.9" Height="18.9" Text="Describe client’s cultural affiliations and/or spiritual/religious beliefs: " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text643" Left="9.45" Top="828.05" Width="766.58" Height="37.8" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeAnySchool]" Font="Arial, 9pt"/>
+      <TextObject Name="Text643" Left="9.45" Top="828.05" Width="766.58" Height="37.8" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeClientCultural]" Font="Arial, 9pt"/>
       <TextObject Name="Text644" Left="5.45" Top="869.4" Width="491.4" Height="18.9" Text="Does the client currently participate in any social activity or program in the community?" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox189" Left="534.1" Top="872.72" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.DoesClientCurrently] == false,true,false)"/>
       <CheckBoxObject Name="CheckBox190" Left="485.4" Top="872.67" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.DoesClientCurrently"/>
@@ -1742,7 +1742,7 @@
         </TableRow>
       </TableObject>
       <TextObject Name="Text655" Left="3.02" Top="708.75" Width="774.9" Height="18.9" Text="Describe any needs, concerns or safety risks related to the performing of activities of daily living:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text656" Left="7.18" Top="727.65" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeClientLiving]" Font="Arial, 9pt"/>
+      <TextObject Name="Text656" Left="7.18" Top="727.65" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeOtherNeedConcerns]" Font="Arial, 9pt"/>
       <TextObject Name="Text657" Top="793.8" Width="776.03" Height="22.68" Fill.Color="Gray" Text="7. HOUSING / LIVING ENVIRONMENT" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
       <TextObject Name="Text658" Left="111.4" Top="820.7" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Switch([TCMAssessment.ResidentStatus] == 0, &quot;LivingAlone&quot;,[TCMAssessment.ResidentStatus] == 1, &quot;livingWithRelatives&quot;,[TCMAssessment.ResidentStatus] == 2, &quot;livingWithNoRelatives&quot;,[TCMAssessment.ResidentStatus] == 3, &quot;AsistedLivingFacility&quot;,[TCMAssessment.ResidentStatus] == 4, &quot;FosterCare_GroupHome&quot;,[TCMAssessment.ResidentStatus] == 5, &quot;Hospital_NursingHome&quot;,[TCMAssessment.ResidentStatus] == 6, &quot;ResidentialProgram&quot;,[TCMAssessment.ResidentStatus] == 7, &quot;Correctional_Facility&quot;,[TCMAssessment.ResidentStatus] == 8, &quot;LivingAlone&quot;)]&#13;&#10;" VertAlign="Bottom" Font="Arial, 9pt"/>
       <TextObject Name="Text659" Left="3.02" Top="821.15" Width="113.4" Height="18.9" Text="Residential Status:" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1753,7 +1753,7 @@
       <TextObject Name="Text664" Left="3" Top="861.95" Width="189" Height="18.9" Text="Person-per-Bedroom (PPB) ratio:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text665" Left="188.55" Top="861.95" Width="37.8" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.PersonPorBedrooms]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text666" Left="229.8" Top="861.95" Width="548.1" Height="28.35" Text="&lt;i&gt;(According to HUD standards, a PPB above 2 is considered household overcrowding&#13;&#10;and housing assistance may be needed)&lt;/i&gt;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text667" Left="3.02" Top="891.3" Width="774.9" Height="18.9" Text="Describe any needs, concerns or safety risks related to the performing of activities of daily living:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text667" Left="3.02" Top="891.3" Width="774.9" Height="18.9" Text="Describe client’s living and sleeping arrangements &lt;i&gt;(rent/own, where client sleeps, whether he/she shares bed/bedroom, etc.):&lt;/i&gt;" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text668" Left="7.18" Top="910.2" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeClientLiving]" Font="Arial, 9pt"/>
     </DataBand>
     <PageFooterBand Name="PageFooter8" Top="970.75" Width="778.3" Height="19.07">
