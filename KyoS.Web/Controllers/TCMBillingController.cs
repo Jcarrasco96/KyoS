@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -661,15 +662,17 @@ namespace KyoS.Web.Controllers
                 int mod;
                 foreach (TCMNoteEntity item in list)
                 {
-                    foreach (var activity in item.TCMNoteActivity)
+                    /*foreach (var activity in item.TCMNoteActivity)
                     {
                         minutes = activity.Minutes;
                         value = minutes / 15;
                         mod = minutes % 15;
                         totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                    }
-
-                    
+                    }*/
+                    minutes = item.TCMNoteActivity.Sum(n => n.Minutes);
+                    value = minutes / 15;
+                    mod = minutes % 15;
+                    totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
                 }
                 
                 ViewBag.Clients = list.GroupBy(n => n.TCMClient).Count().ToString();
@@ -1780,6 +1783,7 @@ namespace KyoS.Web.Controllers
                                        .Include(w => w.TCMNoteActivity)
 
                                        .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                && n.Status == NoteStatus.Approved
                                                 && n.BilledDate == null
                                                 && n.DateOfService >= initial
                                                 && n.DateOfService <= end)
@@ -1810,6 +1814,7 @@ namespace KyoS.Web.Controllers
                                         .Include(w => w.TCMNoteActivity)
 
                                         .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                                 && n.Status == NoteStatus.Approved
                                                  && n.DateOfService >= initial
                                                  && n.DateOfService <= end)
                                         .OrderBy(n => n.TCMClient.Client.Name)
@@ -1831,27 +1836,28 @@ namespace KyoS.Web.Controllers
                 string ReportName = "SuperBill Unbilled Full Report.xlsx";
                 string data = "";
                 tcmNotes = _context.TCMNote
-                                      .Include(f => f.TCMClient)
-                                      .ThenInclude(f => f.Casemanager)
+                                   .Include(f => f.TCMClient)
+                                   .ThenInclude(f => f.Casemanager)
 
-                                      .Include(w => w.TCMClient)
-                                      .ThenInclude(w => w.Client)
+                                   .Include(w => w.TCMClient)
+                                   .ThenInclude(w => w.Client)
 
-                                      .ThenInclude(w => w.Clients_Diagnostics)
-                                      .ThenInclude(w => w.Diagnostic)
+                                   .ThenInclude(w => w.Clients_Diagnostics)
+                                   .ThenInclude(w => w.Diagnostic)
 
-                                      .Include(w => w.TCMClient)
-                                      .ThenInclude(w => w.Client)
-                                      .ThenInclude(w => w.Clients_HealthInsurances)
-                                      .ThenInclude(w => w.HealthInsurance)
+                                   .Include(w => w.TCMClient)
+                                   .ThenInclude(w => w.Client)
+                                   .ThenInclude(w => w.Clients_HealthInsurances)
+                                   .ThenInclude(w => w.HealthInsurance)
 
-                                      .Include(w => w.TCMNoteActivity)
+                                   .Include(w => w.TCMNoteActivity)
 
-                                      .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
-                                               && n.BilledDate == null)
-                                      .OrderBy(n => n.TCMClient.Client.Name)
-                                      .ThenBy(n => n.DateOfService)
-                                      .ToList();
+                                   .Where(n => n.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
+                                            && n.Status == NoteStatus.Approved
+                                            && n.BilledDate == null)
+                                   .OrderBy(n => n.TCMClient.Client.Name)
+                                   .ThenBy(n => n.DateOfService)
+                                   .ToList();
 
                 Periodo = "Unbilled Full Report";
                 data = "NOT BILLED";
