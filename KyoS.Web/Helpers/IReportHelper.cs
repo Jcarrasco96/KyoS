@@ -224,6 +224,7 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakeAssessment(TCMAssessmentEntity intakeAssessment);
         Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);
         Stream TCMDischarge(TCMDischargeEntity intakeDischarge);
+        Stream TCMAdendum(TCMAdendumEntity adendum);
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/12/2023 17:02:23" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/27/2023 11:09:30" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u30cEaffh4FgudeNCGtCOxxg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u37PdwXqkoudV85aX+exe5xA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -291,7 +291,7 @@
         <Column Name="Code90791" DataType="System.Boolean" PropName="Column" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Z1/9xt2wskzgZtO1HFYbyA==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/SRnNvFXakTN6wlNG1z54w==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -896,7 +896,6 @@
       <TextObject Name="Text759" Left="300.4" Top="444.7" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text760" Left="623.7" Top="445.25" Width="128.75" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text763" Top="481.5" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text766" Left="616.14" Top="662.05" Width="141.75" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line15" Left="160.2" Top="681.5" Width="-145.53"/>
       <LineObject Name="Line16" Left="556.1" Top="680.95" Width="-240.03"/>
       <LineObject Name="Line17" Left="756.55" Top="681.5" Width="-136.08"/>
