@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/19/2023 15:53:48" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/27/2023 11:09:22" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38P3JMSGrLtzlDOitMF/r0g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3thj05b2l6G097wcAGcrR3g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1315,7 +1315,6 @@
       <TextObject Name="Text759" Left="314.3" Top="376" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text760" Left="614.25" Top="376.55" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text763" Top="423.8" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text766" Left="613.8" Top="595.9" Width="157.25" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line15" Left="131.85" Top="615.35" Width="-117.18"/>
       <LineObject Name="Line16" Left="570" Top="614.8" Width="-240.03"/>
       <LineObject Name="Line17" Left="756.55" Top="615.35" Width="-136.08"/>
