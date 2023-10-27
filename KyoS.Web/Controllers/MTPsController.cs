@@ -781,7 +781,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateGoalModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoalMTPReviewModal(int? id, int idReview)
         {
             if (id == null)
@@ -813,7 +813,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateGoalMTPReviewModal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -1050,7 +1050,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditGoalModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoalMTPReviewModal(int? id, int idMTPReviewOfView)
         {
             if (id == null)
@@ -1079,7 +1079,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditGoalMTPReviewModal(int id, GoalViewModel model)
         {
             if (id != model.Id)
@@ -1438,7 +1438,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateObjectiveMTPReviewModal(ObjectiveViewModel model, IFormCollection form)
         {
             if (ModelState.IsValid)
@@ -1810,7 +1810,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjectiveModal", model) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjectiveMTPReviewModal(int? id, int idMTPReviewOfView)
         {
             if (id == null)
@@ -1838,7 +1838,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditObjectiveMTPReviewModal(ObjectiveViewModel model, IFormCollection form)
         {
             GoalEntity goal = await _context.Goals
@@ -2022,7 +2022,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> ExpiredMTP()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -2709,7 +2709,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("EditMTPReview", new { id = goalEntity.IdMTPReview });
         }
 
-        [Authorize(Roles = "Facilitator, Supervisor")]
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
         public async Task<IActionResult> EditMTPReview(int? id, int origin = 0)
         {
             if (id == null)
@@ -2736,7 +2736,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Supervisor")]
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
         public async Task<IActionResult> EditMTPReview(int id, MTPReviewViewModel mtpReviewViewModel)
         {
             if (id != mtpReviewViewModel.Id)
@@ -2989,7 +2989,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingMtpReview));
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult CreateMTPReview(int id = 0, int origin = 0)
         {
 
@@ -3006,7 +3006,7 @@ namespace KyoS.Web.Controllers
                                     .Include(n => n.MtpReviewList)
                                     .FirstOrDefault(m => m.Id == id);
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 model = new MTPReviewViewModel
                 {
@@ -3109,7 +3109,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateMTPReview(MTPReviewViewModel reviewViewModel)
         {
             UserEntity user_logged = _context.Users
