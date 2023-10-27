@@ -2992,6 +2992,60 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
 
+            TCMServicePlanEntity serviceplan = await _context.TCMServicePlans.FirstOrDefaultAsync(s => s.Id == id);
+            if (serviceplan == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                serviceplan.Approved = 0;
+                _context.TCMServicePlans.Update(serviceplan);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> AddendumReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAdendumEntity addendum = await _context.TCMAdendums.FirstOrDefaultAsync(s => s.Id == id);
+            if (addendum == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                addendum.Approved = 0;
+                _context.TCMAdendums.Update(addendum);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
     }
 }

@@ -2793,5 +2793,34 @@ namespace KyoS.Web.Controllers
             model = new TCMAssessmentViewModel();
             return View(model);
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAssessmentEntity assessmentEntity = await _context.TCMAssessment.FirstOrDefaultAsync(s => s.Id == id);
+            if (assessmentEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                assessmentEntity.Approved = 0;
+                _context.TCMAssessment.Update(assessmentEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
     }
 }
