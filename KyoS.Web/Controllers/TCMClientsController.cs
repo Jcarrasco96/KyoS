@@ -919,6 +919,7 @@ namespace KyoS.Web.Controllers
                                                           .Include(g => g.TcmIntakeAppendixJ)
                                                           .Include(g => g.TCMAssessment)
                                                           .Include(g => g.TCMNote)
+                                                          .ThenInclude(g => g.TCMNoteActivity)
                                                           .FirstOrDefaultAsync(g => (g.Id == id));
 
                 if (tcmClient != null)

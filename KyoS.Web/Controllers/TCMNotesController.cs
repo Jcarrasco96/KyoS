@@ -2169,5 +2169,33 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("NotesStatus", "TCMNotes", new { status = NoteStatus.Pending });
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMNoteEntity note = await _context.TCMNote.FirstOrDefaultAsync(s => s.Id == id);
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                note.Status = NoteStatus.Edition;
+                _context.TCMNote.Update(note);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
     }
 }

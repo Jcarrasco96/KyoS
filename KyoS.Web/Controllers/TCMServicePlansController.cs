@@ -1329,7 +1329,7 @@ namespace KyoS.Web.Controllers
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .FirstOrDefault(u => u.TcmClient.CaseNumber == caseNumber);
 
-            if (tcmServicePlan != null && tcmServicePlan.Approved == 2)
+            if (tcmServicePlan != null)
             {
                 if (user_logged.UserType.ToString() == "CaseManager")
                 {
@@ -1447,9 +1447,9 @@ namespace KyoS.Web.Controllers
             CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTcmClient);
-            if (tcmServicePlan == null)
-                tcmServicePlan = new TCMServicePlanEntity();
-
+            if (tcmServicePlan == null || tcmServicePlan.Approved < 2)
+              tcmServicePlan = new TCMServicePlanEntity();
+              
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -3017,6 +3017,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
+
+            Stream stream = _reportHelper.TCMAdendum(adendum);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
         [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
         {

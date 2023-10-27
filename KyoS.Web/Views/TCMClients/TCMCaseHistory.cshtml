@@ -50,9 +50,12 @@
                 }
             </div>
         </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
         <div class="col-md-push-12">
             <div id="view-farsForClient">
-                @if (Model.TcmServicePlan != null)
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMAdendum.Count() > 0)
                 {
                     @await Html.PartialAsync("_ViewAddendumForCase", Model.TcmServicePlan.TCMAdendum.ToList())
                 }
@@ -62,29 +65,17 @@
             <hr />
         </div>
         <div class="col-md-push-12">
-            <div class="">
-                <div id="view-farsForClient">
-                    @if (Model.TcmIntakeAppendixJ != null)
-                    {
-                        @await Html.PartialAsync("_ViewAssessmentForCase", Model.TCMAssessment)
-                    }
-
-                </div>
+            <div id="view-farsForClient">
+                @if (Model.TCMNote.Count() > 0)
+                {
+                    @await Html.PartialAsync("_ViewTCMNotesForCase", Model.TCMNote.ToList())
+                }
             </div>
         </div>
         <div class="col-md-12">
             <hr />
         </div>
-        <div class="col-md-push-12">
-            <div class="">
-                <div id="view-notesForClient">
-                    @if (Model.TCMNote.Count() > 0)
-                    {
-                        @await Html.PartialAsync("_ViewAssessmentForCase", Model.TCMAssessment)
-                    }
-                </div>
-            </div>
-        </div>
+
     </div>
 </body>
 </html>
