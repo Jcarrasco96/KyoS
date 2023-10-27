@@ -2992,6 +2992,34 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public IActionResult PrintAdendum(int id)
+        {
+            TCMAdendumEntity adendum = _context.TCMAdendums
 
+                                               .Include(t => t.TcmServicePlan)
+                                               .ThenInclude(tc => tc.TcmClient)
+                                               .ThenInclude(c => c.Client)
+
+                                               .Include(t => t.TcmDomain)
+                                               .ThenInclude(tc => tc.TCMObjetive)
+
+                                               .Include(t => t.TcmServicePlan)
+                                               .ThenInclude(sp => sp.TCMSupervisor)
+                                               .ThenInclude(s => s.Clinic)
+
+                                               .Include(t => t.TcmServicePlan)
+                                               .ThenInclude(sp => sp.TcmClient)
+                                               .ThenInclude(c => c.Casemanager)
+
+                                               .FirstOrDefault(sp => (sp.Id == id && sp.Approved == 2));
+            if (adendum == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMAdendum(adendum);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);           
+        }
     }
 }

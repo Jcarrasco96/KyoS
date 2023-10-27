@@ -23800,6 +23800,70 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMAdendumDS(TCMAdendumEntity adendum)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAdendum"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));            
+            dt.Columns.Add("DateAdendum", typeof(DateTime));
+            dt.Columns.Add("TcmServicePlanId", typeof(int));
+            dt.Columns.Add("TcmDomainId", typeof(int));
+            dt.Columns.Add("Approved", typeof(string));
+            dt.Columns.Add("LongTerm", typeof(string));
+            dt.Columns.Add("NeedsIdentified", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("DateTCMSign", typeof(DateTime));
+            dt.Columns.Add("DateTCMSupervisorSign", typeof(DateTime));            
+
+            if (adendum != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            adendum.Id,
+                                            adendum.DateAdendum,
+                                            0,
+                                            0,
+                                            adendum.Approved,
+                                            adendum.LongTerm,
+                                            adendum.NeedsIdentified,
+                                            adendum.CreatedBy,
+                                            adendum.CreatedOn,
+                                            adendum.LastModifiedBy,
+                                            adendum.LastModifiedOn,
+                                            adendum.DateTCMSign,
+                                            adendum.DateTCMSupervisorSign
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime(),                                            
+                                            new DateTime(),
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -25861,7 +25925,91 @@ namespace KyoS.Web.Helpers
             stream.Position = 0;
 
             return stream;
-        }        
+        }
+
+        public Stream TCMAdendum(TCMAdendumEntity adendum)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMAdendum.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(adendum.TcmServicePlan.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(adendum.TcmServicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(adendum.TcmServicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(adendum.TcmServicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(adendum.TcmServicePlan.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMDomainDS(adendum.TcmDomain));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMDomains");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMObjectiveListDS(adendum.TcmDomain.TCMObjetive));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMObjetives");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanDS(adendum.TcmServicePlan));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlans");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMAdendumDS(adendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAdendums");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(adendum.TcmServicePlan.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(adendum.TcmServicePlan.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(adendum.TcmServicePlan.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(adendum.TcmServicePlan.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
     }
 }
