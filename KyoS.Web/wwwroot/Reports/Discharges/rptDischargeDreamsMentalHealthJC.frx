@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/18/2023 11:49:57" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/28/2023 12:32:54" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuJJl70oGzSXQ83/kuCA3MhM=">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuEp5I7ldlgfVz8oPnpvzbzA=">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuGTm680CjG7fzp9Xv5QxMQU=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuFrAcS/lg/1qvTyqJpXFqF8=">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -259,7 +259,6 @@
       <TextObject Name="Text513" Left="196.18" Top="548.93" Width="232.47" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text514" Left="625.59" Top="567.83" Width="113.4" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text515" Left="625.59" Top="548.93" Width="113.4" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text516" Left="625.59" Top="543.26" Width="113.4" Height="18.9" Text="[Discharge.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text517" Left="196.18" Top="543.1" Width="232.47" Height="18.9" Text="[Supervisors.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text518" Left="28.35" Top="549.1" Width="132.3" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text519" Left="196.18" Top="567.83" Width="232.47" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Clinical Supervisor Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
