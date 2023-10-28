@@ -773,6 +773,36 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> ReturnTo(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(s => s.Id == id);
+            if (activity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                activity.Status = ActivityStatus.Pending;
+                _context.Activities.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create3", "Themes");
+            }
+
+            return RedirectToAction("Create3", "Themes");
+        }
     }
 }
