@@ -2841,7 +2841,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction(nameof(MTPRinEdit));
                     }
-
+                    if (mtpReviewViewModel.Origin == 7)
+                    {
+                        return RedirectToAction(nameof(IndexMTPR));
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -5197,6 +5200,237 @@ namespace KyoS.Web.Controllers
             }
             else
                 return View(null);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> AuditGoalsObjective(int idMtp = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditGoalsObjective> auditGoalsObjetive_List = new List<AuditGoalsObjective>();
+            AuditGoalsObjective auditGoalsObjetive = new AuditGoalsObjective();
+
+            if (idMtp > 0)
+            {
+                MTPEntity mtp = _context.MTPs
+                                       .Include(n => n.Goals)
+                                       .ThenInclude(n => n.Objetives)
+                                       //.Include(n => n.Client)
+                                       .FirstOrDefault(n => n.Id == idMtp);
+
+                //PSR
+                List<NotePEntity> note = await _context.NotesP
+                                                           .Include(n => n.NotesP_Activities)
+                                                           .ThenInclude(n => n.Objetive)
+                                                           .ThenInclude(n => n.Goal)
+
+                                                           .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                && w.MTPId == idMtp
+                                                                && w.Status != NoteStatus.Edition))
+                                                           .ToListAsync();
+                int tempCount = 0;
+                foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.PSR))
+                {
+                    foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                    {
+                        auditGoalsObjetive.NumberGoal = goal.Number;
+                        auditGoalsObjetive.NumberObjective = objective.Objetive;
+                        tempCount = note.Where(n => n.NotesP_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                        auditGoalsObjetive.Count = tempCount;
+                        auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(note.Count()), 1);
+                        if (tempCount == 0)
+                        {
+                            auditGoalsObjetive.Active = 0;
+                        }
+                        else
+                        {
+                            auditGoalsObjetive.Active = 2;
+                        }
+                        auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                        tempCount = 0;
+                        auditGoalsObjetive = new AuditGoalsObjective();
+                    }
+
+                }
+
+                //Group
+                List<GroupNoteEntity> noteGroup = await _context.GroupNotes
+                                                                   .Include(n => n.GroupNotes_Activities)
+                                                                   .ThenInclude(n => n.Objetive)
+                                                                   .ThenInclude(n => n.Goal)
+
+                                                                   .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                             && w.MTPId == idMtp
+                                                                             && w.Status != NoteStatus.Edition))
+                                                                   .ToListAsync();
+                if (noteGroup.Count >= 0)
+                {
+                    tempCount = 0;
+                    foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.Group))
+                    {
+                        foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                        {
+                            auditGoalsObjetive.NumberGoal = goal.Number;
+                            auditGoalsObjetive.NumberObjective = objective.Objetive;
+                            tempCount = noteGroup.Where(n => n.GroupNotes_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                            auditGoalsObjetive.Count = tempCount;
+                            auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteGroup.Count()), 1);
+                            if (tempCount == 0)
+                            {
+                                auditGoalsObjetive.Active = 0;
+                            }
+                            else
+                            {
+                                auditGoalsObjetive.Active = 2;
+                            }
+                            auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                            tempCount = 0;
+                            auditGoalsObjetive = new AuditGoalsObjective();
+                        }
+                    }
+                }
+                else
+                {
+                    List<GroupNote2Entity> noteGroup2 = await _context.GroupNotes2
+                                                              .Include(n => n.GroupNotes2_Activities)
+                                                              .ThenInclude(n => n.Objetive)
+                                                              .ThenInclude(n => n.Goal)
+
+                                                              .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                        && w.MTPId == idMtp
+                                                                        && w.Status != NoteStatus.Edition))
+                                                              .ToListAsync();
+                    tempCount = 0;
+                    foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.Group))
+                    {
+                        foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                        {
+                            auditGoalsObjetive.NumberGoal = goal.Number;
+                            auditGoalsObjetive.NumberObjective = objective.Objetive;
+                            tempCount = noteGroup2.Where(n => n.GroupNotes2_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                            auditGoalsObjetive.Count = tempCount;
+                            auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteGroup2.Count()), 1);
+                            if (tempCount == 0)
+                            {
+                                auditGoalsObjetive.Active = 0;
+                            }
+                            else
+                            {
+                                auditGoalsObjetive.Active = 2;
+                            }
+                            auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                            tempCount = 0;
+                            auditGoalsObjetive = new AuditGoalsObjective();
+                        }
+                    }
+                }
+
+                //Ind
+                List<IndividualNoteEntity> noteInd = await _context.IndividualNotes
+                                                                               .Include(n => n.Objective)
+                                                                               .ThenInclude(n => n.Goal)
+
+                                                                               .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                                         && w.MTPId == idMtp
+                                                                                         && w.Status != NoteStatus.Edition))
+                                                                               .ToListAsync();
+                tempCount = 0;
+                foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.Individual))
+                {
+                    foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                    {
+                        auditGoalsObjetive.NumberGoal = goal.Number;
+                        auditGoalsObjetive.NumberObjective = objective.Objetive;
+                        tempCount = noteInd.Where(n => n.Objective != null && n.Objective.Id == objective.Id).Count();
+                        auditGoalsObjetive.Count = tempCount;
+                        auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteInd.Count()), 1);
+                        if (tempCount == 0)
+                        {
+                            auditGoalsObjetive.Active = 0;
+                        }
+                        else
+                        {
+                            auditGoalsObjetive.Active = 2;
+                        }
+                        auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                        tempCount = 0;
+                        auditGoalsObjetive = new AuditGoalsObjective();
+                    }
+
+                }
+            }
+
+            return View(auditGoalsObjetive_List);
+        }
+
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> IndexMTPR(int idError = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            if (User.IsInRole("Admin"))
+            {
+                return View(await _context.MTPs
+                                          .Include(m => m.Client)
+                                          .ThenInclude(c => c.Clinic)
+                                          .ThenInclude(c => c.Setting)
+                                          .Include(m => m.MtpReviewList)
+                                          .OrderBy(m => m.Client.Clinic.Name).ToListAsync());
+            }
+            else
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic == null)
+                    return View(null);
+
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
+                    {
+                        return View(await _context.MTPReviews
+                                                  .Include(m => m.Mtp)
+
+                                                  .ThenInclude(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id
+                                                        && (m.CreatedBy == user_logged.UserName)))
+                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+                    }
+                    if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
+                    {
+                        return View(await _context.MTPReviews
+                                                  .Include(m => m.Mtp)
+
+                                                  .ThenInclude(c => c.Client)
+                                                  .ThenInclude(c => c.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id))
+                                                  .OrderBy(m => m.Mtp.Client.Clinic.Name).ToListAsync());
+                    }
+                   
+                    return RedirectToAction("Home/Error404");
+                }
+                else
+                    return View(null);
+            }
         }
 
     }
