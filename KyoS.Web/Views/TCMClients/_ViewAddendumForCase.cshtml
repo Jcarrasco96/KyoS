@@ -1,0 +1,136 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAdendumEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Addendum</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" >
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Client
+                            </th>
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Evaluation Date
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Admissioned for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Case
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        { 
+                            <tr>
+                                <td>
+                                    @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.DateServicePlan)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Status)
+                                </td>
+                                <td align="center">
+                                    @if (item.Approved == 0)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        if (item.Approved == 1)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (item.Approved == 2)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                    {
+                                        @if (item.Approved == 2)
+                                        {
+                                            <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Approved == 1)
+                                            {
+                                                <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        @if (item.Approved == 2)
+                                        {
+                                            <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+ 

@@ -890,5 +890,61 @@ namespace KyoS.Web.Controllers
             return Json(new { redirectToUrl = Url.Action("Clients", "TCMClients") });
         }
 
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> TCMCaseHistory(int id = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || user_logged.Clinic.Setting.MentalHealthClinic == false)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                CaseMannagerEntity caseManager = await _context.CaseManagers.FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+                TCMClientEntity tcmClient = await _context.TCMClient
+                                                          .Include(g => g.Casemanager)
+                                                          .ThenInclude(g => g.TCMSupervisor)
+                                                          .Include(g => g.Client)
+                                                          .Include(g => g.TcmServicePlan)
+                                                          .Include(g => g.TcmServicePlan.TCMServicePlanReview)
+                                                          .Include(g => g.TcmServicePlan.TCMAdendum)
+                                                          .Include(g => g.TCMFarsFormList)
+                                                          .Include(g => g.TcmServicePlan.TCMDischarge)
+                                                          .Include(g => g.TcmIntakeAppendixJ)
+                                                          .Include(g => g.TCMAssessment)
+                                                          .Include(g => g.TCMNote)
+                                                          .ThenInclude(g => g.TCMNoteActivity)
+                                                          .FirstOrDefaultAsync(g => (g.Id == id));
+
+                if (tcmClient != null)
+                {
+                    if (tcmClient.TcmServicePlan == null)
+                        tcmClient.TcmServicePlan = new TCMServicePlanEntity();
+                    if (tcmClient.TcmServicePlan.TCMAdendum == null)
+                        tcmClient.TcmServicePlan.TCMAdendum = new List<TCMAdendumEntity>();
+                    if (tcmClient.TcmServicePlan.TCMServicePlanReview == null)
+                        tcmClient.TcmServicePlan.TCMServicePlanReview = new TCMServicePlanReviewEntity();
+                    if (tcmClient.TcmServicePlan.TCMDischarge == null)
+                        tcmClient.TcmServicePlan.TCMDischarge = new TCMDischargeEntity();
+                    if (tcmClient.TCMFarsFormList == null)
+                        tcmClient.TCMFarsFormList = new List<TCMFarsFormEntity>();
+                    if (tcmClient.TCMAssessment == null)
+                        tcmClient.TCMAssessment = new TCMAssessmentEntity();
+                    if (tcmClient.TcmIntakeAppendixJ == null)
+                        tcmClient.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
+
+                }
+
+                return View(tcmClient);
+            }
+          
+            return RedirectToAction("NotAuthorized", "Account");
+        }
     }
 }

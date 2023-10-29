@@ -703,12 +703,12 @@
                 &nbsp;
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2)
+                @if (Model.TcmServicePlan == null )
                 {
                     
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                        </div>
+                     <div class="thumbnail list-group-item list-group-item-text">
+                         <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                     </div>
                     
                 }
                 else
@@ -716,9 +716,9 @@
                     @if (Model.TcmServicePlan.TCMAdendum.Count() == 0)
                     {
                         
-                            <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            </div>
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        </div>
                         
                     }
                     else
@@ -726,9 +726,9 @@
                         @if (Model.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 0).Count() > 0)
                         {
                             
-                                <div class="thumbnail list-group-item list-group-item-warning">
-                                    <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                                </div>
+                             <div class="thumbnail list-group-item list-group-item-warning">
+                                 <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                             </div>
                             
                         }
                         else
@@ -736,17 +736,16 @@
                             @if (Model.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0)
                             {
                                 
-                                    <div class="thumbnail list-group-item list-group-item-info">
-                                        <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                                    </div>
+                                <div class="thumbnail list-group-item list-group-item-info">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </div>
                                 
                             }
                             else
                             {
-                                
-                                    <div class="thumbnail list-group-item list-group-item-success">
-                                        <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                                    </div>
+                                <div class="thumbnail list-group-item list-group-item-success">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </div>
                                 
                             }
                         }
