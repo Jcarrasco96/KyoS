@@ -1492,9 +1492,10 @@ namespace KyoS.Web.Controllers
                         TCMServiceEntity tcmService = await _context.TCMServices.FirstAsync(d => d.Id == tcmAdendumViewModel.ID_TcmDominio);
 
                         TCMServicePlanEntity tcmServicePlan = await _context.TCMServicePlans
-                                                .FirstOrDefaultAsync(s => s.Id == tcmAdendumViewModel.ID_TcmServicePlan);
+                                                                            .FirstOrDefaultAsync(s => s.Id == tcmAdendumViewModel.ID_TcmServicePlan);
 
-                        TCMDomainEntity tcmDomain = _context.TCMDomains.FirstOrDefault(n => n.Code == tcmService.Code);
+                        TCMDomainEntity tcmDomain = _context.TCMDomains.FirstOrDefault(n => n.Code == tcmService.Code
+                                                                                         && n.TcmServicePlan.Id == tcmAdendumViewModel.ID_TcmServicePlan);
 
                         if (tcmDomain == null)
                         {
