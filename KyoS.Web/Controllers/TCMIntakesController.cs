@@ -597,8 +597,8 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             TCMClientEntity TcmClientEntity = await _context.TCMClient
+                                                            //seccion1
                                                             .Include(c => c.TCMIntakeForm)
-                                                            .Include(c => c.Client)
                                                             .Include(c => c.TcmIntakeConsentForTreatment)
                                                             .Include(n => n.TcmIntakeConsentForRelease)
                                                             .Include(n => n.TcmIntakeConsumerRights)
@@ -607,32 +607,27 @@ namespace KyoS.Web.Controllers
                                                             .Include(n => n.TCMIntakeAdvancedDirective)
                                                             .Include(n => n.TCMIntakeForeignLanguage)
                                                             .Include(n => n.TCMIntakeWelcome)
+                                                            //seccion2
                                                             .Include(n => n.Client.IntakeFeeAgreement)
+                                                            .Include(n => n.TCMIntakeNonClinicalLog)
+                                                            //seccion3
                                                             .Include(n => n.Client.IntakeMedicalHistory)
                                                             .Include(n => n.Client.MedicationList)
-                                                            .Include(n => n.TCMIntakeNonClinicalLog)
                                                             .Include(n => n.TCMIntakeMiniMental)
                                                             .Include(n => n.TCMIntakeCoordinationCare)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMAdendum)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMServicePlanReview)
-                                                            .Include(n => n.TcmServicePlan)
-                                                            .ThenInclude(n => n.TCMDischarge)
-                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                            //seccion4
+                                                            //.Include(n => n.TcmServicePlan)
+                                                            //.ThenInclude(n => n.TCMAdendum)
+                                                            //.Include(n => n.TcmServicePlan.TCMServicePlanReview)
+                                                            //.Include(n => n.TcmIntakeAppendixJ)
+                                                            //.Include(n => n.TCMAssessment)
+                                                            //seccion5
                                                             .Include(n => n.TcmInterventionLog)
                                                             .Include(n => n.TCMFarsFormList)
-                                                            .Include(n => n.TCMAssessment)
-                                                            .Include(n => n.TCMNote)
-                                                            .Include(n => n.TCMIntakeClientSignatureVerification)
-                                                            .Include(n => n.TCMIntakeClientIdDocumentVerification)
-                                                            .Include(n => n.TCMIntakePainScreen)
-                                                            .Include(n => n.TCMIntakeColumbiaSuicide)
-                                                            .Include(n => n.TCMIntakeNutritionalScreen)
-                                                            .Include(n => n.TCMIntakePersonalWellbeing)
+                                                            //seccion6
+                                                            //.Include(n => n.TCMNote)
                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
-           
 
             if (TcmClientEntity == null)
             {

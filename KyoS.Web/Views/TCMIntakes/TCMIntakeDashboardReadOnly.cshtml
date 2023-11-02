@@ -108,22 +108,11 @@
         &nbsp;
     </div>
     <div class="col-sm-3 col-md-2">
-        @if ((Model.TcmIntakeAppendixJ != null) && (Model.TcmServicePlan != null) && (Model.TcmServicePlan.TCMAdendum.Count() > 0) && (Model.TcmServicePlan.TCMServicePlanReview != null))
-        {
-            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
-                <div class="thumbnail list-group-item list-group-item-success">
-                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                </div>
-            </a>
-        }
-        else
-        {
-            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
-                <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                </div>
-            </a>
-        }
+        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="4" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
+            <div class="thumbnail list-group-item list-group-item-success">
+                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+            </div>
+        </a>
     </div>
     <div class="col-sm-3 col-md-2">
         @if ((Model.TcmInterventionLog != null) && (Model.TCMFarsFormList.Count() > 0))
@@ -144,22 +133,11 @@
         }
     </div>
     <div class="col-sm-3 col-md-2">
-        @if ((Model == null))
-        {
-            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
-                <div class="thumbnail list-group-item list-group-item-success">
-                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                </div>
-            </a>
-        }
-        else
-        {
-            <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
-                <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                </div>
-            </a>
-        }
+        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-route-section="6" asp-action="TCMIntakeSectionDashboardReadOnly" role="button">
+            <div class="thumbnail list-group-item list-group-item-text">
+                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>SECTION 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+            </div>
+        </a>
     </div>
     <div class="col-md-3">
         &nbsp;
