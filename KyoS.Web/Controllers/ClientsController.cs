@@ -1070,13 +1070,30 @@ namespace KyoS.Web.Controllers
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                    return View(await _context.Clients
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        return View(await _context.Clients
                                               .Include(c => c.MTPs)
                                               .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                         && c.MTPs.Count == 0
-                                                        && c.OnlyTCM == false))
+                                                        && c.OnlyTCM == false
+                                                        && (c.IdFacilitatorPSR == facilitator.Id
+                                                         || c.IdFacilitatorGroup == facilitator.Id
+                                                         || c.IndividualTherapyFacilitator.Id == facilitator.Id)))
                                               .ToListAsync());
 
+                    }
+                    else
+                    {
+                        return View(await _context.Clients
+                                                  .Include(c => c.MTPs)
+                                                  .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                            && c.MTPs.Count == 0
+                                                            && c.OnlyTCM == false))
+                                                  .ToListAsync());
+
+                    }
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");

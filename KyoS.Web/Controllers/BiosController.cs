@@ -1269,16 +1269,35 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                List<ClientEntity> ClientList = await _context.Clients
+                                                         .Include(n => n.Bio)
+                                                         .Where(n => n.Bio == null
+                                                           && n.Brief == null
+                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                           && n.OnlyTCM == false
+                                                           && (n.IdFacilitatorPSR == facilitator.Id
+                                                            || n.IdFacilitatorGroup == facilitator.Id
+                                                            || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                         .ToListAsync();
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null
-                                                            && n.Brief == null
-                                                            && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false)
-                                                          .ToListAsync();
+                return View(ClientList);
+            }
+            else
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                             .Include(n => n.Bio)
+                                                             .Where(n => n.Bio == null
+                                                               && n.Brief == null
+                                                               && n.Clinic.Id == user_logged.Clinic.Id
+                                                               && n.OnlyTCM == false)
+                                                             .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+            }
+               
 
         }
 

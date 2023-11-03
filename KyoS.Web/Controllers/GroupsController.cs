@@ -69,6 +69,9 @@ namespace KyoS.Web.Controllers
                                                            .Include(g => g.Clients)
                                                            .ThenInclude(g => g.Clients_Diagnostics)
                                                            .ThenInclude(g => g.Diagnostic)
+                                                           .Include(g => g.Clients)
+                                                           .ThenInclude(g => g.Clients_HealthInsurances)
+                                                           .ThenInclude(g => g.HealthInsurance)
                                                            .Include(g => g.Schedule)
                                                            .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.PSR))
                                                            .OrderBy(g => g.Facilitator.Name)
@@ -85,6 +88,9 @@ namespace KyoS.Web.Controllers
                                                            .Include(g => g.Clients)
                                                            .ThenInclude(g => g.Clients_Diagnostics)
                                                            .ThenInclude(g => g.Diagnostic)
+                                                           .Include(g => g.Clients)
+                                                           .ThenInclude(g => g.Clients_HealthInsurances)
+                                                           .ThenInclude(g => g.HealthInsurance)
                                                            .Include(g => g.Schedule)
                                                            .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
                                                                      && g.Service == Common.Enums.ServiceType.PSR
@@ -107,6 +113,9 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Clients)
                                                             .ThenInclude(g => g.Clients_Diagnostics)
                                                             .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Include(g => g.Schedule)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                  && g.Service == Common.Enums.ServiceType.PSR)
@@ -125,6 +134,9 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Clients)
                                                             .ThenInclude(g => g.Clients_Diagnostics)
                                                             .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Include(g => g.Schedule)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                  && g.Service == Common.Enums.ServiceType.PSR)
@@ -708,6 +720,12 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Facilitator)
                                                             .Include(g => g.Clients)
                                                             .Include(g => g.Schedule)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_Diagnostics)
+                                                            .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id && g.Service == Common.Enums.ServiceType.Group))
                                                             .OrderBy(g => g.Facilitator.Name)
                                                             .ToListAsync();
@@ -720,6 +738,12 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Facilitator)
                                                             .Include(g => g.Clients)
                                                             .Include(g => g.Schedule)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_Diagnostics)
+                                                            .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id 
                                                                       && g.Service == Common.Enums.ServiceType.Group
                                                                       && g.Clients.Count() > 0))
@@ -737,6 +761,12 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Facilitator)
                                                             .Include(g => g.Clients)
                                                             .Include(g => g.Schedule)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_Diagnostics)
+                                                            .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                 && g.Service == Common.Enums.ServiceType.Group
                                                                 && g.Facilitator.LinkedUser == user_logged.UserName))
@@ -751,6 +781,12 @@ namespace KyoS.Web.Controllers
                                                             .Include(g => g.Facilitator)
                                                             .Include(g => g.Clients)
                                                             .Include(g => g.Schedule)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_Diagnostics)
+                                                            .ThenInclude(g => g.Diagnostic)
+                                                            .Include(g => g.Clients)
+                                                            .ThenInclude(g => g.Clients_HealthInsurances)
+                                                            .ThenInclude(g => g.HealthInsurance)
                                                             .Where(g => (g.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                                 && g.Service == Common.Enums.ServiceType.Group
                                                                 && g.Facilitator.LinkedUser == user_logged.UserName
