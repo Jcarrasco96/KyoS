@@ -5341,5 +5341,86 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMIntakeNutritionalScreen", IntakeViewModel) });
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> UpdateAppendixJ()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TcmIntakeAppendixJ)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Include(f => f.Casemanager)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Casemanager.TCMSupervisor.Id == _context.TCMSupervisors.FirstOrDefault(m => m.LinkedUser == user_logged.UserName).Id
+                                                       && n.TcmIntakeAppendixJ.Approved == 2)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditAppendixJ(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJEntity entity = await _context.TCMIntakeAppendixJ
+                                                            .Include(c => c.TcmClient)
+                                                            .ThenInclude(c => c.Client)
+                                                            .ThenInclude(c => c.Clinic)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJViewModel model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAppendixJ(int id, TCMIntakeAppendixJViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                TCMIntakeAppendixJEntity appendixJ = await _converterHelper.ToTCMIntakeAppendixJEntity(model, false, user_logged.UserName);
+                appendixJ.Approved = 2;
+                _context.Update(appendixJ);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateAppendixJ");
+            }
+
+            return View(model);
+        }
     }
 }
