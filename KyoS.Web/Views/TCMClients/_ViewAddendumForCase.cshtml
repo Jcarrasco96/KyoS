@@ -110,6 +110,7 @@
                                                 <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
+                                        <a onclick="ConfirmDeleteAddendum(@item.Id)" class="btn btn-danger" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
@@ -122,6 +123,7 @@
                                         {
                                             <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
+                                        <a onclick="ConfirmDeleteAddendum(@item.Id)" class="btn btn-danger disabled" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

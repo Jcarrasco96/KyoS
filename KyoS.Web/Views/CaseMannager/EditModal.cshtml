@@ -11,7 +11,7 @@
             <input type="hidden" asp-for="SignaturePath" />
             <input type="hidden" asp-for="IdClinic" />
             <div>
-                <div class="form-group col-md-9">
+                <div class="form-group col-md-6">
                     <label asp-for="Name" class="control-label"></label>&nbsp;*
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -20,6 +20,11 @@
                     <label asp-for="Credentials" class="control-label"></label>
                     <input asp-for="Credentials" class="form-control" />
                     <span asp-validation-for="Credentials" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="ProviderNumber" class="control-label">Number</label>
+                    <input asp-for="ProviderNumber" class="form-control" />
+                    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
                 </div>
             </div>
             <div>

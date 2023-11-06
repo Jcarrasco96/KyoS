@@ -3077,5 +3077,126 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMServicePlanEntity servicePlan = await _context.TCMServicePlans
+                                                             .Include(n => n.TcmClient)
+                                                             .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (servicePlan == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<TCMMessageEntity> messageEntity = await _context.TCMMessages
+                                                                 .Include(n => n.TCMServicePlan)
+                                                                 .Where(d => d.TCMServicePlan.Id == id)
+                                                                 .ToListAsync();
+
+            _context.TCMMessages.RemoveRange(messageEntity);
+            await _context.SaveChangesAsync();
+
+            List<TCMDomainEntity> domains = await _context.TCMDomains
+                                                          .Include(n => n.TcmServicePlan)
+                                                          .Include(n => n.TCMObjetive)
+                                                          .Where(d => d.TcmServicePlan.Id == id)
+                                                          .ToListAsync();
+
+            foreach (var item in domains)
+            {
+                _context.TCMObjetives.RemoveRange(item.TCMObjetive);
+                await _context.SaveChangesAsync();
+            }
+           
+            List<TCMNoteEntity> notes = await _context.TCMNote
+                                                      .Include(n => n.TCMClient)
+                                                      .Include(n => n.TCMNoteActivity)
+                                                      .Where(d => d.TCMClient.Id == servicePlan.TcmClient.Id)
+                                                      .ToListAsync();
+
+            foreach (var item in notes)
+            {
+                _context.TCMNoteActivity.RemoveRange(item.TCMNoteActivity);
+                await _context.SaveChangesAsync();
+            }
+
+            _context.TCMNote.RemoveRange(notes);
+            await _context.SaveChangesAsync();
+
+            _context.TCMDomains.RemoveRange(domains);
+            await _context.SaveChangesAsync();
+
+            TCMDischargeEntity discharge = await _context.TCMDischarge
+                                                         .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
+
+            _context.TCMDischarge.Remove(discharge);
+            await _context.SaveChangesAsync();
+
+            List<TCMAdendumEntity> addendums = await _context.TCMAdendums
+                                                             .Where(d => d.TcmServicePlan.Id == id)
+                                                             .ToListAsync();
+
+            _context.TCMAdendums.RemoveRange(addendums);
+            await _context.SaveChangesAsync();
+
+            TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews
+                                                                         .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
+
+            _context.TCMServicePlanReviews.Remove(servicePlanReview);
+            await _context.SaveChangesAsync();
+
+            _context.TCMServicePlans.Remove(servicePlan);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = servicePlan.TcmClient.Id });
+
+        }
+       
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteAddendum(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+           List<TCMMessageEntity> messageEntity = await _context.TCMMessages
+                                                                .Include(n => n.TCMAddendum)
+                                                                .Where(d => d.TCMAddendum.Id == id)
+                                                                .ToListAsync();
+
+            _context.TCMMessages.RemoveRange(messageEntity);
+            await _context.SaveChangesAsync();
+                       
+            TCMAdendumEntity addendum = await _context.TCMAdendums
+                                                      .Include(n => n.TcmDomain)
+                                                      .Include(n => n.TcmServicePlan)
+                                                      .ThenInclude(n => n.TcmClient)
+                                                      .FirstOrDefaultAsync(d => d.Id == id);
+           
+            List<TCMNoteActivityEntity> noteActivity = await _context.TCMNoteActivity
+                                                                     .Include(n => n.TCMNote)
+                                                                     .Where(m => m.TCMDomain.Id == addendum.TcmDomain.Id)
+                                                                     .ToListAsync();
+
+            _context.TCMNoteActivity.RemoveRange(noteActivity);
+            await _context.SaveChangesAsync();
+
+            _context.TCMDomains.RemoveRange(addendum.TcmDomain);
+            await _context.SaveChangesAsync();
+
+            _context.TCMAdendums.Remove(addendum);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = addendum.TcmServicePlan.TcmClient.Id });
+
+        }
     }
 }

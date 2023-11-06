@@ -1,6 +1,7 @@
 ﻿@model KyoS.Web.Data.Entities.TCMClientEntity
 @{
     ViewData["Title"] = "TCM Case History";
+    ViewData["origin"] = 8;
 }
 
 <!DOCTYPE html>
@@ -37,6 +38,17 @@
                         @await Html.PartialAsync("_ViewAssessmentForCase", Model.TCMAssessment)
                     }
                 </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TcmIntakeAppendixJ != null)
+                {
+                    @await Html.PartialAsync("_ViewAppendixJForCase", Model.TcmIntakeAppendixJ)
+                }
             </div>
         </div>
         <div class="col-md-12">
@@ -108,49 +120,67 @@
             //})
         });
 
-        $(function () {
-
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan='999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
-        });
-
-        function ConfirmDeleteFars(e) {
+        function ConfirmDeleteAppendixJ(e) {
             Swal.fire({
-                title: 'Do you want delete this FARS?',
-                text: "Note: All data related to this element will be deleted.",
+                title: 'Do you want to do this action?',
+                text: "Note: The appendix J will be deleted, this action is irreversible.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, do it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "FarsForms")";
+                    var url = "@Url.Action("DeleteAppendixJ", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        function ConfirmDeleteServicePlan(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The services plan, addendums, services plan review, discharge and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+         function ConfirmDeleteAddendum(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The addendums and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteAddendum", "TCMServicePlans")";
                     window.location.href = url + '/' + e;
                 }
             });
         }
 
-        function ConfirmDeleteDischarge(e) {
+        function ConfirmDeleteAssessment(e) {
             Swal.fire({
-                title: 'Do you want delete this discharge?',
-                text: "Note: All data related to this element will be deleted.",
+                title: 'Do you want to do this action?',
+                text: "Note: The assessment will be deleted, this action is irreversible.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, do it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "Discharge")";
+                    var url = "@Url.Action("Delete", "TCMAssessments")";
                     window.location.href = url + '/' + e;
                 }
             });
@@ -158,7 +188,7 @@
 
         function ConfirmDeleteNote(e) {
             Swal.fire({
-                title: 'Do you want delete this note?',
+                title: 'Do you want to delete?',
                 text: "Note: All data related to this element will be deleted.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -167,46 +197,11 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("DeleteNote", "Notes")";
-                    window.location.href = url + '/' + e;
+                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    window.location.href = url + '?id=' + e + '&origin=' + @ViewData["origin"];
                 }
             });
         }
-
-        function ConfirmReturnToNotStarted(e) {
-            Swal.fire({
-                title: 'Do you want to do this action?',
-                text: "Note: The note will be deleted, this action is irreversible.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, do it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "@Url.Action("ReturnToNotStarted", "Notes")";
-                    window.location.href = url + '/' + e;
-                }
-            });
-        }
-
-         function ConfirmDeleteAddendum(e) {
-            Swal.fire({
-                title: 'Do you want to do this action?',
-                text: "Note: The note will be deleted, this action is irreversible.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, do it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "@Url.Action("DeleteAddendum", "Mtps")";
-                    window.location.href = url + '/' + e;
-                }
-            });
-        }
-
     </script>
 
 

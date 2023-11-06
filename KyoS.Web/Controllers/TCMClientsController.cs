@@ -924,21 +924,9 @@ namespace KyoS.Web.Controllers
 
                 if (tcmClient != null)
                 {
-                    if (tcmClient.TcmServicePlan == null)
-                        tcmClient.TcmServicePlan = new TCMServicePlanEntity();
-                    if (tcmClient.TcmServicePlan.TCMAdendum == null)
-                        tcmClient.TcmServicePlan.TCMAdendum = new List<TCMAdendumEntity>();
-                    if (tcmClient.TcmServicePlan.TCMServicePlanReview == null)
-                        tcmClient.TcmServicePlan.TCMServicePlanReview = new TCMServicePlanReviewEntity();
-                    if (tcmClient.TcmServicePlan.TCMDischarge == null)
-                        tcmClient.TcmServicePlan.TCMDischarge = new TCMDischargeEntity();
                     if (tcmClient.TCMFarsFormList == null)
                         tcmClient.TCMFarsFormList = new List<TCMFarsFormEntity>();
-                    if (tcmClient.TCMAssessment == null)
-                        tcmClient.TCMAssessment = new TCMAssessmentEntity();
-                    if (tcmClient.TcmIntakeAppendixJ == null)
-                        tcmClient.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
-
+                   
                 }
 
                 return View(tcmClient);

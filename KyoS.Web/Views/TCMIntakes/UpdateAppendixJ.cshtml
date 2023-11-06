@@ -91,7 +91,7 @@
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
                                             <a asp-action="EditAppendixJ" asp-route-id="@item.TcmIntakeAppendixJ.Id" class="btn btn-success" title="Edit Appendix J"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.TcmIntakeAppendixJ.Id" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.Id" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {

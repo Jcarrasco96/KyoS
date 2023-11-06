@@ -109,6 +109,7 @@
                                                 <a asp-action="PrintTCMAssessment" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Assessment" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
+                                        <a onclick="ConfirmDeleteAssessment(@Model.Id)" class="btn btn-danger" title="Delete Assessment"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
@@ -121,6 +122,7 @@
                                         {
                                             <a asp-action="PrintTCMAssessment" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Assessment" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
+                                        <a onclick="ConfirmDeleteAssessment(@Model.Id)" class="btn btn-danger disabled" title="Delete Assessment"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

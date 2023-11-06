@@ -2821,5 +2821,28 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAssessmentEntity assessment = await _context.TCMAssessment
+                                                           .Include(n => n.TcmClient)
+                                                           .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (assessment == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+           
+            _context.TCMAssessment.Remove(assessment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = assessment.TcmClient.Id });
+            
+        }
     }
 }

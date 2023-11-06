@@ -5422,5 +5422,57 @@ namespace KyoS.Web.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteAppendixJ(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJEntity appendixJ = await _context.TCMIntakeAppendixJ
+                                                               .Include(n => n.TcmClient)
+                                                               .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (appendixJ == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.TCMIntakeAppendixJ.Remove(appendixJ);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = appendixJ.TcmClient.Id });
+
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> AppendixJReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJEntity appendixJ = await _context.TCMIntakeAppendixJ.FirstOrDefaultAsync(s => s.Id == id);
+            if (appendixJ == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                appendixJ.Approved = 0;
+                _context.TCMIntakeAppendixJ.Update(appendixJ);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
     }
 }

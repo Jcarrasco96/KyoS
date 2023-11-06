@@ -1,11 +1,11 @@
-﻿@model KyoS.Web.Data.Entities.TCMServicePlanEntity
+﻿@model KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity
 
 @if (Model != null)
 {
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Service Plan</h3>
+                <h3 class="panel-title">Appendix J</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" >
@@ -54,7 +54,7 @@
                                     @Html.DisplayFor(modelItem => Model.TcmClient.Client.AdmisionDate)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => Model.DateServicePlan)
+                                    @Html.DisplayFor(modelItem => Model.Date)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name)
@@ -93,36 +93,36 @@
                                     {
                                         @if (Model.Approved == 2)
                                         {
-                                            <a asp-action="ReturnTo" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
                                             @if (Model.Approved == 1)
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
-                                        <a onclick="ConfirmDeleteServicePlan(@Model.Id)" class="btn btn-danger" title="Delete Services Plan"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixJ(@Model.Id)" class="btn btn-danger" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
-                                        <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                         @if (Model.Approved == 2)
                                         {
-                                            <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                        <a onclick="ConfirmDeleteServicePlan(@Model.Id)" class="btn btn-danger" title="Delete Services Plan"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixJ(@Model.Id)" class="btn btn-danger disabled" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

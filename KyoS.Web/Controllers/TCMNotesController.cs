@@ -2072,7 +2072,7 @@ namespace KyoS.Web.Controllers
             return false;
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> Delete(int id = 0, int origin = 0)
         {
             TCMNoteEntity tcmNotes = _context.TCMNote
@@ -2134,6 +2134,17 @@ namespace KyoS.Web.Controllers
                     if (origin == 7)
                     {
                         return RedirectToAction("UpdateNote");
+                    }
+                    else
+                    {
+                        return RedirectToAction("NotesStatus", new { status = NoteStatus.Pending });
+                    }
+                }
+                if (User.IsInRole("Manager"))
+                {
+                    if (origin == 8)
+                    {
+                        return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmNotes.TCMClient.Id });
                     }
                     else
                     {

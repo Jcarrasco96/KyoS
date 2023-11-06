@@ -122,41 +122,43 @@
                                          @Html.DisplayFor(modelItem => item.BilledDate)
                                     }
                                 </td>
-                                <td align="right">
-                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
-                                    {
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                        {
-                                            <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
-                                            {
-                                                <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                        {
-                                            <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                    }
-                                </td>
+                                 <td align="right">
+                                     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                     {
+                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                         {
+                                             <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         else
+                                         {
+                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                             {
+                                                 <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                         }
+                                         <a onclick="ConfirmDeleteNote(@item.Id)" class="btn btn-danger" title="Delete Note"><i class="glyphicon glyphicon-trash"></i></a>
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                         {
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         <a onclick="ConfirmDeleteNote(@item.Id)" class="btn btn-danger disabled" title="Delete Note"><i class="glyphicon glyphicon-trash"></i></a>
+                                     }
+                                 </td>
                             </tr>
                         }
                             
