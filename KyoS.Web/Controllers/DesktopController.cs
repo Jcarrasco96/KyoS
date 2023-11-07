@@ -762,6 +762,12 @@ namespace KyoS.Web.Controllers
                                                                .ToListAsync();
                 ViewBag.BriefPending = BriefPending.Count().ToString();
 
+                List<MTPReviewEntity> MTPrPending = await _context.MTPReviews
+                                                                 .Where(n => (n.Status == AdendumStatus.Pending
+                                                                           && n.CreatedBy == user_logged.UserName))
+                                                                 .ToListAsync();
+                ViewBag.MTPrPending = MTPrPending.Count().ToString();
+
                 ViewBag.ExpiredMTPs = await _context.MTPs
                                                        .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                                       && m.Client.Status == StatusType.Open
@@ -793,6 +799,14 @@ namespace KyoS.Web.Controllers
                                                                   .ToListAsync();
                 BriefWithReview = BriefWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.BriefWithReview = BriefWithReview.Count.ToString();
+
+                List<MTPReviewEntity> MTPrWithReview = await _context.MTPReviews
+                                                                     .Include(wc => wc.Messages)
+                                                                     .Where(wc => (wc.CreatedBy == User.Identity.Name
+                                                                                && wc.Status == AdendumStatus.Pending))
+                                                                     .ToListAsync();
+                MTPrWithReview = MTPrWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
+                ViewBag.MTPrWithReview = MTPrWithReview.Count.ToString();
             }
             if (User.IsInRole("TCMSupervisor"))
             {

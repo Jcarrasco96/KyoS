@@ -2845,6 +2845,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction(nameof(IndexMTPR));
                     }
+                    if (mtpReviewViewModel.Origin == 8)
+                    {
+                        return RedirectToAction(nameof(MTPrWithReview));
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -2862,7 +2866,7 @@ namespace KyoS.Web.Controllers
             return View(mtpReviewViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> FinishEditingMtpReview(int id, int origin = 0)
         {
             MTPReviewEntity MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
@@ -2882,6 +2886,10 @@ namespace KyoS.Web.Controllers
             if (origin == 2)
             {
                 return RedirectToAction(nameof(MTPRinEdit));
+            }
+            if (origin == 3)
+            {
+                return RedirectToAction(nameof(IndexMTPR));
             }
 
             return RedirectToAction("Index", "MTPs");
@@ -2919,7 +2927,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> PendingMtpReview(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -5433,5 +5441,42 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Documents_Assistant, Supervisor, Facilitator")]
+        public async Task<IActionResult> MTPrWithReview()
+        {
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Facilitator"))
+            {
+                List<MTPReviewEntity> salida = await _context.MTPReviews
+                                                             .Include(wc => wc.Mtp)
+                                                             .ThenInclude(wc => wc.Client)
+                                                             .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                             .Where(wc => (wc.CreatedBy == User.Identity.Name
+                                                                        && wc.Status == AdendumStatus.Pending
+                                                                        && wc.Messages.Count() > 0))
+                                                             .ToListAsync();
+
+                return View(salida);
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    List<MTPReviewEntity> salida = await _context.MTPReviews
+                                                                 .Include(wc => wc.Mtp)
+                                                                 .ThenInclude(wc => wc.Client)
+                                                                 .Include(wc => wc.Messages.Where(m => m.Notification == false))
+                                                                 .Where(wc => (wc.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                            && wc.Status == AdendumStatus.Pending
+                                                                            && wc.Messages.Count() > 0))
+                                                                 .ToListAsync();
+                    return View(salida);
+                }
+            }
+
+            return View();
+        }
     }
 }

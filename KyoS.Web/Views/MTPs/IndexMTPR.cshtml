@@ -27,8 +27,8 @@
                             <th class="col-md-3">
                                 Name
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -41,6 +41,9 @@
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Admission for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Doc.
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -90,6 +93,32 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Therapist)
                                 </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
                                 <td align="right">
                                     @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
                                     {
@@ -98,14 +127,30 @@
                                             <a asp-action="EditMTPReview" asp-route-id="@item.Id" asp-route-origin="7" class="btn btn-warning" title="New Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
-                                        { 
+                                        {
                                             <a class="btn btn-warning disabled" title="Edit MTPR"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         <a class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
                                         <a class="btn btn-warning disabled" title="Edit MTPR"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
                                         <a class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
