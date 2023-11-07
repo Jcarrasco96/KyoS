@@ -54,7 +54,7 @@
                             {
                                 <tr>
                                     <td align="center">
-                                        @if (item.Facilitator.ClientsFromIndividualTherapy.Count() != 0)
+                                        @if (item.Facilitator.ClientsFromIndividualTherapy.Where(n => n.Status == KyoS.Common.Enums.StatusType.Open && n.DischargeList.Where(m => m.TypeService == KyoS.Common.Enums.ServiceType.Individual).Count() == 0).Count() > 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
                                         }
@@ -69,7 +69,7 @@
                                                     <th class="col-md-3" style="text-align:center;">Date of birth</th>
                                                     <th class="col-md-3" style="text-align:center;">Medical ID</th>
                                                 </tr>
-                                                @foreach (var client in item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open))
+                                                @foreach (var client in item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open && c.DischargeList.Where(m => m.TypeService == KyoS.Common.Enums.ServiceType.Individual).Count() == 0))
                                                 {
                                                     <tr>
                                                         <td>@Html.DisplayFor(modelItem => client.Name)</td>
@@ -87,7 +87,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="center">
-                                        @item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open).Count()
+                                        @item.Facilitator.ClientsFromIndividualTherapy.Where(c => c.Status == KyoS.Common.Enums.StatusType.Open && c.DischargeList.Where(m => m.TypeService == KyoS.Common.Enums.ServiceType.Individual).Count() == 0).Count()
                                     </td>
                                     <td align="center">
                                         @if (item.Schedule != null)

@@ -214,7 +214,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, TCMSupervisor")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -222,15 +222,16 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            TCMServiceEntity tcmServiceEntity = await _context.TCMServices.FirstOrDefaultAsync(s => s.Id == id);
-            if (tcmServiceEntity == null)
+            TCMClientEntity tcmclient = await _context.TCMClient
+                                                      .FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmclient == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
             try
             {
-                _context.TCMServices.Remove(tcmServiceEntity);
+                _context.TCMClient.Remove(tcmclient);
                 await _context.SaveChangesAsync();
             }
             catch (Exception)
@@ -238,7 +239,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "TCMIntakes");
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
@@ -933,6 +934,87 @@ namespace KyoS.Web.Controllers
             }
           
             return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> TCMCaseActive(int warning = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<TCMClientEntity> tcmClient = new List<TCMClientEntity>();
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+                CaseMannagerEntity caseManager = await _context.CaseManagers
+                                                               .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+                tcmClient = await _context.TCMClient
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .ThenInclude(g => g.Clients_HealthInsurances)
+                                          .ThenInclude(g => g.HealthInsurance)
+                                          .Where(g => (g.Casemanager.Id == caseManager.Id
+                                                    && g.Status == StatusType.Open))
+                                          .OrderBy(g => g.Client.Name)
+                                          .ToListAsync();
+            }
+
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+
+                tcmClient = await _context.TCMClient
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .ThenInclude(g => g.Clients_HealthInsurances)
+                                          .ThenInclude(g => g.HealthInsurance)
+                                          .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                   && s.Status == StatusType.Open)
+                                          .OrderBy(g => g.Casemanager.Name)
+                                          .ToListAsync();
+               
+            }
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+
+                tcmClient = await _context.TCMClient
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .ThenInclude(g => g.Clients_HealthInsurances)
+                                          .ThenInclude(g => g.HealthInsurance)
+                                          .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                   && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                   && s.Status == StatusType.Open)
+                                          .OrderBy(g => g.Casemanager.Name)
+                                          .ToListAsync();
+              
+            }
+
+            ViewData["warning"] = warning;
+            if (warning == 0)
+            {
+                return View(tcmClient);
+            }
+            else
+            {
+                if (warning == 1)
+                {
+                    return View(tcmClient.Where(n => n.DataClose.Date.AddDays(-15) > DateTime.Today.Date && n.DataClose.Date <= DateTime.Today.Date));
+                }
+                else 
+                {
+                    return View(tcmClient.Where(n => n.DataClose.Date < DateTime.Today.Date));
+                }
+            }
+            
         }
     }
 }

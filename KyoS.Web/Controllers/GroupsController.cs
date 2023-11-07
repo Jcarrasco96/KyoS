@@ -1416,7 +1416,9 @@ namespace KyoS.Web.Controllers
                 List<GroupEntity> group = await _context.Groups
                                                         .Include(g => g.Facilitator)
                                                         .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .ThenInclude(g => g.DischargeList)
                                                         .Include(g => g.Clients)
+                                                        
                                                         .Include(g => g.Schedule)
                                                         .ThenInclude(g => g.SubSchedules)
 
@@ -1432,7 +1434,9 @@ namespace KyoS.Web.Controllers
                 List<GroupEntity> group = await _context.Groups
                                                         .Include(g => g.Facilitator)
                                                         .ThenInclude(n => n.ClientsFromIndividualTherapy)
+                                                        .ThenInclude(g => g.DischargeList)
                                                         .Include(g => g.Clients)
+                                                        
                                                         .Include(g => g.Schedule)
                                                         .ThenInclude(g => g.SubSchedules)
 

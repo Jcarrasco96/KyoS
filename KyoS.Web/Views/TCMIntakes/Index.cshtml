@@ -125,7 +125,14 @@
                                     {
                                         <a asp-action="TCMIntakeDashboardReadOnly" asp-route-id="@item.Id" class="btn btn-warning" title="View item"><i class="glyphicon glyphicon-folder-open"></i></a>
                                     }
-
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        <a onclick="ConfirmDeleteCase(@item.Id)" class="btn btn-danger" title="Delete Case"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="ConfirmDeleteCase(@item.Id)" class="btn btn-danger disabled" title="Delete Case"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -136,30 +143,33 @@
     </div>
 </div>
 
-<partial name="_DeleteDialog" />
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
-                            $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
-                                "pageLength": 100
-                            });
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
 
-                            // Delete item
-                            var item_to_delete;
-
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
-
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "TCMIntakes")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });
-                        });
+        });
+        function ConfirmDeleteCase(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The case will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMClients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
