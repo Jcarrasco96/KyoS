@@ -687,14 +687,21 @@
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Cases</a>
                                     <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
                                         <li>@Html.ActionLink("Open", "GetCaseOpen", "TCMClients")</li>
                                         <li>@Html.ActionLink("Close", "GetCaseClose", "TCMClients")</li>
                                         <li>@Html.ActionLink("All Cases/Open case", "Index", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Not started case", "GetCaseNotServicePlan", "TCMClients")</li>
-                                <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
-                                <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new {agency = 1 })</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">TCM Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Active TCM Client", "TCMCaseActive", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Signatures", "Clients", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
+                                    </ul>
+                                </li>
+                                
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -807,7 +814,7 @@
                                 Cases <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Clients", "Clients", "TCMClients")</li>
+                                
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Cases</a>
                                     <ul class="dropdown-menu">
@@ -817,7 +824,15 @@
                                         <li>@Html.ActionLink("All Cases", "Index", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">TC Clients</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Active TCM Client", "TCMCaseActive", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Signatures", "Clients", "TCMClients")</li>
+                                        <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
+                                    </ul>
+                                </li>
+                                
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
