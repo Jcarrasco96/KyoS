@@ -1548,12 +1548,19 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerActives(string user, DateTime dateTCMNote)
         {
-            List<SelectListItem> list = _context.TCMClient
+            UserEntity userEntity = _context.Users
+                                            .Include(n => n.Clinic)
+                                            .ThenInclude(n => n.Setting)
+                                            .FirstOrDefault(n => n.UserName == user);
+
+            if (userEntity.Clinic.Setting.CreateNotesTCMWithServiceplanInEdition == true)
+            {
+                List<SelectListItem> list = _context.TCMClient
 
                                                 .Include(c => c.Client)
 
                                                 .Where(c => (c.TcmServicePlan != null
-                                                          && c.TcmIntakeAppendixJ.Approved == 2 
+                                                          && c.TcmIntakeAppendixJ.Approved == 2
                                                           && c.Casemanager.LinkedUser == user
                                                           && c.DataOpen <= dateTCMNote
                                                           && c.DataClose >= dateTCMNote))
@@ -1565,13 +1572,43 @@ namespace KyoS.Web.Helpers
                                                     Value = $"{c.Id}"
                                                 }).ToList();
 
-            list.Insert(0, new SelectListItem
-            {
-                Text = "[Select client...]",
-                Value = "0"
-            });
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
 
-            return list;
+                return list;
+            }
+            else
+            {
+                List<SelectListItem> list = _context.TCMClient
+
+                                                    .Include(c => c.Client)
+
+                                                    .Where(c => (c.TCMAssessment.Approved == 2
+                                                              && c.TcmServicePlan.Approved == 2
+                                                              && c.TcmIntakeAppendixJ.Approved == 2
+                                                              && c.Casemanager.LinkedUser == user
+                                                              && c.DataOpen <= dateTCMNote
+                                                              && c.DataClose >= dateTCMNote))
+                                                    .OrderBy(c => c.Client.Name)
+
+                                                    .Select(c => new SelectListItem
+                                                    {
+                                                        Text = $"{c.Client.Name} | {c.CaseNumber}",
+                                                        Value = $"{c.Id}"
+                                                    }).ToList();
+
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
+
+                return list;
+            }
+            
         }
 
         public IEnumerable<SelectListItem> GetComboServiceAgency()

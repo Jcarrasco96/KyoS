@@ -1446,7 +1446,8 @@ namespace KyoS.Web.Helpers
                 TCMEndTime = model.TCMEndTime,
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
                 UnitsForDayForClient = model.UnitsForDayForClient,
-                DischargeJoinCommission = model.DischargeJoinCommission
+                DischargeJoinCommission = model.DischargeJoinCommission,
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition
             };
         }
 
@@ -1473,7 +1474,8 @@ namespace KyoS.Web.Helpers
                 TCMEndTime = model.TCMEndTime,
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
                 UnitsForDayForClient = model.UnitsForDayForClient,
-                DischargeJoinCommission = model.DischargeJoinCommission
+                DischargeJoinCommission = model.DischargeJoinCommission,
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition
             };
         }
 
