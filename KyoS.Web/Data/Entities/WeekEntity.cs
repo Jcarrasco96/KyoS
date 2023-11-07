@@ -36,7 +36,7 @@ namespace KyoS.Web.Data.Entities
                 {
                     foreach (var item in this.Days)
                     {
-                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false))
+                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false && wc.Client != null))
                         {
                             if(workday_client.Note != null)
                             {
@@ -107,7 +107,7 @@ namespace KyoS.Web.Data.Entities
                 {
                     foreach (var item in this.Days)
                     {
-                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == true))
+                        foreach (var workday_client in item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == true && wc.Client != null))
                         {
                             if (workday_client.Note != null)
                             {
@@ -171,7 +171,7 @@ namespace KyoS.Web.Data.Entities
                 { 
                     foreach (var item in this.Days)
                     {
-                        count += item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false).Count();
+                        count += item.Workdays_Clients.Where(wc => wc.Present == true && wc.Hold == false && wc.Client != null).Count();
                     }
                 }
                 return count;
