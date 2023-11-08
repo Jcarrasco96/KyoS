@@ -2149,7 +2149,7 @@ namespace KyoS.Web.Controllers
                 return View(null);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> IndexAdendum(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -2278,7 +2278,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> CreateAdendum(AdendumViewModel adendumViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2335,7 +2335,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAdendum", adendumViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult EditAdendum(int id = 0, int origin = 0)
         {
             AdendumViewModel model;
@@ -2389,7 +2389,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> EditAdendum(AdendumViewModel adendumViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2464,7 +2464,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditAdendum", adendumViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> FinishEditingAdendum(int id, int origin = 0)
         {
             AdendumEntity adendum = await _context.Adendums.FirstOrDefaultAsync(n => n.Id == id);
@@ -2488,7 +2488,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexAdendum));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> PendingAdendum(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -2564,7 +2564,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingAdendum));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public IActionResult PrintAdendum(int id)
         {
             AdendumEntity entity = _context.Adendums
@@ -2676,7 +2676,7 @@ namespace KyoS.Web.Controllers
            
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> DeleteGoalOfMTPreview(int? id)
         {
             if (id == null)

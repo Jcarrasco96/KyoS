@@ -311,7 +311,7 @@
                                         @Html.DisplayFor(modelItem => item.Active)
                                     </td>
                                     <td align="center">
-                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && item.Active == true && (User.IsInRole("Facilitator") || User.IsInRole("Supervisor")))
+                                        @if (item.Client.Status == KyoS.Common.Enums.StatusType.Open && item.Active == true && (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
                                         {
                                             <a asp-action="CreateAdendum" asp-route-id="@item.Id" class="btn btn-warning" title="New Addendum"><i class="glyphicon glyphicon-plus"></i></a>                                            
                                         }
