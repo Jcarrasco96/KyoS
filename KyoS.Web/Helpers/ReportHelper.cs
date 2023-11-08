@@ -19153,7 +19153,7 @@ namespace KyoS.Web.Helpers
 
             dt.Columns.Add("ClientFamilyAbusoTrauma", typeof(bool));
 
-            dt.Columns.Add("DateAbuse", typeof(DateTime));
+            dt.Columns.Add("DateAbuse", typeof(string));
 
             dt.Columns.Add("PersonInvolved", typeof(string));
 
@@ -19603,7 +19603,7 @@ namespace KyoS.Web.Helpers
                                             false,
                                             string.Empty,
                                             false,
-                                            new DateTime(),
+                                            string.Empty,
                                             string.Empty,
                                             new DateTime(),
                                             string.Empty,
