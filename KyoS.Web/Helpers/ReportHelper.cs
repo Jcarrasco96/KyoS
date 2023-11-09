@@ -19157,7 +19157,7 @@ namespace KyoS.Web.Helpers
 
             dt.Columns.Add("PersonInvolved", typeof(string));
 
-            dt.Columns.Add("ApproximateDateReport", typeof(DateTime));
+            dt.Columns.Add("ApproximateDateReport", typeof(string));
 
             dt.Columns.Add("ApproximateDateReport_Where", typeof(string));
             dt.Columns.Add("RelationShips", typeof(string));
@@ -19605,7 +19605,7 @@ namespace KyoS.Web.Helpers
                                             false,
                                             string.Empty,
                                             string.Empty,
-                                            new DateTime(),
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty,
                                             string.Empty,
