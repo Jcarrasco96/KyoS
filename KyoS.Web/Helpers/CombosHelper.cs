@@ -1562,8 +1562,8 @@ namespace KyoS.Web.Helpers
                                                 .Where(c => (c.TcmServicePlan != null
                                                           && c.TcmIntakeAppendixJ.Approved == 2
                                                           && c.Casemanager.LinkedUser == user
-                                                          && c.DataOpen <= dateTCMNote
-                                                          && c.DataClose >= dateTCMNote))
+                                                          && c.DataOpen.Date <= dateTCMNote.Date
+                                                          && c.DataClose.Date >= dateTCMNote.Date))
                                                 .OrderBy(c => c.Client.Name)
 
                                                 .Select(c => new SelectListItem

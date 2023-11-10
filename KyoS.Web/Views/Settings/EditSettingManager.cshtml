@@ -1,0 +1,85 @@
+﻿@model KyoS.Web.Models.SettingManagerViewModel
+@{
+    ViewData["Title"] = "Edit Setting";
+}
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Edit Setting</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div>
+    @if (ViewBag.Creado == "Y")
+    {
+        <div class="alert alert-block alert-success">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok green"></i>
+            <strong class="green">
+                Clinic has been successfully created
+            </strong>
+
+        </div>
+    }
+    @if (ViewBag.Creado == "E")
+    {
+        <div class="alert alert-block alert-warning">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                Error. Clinic already exist
+            </strong>
+        </div>
+    }
+</div>
+<h4>Edit Clinic</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditSettingManager" enctype="multipart/form-data">
+            
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#mh" aria-controls="tcm" role="tab" data-toggle="tab">MH</a></li>
+                <li role="presentation"><a href="#codes" aria-controls="codes" role="tab" data-toggle="tab">CPTCodes</a></li>
+                <li role="presentation"><a href="#tcm" aria-controls="tcm" role="tab" data-toggle="tab">TCM</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="mh">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdClinic" />
+                    <partial name="_SettingManagerMH" />
+                    <div class="form-group col-md-12">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a asp-action="Index" asp-controller="Desktop" class="btn btn-success">Back</a>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tcm">
+                    <partial name="_SettingManagerTCM" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="codes">
+                    <partial name="_SettingManagerCodes" />
+                </div>
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+
+
+
+       
+    
+
+
+
