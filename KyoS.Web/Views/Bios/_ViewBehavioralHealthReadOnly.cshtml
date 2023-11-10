@@ -33,7 +33,14 @@
                                     @Html.DisplayFor(modelItem => item.Date)
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopup('@Url.Action("EditBehavioralModal", "Bios", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning disabled" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @if (item.Client.Clinic.Setting.TCMSupervisorEdit == true)
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditBehavioralModal", "Bios", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditBehavioralModal", "Bios", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning disabled" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }

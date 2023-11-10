@@ -643,6 +643,7 @@ namespace KyoS.Web.Controllers
                                        .Include(f => f.Client)
                                        .ThenInclude(f => f.Clients_Diagnostics)
                                        .ThenInclude(f => f.Diagnostic)
+                                       
                                        .FirstOrDefault(i => i.Client.Id == id);
 
             if (entity == null)
@@ -1519,7 +1520,9 @@ namespace KyoS.Web.Controllers
                                        .Include(m => m.Client)
                                        .ThenInclude(n => n.Clients_Diagnostics)
                                        .ThenInclude(n => n.Diagnostic)
-
+                                       .Include(n => n.Client)
+                                       .ThenInclude(n => n.Clinic)
+                                       .ThenInclude(n => n.Setting)
                                        .FirstOrDefault(i => i.Id == id);
 
             if (entity == null)
@@ -1608,12 +1611,40 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Approve(BioViewModel model, int id, int origi = 0)
         {
 
-            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+            BioEntity bio = await _context.Bio
+                                          .Include(n => n.Client)
+                                          .ThenInclude(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
+                                          .FirstOrDefaultAsync(n => n.Id == id);
 
 
             bio.Status = BioStatus.Approved;
             bio.DateSignatureSupervisor = model.DateSignatureSupervisor;
             bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+
+            if (bio.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            {
+                //section2
+                bio.PresentingProblem = model.PresentingProblem;
+                bio.ClientAssessmentSituation = model.ClientAssessmentSituation;
+                bio.FamilyAssessmentSituation = model.FamilyAssessmentSituation;
+                bio.FamilyEmotional = model.FamilyEmotional;
+                bio.LegalAssessment = model.LegalAssessment;
+
+                //section 7
+                bio.SubstanceAbuse = model.SubstanceAbuse;
+                bio.MilitaryServiceHistory = model.MilitaryServiceHistory;
+                bio.VocationalAssesment = model.VocationalAssesment;
+                bio.LegalHistory = model.LegalHistory;
+                bio.PersonalFamilyPsychiatric = model.PersonalFamilyPsychiatric;
+                bio.DoesClientRequired = model.DoesClientRequired;
+                bio.DoesClientRequired_Where = model.DoesClientRequired_Where;
+                bio.ObtainRelease = model.ObtainRelease;
+
+                //section 12
+                bio.TreatmentNeeds = model.TreatmentNeeds;
+
+            }
             _context.Update(bio);
 
             await _context.SaveChangesAsync();

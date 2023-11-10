@@ -125,24 +125,48 @@
 </pre>
 </div>
 <div class="col-md-12">
+    @if (Model.Client.Clinic.Setting.TCMSupervisorEdit == true)
+    {
     <pre>
 <strong>7. PSYCHOSOCIAL HISTORY</strong>
 
     Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
-    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" disabled></textarea>   
-    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28" disabled> YES  <input type="checkbox" class="form-check-input" id="check128" disabled> NO
-    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4" disabled></textarea>   
+    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2"></textarea>   
+    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28"> YES  <input type="checkbox" class="form-check-input" id="check128"> NO
+    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4"></textarea>   
     <strong>VOCATIONAL ASSESMENT:</strong>
-    <textarea asp-for="VocationalAssesment" style="width:90%" rows="2" disabled></textarea>
+    <textarea asp-for="VocationalAssesment" style="width:90%" rows="2"></textarea>
     Legal History (specifying changes, date, convictions and incarcerations):
-    <textarea asp-for="LegalHistory" style="width:90%" rows="2" disabled></textarea>  
+    <textarea asp-for="LegalHistory" style="width:90%" rows="2"></textarea>  
     Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
-    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2" disabled></textarea>  
+    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2"></textarea>  
         
-    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input" disabled> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%" disabled>
+    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input"> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%">
 
-    <input type="checkbox" asp-for="ObtainRelease" class="form-check-input" disabled> Obtain release of information so care can be coordinated.
+    <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information so care can be coordinated.
     </pre>
+    }
+    else
+    { 
+<pre>
+<strong>7. PSYCHOSOCIAL HISTORY</strong>
+
+    Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
+<textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" disabled></textarea>   
+<strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28" disabled> YES  <input type="checkbox" class="form-check-input" id="check128" disabled> NO
+<textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="4" disabled></textarea>   
+<strong>VOCATIONAL ASSESMENT:</strong>
+<textarea asp-for="VocationalAssesment" style="width:90%" rows="2" disabled></textarea>
+    Legal History (specifying changes, date, convictions and incarcerations):
+<textarea asp-for="LegalHistory" style="width:90%" rows="2" disabled></textarea>  
+    Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
+<textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2" disabled></textarea>  
+        
+<input type="checkbox" asp-for="DoesClientRequired" class="form-check-input" disabled> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%" disabled>
+
+<input type="checkbox" asp-for="ObtainRelease" class="form-check-input" disabled> Obtain release of information so care can be coordinated.
+    </pre>
+    }
 </div>
 <div class="col-md-12">
     <pre>
@@ -199,12 +223,24 @@
     </pre>
 </div>
 <div class="col-md-12">
+    @if (Model.Client.Clinic.Setting.TCMSupervisorEdit == true)
+    {
+    <pre>
+<strong>12. TREATMENT NEEDS:</strong> (use client’s own words)
+
+    The client stated: 
+    <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8" ></textarea>   
+    </pre>
+    }
+    else
+    {
     <pre>
 <strong>12. TREATMENT NEEDS:</strong> (use client’s own words)
 
     The client stated: 
     <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8" disabled></textarea>   
     </pre>
+    }
 </div>
 
 <br />
