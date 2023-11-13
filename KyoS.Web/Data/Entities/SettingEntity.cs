@@ -31,5 +31,6 @@ namespace KyoS.Web.Data.Entities
         public int UnitsForDayForClient { get; set; }
         public bool DischargeJoinCommission { get; set; }
         public bool CreateNotesTCMWithServiceplanInEdition { get; set; }
+        public bool SupervisorEdit { get; set; }
     }
 }

@@ -202,12 +202,12 @@ namespace KyoS.Web.Controllers
                 ProviderTaxId = user_logged.Clinic.ProviderTaxId,
                 SignaturePath = user_logged.Clinic.SignaturePath,
                 State = user_logged.Clinic.State,
-                SupervisorEdit = user_logged.Clinic.Setting.TCMSupervisorEdit,
+                SupervisorEdit = user_logged.Clinic.Setting.SupervisorEdit,
                 TCMEndTime = user_logged.Clinic.Setting.TCMEndTime,
                 TCMInitialTime = user_logged.Clinic.Setting.TCMInitialTime,
                 TCMSupervisorEdit = user_logged.Clinic.Setting.TCMSupervisorEdit,
                 UnitsForDayForClient = user_logged.Clinic.Setting.UnitsForDayForClient,
-                ZipCode = user_logged.Clinic.ZipCode
+                ZipCode = user_logged.Clinic.ZipCode                
 
             };
 
@@ -263,7 +263,8 @@ namespace KyoS.Web.Controllers
                     setting.LockTCMNoteForUnits = model.LockTCMNoteForUnits;
                     setting.TCMSupervisorEdit = model.TCMSupervisorEdit;
                     setting.CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition;
-                   
+                    setting.SupervisorEdit = model.SupervisorEdit;
+
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

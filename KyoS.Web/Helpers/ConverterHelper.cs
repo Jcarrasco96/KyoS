@@ -1447,7 +1447,8 @@ namespace KyoS.Web.Helpers
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
                 UnitsForDayForClient = model.UnitsForDayForClient,
                 DischargeJoinCommission = model.DischargeJoinCommission,
-                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
+                SupervisorEdit = model.SupervisorEdit
             };
         }
 
@@ -1475,7 +1476,8 @@ namespace KyoS.Web.Helpers
                 LockTCMNoteForUnits = model.LockTCMNoteForUnits,
                 UnitsForDayForClient = model.UnitsForDayForClient,
                 DischargeJoinCommission = model.DischargeJoinCommission,
-                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
+                SupervisorEdit = model.SupervisorEdit
             };
         }
 
