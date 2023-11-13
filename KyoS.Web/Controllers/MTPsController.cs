@@ -2214,7 +2214,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult CreateAdendum(int id = 0)
         {
 
@@ -2224,7 +2224,7 @@ namespace KyoS.Web.Controllers
 
             AdendumViewModel model = new AdendumViewModel();
 
-            if (User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor") )
             {
                 model = new AdendumViewModel
                 {
@@ -2244,7 +2244,9 @@ namespace KyoS.Web.Controllers
                     Facilitator = new FacilitatorEntity(),
                     IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
                     IdFacilitator = 0,
-                    Goals = new List<GoalEntity>()
+                    IdDocumentAssisstant = 0,
+                    Goals = new List<GoalEntity>(),
+                    DocumentAssisstant = new DocumentsAssistantEntity()
                 };
             }
             if (User.IsInRole("Facilitator"))
@@ -2266,12 +2268,37 @@ namespace KyoS.Web.Controllers
                     Supervisor = new SupervisorEntity(),
                     IdFacilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
                     IdSupervisor = 0,
-                    Goals = new List<GoalEntity>()
+                    IdDocumentAssisstant = 0,
+                    Goals = new List<GoalEntity>(),
+                    DocumentAssisstant = new DocumentsAssistantEntity()
                 };
 
                 return View(model);
             }
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                model = new AdendumViewModel
+                {
+                    Mtp = _context.MTPs
+                                  .Include(c => c.Client.Clients_Diagnostics)
+                                  .ThenInclude(cd => cd.Diagnostic)
+                                  .FirstOrDefault(n => n.Id == id),
 
+                    Dateidentified = DateTime.Now,
+                    ProblemStatement = "",
+                    Duration = 6,
+                    Frecuency = "once a week",
+                    Id = 0,
+                    IdMTP = id,
+                    Status = AdendumStatus.Edition,
+                    Unit = 4,
+                    Facilitator = new FacilitatorEntity(),
+                    IdDocumentAssisstant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
+                    IdFacilitator = 0,
+                    IdSupervisor = 0,
+                    Goals = new List<GoalEntity>()
+                };
+            }
             return View(model);
 
         }

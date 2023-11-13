@@ -3617,7 +3617,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null,
-                DateOfApprove = model.DateOfApprove
+                DateOfApprove = model.DateOfApprove,
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant)
             };
         }
 
@@ -3652,6 +3653,10 @@ namespace KyoS.Web.Helpers
                 salida.IdSupervisor = model.Supervisor.Id;
             else
                 salida.IdSupervisor = 0;
+            if (model.DocumentAssisstant != null)
+                salida.IdDocumentAssisstant = model.DocumentAssisstant.Id;
+            else
+                salida.IdDocumentAssisstant = 0;
             return salida;
         }
 

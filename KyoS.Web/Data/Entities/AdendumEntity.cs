@@ -52,5 +52,7 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
 
         public DateTime DateOfApprove { get; set; }
+
+        public DocumentsAssistantEntity DocumentAssisstant { get; set; }
     }
 }
