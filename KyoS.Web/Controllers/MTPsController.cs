@@ -3241,7 +3241,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMTPReview", reviewViewModel.Id) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public IActionResult PrintMTPReview(int id)
         {
             MTPReviewEntity entity = _context.MTPReviews

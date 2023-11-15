@@ -3885,7 +3885,7 @@ namespace KyoS.Web.Controllers
 
             List<TCMIntakeAppendixJEntity> apendiceJ = new List<TCMIntakeAppendixJEntity>();
 
-            if (User.IsInRole("Casemanager"))
+            if (User.IsInRole("CaseManager"))
             {
                 apendiceJ = await _context.TCMIntakeAppendixJ
                                           .Include(w => w.TcmClient)
