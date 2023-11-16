@@ -2367,7 +2367,7 @@ namespace KyoS.Web.Controllers
         {
             AdendumViewModel model;
 
-            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
+            if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -2392,6 +2392,7 @@ namespace KyoS.Web.Controllers
                                                     .Include(a => a.Supervisor)
 
                                                     .Include(a => a.Facilitator)
+                                                    .Include(a => a.DocumentAssisstant)
 
                                                     .FirstOrDefault(a => a.Id == id
                                                                       && a.CreatedBy == user_logged.UserName);
