@@ -188,18 +188,24 @@ namespace KyoS.Web.Helpers
         Stream FloridaSocialHSTCMNoteReportSchema1(TCMNoteEntity note);
         Stream DreamsMentalHealthTCMNoteReportSchema1(TCMNoteEntity note);
         Stream SapphireMHCTCMNoteReportSchema1(TCMNoteEntity note);
+        Stream OrionMHCTCMNoteReportSchema1(TCMNoteEntity note);
+        Stream MyFloridaTCMNoteReportSchema1(TCMNoteEntity note);
         #endregion
 
         #region TCM Service Plan
         Stream FloridaSocialHSTCMServicePlan(TCMServicePlanEntity servicePlan);
         Stream DreamsMentalHealthTCMServicePlan(TCMServicePlanEntity servicePlan);
         Stream SapphireMHCTCMServicePlan(TCMServicePlanEntity servicePlan);
+        Stream OrionMHCTCMServicePlan(TCMServicePlanEntity servicePlan);
+        Stream MyFloridaTCMServicePlan(TCMServicePlanEntity servicePlan);
         #endregion
 
         #region TCM Fars Form
-        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity intake);
-        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity intake);
-        Stream TCMSapphireMHCFarsReport(TCMFarsFormEntity intake);
+        Stream TCMFloridaSocialHSFarsReport(TCMFarsFormEntity fars);
+        Stream TCMDreamsMentalHealthFarsReport(TCMFarsFormEntity fars);
+        Stream TCMSapphireMHCFarsReport(TCMFarsFormEntity fars);
+        Stream TCMOrionMHCFarsReport(TCMFarsFormEntity fars);
+        Stream TCMMyFloridaFarsReport(TCMFarsFormEntity fars);
         #endregion
 
         #region TCM Binder Section #1
