@@ -129,6 +129,8 @@ namespace KyoS.Web.Controllers
                                                         .Include(n => n.TCMIntakeForm)
                                                         .Include(n => n.Casemanager)
                                                         .ThenInclude(n => n.TCMSupervisor)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.MedicationList)
                                                         .FirstOrDefault(n => n.Id == id);
 
                     if (tcmClient.TCMIntakeForm == null)
@@ -536,7 +538,7 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
-
+                   
                     ViewData["origi"] = origi;
                     return View(model);
                 }
@@ -585,6 +587,28 @@ namespace KyoS.Web.Controllers
                     tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, true, user_logged.UserName);
                     tcmAssessmentEntity.Approved = 0;
                     _context.TCMAssessment.Add(tcmAssessmentEntity);
+
+                    TCMClientEntity tcmclient = _context.TCMClient
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.MedicationList)
+                                                        .FirstOrDefault(n => n.Id == tcmAssessmentViewModel.TcmClient_FK);
+                    tcmAssessmentEntity.MedicationList = new List<TCMAssessmentMedicationEntity>();
+                    foreach (var item in tcmclient.Client.MedicationList)
+                    {
+                        if (tcmAssessmentEntity.MedicationList.Where(n => n.Name == item.Name).Count() == 0)
+                        {
+                            TCMAssessmentMedicationEntity medicine = new TCMAssessmentMedicationEntity()
+                            {
+                                Name = item.Name,
+                                Dosage = item.Dosage,
+                                Frequency = item.Frequency,
+                                Prescriber = item.Prescriber,
+                                ReasonPurpose = string.Empty
+                            };
+                            tcmAssessmentEntity.MedicationList.Add(medicine);
+                        }
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1524,6 +1548,25 @@ namespace KyoS.Web.Controllers
                 {
                     MedicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, true, user_logged.UserName);
                     _context.TCMAssessmentMedication.Add(MedicationEntity);
+
+                    if (_context.Medication.Where(n => n.Name == MedicationEntity.Name).Count() == 0)
+                    {
+                        MedicationEntity medicine = new MedicationEntity()
+                        {
+                            Name = MedicationEntity.Name,
+                            Dosage = MedicationEntity.Dosage,
+                            Frequency = MedicationEntity.Frequency,
+                            Prescriber = MedicationEntity.Prescriber,
+                            ReasonPurpose = MedicationEntity.ReasonPurpose,
+                            CreatedOn = MedicationEntity.CreatedOn,
+                            CreatedBy = MedicationEntity.CreatedBy,
+                            LastModifiedBy = MedicationEntity.LastModifiedBy,
+                            LastModifiedOn = MedicationEntity.LastModifiedOn,
+                            Client = _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.TCMAssessment.Id == MedicationViewModel.IdTCMAssessment).Client
+                        };
+                        _context.Medication.Add(medicine);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1582,10 +1625,10 @@ namespace KyoS.Web.Controllers
                 {
 
                     TCMAssessmentMedicationEntity MedicationEntity = _context.TCMAssessmentMedication
-                                                                        .Include(m => m.TcmAssessment)
-                                                                        .ThenInclude(m => m.TcmClient)
-                                                                        .ThenInclude(m => m.Client)
-                                                                        .FirstOrDefault(m => m.Id == id);
+                                                                             .Include(m => m.TcmAssessment)
+                                                                             .ThenInclude(m => m.TcmClient)
+                                                                             .ThenInclude(m => m.Client)
+                                                                             .FirstOrDefault(m => m.Id == id);
                     if (MedicationEntity == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -1594,7 +1637,7 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToTCMAssessmentMedicationViewModel(MedicationEntity);
-
+                        model.OldName = MedicationEntity.Name;
                         return View(model);
                     }
 
@@ -1618,6 +1661,25 @@ namespace KyoS.Web.Controllers
             {
                 TCMAssessmentMedicationEntity MedicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, false, user_logged.UserName);
                 _context.TCMAssessmentMedication.Update(MedicationEntity);
+                MedicationEntity medication = _context.Medication
+                                                      .FirstOrDefault(n => n.Name == MedicationViewModel.OldName
+                                                                        && n.Client.Id == _context.TCMClient
+                                                                                                  .Include(n => n.Client)
+                                                                                                  .FirstOrDefault(n => n.TCMAssessment.Id == MedicationViewModel.IdTCMAssessment).Client.Id);
+                if (medication != null)
+                {
+                    medication.Name = MedicationEntity.Name;
+                    medication.Dosage = MedicationEntity.Dosage;
+                    medication.Frequency = MedicationEntity.Frequency;
+                    medication.Prescriber = MedicationEntity.Prescriber;
+                    medication.ReasonPurpose = MedicationEntity.ReasonPurpose;
+                    medication.CreatedOn = MedicationEntity.CreatedOn;
+                    medication.CreatedBy = MedicationEntity.CreatedBy;
+                    medication.LastModifiedBy = MedicationEntity.LastModifiedBy;
+                    medication.LastModifiedOn = MedicationEntity.LastModifiedOn;
+                    _context.Medication.Update(medication);
+                }
+
                 try
                 {
                     await _context.SaveChangesAsync();

@@ -11,21 +11,24 @@
                  <table class="table table-hover table-responsive table-striped" id="MyTable">
                      <thead>
                          <tr>
-                             <th class="col-md-2">
+                             <th class="col-md-3">
                                  Case Manager
                              </th>
                              <th class="col-md-3">
                                  Client Name
                              </th>
-                             <th class="col-md-2" style="text-align: center;">
+                             <th class="col-md-1" style="text-align: center;">
+                                 Case
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
                                  Client Status
                              </th>
                              <th class="col-md-1" style="text-align: center;">
                                  Open Date
                              </th>
-                             <th class="col-md-2" style="text-align: center;">
+                             <th class="col-md-1" style="text-align: center;">
                                  Close Date
-                             </th>                             
+                             </th>
                              <th class="col-md-2" style="text-align: center;">
                              </th>
                          </tr>
@@ -48,7 +51,8 @@
                                  }
                                  &nbsp;
                                  @Html.DisplayFor(modelItem => item.Client.Name)
-                                 |
+                             </td>
+                             <td align="center">
                                  @Html.DisplayFor(modelItem => item.CaseNumber)
                              </td>
                              <td align="center">

@@ -86,7 +86,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
 
@@ -96,7 +96,7 @@ namespace KyoS.Web.Controllers
 
             MedicationViewModel model;
 
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            if (User.IsInRole("Documents_Assistant") || User.IsInRole("Supervisor"))
             {
 
 
@@ -111,7 +111,8 @@ namespace KyoS.Web.Controllers
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = ""
+                        Prescriber = "",
+                        ReasonPurpose = ""
 
                     };
                     if (model.Client.MedicationList == null)
@@ -128,7 +129,9 @@ namespace KyoS.Web.Controllers
                 Dosage = "",
                 Frequency = "",
                 Name = "",
-                Prescriber = ""
+                Prescriber = "",
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Today
             };
             if (model.Client.MedicationList == null)
                 model.Client.MedicationList = new List<MedicationEntity>();
@@ -150,6 +153,8 @@ namespace KyoS.Web.Controllers
                 if (medicationEntity == null)
                 {
                     medicationEntity = await _converterHelper.ToMedicationEntity(MedicationViewModel, true);
+                    medicationEntity.CreatedBy = user_logged.UserName;
+                    medicationEntity.CreatedOn = DateTime.Today;
                     _context.Medication.Add(medicationEntity);
                     try
                     {
@@ -262,6 +267,8 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 MedicationEntity medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, false);
+                medicationEntity.LastModifiedBy = user_logged.UserName;
+                medicationEntity.LastModifiedOn = DateTime.Today;
                 _context.Medication.Update(medicationEntity);
                 try
                 {

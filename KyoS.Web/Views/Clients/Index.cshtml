@@ -78,7 +78,7 @@
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Therapy
+                                Services
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Admission
@@ -123,7 +123,14 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @if (item.OnlyTCM == true)
+                                        {
+                                            <p>TCM</p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Service)
+                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
@@ -192,7 +199,14 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @if (item.OnlyTCM == true)
+                                        {
+                                            <p>TCM</p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Service)
+                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)

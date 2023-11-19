@@ -2991,8 +2991,13 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber
-                
+                Prescriber = model.Prescriber,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                ReasonPurpose = model.ReasonPurpose,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+
             };
         }
 
@@ -3006,7 +3011,10 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber
+                Prescriber = model.Prescriber,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                ReasonPurpose = model.ReasonPurpose
             };
 
         }
