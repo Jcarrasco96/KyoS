@@ -1740,6 +1740,18 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (note.TCMClient.Casemanager.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionMHCTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            if (note.TCMClient.Casemanager.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
         

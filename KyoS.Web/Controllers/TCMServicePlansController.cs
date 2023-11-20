@@ -2515,6 +2515,18 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (servicePlan.TCMSupervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionMHCTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            if (servicePlan.TCMSupervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 
@@ -3022,6 +3034,7 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMAdendum(adendum);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
         [Authorize(Roles = "Manager, TCMSupervisor")]
         public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
         {
