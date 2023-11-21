@@ -28,11 +28,8 @@
     <div class="col-md-12">
         &nbsp;
     </div>
-    <div class="col-md-12">
-        @*<div class="alert alert-warning" role="alert">
-            <span class="sr-only"></span>*@
-        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents
-        @*</div>*@
+    <div class="col-md-12">        
+        <strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents        
     </div>
     <div class="col-md-12">
         &nbsp;
@@ -109,7 +106,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager"))
+                                        @if (User.IsInRole("Manager") || (User.IsInRole("Frontdesk")))
                                         {
                                             <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
@@ -118,8 +115,7 @@
                                             <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
-                                           && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
-                                             )
+                                           && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null))
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
@@ -169,7 +165,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager"))
+                                        @if (User.IsInRole("Manager") || (User.IsInRole("Frontdesk")))
                                         {
                                             <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
@@ -178,8 +174,7 @@
                                             <a class="btn btn-success disabled" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         @if ((item.IntakeScreening != null) && (item.IntakeConsentForTreatment != null) && (item.IntakeConsentForRelease != null) && (item.IntakeConsumerRights != null) && (item.IntakeAcknowledgementHipa != null) && (item.IntakeAccessToServices != null)
-                                          && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null)
-                                           )
+                                          && (item.IntakeOrientationChecklist != null) && (item.IntakeTransportation != null) && (item.IntakeConsentPhotograph != null) && (item.IntakeFeeAgreement != null) && (item.IntakeTuberculosis != null))
                                         {
                                             <a asp-action="PrintIntake" asp-route-id="@item.IntakeScreening.Id" class="btn btn-success" title="Print Intake" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }

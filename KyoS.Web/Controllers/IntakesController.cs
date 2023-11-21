@@ -300,7 +300,7 @@ namespace KyoS.Web.Controllers
 
             IntakeScreeningViewModel model;
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -391,7 +391,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentForTreatmentViewModel model;
             ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -502,7 +502,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentForReleaseViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -611,7 +611,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult CreateConsumerRights(int id = 0)
         {
 
@@ -622,7 +622,7 @@ namespace KyoS.Web.Controllers
             IntakeConsumerRightsViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -667,7 +667,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> CreateConsumerRights(IntakeConsumerRightsViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -878,7 +878,7 @@ namespace KyoS.Web.Controllers
             IntakeAcknoewledgementHippaViewModel model;
             ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -981,7 +981,7 @@ namespace KyoS.Web.Controllers
             IntakeAccessToServicesViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1084,7 +1084,7 @@ namespace KyoS.Web.Controllers
             IntakeOrientationCheckListViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1207,7 +1207,7 @@ namespace KyoS.Web.Controllers
             IntakeTransportationViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1309,7 +1309,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentPhotographViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1420,7 +1420,7 @@ namespace KyoS.Web.Controllers
             IntakeFeeAgreementViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1521,7 +1521,7 @@ namespace KyoS.Web.Controllers
             IntakeTuberculosisViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 if (user_logged.Clinic != null)
                 {
