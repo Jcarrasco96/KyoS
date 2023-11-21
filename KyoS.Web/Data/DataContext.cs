@@ -146,6 +146,8 @@ namespace KyoS.Web.Data
         public DbSet<BillDmsDetailsEntity> BillDmsDetails { get; set; }
         public DbSet<BillDmsPaidEntity> BillDmsPaid { get; set; }
         public DbSet<TCMReferralFormEntity> TCMReferralForms { get; set; }
+        public DbSet<TCMSupervisionTimeEntity> TCMSupervisionTimes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

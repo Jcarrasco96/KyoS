@@ -1,0 +1,78 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMSupervisionTimeEntity>
+
+<div class="col-md-12">
+    @if (ViewBag.Delete == "N")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <strong class="red">
+                Error. It is not posible delete the TCM supervision Time
+            </strong>
+        </div>
+    }
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">TCM Supervision Times</h3>
+        </div>
+        <div class="panel-body" id="view-tcmSupervisionTime">
+            <table class="table table-hover table-responsive table-striped" id="MyTable">
+                <thead>
+                    <tr>
+                        <th class="col-md-3" align="center">
+                            @Html.DisplayNameFor(model => model.TCMSupervisor.Name)
+                        </th>
+                        <th class="col-md-3" style="text-align: center;">
+                            @Html.DisplayNameFor(model => model.CaseManager.Name)
+                        </th>
+                        <th class="col-md-2">
+                            Date
+                        </th>
+                        <th class="col-md-1" style="text-align: center;">
+                            Start time
+                        </th>
+                        <th class="col-md-1" style="text-align: center;">
+                            End Time
+                        </th>
+                        <th class="col-md-2" align="center">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TCMSupervisor.Name)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.CaseManager.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateSupervision)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.StartTime)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.EndTime)
+                            </td>
+                            <td align="right">
+                                <a onclick="showInPopup('@Url.Action("EditSupervisionTime", "TCMSupervisors", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Supervision Time')" class="btn btn-warning" title="Edit TCM Supervision Time"><i class="glyphicon glyphicon-pencil"></i></a>
+                                @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete TCM SupervisionTime"><i class="glyphicon glyphicon-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

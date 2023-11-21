@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+   
     public class TCMSupervisorsController : Controller
     {
         private readonly DataContext _context;
@@ -260,7 +260,8 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmSupervisorViewModel) });
         }
-
+        
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -492,5 +493,360 @@ namespace KyoS.Web.Controllers
             return Json(new { redirectToUrl = Url.Action("Signatures", "TCMsupervisors") });
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult CreateSupervisionTime(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            TCMSupervisionTimeViewModel model = new TCMSupervisionTimeViewModel();
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+                    TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    List<CaseMannagerEntity> caseManager = _context.CaseManagers
+                                                                   .Where(c => c.TCMSupervisor.Id == tcmSupervisor.Id)
+                                                                   .ToList();
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    foreach (var item in caseManager)
+                    {
+                        list.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = $"{item.Id}"
+                        });
+                    }
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = "Select a CaseManager",
+                        Value = $"{0}"
+                    });
+                    model = new TCMSupervisionTimeViewModel
+                    {
+                        CaseManagers = list,
+                        DateSupervision = DateTime.Today,
+                        Description = string.Empty,
+                        StartTime = DateTime.Today,
+                        EndTime = DateTime.Today,
+                        TCMSupervisor = tcmSupervisor,
+                        IdTCMSupervisor = tcmSupervisor.Id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Today
+
+                    };
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> CreateSupervisionTime(TCMSupervisionTimeViewModel tcmSupervisionTimeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            List<CaseMannagerEntity> caseManager = _context.CaseManagers
+                                                           .Where(c => c.TCMSupervisor.Id == tcmSupervisor.Id)
+                                                           .ToList();
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+                TCMSupervisionTimeEntity tcmSupervisionTimeEntity = await _context.TCMSupervisionTimes
+                                                                                  .FirstOrDefaultAsync(s => s.DateSupervision.Date == tcmSupervisionTimeViewModel.DateSupervision.Date
+                                                                                  && ((s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.StartTime.TimeOfDay
+                                                                                      && s.EndTime.TimeOfDay >= tcmSupervisionTimeViewModel.StartTime.TimeOfDay)
+                                                                                    ||(s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.EndTime.TimeOfDay
+                                                                                      && s.EndTime.TimeOfDay >= tcmSupervisionTimeViewModel.EndTime.TimeOfDay)));
+                if (tcmSupervisionTimeEntity == null)
+                {
+                    tcmSupervisionTimeEntity = await _converterHelper.ToTCMSupervisionTimeEntity(tcmSupervisionTimeViewModel, true, user_logged.UserName);
+                    _context.Add(tcmSupervisionTimeEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
+                                                                                           .Include(f => f.CaseManager)
+                                                                                           .Include(f => f.TCMSupervisor)
+                                                                                           .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    
+                    foreach (var item in caseManager)
+                    {
+                        list.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = $"{item.Id}"
+                        });
+                    }
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = "Select a CaseManager",
+                        Value = $"{0}"
+                    });
+                    tcmSupervisionTimeViewModel.CaseManagers = list;
+                    ModelState.AddModelError(string.Empty, $"The selected interval time is busy");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSupervisionTime", tcmSupervisionTimeViewModel) });
+                }
+                
+            }
+
+            //recovery data
+           
+            foreach (var item in caseManager)
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = $"{item.Id}"
+                });
+            }
+            list.Insert(0, new SelectListItem
+            {
+                Text = "Select a CaseManager",
+                Value = $"{0}"
+            });
+            tcmSupervisionTimeViewModel.CaseManagers = list;
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSupervisionTime", tcmSupervisionTimeViewModel) });
+        }
+
+        public async Task<IActionResult> TCMSupervisionTime(int idError = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.TCMSupervisionTimes
+                                          .Include(f => f.CaseManager)
+                                          .Include(f => f.TCMSupervisor)
+                                          .ToListAsync());
+            }
+            if (User.IsInRole("CaseManager"))
+            {
+                return View(await _context.TCMSupervisionTimes
+                                          .Include(f => f.CaseManager)
+                                          .Include(f => f.TCMSupervisor)
+                                          .Where(n => n.CaseManager.LinkedUser == user_logged.UserName)
+                                          .ToListAsync());
+            }
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                return View(await _context.TCMSupervisionTimes
+                                          .Include(f => f.CaseManager)
+                                          .Include(f => f.TCMSupervisor)
+                                          .Where(n => n.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                          .ToListAsync());
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditSupervisionTime(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisionTimeEntity tcmSupervisioTimeEntity = await _context.TCMSupervisionTimes
+                                                                             .Include(s => s.CaseManager)
+                                                                             .Include(s => s.TCMSupervisor)
+                                                                             .FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmSupervisioTimeEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSupervisionTimeViewModel tcmSupervisionTimeViewModel = new TCMSupervisionTimeViewModel();
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                tcmSupervisionTimeViewModel = _converterHelper.ToTCMSupervisionTimeViewModel(tcmSupervisioTimeEntity, user_logged.Clinic.Id);
+
+                TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                List<CaseMannagerEntity> caseManager = _context.CaseManagers
+                                                               .Where(c => c.TCMSupervisor.Id == tcmSupervisor.Id)
+                                                               .ToList();
+                List<SelectListItem> list = new List<SelectListItem>();
+                foreach (var item in caseManager)
+                {
+                    list.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = $"{item.Id}"
+                    });
+                }
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "Select a CaseManager",
+                    Value = $"{0}"
+                });
+
+                tcmSupervisionTimeViewModel.CaseManagers = list;
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View(tcmSupervisionTimeViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditSupervisionTime(int id, TCMSupervisionTimeViewModel tcmSupervisionTimeViewModel)
+        {
+            if (id != tcmSupervisionTimeViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+            List<CaseMannagerEntity> caseManager = _context.CaseManagers
+                                                           .Where(c => c.TCMSupervisor.Id == tcmSupervisor.Id)
+                                                           .ToList();
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+                TCMSupervisionTimeEntity tcmSupervisionTimeEntity = await _context.TCMSupervisionTimes
+                                                                                   .FirstOrDefaultAsync(s => s.DateSupervision.Date == tcmSupervisionTimeViewModel.DateSupervision.Date
+                                                                                                        && ((s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.StartTime.TimeOfDay
+                                                                                                               && s.EndTime.TimeOfDay >= tcmSupervisionTimeViewModel.StartTime.TimeOfDay)
+                                                                                                            || (s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.EndTime.TimeOfDay
+                                                                                                               && s.EndTime.TimeOfDay >= tcmSupervisionTimeViewModel.EndTime.TimeOfDay))
+                                                                                                               && s.Id != tcmSupervisionTimeViewModel.Id);
+                if (tcmSupervisionTimeEntity == null)
+                {
+                    tcmSupervisionTimeEntity = await _converterHelper.ToTCMSupervisionTimeEntity(tcmSupervisionTimeViewModel, false, user_logged.UserName);
+                    _context.Update(tcmSupervisionTimeEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
+                                                                                           .Include(f => f.CaseManager)
+                                                                                           .Include(f => f.TCMSupervisor)
+                                                                                           .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+
+                    foreach (var item in caseManager)
+                    {
+                        list.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = $"{item.Id}"
+                        });
+                    }
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = "Select a CaseManager",
+                        Value = $"{0}"
+                    });
+                    tcmSupervisionTimeViewModel.CaseManagers = list;
+                    ModelState.AddModelError(string.Empty, $"The selected interval time is busy");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSupervisionTime", tcmSupervisionTimeViewModel) });
+                }
+            }
+
+            //recovery data
+            foreach (var item in caseManager)
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = $"{item.Id}"
+                });
+            }
+            list.Insert(0, new SelectListItem
+            {
+                Text = "Select a CaseManager",
+                Value = $"{0}"
+            });
+            tcmSupervisionTimeViewModel.CaseManagers = list;
+            ModelState.AddModelError(string.Empty, $"The selected interval time is busy");
+           
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSupervisionTime", tcmSupervisionTimeViewModel) });
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> DeleteTCMSupervisionTime(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisionTimeEntity tcmSupervisionTimeEntity = await _context.TCMSupervisionTimes.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmSupervisionTimeEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMSupervisionTimes.Remove(tcmSupervisionTimeEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("TCMSupervisionTime", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(TCMSupervisionTime));
+        }
     }
 }

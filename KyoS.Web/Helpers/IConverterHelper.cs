@@ -221,5 +221,7 @@ namespace KyoS.Web.Helpers
         BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model);
         Task<TCMReferralFormEntity> ToTCMReferralFormEntity(TCMReferralFormViewModel model, bool isNew, string userId);
         TCMReferralFormViewModel ToTCMReferralFormViewModel(TCMReferralFormEntity model);
+        Task<TCMSupervisionTimeEntity> ToTCMSupervisionTimeEntity(TCMSupervisionTimeViewModel model, bool isNew, string userId);
+        TCMSupervisionTimeViewModel ToTCMSupervisionTimeViewModel(TCMSupervisionTimeEntity model, int idClinic);
     }
 }

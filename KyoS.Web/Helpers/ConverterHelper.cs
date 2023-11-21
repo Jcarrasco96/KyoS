@@ -7534,5 +7534,41 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<TCMSupervisionTimeEntity> ToTCMSupervisionTimeEntity(TCMSupervisionTimeViewModel model, bool isNew, string userId)
+        {
+            return new TCMSupervisionTimeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CaseManager = await _context.CaseManagers.FindAsync(model.IdCaseManager),
+                Description = model.Description,
+                DateSupervision = model.DateSupervision,
+                EndTime = model.EndTime,
+                StartTime = model.StartTime,
+                TCMSupervisor = await _context.TCMSupervisors.FindAsync(model.IdTCMSupervisor),
+            };
+        }
+
+        public TCMSupervisionTimeViewModel ToTCMSupervisionTimeViewModel(TCMSupervisionTimeEntity model, int idClinic)
+        {
+            return new TCMSupervisionTimeViewModel
+            {
+                Id = model.Id,
+                Description = model.Description,
+                CreatedOn = model.CreatedOn,
+                CreatedBy = model.CreatedBy,
+                IdCaseManager = model.CaseManager.Id,
+                CaseManager = model.CaseManager,
+                DateSupervision = model.DateSupervision,
+                StartTime = model.StartTime,
+                EndTime= model.EndTime,
+                IdTCMSupervisor = model.TCMSupervisor.Id,
+                TCMSupervisor = model.TCMSupervisor
+                
+            };
+        }
     }
 }
