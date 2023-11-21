@@ -7443,5 +7443,96 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<TCMReferralFormEntity> ToTCMReferralFormEntity(TCMReferralFormViewModel model, bool isNew, string userId)
+        {
+            TCMReferralFormEntity salida;
+            salida = new TCMReferralFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+
+                TcmClient = await _context.TCMClient
+                                          .FirstOrDefaultAsync(n => n.Id == model.IdTCMClient),
+               Address = model.Address,
+               AssignedTo = model.AssignedTo,
+               AuthorizedDate = model.AuthorizedDate,
+               DateOfBirth = model.DateOfBirth,
+               CaseAccepted = model.CaseAccepted,
+               CaseNumber = model.CaseNumber,
+               Comments = model.Comments,
+               DateAssigned = model.DateAssigned,
+               Dx = model.Dx,
+               Dx_Description = model.Dx_Description,
+               ExperatedDate = model.ExperatedDate,
+               Gender = model.Gender,
+               HMO = model.HMO,
+               LegalGuardianName = model.LegalGuardianName,
+               LegalGuardianPhone = model.LegalGuardianPhone,
+               MedicaidId = model.MedicaidId,
+               NameClient = model.NameClient,
+               NameSupervisor = model.NameSupervisor,
+               PrimaryPhone = model.PrimaryPhone,
+               Program = model.Program,
+               ReferredBy_Name = model.ReferredBy_Name,
+               ReferredBy_Phone = model.ReferredBy_Phone,
+               ReferredBy_Title = model.ReferredBy_Title,
+               SecondaryPhone = model.SecondaryPhone,
+               SSN = model.SSN,
+               TCMSign = model.TCMSign,
+               TCMSupervisorSign = model.TCMSupervisorSign,
+               UnitsApproved = model.UnitsApproved
+
+            };
+
+            return salida;
+        }
+
+        public TCMReferralFormViewModel ToTCMReferralFormViewModel(TCMReferralFormEntity model)
+        {
+            return new TCMReferralFormViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient = model.TcmClient,
+
+                Address = model.Address,
+                AssignedTo = model.AssignedTo,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAccepted = model.CaseAccepted,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = model.NameSupervisor,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                TCMSign = model.TCMSign,
+                TCMSupervisorSign = model.TCMSupervisorSign,
+                UnitsApproved = model.UnitsApproved
+                
+            };
+        }
+
     }
 }

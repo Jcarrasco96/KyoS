@@ -78,5 +78,6 @@ namespace KyoS.Web.Data.Entities
         public TCMIntakePersonalWellbeingEntity TCMIntakePersonalWellbeing { get; set; }
 
         public TCMIntakeNutritionalScreenEntity TCMIntakeNutritionalScreen { get; set; }
+        public TCMReferralFormEntity TCMReferralForm { get; set; }
     }
 }

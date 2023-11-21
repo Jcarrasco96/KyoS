@@ -55,6 +55,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.TCMClient
                                           .Include(g => g.Casemanager)
                                           .Include(g => g.Client)
+                                          .Include(g => g.TCMReferralForm)
                                           .Where(g => (g.Casemanager.Id == caseManager.Id))
                                           .OrderBy(g => g.Client.Name)
                                           .ToListAsync());
@@ -66,6 +67,7 @@ namespace KyoS.Web.Controllers
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
                                                                  .Include(g => g.Casemanager)
                                                                  .Include(g => g.Client)
+                                                                 .Include(g => g.TCMReferralForm)
                                                                  .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                  .OrderBy(g => g.Casemanager.Name)
                                                                  .ToListAsync();
@@ -78,8 +80,9 @@ namespace KyoS.Web.Controllers
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
                                                                  .Include(g => g.Casemanager)
                                                                  .Include(g => g.Client)
+                                                                 .Include(g => g.TCMReferralForm)
                                                                  .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                 && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                                          && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                                                  .OrderBy(g => g.Casemanager.Name)
                                                                  .ToListAsync();
                 return View(tcmClient);
@@ -1016,5 +1019,240 @@ namespace KyoS.Web.Controllers
             }
             
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMReferralAccept(int? idTCMClient)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (idTCMClient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                TCMReferralFormEntity tcmReferral = await _context.TCMReferralForms
+                                                                  .Include(g => g.TcmClient)
+                                                                  .FirstOrDefaultAsync(g => g.TcmClient.Id == idTCMClient
+                                                                                         && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName);
+                if (tcmReferral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                TCMReferralFormViewModel tcmReferralViewModel = _converterHelper.ToTCMReferralFormViewModel(tcmReferral);
+                return View(tcmReferralViewModel);
+            }
+            if (User.IsInRole("CaseManager"))
+            {
+                TCMReferralFormEntity tcmReferral = await _context.TCMReferralForms
+                                                                  .Include(g => g.TcmClient)
+                                                                  .FirstOrDefaultAsync(g => g.TcmClient.Id == idTCMClient
+                                                                                         && g.TcmClient.Casemanager.LinkedUser == user_logged.UserName);
+                if (tcmReferral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                TCMReferralFormViewModel tcmReferralViewModel = _converterHelper.ToTCMReferralFormViewModel(tcmReferral);
+                return View(tcmReferralViewModel);
+            }
+            if (User.IsInRole("Manager"))
+            {
+                TCMReferralFormEntity tcmReferral = await _context.TCMReferralForms
+                                                                  .Include(g => g.TcmClient)
+                                                                  .FirstOrDefaultAsync(g => g.TcmClient.Id == idTCMClient);
+                if (tcmReferral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                TCMReferralFormViewModel tcmReferralViewModel = _converterHelper.ToTCMReferralFormViewModel(tcmReferral);
+                return View(tcmReferralViewModel);
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TCMReferralAccept(TCMReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                           .Include(u => u.Clinic)
+                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMReferralFormEntity tcmReferral = await _converterHelper.ToTCMReferralFormEntity(model, false, user_logged.UserName);
+                _context.TCMReferralForms.Update(tcmReferral);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "TCMClients");
+
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult CreateReferralForm(int idTCMClient = 0)
+        {
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(d => d.Clients_Diagnostics)
+                                                .ThenInclude(d => d.Diagnostic)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .Include(n => n.Casemanager)
+                                                .ThenInclude(d => d.TCMSupervisor)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(d => d.Client_Referred)
+                                                .ThenInclude(d => d.Referred)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(d => d.Clients_HealthInsurances)
+                                                .ThenInclude(d => d.HealthInsurance)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+            TCMReferralFormViewModel salida;
+            
+            Client_Diagnostic client_Diagnostic = new Client_Diagnostic();
+            if (tcmclient.Client.Clients_Diagnostics != null)
+            {
+                client_Diagnostic = tcmclient.Client
+                                             .Clients_Diagnostics
+                                             .FirstOrDefault(n => n.Principal == true);
+            }
+            ReferredEntity Referred = new ReferredEntity();
+            if (tcmclient.Client.Client_Referred.Count() > 0)
+            {
+                Referred = tcmclient.Client
+                                    .Client_Referred
+                                    .FirstOrDefault(n => n.Service == ServiceAgency.TCM)
+                                    .Referred;
+            }
+            Client_HealthInsurance Client_HealtInsurance = new Client_HealthInsurance();
+            if (tcmclient.Client.Clients_HealthInsurances.Count() > 0)
+            {
+                Client_HealtInsurance = tcmclient.Client
+                                                 .Clients_HealthInsurances
+                                                 .FirstOrDefault(n => n.Active == true 
+                                                                   && n.Agency == ServiceAgency.TCM);
+            }
+            LegalGuardianEntity legalGuardian = new LegalGuardianEntity();
+            if (tcmclient.Client.LegalGuardian != null)
+            {
+                legalGuardian = tcmclient.Client
+                                         .LegalGuardian;
+            }
+            else
+            {
+                tcmclient.Client.LegalGuardian = new LegalGuardianEntity();
+            }
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    salida = new TCMReferralFormViewModel
+                    {
+                        //Client
+                        Address = tcmclient.Client.FullAddress,
+                        SecondaryPhone = tcmclient.Client.TelephoneSecondary,
+                        SSN = tcmclient.Client.SSN,
+                        DateOfBirth = tcmclient.Client.DateOfBirth,
+                        MedicaidId = tcmclient.Client.MedicaidID,
+                        Gender = (tcmclient.Client.Gender == GenderType.Female) ? "Female" : "Masculine",
+                        HMO = string.Empty,
+                        PrimaryPhone = tcmclient.Client.Telephone,
+                        //audit
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        //tcmClient
+                        CaseNumber = tcmclient.CaseNumber,
+                        NameClient = tcmclient.Client.Name,
+                        //Referred
+                        AssignedTo = tcmclient.Casemanager.Name,
+                        CaseAccepted = false,
+                        Comments = string.Empty,
+                        DateAssigned = DateTime.Today,
+                        TCMSign = false,
+                        TCMSupervisorSign = false,
+                        NameSupervisor = tcmclient.Casemanager.TCMSupervisor.Name,
+                        Program = "Mental Health Targeted Case Management",
+                        //Health Insurance
+                        AuthorizedDate = Client_HealtInsurance.ApprovedDate,
+                        ExperatedDate = Client_HealtInsurance.ApprovedDate.AddMonths(Client_HealtInsurance.DurationTime),
+                        UnitsApproved = Client_HealtInsurance.Units,
+                        //Legal Guardian
+                        LegalGuardianName = legalGuardian.Name,
+                        LegalGuardianPhone = legalGuardian.Telephone,
+                        //Diagnostic
+                        Dx = client_Diagnostic.Diagnostic.Code,
+                        Dx_Description = client_Diagnostic.Diagnostic.Description,
+                        //Referred
+                        ReferredBy_Name = Referred.Name,
+                        ReferredBy_Phone = Referred.Telephone,
+                        ReferredBy_Title = Referred.Title,
+                        TcmClient = tcmclient,
+                        IdTCMClient = tcmclient.Id
+                    };
+
+                    return View(salida);
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReferralForm(TCMReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                                .Include(u => u.Clinic)
+                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                if (ModelState.IsValid)
+                {
+                    TCMReferralFormEntity tcmReferral = await _converterHelper.ToTCMReferralFormEntity(model, true, user_logged.UserName);
+                    tcmReferral.TCMSupervisorSign = true;
+                    _context.Add(tcmReferral);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index", "TCMClients");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+          
+            return View(model);
+        }
+
     }
 }

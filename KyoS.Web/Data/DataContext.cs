@@ -145,7 +145,7 @@ namespace KyoS.Web.Data
         public DbSet<BillDmsEntity> BillDms { get; set; }
         public DbSet<BillDmsDetailsEntity> BillDmsDetails { get; set; }
         public DbSet<BillDmsPaidEntity> BillDmsPaid { get; set; }
-
+        public DbSet<TCMReferralFormEntity> TCMReferralForms { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -644,6 +644,13 @@ namespace KyoS.Web.Data
                       .WithOne(s => s.TcmClient)
                       .OnDelete(DeleteBehavior.Cascade)
                       .HasForeignKey<TCMIntakePersonalWellbeingEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMReferralForm)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMReferralFormEntity>(s => s.TcmClient_FK);
+
         }
     }
 }

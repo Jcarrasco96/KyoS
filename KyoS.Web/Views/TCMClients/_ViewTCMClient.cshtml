@@ -14,11 +14,14 @@
                              <th class="col-md-3">
                                  Case Manager
                              </th>
-                             <th class="col-md-3">
+                             <th class="col-md-2">
                                  Client Name
                              </th>
                              <th class="col-md-1" style="text-align: center;">
                                  Case
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Referral
                              </th>
                              <th class="col-md-1" style="text-align: center;">
                                  Client Status
@@ -54,6 +57,45 @@
                              </td>
                              <td align="center">
                                  @Html.DisplayFor(modelItem => item.CaseNumber)
+                             </td>
+                             <td align="center">
+                                 @if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                                 {
+                                     @if (item.TCMReferralForm != null)
+                                     {
+                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="CreateReferralForm" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                     }
+                                 }
+                                 @if (User.IsInRole("CaseManager"))
+                                 {
+                                     @if (item.TCMReferralForm != null)
+                                     {
+                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="TCMReferralAccept" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                     }
+                                 }
+
                              </td>
                              <td align="center">
                                  @if (item.Status == KyoS.Common.Enums.StatusType.Open)
