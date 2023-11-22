@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -1108,6 +1109,7 @@ namespace KyoS.Web.Controllers
         public IActionResult CreateReferralForm(int idTCMClient = 0)
         {
             TCMClientEntity tcmclient = _context.TCMClient
+
                                                 .Include(n => n.Client)
                                                 .ThenInclude(d => d.Clients_Diagnostics)
                                                 .ThenInclude(d => d.Diagnostic)
@@ -1121,7 +1123,9 @@ namespace KyoS.Web.Controllers
                                                 .Include(n => n.Client)
                                                 .ThenInclude(d => d.Clients_HealthInsurances)
                                                 .ThenInclude(d => d.HealthInsurance)
+
                                                 .FirstOrDefault(n => n.Id == idTCMClient);
+            
             TCMReferralFormViewModel salida;
             
             Client_Diagnostic client_Diagnostic = new Client_Diagnostic();
@@ -1131,6 +1135,7 @@ namespace KyoS.Web.Controllers
                                              .Clients_Diagnostics
                                              .FirstOrDefault(n => n.Principal == true);
             }
+
             ReferredEntity Referred = new ReferredEntity();
             if (tcmclient.Client.Client_Referred.Count() > 0)
             {
@@ -1139,6 +1144,7 @@ namespace KyoS.Web.Controllers
                                     .FirstOrDefault(n => n.Service == ServiceAgency.TCM)
                                     .Referred;
             }
+
             Client_HealthInsurance Client_HealtInsurance = new Client_HealthInsurance();
             if (tcmclient.Client.Clients_HealthInsurances.Count() > 0)
             {
@@ -1147,20 +1153,19 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(n => n.Active == true 
                                                                    && n.Agency == ServiceAgency.TCM);
             }
+
             LegalGuardianEntity legalGuardian = new LegalGuardianEntity();
             if (tcmclient.Client.LegalGuardian != null)
             {
                 legalGuardian = tcmclient.Client
                                          .LegalGuardian;
             }
-            else
-            {
-                tcmclient.Client.LegalGuardian = new LegalGuardianEntity();
-            }
+            
             if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
                     salida = new TCMReferralFormViewModel
@@ -1171,7 +1176,7 @@ namespace KyoS.Web.Controllers
                         SSN = tcmclient.Client.SSN,
                         DateOfBirth = tcmclient.Client.DateOfBirth,
                         MedicaidId = tcmclient.Client.MedicaidID,
-                        Gender = (tcmclient.Client.Gender == GenderType.Female) ? "Female" : "Masculine",
+                        Gender = (tcmclient.Client.Gender == GenderType.Female) ? "Female" : "Male",
                         HMO = string.Empty,
                         PrimaryPhone = tcmclient.Client.Telephone,
                         //audit
@@ -1190,9 +1195,9 @@ namespace KyoS.Web.Controllers
                         NameSupervisor = tcmclient.Casemanager.TCMSupervisor.Name,
                         Program = "Mental Health Targeted Case Management",
                         //Health Insurance
-                        AuthorizedDate = Client_HealtInsurance.ApprovedDate,
-                        ExperatedDate = Client_HealtInsurance.ApprovedDate.AddMonths(Client_HealtInsurance.DurationTime),
-                        UnitsApproved = Client_HealtInsurance.Units,
+                        AuthorizedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate : new DateTime(),
+                        ExperatedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate.AddMonths(Client_HealtInsurance.DurationTime) : new DateTime(),
+                        UnitsApproved = Client_HealtInsurance != null ? Client_HealtInsurance.Units : 0,
                         //Legal Guardian
                         LegalGuardianName = legalGuardian.Name,
                         LegalGuardianPhone = legalGuardian.Telephone,
@@ -1254,5 +1259,43 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintReferralForm(int id)
+        {
+            TCMClientEntity entity = await _context.TCMClient
+
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(d => d.Clients_Diagnostics)
+                                                    .ThenInclude(d => d.Diagnostic)
+                                                      
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(d => d.LegalGuardian)
+                                                      
+                                                    .Include(n => n.Casemanager)
+                                                    .ThenInclude(d => d.TCMSupervisor)
+
+                                                    .Include(n => n.Casemanager)
+                                                    .ThenInclude(d => d.Clinic)
+
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(d => d.Client_Referred)
+                                                    .ThenInclude(d => d.Referred)
+
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(d => d.Clients_HealthInsurances)
+                                                    .ThenInclude(d => d.HealthInsurance)
+
+                                                    .Include(t => t.TCMReferralForm)
+
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMReferralFormReport(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }

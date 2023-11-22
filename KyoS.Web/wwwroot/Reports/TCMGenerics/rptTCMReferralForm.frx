@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="11/22/2023 15:55:56" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrNfnQlkoodjihZhmGIXD9iA==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMReferralForms" DataType="System.Int32" Enabled="true" TableName="TCMReferralForms">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="NameClient" DataType="System.String"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="PrimaryPhone" DataType="System.String"/>
+        <Column Name="SecondaryPhone" DataType="System.String"/>
+        <Column Name="LegalGuardianName" DataType="System.String"/>
+        <Column Name="LegalGuardianPhone" DataType="System.String"/>
+        <Column Name="Dx" DataType="System.String"/>
+        <Column Name="Dx_Description" DataType="System.String"/>
+        <Column Name="ReferredBy_Name" DataType="System.String"/>
+        <Column Name="ReferredBy_Title" DataType="System.String"/>
+        <Column Name="ReferredBy_Phone" DataType="System.String"/>
+        <Column Name="MedicaidId" DataType="System.String"/>
+        <Column Name="HMO" DataType="System.String"/>
+        <Column Name="UnitsApproved" DataType="System.Int32"/>
+        <Column Name="AuthorizedDate" DataType="System.DateTime"/>
+        <Column Name="ExperatedDate" DataType="System.DateTime"/>
+        <Column Name="Program" DataType="System.String"/>
+        <Column Name="AssignedTo" DataType="System.String"/>
+        <Column Name="NameSupervisor" DataType="System.String"/>
+        <Column Name="Comments" DataType="System.String"/>
+        <Column Name="CaseAccepted" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DateAssigned" DataType="System.DateTime"/>
+        <Column Name="TCMSign" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="TCMSupervisorSign" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="85.5">
+      <TextObject Name="Textbox12" Left="124.3" Top="9.45" Width="525.65" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="124.3" Top="34.33" Width="525.65" Height="22" CanGrow="true" Text="Internal Referral Form" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="132.3" Top="1" Height="65.55"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="0.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="131.3" Height="66.15"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="89.35" Width="778.3" Height="642.84" CanGrow="true" Guides="217.35">
+      <TextObject Name="Text40" Left="3.45" Top="35.35" Width="97.15" Height="18.9" Text="Client's Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text41" Left="434.7" Top="35.8" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text44" Left="102.95" Top="35.35" Width="312.61" Height="18.9" Border.Lines="Bottom" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="531.2" Top="35.8" Width="198.45" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text360" Top="9.45" Width="774.9" Height="20.79" Border.Lines="All" Fill.Color="WhiteSmoke" Text="CLIENT'S INFORMATION" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text365" Left="3.45" Top="56.7" Width="97.15" Height="18.9" Text="Date of Birth:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text366" Left="102.95" Top="56.7" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.DateOfBirth]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text367" Left="221.8" Top="56.7" Width="97.15" Height="18.9" Text="SSN:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text368" Left="321.3" Top="56.7" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.SSN]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text369" Left="433.15" Top="56.7" Width="97.15" Height="18.9" Text="Gender:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text370" Left="532.65" Top="56.7" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.Gender]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text371" Left="4" Top="77.6" Width="97.15" Height="18.9" Text="Address:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text372" Left="102.82" Top="77.6" Width="312.98" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.Address]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text373" Left="-6" Top="98.4" Width="105.84" Height="18.9" Text="Primary Phone #:" Padding="0, 0, 0, 0" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text374" Left="243.65" Top="98.85" Width="66.15" Height="18.9" Text="Other:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text375" Left="102.5" Top="98.4" Width="137.97" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.PrimaryPhone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text376" Left="311.8" Top="98.85" Width="103.95" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.SecondaryPhone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text377" Left="-5.45" Top="129.3" Width="106.6" Height="18.9" Text="Legal Guardian:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text378" Left="436.25" Top="129.75" Width="94.5" Height="18.9" Text="Phone:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text379" Left="102.5" Top="129.3" Width="312.61" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.LegalGuardianName]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text380" Left="532.75" Top="129.75" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.LegalGuardianPhone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text381" Top="170.1" Width="774.9" Height="20.79" Border.Lines="All" Fill.Color="WhiteSmoke" Text="DIAGNOSIS AND REFERRAL INFORMATION" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text382" Left="3.45" Top="195.45" Width="97.15" Height="18.9" Text="Diagnosis:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text383" Left="102.95" Top="195.45" Width="76.36" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.Dx]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text384" Left="183.55" Top="195.45" Width="590.81" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.Dx_Description]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text385" Left="102.95" Top="217.35" Width="75.6" Height="15.12" Text="Code" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text386" Left="184" Top="217.13" Width="75.6" Height="15.12" Text="Descriptor" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text387" Left="4" Top="234.25" Width="97.15" Height="18.9" Text="Referred by:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text388" Left="102.95" Top="234.25" Width="670.95" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.ReferredBy_Name], [TCMReferralForms.ReferredBy_Title], [TCMReferralForms.ReferredBy_Phone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text389" Left="103.95" Top="255.15" Width="670.95" Height="15.12" Text="Print Name, Title, Phone Number" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text390" Top="292.95" Width="774.9" Height="20.79" Border.Lines="All" Fill.Color="WhiteSmoke" Text="INSURANCE INFORMATION AND ELIGIBILITY VERIFICATION" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text391" Left="4" Top="319.3" Width="97.15" Height="18.9" Text="Medicaid ID:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text392" Left="232.8" Top="319.75" Width="94.5" Height="18.9" Text="HMO:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text393" Left="102.5" Top="319.3" Width="114.16" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.MedicaidId]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text394" Left="329.3" Top="319.75" Width="444.91" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.HMO]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text395" Left="-5.45" Top="341.2" Width="106.6" Height="18.9" Text="Units Approved:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text396" Left="102.5" Top="341.2" Width="113.4" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.UnitsApproved]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text397" Left="230.35" Top="341.2" Width="97.15" Height="18.9" Text="Auth Date:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text398" Left="328.85" Top="341.2" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[IIf(Year([TCMReferralForms.AuthorizedDate]) == 1,&quot;&quot;,[TCMReferralForms.AuthorizedDate])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text399" Left="431.25" Top="341.2" Width="97.15" Height="18.9" Text="Exp Date:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text400" Left="530.75" Top="341.2" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[IIf(Year([TCMReferralForms.ExperatedDate]) == 1,&quot;&quot;,[TCMReferralForms.ExperatedDate])]&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text401" Top="388.45" Width="774.9" Height="20.79" Border.Lines="All" Fill.Color="WhiteSmoke" Text="CASE ASSIGNMENT" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text402" Left="4" Top="415.35" Width="97.15" Height="18.9" Text="Program:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text403" Left="102.95" Top="415.35" Width="670.95" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.Program]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text404" Left="4" Top="437.7" Width="97.15" Height="18.9" Text="Assigned to:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text405" Left="102.95" Top="437.7" Width="316.76" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.AssignedTo]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text406" Left="103.4" Top="459.38" Width="313.74" Height="15.12" Text="Print Staff Name" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text407" Left="4" Top="505.85" Width="97.15" Height="18.9" Text="Supervisor:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text408" Left="102.95" Top="505.85" Width="316.76" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.NameSupervisor]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text409" Left="103.4" Top="527.53" Width="313.74" Height="15.12" Text="Print Supervisor Name" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text410" Left="425.25" Top="437.25" Width="97.15" Height="18.9" Text="Date:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text411" Left="523.75" Top="437.25" Width="113.4" Height="18.9" Border.Lines="Bottom" Text="[TCMReferralForms.DateAssigned]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text412" Left="523.75" Top="459.47" Width="114.16" Height="15.12" Text="Date Assigned" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text284" Left="513.95" Top="525.2" Width="134.19" Height="18.14" CanGrow="true" Text="Supervisor Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <LineObject Name="Line11" Left="639.35" Top="523.75" Width="-117.18"/>
+      <PictureObject Name="Picture3" Left="532.85" Top="470.05" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text413" Left="4" Top="546.65" Width="97.15" Height="18.9" Text="Comments:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text414" Left="103.95" Top="546.65" Width="670.95" Height="18.9" Border.Lines="Bottom" CanGrow="true" Text="[TCMReferralForms.Comments]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text415" Left="150.2" Top="602.35" Width="103.19" Height="18.9" Text="Case accepted:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox27" Left="274.05" Top="606.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMReferralForms.CaseAccepted"/>
+      <TextObject Name="Text310" Left="287.95" Top="603.35" Width="37.8" Height="18.9" Text="YES" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt"/>
+      <CheckBoxObject Name="CheckBox28" Left="330.75" Top="606.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMReferralForms.CaseAccepted] == false,true,false)"/>
+      <TextObject Name="Text416" Left="344.65" Top="603.35" Width="37.8" Height="18.9" Text="NO" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt"/>
+      <PictureObject Name="Picture4" Left="534.2" Top="569.55" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text417" Left="515.3" Top="624.7" Width="134.19" Height="18.14" CanGrow="true" Text="Staff Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt, style=Italic" TextRenderType="HtmlTags"/>
+      <LineObject Name="Line12" Left="640.7" Top="623.25" Width="-117.18"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="736.03" Width="778.3" Height="31.37">
+      <TextObject Name="Text418" Left="4" Top="2" Width="207.9" Height="18.9" Text="Internal Referral Form 02.2018" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>
