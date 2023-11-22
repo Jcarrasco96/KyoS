@@ -1448,7 +1448,8 @@ namespace KyoS.Web.Helpers
                 UnitsForDayForClient = model.UnitsForDayForClient,
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
-                SupervisorEdit = model.SupervisorEdit
+                SupervisorEdit = model.SupervisorEdit,
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
             };
         }
 
@@ -1477,7 +1478,8 @@ namespace KyoS.Web.Helpers
                 UnitsForDayForClient = model.UnitsForDayForClient,
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
-                SupervisorEdit = model.SupervisorEdit
+                SupervisorEdit = model.SupervisorEdit,
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
             };
         }
 

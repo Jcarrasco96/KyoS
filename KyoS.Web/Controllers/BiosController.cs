@@ -200,7 +200,7 @@ namespace KyoS.Web.Controllers
                         HaveYouEverThought_Explain = "",
                         HigHestEducation = "",
                         Hydration = Bio_Hydration.Diminished,
-                        IConcurWhitDiagnistic = false,
+                        IConcurWhitDiagnistic = true,
                         Id = 0,
                         If6_Date = new DateTime(),
                         If6_ReferredTo = "",
