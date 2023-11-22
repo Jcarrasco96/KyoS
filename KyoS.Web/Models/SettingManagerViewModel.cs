@@ -86,5 +86,8 @@ namespace KyoS.Web.Models
        
         public bool CreateNotesTCMWithServiceplanInEdition { get; set; }
         public bool TCMSupervisorEdit { get; set; }
+
+        public bool TCMSupervisionTimeWithCaseManager { get; set; }
+        
     }
 }
