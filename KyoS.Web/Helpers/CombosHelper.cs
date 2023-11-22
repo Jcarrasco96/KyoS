@@ -383,8 +383,10 @@ namespace KyoS.Web.Helpers
                                                                  && d.DateDischarge > workday_client.Workday.Date).Count() > 0
                                       || n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0)
                                       && n.AdmisionDate < workday_client.Workday.Date
-                                      && n.MTPs.First(c => c.Active == true).Goals.Where(g => g.Service == ServiceType.Individual 
-                                                                                           && g.Objetives.Where(o => o.DateResolved > workday_client.Workday.Date).Count() > 0 ).Count() > 0)
+                                      && n.MTPs.First(c => c.Active == true 
+                                                        && c.MTPDevelopedDate <= workday_client.Workday.Date).Goals.Where(g => g.Service == ServiceType.Individual 
+                                                                                                                            && g.Objetives.Where(o => o.DateResolved > workday_client.Workday.Date
+                                                                                                                                                   && o.DateOpened <= workday_client.Workday.Date).Count() > 0 ).Count() > 0)
                              .OrderBy(n => n.Name)
                              .ToList();
             
