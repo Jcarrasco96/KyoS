@@ -36,9 +36,12 @@
                             </th>
                             <th class="col-md-3" style="text-align:left;">
                                 Client Name
-                            </th>                            
+                            </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Services Plan Date
+                                Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Review
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -51,7 +54,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td align="center">
+                                @*<td align="center">           //SI LO QUE SE QUIERE ES VISUALIZAR LOS DOMAINS Y OBJECTIVE
                                     @if (item.TCMDomain.Count() != 0)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
@@ -67,7 +70,7 @@
                                                 <th class="col-md-1" style="text-align:center">Domain</th>
                                                 <th class="col-md-2">Domain Name</th>
                                                 <th class="col-md-6">Need Identified</th>
-                                                <th class="col-md-2" style="text-align:center">Date Identified</th>                                            
+                                                <th class="col-md-2" style="text-align:center">Date Identified</th>
                                             </tr>
                                             @foreach (var product in item.TCMDomain)
                                             {
@@ -90,7 +93,7 @@
                                                                         <th class="col-md-7">Task</th>
                                                                         <th class="col-md-1" style="text-align:center;">Start Date</th>
                                                                         <th class="col-md-2" style="text-align:center;">Target Date</th>
-                                                                        <th class="col-md-1" style="text-align:center;">End Date</th>                                                                    
+                                                                        <th class="col-md-1" style="text-align:center;">End Date</th>
                                                                     </tr>
                                                                     @foreach (var product1 in product.TCMObjetive)
                                                                     {
@@ -101,11 +104,9 @@
                                                                                 <td>@Html.DisplayFor(modelItem => product1.Name)</td>
                                                                                 <td align="center">@Html.DisplayFor(modelItem => product1.StartDate)</td>
                                                                                 <td align="center">@Html.DisplayFor(modelItem => product1.TargetDate)</td>
-                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>                                                                            
+                                                                                <td align="center">@Html.DisplayFor(modelItem => product1.EndDate)</td>
                                                                             </tr>
                                                                         }
-
-                                                                        @* cant_unit = cant_unit + product.Units;*@
                                                                     }
                                                                 </table>
                                                             </div>
@@ -113,9 +114,57 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => product.Code)</td>
                                                         <td>@Html.DisplayFor(modelItem => product.Name)</td>
                                                         <td>@Html.DisplayFor(modelItem => product.NeedsIdentified)</td>
-                                                        <td align="center">@Html.DisplayFor(modelItem => product.DateIdentified)</td>                                                    
+                                                        <td align="center">@Html.DisplayFor(modelItem => product.DateIdentified)</td>
                                                     </tr>
-                                                    @* cant_unit = cant_unit + product.Units;*@
+                                                }
+                                            }
+                                        </table>
+                                    </div>
+                                </td>*@
+                                 <td align="center">
+                                    @if (item.TCMMessages.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2"></th>
+                                                <th class="col-md-3">Title</th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>
+                                                @*<th class="col-md-1"></th>*@
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                            {
+
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    <tr style="color:mediumblue;">
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
                                                 }
                                             }
                                         </table>
@@ -140,6 +189,38 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateServicePlan)
+                                </td>
+                                <td align="center">
+                                    @if (item.TCMMessages.Count() == 0)
+                                    {
+                                        <span>
+                                            -
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        bool read = false;
+                                        @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                        {
+                                            @if (message.Status.ToString() == "NotRead")
+                                            {
+                                                read = false;
+                                                break;
+                                            }
+                                            @if (message.Status.ToString() == "Read")
+                                            {
+                                                read = true;
+                                            }
+                                        }
+                                        if (read)
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-down"></i>
+                                        }
+                                    }
                                 </td>
                                 <td align="center">
                                     @if (item.Approved == 2)

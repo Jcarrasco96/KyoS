@@ -44,7 +44,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td align="center">
+                                @*<td align="center">                           //SI LO QUE SE QUIERE ES VISUALIZAR LOS DOMAINS Y OBJECTIVE
                                     @if (item.TcmDomain != null)
                                     {
                                         <a class="icon-plus-sign-alt"></a>
@@ -92,6 +92,55 @@
                                                 <td>@Html.DisplayFor(modelItem => item.TcmDomain.Name)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.NeedsIdentified)</td>
                                             </tr>
+                                        </table>
+                                    </div>
+                                </td>*@
+                                 <td align="center">
+                                    @if (item.TCMMessages.Count() != 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2"></th>
+                                                <th class="col-md-3">Title</th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>
+                                                @*<th class="col-md-1"></th>*@
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
+                                            {
+
+                                                @if (message.Status.ToString() == "NotRead")
+                                                {
+                                                    <tr style="color:mediumblue;">
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-down"></i> Not processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (message.Status.ToString() == "Read")
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i> Processed
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Title)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => message.Text)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
                                         </table>
                                     </div>
                                 </td>

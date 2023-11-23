@@ -1987,6 +1987,7 @@ namespace KyoS.Web.Controllers
                                                          .Include(g => g.TcmClient)
                                                          .ThenInclude(f => f.Client)
                                                          .Include(t => t.TcmClient.Casemanager)
+                                                         .Include(h => h.TCMMessages)
                                                          .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
                                                                 && g.Approved == approved))
                                                          .OrderBy(g => g.TcmClient.CaseNumber)
@@ -2000,6 +2001,7 @@ namespace KyoS.Web.Controllers
                                                 .Include(g => g.TcmClient)
                                                 .ThenInclude(f => f.Client)
                                                 .Include(t => t.TcmClient.Casemanager)
+                                                .Include(h => h.TCMMessages)
                                                 .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
                                                     && g.TcmClient.CaseNumber == caseNumber
                                                     && g.Approved == approved))
@@ -2015,6 +2017,7 @@ namespace KyoS.Web.Controllers
                                              .Include(g => g.TcmClient)
                                              .ThenInclude(f => f.Client)
                                              .Include(t => t.TcmClient.Casemanager)
+                                             .Include(h => h.TCMMessages)
                                              .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
                                                        && g.Approved == approved))
                                              .OrderBy(g => g.TcmClient.CaseNumber)
@@ -2034,6 +2037,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(f => f.Client)
                                     .ThenInclude(g => g.Clinic)
                                     .ThenInclude(f => f.Setting)
+                                    .Include(h => h.TCMMessages)
                                     .Where(g => g.Approved == approved
                                       && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                     .OrderBy(g => g.TcmClient.CaseNumber)
