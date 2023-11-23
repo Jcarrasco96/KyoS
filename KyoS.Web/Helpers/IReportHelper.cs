@@ -232,5 +232,9 @@ namespace KyoS.Web.Helpers
         Stream TCMDischarge(TCMDischargeEntity intakeDischarge);
         Stream TCMAdendum(TCMAdendumEntity adendum);
         #endregion
+
+        #region Referral Form
+        Stream TCMReferralFormReport(TCMClientEntity tcmClient);
+        #endregion
     }
 }

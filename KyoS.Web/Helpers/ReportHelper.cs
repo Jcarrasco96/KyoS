@@ -23864,6 +23864,133 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMReferralFormDS(TCMReferralFormEntity referral)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMReferralForms"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("NameClient", typeof(string)); 
+            dt.Columns.Add("CaseNumber", typeof(string));
+            dt.Columns.Add("DateOfBirth", typeof(DateTime));
+            dt.Columns.Add("SSN", typeof(string));
+            dt.Columns.Add("Gender", typeof(string));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("PrimaryPhone", typeof(string));
+            dt.Columns.Add("SecondaryPhone", typeof(string));
+            dt.Columns.Add("LegalGuardianName", typeof(string));
+            dt.Columns.Add("LegalGuardianPhone", typeof(string));
+            dt.Columns.Add("Dx", typeof(string));
+            dt.Columns.Add("Dx_Description", typeof(string));
+            dt.Columns.Add("ReferredBy_Name", typeof(string));
+            dt.Columns.Add("ReferredBy_Title", typeof(string));
+            dt.Columns.Add("ReferredBy_Phone", typeof(string));
+            dt.Columns.Add("MedicaidId", typeof(string));
+            dt.Columns.Add("HMO", typeof(string));
+            dt.Columns.Add("UnitsApproved", typeof(int));
+            dt.Columns.Add("AuthorizedDate", typeof(DateTime));
+            dt.Columns.Add("ExperatedDate", typeof(DateTime));
+            dt.Columns.Add("Program", typeof(string));
+            dt.Columns.Add("AssignedTo", typeof(string));
+            dt.Columns.Add("NameSupervisor", typeof(string));
+            dt.Columns.Add("Comments", typeof(string));
+            dt.Columns.Add("CaseAccepted", typeof(bool));
+            dt.Columns.Add("DateAssigned", typeof(DateTime));
+            dt.Columns.Add("TCMSign", typeof(bool));
+            dt.Columns.Add("TCMSupervisorSign", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            if (referral != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            referral.Id,
+                                            referral.TcmClient_FK,
+                                            referral.NameClient, 
+                                            referral.CaseNumber,
+                                            referral.DateOfBirth,
+                                            referral.SSN,
+                                            referral.Gender,
+                                            referral.Address,
+                                            referral.PrimaryPhone,
+                                            referral.SecondaryPhone,
+                                            referral.LegalGuardianName,
+                                            referral.LegalGuardianPhone,
+                                            referral.Dx,
+                                            referral.Dx_Description,
+                                            referral.ReferredBy_Name,
+                                            referral.ReferredBy_Title,
+                                            referral.ReferredBy_Phone,
+                                            referral.MedicaidId,
+                                            referral.HMO,
+                                            referral.UnitsApproved,
+                                            referral.AuthorizedDate,
+                                            referral.ExperatedDate,
+                                            referral.Program,
+                                            referral.AssignedTo,
+                                            referral.NameSupervisor,
+                                            referral.Comments,
+                                            referral.CaseAccepted,
+                                            referral.DateAssigned,
+                                            referral.TCMSign,
+                                            referral.TCMSupervisorSign,
+                                            referral.CreatedBy,
+                                            referral.CreatedOn,
+                                            referral.LastModifiedBy,
+                                            referral.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -26447,6 +26574,79 @@ namespace KyoS.Web.Helpers
             if (!string.IsNullOrEmpty(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region Referral Form
+        public Stream TCMReferralFormReport(TCMClientEntity tcmClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMReferralForm.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(tcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(tcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(tcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(tcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");            
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMReferralFormDS(tcmClient.TCMReferralForm));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMReferralForms");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(tcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            TCMSupervisorEntity supervisor =  _context.TCMSupervisors
+                                                   .FirstOrDefault(s => s.Name == tcmClient.TCMReferralForm.NameSupervisor);
+
+            if (!string.IsNullOrEmpty(supervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(tcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmClient.Casemanager.SignaturePath)}");
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 

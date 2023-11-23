@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMReferralFormViewModel
 @{
-    ViewData["Title"] = "TCM Referral";
+    ViewData["Title"] = "Referral Form";
 }
 
 <!DOCTYPE html>
@@ -70,7 +70,7 @@
                 }
                 else
                 {
-                    <a asp-action="PrintReferralForm" asp-route-idTCMClient="@Model.Id" asp-controller="TCMClients" class="btn btn-success" title="Print Referral Form"><i class="glyphicon glyphicon-print"></i> Print</a>
+                    <a asp-action="PrintReferralForm" asp-route-id="@Model.TcmClient.Id" asp-controller="TCMClients" class="btn btn-success" title="Print Referral Form" target="_blank"><i class="glyphicon glyphicon-print"></i> Print</a>
                 }
                 <a asp-action="Index" class="btn btn-success">Back</a>
             </div>
