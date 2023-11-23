@@ -1655,7 +1655,9 @@ namespace KyoS.Web.Helpers
                 CreatedBy = TcmDomainEntity.CreatedBy,
                 CreatedOn = TcmDomainEntity.CreatedOn,
                 LastModifiedBy = TcmDomainEntity.LastModifiedBy,
-                LastModifiedOn = TcmDomainEntity.LastModifiedOn
+                LastModifiedOn = TcmDomainEntity.LastModifiedOn,
+                Id_SubService = TcmDomainEntity.IdSubService,
+                NameSubService = TcmDomainEntity.NameSubService
 
             };
         }
@@ -1677,7 +1679,9 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 Name = model.Name,
                 TcmServicePlan = model.TcmServicePlan,
-                Origin = origin
+                Origin = origin,
+                NameSubService =(model.Id_SubService == 0)? string.Empty: _context.TCMSubServices.FirstOrDefault(n => n.Id == model.Id_SubService).Name,
+                IdSubService = model.Id_SubService
             };
         }
 
@@ -1700,8 +1704,8 @@ namespace KyoS.Web.Helpers
                 BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
                 SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs),
                 EmergencyContact = model.EmergencyContact,
-                DateSignatureEmployee = model.DateSignatureEmployee,
-
+                DateSignatureEmployee = model.DateSignatureEmployee
+                
             };
         }
 
@@ -7570,6 +7574,39 @@ namespace KyoS.Web.Helpers
                 IdTCMSupervisor = model.TCMSupervisor.Id,
                 TCMSupervisor = model.TCMSupervisor
                 
+            };
+        }
+
+        public async Task<TCMSubServiceEntity> ToTCMSubServiceEntity(TCMSubServiceViewModel model, bool isNew, string userId)
+        {
+            return new TCMSubServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmService = await _context.TCMServices.FindAsync(model.Id_TCMService),
+                Name = model.Name,
+                Description = model.Description,
+                Active = model.Active
+                
+            };
+        }
+
+        public TCMSubServiceViewModel ToTCMSubServiceViewModel(TCMSubServiceEntity TcmStageEntity)
+        {
+            return new TCMSubServiceViewModel
+            {
+                Id = TcmStageEntity.Id,
+                Name = TcmStageEntity.Name,
+                Id_TCMService = TcmStageEntity.TcmService.Id,
+                Description = TcmStageEntity.Description,
+                TcmService = TcmStageEntity.TcmService,
+                CreatedBy = TcmStageEntity.CreatedBy,
+                CreatedOn = TcmStageEntity.CreatedOn,
+                Active = TcmStageEntity.Active
+
             };
         }
     }

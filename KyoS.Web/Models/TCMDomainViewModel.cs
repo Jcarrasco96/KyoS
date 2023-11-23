@@ -17,5 +17,8 @@ namespace KyoS.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a service.")]
         public int Id_Service { get; set; }
         public IEnumerable<SelectListItem> Services { get; set; }
+
+        public int Id_SubService { get; set; }
+        public IEnumerable<SelectListItem> SubServices { get; set; }
     }
 }

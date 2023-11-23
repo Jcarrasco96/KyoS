@@ -801,6 +801,181 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("ServiceActivity", new { idError = 0 });
         }
-       
+
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public async Task<IActionResult> TCMSubServices(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            List<TCMServiceEntity> tcmservices = await _context.TCMServices
+                                   .Include(m => m.TCMSubServices)
+                                   .OrderBy(f => f.Code)
+                                   .ToListAsync();
+
+            return View(tcmservices);
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CreateSubService(int id = 0)
+        {
+            TCMSubServiceViewModel model;
+
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                                        .Include(g => g.TCMSubServices)
+                                                        .FirstOrDefaultAsync(m => m.Id == id);
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic != null)
+            {
+                model = new TCMSubServiceViewModel
+                {
+                    TcmService = tcmservice,
+                    Id_TCMService = id,
+                    CreatedBy = user_logged.UserName,
+                    CreatedOn = DateTime.Now,
+                    
+                };
+
+                return View(model);
+            }
+
+            model = new TCMSubServiceViewModel
+            {
+               
+                Id_TCMService = id,
+                TcmService = tcmservice,
+                
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CreateSubService(TCMSubServiceViewModel tcmSubServiceViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                                        .Include(g => g.TCMSubServices)
+                                                        .FirstOrDefaultAsync(m => m.Id == tcmSubServiceViewModel.Id_TCMService);
+            if (ModelState.IsValid)
+            {
+                TCMSubServiceEntity tcmSubServiceEntity = await _converterHelper.ToTCMSubServiceEntity(tcmSubServiceViewModel, true, user_logged.UserName);
+                _context.Add(tcmSubServiceEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                       .Include(m => m.TCMSubServices)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            //recovery data
+
+            tcmSubServiceViewModel.TcmService = tcmservice;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSubService", tcmSubServiceViewModel) });
+        }
+
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public async Task<IActionResult> EditSubService(int id = 0)
+        {
+
+            TCMSubServiceViewModel model;
+            TCMSubServiceEntity tcmSubService = await _context.TCMSubServices
+                                                              .Include(g => g.TcmService)
+                                                              .FirstOrDefaultAsync(m => m.Id == id);
+            if (tcmSubService != null)
+            {
+                model = _converterHelper.ToTCMSubServiceViewModel(tcmSubService);
+                return View(model);
+            }
+            return RedirectToAction("Index", new { idError = 1 });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public async Task<IActionResult> EditSubService(TCMSubServiceViewModel tcmSubServiceViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSubServiceEntity tcmSubServiceEntity = await _converterHelper.ToTCMSubServiceEntity(tcmSubServiceViewModel, false, user_logged.UserName);
+
+            if (ModelState.IsValid)
+            {
+
+                _context.Update(tcmSubServiceEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<TCMServiceEntity> tcmService = await _context.TCMServices
+                                                                       .Include(m => m.TCMSubServices)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmService) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            //recovery data
+           
+            TCMServiceEntity tcmservice = await _context.TCMServices
+                                                        .Include(g => g.TCMSubServices)
+                                                        .FirstOrDefaultAsync(m => m.Id == tcmSubServiceViewModel.Id_TCMService);
+            tcmSubServiceViewModel.TcmService = tcmservice;
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSubService", tcmSubServiceViewModel) });
+        }
+
+        public JsonResult GetListSubServices(int idService)
+        {
+            List<TCMSubServiceEntity> subServices = _context.TCMSubServices
+                                                            .Where(o => o.TcmService.Id == idService
+                                                                     && o.Active == true)
+                                                            .ToList();
+            if (subServices.Count == 0)
+            {
+                subServices.Insert(0, new TCMSubServiceEntity
+                {
+                    Name = "[First select Service...]",
+                    Id = 0
+                });
+            }
+            return Json(new SelectList(subServices, "Id", "Name"));
+        }
     }
 }

@@ -31,5 +31,8 @@ namespace KyoS.Web.Data.Entities
         public bool Used { get; set; }
         public bool Status { get; set; }
 
+        public int IdSubService { get; set; }
+        public string NameSubService { get; set; }
+
     }
 }
