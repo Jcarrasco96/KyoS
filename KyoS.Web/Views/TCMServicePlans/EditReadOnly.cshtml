@@ -93,43 +93,51 @@
     <input asp-for="Domain6" class="form-check-input" disabled> Activities of Daily Living (ADL and IADL)        <input asp-for="Domain12" class="form-check-input" disabled> Other (specify):>
                 </pre>
             </div>
-            <div class="col-md-push-12">
-                <div id="view-TCMdomain">
-                    @await Html.PartialAsync("_ViewDomains", Model.TCMDomain.ToList())
+            <div class="row">
+                <div class="col-md-12">
+                    <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.Id}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
+                </div>
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="col-md-12">
+                    <div id="view-TCMdomain">
+                        @await Html.PartialAsync("_ViewDomains", Model.TCMDomain.ToList())
+                    </div>
                 </div>
             </div>
-            <partial name="TCMServicePlan1ReadOnly" />
-            <div class="form-group">
-                <input type="submit" value="Sign / Approve" class="btn btn-primary" />
-                @if (User.IsInRole("TCMSupervisor"))
-                {
-                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
-                }
-                else
-                {
-                    <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
-                }
-                @if (ViewData["origi"].ToString() == "0")
-                {
-                    <a asp-action="Index" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "1")
-                {
-                    <a asp-action="ServicePlanStarted" asp-route-approved="1" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "2")
-                {
-                    <a asp-action="TCMServicePlanWithReview" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "3")
-                {
-                    <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "4")
-                {
-                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
-                }
-            </div>
+                <partial name="TCMServicePlan1ReadOnly" />
+                <div class="form-group">
+                    <input type="submit" value="Sign / Approve" class="btn btn-primary" />
+                    @if (User.IsInRole("TCMSupervisor"))
+                    {
+                        <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "0")
+                    {
+                        <a asp-action="Index" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "1")
+                    {
+                        <a asp-action="ServicePlanStarted" asp-route-approved="1" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "2")
+                    {
+                        <a asp-action="TCMServicePlanWithReview" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "3")
+                    {
+                        <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "4")
+                    {
+                        <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
+                    }
+                </div>
         </form>
     </div>
 </div>
