@@ -683,6 +683,8 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.Casemanager)
                                                                 .ThenInclude(b => b.TCMSupervisor)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
@@ -693,18 +695,6 @@ namespace KyoS.Web.Controllers
 
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
 
-                        if (TcmAssessment.TcmClient.TCMIntakeForm != null)
-                        {
-                            model.Psychiatrist_Name = model.TcmClient.TCMIntakeForm.Psychiatrist_Name;
-                            model.Psychiatrist_Address = model.TcmClient.TCMIntakeForm.Psychiatrist_Address;
-                            model.Psychiatrist_Phone = model.TcmClient.TCMIntakeForm.Psychiatrist_Phone;
-                            model.Psychiatrist_CityStateZip = model.TcmClient.TCMIntakeForm.Psychiatrist_CityStateZip;
-
-                            model.PCP_Name = model.TcmClient.TCMIntakeForm.PCP_Name;
-                            model.PCP_Address = model.TcmClient.TCMIntakeForm.PCP_Address;
-                            model.PCP_Phone = model.TcmClient.TCMIntakeForm.PCP_Phone;
-                            model.PCP_CityStateZip = model.TcmClient.TCMIntakeForm.PCP_CityStateZip;
-                        }
                         ViewData["origi"] = origi;
                         return View(model);
                     }
