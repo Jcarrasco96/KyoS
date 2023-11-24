@@ -27,10 +27,12 @@
             @if (User.IsInRole("CaseManager"))
             {
                 <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
             }
             else
             {
                 <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
             }
 
         </p>       
@@ -111,6 +113,7 @@
     </div>
 </div>
 
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

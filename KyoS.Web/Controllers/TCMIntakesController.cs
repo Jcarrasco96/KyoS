@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -5474,5 +5474,160 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
+
+        [Authorize(Roles = "Manager, Frontdesk, TCMSupervisor, CaseManager")]
+        public IActionResult AuditConsentForRelease(int idTCMClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditTCMConsentForrelease> auditConsent_List = new List<AuditTCMConsentForrelease>();
+            AuditTCMConsentForrelease auditConsent = new AuditTCMConsentForrelease();
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.TcmIntakeConsentForRelease)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+            //apertura
+            TCMIntakeConsentForReleaseEntity consentPCP = tcmClient.TcmIntakeConsentForRelease.FirstOrDefault(n => n.ConsentType == ConsentType.PCP);
+            if (consentPCP != null)
+            {
+                auditConsent.Name = "PCP";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = consentPCP.DateSignatureEmployee.ToShortDateString();
+                if (consentPCP.DateSignatureEmployee.Date == tcmClient.DataOpen.Date)
+                {
+                    auditConsent.Active = 2;
+                }
+                else 
+                {
+                    auditConsent.Active = 1;
+                }
+            }
+            else
+            {
+                auditConsent.Name = "PCP";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = string.Empty;
+                auditConsent.Active = 0;
+            }
+            auditConsent_List.Add(auditConsent);
+            auditConsent = new AuditTCMConsentForrelease();
+
+            TCMIntakeConsentForReleaseEntity consentPsy = tcmClient.TcmIntakeConsentForRelease.FirstOrDefault(n => n.ConsentType == ConsentType.PSYCHIATRIST);
+            if (consentPsy != null)
+            {
+                auditConsent.Name = "PSYCHIATRIST";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = consentPsy.DateSignatureEmployee.ToShortDateString();
+
+                if (consentPsy.DateSignatureEmployee.Date == tcmClient.DataOpen.Date)
+                {
+                    auditConsent.Active = 2;
+                }
+                else
+                {
+                    auditConsent.Active = 1;
+                }
+            }
+            else
+            {
+                auditConsent.Name = "PSYCHIATRIST";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = string.Empty;
+                auditConsent.Active = 0;
+            }
+            auditConsent_List.Add(auditConsent);
+            auditConsent = new AuditTCMConsentForrelease();
+
+            TCMIntakeConsentForReleaseEntity emergencyContact = tcmClient.TcmIntakeConsentForRelease.FirstOrDefault(n => n.ConsentType == ConsentType.EMERGENCY_CONTACT);
+            if (emergencyContact != null)
+            {
+                auditConsent.Name = "EMERGENCY CONTACT";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = emergencyContact.DateSignatureEmployee.ToShortDateString();
+
+                if (consentPCP.DateSignatureEmployee.Date == tcmClient.DataOpen.Date)
+                {
+                    auditConsent.Active = 2;
+                }
+                else
+                {
+                    auditConsent.Active = 1;
+                }
+            }
+            else
+            {
+                auditConsent.Name = "EMERGENCY CONTACT";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = string.Empty;
+                auditConsent.Active = 0;
+            }
+            auditConsent_List.Add(auditConsent);
+            auditConsent = new AuditTCMConsentForrelease();
+
+            TCMIntakeConsentForReleaseEntity social = tcmClient.TcmIntakeConsentForRelease.FirstOrDefault(n => n.ConsentType == ConsentType.SSA);
+            if (social != null)
+            {
+                auditConsent.Name = "SSA";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = social.DateSignatureEmployee.ToShortDateString();
+
+                if (consentPCP.DateSignatureEmployee.Date == tcmClient.DataOpen.Date)
+                {
+                    auditConsent.Active = 2;
+                }
+                else
+                {
+                    auditConsent.Active = 1;
+                }
+            }
+            else
+            {
+                auditConsent.Name = "SSA";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = string.Empty;
+                auditConsent.Active = 0;
+            }
+            auditConsent_List.Add(auditConsent);
+            auditConsent = new AuditTCMConsentForrelease();
+
+            TCMIntakeConsentForReleaseEntity DCF = tcmClient.TcmIntakeConsentForRelease.FirstOrDefault(n => n.ConsentType == ConsentType.DCF);
+            if (DCF != null)
+            {
+                auditConsent.Name = "DCF";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = DCF.DateSignatureEmployee.ToShortDateString();
+
+                if (consentPCP.DateSignatureEmployee.Date == tcmClient.DataOpen.Date)
+                {
+                    auditConsent.Active = 2;
+                }
+                else
+                {
+                    auditConsent.Active = 1;
+                }
+            }
+            else
+            {
+                auditConsent.Name = "DCF";
+                auditConsent.Origin = "Initial";
+                auditConsent.Date = string.Empty;
+                auditConsent.Active = 0;
+            }
+            auditConsent_List.Add(auditConsent);
+            auditConsent = new AuditTCMConsentForrelease();
+
+            return View(auditConsent_List);
+        }
+
     }
 }

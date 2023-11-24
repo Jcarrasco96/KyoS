@@ -822,9 +822,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
             List<TCMServiceEntity> tcmservices = await _context.TCMServices
-                                   .Include(m => m.TCMSubServices)
-                                   .OrderBy(f => f.Code)
-                                   .ToListAsync();
+                                                               .Include(m => m.TCMSubServices)
+                                                               .OrderBy(f => f.Code)
+                                                               .ToListAsync();
 
             return View(tcmservices);
         }
