@@ -977,5 +977,16 @@ namespace KyoS.Web.Controllers
             }
             return Json(new SelectList(subServices, "Id", "Name"));
         }
+
+        public JsonResult GetSubService(int idDomain)
+        {
+            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(o => o.Id == idDomain);
+            string text = "Select Domain";
+            if (domain != null)
+            {
+                text = domain.NameSubService;
+            }
+            return Json(text);
+        }
     }
 }
