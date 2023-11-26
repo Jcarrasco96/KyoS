@@ -2436,5 +2436,25 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboCaseManagersActive()
+        {
+            List<SelectListItem> list = _context.CaseManagers
+
+                                                .Where(c => c.Status == StatusType.Open)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name} ",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All TCM...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

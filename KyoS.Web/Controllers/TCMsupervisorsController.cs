@@ -866,23 +866,54 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(TCMSupervisionTime));
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager,CaseManager")]
         public IActionResult TCMSupervisionTimeCalendar()
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMSupervisionTimeViewModel model = new TCMSupervisionTimeViewModel
+            TCMSupervisionTimeViewModel model = new TCMSupervisionTimeViewModel();
+
+            if (User.IsInRole("TCMSupervisor"))
             {
-                IdCaseManager = 0,
-                CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName)
-            };
+                model = new TCMSupervisionTimeViewModel
+                {
+                    IdCaseManager = 0,
+                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName)
+                };
+            }
+            if (User.IsInRole("Manager"))
+            {
+                model = new TCMSupervisionTimeViewModel
+                {
+                    IdCaseManager = 0,
+                    CaseManagers = _combosHelper.GetComboCaseManagersActive()
+                };
+            }
+            if (User.IsInRole("CaseManager"))
+            {
+                List<SelectListItem> list = new List<SelectListItem>();
+                CaseMannagerEntity caseManager = _context.CaseManagers
+
+                                               .FirstOrDefault(c => c.LinkedUser == user_logged.UserName);
+                
+                list.Insert(0, new SelectListItem
+                {
+                    Text = $"{caseManager.Name} ",
+                    Value = $"{caseManager.Id} "
+                });
+                model = new TCMSupervisionTimeViewModel
+                {
+                    IdCaseManager = 0,
+                    CaseManagers = list
+                };
+            }
 
             return View(model);
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
         private async Task<List<object>> SupervisionByTCMsupervisor(string start, string end, int idTCMSupervisor = 0, int idCaseManager = 0)
         {
             var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;

@@ -207,7 +207,8 @@ namespace KyoS.Web.Controllers
                 TCMInitialTime = user_logged.Clinic.Setting.TCMInitialTime,
                 TCMSupervisorEdit = user_logged.Clinic.Setting.TCMSupervisorEdit,
                 UnitsForDayForClient = user_logged.Clinic.Setting.UnitsForDayForClient,
-                ZipCode = user_logged.Clinic.ZipCode                
+                ZipCode = user_logged.Clinic.ZipCode,
+                TCMSupervisionTimeWithCaseManager = user_logged.Clinic.Setting.TCMSupervisionTimeWithCaseManager
 
             };
 
@@ -264,6 +265,7 @@ namespace KyoS.Web.Controllers
                     setting.TCMSupervisorEdit = model.TCMSupervisorEdit;
                     setting.CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition;
                     setting.SupervisorEdit = model.SupervisorEdit;
+                    setting.TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager;
 
                 }
                 _context.Update(setting);

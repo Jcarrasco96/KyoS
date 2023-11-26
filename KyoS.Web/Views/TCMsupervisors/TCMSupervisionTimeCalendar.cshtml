@@ -20,7 +20,11 @@
         <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control" id="cbCaseManager"></select>
         <span asp-validation-for="IdCaseManager" class="text-danger"></span>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-1">
+        <br />
+        <a asp-action="TCMSupervisionTimeCalendar" class="btn btn-success" title="Refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+    </div>
+    <div class="col-md-8">
         &nbsp;
     </div>
 </div>
