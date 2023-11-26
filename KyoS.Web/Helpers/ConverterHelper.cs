@@ -7527,6 +7527,7 @@ namespace KyoS.Web.Helpers
                 EndTime = model.EndTime,
                 StartTime = model.StartTime,
                 TCMSupervisor = await _context.TCMSupervisors.FindAsync(model.IdTCMSupervisor),
+                Present = model.Present
             };
         }
 
@@ -7544,8 +7545,9 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 EndTime= model.EndTime,
                 IdTCMSupervisor = model.TCMSupervisor.Id,
-                TCMSupervisor = model.TCMSupervisor
-                
+                TCMSupervisor = model.TCMSupervisor,
+                Present = model.Present
+
             };
         }
 

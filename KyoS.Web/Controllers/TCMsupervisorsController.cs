@@ -4,9 +4,11 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IRenderHelper _renderHelper;
-        
-        public TCMSupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper)
+
+        public IConfiguration Configuration { get; }
+        public TCMSupervisorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper, IConfiguration configuration)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
             _renderHelper = renderHelper;
+            Configuration = configuration;
         }
 
         public async Task<IActionResult> Index(int idError = 0)
@@ -577,6 +581,10 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                DateTime start = new DateTime(tcmSupervisionTimeViewModel.DateSupervision.Year, tcmSupervisionTimeViewModel.DateSupervision.Month, tcmSupervisionTimeViewModel.DateSupervision.Day, tcmSupervisionTimeViewModel.StartTime.Hour, tcmSupervisionTimeViewModel.StartTime.Minute, tcmSupervisionTimeViewModel.StartTime.Second);
+                DateTime end = new DateTime(tcmSupervisionTimeViewModel.DateSupervision.Year, tcmSupervisionTimeViewModel.DateSupervision.Month, tcmSupervisionTimeViewModel.DateSupervision.Day, tcmSupervisionTimeViewModel.EndTime.Hour, tcmSupervisionTimeViewModel.EndTime.Minute, tcmSupervisionTimeViewModel.EndTime.Second);
+                tcmSupervisionTimeViewModel.StartTime = start;
+                tcmSupervisionTimeViewModel.EndTime = end;
                 TCMSupervisionTimeEntity tcmSupervisionTimeEntity = await _context.TCMSupervisionTimes
                                                                                   .FirstOrDefaultAsync(s => s.DateSupervision.Date == tcmSupervisionTimeViewModel.DateSupervision.Date
                                                                                   && ((s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.StartTime.TimeOfDay
@@ -590,12 +598,15 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
+                        /*List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
                                                                                            .Include(f => f.CaseManager)
                                                                                            .Include(f => f.TCMSupervisor)
                                                                                            .ToListAsync();
+                        
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });*/
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });
+                        // return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "TCMSupervisionTime1") });
+                        return Json(new { isValid = true, html = tcmSupervisionTimeViewModel.IdCaseManager.ToString() });
                     }
                     catch (System.Exception ex)
                     {
@@ -754,6 +765,11 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                DateTime start = new DateTime(tcmSupervisionTimeViewModel.DateSupervision.Year, tcmSupervisionTimeViewModel.DateSupervision.Month, tcmSupervisionTimeViewModel.DateSupervision.Day, tcmSupervisionTimeViewModel.StartTime.Hour, tcmSupervisionTimeViewModel.StartTime.Minute, tcmSupervisionTimeViewModel.StartTime.Second);
+                DateTime end = new DateTime(tcmSupervisionTimeViewModel.DateSupervision.Year, tcmSupervisionTimeViewModel.DateSupervision.Month, tcmSupervisionTimeViewModel.DateSupervision.Day, tcmSupervisionTimeViewModel.EndTime.Hour, tcmSupervisionTimeViewModel.EndTime.Minute, tcmSupervisionTimeViewModel.EndTime.Second);
+                tcmSupervisionTimeViewModel.StartTime = start;
+                tcmSupervisionTimeViewModel.EndTime = end;
+
                 TCMSupervisionTimeEntity tcmSupervisionTimeEntity = await _context.TCMSupervisionTimes
                                                                                    .FirstOrDefaultAsync(s => s.DateSupervision.Date == tcmSupervisionTimeViewModel.DateSupervision.Date
                                                                                                         && ((s.StartTime.TimeOfDay <= tcmSupervisionTimeViewModel.StartTime.TimeOfDay
@@ -768,12 +784,13 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
+                        /*List<TCMSupervisionTimeEntity> tcmSupervisionTimes = await _context.TCMSupervisionTimes
                                                                                            .Include(f => f.CaseManager)
                                                                                            .Include(f => f.TCMSupervisor)
                                                                                            .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisionTime", tcmSupervisionTimes) });*/
+                        return Json(new { isValid = true, html = "0" });
                     }
                     catch (System.Exception ex)
                     {
@@ -847,6 +864,125 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction(nameof(TCMSupervisionTime));
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult TCMSupervisionTimeCalendar()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSupervisionTimeViewModel model = new TCMSupervisionTimeViewModel
+            {
+                IdCaseManager = 0,
+                CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName)
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        private async Task<List<object>> SupervisionByTCMsupervisor(string start, string end, int idTCMSupervisor = 0, int idCaseManager = 0)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<TCMSupervisionTimeEntity> listSupervisions;
+
+            UserEntity user_logged = _context.Users
+                                           .Include(u => u.Clinic)
+                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            using (DataContext db = new DataContext(options))
+            {
+                listSupervisions = await db.TCMSupervisionTimes
+
+                                           .Include(c => c.CaseManager)
+
+                                           .Include(c => c.TCMSupervisor)
+
+                                          // .Where(c => (c.DateCite >= initDate && c.DateCite <= finalDate))
+                                           .ToListAsync();
+
+
+                if (idTCMSupervisor != 0)
+                {
+                    if (idCaseManager == 0)
+                    {
+                        listSupervisions = listSupervisions.Where(c => c.TCMSupervisor.Id == idTCMSupervisor)
+                                                           .ToList();
+                    }
+                    else
+                    {
+                        listSupervisions = listSupervisions.Where(c => c.TCMSupervisor.Id == idTCMSupervisor
+                                                                    && c.CaseManager.Id == idCaseManager)
+                                                           .ToList();
+                    }
+                }
+                else
+                {
+                    if (idCaseManager == 0)
+                    {
+                        listSupervisions = listSupervisions.ToList();
+                    }
+                    else
+                    {
+                        listSupervisions = listSupervisions.Where(c => c.CaseManager.Id == idCaseManager)
+                                                           .ToList();
+                    }
+                }
+            }
+            return listSupervisions
+                        .Select(t => new
+                        {
+                            id = t.Id,
+                            title = t.CaseManager.Name.ToString(),
+                            start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                            end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                            // url = Url.Action("EditSupervisionTime", "TCMsupervisors", new { id = t.Id }),
+                            backgroundColor = (t.Present == true) ? "#dff0d8" : "#d9edf7",
+                            textColor = (t.Present == true) ? "#417c49" : "#487c93",
+                            borderColor = (t.Present == true) ? "#417c49" : "#487c93"
+                        })
+                        .Distinct()
+                        .ToList<object>();
+
+        }
+
+        public async Task<IActionResult> Events(string start, string end, int idCaseManager = 0)
+        {
+            DateTime initDate = Convert.ToDateTime(start);
+            DateTime finalDate = Convert.ToDateTime(end);
+            UserEntity user_logged = _context.Users
+                                          .Include(u => u.Clinic)
+                                          .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMSupervisorEntity tcmSupervisor;
+            if (idCaseManager != 0)
+            {
+                tcmSupervisor  = _context.CaseManagers.Include(n => n.TCMSupervisor).FirstOrDefault(n => n.Id == idCaseManager).TCMSupervisor;
+            }
+            else
+            {
+                if (User.IsInRole("Manager"))
+                {
+                    tcmSupervisor = new TCMSupervisorEntity();
+                }
+                else
+                {
+                    tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                }
+                
+            }
+
+            Task<List<object>> notesTask = SupervisionByTCMsupervisor(start, end, tcmSupervisor.Id, idCaseManager);
+
+            await Task.WhenAll(notesTask);
+
+            var notes = await notesTask;
+
+            List<object> events = new List<object>();
+            events.AddRange(notes);
+
+            return new JsonResult(events);
         }
     }
 }

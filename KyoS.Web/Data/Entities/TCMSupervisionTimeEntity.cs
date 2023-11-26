@@ -25,5 +25,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        public bool Present { get; set; }
     }
 }
