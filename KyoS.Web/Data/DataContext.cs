@@ -90,6 +90,7 @@ namespace KyoS.Web.Data
         public DbSet<MedicationEntity> Medication { get; set; }
         public DbSet<FarsFormEntity> FarsForm { get; set; }
         public DbSet<BioEntity> Bio { get; set; }
+        public DbSet<BioTempEntity> BioTemp { get; set; }
         public DbSet<Bio_BehavioralHistoryEntity> Bio_BehavioralHistory { get; set; }
         public DbSet<AdendumEntity> Adendums { get; set; }
         public DbSet<MTPReviewEntity> MTPReviews { get; set; }

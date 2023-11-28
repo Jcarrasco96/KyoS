@@ -10,7 +10,7 @@
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Client.Name" />
             <div class="container-fluid">
-                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.Client.Name </span></h4>
+                <h4 style="font-weight:bold;"> <span class="label label-info"> @Model.Client.Name </span></h4>
             </div>
             <div>
                 <div class=" col-md-4 form-group">
@@ -36,8 +36,13 @@
             <div>
                 <div class=" col-md-12 form-group">
                     <label asp-for="Problem" class="control-label"></label>
-                    <textarea asp-for="Problem" class="form-control" rows="4"></textarea>
+                    <textarea asp-for="Problem" class="form-control" rows="5"></textarea>
                     <span asp-validation-for="Problem" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             </div>
             <div>

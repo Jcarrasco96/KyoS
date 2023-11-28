@@ -58,26 +58,26 @@
         
         The purpose of mental health programs/services is to assist clients in gaining more stable mental health and reduce behavioral symptoms and health risks.\
 
-        Program: <input type="checkbox" asp-for="CMH" class="form-check-input"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input"> PRIV               Setting: <strong><u><input asp-for="Setting"></u></strong>                         Select: <input type="checkbox" asp-for="BioH0031HN" class="form-check-input"> BIO H0031 HN   <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input"> IDA H0031 HO   <input type="checkbox" asp-for="Code90791" class="form-check-input"> 90791 
+        Program: <input type="checkbox" asp-for="CMH" class="form-check-input" id="CMH"> CMH <input type="checkbox" asp-for="Priv" class="form-check-input" id="Priv"> PRIV               Setting: <strong><u><input asp-for="Setting" id="Setting"></u></strong>                         Select: <input type="checkbox" asp-for="BioH0031HN" class="form-check-input" id="BioH0031HN"> BIO H0031 HN   <input type="checkbox" asp-for="IDAH0031HO" class="form-check-input" id="IDAH0031HO"> IDA H0031 HO   <input type="checkbox" asp-for="Code90791" class="form-check-input" id="Code90791"> 90791 
     
-           Date: <input asp-for="DateBio">                Time: <input asp-for="StartTime"> - <input asp-for="EndTime">                                      
+           Date: <input asp-for="DateBio" id="DateBio">                Time: <input asp-for="StartTime" id="StartTime"> - <input asp-for="EndTime" id="EndTime">                                      
     </pre>
 </div>
 <div class="col-md-12">
     <pre>
 <strong>2.  CLIENT’S PRESENTING PROBLEM (S):</strong> (list specific symptoms, onset history, criteria for diagnosis and justification  of  treatment recommendations)
-    <textarea asp-for="PresentingProblem" rows="10" style="width:90%"></textarea> 
+    <textarea asp-for="PresentingProblem" rows="10" style="width:90%" id="PresentingProblem"></textarea> 
 
     <strong>CLIENT’S ASSESSMENT OF SITUATION: </strong>(list how the client’s symptoms are affecting clients emotional functioning and use their own words)
-    <textarea asp-for="ClientAssessmentSituation" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="ClientAssessmentSituation" style="width:90%" rows="2" id="ClientAssessmentSituation"></textarea> 
 
     <strong>FAMILY'S ASSESSMENT OF SITUATION: </strong>(if applicable, list how the client’s symptoms are affecting clients emotional functioning and use family’s own words)
-    <textarea asp-for="FamilyAssessmentSituation" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="FamilyAssessmentSituation" style="width:90%" rows="2" id="FamilyAssessmentSituation"></textarea> 
 
     <strong>FAMILY'S EMOTIONAL FUNCTIONING: </strong> (describe any emotional issues, difficulties functioning, substance abuse and/or abuse history affecting family members)
-    <textarea asp-for="FamilyEmotional" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="FamilyEmotional" style="width:90%" rows="2" id="FamilyEmotional"></textarea> 
 
     <strong>LEGAL REPRESENTATIVE’S ASSESSMENT OF SITUATION: </strong> (if applicable, in their own words)
-    <textarea asp-for="LegalAssessment" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="LegalAssessment" style="width:90%" rows="2" id="LegalAssessment"></textarea> 
     </pre>
 </div>
