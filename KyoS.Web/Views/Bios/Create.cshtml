@@ -55,7 +55,7 @@
                         @await Html.PartialAsync("_ViewMedication", Model.Client.MedicationList.ToList())
                     </div>
                 </div>
-            </div>
+            </div>           
             <partial name="_Bios2" />
             <div class="col-md-push-12">
                 <div class="">
@@ -87,6 +87,160 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script>
+        $(document).ready(function () {
+            // Configure to save every 15 seconds
+            window.setInterval(SaveData, 15000);//calling saveData function for every 15 seconds
+        });
+
+        // ajax method
+        function SaveData() {
+            var jsonObj =
+            {
+                'url': 'Bios/Create/' + @Model.Client.Id,
+                'CMH': CMH.checked,
+                'Priv': Priv.checked,
+                'Setting': document.getElementById('Setting').value,
+                'BioH0031HN': BioH0031HN.checked,
+                'IDAH0031HO': IDAH0031HO.checked,
+                'Code90791': Code90791.checked,                
+                'DateBio': document.getElementById('DateBio').value,
+                'StartTime': document.getElementById('StartTime').value,
+                'EndTime': document.getElementById('EndTime').value,
+                'PresentingProblem': document.getElementById('PresentingProblem').value,
+                'ClientAssessmentSituation': document.getElementById('ClientAssessmentSituation').value,
+                'FamilyAssessmentSituation': document.getElementById('FamilyAssessmentSituation').value,
+                'FamilyEmotional': document.getElementById('FamilyEmotional').value,
+                'LegalAssessment': document.getElementById('LegalAssessment').value,
+                'Appearance_Disheveled': Appearance_Disheveled.checked,
+                'Appearance_FairHygiene': Appearance_FairHygiene.checked,
+                'Appearance_Cleaned': Appearance_Cleaned.checked,
+                'Appearance_WellGroomed': Appearance_WellGroomed.checked,
+                'Appearance_Bizarre': Appearance_Bizarre.checked,
+                'Motor_Normal': Motor_Normal.checked,
+                'Motor_Agitated': Motor_Agitated.checked,
+                'Motor_Retardation': Motor_Retardation.checked,
+                'Motor_RestLess': Motor_RestLess.checked,
+                'Motor_Akathisia': Motor_Akathisia.checked,
+                'Motor_Tremor': Motor_Tremor.checked,
+                'Motor_Other': Motor_Other.checked,
+                'Speech_Normal': Speech_Normal.checked,
+                'Speech_Loud': Speech_Loud.checked,
+                'Speech_Pressured': Speech_Pressured.checked,
+                'Speech_Impoverished': Speech_Impoverished.checked,
+                'Speech_Slurred': Speech_Slurred.checked,
+                'Speech_Mumbled': Speech_Mumbled.checked,
+                'Speech_Stutters': Speech_Stutters.checked,
+                'Speech_Rapid': Speech_Rapid.checked,
+                'Speech_Slow': Speech_Slow.checked,
+                'Speech_Other': Speech_Other.checked,
+                'Affect_Appropriate': Affect_Appropriate.checked,
+                'Affect_labile': Affect_labile.checked,
+                'Affect_Expansive': Affect_Expansive.checked,
+                'Affect_Blunted': Affect_Blunted.checked,
+                'Affect_Constricted': Affect_Constricted.checked,
+                'Affect_Flat': Affect_Flat.checked,
+                'Affect_Tearful_Sad': Affect_Tearful_Sad.checked,
+                'Affect_Anxious': Affect_Anxious.checked,
+                'Affect_Angry': Affect_Angry.checked,
+                'Affect_Other': Affect_Other.checked,
+                'ThoughtProcess_Organized': ThoughtProcess_Organized.checked,
+                'ThoughtProcess_Disorganized': ThoughtProcess_Disorganized.checked,
+                'ThoughtProcess_GoalDirected': ThoughtProcess_GoalDirected.checked,
+                'ThoughtProcess_Irrational': ThoughtProcess_Irrational.checked,
+                'ThoughtProcess_Rigid': ThoughtProcess_Rigid.checked,
+                'ThoughtProcess_Obsessive': ThoughtProcess_Obsessive.checked,
+                'ThoughtProcess_Tangential': ThoughtProcess_Tangential.checked,
+                'ThoughtProcess_Circumstantial': ThoughtProcess_Circumstantial.checked,
+                'ThoughtProcess_Preoccupied': ThoughtProcess_Preoccupied.checked,
+                'ThoughtProcess_Blocking': ThoughtProcess_Blocking.checked,
+                'ThoughtProcess_FightIdeas': ThoughtProcess_FightIdeas.checked,
+                'ThoughtProcess_LooseAssociations': ThoughtProcess_LooseAssociations.checked,
+                'ThoughtProcess_Other': ThoughtProcess_Other.checked,
+                'Mood_Euthymic': Mood_Euthymic.checked,
+                'Mood_Depressed': Mood_Depressed.checked,
+                'Mood_Anxious': Mood_Anxious.checked,
+                'Mood_Euphoric': Mood_Euphoric.checked,
+                'Mood_Angry': Mood_Angry.checked,
+                'Mood_Maniac': Mood_Maniac.checked,
+                'Mood_Other': Mood_Other.checked,
+                'Judgment_Good': Judgment_Good.checked,
+                'Judgment_Fair': Judgment_Fair.checked,
+                'Judgment_Poor': Judgment_Poor.checked,
+                'Judgment_Other': Judgment_Other.checked,
+                'Insight_Good': Insight_Good.checked,
+                'Insight_Fair': Insight_Fair.checked,
+                'Insight_Poor': Insight_Poor.checked,
+                'Insight_Other': Insight_Other.checked,
+                'ThoughtContent_Relevant': ThoughtContent_Relevant.checked,
+                'ThoughtContent_Hallucinations': check1.checked,
+                'ThoughtContent_Hallucinations_Type': document.getElementById('ThoughtContent_Hallucinations_Type').value,
+                'ThoughtContent_RealityBased': ThoughtContent_RealityBased.checked,
+                'ThoughtContent_Delusions': check2.checked,
+                'ThoughtContent_Delusions_Type': document.getElementById('ThoughtContent_Delusions_Type').value,
+                'Oriented_FullOriented': Oriented_FullOriented.checked,
+                'Lacking_Time': Lacking_Time.checked,
+                'Lacking_Place': Lacking_Place.checked,
+                'Lacking_Person': Lacking_Person.checked,
+                'Lacking_Location': Lacking_Location.checked,
+                'RiskToSelf_Low': RiskToSelf_Low.checked,
+                'RiskToSelf_Medium': RiskToSelf_Medium.checked,
+                'RiskToSelf_High': RiskToSelf_High.checked,
+                'RiskToSelf_Chronic': RiskToSelf_Chronic.checked,
+                'RiskToOther_Low': RiskToOther_Low.checked,
+                'RiskToOther_Medium': RiskToOther_Medium.checked,
+                'RiskToOther_High': RiskToOther_High.checked,
+                'RiskToOther_Chronic': RiskToOther_Chronic.checked,
+                'SafetyPlan': check3.checked,                
+                'Comments': document.getElementById('Comments').value,
+                'ClientDenied': ClientDenied.checked,
+                'HaveYouEverThought': check4.checked,
+                'DoYouOwn': check5.checked,
+                'DoesClient': check6.checked,
+                'HaveYouEverBeen': check7.checked,
+                'HasTheClient': check8.checked,
+                'HaveYouEverThought_Explain': document.getElementById('HaveYouEverThought_Explain').value,
+                'DoYouOwn_Explain': document.getElementById('DoYouOwn_Explain').value,
+                'HaveYouEverBeen_Explain': document.getElementById('HaveYouEverBeen_Explain').value,
+                'HasTheClient_Explain': document.getElementById('HasTheClient_Explain').value,
+                'ClientFamilyAbusoTrauma': ClientFamilyAbusoTrauma.checked,
+                'DateAbuse': document.getElementById('DateAbuse').value,
+                'PersonInvolved': document.getElementById('PersonInvolved').value,
+                'ApproximateDateReport': document.getElementById('ApproximateDateReport').value,
+                'ApproximateDateReport_Where': document.getElementById('ApproximateDateReport_Where').value,
+                'RelationShips': document.getElementById('RelationShips').value,
+                'Details': document.getElementById('Details').value,
+                'Outcome': document.getElementById('Outcome').value,
+                'AReferral': AReferral.checked,
+                'AReferral_Services': document.getElementById('AReferral_Services').value,
+                'AReferral_When': document.getElementById('AReferral_When').value,
+                'AReferral_Where': document.getElementById('AReferral_Where').value,
+                'ObtainRelease': ObtainRelease.checked,
+                'WhereRecord': WhereRecord.checked,
+                'WhereRecord_When': document.getElementById('WhereRecord_When').value,
+                'WhereRecord_Where': document.getElementById('WhereRecord_Where').value
+            };
+
+            var json = JSON.stringify(jsonObj);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AutoSave", "Bios")',
+                data: { jsonModel: json },
+                success: function (data) {
+                    if (data == true) {
+                        Swal.fire({
+                            position: "bottom-end",
+                            icon: "success",
+                            title: "Saved",
+                            showConfirmButton: false,
+                            timer: 1800,
+                            timerProgressBar: true                            
+                        });
+                    }
+                }
+            });
+        }        
+
         check1.addEventListener('change', (e) => {
             if (check1.checked == true) {
                 check101.checked = false;
@@ -646,5 +800,7 @@
         } else {
             check128.checked = true;
         }
+
+
     </script>
 }
