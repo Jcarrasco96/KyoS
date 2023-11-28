@@ -50,11 +50,12 @@
                                         <table class="table table-striped table-bordered" id="MyTableDetails">
                                             <tr>
                                                 <th class="col-md-1" style="text-align:center;">Birth Date</th>
-                                                <th class="col-md-1" style="text-align:center;">Bill Code</th>
+                                                <th class="col-md-1" style="text-align:center;">CPT Code</th>
                                                 <th class="col-md-2">Admission for</th>
                                                 <th class="col-md-1" style="text-align:center;">Document</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
                                                 <th class="col-md-1" style="text-align:center;">Status</th>
+                                                <th class="col-md-1" style="text-align:center;">Setting</th>
                                                 <th class="col-md-1" style="text-align:center;">Billed</th>
                                                 <th class="col-md-1" style="text-align:center;">Payment</th>
                                                 <th class="col-md-2"></th>
@@ -315,6 +316,44 @@
                                                                                     <span class="label label-danger">
                                                                                         Not Started
                                                                                     </span>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </td>
+                                                            <td align="center">
+                                                                @if (element.NoteP != null)
+                                                                {
+                                                                    @element.NoteP.Setting
+                                                                }
+                                                                else
+                                                                {
+                                                                    @if (element.Note != null)
+                                                                    {
+                                                                        @element.Note.Setting
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @if (element.GroupNote2 != null)
+                                                                        {
+                                                                            @element.GroupNote2.Setting
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @if (element.GroupNote != null)
+                                                                            {
+                                                                                @element.GroupNote.Setting
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @if (element.IndividualNote != null)
+                                                                                {
+                                                                                    @element.IndividualNote.Setting
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>-</p>
                                                                                 }
                                                                             }
                                                                         }
@@ -648,6 +687,44 @@
                                                                     }
                                                                 </td>
                                                                 <td align="center">
+                                                                @if (element.NoteP != null)
+                                                                {
+                                                                    @element.NoteP.Setting
+                                                                }
+                                                                else
+                                                                {
+                                                                    @if (element.Note != null)
+                                                                    {
+                                                                        @element.Note.Setting
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @if (element.GroupNote2 != null)
+                                                                        {
+                                                                            @element.GroupNote2.Setting
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @if (element.GroupNote != null)
+                                                                            {
+                                                                                @element.GroupNote.Setting
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @if (element.IndividualNote != null)
+                                                                                {
+                                                                                    @element.IndividualNote.Setting
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>-</p>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </td>
+                                                                <td align="center">
                                                                     @if (element.BilledDate == null)
                                                                     {
                                                                         <p>-</p>
@@ -755,6 +832,9 @@
                                                         }
                                                     </td>
                                                     <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.Bio.Setting)
+                                                    </td>
+                                                    <td align="center">
                                                         @Html.DisplayFor(modelItem => item.Bio.BilledDate)
                                                     </td>
                                                     <td align="center">
@@ -851,6 +931,9 @@
                                                                 Approved
                                                             </span>
                                                         }
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => mtp.Setting)
                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => mtp.BilledDate)
@@ -952,6 +1035,9 @@
                                                             }
                                                         </td>
                                                         <td align="center">
+                                                            @Html.DisplayFor(modelItem => mtpr.Setting)
+                                                        </td>
+                                                        <td align="center">
                                                             @Html.DisplayFor(modelItem => mtpr.BilledDate)
                                                         </td>
                                                         <td align="center">
@@ -1051,6 +1137,9 @@
                                                                     Approved
                                                                 </span>
                                                             }
+                                                        </td>
+                                                        <td align="center">
+                                                            <p>-</p>
                                                         </td>
                                                         <td align="center">
                                                             @Html.DisplayFor(modelItem => fars.BilledDate)
