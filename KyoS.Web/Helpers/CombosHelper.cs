@@ -387,7 +387,7 @@ namespace KyoS.Web.Helpers
                                                         && c.MTPDevelopedDate <= workday_client.Workday.Date
                                                         && c.Goals.Where(g => g.Service == ServiceType.Individual
                                                                            && g.Objetives.Where(o => o.DateOpened <= workday_client.Workday.Date
-                                                                                                  && o.DateTarget >= workday_client.Workday.Date)
+                                                                                                  && o.DateResolved >= workday_client.Workday.Date)
                                                                                          .Count() > 0)
                                                                   .Count() > 0)
                                                .Count() > 0)
