@@ -243,7 +243,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction("Index", "TCMIntakes");
+            return RedirectToAction("Index", "TCMClients");
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
