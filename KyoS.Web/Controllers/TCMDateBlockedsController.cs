@@ -32,11 +32,23 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TCMDateBlocked
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                return View(await _context.TCMDateBlocked
 
                                       .Include(s => s.Clinic)
 
                                       .OrderBy(s => s.Clinic.Name).ToListAsync());
+            }
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]

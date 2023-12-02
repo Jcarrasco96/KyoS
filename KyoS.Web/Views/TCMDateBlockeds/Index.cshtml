@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMDateBlockedEntity>
     @{
-        ViewData["Title"] = "Dates Blocked";
+        ViewData["Title"] = "Disabled Dates";
     }
 
     <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,18 +11,18 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Dashboard", "Index", "Desktop")
             </li>
-            <li class="active">Settings</li>
+            <li class="active">Disabled Dates</li>
         </ul><!--.breadcrumb-->
     </div>
 
     <p>
         @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
         {
-            <a onclick="showInPopup('@Url.Action("Create", "TCMDateBlockeds", null, Context.Request.Scheme)','Create Date Blocked')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Date Blocked</a>
+            <a onclick="showInPopup('@Url.Action("Create", "TCMDateBlockeds", null, Context.Request.Scheme)','Disabled Date')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Disabled Date</a>
         }
         else
         { 
-            <a onclick="showInPopup('@Url.Action("Create","TCMDateBlockeds",null,Context.Request.Scheme)','Create Date Blocked')" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create Date Blocked</a>
+            <a onclick="showInPopup('@Url.Action("Create","TCMDateBlockeds",null,Context.Request.Scheme)','Disabled Date')" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Disabled Date</a>
         }
     </p>
 
