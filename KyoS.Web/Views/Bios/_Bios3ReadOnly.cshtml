@@ -17,8 +17,14 @@
 </div>
 <div class="col-md-12">
     <pre>
-    
-    <strong>Date Signature Licensed </strong> <input asp-for="DateSignatureSupervisor" >                                                   
+    @if (Model.Status != KyoS.Common.Enums.BioStatus.Approved && User.IsInRole("Supervisor"))
+    {
+    <strong>Date Signature Licensed </strong> <input asp-for="DateSignatureSupervisor">                                                   
+    }
+    else
+    { 
+    <strong>Date Signature Licensed </strong> <input asp-for="DateSignatureSupervisor" disabled>                                                   
+    }
     </pre>
 </div>
 <br />

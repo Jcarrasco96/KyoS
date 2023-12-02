@@ -41,5 +41,7 @@ namespace KyoS.Web.Models
 
         public string TimeEnd { get; set; }
 
+        public string SubService { get; set; }
+
     }
 }

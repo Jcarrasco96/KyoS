@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -3216,6 +3217,279 @@ namespace KyoS.Web.Controllers
 
         }
 
-      
+        [Authorize(Roles = "Manager, Frontdesk, TCMSupervisor, CaseManager")]
+        public IActionResult AuditTCMServicePlan(int idTCMClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditTCMServicePlan> auditServicePlan_List = new List<AuditTCMServicePlan>();
+            AuditTCMServicePlan auditServicePlan = new AuditTCMServicePlan();
+
+            TCMAssessmentEntity assessment = _context.TCMAssessment
+                                                     .Include(n => n.TcmClient)
+                                                     .FirstOrDefault(n => n.TcmClient_FK == idTCMClient);
+            List<TCMDomainEntity> domains = _context.TCMDomains
+                                                    .Include(n => n.TcmServicePlan)
+                                                    .ThenInclude(n => n.TcmClient)
+                                                    .Where(n => n.TcmServicePlan.TcmClient.Id == idTCMClient)
+                                                    .ToList();
+            //apertura
+
+            if (assessment != null)
+            {
+                if (assessment.RecommendedMentalHealth == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "01");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "01-Mental Health";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "01-Mental Health";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedPhysicalHealth == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "02");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "02-Physical Health";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "02-Physical Health";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedVocation == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "03");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "03-Vocational";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "03-Vocational";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedSchool == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "04");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "04-School";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "04-School";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedRecreational == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "05");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "05-Recreational ";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "05-Recreational ";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedActivities == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "06");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "06-Activities of Daily Living ";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "06-Activities of Daily Living ";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedHousing == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "07");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "07-Housing";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "07-Housing";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedEconomic == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "08");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "08-Economic";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "08-Economic";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedBasicNeed == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "09");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "09-Basic Needs";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "09-Basic Needs";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedTransportation == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "10");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "10-Transportation";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "10-Transportation";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedLegalImmigration == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "11");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "11-Legal";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "11-Legal";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+                if (assessment.RecommendedOther == true)
+                {
+                    TCMDomainEntity domain = domains.FirstOrDefault(n => n.Code == "12");
+                    if (domain != null)
+                    {
+                        auditServicePlan.Name = "12-Other";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 2;
+                    }
+                    else
+                    {
+                        auditServicePlan.Name = "12-Other";
+                        auditServicePlan.Description = "Assessment";
+                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Active = 0;
+                    }
+                    auditServicePlan_List.Add(auditServicePlan);
+                    auditServicePlan = new AuditTCMServicePlan();
+                }
+            }
+           
+            return View(auditServicePlan_List);
+        }
     }
 }

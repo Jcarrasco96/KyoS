@@ -412,7 +412,8 @@
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>
-                                    <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>
+                                    <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>                              
+                                    <li>@Html.ActionLink("Supervision Calendar", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                                 </ul>
                             </li>
                         }
@@ -709,7 +710,7 @@
                                         <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Supervision", "TCMSupervisionTime", "TCMSupervisors")</li>
+                                <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -824,7 +825,7 @@
                             <ul class="dropdown-menu" role="menu">
 
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Cases</a>
+                                    <a class="test" tabindex="-1" href="#">General</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Not Started", "GetCaseNotServicePlan", "TCMClients")</li>
                                         <li>@Html.ActionLink("Opened", "GetCaseOpen", "TCMClients")</li>
@@ -840,7 +841,7 @@
                                         <li>@Html.ActionLink("Authorizations", "UnitsAvailability", "HealthInsurances", new { agency = 1 })</li>
                                     </ul>
                                 </li>
-
+                                <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

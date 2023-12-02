@@ -125,7 +125,7 @@
 </pre>
 </div>
 <div class="col-md-12">
-    @if (Model.Client.Clinic.Setting.SupervisorEdit == true)
+    @if (Model.Client.Clinic.Setting.SupervisorEdit == true && Model.Status == KyoS.Common.Enums.BioStatus.Pending && User.IsInRole("Supervisor"))
     {
     <pre>
 <strong>7. PSYCHOSOCIAL HISTORY</strong>
@@ -223,7 +223,7 @@
     </pre>
 </div>
 <div class="col-md-12">
-    @if (Model.Client.Clinic.Setting.SupervisorEdit == true)
+    @if (Model.Client.Clinic.Setting.SupervisorEdit == true && Model.Status == KyoS.Common.Enums.BioStatus.Pending && User.IsInRole("Supervisor"))
     {
     <pre>
 <strong>12. TREATMENT NEEDS:</strong> (use client’s own words)

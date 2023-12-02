@@ -15,7 +15,7 @@
         <input type="hidden" asp-for="EndTime" />
         @if (User.IsInRole("TCMSupervisor"))
         {
-           
+
             <input type="hidden" asp-for="IdTCMDomain" />
             <input type="hidden" asp-for="IdTCMActivity" />
         }
@@ -58,7 +58,7 @@
         <div>
             <div class=" col-md-3 form-group">
                 <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control" ></select>
+                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
                 <span asp-validation-for="IdSetting" class="text-danger"></span>
             </div>
         </div>
@@ -81,7 +81,7 @@
         }
         else
         {
-           <div>
+            <div>
                 <div class=" col-md-6 form-group">
                     <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
                     <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>
@@ -96,6 +96,13 @@
                 </div>
             </div>
         }
+        <div>
+            <div class=" col-md-12 form-group">
+                <label asp-for="SubService" class="control-label">Name Sub-Service in domain selected</label>
+                <textarea asp-for="SubService" class="form-control" rows="1" readonly id="cbSubService"></textarea>
+                <span asp-validation-for="SubService" class="text-danger"></span>
+            </div>
+        </div>
         <div>
             <div class=" col-md-12 form-group">
                 <label asp-for="NeedIdentified" class="control-label">Need Identified in domain selected</label>
@@ -158,7 +165,10 @@
             $("#cbActivities").empty();
             $.each(data, function (index, row) { $("#cbActivities").append("<option value='" + row.value + "'>" + row.text + "</option>") });
 
-             url = "@Url.Action("GetNeedIdentified", "TCMNotes")";
+             url = "@Url.Action("GetSubService", "TCMServices")";
+            $.get(url, { idDomain: $("#cbDomain").val() }, function (data) { $("#cbSubService").text(data); });
+
+              url = "@Url.Action("GetNeedIdentified", "TCMNotes")";
             $.get(url, { idDomain: $("#cbDomain").val() }, function (data) { $("#cbNeed").text(data); });
 
             //actualizo el label con la sugerencia de la actividad

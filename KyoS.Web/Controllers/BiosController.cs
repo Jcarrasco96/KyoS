@@ -1862,7 +1862,7 @@ namespace KyoS.Web.Controllers
             bio.DateSignatureSupervisor = model.DateSignatureSupervisor;
             bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
 
-            if (bio.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            if (bio.Client.Clinic.Setting.SupervisorEdit == true)
             {
                 //section2
                 bio.PresentingProblem = model.PresentingProblem;

@@ -822,9 +822,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
             List<TCMServiceEntity> tcmservices = await _context.TCMServices
-                                   .Include(m => m.TCMSubServices)
-                                   .OrderBy(f => f.Code)
-                                   .ToListAsync();
+                                                               .Include(m => m.TCMSubServices)
+                                                               .OrderBy(f => f.Code)
+                                                               .ToListAsync();
 
             return View(tcmservices);
         }
@@ -976,6 +976,17 @@ namespace KyoS.Web.Controllers
                 });
             }
             return Json(new SelectList(subServices, "Id", "Name"));
+        }
+
+        public JsonResult GetSubService(int idDomain)
+        {
+            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(o => o.Id == idDomain);
+            string text = "Select Domain";
+            if (domain != null)
+            {
+                text = domain.NameSubService;
+            }
+            return Json(text);
         }
     }
 }

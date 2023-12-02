@@ -68,6 +68,13 @@
         </div>
         <div>
             <div class=" col-md-12 form-group">
+                <label asp-for="SubService" class="control-label">Name Sub-Service in domain selected</label>
+                <textarea asp-for="SubService" class="form-control" rows="1" readonly id="cbSubService"></textarea>
+                <span asp-validation-for="SubService" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class=" col-md-12 form-group">
                 <label asp-for="NeedIdentified" class="control-label">Need Identified in domain selected</label>
                 <textarea asp-for="NeedIdentified" class="form-control" rows="2" readonly id="cbNeed"></textarea>
                 <span asp-validation-for="NeedIdentified" class="text-danger"></span>
@@ -130,6 +137,9 @@
             $.each(data, function (index, row) {
                 $("#cbActivities").append("<option value='" + row.value + "'>" + row.text + "</option>")
             });
+
+                url = "@Url.Action("GetSubService", "TCMServices")";
+            $.get(url, { idDomain: $("#cbDomain").val() }, function (data) { $("#cbSubService").text(data); });
 
             url = "@Url.Action("GetNeedIdentified", "TCMNotes")";
             $.get(url, { idDomain: $("#cbDomain").val() }, function (data) { $("#cbNeed").text(data); });
