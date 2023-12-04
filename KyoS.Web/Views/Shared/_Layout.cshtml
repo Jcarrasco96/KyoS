@@ -131,7 +131,7 @@
                                 General <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Settings" asp-action="EditSettingManager">Clinic</a></li>
+                                <li><a asp-area="" asp-controller="Settings" asp-action="EditSettingManager">My Clinic</a></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
@@ -412,7 +412,7 @@
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>
-                                    <li>@Html.ActionLink("Dates locked", "Index", "TCMDateBlockeds")</li>
+                                    <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>                              
                                     <li>@Html.ActionLink("Supervision Calendar", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                                 </ul>
                             </li>
@@ -918,7 +918,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Activities for services", "ServiceActivity", "TCMServices")</li>
-                                <li>@Html.ActionLink("Dates blocked", "Index", "TCMDateBlockeds")</li>
+                                <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>

@@ -1338,12 +1338,12 @@ jQueryAjaxPostReferred = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-referreds').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)

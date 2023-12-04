@@ -12,23 +12,23 @@
                     <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
                         <thead>
                             <tr>
-                                <th class="col-md-2">
+                                <th class="col-md-3">
                                     Name
                                 </th>
-                                <th class="col-md-1">
+                                <th class="col-md-1" style="text-align:center;">
                                     Service
                                 </th>
                                 <th class="col-md-1">
                                     Member ID
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Approved Date
+                                    Approved
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Expired Date
+                                    Expired
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
-                                    Authorization Number
+                                <th class="col-md-1" style="text-align:center;">
+                                    Auth Number
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Active
@@ -47,7 +47,7 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.Agency)
                                     </td>
                                      <td>

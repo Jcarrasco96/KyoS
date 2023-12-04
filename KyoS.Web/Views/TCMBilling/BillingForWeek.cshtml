@@ -43,15 +43,13 @@
             &nbsp;
         </div>
         <div class="col-md-12">
-            @*<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>
-                <button type="submit" asp-route-billed="0" class="btn btn-success"><i class="icon-usd"></i> Bill</button>*@
             <button type="submit" asp-route-billed="2" class="btn btn-success"><i class="icon-usd"></i> Billed</button>
             <button type="submit" asp-route-billed="1" class="btn btn-danger"><i class="icon-usd "></i> No Billed</button>
             <button type="submit" asp-route-billed="3" class="btn btn-info"><i class="icon-usd "></i> Payment Pending</button>
         </div>
     </form>
     <div class="col-md-12">
-        </br>
+        <hr/>
     </div>
     @if (User.IsInRole("Manager"))
     {
@@ -59,15 +57,15 @@
             <div class="col-md-3">
                 &nbsp;
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <center>
-                    <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update Bill"><i class="glyphicon glyphicon-refresh"></i> Update services pending billing</a>
-                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=0 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
-                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=1 class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export All Report</a>
+                    <a asp-action="UpdateBill" asp-route-billed="1" class="btn btn-warning" title="Update pending services for billing"><i class="glyphicon glyphicon-refresh"></i> Update pending services</a>
+                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=0 class="btn btn-success" title="Export Unbilled Report to Excel"><i class="glyphicon glyphicon-download-alt"></i> Export Unbilled Report</a>
+                    <a asp-action="EXCEL" asp-route-dateInterval="@Model.DateIterval" asp-route-all=1 class="btn btn-success" title="Export All Report to Excel"><i class="glyphicon glyphicon-download-alt"></i> Export All Report</a>
                     <hr />
                 </center>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 &nbsp;
             </div>
         </div>

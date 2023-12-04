@@ -11,8 +11,8 @@
         <input type="hidden" asp-for="CreatedOn" />
         <input type="hidden" asp-for="CreatedBy" />
         <input type="hidden" asp-for="IdClient" />
-        <div class="col-md-12">
-            <div class="col-md-6">
+        <div class="form-group col-md-12">
+            <div class="col-md-5">
                 <label asp-for="Id_Referred" class="control-label"></label>
                 <select asp-for="Id_Referred" asp-items="Model.Referreds" class="form-control" id="Code_Name" onchange="getCode();"></select>
                 <span asp-validation-for="Id_Referred" class="text-danger"></span>
@@ -27,26 +27,29 @@
                 <select asp-for="IdServiceAgency" asp-items="Model.ServiceAgency" class="form-control"></select>
                 <span asp-validation-for="IdServiceAgency" class="text-danger"></span>
             </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
         </div>
-        <div class="col-md-12">
-            <div class="col-md-4">
+        <div class="form-group col-md-12">
+            <div class="col-md-5">
                 <label asp-for="Name" class="control-label"></label>
                 <textarea asp-for="Name" id="lbName" class="form-control" rows="1" readonly />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label asp-for="Title" class="control-label"></label>
                 <textarea asp-for="Title" id="lbTitle" class="form-control" rows="1" readonly />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label asp-for="Agency" class="control-label"></label>
                 <textarea asp-for="Agency" id="lbAgency" class="form-control" rows="1" readonly />
                 <span asp-validation-for="Agency" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="col-md-9">
+        <div class="form-group col-md-12">
+            <div class="col-md-5">
                 <label asp-for="Address" class="control-label"></label>
                 <textarea asp-for="Address" id="lbAddress" class="form-control" rows="1" readonly />
                 <span asp-validation-for="Address" class="text-danger"></span>
@@ -56,25 +59,26 @@
                 <textarea asp-for="Telephone" id="lbPhone" class="form-control" rows="1" readonly />
                 <span asp-validation-for="Telephone" class="text-danger"></span>
             </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
         </div>
-        <div class="col-md-12">
+        <div class="form-group col-md-12">
             <div class="col-md-12">
-                <label asp-for="ReferredNote" class="control-label"></label>
+                <label asp-for="ReferredNote" class="control-label">Referred Note</label>
                 <textarea asp-for="ReferredNote" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="ReferredNote" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-12">
             &nbsp;
-        </div>
-        <div class="">
-            <div class="">
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                </div>
+        </div>        
+        <div class="col-md-12">
+            <div class="col-md-offset-10">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>                    
             </div>
-        </div>
+        </div>        
     </form>
 </div>
 
