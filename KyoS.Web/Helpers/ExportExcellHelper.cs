@@ -1173,29 +1173,48 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 9).Value = item.TCMNoteActivity.Sum(n => n.Minutes);
                     int temp = 0;
                     int temp1 = 0;
-                    foreach (var product in item.TCMNoteActivity)
+                    /* foreach (var product in item.TCMNoteActivity)
+                     {
+                         valor = product.Minutes / 15;
+                         residuo = product.Minutes % 15;
+                         valorAumentado = valor + 1;
+
+                         if (residuo > 7)
+                         {
+                             temp += valorAumentado;
+                             temp1 += (valorAumentado * 12);
+                             unit_total = unit_total + valorAumentado;
+                             amount = amount + (valorAumentado * 12);
+
+                         }
+                         else
+                         {
+                             temp += valor;
+                             temp1 += (valor * 12);
+                             unit_total = unit_total + valor;
+                             amount = amount + (valor * 12);
+                         }
+                        
+                    }*/
+                    valor = item.TCMNoteActivity.Sum(n => n.Minutes) / 15;
+                    residuo = item.TCMNoteActivity.Sum(n => n.Minutes) % 15;
+                    valorAumentado = valor + 1;
+
+                    if (residuo > 7)
                     {
-                        valor = product.Minutes / 15;
-                        residuo = product.Minutes % 15;
-                        valorAumentado = valor + 1;
-
-                        if (residuo > 7)
-                        {
-                            temp += valorAumentado;
-                            temp1 += (valorAumentado * 12);
-                            unit_total = unit_total + valorAumentado;
-                            amount = amount + (valorAumentado * 12);
-
-                        }
-                        else
-                        {
-                            temp += valor;
-                            temp1 += (valor * 12);
-                            unit_total = unit_total + valor;
-                            amount = amount + (valor * 12);
-                        }
-
+                        temp = valorAumentado;
+                        temp1 = temp * 12;
+                        unit_total = unit_total + temp;
+                        amount = amount + temp1;
                     }
+                    else
+                    {
+                        temp = valor;
+                        temp1 = temp * 12;
+                        unit_total = unit_total + temp;
+                        amount = amount + temp1;
+                    }
+
                     worksheet.Cell(currentRow, 10).Value = temp;
                     worksheet.Cell(currentRow, 11).Value = temp1;
 
@@ -1305,28 +1324,28 @@ namespace KyoS.Web.Helpers
                     worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
-                    worksheet.Cell(3, 13).Value = data;
-                    worksheet.Cell(3, 13).Style.Font.FontColor = XLColor.Red;
-                    worksheet.Cell(3, 13).Style.Font.FontSize = 16;
-                    worksheet.Cell(3, 13).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(3, 11).Value = data;
+                    worksheet.Cell(3, 11).Style.Font.FontColor = XLColor.Red;
+                    worksheet.Cell(3, 11).Style.Font.FontSize = 16;
+                    worksheet.Cell(3, 11).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(3, 1).Value = "SUPERBILL";
                     worksheet.Cell(3, 1).Style.Font.FontColor = XLColor.BlueGray;
                     worksheet.Cell(3, 1).Style.Font.FontSize = 16;
                     worksheet.Cell(3, 1).Style.Font.Bold = true;
                     worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 13).Address);
+                    IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 11).Address);
                     range11.Style.Font.FontSize = 18;
                     range11.Style.Font.Bold = false;
                     range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                     range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     range11.Merge();
-                    IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 13).Address);
+                    IXLRange range21 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 11).Address);
                     range21.Style.Font.FontSize = 16;
                     range21.Style.Font.Bold = false;
                     range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     range21.Merge();
-                    IXLRange range31 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 12).Address);
+                    IXLRange range31 = worksheet.Range(worksheet.Cell(3, 2).Address, worksheet.Cell(3, 10).Address);
                     range31.Style.Font.FontSize = 14;
                     range31.Style.Font.Bold = false;
                     range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -1342,13 +1361,13 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 7).Value = "Date";
                     worksheet.Cell(currentRow, 8).Value = "Setting";
                     worksheet.Cell(currentRow, 9).Value = "Minutes";
-                    worksheet.Cell(currentRow, 10).Value = "Units";
-                    worksheet.Cell(currentRow, 11).Value = "Amount";
-                    worksheet.Cell(currentRow, 12).Value = "CaseManager";
-                    worksheet.Cell(currentRow, 13).Value = "Status Bill";
+                    //worksheet.Cell(currentRow, 10).Value = "Units";
+                    //worksheet.Cell(currentRow, 11).Value = "Amount";
+                    worksheet.Cell(currentRow, 10).Value = "CaseManager";
+                    worksheet.Cell(currentRow, 11).Value = "Status Bill";
 
 
-                    IXLRange range0 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 13).Address);
+                    IXLRange range0 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 11).Address);
                     range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                     range0.SetAutoFilter();
                     range0.Style.Font.Bold = true;
@@ -1362,10 +1381,6 @@ namespace KyoS.Web.Helpers
 
                     foreach (var product in item)
                     {
-                        int valor1 = 0;
-                        int residuo1 = 0;
-                        int valorAumentado1 = 0;
-
                         foreach (var activity in product.TCMNoteActivity)
                         {
                            
@@ -1405,7 +1420,7 @@ namespace KyoS.Web.Helpers
                             worksheet.Cell(currentRow, 8).Value = activity.Setting;
                             worksheet.Cell(currentRow, 9).Value = activity.Minutes;
 
-                            valor1 = activity.Minutes / 15;
+                            /*valor1 = activity.Minutes / 15;
                             residuo1 = activity.Minutes % 15;
                             valorAumentado1 = valor1 + 1;
 
@@ -1424,38 +1439,38 @@ namespace KyoS.Web.Helpers
                                 unit_total1 = unit_total1 + valor1;
                                 amount1 = amount1 + (valor1 * 12);
                             }
-
-                            worksheet.Cell(currentRow, 12).Value = product.TCMClient.Casemanager.Name;
+                            */
+                            worksheet.Cell(currentRow, 10).Value = product.TCMClient.Casemanager.Name;
                             if (product.DeniedBill == true)
                             {
-                                worksheet.Cell(currentRow, 13).Value = "Denied";
-                                worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Red);
+                                worksheet.Cell(currentRow, 11).Value = "Denied";
+                                worksheet.Cell(currentRow, 11).Style.Fill.SetBackgroundColor(XLColor.Red);
                             }
                             else
                             {
                                 if (product.BilledDate != null && product.PaymentDate != null)
                                 {
-                                    worksheet.Cell(currentRow, 13).Value = "Paid";
-                                    worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.Green);
+                                    worksheet.Cell(currentRow, 11).Value = "Paid";
+                                    worksheet.Cell(currentRow, 11).Style.Fill.SetBackgroundColor(XLColor.Green);
                                 }
                                 else
                                 {
                                     if (product.BilledDate != null && product.PaymentDate == null)
                                     {
-                                        worksheet.Cell(currentRow, 13).Value = "Pending";
-                                        worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                        worksheet.Cell(currentRow, 11).Value = "Pending";
+                                        worksheet.Cell(currentRow, 11).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
                                     }
                                     else
                                     {
-                                        worksheet.Cell(currentRow, 13).Value = "Not Billed";
-                                        worksheet.Cell(currentRow, 13).Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                                        worksheet.Cell(currentRow, 11).Value = "Not Billed";
+                                        worksheet.Cell(currentRow, 11).Style.Fill.SetBackgroundColor(XLColor.LightGray);
                                     }
                                 }
                             }
 
                         }
 
-                        IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 13).Address);
+                        IXLRange rangeCurrent = worksheet.Range(worksheet.Cell(currentRow, 1).Address, worksheet.Cell(currentRow, 9).Address);
                         rangeCurrent.Style.Font.FontSize = 11;
                         rangeCurrent.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         rangeCurrent.Style.Font.Bold = false;
@@ -1463,10 +1478,10 @@ namespace KyoS.Web.Helpers
                         worksheet.Cell(5, 1).Value = codes.Count() + " Client";
                         worksheet.Cell(5, 7).Value = item.Sum(m => m.TCMNoteActivity.Count()) + " Services";
                         worksheet.Cell(5, 9).Value = item.Sum(n => n.TCMNoteActivity.Sum(m => m.Minutes));
-                        worksheet.Cell(5, 10).Value = unit_total1;
-                        worksheet.Cell(5, 11).Value = "$ " + amount1;
-                        worksheet.Cell(5, 12).Value = facilitators.Count() + " CaseManager";
-                        IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 12).Address);
+                        //worksheet.Cell(5, 10).Value = unit_total1;
+                        //worksheet.Cell(5, 11).Value = "$ " + amount1;
+                        worksheet.Cell(5, 10).Value = facilitators.Count() + " CaseManager";
+                        IXLRange rangeTotal = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 10).Address);
                         rangeTotal.Style.Font.FontSize = 12;
                         rangeTotal.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         rangeTotal.Style.Font.Bold = true;
