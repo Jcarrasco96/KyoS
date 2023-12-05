@@ -78,25 +78,25 @@
 
     Has the client visited a physician in the last two years?
     <input type="checkbox" asp-for="HasTheClientVisitedPhysician" class="form-check-input" id="check9"> Yes   <input type="checkbox" class="form-check-input" id="check109"> No  (if no, provide client with education on preventive health measures and offer to refer to a physician) 
-    If yes, give reason and date:  <input asp-for="HasTheClientVisitedPhysician_Reason" style="width:20%">      <input asp-for="HasTheClientVisitedPhysician_Date" style="width:10%"><br />
+    If yes, give reason and date:  <input asp-for="HasTheClientVisitedPhysician_Reason" style="width:20%" id="HasTheClientVisitedPhysician_Reason">      <input asp-for="HasTheClientVisitedPhysician_Date" style="width:10%" id="HasTheClientVisitedPhysician_Date"><br />
 
     <strong>Name of Primary Care physician:</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Name)</u></strong>      <strong>Phone</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Telephone)</u></strong>
     <strong>Address</strong>  <strong><u>@Html.DisplayFor(modelItem => Model.Client.Doctor.Address)</u></strong>
 
-    Does the client experience any pain?  <input type="checkbox" asp-for="DoesTheClientExperience" class="form-check-input" id="check10"> Yes  <input type="checkbox" class="form-check-input" id="check110"> No    If yes, specify where? <input asp-for="DoesTheClientExperience_Where" style="width:30%">
+    Does the client experience any pain?  <input type="checkbox" asp-for="DoesTheClientExperience" class="form-check-input" id="check10"> Yes  <input type="checkbox" class="form-check-input" id="check110"> No    If yes, specify where? <input asp-for="DoesTheClientExperience_Where" style="width:30%" id="DoesTheClientExperience_Where">
 
-    For how long (including frequency of pain)?              <input asp-for="ForHowLong" style="width:10%">
+    For how long (including frequency of pain)?              <input asp-for="ForHowLong" style="width:10%" id="ForHowLong">
 
-    Please rate pain from 1 (no pain) to 10 (intense pain)   <input asp-for="PleaseRatePain" style="width:10%">
+    Please rate pain from 1 (no pain) to 10 (intense pain)   <input asp-for="PleaseRatePain" style="width:10%" id="PleaseRatePain">
 
     Has a client been treated for pain? <input type="checkbox" asp-for="HasClientBeenTreatedPain" class="form-check-input" id="check11"> Yes  <input type="checkbox" class="form-check-input" id="check111"> No 
-    Please include services that client is receiving for pain (if any): <input asp-for="HasClientBeenTreatedPain_PleaseIncludeService" style="width:30%">
+    Please include services that client is receiving for pain (if any): <input asp-for="HasClientBeenTreatedPain_PleaseIncludeService" style="width:30%" id="HasClientBeenTreatedPain_PleaseIncludeService">
 
-    If not, describe referral to Primary Care Physician/ Specialist or case manager for follow up: <input asp-for="HasClientBeenTreatedPain_Ifnot" style="width:20%">
+    If not, describe referral to Primary Care Physician/ Specialist or case manager for follow up: <input asp-for="HasClientBeenTreatedPain_Ifnot" style="width:20%" id="HasClientBeenTreatedPain_Ifnot">
 
-    Where: <input asp-for="HasClientBeenTreatedPain_Where" style="width:60%">
+    Where: <input asp-for="HasClientBeenTreatedPain_Where" style="width:60%" id="HasClientBeenTreatedPain_Where">
 
-    <input type="checkbox" asp-for="ObtainReleaseInformation" class="form-check-input"> Obtain release of information so care can be coordinated <br />
+    <input type="checkbox" asp-for="ObtainReleaseInformation" class="form-check-input" id="ObtainReleaseInformation"> Obtain release of information so care can be coordinated <br />
 
     <strong>A. Nutritional Risk Assessment: </strong>(Directions: Indicate with Yes to Assessment, then total SCORE to determine addition risk)
 
@@ -118,10 +118,10 @@
     <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
     <strong>6> High risk. Coordinate. </strong>with physician, dietitian, social service professional or RN about how to improve nutritional health 
                 
-    IF 6 OR HIGHER, REFERRED TO <input asp-for="If6_ReferredTo" style="width:30%">   DATE: <input asp-for="If6_Date" style="width:10%">
+    IF 6 OR HIGHER, REFERRED TO <input asp-for="If6_ReferredTo" style="width:30%" id="If6_ReferredTo">   DATE: <input asp-for="If6_Date" style="width:10%" id="If6_Date">
                 
     <strong>NUTRITONIAL STATUS</strong>               
-    APPETITE <select asp-for="IdAppetite" asp-items="Model.Appetite_Status"></select>     HYDRATATION <select asp-for="IdHydratation" asp-items="Model.Hydratation_Status"></select>     RECENT WEIGHT CHANGE <select asp-for="IdRecentWeight" asp-items="Model.RecentWeight_Status"></select>
+    APPETITE <select asp-for="IdAppetite" asp-items="Model.Appetite_Status" id="IdAppetite"></select>     HYDRATATION <select asp-for="IdHydratation" asp-items="Model.Hydratation_Status" id="IdHydratation"></select>     RECENT WEIGHT CHANGE <select asp-for="IdRecentWeight" asp-items="Model.RecentWeight_Status" id="IdRecentWeight"></select>
     <span asp-validation-for="IdAppetite" class="text-danger"></span>          <span asp-validation-for="IdHydratation" class="text-danger"></span>              <span asp-validation-for="IdRecentWeight" class="text-danger"></span>     
 </pre>
 </div>
@@ -130,35 +130,35 @@
 <strong>7. PSYCHOSOCIAL HISTORY</strong>
 
     Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
-    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2"></textarea>   
+    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" id="SubstanceAbuse"></textarea>   
     <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28"> YES  <input type="checkbox" class="form-check-input" id="check128"> NO
-    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="2"></textarea>   
+    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:90%" rows="2" id="MilitaryServiceHistory_Explain"></textarea>   
     <strong>VOCATIONAL ASSESMENT:</strong>
-    <textarea asp-for="VocationalAssesment" style="width:90%" rows="4"></textarea>     
+    <textarea asp-for="VocationalAssesment" style="width:90%" rows="4" id="VocationalAssesment"></textarea>     
     Legal History (specifying changes, date, convictions and incarcerations):
-    <textarea asp-for="LegalHistory" style="width:90%" rows="2"></textarea>  
+    <textarea asp-for="LegalHistory" style="width:90%" rows="2" id="LegalHistory"></textarea>  
     Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
-    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2"></textarea>  
+    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2" id="PersonalFamilyPsychiatric"></textarea>  
         
-    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input"> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%">
+    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input" id="DoesClientRequired"> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%" id="DoesClientRequired_Where">
 
-    <input type="checkbox" asp-for="ObtainReleaseInformation7" class="form-check-input"> Obtain release of information so care can be coordinated.
+    <input type="checkbox" asp-for="ObtainReleaseInformation7" class="form-check-input" id="ObtainReleaseInformation7"> Obtain release of information so care can be coordinated.
     </pre>
 </div>
 <div class="col-md-12">
     <pre>
 <strong>8. BACKGROUND, SOCIAL AND EDUCATIONAL </strong>
 
-    Place of Birth: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PlaceOfBirth)</u></strong>                    <input type="checkbox" asp-for="IfForeing_Born" class="form-check-input"> if foreign-Born, age/date of arrival to US: <input asp-for="IfForeing_AgeArrival" style="width:10%"> / <input asp-for="IfForeing_YearArrival" style="width:10%">
+    Place of Birth: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PlaceOfBirth)</u></strong>                    <input type="checkbox" asp-for="IfForeing_Born" class="form-check-input" id="IfForeing_Born"> if foreign-Born, age/date of arrival to US: <input asp-for="IfForeing_AgeArrival" style="width:10%" id="IfForeing_AgeArrival"> / <input asp-for="IfForeing_YearArrival" style="width:10%" id="IfForeing_YearArrival">
 
-    Primary location where client was raised: <input asp-for="PrimaryLocation" style="width:10%">
+    Primary location where client was raised: <input asp-for="PrimaryLocation" style="width:10%" id="PrimaryLocation">
 
     General description of childhood/adolescence:
-    <textarea asp-for="GeneralDescription" style="width:90%" rows="2"></textarea>   
+    <textarea asp-for="GeneralDescription" style="width:90%" rows="2" id="GeneralDescription"></textarea>   
     Adult and current experience: (include work history/ leisure activities and interest)  
-    <textarea asp-for="AdultCurrentExperience" style="width:90%" rows="2"></textarea>   
+    <textarea asp-for="AdultCurrentExperience" style="width:90%" rows="2" id="AdultCurrentExperience"></textarea>   
     What is the client`s/family beliefs and important spiritual practices? (Include how these beliefs assist client in dealing with stressor)
-    <textarea asp-for="WhatIsTheClient" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="WhatIsTheClient" style="width:90%" rows="2" id="WhatIsTheClient"></textarea> 
     </pre>
 </div>
 <div class="col-md-12">
@@ -166,15 +166,15 @@
 <strong>9. FAMILY EXPERIENCE: </strong> (if child is under 16, skip to 10)
 
     Relationship with family, friends, romantic interests:
-    <textarea asp-for="RelationshipWithFamily" style="width:90%" rows="2"></textarea>   
+    <textarea asp-for="RelationshipWithFamily" style="width:90%" rows="2" id="RelationshipWithFamily"></textarea>   
     Number of children (specify name or gender and current age)
-    <textarea asp-for="Children" style="width:90%" rows="2"></textarea> 
+    <textarea asp-for="Children" style="width:90%" rows="2" id="Children"></textarea> 
         Marital Status:  <strong><u>@Html.DisplayFor(modelItem => Model.Client.MaritalStatus)</u></strong> 
-        •	If Married or Cohabitating, how long:               <input asp-for="IfMarried" style="width:10%">
+        •	If Married or Cohabitating, how long:               <input asp-for="IfMarried" style="width:10%" id="IfMarried">
 
-        •	If Separated, Divorce, or Widowed, how long:        <input asp-for="IfSeparated" style="width:10%">
+        •	If Separated, Divorce, or Widowed, how long:        <input asp-for="IfSeparated" style="width:10%" id="IfSeparated">
 
-        •	If sexually active, is client aware of risk regarding Sexual Transmitted Diseases:    <select asp-for="IdIfSexuallyActive" asp-items="Model.IfSexuallyActive_Status"></select>
+        •	If sexually active, is client aware of risk regarding Sexual Transmitted Diseases:    <select asp-for="IdIfSexuallyActive" asp-items="Model.IfSexuallyActive_Status" id="IdIfSexuallyActive"></select>
         •	If “No” please educate client as to risk of sexually transmitted diseases.      <span asp-validation-for="IdIfSexuallyActive" class="text-danger"></span> 
     </pre>
 </div>
