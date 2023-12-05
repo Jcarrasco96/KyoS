@@ -2696,6 +2696,21 @@ namespace KyoS.Web.Controllers
                 bio.IfMarried = model.IfMarried;
                 bio.IfSeparated = model.IfSeparated;
                 bio.IfSexuallyActive = model.IfSexuallyActive;
+                bio.PleaseProvideGoal = model.PleaseProvideGoal;
+                bio.DoYouHaveAnyReligious = model.DoYouHaveAnyReligious;
+                bio.DoYouHaveAnyVisual = model.DoYouHaveAnyVisual;
+                bio.HigHestEducation = model.HigHestEducation;
+                bio.DoYouHaveAnyPhysical = model.DoYouHaveAnyPhysical;
+                bio.CanClientFollow = model.CanClientFollow;
+                bio.ProvideIntegratedSummary = model.ProvideIntegratedSummary;
+                bio.TreatmentNeeds = model.TreatmentNeeds;
+                bio.Treatmentrecomendations = model.Treatmentrecomendations;
+                bio.IConcurWhitDiagnistic = model.IConcurWhitDiagnistic;
+                bio.AlternativeDiagnosis = model.AlternativeDiagnosis;
+                if(User.IsInRole("Supervisor"))                
+                    bio.DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner;                
+                else                
+                    bio.DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist;                
 
                 _context.Update(bio);
                 try
