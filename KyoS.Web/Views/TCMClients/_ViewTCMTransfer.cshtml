@@ -1,0 +1,218 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMTransferEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+         <div class="panel panel-default">
+             <div class="panel-heading">
+                 <h3 class="panel-title">TCM Transfers</h3>
+             </div>
+             <div class="panel-body">
+                 <table class="table table-hover table-responsive table-striped" id="MyTable">
+                     <thead>
+                         <tr>
+                             <th class="col-md-2">
+                                 Client Name
+                             </th>
+                             <th class="col-md-2">
+                                 From
+                             </th>
+                             <th class="col-md-2">
+                                 To
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Status
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Start Date
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 End Date
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Return
+                             </th>
+                             <th class="col-md-2" style="text-align: center;">
+                             </th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                        @foreach (var item in Model)
+                         {
+                         <tr>
+                             <td>
+                                 @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                 {
+                                     <i class="glyphicon glyphicon-user btn-danger"></i>
+                                 }
+                                 @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                 {
+                                     <i class="glyphicon glyphicon-user btn-primary"></i>
+                                 }
+                                 &nbsp;
+                                 @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                             </td>
+                             <td>
+                                 @Html.DisplayFor(modelItem => item.TCMAssignedFrom.Name)
+                             </td>
+                             <td>
+                                 @Html.DisplayFor(modelItem => item.TCMAssignedTo.Name)
+                             </td>
+                             <td align="center">
+                                 @if (User.IsInRole("CaseManager"))
+                                 {
+                                     @if (item.TCMAssignedTo.Id.ToString() == ViewData["IdTCMLogin"].ToString())
+                                     {
+                                         @if (item.TCMAssignedToAccept == false)
+                                         {
+                                             <span class="label label-info">
+                                                 Pending
+                                             </span>
+                                         }
+                                         else
+                                         {
+                                             <span class="label label-success">
+                                                 Accepted
+                                             </span>
+                                         }
+                                     }
+                                     @if (item.TCMAssignedFrom.Id.ToString() == ViewData["IdTCMLogin"].ToString())
+                                     {
+                                         @if (item.TCMAssignedFromAccept == false)
+                                         {
+                                             <span class="label label-info">
+                                                 Pending
+                                             </span>
+                                         }
+                                         else
+                                         {
+                                             <span class="label label-success">
+                                                 Accepted
+                                             </span>
+                                         }
+                                     }
+                                 }
+                                 else
+                                 {
+                                     @if (item.TCMAssignedFromAccept == false || item.TCMAssignedToAccept == false)
+                                     {
+                                         <a onclick="showInPopup('@Url.Action("ViewPendingTransfer", "TCMClients", new {idtransfer = item.Id }, Context.Request.Scheme)','Transfer status')" class="btn btn-info" title="View Sign pending"><i class="glyphicon glyphicon-search"></i></a>
+                                     }
+                                     @if (item.TCMAssignedFromAccept == true && item.TCMAssignedToAccept == true)
+                                     {
+                                         <span class="label label-success">
+                                             Approved
+                                         </span>
+                                     }
+                                 }
+                             </td>
+                             <td align="center">
+                                 @Html.DisplayFor(modelItem => item.OpeningDateAssignedTo)
+                             </td>
+                             <td align="center">
+                                 @if (item.EndTransferDate >= DateTime.Today)
+                                 {
+                                     <span class="label label-warning">
+                                         @Html.DisplayFor(modelItem => item.EndTransferDate)
+                                     </span>
+                                 }
+                                 else
+                                 {
+                                     @if (item.Return == true)
+                                     {
+                                        <span class="label label-success">
+                                             @Html.DisplayFor(modelItem => item.EndTransferDate)
+                                        </span>
+                                     }
+                                     else
+                                     { 
+                                        <span class="label label-danger">
+                                           @Html.DisplayFor(modelItem => item.EndTransferDate)
+                                        </span>
+                                     }
+                                 }
+                             </td>
+                             <td align="center">
+                                 @Html.DisplayFor(modelItem => item.Return)
+                             </td>
+                             <td align="right">
+                                 @if (User.IsInRole("TCMSupervisor"))
+                                 {
+                                     @if (item.TCMAssignedFromAccept == true && item.TCMAssignedToAccept == true)
+                                     {
+                                         @if (item.Return == false)
+                                         {
+                                             <a onclick="showInPopup('@Url.Action("ReturnTransfer", "TCMClients", new {idtransfer = item.Id }, Context.Request.Scheme)','Return transfer')" class="btn btn-warning" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a onclick="showInPopup('@Url.Action("ReturnTransfer", "TCMClients", new {idtransfer = item.Id }, Context.Request.Scheme)','Return transfer')" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                         }
+
+                                         <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                         <a asp-action="EditTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="Edit Transfer"><i class="glyphicon glyphicon-pencil"></i></a>
+                                     }
+
+                                 }
+                                 else
+                                 {
+                                     @if (User.IsInRole("CaseManager"))
+                                     {
+                                         @if (item.TCMAssignedTo.Id.ToString() == ViewData["IdTCMLogin"].ToString())
+                                         {
+                                             @if (item.TCMAssignedToAccept == false)
+                                             {
+                                                 <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="AcceptTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="Accept Transfer"><i class="glyphicon glyphicon-ok"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                             }
+                                         }
+                                         @if (item.TCMAssignedFrom.Id.ToString() == ViewData["IdTCMLogin"].ToString())
+                                         {
+                                             @if (item.TCMAssignedFromAccept == false)
+                                             {
+                                                 <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="AcceptTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="Accept Transfer"><i class="glyphicon glyphicon-ok"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                             }
+                                         }
+                                     }
+                                     else
+                                     {
+                                         @if (User.IsInRole("Manager"))
+                                         {
+                                             <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                             <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                         }
+                                     }
+                                 }
+                                 @if (item.TCMAssignedFromAccept == true && item.TCMAssignedToAccept == true)
+                                 {
+                                     <a asp-action="PrintTransfer" asp-controller="TCMClients" asp-route-id="@item.Id" class="btn btn-success" title="Print Transfer" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                 }
+                                 else
+                                 {
+                                     <a asp-action="PrintTransfer" asp-controller="TCMClients" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Transfer" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                 }
+                             </td>
+                         </tr>
+                         }
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+}
+

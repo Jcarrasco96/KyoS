@@ -1,0 +1,65 @@
+﻿@model KyoS.Web.Models.TCMTransferViewModel
+@{
+    ViewData["Title"] = "Create TCM Transfer";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Transfers", "Transfers", "TCMClients")
+            </li>
+            <li class="active">Create TCM Transfer</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Accept TCM Transfer</h4>
+    <hr />
+    <div class="row">
+        <form asp-action="AcceptTransfer" asp-route-id="@Model.Id" asp-route-from="@ViewData["From"]" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="IdTCMSupervisor" />
+            <input type="hidden" asp-for="IdCaseManagerFrom" />
+            <input type="hidden" asp-for="LegalGuardianName" />
+            <input type="hidden" asp-for="LegalGuardianPhone" />
+            <input type="hidden" asp-for="OpeningDate" />
+            <input type="hidden" asp-for="DateLastService" />
+            <input type="hidden" asp-for="DateServicePlanORLastSPR" />
+            <input type="hidden" asp-for="IdCaseManagerTo" />
+            @if (ViewData["From"].ToString() == "1")
+            {
+                <partial name="_TCMTransferAcceptFrom" />
+            }
+            else
+            {
+                <partial name="_TCMTransferAcceptTo" />
+            }
+            <div class="form-group col-md-12">
+                <input type="submit" value="Sign and Save" class="btn btn-primary" />
+                <a asp-action="Transfers" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+

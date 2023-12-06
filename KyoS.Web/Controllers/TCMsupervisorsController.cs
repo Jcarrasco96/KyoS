@@ -880,7 +880,7 @@ namespace KyoS.Web.Controllers
                 model = new TCMSupervisionTimeViewModel
                 {
                     IdCaseManager = 0,
-                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName)
+                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,0)
                 };
             }
             if (User.IsInRole("Manager"))

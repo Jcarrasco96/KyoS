@@ -2015,7 +2015,7 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user)
+        public IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user, int allClient = 0)
         {
             List<SelectListItem> list = _context.CaseManagers
 
@@ -2026,12 +2026,22 @@ namespace KyoS.Web.Helpers
                                                     Value = $"{c.Id}"
                                                 }).ToList();
 
-            list.Insert(0, new SelectListItem
+            if (allClient == 0)
             {
-                Text = "[All TCM...]",
-                Value = "0"
-            });
-
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All Clients...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select Client...]",
+                    Value = "0"
+                });
+            }
             return list;
         }
 
@@ -2051,7 +2061,7 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user)
+        public IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user, int allClient = 0)
         {
             List<SelectListItem> list = _context.TCMClient
                                                 .Include(n => n.Client)
@@ -2061,12 +2071,23 @@ namespace KyoS.Web.Helpers
                                                     Text = $"{c.Client.Name} ",
                                                     Value = $"{c.Id}"
                                                 }).ToList();
-
-            list.Insert(0, new SelectListItem
+            if (allClient == 0)
             {
-                Text = "[All Clients...]",
-                Value = "0"
-            });
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All Clients...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select Client...]",
+                    Value = "0"
+                });
+            }
+            
 
             return list;
         }
