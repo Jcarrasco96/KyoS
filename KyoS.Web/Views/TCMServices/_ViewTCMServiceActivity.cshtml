@@ -16,8 +16,8 @@
                                 <th class="col-md-1">
 
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
-                                    Service Code
+                                <th class="col-md-1" style="text-align:center;">
+                                    Code
                                 </th>
                                 <th class="col-md-2">
                                     Service Name
@@ -31,12 +31,12 @@
                                 <th class="col-md-1" style="text-align:center;">
                                     Units
                                 </th>
-                                <th class="col-md-1" style="text-align:center;">
+                                <th class="col-md-2" style="text-align:center;">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.OrderBy(n => n.Code))
                             {
                                 <tr>
                                     <td align="center">
@@ -59,7 +59,7 @@
                                                     <th class="col-md-1" style="text-align:center;">Status</th>
                                                     <th class="col-md-2" style="text-align:center;"></th>
                                                 </tr>
-                                                @foreach (var product in item.TCMServiceActivity)
+                                                @foreach (var product in item.TCMServiceActivity.OrderBy(n => n.Name))
                                                 {
                                                     <tr>
                                                         <td>@Html.DisplayFor(modelItem => product.Name)</td>
@@ -143,7 +143,8 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
                                         {
-                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activities"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("CopyActivity", "TCMServices", new { idServiceTo = item.Id }, Context.Request.Scheme)','Copy TCM Activity')" class="btn btn-primary" title="Copy Activity"><i class="glyphicon glyphicon-copy"></i></a>
                                         }
                                         else
                                         {

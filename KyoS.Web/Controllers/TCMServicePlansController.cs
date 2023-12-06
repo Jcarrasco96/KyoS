@@ -905,7 +905,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> DeleteDomain(int? id, int origin = 0, int aview = 0)
         {
             //TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans.Include(n => n.TcmClient).Include(n => n.TCMDomain.Where(m => m.Id == id)).FirstOrDefault();
@@ -951,10 +951,15 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateObjetive(int id = 0, int Origin = 0, int idAddendum = 0)
         {
-           
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             TCMObjetiveViewModel model = null;
             TCMDomainEntity tcmdomain = await _context.TCMDomains
                                                       .Include(g => g.TCMObjetive)
@@ -965,12 +970,8 @@ namespace KyoS.Web.Controllers
                                                       .ThenInclude(h => h.TcmClient)
                                                       .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
                 if (user_logged.Clinic != null)
                 {
 
@@ -1002,7 +1003,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateObjetive(TCMObjetiveViewModel tcmObjetiveViewModel, int Origin, int idAddendum = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1011,7 +1012,8 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(c => c.Setting)
 
                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager"))
+
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -1261,7 +1263,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> DeleteObjetive(int? id, int origi = 0, int aview = 0, int idAddendum = 0)
         {
             if (id == null)

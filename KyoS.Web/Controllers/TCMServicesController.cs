@@ -988,5 +988,71 @@ namespace KyoS.Web.Controllers
             }
             return Json(text);
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CopyActivity(int idServiceTo = 0)
+        {
+            TCMCopyActivityViewModel model;
+
+            model = new TCMCopyActivityViewModel
+            {
+                IdServiceFrom = 0,
+                IdServiceTo = idServiceTo,
+                Services = _combosHelper.GetComboTCMServices(),
+                TCMService = _context.TCMServices.FirstOrDefault(n => n.Id == idServiceTo)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CopyActivity(TCMCopyActivityViewModel tcmCopyActivityViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMServiceEntity tcmServiceFrom = await _context.TCMServices
+                                                        .Include(g => g.TCMServiceActivity)
+                                                        .FirstOrDefaultAsync(m => m.Id == tcmCopyActivityViewModel.IdServiceFrom);
+            TCMServiceEntity tcmServiceTo = _context.TCMServices.Find(tcmCopyActivityViewModel.IdServiceTo);
+            List<TCMServiceActivityEntity> list = new List<TCMServiceActivityEntity>();
+            if (ModelState.IsValid)
+            {
+                foreach (var item in tcmServiceFrom.TCMServiceActivity)
+                {
+                    item.Id = 0;
+                    item.TcmService = tcmServiceTo;
+                    list.Add(item);
+                }
+                _context.AddRange(list);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                       .Include(m => m.TCMServiceActivity)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServiceActivity", tcmServices) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            //recovery data
+
+            tcmCopyActivityViewModel.Services = _combosHelper.GetComboTCMServices();
+            tcmCopyActivityViewModel.TCMService = tcmServiceTo;
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CopyActivity", tcmCopyActivityViewModel) });
+        }
+
     }
 }
