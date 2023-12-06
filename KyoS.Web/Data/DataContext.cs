@@ -149,6 +149,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMReferralFormEntity> TCMReferralForms { get; set; }
         public DbSet<TCMSupervisionTimeEntity> TCMSupervisionTimes { get; set; }
         public DbSet<TCMSubServiceEntity> TCMSubServices { get; set; }
+        public DbSet<TCMTransferEntity> TCMTransfers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

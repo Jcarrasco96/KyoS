@@ -1297,5 +1297,497 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMReferralFormReport(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> Transfers()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+                CaseMannagerEntity caseManager = await _context.CaseManagers
+                                                               .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+                ViewData["IdTCMLogin"] = caseManager.Id;
+                return View(await _context.TCMTransfers
+                                          .Include(g => g.TCMAssignedFrom)
+                                          .Include(g => g.TCMAssignedTo)
+                                          .Include(g => g.TCMClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Include(g => g.TCMSupervisor)
+                                          .Where(g => (g.TCMAssignedFrom.Id == caseManager.Id
+                                                    || g.TCMAssignedTo.Id == caseManager.Id))
+                                          .OrderBy(g => g.TCMClient.Client.Name)
+                                          .ToListAsync());
+            }
+
+            if (user_logged.UserType.ToString() == "Manager")
+            {
+                ViewData["IdTCMLogin"] = 0;
+                return View(await _context.TCMTransfers
+                                          .Include(g => g.TCMAssignedFrom)
+                                          .Include(g => g.TCMAssignedTo)
+                                          .Include(g => g.TCMClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Include(g => g.TCMSupervisor)
+                                          .Where(g => (g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id))
+                                          .OrderBy(g => g.TCMClient.Client.Name)
+                                          .ToListAsync());
+            }
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+                TCMSupervisorEntity tcmSupervisor = await _context.TCMSupervisors
+                                                                  .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+                ViewData["IdTCMLogin"] = 0;
+                return View(await _context.TCMTransfers
+                                          .Include(g => g.TCMAssignedFrom)
+                                          .Include(g => g.TCMAssignedTo)
+                                          .Include(g => g.TCMClient)
+                                          .ThenInclude(g => g.Client)
+                                          .Include(g => g.TCMSupervisor)
+                                          .Where(g => (g.TCMSupervisor.Id == tcmSupervisor.Id))
+                                          .OrderBy(g => g.TCMClient.Client.Name)
+                                          .ToListAsync());
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult CreateTransfer(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(m => m.Client)
+                                                .Include(m => m.Client.LegalGuardian)
+                                                .Include(n => n.Casemanager)
+                                                .ThenInclude(n => n.TCMSupervisor)
+                                                .Include(n => n.TcmServicePlan)
+                                                .ThenInclude(n => n.TCMServicePlanReview)
+                                                .Include(m => m.TCMNote)
+                                                .FirstOrDefault(n => n.Id == id);
+            TCMSupervisorEntity tcmsupervisor = _context.TCMSupervisors
+                                                        .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+           
+            TCMTransferViewModel model;
+            DateTime temp = new DateTime();
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+
+                    model = new TCMTransferViewModel
+                    {
+                        IdTCMClient = id,
+                        Address = tcmClient.Client.FullAddress,
+                        ChangeInformation = false,
+                        CityStateZip = tcmClient.Client.City + ',' +tcmClient.Client.State + ',' + tcmClient.Client.ZipCode,
+                        DateAudit = DateTime.Today,
+                        DateAuditSign = DateTime.Today,
+                        DateLastService = (tcmClient.TCMNote.Count() > 0)? tcmClient.TCMNote.Max(n => n.DateOfService) : temp,
+                        DateServicePlanORLastSPR = (tcmClient.TcmServicePlan == null)? temp : (tcmClient.TcmServicePlan.TCMServicePlanReview == null)? tcmClient.TcmServicePlan.DateServicePlan : tcmClient.TcmServicePlan.TCMServicePlanReview.DateServicePlanReview,
+                        EndTransferDate = DateTime.Today,
+                        HasClientChart = false,
+                        Id = 0,
+                        IdCaseManagerFrom = tcmClient.Casemanager.Id, 
+                        IdCaseManagerTo = 0,
+                        IdTCMSupervisor = tcmClient.Casemanager.TCMSupervisor.Id,
+                        OpeningDate = tcmClient.DataOpen,
+                        OpeningDateAssignedTo = DateTime.Today,
+                        PrimaryPhone = string.Empty,
+                        OtherPhone = string.Empty,
+                        Return = false,
+                        TCMAssignedFromAccept = false,
+                        TCMAssignedToAccept =  false,
+                        TransferFollow = string.Empty,
+                        TCMsFrom = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,1),
+                        TCMsTo = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,1),
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Today,
+                        TCMClient = tcmClient,
+                        TCMSupervisor = tcmsupervisor,
+                        TCMAssignedFrom = tcmClient.Casemanager,
+                        TCMSupervisorAccept = true
+
+                    };
+                    if (tcmClient.Client.LegalGuardian != null)
+                    {
+                        model.LegalGuardianName = tcmClient.Client.LegalGuardian.Name;
+                        model.LegalGuardianPhone = tcmClient.Client.LegalGuardian.Telephone;
+                    }
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> CreateTransfer(TCMTransferViewModel transferViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity tcmTransfer = new TCMTransferEntity();
+
+            if (ModelState.IsValid)
+            {
+                tcmTransfer = await _converterHelper.ToTCMTransferEntity(transferViewModel, true, user_logged.UserName);
+                _context.Add(tcmTransfer);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Transfers");
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            return View(transferViewModel);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult SelectTCMClientForTransfer()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferViewModel model = new TCMTransferViewModel()
+            {
+                IdTCMClient = 0,
+                TCMClients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName,1).OrderBy(n => n.Text),
+
+            };
+           
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> SelectTCMClientForTransfer(TCMTransferViewModel tcmTransferViewModel)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            return RedirectToAction("CreateTransfer", "TCMClients", new { id = tcmTransferViewModel.IdTCMClient });
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult EditTransfer(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity transfer = _context.TCMTransfers
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(m => m.Client)
+                                                 .ThenInclude(m => m.LegalGuardian)
+                                                 .Include(n => n.TCMAssignedFrom)
+                                                 .Include(n => n.TCMAssignedTo)
+                                                 .Include(n => n.TCMSupervisor)
+                                                 .Include(n => n.TCMClient)
+                                                 .ThenInclude(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMServicePlanReview)
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(n => n.TCMNote)
+                                                 .FirstOrDefault(n => n.Id == id);
+
+            TCMTransferViewModel model = _converterHelper.ToTCMTransferViewModel(transfer);
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+
+                   
+                    if (model.TCMClient.Client.LegalGuardian != null)
+                    {
+                        model.LegalGuardianName = model.TCMClient.Client.LegalGuardian.Name;
+                        model.LegalGuardianPhone = model.TCMClient.Client.LegalGuardian.Telephone;
+                    }
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditTransfer(TCMTransferViewModel transferViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity tcmTransfer = new TCMTransferEntity();
+
+            if (ModelState.IsValid)
+            {
+                tcmTransfer = await _converterHelper.ToTCMTransferEntity(transferViewModel, false, user_logged.UserName);
+                _context.Update(tcmTransfer);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Transfers");
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            return View(transferViewModel);
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult AcceptTransfer(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity transfer = _context.TCMTransfers
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(m => m.Client)
+                                                 .ThenInclude(m => m.LegalGuardian)
+                                                 .Include(n => n.TCMAssignedFrom)
+                                                 .Include(n => n.TCMAssignedTo)
+                                                 .Include(n => n.TCMSupervisor)
+                                                 .Include(n => n.TCMClient)
+                                                 .ThenInclude(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMServicePlanReview)
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(n => n.TCMNote)
+                                                 .FirstOrDefault(n => n.Id == id);
+
+            TCMTransferViewModel model = _converterHelper.ToTCMTransferViewModel(transfer);
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (model.TCMClient.Client.LegalGuardian != null)
+                {
+                    model.LegalGuardianName = model.TCMClient.Client.LegalGuardian.Name;
+                    model.LegalGuardianPhone = model.TCMClient.Client.LegalGuardian.Telephone;
+                }
+                if (transfer.TCMAssignedFrom.Id == _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id)
+                {
+                    ViewData["From"] = 1;
+                }
+                else
+                {
+                    ViewData["From"] = 0;
+                }
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> AcceptTransfer(TCMTransferViewModel transferViewModel, int from)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity tcmTransfer = _context.TCMTransfers.FirstOrDefault(n => n.Id == transferViewModel.Id);
+            if (from == 1)
+            {
+                tcmTransfer.TCMAssignedFromAccept = transferViewModel.TCMAssignedFromAccept;
+                tcmTransfer.LastModifiedBy = user_logged.UserName;
+                tcmTransfer.LastModifiedOn = DateTime.Now;
+            }
+            else
+            {
+                tcmTransfer.TCMAssignedToAccept = transferViewModel.TCMAssignedToAccept;
+                tcmTransfer.OpeningDateAssignedTo = transferViewModel.OpeningDateAssignedTo;
+                tcmTransfer.LastModifiedBy = user_logged.UserName;
+                tcmTransfer.LastModifiedOn = DateTime.Now;
+            }
+
+            if (tcmTransfer.TCMAssignedFromAccept == true && tcmTransfer.TCMAssignedToAccept == true && tcmTransfer.TCMSupervisorAccept == true)
+            {
+                TCMClientEntity tcmClient = _context.TCMClient.Include(n => n.Casemanager).FirstOrDefault(n => n.Id == transferViewModel.IdTCMClient);
+                tcmClient.Casemanager = _context.CaseManagers.FirstOrDefault(n => n.Id == transferViewModel.IdCaseManagerTo);
+                _context.Update(tcmClient);
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(tcmTransfer);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Transfers");
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            return View(transferViewModel);
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public IActionResult TransferReadOnly(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity transfer = _context.TCMTransfers
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(m => m.Client)
+                                                 .ThenInclude(m => m.LegalGuardian)
+                                                 .Include(n => n.TCMAssignedFrom)
+                                                 .Include(n => n.TCMAssignedTo)
+                                                 .Include(n => n.TCMSupervisor)
+                                                 .Include(n => n.TCMClient)
+                                                 .ThenInclude(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMServicePlanReview)
+                                                 .Include(m => m.TCMClient)
+                                                 .ThenInclude(n => n.TCMNote)
+                                                 .FirstOrDefault(n => n.Id == id);
+
+            TCMTransferViewModel model = _converterHelper.ToTCMTransferViewModel(transfer);
+
+            if (model.TCMClient.Client.LegalGuardian != null)
+            {
+                model.LegalGuardianName = model.TCMClient.Client.LegalGuardian.Name;
+                model.LegalGuardianPhone = model.TCMClient.Client.LegalGuardian.Telephone;
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult ReturnTransfer(int idTransfer = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity transfer = _context.TCMTransfers
+                                                 .Include(n => n.TCMClient)
+                                                 .ThenInclude(n => n.Client)
+                                                 .Include(n => n.TCMSupervisor)
+                                                 .Include(n => n.TCMAssignedFrom)
+                                                 .FirstOrDefault(n => n.Id == idTransfer);
+
+            TCMTransferViewModel model = new TCMTransferViewModel()
+            {
+                IdTCMClient = transfer.TCMClient.Id,
+                TCMClient = transfer.TCMClient,
+                TCMAssignedFrom = transfer.TCMAssignedFrom,
+                IdCaseManagerFrom = transfer.TCMAssignedFrom.Id,
+                Id = transfer.Id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> ReturnTransfer(TCMTransferViewModel tcmTransferViewModel)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            TCMClientEntity tcmClient = _context.TCMClient.Include(n => n.Casemanager).FirstOrDefault(n => n.Id == tcmTransferViewModel.IdTCMClient);
+            tcmClient.Casemanager = _context.CaseManagers.FirstOrDefault(n => n.Id == tcmTransferViewModel.IdCaseManagerFrom);
+
+            TCMTransferEntity transferEntity = _context.TCMTransfers.FirstOrDefault(n => n.Id == tcmTransferViewModel.Id);
+            transferEntity.Return = true;
+            _context.Update(transferEntity);
+            _context.Update(tcmClient);
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Transfers");
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+            }
+
+            return View(tcmTransferViewModel);
+        }
+
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public IActionResult ViewPendingTransfer(int idTransfer = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMTransferEntity transfer = _context.TCMTransfers
+                                                 .Include(m => m.TCMClient)
+                                                 .FirstOrDefault(n => n.Id == idTransfer);
+
+            TCMTransferViewModel model = new TCMTransferViewModel();
+
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+            {
+                model.TCMSupervisorAccept = transfer.TCMSupervisorAccept;
+                model.TCMAssignedFromAccept = transfer.TCMAssignedFromAccept;
+                model.TCMAssignedToAccept = transfer.TCMAssignedToAccept;
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View(model);
+        }
+
     }
 }

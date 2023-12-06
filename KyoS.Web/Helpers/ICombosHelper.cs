@@ -86,9 +86,9 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboThemeType();
         IEnumerable<SelectListItem> GetComboTypeReferred();
         IEnumerable<SelectListItem> GetComboTCMSupervisorByClinic(int idClinic);
-        IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user);
+        IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user, int allClient);
         IEnumerable<SelectListItem> GetComboRisk();
-        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user);
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user, int allClient);
         IEnumerable<SelectListItem> GetComboTCMClientsByClinic(int idClinic);
         IEnumerable<SelectListItem> GetComboSiteStatus();
         IEnumerable<SelectListItem> GetComboClientByIndfacilitator(int idFacilitator);

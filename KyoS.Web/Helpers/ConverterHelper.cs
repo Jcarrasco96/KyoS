@@ -7583,5 +7583,83 @@ namespace KyoS.Web.Helpers
 
             };
         }
+
+        public async Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId)
+        {
+            return new TCMTransferEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Address = model.Address,
+                ChangeInformation = model.ChangeInformation,
+                CityStateZip = model.CityStateZip,
+                DateAudit = model.DateAudit,
+                DateAuditSign = model.DateAuditSign,
+                DateLastService = model.DateLastService,
+                DateServicePlanORLastSPR = model.DateServicePlanORLastSPR,
+                EndTransferDate = model.EndTransferDate,
+                HasClientChart = model.HasClientChart,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                OpeningDate = model.OpeningDate,
+                OpeningDateAssignedTo = model.OpeningDateAssignedTo,
+                OtherPhone = model.OtherPhone,
+                PrimaryPhone = model.PrimaryPhone,
+                Return = model.Return,
+                TCMAssignedFrom = _context.CaseManagers.FirstOrDefault(n => n.Id == model.IdCaseManagerFrom),
+                TCMAssignedFromAccept = model.TCMAssignedFromAccept,
+                TCMAssignedTo = _context.CaseManagers.FirstOrDefault(n => n.Id == model.IdCaseManagerTo),
+                TCMAssignedToAccept = model.TCMAssignedToAccept,
+                TCMClient = _context.TCMClient.FirstOrDefault(n => n.Id == model.IdTCMClient),
+                TCMSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.Id == model.IdTCMSupervisor),
+                TCMSupervisorAccept = model.TCMSupervisorAccept,
+                TransferFollow = model.TransferFollow              
+
+            };
+        }
+
+        public TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model)
+        {
+            return new TCMTransferViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                Address = model.Address,
+                ChangeInformation = model.ChangeInformation,
+                CityStateZip = model.CityStateZip,
+                DateAudit = model.DateAudit,
+                DateAuditSign = model.DateAuditSign,
+                DateLastService = model.DateLastService,
+                DateServicePlanORLastSPR = model.DateServicePlanORLastSPR,
+                EndTransferDate = model.EndTransferDate,
+                HasClientChart = model.HasClientChart,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                OpeningDate = model.OpeningDate,
+                OpeningDateAssignedTo = model.OpeningDateAssignedTo,
+                OtherPhone = model.OtherPhone,
+                PrimaryPhone = model.PrimaryPhone,
+                Return = model.Return,
+                TCMAssignedFrom = model.TCMAssignedFrom,
+                TCMAssignedFromAccept = model.TCMAssignedFromAccept,
+                TCMAssignedTo = model.TCMAssignedTo,
+                TCMAssignedToAccept = model.TCMAssignedToAccept,
+                TCMClient = model.TCMClient,
+                TCMSupervisor = model.TCMSupervisor,
+                TCMSupervisorAccept = model.TCMSupervisorAccept,
+                TransferFollow = model.TransferFollow,
+                IdCaseManagerFrom = model.TCMAssignedFrom.Id,
+                IdCaseManagerTo = model.TCMAssignedTo.Id,
+                IdTCMClient = model.TCMClient.Id,
+                IdTCMSupervisor = model.TCMSupervisor.Id,
+                TCMsTo = _combosHelper.GetComboCaseManagersByTCMSupervisor(model.TCMSupervisor.LinkedUser, 1)
+
+
+            };
+        }
     }
 }

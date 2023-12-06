@@ -707,8 +707,8 @@ namespace KyoS.Web.Controllers
             }
             if (User.IsInRole("TCMSupervisor"))
             {
-                model.CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName);
-                model.Clients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName);
+                model.CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,0);
+                model.Clients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName,0);
                 
             }
 
@@ -903,7 +903,7 @@ namespace KyoS.Web.Controllers
             {
                 IdClient = 0,
                 IdCaseManager = 0,
-                CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName)
+                CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,0)
             };
 
             return View(model);
