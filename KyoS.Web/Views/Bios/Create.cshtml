@@ -55,7 +55,7 @@
                         @await Html.PartialAsync("_ViewMedication", Model.Client.MedicationList.ToList())
                     </div>
                 </div>
-            </div>           
+            </div>
             <partial name="_Bios2" />
             <div class="col-md-push-12">
                 <div class="">
@@ -102,7 +102,7 @@
                 'Setting': document.getElementById('Setting').value,
                 'BioH0031HN': BioH0031HN.checked,
                 'IDAH0031HO': IDAH0031HO.checked,
-                'Code90791': Code90791.checked,                
+                'Code90791': Code90791.checked,
                 'DateBio': document.getElementById('DateBio').value,
                 'StartTime': document.getElementById('StartTime').value,
                 'EndTime': document.getElementById('EndTime').value,
@@ -190,7 +190,7 @@
                 'RiskToOther_Medium': RiskToOther_Medium.checked,
                 'RiskToOther_High': RiskToOther_High.checked,
                 'RiskToOther_Chronic': RiskToOther_Chronic.checked,
-                'SafetyPlan': check3.checked,                
+                'SafetyPlan': check3.checked,
                 'Comments': document.getElementById('Comments').value,
                 'ClientDenied': ClientDenied.checked,
                 'HaveYouEverThought': check4.checked,
@@ -217,7 +217,75 @@
                 'ObtainRelease': ObtainRelease.checked,
                 'WhereRecord': WhereRecord.checked,
                 'WhereRecord_When': document.getElementById('WhereRecord_When').value,
-                'WhereRecord_Where': document.getElementById('WhereRecord_Where').value
+                'WhereRecord_Where': document.getElementById('WhereRecord_Where').value,
+                'HasTheClientVisitedPhysician': check9.checked,
+                'HasTheClientVisitedPhysician_Reason': document.getElementById('HasTheClientVisitedPhysician_Reason').value,
+                'HasTheClientVisitedPhysician_Date': document.getElementById('HasTheClientVisitedPhysician_Date').value,
+                'DoesTheClientExperience': check10.checked,
+                'DoesTheClientExperience_Where': document.getElementById('DoesTheClientExperience_Where').value,
+                'ForHowLong': document.getElementById('ForHowLong').value,
+                'PleaseRatePain': document.getElementById('PleaseRatePain').value,
+                'HasClientBeenTreatedPain': check11.checked,
+                'HasClientBeenTreatedPain_PleaseIncludeService': document.getElementById('HasClientBeenTreatedPain_PleaseIncludeService').value,
+                'HasClientBeenTreatedPain_Ifnot': document.getElementById('HasClientBeenTreatedPain_Ifnot').value,
+                'HasClientBeenTreatedPain_Where': document.getElementById('HasClientBeenTreatedPain_Where').value,
+                'ObtainReleaseInformation': document.getElementById('ObtainReleaseInformation').value,
+                'EastFewer': check12.checked,
+                'EastFew': check13.checked,
+                'Has3OrMore': check14.checked,
+                'HasTooth': check15.checked,
+                'DoesNotAlways': check16.checked,
+                'EastAlone': check17.checked,
+                'Takes3OrMore': check18.checked,
+                'WithoutWanting': check19.checked,
+                'NotAlwaysPhysically': check20.checked,
+                'AnyFood': check26.checked,
+                'AnyEating': check27.checked,
+                'If6_ReferredTo': document.getElementById('If6_ReferredTo').value,
+                'If6_Date': document.getElementById('If6_Date').value,
+                'Appetite': $("#IdAppetite").val() > 0 ? $("#IdAppetite option:selected").text() : 'WNL',
+                'Hydration': $("#IdHydratation").val() > 0 ? $("#IdHydratation option:selected").text() : 'WNL',
+                'RecentWeight': $("#IdRecentWeight").val() > 0 ? $("#IdRecentWeight option:selected").text() : 'N_A',
+                'SubstanceAbuse': document.getElementById('SubstanceAbuse').value,
+                'MilitaryServiceHistory': check28.checked,
+                'MilitaryServiceHistory_Explain': document.getElementById('MilitaryServiceHistory_Explain').value,
+                'VocationalAssesment': document.getElementById('VocationalAssesment').value,
+                'LegalHistory': document.getElementById('LegalHistory').value,
+                'PersonalFamilyPsychiatric': document.getElementById('PersonalFamilyPsychiatric').value,
+                'DoesClientRequired': DoesClientRequired.checked,
+                'DoesClientRequired_Where': document.getElementById('DoesClientRequired_Where').value,
+                'ObtainReleaseInformation7': ObtainReleaseInformation7.checked,
+                'IfForeing_Born': IfForeing_Born.checked,
+                'IfForeing_AgeArrival': document.getElementById('IfForeing_AgeArrival').value,
+                'IfForeing_YearArrival': document.getElementById('IfForeing_YearArrival').value,
+                'PrimaryLocation': document.getElementById('PrimaryLocation').value,
+                'GeneralDescription': document.getElementById('GeneralDescription').value,
+                'AdultCurrentExperience': document.getElementById('AdultCurrentExperience').value,
+                'WhatIsTheClient': document.getElementById('WhatIsTheClient').value,
+                'RelationshipWithFamily': document.getElementById('RelationshipWithFamily').value,
+                'Children': document.getElementById('Children').value,
+                'IfMarried': document.getElementById('IfMarried').value,
+                'IfSeparated': document.getElementById('IfSeparated').value,
+                'IfSexuallyActive': $("#IdIfSexuallyActive").val() > 0 ? $("#IdIfSexuallyActive option:selected").text() : 'N_A',
+                'PleaseProvideGoal': document.getElementById('PleaseProvideGoal').value,
+                'DoYouHaveAnyReligious': check21.checked,
+                'DoYouHaveAnyVisual': check22.checked,
+                'HigHestEducation': document.getElementById('HigHestEducation').value,
+                'DoYouHaveAnyPhysical': check23.checked,
+                'CanClientFollow': check24.checked,
+                'ProvideIntegratedSummary': document.getElementById('ProvideIntegratedSummary').value,
+                'TreatmentNeeds': document.getElementById('TreatmentNeeds').value,
+                'Treatmentrecomendations': document.getElementById('Treatmentrecomendations').value,
+                'IConcurWhitDiagnistic': check25.checked,
+                'AlternativeDiagnosis': document.getElementById('AlternativeDiagnosis').value,
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <text>'DateSignatureLicensedPractitioner': document.getElementById('DateSignatureLicensedPractitioner').value</text>
+                }      
+                @if (!User.IsInRole("Supervisor"))
+                {
+                    <text>'DateSignatureUnlicensedTherapist': document.getElementById('DateSignatureUnlicensedTherapist').value</text>
+                }
             };
 
             var json = JSON.stringify(jsonObj);
@@ -229,578 +297,587 @@
                 success: function (data) {
                     if (data == true) {
                         Swal.fire({
-                            position: "bottom-end",
-                            icon: "success",
-                            title: "Saved",
-                            showConfirmButton: false,
-                            timer: 1800,
-                            timerProgressBar: true                            
+                        position: "bottom-end",
+                        icon: "success",
+                        title: "Saved",
+                        showConfirmButton: false,
+                        timer: 1800,
+                        timerProgressBar: true
                         });
                     }
                 }
             });
-        }        
+        }
 
         check1.addEventListener('change', (e) => {
             if (check1.checked == true) {
                 check101.checked = false;
-            } else {
+            }
+            else {
                 check101.checked = true;
             }
         })
         check101.addEventListener('change', (e) => {
             if (check101.checked == true) {
                 check1.checked = false;
-            } else {
+            }
+            else {
                 check1.checked = true;
             }
         })
         if (check1.checked == true) {
             check101.checked = false;
-        } else {
+        }
+        else {
             check101.checked = true;
         }
         //---------------------------------
         check2.addEventListener('change', (e) => {
             if (check2.checked == true) {
                 check102.checked = false;
-            } else {
+            }
+            else {
                 check102.checked = true;
             }
         })
         check102.addEventListener('change', (e) => {
             if (check102.checked == true) {
                 check2.checked = false;
-            } else {
+            }
+            else {
                 check2.checked = true;
             }
         })
         if (check2.checked == true) {
             check102.checked = false;
-        } else {
+        }
+        else {
             check102.checked = true;
         }
         //---------------------------------
         check3.addEventListener('change', (e) => {
             if (check3.checked == true) {
                 check103.checked = false;
-            } else {
+            }
+            else {
                 check103.checked = true;
             }
         })
         check103.addEventListener('change', (e) => {
             if (check103.checked == true) {
                 check3.checked = false;
-            } else {
+            }
+            else {
                 check3.checked = true;
             }
         })
         if (check3.checked == true) {
             check103.checked = false;
-        } else {
+        }
+        else {
             check103.checked = true;
         }
         //---------------------------------
-        check4.addEventListener('change', (e) => {
-            if (check4.checked == true) {
+                check4.addEventListener('change', (e) => {
+                if (check4.checked == true) {
                 check104.checked = false;
-            } else {
+                } else {
                 check104.checked = true;
-            }
-        })
-        check104.addEventListener('change', (e) => {
-            if (check104.checked == true) {
+                }
+                })
+                check104.addEventListener('change', (e) => {
+                if (check104.checked == true) {
                 check4.checked = false;
-            } else {
+                } else {
                 check4.checked = true;
-            }
-        })
-        if (check4.checked == true) {
-            check104.checked = false;
-        } else {
-            check104.checked = true;
-        }
-        //---------------------------------
-        check5.addEventListener('change', (e) => {
-            if (check5.checked == true) {
+                }
+                })
+                if (check4.checked == true) {
+                check104.checked = false;
+                } else {
+                check104.checked = true;
+                }
+                //---------------------------------
+                check5.addEventListener('change', (e) => {
+                if (check5.checked == true) {
                 check105.checked = false;
-            } else {
+                } else {
                 check105.checked = true;
-            }
-        })
-        check105.addEventListener('change', (e) => {
-            if (check105.checked == true) {
+                }
+                })
+                check105.addEventListener('change', (e) => {
+                if (check105.checked == true) {
                 check5.checked = false;
-            } else {
+                } else {
                 check5.checked = true;
-            }
-        })
-        if (check5.checked == true) {
-            check105.checked = false;
-        } else {
-            check105.checked = true;
-        }
-        //---------------------------------
-        check6.addEventListener('change', (e) => {
-            if (check6.checked == true) {
+                }
+                })
+                if (check5.checked == true) {
+                check105.checked = false;
+                } else {
+                check105.checked = true;
+                }
+                //---------------------------------
+                check6.addEventListener('change', (e) => {
+                if (check6.checked == true) {
                 check106.checked = false;
-            } else {
+                } else {
                 check106.checked = true;
-            }
-        })
-        check106.addEventListener('change', (e) => {
-            if (check106.checked == true) {
+                }
+                })
+                check106.addEventListener('change', (e) => {
+                if (check106.checked == true) {
                 check6.checked = false;
-            } else {
+                } else {
                 check6.checked = true;
-            }
-        })
-        if (check6.checked == true) {
-            check106.checked = false;
-        } else {
-            check106.checked = true;
-        }
-        //---------------------------------
-        check7.addEventListener('change', (e) => {
-            if (check7.checked == true) {
+                }
+                })
+                if (check6.checked == true) {
+                check106.checked = false;
+                } else {
+                check106.checked = true;
+                }
+                //---------------------------------
+                check7.addEventListener('change', (e) => {
+                if (check7.checked == true) {
                 check107.checked = false;
-            } else {
+                } else {
                 check107.checked = true;
-            }
-        })
-        check107.addEventListener('change', (e) => {
-            if (check107.checked == true) {
+                }
+                })
+                check107.addEventListener('change', (e) => {
+                if (check107.checked == true) {
                 check7.checked = false;
-            } else {
+                } else {
                 check7.checked = true;
-            }
-        })
-        if (check7.checked == true) {
-            check107.checked = false;
-        } else {
-            check107.checked = true;
-        }
-        //---------------------------------
-        check8.addEventListener('change', (e) => {
-            if (check8.checked == true) {
+                }
+                })
+                if (check7.checked == true) {
+                check107.checked = false;
+                } else {
+                check107.checked = true;
+                }
+                //---------------------------------
+                check8.addEventListener('change', (e) => {
+                if (check8.checked == true) {
                 check108.checked = false;
-            } else {
+                } else {
                 check108.checked = true;
-            }
-        })
-        check108.addEventListener('change', (e) => {
-            if (check108.checked == true) {
+                }
+                })
+                check108.addEventListener('change', (e) => {
+                if (check108.checked == true) {
                 check8.checked = false;
-            } else {
+                } else {
                 check8.checked = true;
-            }
-        })
-        if (check8.checked == true) {
-            check108.checked = false;
-        } else {
-            check108.checked = true;
-        }
-        //---------------------------------
-        check9.addEventListener('change', (e) => {
-            if (check9.checked == true) {
+                }
+                })
+                if (check8.checked == true) {
+                check108.checked = false;
+                } else {
+                check108.checked = true;
+                }
+                //---------------------------------
+                check9.addEventListener('change', (e) => {
+                if (check9.checked == true) {
                 check109.checked = false;
-            } else {
+                } else {
                 check109.checked = true;
-            }
-        })
-        check109.addEventListener('change', (e) => {
-            if (check109.checked == true) {
+                }
+                })
+                check109.addEventListener('change', (e) => {
+                if (check109.checked == true) {
                 check9.checked = false;
-            } else {
+                } else {
                 check9.checked = true;
-            }
-        })
-        if (check9.checked == true) {
-            check109.checked = false;
-        } else {
-            check109.checked = true;
-        }
-        //---------------------------------
-        check10.addEventListener('change', (e) => {
-            if (check10.checked == true) {
+                }
+                })
+                if (check9.checked == true) {
+                check109.checked = false;
+                } else {
+                check109.checked = true;
+                }
+                //---------------------------------
+                check10.addEventListener('change', (e) => {
+                if (check10.checked == true) {
                 check110.checked = false;
-            } else {
+                } else {
                 check110.checked = true;
-            }
-        })
-        check110.addEventListener('change', (e) => {
-            if (check110.checked == true) {
+                }
+                })
+                check110.addEventListener('change', (e) => {
+                if (check110.checked == true) {
                 check10.checked = false;
-            } else {
+                } else {
                 check10.checked = true;
-            }
-        })
-        if (check10.checked == true) {
-            check110.checked = false;
-        } else {
-            check110.checked = true;
-        }
-        //---------------------------------
-        check11.addEventListener('change', (e) => {
-            if (check11.checked == true) {
+                }
+                })
+                if (check10.checked == true) {
+                check110.checked = false;
+                } else {
+                check110.checked = true;
+                }
+                //---------------------------------
+                check11.addEventListener('change', (e) => {
+                if (check11.checked == true) {
                 check111.checked = false;
-            } else {
+                } else {
                 check111.checked = true;
-            }
-        })
-        check111.addEventListener('change', (e) => {
-            if (check111.checked == true) {
+                }
+                })
+                check111.addEventListener('change', (e) => {
+                if (check111.checked == true) {
                 check11.checked = false;
-            } else {
+                } else {
                 check11.checked = true;
-            }
-        })
-        if (check11.checked == true) {
-            check111.checked = false;
-        } else {
-            check111.checked = true;
-        }
-        //---------------------------------
-        check12.addEventListener('change', (e) => {
-            if (check12.checked == true) {
+                }
+                })
+                if (check11.checked == true) {
+                check111.checked = false;
+                } else {
+                check111.checked = true;
+                }
+                //---------------------------------
+                check12.addEventListener('change', (e) => {
+                if (check12.checked == true) {
                 check112.checked = false;
-            } else {
+                } else {
                 check112.checked = true;
-            }
-        })
-        check112.addEventListener('change', (e) => {
-            if (check112.checked == true) {
+                }
+                })
+                check112.addEventListener('change', (e) => {
+                if (check112.checked == true) {
                 check12.checked = false;
-            } else {
+                } else {
                 check12.checked = true;
-            }
-        })
-        if (check12.checked == true) {
-            check112.checked = false;
-        } else {
-            check112.checked = true;
-        }
-        //---------------------------------
-        check13.addEventListener('change', (e) => {
-            if (check13.checked == true) {
+                }
+                })
+                if (check12.checked == true) {
+                check112.checked = false;
+                } else {
+                check112.checked = true;
+                }
+                //---------------------------------
+                check13.addEventListener('change', (e) => {
+                if (check13.checked == true) {
                 check113.checked = false;
-            } else {
+                } else {
                 check113.checked = true;
-            }
-        })
-        check113.addEventListener('change', (e) => {
-            if (check113.checked == true) {
+                }
+                })
+                check113.addEventListener('change', (e) => {
+                if (check113.checked == true) {
                 check13.checked = false;
-            } else {
+                } else {
                 check13.checked = true;
-            }
-        })
-        if (check13.checked == true) {
-            check113.checked = false;
-        } else {
-            check113.checked = true;
-        }
-        //---------------------------------
-        check14.addEventListener('change', (e) => {
-            if (check14.checked == true) {
+                }
+                })
+                if (check13.checked == true) {
+                check113.checked = false;
+                } else {
+                check113.checked = true;
+                }
+                //---------------------------------
+                check14.addEventListener('change', (e) => {
+                if (check14.checked == true) {
                 check114.checked = false;
-            } else {
+                } else {
                 check114.checked = true;
-            }
-        })
-        check114.addEventListener('change', (e) => {
-            if (check114.checked == true) {
+                }
+                })
+                check114.addEventListener('change', (e) => {
+                if (check114.checked == true) {
                 check14.checked = false;
-            } else {
+                } else {
                 check14.checked = true;
-            }
-        })
-        if (check14.checked == true) {
-            check114.checked = false;
-        } else {
-            check114.checked = true;
-        }
-        //---------------------------------
-        check15.addEventListener('change', (e) => {
-            if (check15.checked == true) {
+                }
+                })
+                if (check14.checked == true) {
+                check114.checked = false;
+                } else {
+                check114.checked = true;
+                }
+                //---------------------------------
+                check15.addEventListener('change', (e) => {
+                if (check15.checked == true) {
                 check115.checked = false;
-            } else {
+                } else {
                 check115.checked = true;
-            }
-        })
-        check115.addEventListener('change', (e) => {
-            if (check115.checked == true) {
+                }
+                })
+                check115.addEventListener('change', (e) => {
+                if (check115.checked == true) {
                 check15.checked = false;
-            } else {
+                } else {
                 check15.checked = true;
-            }
-        })
-        if (check15.checked == true) {
-            check115.checked = false;
-        } else {
-            check115.checked = true;
-        }
-        //---------------------------------
-        check16.addEventListener('change', (e) => {
-            if (check16.checked == true) {
+                }
+                })
+                if (check15.checked == true) {
+                check115.checked = false;
+                } else {
+                check115.checked = true;
+                }
+                //---------------------------------
+                check16.addEventListener('change', (e) => {
+                if (check16.checked == true) {
                 check116.checked = false;
-            } else {
+                } else {
                 check116.checked = true;
-            }
-        })
-        check116.addEventListener('change', (e) => {
-            if (check116.checked == true) {
+                }
+                })
+                check116.addEventListener('change', (e) => {
+                if (check116.checked == true) {
                 check16.checked = false;
-            } else {
+                } else {
                 check16.checked = true;
-            }
-        })
-        if (check16.checked == true) {
-            check116.checked = false;
-        } else {
-            check116.checked = true;
-        }
-        //---------------------------------
-        check17.addEventListener('change', (e) => {
-            if (check17.checked == true) {
+                }
+                })
+                if (check16.checked == true) {
+                check116.checked = false;
+                } else {
+                check116.checked = true;
+                }
+                //---------------------------------
+                check17.addEventListener('change', (e) => {
+                if (check17.checked == true) {
                 check117.checked = false;
-            } else {
+                } else {
                 check117.checked = true;
-            }
-        })
-        check117.addEventListener('change', (e) => {
-            if (check117.checked == true) {
+                }
+                })
+                check117.addEventListener('change', (e) => {
+                if (check117.checked == true) {
                 check17.checked = false;
-            } else {
+                } else {
                 check17.checked = true;
-            }
-        })
-        if (check17.checked == true) {
-            check117.checked = false;
-        } else {
-            check117.checked = true;
-        }
-        //---------------------------------
-        check18.addEventListener('change', (e) => {
-            if (check18.checked == true) {
+                }
+                })
+                if (check17.checked == true) {
+                check117.checked = false;
+                } else {
+                check117.checked = true;
+                }
+                //---------------------------------
+                check18.addEventListener('change', (e) => {
+                if (check18.checked == true) {
                 check118.checked = false;
-            } else {
+                } else {
                 check118.checked = true;
-            }
-        })
-        check118.addEventListener('change', (e) => {
-            if (check118.checked == true) {
+                }
+                })
+                check118.addEventListener('change', (e) => {
+                if (check118.checked == true) {
                 check18.checked = false;
-            } else {
+                } else {
                 check18.checked = true;
-            }
-        })
-        if (check18.checked == true) {
-            check118.checked = false;
-        } else {
-            check118.checked = true;
-        }
-        //---------------------------------
-        check19.addEventListener('change', (e) => {
-            if (check19.checked == true) {
+                }
+                })
+                if (check18.checked == true) {
+                check118.checked = false;
+                } else {
+                check118.checked = true;
+                }
+                //---------------------------------
+                check19.addEventListener('change', (e) => {
+                if (check19.checked == true) {
                 check119.checked = false;
-            } else {
+                } else {
                 check119.checked = true;
-            }
-        })
-        check119.addEventListener('change', (e) => {
-            if (check119.checked == true) {
+                }
+                })
+                check119.addEventListener('change', (e) => {
+                if (check119.checked == true) {
                 check19.checked = false;
-            } else {
+                } else {
                 check19.checked = true;
-            }
-        })
-        if (check19.checked == true) {
-            check119.checked = false;
-        } else {
-            check119.checked = true;
-        }
-        //---------------------------------
-        check20.addEventListener('change', (e) => {
-            if (check20.checked == true) {
+                }
+                })
+                if (check19.checked == true) {
+                check119.checked = false;
+                } else {
+                check119.checked = true;
+                }
+                //---------------------------------
+                check20.addEventListener('change', (e) => {
+                if (check20.checked == true) {
                 check120.checked = false;
-            } else {
+                } else {
                 check120.checked = true;
-            }
-        })
-        check120.addEventListener('change', (e) => {
-            if (check120.checked == true) {
+                }
+                })
+                check120.addEventListener('change', (e) => {
+                if (check120.checked == true) {
                 check20.checked = false;
-            } else {
+                } else {
                 check20.checked = true;
-            }
-        })
-        if (check20.checked == true) {
-            check120.checked = false;
-        } else {
-            check120.checked = true;
-        }
-        //---------------------------------
-        check21.addEventListener('change', (e) => {
-            if (check21.checked == true) {
+                }
+                })
+                if (check20.checked == true) {
+                check120.checked = false;
+                } else {
+                check120.checked = true;
+                }
+                //---------------------------------
+                check21.addEventListener('change', (e) => {
+                if (check21.checked == true) {
                 check121.checked = false;
-            } else {
+                } else {
                 check121.checked = true;
-            }
-        })
-        check121.addEventListener('change', (e) => {
-            if (check121.checked == true) {
+                }
+                })
+                check121.addEventListener('change', (e) => {
+                if (check121.checked == true) {
                 check21.checked = false;
-            } else {
+                } else {
                 check21.checked = true;
-            }
-        })
-        if (check21.checked == true) {
-            check121.checked = false;
-        } else {
-            check121.checked = true;
-        }
-        //---------------------------------
-        check22.addEventListener('change', (e) => {
-            if (check22.checked == true) {
+                }
+                })
+                if (check21.checked == true) {
+                check121.checked = false;
+                } else {
+                check121.checked = true;
+                }
+                //---------------------------------
+                check22.addEventListener('change', (e) => {
+                if (check22.checked == true) {
                 check122.checked = false;
-            } else {
+                } else {
                 check122.checked = true;
-            }
-        })
-        check122.addEventListener('change', (e) => {
-            if (check122.checked == true) {
+                }
+                })
+                check122.addEventListener('change', (e) => {
+                if (check122.checked == true) {
                 check22.checked = false;
-            } else {
+                } else {
                 check22.checked = true;
-            }
-        })
-        if (check22.checked == true) {
-            check122.checked = false;
-        } else {
-            check122.checked = true;
-        }
-        //---------------------------------
-        check23.addEventListener('change', (e) => {
-            if (check23.checked == true) {
+                }
+                })
+                if (check22.checked == true) {
+                check122.checked = false;
+                } else {
+                check122.checked = true;
+                }
+                //---------------------------------
+                check23.addEventListener('change', (e) => {
+                if (check23.checked == true) {
                 check123.checked = false;
-            } else {
+                } else {
                 check123.checked = true;
-            }
-        })
-        check123.addEventListener('change', (e) => {
-            if (check123.checked == true) {
+                }
+                })
+                check123.addEventListener('change', (e) => {
+                if (check123.checked == true) {
                 check23.checked = false;
-            } else {
+                } else {
                 check23.checked = true;
-            }
-        })
-        if (check23.checked == true) {
-            check123.checked = false;
-        } else {
-            check123.checked = true;
-        }
-        //---------------------------------
-        check24.addEventListener('change', (e) => {
-            if (check24.checked == true) {
+                }
+                })
+                if (check23.checked == true) {
+                check123.checked = false;
+                } else {
+                check123.checked = true;
+                }
+                //---------------------------------
+                check24.addEventListener('change', (e) => {
+                if (check24.checked == true) {
                 check124.checked = false;
-            } else {
+                } else {
                 check124.checked = true;
-            }
-        })
-        check124.addEventListener('change', (e) => {
-            if (check124.checked == true) {
+                }
+                })
+                check124.addEventListener('change', (e) => {
+                if (check124.checked == true) {
                 check24.checked = false;
-            } else {
+                } else {
                 check24.checked = true;
-            }
-        })
-        if (check24.checked == true) {
-            check124.checked = false;
-        } else {
-            check124.checked = true;
-        }
-        //---------------------------------
-        check25.addEventListener('change', (e) => {
-            if (check25.checked == true) {
+                }
+                })
+                if (check24.checked == true) {
+                check124.checked = false;
+                } else {
+                check124.checked = true;
+                }
+                //---------------------------------
+                check25.addEventListener('change', (e) => {
+                if (check25.checked == true) {
                 check125.checked = false;
-            } else {
+                } else {
                 check125.checked = true;
-            }
-        })
-        check125.addEventListener('change', (e) => {
-            if (check125.checked == true) {
+                }
+                })
+                check125.addEventListener('change', (e) => {
+                if (check125.checked == true) {
                 check25.checked = false;
-            } else {
+                } else {
                 check25.checked = true;
-            }
-        })
-        if (check25.checked == true) {
-            check125.checked = false;
-        } else {
-            check125.checked = true;
-        }
-        //---------------------------------
-        check26.addEventListener('change', (e) => {
-            if (check26.checked == true) {
+                }
+                })
+                if (check25.checked == true) {
+                check125.checked = false;
+                } else {
+                check125.checked = true;
+                }
+                //---------------------------------
+                check26.addEventListener('change', (e) => {
+                if (check26.checked == true) {
                 check126.checked = false;
-            } else {
+                } else {
                 check126.checked = true;
-            }
-        })
-        check126.addEventListener('change', (e) => {
-            if (check126.checked == true) {
+                }
+                })
+                check126.addEventListener('change', (e) => {
+                if (check126.checked == true) {
                 check26.checked = false;
-            } else {
+                } else {
                 check26.checked = true;
-            }
-        })
-        if (check26.checked == true) {
-            check126.checked = false;
-        } else {
-            check126.checked = true;
-        }
-        //---------------------------------
-        check27.addEventListener('change', (e) => {
-            if (check27.checked == true) {
+                }
+                })
+                if (check26.checked == true) {
+                check126.checked = false;
+                } else {
+                check126.checked = true;
+                }
+                //---------------------------------
+                check27.addEventListener('change', (e) => {
+                if (check27.checked == true) {
                 check127.checked = false;
-            } else {
+                } else {
                 check127.checked = true;
-            }
-        })
-        check127.addEventListener('change', (e) => {
-            if (check127.checked == true) {
+                }
+                })
+                check127.addEventListener('change', (e) => {
+                if (check127.checked == true) {
                 check27.checked = false;
-            } else {
+                } else {
                 check27.checked = true;
-            }
-        })
-        if (check27.checked == true) {
-            check127.checked = false;
-        } else {
-            check127.checked = true;
-        }
-        //---------------------------------
-        check28.addEventListener('change', (e) => {
-            if (check28.checked == true) {
+                }
+                })
+                if (check27.checked == true) {
+                check127.checked = false;
+                } else {
+                check127.checked = true;
+                }
+                //---------------------------------
+                check28.addEventListener('change', (e) => {
+                if (check28.checked == true) {
                 check128.checked = false;
-            } else {
+                } else {
                 check128.checked = true;
-            }
-        })
-        check128.addEventListener('change', (e) => {
-            if (check128.checked == true) {
+                }
+                })
+                check128.addEventListener('change', (e) => {
+                if (check128.checked == true) {
                 check28.checked = false;
-            } else {
+                } else {
                 check28.checked = true;
-            }
-        })
-        if (check28.checked == true) {
-            check128.checked = false;
-        } else {
-            check128.checked = true;
-        }
+                }
+                })
+                if (check28.checked == true) {
+                check128.checked = false;
+                } else {
+                check128.checked = true;
+                }
 
 
-    </script>
+                </script>
 }

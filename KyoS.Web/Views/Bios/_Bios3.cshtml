@@ -3,7 +3,7 @@
     <pre>
 
     <strong>TREATMENT RECOMMENDATIONS:</strong>
-    <textarea asp-for="Treatmentrecomendations" style="width:90%" rows="8"></textarea>   
+    <textarea asp-for="Treatmentrecomendations" style="width:95%" rows="8" id="Treatmentrecomendations"></textarea>   
     </pre>
 </div>
 <div class="col-md-12">
@@ -12,18 +12,18 @@
     <input type="checkbox" class="form-check-input" id="check125"> I do not concur with the diagnosis and treatment recommendations
     
     Alternative diagnosis and/or recommendations 
-    <textarea asp-for="AlternativeDiagnosis" style="width:90%" rows="4"></textarea>
+    <textarea asp-for="AlternativeDiagnosis" style="width:95%" rows="4" id="AlternativeDiagnosis"></textarea>
     </pre>
 </div>
 <div class="col-md-12">
     <pre>
     @if (User.IsInRole("Supervisor"))
     { 
-        <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner">                                                   
+        <strong>Date Signature Licensed Practitioner</strong> <input asp-for="DateSignatureLicensedPractitioner" id="DateSignatureLicensedPractitioner">                                                   
     }
     @if (User.IsInRole("Documents_Assistant"))
     { 
-        <strong>Date Signature Unlicensed Therapist</strong> <input asp-for="DateSignatureUnlicensedTherapist">                                                   
+        <strong>Date Signature Unlicensed Therapist</strong> <input asp-for="DateSignatureUnlicensedTherapist" id="DateSignatureUnlicensedTherapist">                                                   
     }                                               
     </pre>
 </div>

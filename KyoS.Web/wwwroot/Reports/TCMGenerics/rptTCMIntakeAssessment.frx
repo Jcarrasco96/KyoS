@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/26/2023 11:04:28" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/04/2023 12:34:37" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuAjnSY2K/oynsqpsMacj1hU=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuMRp0Ok9RtHKXq/FTo0f+V0=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -649,7 +649,7 @@
       <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="CASE MANAGEMENT ASSESSMENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
@@ -863,13 +863,13 @@
       <TextObject Name="Text367" Top="510.3" Width="255.15" Height="18.9" Text="B. Household Composition" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text368" Top="531.2" Width="774.9" Height="18.9" Text="List all family members living in the same household and indicate their ability to support and take care of the client." HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
     </DataBand>
-    <DataBand Name="Data4" Top="578.69" Width="778.3" Height="18.9" DataSource="TCMAssessmentHouseComposition" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data4" Top="578.69" Width="778.3" Height="18.9" CanGrow="true" DataSource="TCMAssessmentHouseComposition" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table5" Left="4.16" Width="773.14" Height="18.9">
-        <TableColumn Name="Column13" Width="255.15"/>
+        <TableColumn Name="Column13" Width="236.25"/>
         <TableColumn Name="Column14" Width="47.25"/>
-        <TableColumn Name="Column15" Width="225.04"/>
-        <TableColumn Name="Column16" Width="245.7"/>
-        <TableRow Name="Row5">
+        <TableColumn Name="Column15" Width="177.79"/>
+        <TableColumn Name="Column16" Width="311.85"/>
+        <TableRow Name="Row5" AutoSize="true">
           <TableCell Name="Cell13" Border.Lines="All" Fill.Color="White" Text="[TCMAssessmentHouseComposition.Name]" Font="Arial, 9pt"/>
           <TableCell Name="Cell14" Border.Lines="All" Fill.Color="White" Text="[TCMAssessmentHouseComposition.Age]" HorzAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell15" Border.Lines="All" Fill.Color="White" Text="[TCMAssessmentHouseComposition.RelationShip]" HorzAlign="Center" Font="Arial, 9pt"/>
@@ -878,10 +878,10 @@
       </TableObject>
       <DataHeaderBand Name="DataHeader2" Top="553.95" Width="778.3" Height="20.9">
         <TableObject Name="Table4" Left="4.16" Top="2" Width="773.14" Height="18.9">
-          <TableColumn Name="Column9" Width="255.15"/>
+          <TableColumn Name="Column9" Width="236.25"/>
           <TableColumn Name="Column12" Width="47.25"/>
-          <TableColumn Name="Column10" Width="225.04"/>
-          <TableColumn Name="Column11" Width="245.7"/>
+          <TableColumn Name="Column10" Width="177.79"/>
+          <TableColumn Name="Column11" Width="311.85"/>
           <TableRow Name="Row4">
             <TableCell Name="Cell9" Border.Lines="All" Fill.Color="Gainsboro" Text="Name" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
             <TableCell Name="Cell12" Border.Lines="All" Fill.Color="Gainsboro" Text="Age" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -895,13 +895,13 @@
       <TextObject Name="Text369" Top="28.35" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="SECTION V: PAST AND CURRENT SERVICES AND EFFECTIVENESS" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
       <TextObject Name="Text370" Top="53.25" Width="774.9" Height="18.9" Text="List past and current services provided to client starting with the most recent on top. Identify providers, dates and effectiveness." HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
     </DataBand>
-    <DataBand Name="Data6" Top="703.63" Width="778.3" Height="18.9" DataSource="TCMAssessmentPastCurrentService" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data6" Top="703.63" Width="778.3" Height="18.9" CanGrow="true" DataSource="TCMAssessmentPastCurrentService" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table7" Left="4.16" Width="773.17" Height="18.9">
         <TableColumn Name="Column21" Width="200.82"/>
-        <TableColumn Name="Column22" Width="200.82"/>
-        <TableColumn Name="Column23" Width="151.81"/>
-        <TableColumn Name="Column24" Width="219.72"/>
-        <TableRow Name="Row7">
+        <TableColumn Name="Column22" Width="304.77"/>
+        <TableColumn Name="Column23" Width="114.01"/>
+        <TableColumn Name="Column24" Width="153.57"/>
+        <TableRow Name="Row7" AutoSize="true">
           <TableCell Name="Cell21" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.TypeService]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell22" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.ProviderAgency]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell23" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.DateReceived]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
@@ -911,9 +911,9 @@
       <DataHeaderBand Name="DataHeader3" Top="680.88" Width="778.3" Height="18.9">
         <TableObject Name="Table6" Left="4.16" Width="773.17" Height="18.9">
           <TableColumn Name="Column17" Width="200.82"/>
-          <TableColumn Name="Column18" Width="200.82"/>
-          <TableColumn Name="Column19" Width="151.81"/>
-          <TableColumn Name="Column20" Width="219.72"/>
+          <TableColumn Name="Column18" Width="304.77"/>
+          <TableColumn Name="Column19" Width="114.01"/>
+          <TableColumn Name="Column20" Width="153.57"/>
           <TableRow Name="Row6">
             <TableCell Name="Cell17" Border.Lines="All" Fill.Color="Gainsboro" Text="Type of Service" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
             <TableCell Name="Cell18" Border.Lines="All" Fill.Color="Gainsboro" Text="Provider / Agency" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -945,8 +945,8 @@
       <TableObject Name="Table11" Left="4.16" Width="773.12" Height="18.9">
         <TableColumn Name="Column39" Width="165.37"/>
         <TableColumn Name="Column40" Width="146.47"/>
-        <TableColumn Name="Column41" Width="210.86"/>
-        <TableColumn Name="Column42" Width="250.42"/>
+        <TableColumn Name="Column41" Width="191.96"/>
+        <TableColumn Name="Column42" Width="269.32"/>
         <TableRow Name="Row11">
           <TableCell Name="Cell39" Border.Lines="All" Text="[TCMAssessmentMedication.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell40" Border.Lines="All" Text="[TCMAssessmentMedication.Frequency]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
@@ -958,8 +958,8 @@
         <TableObject Name="Table8" Left="4.16" Top="2" Width="773.12" Height="18.9">
           <TableColumn Name="Column27" Width="165.37"/>
           <TableColumn Name="Column28" Width="146.47"/>
-          <TableColumn Name="Column29" Width="210.86"/>
-          <TableColumn Name="Column30" Width="250.42"/>
+          <TableColumn Name="Column29" Width="191.96"/>
+          <TableColumn Name="Column30" Width="269.32"/>
           <TableRow Name="Row8">
             <TableCell Name="Cell27" Border.Lines="All" Fill.Color="Gainsboro" Text="Medication" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
             <TableCell Name="Cell28" Border.Lines="All" Fill.Color="Gainsboro" Text="Doses / Frecuency" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -1095,8 +1095,8 @@
     <DataBand Name="Data12" Top="276.07" Width="778.3" Height="18.9" DataSource="TCMAssessmentHospital" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table13" Left="4.16" Width="773.02" Height="18.9">
         <TableColumn Name="Column46" Width="264.56"/>
-        <TableColumn Name="Column47" Width="122.81"/>
-        <TableColumn Name="Column48" Width="385.65"/>
+        <TableColumn Name="Column47" Width="103.91"/>
+        <TableColumn Name="Column48" Width="404.55"/>
         <TableRow Name="Row13">
           <TableCell Name="Cell46" Border.Lines="All" Text="[TCMAssessmentHospital.Name]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell47" Border.Lines="All" Text="[IIf(Year([TCMAssessmentHospital.Date]) == 1,&quot;&quot;,[TCMAssessmentHospital.Date])]&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1106,8 +1106,8 @@
       <DataHeaderBand Name="DataHeader5" Top="253.33" Width="778.3" Height="18.9">
         <TableObject Name="Table12" Left="4.16" Width="773.02" Height="18.9">
           <TableColumn Name="Column43" Width="264.56"/>
-          <TableColumn Name="Column44" Width="122.81"/>
-          <TableColumn Name="Column45" Width="385.65"/>
+          <TableColumn Name="Column44" Width="103.91"/>
+          <TableColumn Name="Column45" Width="404.55"/>
           <TableRow Name="Row12">
             <TableCell Name="Cell43" Border.Lines="All" Fill.Color="Gainsboro" Text="Hospital or Institution" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
             <TableCell Name="Cell44" Border.Lines="All" Fill.Color="Gainsboro" Text="Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -1177,10 +1177,10 @@
       <CheckBoxObject Name="CheckBox119" Left="349.65" Top="12.72" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.HaveYouEverBeenToAny"/>
       <TextObject Name="Text465" Left="453.6" Top="9.45" Width="257.04" Height="18.9" Text="If Yes, complete information below:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TableObject Name="Table16" Left="4.16" Top="32.35" Width="773.02" Height="18.9">
-        <TableColumn Name="Column59" Width="236.21"/>
-        <TableColumn Name="Column60" Width="198.41"/>
-        <TableColumn Name="Column61" Width="158.85"/>
-        <TableColumn Name="Column62" Width="179.55"/>
+        <TableColumn Name="Column59" Width="226.76"/>
+        <TableColumn Name="Column60" Width="188.96"/>
+        <TableColumn Name="Column61" Width="139.95"/>
+        <TableColumn Name="Column62" Width="217.35"/>
         <TableRow Name="Row16">
           <TableCell Name="Cell59" Border.Lines="All" Text="When was the first time?" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
           <TableCell Name="Cell60" Border.Lines="All" Text="How many times since then?" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -1189,10 +1189,10 @@
         </TableRow>
       </TableObject>
       <TableObject Name="Table17" Left="4.16" Top="51.7" Width="773.02" Height="18.9">
-        <TableColumn Name="Column63" Width="236.21"/>
-        <TableColumn Name="Column64" Width="198.41"/>
-        <TableColumn Name="Column65" Width="158.85"/>
-        <TableColumn Name="Column66" Width="179.55"/>
+        <TableColumn Name="Column63" Width="226.76"/>
+        <TableColumn Name="Column64" Width="188.96"/>
+        <TableColumn Name="Column65" Width="139.95"/>
+        <TableColumn Name="Column66" Width="217.35"/>
         <TableRow Name="Row17">
           <TableCell Name="Cell63" Border.Lines="All" Text="[TCMAssessment.WhenWas]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
           <TableCell Name="Cell64" Border.Lines="All" Text="[TCMAssessment.HowManyTimes]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
@@ -1278,10 +1278,10 @@
     </DataBand>
     <DataBand Name="Data19" Top="323.63" Width="778.3" Height="18.9" DataSource="TCMAssessmentSurgery" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table23" Left="4.16" Width="772.98" Height="18.9">
-        <TableColumn Name="Column88" Width="220.45"/>
+        <TableColumn Name="Column88" Width="201.55"/>
         <TableColumn Name="Column89" Width="107.05"/>
         <TableColumn Name="Column90" Width="228.14"/>
-        <TableColumn Name="Column91" Width="217.34"/>
+        <TableColumn Name="Column91" Width="236.24"/>
         <TableRow Name="Row23">
           <TableCell Name="Cell88" Border.Lines="All" Text="[TCMAssessmentSurgery.TypeSurgery]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell89" Border.Lines="All" Text="[IIf(Year([TCMAssessmentSurgery.Date]) == 1,&quot;&quot;,[TCMAssessmentHospital.Date])]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1291,10 +1291,10 @@
       </TableObject>
       <DataHeaderBand Name="DataHeader8" Top="300.88" Width="778.3" Height="18.9">
         <TableObject Name="Table22" Left="4.16" Width="772.98" Height="18.9">
-          <TableColumn Name="Column84" Width="220.45"/>
+          <TableColumn Name="Column84" Width="201.55"/>
           <TableColumn Name="Column85" Width="107.05"/>
           <TableColumn Name="Column86" Width="228.14"/>
-          <TableColumn Name="Column87" Width="217.34"/>
+          <TableColumn Name="Column87" Width="236.24"/>
           <TableRow Name="Row22">
             <TableCell Name="Cell84" Border.Lines="All" Fill.Color="Gainsboro" Text="Type of Surgery" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
             <TableCell Name="Cell85" Border.Lines="All" Fill.Color="Gainsboro" Text="Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
