@@ -3200,14 +3200,14 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.TcmServicePlan)
                                                       .ThenInclude(n => n.TcmClient)
                                                       .FirstOrDefaultAsync(d => d.Id == id);
-           
-            List<TCMNoteActivityEntity> noteActivity = await _context.TCMNoteActivity
+
+            /*List<TCMNoteActivityEntity> noteActivity = await _context.TCMNoteActivity
                                                                      .Include(n => n.TCMNote)
                                                                      .Where(m => m.TCMDomain.Id == addendum.TcmDomain.Id)
                                                                      .ToListAsync();
 
             _context.TCMNoteActivity.RemoveRange(noteActivity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
 
             _context.TCMDomains.RemoveRange(addendum.TcmDomain);
             await _context.SaveChangesAsync();

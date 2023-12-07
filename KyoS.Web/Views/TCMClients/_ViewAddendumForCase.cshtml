@@ -55,7 +55,7 @@
                                     @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Client.AdmisionDate)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TcmServicePlan.DateServicePlan)
+                                    @Html.DisplayFor(modelItem => item.DateAdendum)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.TcmServicePlan.TcmClient.Casemanager.Name)
@@ -106,7 +106,7 @@
                                             }
                                             else
                                             {
-                                                <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
