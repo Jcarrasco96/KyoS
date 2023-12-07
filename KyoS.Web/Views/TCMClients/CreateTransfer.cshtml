@@ -49,10 +49,72 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IdCaseManagerTo").change(function () {
+                if ($("#IdCaseManagerTo").val() != 0) {
+                    $("#NameAssignedTo").val($("#IdCaseManagerTo option:selected").text());
+                }
+                else {
+                    $("#NameAssignedTo").val("");
+                }
+            })
+        });
 
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+                $("#Address").prop('disabled', false);
+                $("#CityStateZip").prop('disabled', false);
+                $("#PrimaryPhone").prop('disabled', false);
+                $("#OtherPhone").prop('disabled', false);
+
+            } else {
+                check101.checked = true;
+            }
+
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+                $("#Address").prop('disabled', true);
+                $("#CityStateZip").prop('disabled', true);
+                $("#PrimaryPhone").prop('disabled', true);
+                $("#OtherPhone").prop('disabled', true);
+            } else {
+                check1.checked = true;
+            }
+
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+        //
+        check2.addEventListener('change', (e) => {
+            if (check2.checked == true) {
+                check102.checked = false;
+                $("#DateAudit").prop('disabled', false);
+            } else {
+                check102.checked = true;
+            }
+
+        })
+        check102.addEventListener('change', (e) => {
+            if (check102.checked == true) {
+                check2.checked = false;
+                $("#DateAudit").prop('disabled', true);
+            } else {
+                check2.checked = true;
+            }
+
+        })
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
     </script>
 }
 

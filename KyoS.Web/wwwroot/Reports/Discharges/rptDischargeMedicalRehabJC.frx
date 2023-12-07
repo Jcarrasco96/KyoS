@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/06/2023 11:16:17" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/07/2023 11:10:12" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuG3KhVgYj7Ohyg4AGSGZtYE=">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuB04x5+d9vZ7yfn9YMxZ1L4=">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuFuXP9SzKbgtWU0iQVzNRpI=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuMv7GMMxuqAIPz5h6ytpVyo=">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -235,7 +235,7 @@
         <TextObject Name="Text2" Left="31.71" Top="32.35" Width="387.45" Height="24.57" Text="Discharge Summary" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold" TextRenderType="HtmlTags"/>
       </ContainerObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="83.23" Width="778.3" Height="722.2" CanGrow="true" CanShrink="true" DataSource="Discharge">
+    <DataBand Name="Data1" Top="83.23" Width="778.3" Height="608.8" CanGrow="true" CanShrink="true" DataSource="Discharge">
       <TextObject Name="Text29" Left="3.45" Top="482.5" Width="170.1" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Clinician Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text31" Left="196.34" Top="463.43" Width="232.47" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text33" Left="625.7" Top="482.33" Width="113.4" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -265,14 +265,8 @@
       <TextObject Name="Text520" Left="467.21" Top="567.83" Width="113.4" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Credentials" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text521" Left="467.21" Top="548.93" Width="113.4" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text522" Left="467.21" Top="543.26" Width="113.4" Height="18.9" Text="[Supervisors.Code]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text524" Left="197.23" Top="678.23" Width="232.47" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text525" Left="467.54" Top="697.13" Width="113.4" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text526" Left="467.54" Top="678.23" Width="113.4" Height="18.9" Text="____________________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text527" Left="467.54" Top="672.56" Width="113.4" Height="18.9" Text="[Discharge.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text528" Left="197.23" Top="672.4" Width="232.47" Height="18.9" Text="[Clients.Name]" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text530" Left="197.23" Top="697.13" Width="232.47" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Client Name" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="809.27" Width="778.3" Height="29.35">
+    <PageFooterBand Name="PageFooter2" Top="695.87" Width="778.3" Height="29.35">
       <TextObject Name="Text65" Left="689.85" Top="5.29" Width="85.05" Height="18.9" CanGrow="true" CanShrink="true" CanBreak="false" Text="Page 2 of 2" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
     </PageFooterBand>
   </ReportPage>

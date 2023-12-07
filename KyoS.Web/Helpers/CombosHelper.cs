@@ -2030,7 +2030,7 @@ namespace KyoS.Web.Helpers
             {
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "[All Clients...]",
+                    Text = "[All Case Managers...]",
                     Value = "0"
                 });
             }
@@ -2038,7 +2038,7 @@ namespace KyoS.Web.Helpers
             {
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "[Select Client...]",
+                    Text = "[Select Case Manager...]",
                     Value = "0"
                 });
             }

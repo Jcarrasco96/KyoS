@@ -1383,9 +1383,8 @@ namespace KyoS.Web.Controllers
            
             TCMTransferViewModel model;
             DateTime temp = new DateTime();
-            if (User.IsInRole("TCMSupervisor"))
-            {
-                if (user_logged.Clinic != null)
+            
+            if (user_logged.Clinic != null)
                 {
 
                     model = new TCMTransferViewModel
@@ -1429,12 +1428,7 @@ namespace KyoS.Web.Controllers
                     }
                     return View(model);
                 }
-            }
-            else
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
-
+            
             return View();
         }
 
