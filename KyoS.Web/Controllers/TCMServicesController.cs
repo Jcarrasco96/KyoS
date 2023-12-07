@@ -1054,5 +1054,137 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CopyActivity", tcmCopyActivityViewModel) });
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> DuplicateService(int idServiceFrom = 0)
+        {
+            TCMCopyActivityViewModel model;
+
+            model = new TCMCopyActivityViewModel
+            {
+                IdServiceFrom = idServiceFrom,
+                IdServiceTo = 0,
+                Services = _combosHelper.GetComboTCMServices(),
+                TCMService = _context.TCMServices.FirstOrDefault(n => n.Id == idServiceFrom)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> DuplicateService(TCMCopyActivityViewModel tcmCopyActivityViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMServiceEntity tcmServiceFrom = await _context.TCMServices
+                                                            .Include(g => g.Stages)
+                                                            .Include(g => g.TCMServiceActivity)
+                                                            .Include(g => g.TCMSubServices)
+                                                            .Include(g => g.Clinic)
+                                                            .FirstOrDefaultAsync(m => m.Id == tcmCopyActivityViewModel.IdServiceFrom);
+            TCMServiceEntity tcmNewService = new TCMServiceEntity()
+            { 
+                Name = tcmServiceFrom.Name,
+                Clinic = tcmServiceFrom.Clinic,
+                CreatedBy = tcmServiceFrom.CreatedBy,
+                CreatedOn = tcmServiceFrom.CreatedOn,
+                Description = tcmServiceFrom.Description                
+            };
+
+            tcmNewService.Stages = new List<TCMStageEntity>();
+            tcmNewService.TCMSubServices = new List<TCMSubServiceEntity>();
+            tcmNewService.TCMServiceActivity = new List<TCMServiceActivityEntity>();
+            string[] aux = tcmServiceFrom.Code.Split('.');
+            int mount = await _context.TCMServices.Where(n => n.Code.Contains(aux[0]) == true).CountAsync();
+            tcmNewService.Code = aux[0] + '.' + mount;
+            if (ModelState.IsValid)
+            {
+                if (tcmCopyActivityViewModel.copyAllObjective == true)
+                {
+                    List<TCMStageEntity> tempList = new List<TCMStageEntity>();
+                    foreach (var item in tcmServiceFrom.Stages)
+                    {
+                        TCMStageEntity temp = new TCMStageEntity();
+                        temp.Clinic = item.Clinic;
+                        temp.CreatedBy = item.CreatedBy;
+                        temp.CreatedOn = item.CreatedOn;
+                        temp.Description = item.Description;
+                        temp.ID_Etapa = item.ID_Etapa;
+                        temp.Name = item.Name;
+                        temp.tCMservice = tcmNewService;
+                        tempList.Add(temp);
+                                                
+                    }
+                    tcmNewService.Stages = tempList;
+                }
+
+                if (tcmCopyActivityViewModel.copyAllActivity == true)
+                {
+                   
+                    foreach (var item in tcmServiceFrom.TCMServiceActivity)
+                    {
+                        TCMServiceActivityEntity temp = new TCMServiceActivityEntity();
+                        temp.Approved = 1;
+                        temp.CreatedBy = item.CreatedBy;
+                        temp.CreatedOn = item.CreatedOn;
+                        temp.Description = item.Description;
+                        temp.Frecuency = item.Frecuency;
+                        temp.Name = item.Name;
+                        temp.Status = item.Status;
+                        temp.Unit = item.Unit;
+                        temp.TcmService = tcmNewService;
+                        tcmNewService.TCMServiceActivity.Add(temp);
+                        temp = new TCMServiceActivityEntity();
+                    }
+                }
+
+                if (tcmCopyActivityViewModel.copyAllSubService == true)
+                {
+                    
+                    foreach (var item in tcmServiceFrom.TCMSubServices)
+                    {
+                        TCMSubServiceEntity temp1 = new TCMSubServiceEntity();
+                        temp1.Active = item.Active;
+                        temp1.CreatedBy = item.CreatedBy;
+                        temp1.CreatedOn = item.CreatedOn;
+                        temp1.Description = item.Description;
+                        temp1.Name = item.Name;
+                        temp1.TcmService = tcmNewService;
+                        tcmNewService.TCMSubServices.Add(temp1);
+                        //temp1 = new TCMSubServiceEntity();
+                    }
+                }
+
+                _context.Add(tcmNewService);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmService = await _context.TCMServices
+                                                                      .Include(m => m.Stages)
+                                                                      .OrderBy(f => f.Code)
+                                                                      .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServices", tcmService) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            //recovery data
+
+            tcmCopyActivityViewModel.Services = _combosHelper.GetComboTCMServices();
+            tcmCopyActivityViewModel.TCMService = tcmServiceFrom;
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "DuplicateService", tcmCopyActivityViewModel) });
+        }
+
     }
 }
