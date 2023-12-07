@@ -149,7 +149,7 @@
                                              <a onclick="showInPopup('@Url.Action("ReturnTransfer", "TCMClients", new {idtransfer = item.Id }, Context.Request.Scheme)','Return transfer')" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                          }
 
-                                         <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                         <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Details"><i class="glyphicon glyphicon-list"></i></a>
                                      }
                                      else
                                      {
@@ -172,7 +172,7 @@
                                              else
                                              {
                                                  <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Details"><i class="glyphicon glyphicon-list"></i></a>
                                              }
                                          }
                                          @if (item.TCMAssignedFrom.Id.ToString() == ViewData["IdTCMLogin"].ToString())
@@ -185,7 +185,7 @@
                                              else
                                              {
                                                  <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                                 <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Details"><i class="glyphicon glyphicon-list"></i></a>
                                              }
                                          }
                                      }
@@ -194,7 +194,7 @@
                                          @if (User.IsInRole("Manager"))
                                          {
                                              <a asp-action="ReturnTransfer" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-warning disabled" title="Return Transfer"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                             <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Read Only"><i class="glyphicon glyphicon-list"></i></a>
+                                             <a asp-action="TransferReadOnly" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-primary" title="Details"><i class="glyphicon glyphicon-list"></i></a>
                                          }
                                      }
                                  }
