@@ -22,5 +22,9 @@ namespace KyoS.Web.Models
 
         public IEnumerable<SelectListItem> Services { get; set; }
 
+        public bool copyAllObjective { get; set; }
+        public bool copyAllActivity { get; set; }
+        public bool copyAllSubService { get; set; }
+
     }
 }

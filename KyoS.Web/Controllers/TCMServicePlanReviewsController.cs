@@ -353,6 +353,7 @@ namespace KyoS.Web.Controllers
                                                                                 .FirstOrDefault(n => n.Id == tcmServicePlanreviewViewModel.Id);
                 tcmServicePlanReviewEntity.Recomendation = tcmServicePlanreviewViewModel.Recomendation;
                 tcmServicePlanReviewEntity.SummaryProgress = tcmServicePlanreviewViewModel.SummaryProgress;
+                tcmServicePlanReviewEntity.DateServicePlanReview = tcmServicePlanreviewViewModel.DateServicePlanReview;
 
                 List<TCMMessageEntity> messages = tcmServicePlanReviewEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
                 //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
@@ -1576,6 +1577,73 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ServicePlanReviewReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
 
+            TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews.FirstOrDefaultAsync(s => s.Id == id);
+            if (servicePlanReview == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                servicePlanReview.Approved = 0;
+                _context.TCMServicePlanReviews.Update(servicePlanReview);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteSPR(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<TCMMessageEntity> messageEntity = await _context.TCMMessages
+                                                                 .Include(n => n.TCMAddendum)
+                                                                 .Where(d => d.TCMServicePlanReview.Id == id)
+                                                                 .ToListAsync();
+
+            _context.TCMMessages.RemoveRange(messageEntity);
+            await _context.SaveChangesAsync();
+
+            TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews
+                                                                         .Include(n => n.TCMServicePlanRevDomain)
+                                                                         .ThenInclude(n => n.TCMServicePlanRevDomainObjectiive)
+                                                                         .Include(n => n.TcmServicePlan)
+                                                                         .ThenInclude(n => n.TcmClient)
+                                                                         .FirstOrDefaultAsync(d => d.Id == id);
+
+           /* List<TCMNoteActivityEntity> noteActivity = await _context.TCMNoteActivity
+                                                                     .Include(n => n.TCMNote)
+                                                                     .Where(m => m.TCMDomain.Id == )
+                                                                     .ToListAsync();
+
+            _context.TCMNoteActivity.RemoveRange(noteActivity);
+            await _context.SaveChangesAsync();*/
+
+            _context.TCMServicePlanReviewDomains.RemoveRange(servicePlanReview.TCMServicePlanRevDomain);
+            await _context.SaveChangesAsync();
+
+            _context.TCMServicePlanReviews.Remove(servicePlanReview);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = servicePlanReview.TcmServicePlan.TcmClient.Id });
+
+        }
     }
 }

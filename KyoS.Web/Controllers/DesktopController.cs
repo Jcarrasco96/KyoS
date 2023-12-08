@@ -864,8 +864,7 @@ namespace KyoS.Web.Controllers
                                                                                 && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 
                 ViewBag.DischargePending = await _context.TCMClient                                                   
-                                                         .CountAsync(g => (g.Status == StatusType.Close
-                                                                        && g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                         .CountAsync(g => (g.Client.Clinic.Id == user_logged.Clinic.Id
                                                                         && g.TcmServicePlan.TCMDischarge.Approved == 1
                                                                         && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
 

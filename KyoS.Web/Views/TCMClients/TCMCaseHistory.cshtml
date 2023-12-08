@@ -78,6 +78,17 @@
         </div>
         <div class="col-md-push-12">
             <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMAdendum.Count() > 0)
+                {
+                    @await Html.PartialAsync("_ViewServicePlanRForCase", Model.TcmServicePlan.TCMServicePlanReview)
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
                 @if (Model.TCMNote.Count() > 0)
                 {
                     @await Html.PartialAsync("_ViewTCMNotesForCase", Model.TCMNote.ToList())
@@ -202,6 +213,24 @@
                 }
             });
         }
+
+        function ConfirmDeleteSPR(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The addendums and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteSPR", "TCMServicePlanReviews")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
     </script>
 
 

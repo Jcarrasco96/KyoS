@@ -667,6 +667,9 @@ namespace KyoS.Web.Controllers
                                                                        .ThenInclude(m => m.Client)
                                                                        .Include(n => n.TcmDischargeFollowUp)
                                                                        .Include(n => n.TCMMessages)
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Casemanager)
                                                                        .Where(m => m.Approved == approved
                                                                             && m.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                        .OrderBy(m => m.TcmServicePlan.TcmClient.CaseNumber)
@@ -681,6 +684,9 @@ namespace KyoS.Web.Controllers
                                                                        .Include(m => m.TcmServicePlan)
                                                                        .ThenInclude(m => m.TcmClient)
                                                                        .ThenInclude(m => m.Client)
+                                                                       .Include(m => m.TcmServicePlan)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .ThenInclude(m => m.Casemanager)
                                                                        .Include(n => n.TcmDischargeFollowUp)
                                                                        .Include(n => n.TCMMessages)
                                                                        .Where(m => m.Approved == approved
@@ -761,10 +767,10 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> ApproveDischarge(int id)
         {
             TCMDischargeEntity tcmDischarge = _context.TCMDischarge
-                                                   .Include(u => u.TcmServicePlan)
-                                                   .ThenInclude(u => u.TcmClient)
-                                                   .ThenInclude(u => u.Client)
-                                                   .FirstOrDefault(u => u.Id == id);
+                                                      .Include(u => u.TcmServicePlan)
+                                                      .ThenInclude(u => u.TcmClient)
+                                                      .ThenInclude(u => u.Client)
+                                                      .FirstOrDefault(u => u.Id == id);
 
             if (tcmDischarge != null)
             {
@@ -776,7 +782,12 @@ namespace KyoS.Web.Controllers
                     if (user_logged.Clinic != null)
                     {
                         tcmDischarge.Approved = 2;
+                        tcmDischarge.LastModifiedBy = user_logged.UserName;
+                        tcmDischarge.LastModifiedOn = DateTime.Now;
                         _context.Update(tcmDischarge);
+                        tcmDischarge.TcmServicePlan.TcmClient.Status = StatusType.Close;
+                        tcmDischarge.TcmServicePlan.TcmClient.DataClose = tcmDischarge.DischargeDate;
+                        _context.Update(tcmDischarge.TcmServicePlan.TcmClient);
                         try
                         {
                             await _context.SaveChangesAsync();

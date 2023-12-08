@@ -5,43 +5,31 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CopyActivity" asp-route-idServiceFrom="@Model.IdServiceFrom" onsubmit="return jQueryAjaxPostTCMService(this);">
+        <form asp-action="DuplicateService" asp-route-idServiceFrom="@Model.IdServiceFrom" onsubmit="return jQueryAjaxPostTCMService(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdServiceTo" />
+            <input type="hidden" asp-for="IdServiceFrom" />
 
             <div class="col-md-12">
-                <p><strong>FROM</strong></p>
+                <p><strong>Service to duplicate</strong></p>
             </div>
-            <div class="col-md-12">
-                <div class="form-group col-md-6">
-                    <label class="control-label"></label> <strong>Select Service from &nbsp;*</strong>
-                    <select asp-for="IdServiceFrom" asp-items="Model.Services" class="form-control"></select>
-                    <span asp-validation-for="IdServiceFrom" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    &nbsp;
-                </div>
+            <div class="form-group col-md-3">
+                <label asp-for="TCMService.Code" class="control-label"></label>&nbsp;
+                <input asp-for="TCMService.Code" class="form-control" disabled />
+                <span asp-validation-for="TCMService.Code" class="text-danger"></span>
             </div>
-            <div class="col-md-12">
-                <hr />
+            <div class="form-group col-md-9">
+                <label asp-for="TCMService.Name" class="control-label"></label>&nbsp;
+                <input asp-for="TCMService.Name" class="form-control" disabled />
+                <span asp-validation-for="TCMService.Name" class="text-danger"></span>
             </div>
-            <div class="col-md-12">
-                <p><strong>TO</strong></p>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group col-md-3">
-                    <label asp-for="TCMService.Code" class="control-label"></label>&nbsp;
-                    <input asp-for="TCMService.Code" class="form-control" disabled />
-                    <span asp-validation-for="TCMService.Code" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-9">
-                    <label asp-for="TCMService.Name" class="control-label"></label>&nbsp;
-                    <input asp-for="TCMService.Name" class="form-control" disabled />
-                    <span asp-validation-for="TCMService.Name" class="text-danger"></span>
+            <div class="col-md-push-12">
+                <div class="form-group col-md-12">
+                    <input type="checkbox" asp-for="copyAllObjective" class="form-check-input"> Copy of all objectives for the selected service.<br />
+                    <input type="checkbox" asp-for="copyAllActivity" class="form-check-input"> Copy of all activities for the selected service.<br />
+                    <input type="checkbox" asp-for="copyAllSubService" class="form-check-input"> Copy of all sub-Services for the selected service.<br />
                 </div>
             </div>
             <div class="col-md-12">
-                <i>Note: This action is a copy of all activities for the selected service.</i>
                 <hr />
             </div>
             <div class="col-md-12">
