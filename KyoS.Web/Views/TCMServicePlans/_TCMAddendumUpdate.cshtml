@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Addendums</h3>
+                <h3 class="panel-title">Addendums for update</h3>
             </div>
             <div class="panel-body" id="view-tcmAddendum">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -34,7 +34,7 @@
                                 Client Name
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Addendum Date
+                                Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -156,12 +156,12 @@
                                         @if (item.Approved == 2)
                                         {
                                             <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-aview=5 class="btn btn-success" title="Update TCM Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintAdendum" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Addendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-pencil"></i>
-                                            <a asp-action="PrintServicePlan" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintAdendum" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Addendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>

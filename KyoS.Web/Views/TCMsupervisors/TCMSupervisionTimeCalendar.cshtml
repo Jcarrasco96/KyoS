@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMSupervisionTimeViewModel
 @{
-    ViewData["Title"] = "TCMSupervision";
+    ViewData["Title"] = "TCM Supervision";
 }
 <link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
 
@@ -10,13 +10,13 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Billing</li>
+        <li class="active">Supervision</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <label asp-for="IdCaseManager" class="control-label">Select TCM</label>
+        <label asp-for="IdCaseManager" class="control-label">Select Case Manager</label>
         <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control" id="cbCaseManager"></select>
         <span asp-validation-for="IdCaseManager" class="text-danger"></span>
     </div>

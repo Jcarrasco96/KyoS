@@ -1017,8 +1017,7 @@ namespace KyoS.Web.Controllers
                 {
                     return View(tcmClient.Where(n => n.DataClose.Date < DateTime.Today.Date));
                 }
-            }
-            
+            }            
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
