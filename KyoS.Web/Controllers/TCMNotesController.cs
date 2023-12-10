@@ -563,8 +563,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMNoteActivityViewModel model;
-            IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id);
-
+           
             TCMNoteEntity note = _context.TCMNote
 
                                          .Include(n => n.TCMNoteActivity)
@@ -575,6 +574,7 @@ namespace KyoS.Web.Controllers
                                          .FirstOrDefault(n => n.Id == idNote);
 
             DateTime StartTime = note.DateOfService;
+            IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id, note.DateOfService);
 
             if (note.TCMNoteActivity.Count() > 0)
             {
@@ -664,7 +664,7 @@ namespace KyoS.Web.Controllers
 
                         TcmNotesViewModel.TCMNote = tcmNote1;
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -686,7 +686,7 @@ namespace KyoS.Web.Controllers
 
                         TcmNotesViewModel.TCMNote = tcmNote1;
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -708,7 +708,7 @@ namespace KyoS.Web.Controllers
 
                         TcmNotesViewModel.TCMNote = tcmNote1;
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -730,7 +730,7 @@ namespace KyoS.Web.Controllers
 
                         TcmNotesViewModel.TCMNote = tcmNote1;
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -752,7 +752,7 @@ namespace KyoS.Web.Controllers
 
                         TcmNotesViewModel.TCMNote = tcmNote1;
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id,tcmNote1.DateOfService);
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -784,7 +784,7 @@ namespace KyoS.Web.Controllers
 
                             TcmNotesViewModel.TCMNote = tcmNote1;
                             TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                             if (TcmNotesViewModel.IdTCMDomain != 0)
                             {
                                 TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -837,7 +837,7 @@ namespace KyoS.Web.Controllers
 
             TcmNotesViewModel.TCMNote = tcmNote;
             TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote.DateOfService);
             if (TcmNotesViewModel.IdTCMDomain != 0)
             {
                 TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -856,7 +856,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMNoteActivityViewModel model;
-            IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id);
+            IEnumerable<SelectListItem> list_Services = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == idTCMClient).Id, initDate);
 
             if (user_logged.Clinic != null)
             {
@@ -925,7 +925,7 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic.Setting.UnitsForDayForClient < CalculateUnits(TcmNotesViewModel.Minutes + _context.TCMNoteActivityTemp.Where(n => n.IdTCMClient == TcmNotesViewModel.IdTCMClient && n.DateOfServiceOfNote.Date == TcmNotesViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes)))
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
 
                     if (TcmNotesViewModel.IdTCMDomain != 0)
                     {
@@ -942,7 +942,7 @@ namespace KyoS.Web.Controllers
                 if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(TcmNotesViewModel.IdTCMClient, true) - CalculateUnits(TcmNotesViewModel.Minutes)) < 0))
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
 
                     if (TcmNotesViewModel.IdTCMDomain != 0)
                     {
@@ -958,7 +958,7 @@ namespace KyoS.Web.Controllers
                 if (CheckTimeRange(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime))
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
 
                     if (TcmNotesViewModel.IdTCMDomain != 0)
                     {
@@ -974,7 +974,7 @@ namespace KyoS.Web.Controllers
                 if (noteActivities.Count() > 0 || noteActivitiesTemp.Count() > 0 )
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
                     
                     if (TcmNotesViewModel.IdTCMDomain != 0)
                     {
@@ -990,7 +990,7 @@ namespace KyoS.Web.Controllers
                 if (CheckOverlappingMH(TcmNotesViewModel.StartTime, TcmNotesViewModel.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).Client.Id) == true)
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
 
                     if (TcmNotesViewModel.IdTCMDomain != 0)
                     {
@@ -1016,7 +1016,7 @@ namespace KyoS.Web.Controllers
                     if (supervision != null)
                     {
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
 
                         if (TcmNotesViewModel.IdTCMDomain != 0)
                         {
@@ -1051,7 +1051,7 @@ namespace KyoS.Web.Controllers
             }
 
             TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id);
+            TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
             if (TcmNotesViewModel.IdTCMDomain != 0)
             {
                 TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
@@ -1184,7 +1184,7 @@ namespace KyoS.Web.Controllers
 
                     NoteActivityViewModel.TCMNote = tcmNote1;
                     NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                     if (NoteActivityViewModel.IdTCMDomain != 0)
                     {
                         TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1209,7 +1209,7 @@ namespace KyoS.Web.Controllers
 
                         NoteActivityViewModel.TCMNote = tcmNote1;
                         NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                        NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (NoteActivityViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1233,7 +1233,7 @@ namespace KyoS.Web.Controllers
 
                     NoteActivityViewModel.TCMNote = tcmNote1;
                     NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                     if (NoteActivityViewModel.IdTCMDomain != 0)
                     {
                         TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1264,7 +1264,7 @@ namespace KyoS.Web.Controllers
 
                     NoteActivityViewModel.TCMNote = tcmNote1;
                     NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                     if (NoteActivityViewModel.IdTCMDomain != 0)
                     {
                         TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1287,7 +1287,7 @@ namespace KyoS.Web.Controllers
 
                     NoteActivityViewModel.TCMNote = tcmNote1;
                     NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                     if (NoteActivityViewModel.IdTCMDomain != 0)
                     {
                         TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1320,7 +1320,7 @@ namespace KyoS.Web.Controllers
 
                         NoteActivityViewModel.TCMNote = tcmNote1;
                         NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-                        NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+                        NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
                         if (NoteActivityViewModel.IdTCMDomain != 0)
                         {
                             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
@@ -1370,7 +1370,7 @@ namespace KyoS.Web.Controllers
 
             NoteActivityViewModel.TCMNote = tcmNote;
             NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
-            NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id);
+            NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id,tcmNote.DateOfService);
             if (NoteActivityViewModel.IdTCMDomain != 0)
             {
                 TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);

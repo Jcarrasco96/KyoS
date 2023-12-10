@@ -1507,12 +1507,16 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan)
+        public IEnumerable<SelectListItem>  GetComboServicesUsed(int idServicePlan, DateTime serviceDate)
         {
            
             List<TCMDomainEntity> Services_Domain = _context.TCMDomains
                                                             .Include(d => d.TcmServicePlan)
-                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan)
+                                                            .Where(d => d.TcmServicePlan.Id == idServicePlan
+                                                                     && d.DateIdentified <= serviceDate
+                                                                     && ((d.Status == false)
+                                                                      || (d.Status == true 
+                                                                       && d.DateAccomplished > serviceDate)))
                                                             .ToList();
             
             List<SelectListItem> list = Services_Domain.Select(c => new SelectListItem

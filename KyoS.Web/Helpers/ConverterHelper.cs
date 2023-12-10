@@ -1657,8 +1657,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = TcmDomainEntity.LastModifiedBy,
                 LastModifiedOn = TcmDomainEntity.LastModifiedOn,
                 Id_SubService = TcmDomainEntity.IdSubService,
-                NameSubService = TcmDomainEntity.NameSubService
-
+                NameSubService = TcmDomainEntity.NameSubService,
+                DateAccomplished = TcmDomainEntity.DateAccomplished
             };
         }
 
@@ -1681,7 +1681,9 @@ namespace KyoS.Web.Helpers
                 TcmServicePlan = model.TcmServicePlan,
                 Origin = origin,
                 NameSubService =(model.Id_SubService == 0)? string.Empty: _context.TCMSubServices.FirstOrDefault(n => n.Id == model.Id_SubService).Name,
-                IdSubService = model.Id_SubService
+                IdSubService = model.Id_SubService,
+                Status = model.Status,
+                DateAccomplished = model.DateAccomplished
             };
         }
 
@@ -6071,7 +6073,7 @@ namespace KyoS.Web.Helpers
                 IdTCMDomain = model.TCMDomain.Id,
                 IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
-                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
+                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id, model.TCMNote.DateOfService),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
                 ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
                 DateOfServiceNote = model.TCMNote.DateOfService,

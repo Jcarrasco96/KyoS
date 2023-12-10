@@ -34,5 +34,8 @@ namespace KyoS.Web.Data.Entities
         public int IdSubService { get; set; }
         public string NameSubService { get; set; }
 
+        [Display(Name = "Date Accomplished")]
+        [DataType(DataType.Date)]
+        public DateTime DateAccomplished { get; set; }
     }
 }
