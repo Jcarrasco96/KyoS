@@ -67,7 +67,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBio_RecentWeight();
         IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive();
         IEnumerable<SelectListItem> GetComboTCMNoteSetting();
-        IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan, DateTime serviceDate);
         IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
         IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerActives(string user, DateTime dateTCMNote);
         IEnumerable<SelectListItem> GetComboServiceAgency();
