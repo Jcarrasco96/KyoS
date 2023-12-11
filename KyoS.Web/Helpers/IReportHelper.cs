@@ -236,5 +236,9 @@ namespace KyoS.Web.Helpers
         #region Referral Form
         Stream TCMReferralFormReport(TCMClientEntity tcmClient);
         #endregion
+
+        #region TCMTransfer
+        Stream TCMTransferReport(TCMTransferEntity tcmTransfer);
+        #endregion
     }
 }
