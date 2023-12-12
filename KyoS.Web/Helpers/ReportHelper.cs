@@ -23990,6 +23990,118 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
+        
+        private DataTable GetTCMTransferDS(TCMTransferEntity transfer)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMTransfers"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TCMClientId", typeof(int));
+            dt.Columns.Add("LegalGuardianName", typeof(string));
+            dt.Columns.Add("LegalGuardianPhone", typeof(string));
+            dt.Columns.Add("ChangeInformation", typeof(bool));
+            dt.Columns.Add("Address", typeof(string));
+            dt.Columns.Add("CityStateZip", typeof(string));
+            dt.Columns.Add("PrimaryPhone", typeof(string));
+            dt.Columns.Add("OtherPhone", typeof(string));
+            dt.Columns.Add("TransferFollow", typeof(string));
+            dt.Columns.Add("OpeningDate", typeof(DateTime));
+            dt.Columns.Add("DateServicePlanORLastSPR", typeof(DateTime));
+            dt.Columns.Add("DateLastService", typeof(DateTime));
+            dt.Columns.Add("HasClientChart", typeof(bool));
+            dt.Columns.Add("DateAudit", typeof(DateTime));
+            dt.Columns.Add("DateAuditSign", typeof(DateTime));
+            dt.Columns.Add("TCMAssignedToId", typeof(int));
+            dt.Columns.Add("OpeningDateAssignedTo", typeof(DateTime));
+            dt.Columns.Add("TCMSupervisorId", typeof(int));
+            dt.Columns.Add("TCMAssignedFromId", typeof(int));
+            dt.Columns.Add("EndTransferDate", typeof(DateTime));
+            dt.Columns.Add("TCMAssignedFromAccept", typeof(bool));
+            dt.Columns.Add("TCMAssignedToAccept", typeof(bool));
+            dt.Columns.Add("Return", typeof(bool));
+            dt.Columns.Add("TCMSupervisorAccept", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (transfer != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            transfer.Id,
+                                            0,
+                                            transfer.LegalGuardianName,
+                                            transfer.LegalGuardianPhone,
+                                            transfer.ChangeInformation,
+                                            transfer.Address,
+                                            transfer.CityStateZip,
+                                            transfer.PrimaryPhone,
+                                            transfer.OtherPhone,
+                                            transfer.TransferFollow,
+                                            transfer.OpeningDate,
+                                            transfer.DateServicePlanORLastSPR,
+                                            transfer.DateLastService,
+                                            transfer.HasClientChart,
+                                            transfer.DateAudit,
+                                            transfer.DateAuditSign,
+                                            0,
+                                            transfer.OpeningDateAssignedTo,
+                                            0,
+                                            0,
+                                            transfer.EndTransferDate,
+                                            transfer.TCMAssignedFromAccept,
+                                            transfer.TCMAssignedToAccept,
+                                            transfer.Return,
+                                            transfer.TCMSupervisorAccept,
+                                            transfer.CreatedBy,
+                                            transfer.CreatedOn,
+                                            transfer.LastModifiedBy,
+                                            transfer.LastModifiedOn
+                                        });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,              
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),                                            
+                                            false,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            0,
+                                            new DateTime(),
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            new DateTime(),
+                                            string.Empty,
+                                            new DateTime()
+                                       });
+            }
+
+            return dt;
+        }
 
         #endregion
 
@@ -26653,6 +26765,97 @@ namespace KyoS.Web.Helpers
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
+        #region TCMTransfer
+        public Stream TCMTransferReport(TCMTransferEntity tcmTransfer)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMTransfer.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(tcmTransfer.TCMSupervisor.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(tcmTransfer.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(tcmTransfer.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(tcmTransfer.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(tcmTransfer.TCMAssignedFrom));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssignedFrom");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(tcmTransfer.TCMAssignedTo));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssignedTo");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMTransferDS(tcmTransfer));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMTransfers");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(tcmTransfer.TCMSupervisor.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmTransfer.TCMSupervisor.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(tcmTransfer.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmTransfer.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(tcmTransfer.TCMAssignedFrom.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmTransfer.TCMAssignedFrom.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(tcmTransfer.TCMAssignedTo.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(tcmTransfer.TCMAssignedTo.SignaturePath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 

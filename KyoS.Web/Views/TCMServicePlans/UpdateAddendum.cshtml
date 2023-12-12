@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAdendumEntity>
 @{
-    ViewData["Title"] = "Service Plans";
+    ViewData["Title"] = "Updates of Addendums";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,7 +11,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Service Plans</li>
+        <li class="active">Updates of Addendums</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -32,18 +32,7 @@
             $('#MyTable').DataTable({
                "order": [[0, "asc"]],
                "pageLength": 100
-            });
-
-            // Delete item
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-            $("#btnYesDelete").click(function () {
-               var url = "@Url.Action("DeleteAddendum", "TCServicePlan")";
-               window.location.href = url + '/' + item_to_delete;
-            });
+            });            
         });
         $(function () {
 

@@ -1017,8 +1017,7 @@ namespace KyoS.Web.Controllers
                 {
                     return View(tcmClient.Where(n => n.DataClose.Date < DateTime.Today.Date));
                 }
-            }
-            
+            }            
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
@@ -1783,5 +1782,30 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTransfer(int id)
+        {
+            TCMTransferEntity entity = await _context.TCMTransfers
+
+                                                     .Include(t => t.TCMClient)
+                                                     .ThenInclude(t => t.Client)
+
+                                                     .Include(t => t.TCMAssignedFrom)
+
+                                                     .Include(t => t.TCMAssignedTo)
+
+                                                     .Include(t => t.TCMSupervisor)  
+                                                     .ThenInclude(s => s.Clinic)
+
+                                                     .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMTransferReport(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }
