@@ -94,21 +94,6 @@
                 navLinks: true,
                 firstDay: 1,
                 hiddenDays: [0],
-                dateClick: function(info) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '@Url.Action("AddProgressNote","TCMBilling", null, Context.Request.Scheme)' + '?date=' + info.dateStr,
-                        success: function (res) {
-                            $('#form-modal .modal-body').html(res);
-                            $('#form-modal .modal-title').html('Add Progress Note');
-                            $('#form-modal').modal('show');
-                            // to make popup draggable
-                            $('.modal-dialog').draggable({
-                                handle: ".modal-header"
-                            });
-                        }
-                    })
-                },
                 eventTimeFormat: { // like '14:30:00'
                     hour: 'numeric',
                     minute: '2-digit',
