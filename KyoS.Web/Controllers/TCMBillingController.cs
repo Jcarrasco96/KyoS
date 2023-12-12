@@ -117,7 +117,7 @@ namespace KyoS.Web.Controllers
                                          .Select(t => new
                                          {
                                              //id = t.TCMNote.Id,
-                                             title = t.ServiceName.ToString(),
+                                             title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -172,7 +172,7 @@ namespace KyoS.Web.Controllers
                                          .Select(t => new
                                          {
                                              //id = t.TCMNote.Id,
-                                             title = t.ServiceName.ToString(),
+                                             title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -189,8 +189,7 @@ namespace KyoS.Web.Controllers
                                          .ToList();
 
                 return new JsonResult(events);
-            }
-           
+            }           
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -946,7 +945,7 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = t.ServiceName.ToString(),
+                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -970,8 +969,8 @@ namespace KyoS.Web.Controllers
                                          .Where(t => (t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                              .Select(t => new
                                              {
-                                             //id = t.TCMNote.Id,
-                                             title = t.ServiceName.ToString(),
+                                                 //id = t.TCMNote.Id,
+                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -1001,7 +1000,7 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = t.ServiceName.ToString(),
+                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
@@ -1026,8 +1025,8 @@ namespace KyoS.Web.Controllers
                                                    && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                              .Select(t => new
                                              {
-                                             //id = t.TCMNote.Id,
-                                             title = t.ServiceName.ToString(),
+                                                 //id = t.TCMNote.Id,
+                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
