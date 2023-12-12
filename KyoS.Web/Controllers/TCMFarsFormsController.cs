@@ -454,6 +454,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.TCMFloridaSocialHSFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.TCMClient.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.TCMCommunityHTCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             if (entity.TCMClient.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.TCMDreamsMentalHealthFarsReport(entity);

@@ -1825,6 +1825,12 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (note.TCMClient.Casemanager.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             if (note.TCMClient.Casemanager.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthTCMNoteReportSchema1(note);
