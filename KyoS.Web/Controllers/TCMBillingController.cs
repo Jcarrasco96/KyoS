@@ -92,7 +92,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult Events(string start, string end, int idClient, int idCaseManager = 0)
         {
             HttpContext.Session.SetString("initDate", start);
@@ -892,24 +892,37 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public IActionResult TCMSupervisor()
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMBillingViewModel model = new TCMBillingViewModel
+            TCMBillingViewModel model = new TCMBillingViewModel();
+            if (User.IsInRole("TCMSupervisor"))
             {
-                IdClient = 0,
-                IdCaseManager = 0,
-                CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,0)
-            };
+                model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    IdCaseManager = 0,
+                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName, 0)
+                };
+            }
+            if (User.IsInRole("Manager"))
+            {
+                model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    IdCaseManager = 0,
+                    CaseManagers = _combosHelper.GetComboCaseManagersActive()
+                };
+            }
 
             return View(model);
         }
         
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public IActionResult EventsTCM(string start, string end, int idCaseManager = 0)
         {
             HttpContext.Session.SetString("initDate", start);
@@ -925,61 +938,118 @@ namespace KyoS.Web.Controllers
 
             if (idCaseManager == 0)
             {
-                var events = _context.TCMNoteActivity
-                                     .Where(t => (t.TCMNote.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                               && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
-                                         .Select(t => new
-                                         {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    var events = _context.TCMNoteActivity
+                                         .Where(t => (t.TCMNote.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                   && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
+                                             .Select(t => new
+                                             {
+                                                 //id = t.TCMNote.Id,
+                                                 title = t.ServiceName.ToString(),
+                                                 start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
+                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             })
+                                             .ToList();
+
+                    return new JsonResult(events);
+                }
+                else
+                {
+                    var events = _context.TCMNoteActivity
+                                         .Where(t => (t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
+                                             .Select(t => new
+                                             {
                                              //id = t.TCMNote.Id,
                                              title = t.ServiceName.ToString(),
-                                             start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                             end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                             url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                             backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                             textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                             borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
-                                         })
-                                         .ToList();
+                                                 start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
+                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             })
+                                             .ToList();
 
-                return new JsonResult(events);
+                    return new JsonResult(events);
+                }
             }
             else
             {
-                var events = _context.TCMNoteActivity
-                                     .Where(t => (t.TCMNote.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                               && t.TCMNote.TCMClient.Casemanager.Id == idCaseManager
-                                               && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
-                                         .Select(t => new
-                                         {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    var events = _context.TCMNoteActivity
+                                         .Where(t => (t.TCMNote.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                   && t.TCMNote.TCMClient.Casemanager.Id == idCaseManager
+                                                   && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
+                                             .Select(t => new
+                                             {
+                                                 //id = t.TCMNote.Id,
+                                                 title = t.ServiceName.ToString(),
+                                                 start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
+                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             })
+                                             .ToList();
+
+                    return new JsonResult(events);
+                }
+                else
+                {
+                    var events = _context.TCMNoteActivity
+                                         .Where(t => (t.TCMNote.TCMClient.Casemanager.Id == idCaseManager
+                                                   && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
+                                             .Select(t => new
+                                             {
                                              //id = t.TCMNote.Id,
                                              title = t.ServiceName.ToString(),
-                                             start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                             end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                             url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                             backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                             textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                             borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
-                                         })
-                                         .ToList();
+                                                 start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
+                                                 url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
+                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
+                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             })
+                                             .ToList();
 
-                return new JsonResult(events);
+                    return new JsonResult(events);
+                }
             }
 
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public JsonResult GetTotalMoneySupervisor()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -992,14 +1062,26 @@ namespace KyoS.Web.Controllers
 
             if (idCaseManager == 0)
             {
-                List<TCMNoteEntity> notes = _context.TCMNote
-                                                     .Include(t => t.TCMNoteActivity)
-                                                     .Include(t => t.TCMClient)
-                                                     .ThenInclude(t => t.Casemanager)
-                                                     .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                                               && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                                     .ToList();
-
+                List<TCMNoteEntity> notes = new List<TCMNoteEntity>();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Include(t => t.TCMClient)
+                                    .ThenInclude(t => t.Casemanager)
+                                    .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                              && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
+                else
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Include(t => t.TCMClient)
+                                    .ThenInclude(t => t.Casemanager)
+                                    .Where(t => (t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
 
                 decimal totalUnits = 0;
                 int units = 0;
@@ -1071,7 +1153,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public JsonResult GetTotalMinutesSupervisor()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -1084,13 +1166,29 @@ namespace KyoS.Web.Controllers
 
             if (idCaseManager == 0)
             {
-                IEnumerable<TCMNoteEntity> notes = _context.TCMNote
-                                                           .Include(t => t.TCMNoteActivity)
-                                                           .Include(t => t.TCMClient)
-                                                           .ThenInclude(t => t.Casemanager)
-                                                           .ThenInclude(t => t.TCMSupervisor)
-                                                           .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate));
+                List<TCMNoteEntity> notes = new List<TCMNoteEntity>();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Include(t => t.TCMClient)
+                                    .ThenInclude(t => t.Casemanager)
+                                    .ThenInclude(t => t.TCMSupervisor)
+                                    .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                              && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
+                else
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Include(t => t.TCMClient)
+                                    .ThenInclude(t => t.Casemanager)
+                                    .ThenInclude(t => t.TCMSupervisor)
+                                    .Where(t => (t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
+
 
                 int minutes = 0;
                 int totalMinutes = 0;
@@ -1127,7 +1225,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public JsonResult GetTotalNotesSupervisor()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -1140,13 +1238,25 @@ namespace KyoS.Web.Controllers
 
             if (idCaseManager == 0)
             {
-                int count = _context.TCMNote
-                                    .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                           && t.DateOfService >= initDate && t.DateOfService <= finalDate))
-                                    .ToList()
-                                    .Count();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    int count = _context.TCMNote
+                                       .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                              && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                       .ToList()
+                                       .Count();
 
-                return Json(count);
+                    return Json(count);
+                }
+                else
+                {
+                    int count = _context.TCMNote
+                                       .Where(t => (t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                       .ToList()
+                                       .Count();
+
+                    return Json(count);
+                }
             }
             else
             {
@@ -1160,7 +1270,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager")]
         public JsonResult GetTotalUnitsSupervisor()
         {
             DateTime initDate = Convert.ToDateTime(HttpContext.Session.GetString("initDate"));
@@ -1173,12 +1283,22 @@ namespace KyoS.Web.Controllers
 
             if (idCaseManager == 0)
             {
-                IEnumerable<TCMNoteEntity> notes = _context.TCMNote
-
-                                                           .Include(t => t.TCMNoteActivity)
-
-                                                           .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
-                                                                     && t.DateOfService >= initDate && t.DateOfService <= finalDate));
+                List<TCMNoteEntity> notes = new List<TCMNoteEntity>();
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Where(t => (t.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                              && t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
+                else
+                {
+                    notes = _context.TCMNote
+                                    .Include(t => t.TCMNoteActivity)
+                                    .Where(t => (t.DateOfService >= initDate && t.DateOfService <= finalDate))
+                                    .ToList();
+                }
 
                 int minutes;
                 int totalUnits = 0;

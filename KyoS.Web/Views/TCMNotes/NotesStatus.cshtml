@@ -93,21 +93,20 @@
                             <th class="col-md-2">
                                 TCM Name
                             </th>
+                            <th class="col-md-2">
+                                Service Name
+                            </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Minutes
+                                Min/Units
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Units
-                            </th>
+
                             <th class="col-md-1" style="text-align:center;">
                                 Review
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Status
-                            </th>
+
                             <th class="col-md-2" align="right">
                             </th>
                         </tr>
@@ -187,13 +186,15 @@
                                     <td >
                                         @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
                                     </td>
+                                    <td >
+                                        @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                    </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfService)
                                     </td>
                                     <td align="center">
                                         @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
-                                    </td>
-                                    <td align="center">
+                                        |
                                         @if (@residuo > 7)
                                         {
                                             @valorAumentado
@@ -233,26 +234,6 @@
                                             {
                                                 <i class="glyphicon glyphicon-thumbs-down"></i>
                                             }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                        {
-                                            <span class="label label-warning">
-                                                Edition
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
-                                        {
-                                            <span class="label label-info">
-                                                Pending
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                        {
-                                            <span class="label label-success">
-                                                Approved
-                                            </span>
                                         }
                                     </td>
                                     <td align="right">
@@ -401,13 +382,15 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
                                     </td>
+                                    <td >
+                                        @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                    </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfService)
                                     </td>
                                     <td align="center">
                                         @item.TCMNoteActivity.ToList().Sum(n => n.Minutes)
-                                    </td>
-                                    <td align="center">
+                                        |
                                         @if (@residuo > 7)
                                         {
                                             @valorAumentado
@@ -417,6 +400,7 @@
                                             @valor
                                         }
                                     </td>
+                                    
                                     <td align="center">
                                         @if (item.TCMMessages.Count() == 0)
                                         {
@@ -448,26 +432,6 @@
                                             {
                                                 <i class="glyphicon glyphicon-thumbs-down"></i>
                                             }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
-                                        {
-                                            <span class="label label-warning">
-                                                Edition
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
-                                        {
-                                            <span class="label label-info">
-                                                Pending
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
-                                        {
-                                            <span class="label label-success">
-                                                Approved
-                                            </span>
                                         }
                                     </td>
                                     <td align="right">

@@ -1421,9 +1421,6 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
-                        <div class="col-md-1">
-                            &nbsp;
-                        </div>
                         <div class="col-md-2">
                             @if (ViewBag.TCMSupervisor == 0)
                             {
@@ -1479,6 +1476,24 @@
                             }
                         </div>
                         <div class="col-md-2">
+                            @if (ViewBag.Billing == 0)
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-calendar" style="padding-right: 10px !important;"></i>Calendar<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                    <span class="message-counter-cero">@ViewBag.Billing</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="TCMBilling" asp-action="TCMSupervisor" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-success">
+                                        <h4 style="align-content:end;"><i class="icon-calendar" style="padding-right: 10px !important;"></i>Calendar<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                        <span class="message-counter-success">@ViewBag.Billing</span>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-2">
                             <a style="text-decoration: none;" asp-controller="TCMBilling" asp-action="BillingForWeek" role="button">
                                 <div class="thumbnail list-group-item list-group-item-success">
                                     <h4 style="align-content:end;"><i class="icon-dollar" style="padding-right: 10px !important;"></i>Billing<br>&nbsp;&nbsp;&nbsp;&nbsp;Report</h4>
@@ -1503,9 +1518,6 @@
                                     </div>
                                 </a>
                             }
-                        </div>
-                        <div class="col-md-1">
-                            &nbsp;
                         </div>
                         <div class="col-md-12">
                             &nbsp;

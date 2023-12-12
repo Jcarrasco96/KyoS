@@ -1605,7 +1605,8 @@ namespace KyoS.Web.Controllers
                                                       .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
                                                       .Include(f => f.TCMMessages)
                                                       .Where(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
-                                                            && s.Approved == approved)
+                                                               && s.TcmServicePlan.TcmClient.Casemanager.Id == caseManager.Id
+                                                               && s.Approved == approved)
                                                       .OrderBy(f => f.TcmServicePlan.TcmClient.CaseNumber)
                                                       .ToListAsync();
                 }

@@ -577,6 +577,9 @@ namespace KyoS.Web.Controllers
                     ViewBag.TCMSupervisor = await _context.TCMSupervisors
                                                           .CountAsync(g => (g.Status == StatusType.Open
                                                                          && g.Clinic.Id == user_logged.Clinic.Id));
+                    ViewBag.Billing = await _context.TCMClient
+                                                    .CountAsync(g => (g.Status == StatusType.Open
+                                                                   && g.Client.Clinic.Id == user_logged.Clinic.Id));
                 }
             }
             if (User.IsInRole("Admin"))
