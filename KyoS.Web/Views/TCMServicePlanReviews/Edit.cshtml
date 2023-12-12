@@ -100,22 +100,13 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
-                                "order": [[1, "asc"]],
-                                "pageLength": 100
-                            });
+             $('#MyTable').DataTable({
+                 "order": [[0, "asc"]],
+                 "pageLength": 100
+             });
 
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("DeleteDomain", "TCMServicePlanReviews")";
-                window.location.href = url + '/' + item_to_delete;
-            });
         });
+
         $(function () {
             //Assign Click event to Plus Image.
             $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
@@ -128,5 +119,6 @@
                 $(this).closest("tr").next().remove();
             });
         });
+       
     </script>
 }
