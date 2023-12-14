@@ -113,7 +113,7 @@
                             }
                         </td>
                         <td align="center">
-                            @if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && item.TcmServicePlanReview.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true))
+                            @if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && item.TcmServicePlanReview.TcmServicePlan.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true))
                             {
                                 @if (item.TcmDomain.Origin == "Service Plan Review")
                                 {
