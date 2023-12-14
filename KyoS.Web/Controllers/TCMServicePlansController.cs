@@ -2510,6 +2510,12 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (servicePlan.TCMSupervisor.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.CommunityHTCTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             if (servicePlan.TCMSupervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthTCMServicePlan(servicePlan);

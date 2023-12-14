@@ -69,7 +69,45 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+            } else {
+                check101.checked = true;
+            }
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+            } else {
+                check1.checked = true;
+            }
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+        //-----------------------------
+        check2.addEventListener('change', (e) => {
+            if (check2.checked == true) {
+                check102.checked = false;
+            } else {
+                check102.checked = true;
+            }
+        })
+        check102.addEventListener('change', (e) => {
+            if (check102.checked == true) {
+                check2.checked = false;
+            } else {
+                check2.checked = true;
+            }
+        })
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
     </script>
 }
 

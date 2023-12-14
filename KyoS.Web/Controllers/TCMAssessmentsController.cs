@@ -515,7 +515,7 @@ namespace KyoS.Web.Controllers
                         Provider = "",
                         SurgeryList = new List<TCMAssessmentSurgeryEntity>(),
                         TypeOfAssessmentAnnual = false,
-                        TypeOfAssessmentInitial = false,
+                        TypeOfAssessmentInitial = true,
                         TypeOfAssessmentOther = false,
                         TypeOfAssessmentOtherExplain = "",
                         TypeOfAssessmentSignificant = false,
@@ -584,6 +584,7 @@ namespace KyoS.Web.Controllers
                 TCMAssessmentEntity tcmAssessmentEntity = _context.TCMAssessment.Find(tcmAssessmentViewModel.Id);
                 if (tcmAssessmentEntity == null)
                 {
+                    tcmAssessmentViewModel.IdYesNoNAPregnancy = 1;
                     tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, true, user_logged.UserName);
                     tcmAssessmentEntity.Approved = 0;
                     _context.TCMAssessment.Add(tcmAssessmentEntity);
