@@ -2234,7 +2234,8 @@ namespace KyoS.Web.Helpers
                                   new SelectListItem { Text = ConsentType.DONATION_CENTERS.ToString(), Value = "16"},
                                   new SelectListItem { Text = ConsentType.LTC.ToString(), Value = "17"},
                                   new SelectListItem { Text = ConsentType.INTERNET_SERVICES.ToString(), Value = "18"},
-                                  new SelectListItem { Text = ConsentType.USCIS.ToString(), Value = "19"}
+                                  new SelectListItem { Text = ConsentType.USCIS.ToString(), Value = "19"},
+                                  new SelectListItem { Text = ConsentType.OTHERS.ToString(), Value = "20"}
                                 };
 
             list.Insert(0, new SelectListItem

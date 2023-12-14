@@ -20,7 +20,8 @@
         DONATION_CENTERS,
         LTC,
         INTERNET_SERVICES,
-        USCIS
+        USCIS,
+        OTHERS
 
     }
     public class ConsentUtils
@@ -45,7 +46,8 @@
                    (index == 16) ? ConsentType.DONATION_CENTERS :
                    (index == 17) ? ConsentType.LTC :
                    (index == 18) ? ConsentType.INTERNET_SERVICES :
-                   (index == 19) ? ConsentType.USCIS : ConsentType.HURRICANE;
+                   (index == 19) ? ConsentType.USCIS :
+                   (index == 20) ? ConsentType.OTHERS : ConsentType.HURRICANE;
         }
       
     }
