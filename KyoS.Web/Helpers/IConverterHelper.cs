@@ -227,5 +227,7 @@ namespace KyoS.Web.Helpers
         TCMSubServiceViewModel ToTCMSubServiceViewModel(TCMSubServiceEntity model);
         Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId);
         TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model);
+        IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew);
+        IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model);
     }
 }

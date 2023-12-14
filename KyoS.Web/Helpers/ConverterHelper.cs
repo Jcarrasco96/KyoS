@@ -7665,5 +7665,41 @@ namespace KyoS.Web.Helpers
 
             };
         }
+
+        public IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew)
+        {
+            return new IntakeConsentForTelehealthEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+            };
+        }
+
+        public IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model)
+        {
+            return new IntakeConsentForTelehealthViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+
+            };
+
+        }
+
     }
 }

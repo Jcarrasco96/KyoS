@@ -71,6 +71,7 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.IntakeFeeAgreement)
                                               .Include(n => n.IntakeTuberculosis)
                                               .Include(n => n.IntakeMedicalHistory)
+                                              .Include(n => n.IntakeConsentForTelehealth)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .ToListAsync());
@@ -94,6 +95,7 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.IntakeFeeAgreement)
                                               .Include(n => n.IntakeTuberculosis)
                                               .Include(n => n.IntakeMedicalHistory)
+                                              .Include(n => n.IntakeConsentForTelehealth)
 
                                               .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                                   && n.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0))
@@ -119,6 +121,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.IntakeTuberculosis)
                                                   .Include(n => n.IntakeMedicalHistory)
                                                   .Include(n => n.Bio)
+                                                  .Include(n => n.IntakeConsentForTelehealth)
 
                                                   .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                                             && (n.Bio.DocumentsAssistant.Id == doc_assistant.Id
@@ -312,7 +315,7 @@ namespace KyoS.Web.Controllers
 
             IntakeScreeningViewModel model;
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -403,7 +406,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentForTreatmentViewModel model;
             ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -514,7 +517,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentForReleaseViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -634,7 +637,7 @@ namespace KyoS.Web.Controllers
             IntakeConsumerRightsViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -890,7 +893,7 @@ namespace KyoS.Web.Controllers
             IntakeAcknoewledgementHippaViewModel model;
             ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -993,7 +996,7 @@ namespace KyoS.Web.Controllers
             IntakeAccessToServicesViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1096,7 +1099,7 @@ namespace KyoS.Web.Controllers
             IntakeOrientationCheckListViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1219,7 +1222,7 @@ namespace KyoS.Web.Controllers
             IntakeTransportationViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1321,7 +1324,7 @@ namespace KyoS.Web.Controllers
             IntakeConsentPhotographViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1432,7 +1435,7 @@ namespace KyoS.Web.Controllers
             IntakeFeeAgreementViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1533,7 +1536,7 @@ namespace KyoS.Web.Controllers
             IntakeTuberculosisViewModel model;
             ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
-            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1959,6 +1962,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeTuberculosis)
                                                       .Include(c => c.IntakeMedicalHistory)
                                                       .Include(c => c.Clinic)
+                                                      .Include(n => n.IntakeConsentForTelehealth)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2449,6 +2453,109 @@ namespace KyoS.Web.Controllers
             }
 
             return View(auditClient_List);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateConsentForTelehealth(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeConsentForTelehealthViewModel model;
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeConsentForTelehealthEntity intakeConsent = _context.IntakeConsentForTelehealth
+                                                                             .Include(n => n.Client)
+                                                                             .ThenInclude(n => n.LegalGuardian)
+                                                                             .FirstOrDefault(n => n.Client.Id == id);
+
+                    if (intakeConsent == null)
+                    {
+                        model = new IntakeConsentForTelehealthViewModel
+                        {
+                            Client = client,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
+                            Id = 0,
+                            IdClient = id,
+                            Client_FK = id,
+                            AdmissionedFor = user_logged.FullName,
+                            IConsentToReceive = true
+
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToIntakeConsentForTelehealthViewModel(intakeConsent);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateConsentForTelehealth(IntakeConsentForTelehealthViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeConsentForTelehealthEntity IntakeConsentEntity = _converterHelper.ToIntakeConsentForTelehealthEntity(IntakeViewModel, false);
+
+                if (IntakeConsentEntity.Id == 0)
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForTelehealth.Add(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeConsentForTelehealth.Update(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForTelehealth", IntakeViewModel) });
         }
 
     }

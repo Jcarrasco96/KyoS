@@ -150,6 +150,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMSupervisionTimeEntity> TCMSupervisionTimes { get; set; }
         public DbSet<TCMSubServiceEntity> TCMSubServices { get; set; }
         public DbSet<TCMTransferEntity> TCMTransfers { get; set; }
+        public DbSet<IntakeConsentForTelehealthEntity> IntakeConsentForTelehealth { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -656,6 +657,11 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMReferralFormEntity>(s => s.TcmClient_FK);
 
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeConsentForTelehealth)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeConsentForTelehealthEntity>(s => s.Client_FK);
         }
     }
 }
