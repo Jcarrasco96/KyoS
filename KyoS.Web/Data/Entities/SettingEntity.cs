@@ -33,5 +33,7 @@ namespace KyoS.Web.Data.Entities
         public bool CreateNotesTCMWithServiceplanInEdition { get; set; }
         public bool SupervisorEdit { get; set; }
         public bool TCMSupervisionTimeWithCaseManager { get; set; }
+
+        public bool DocumentAssisstant_Intake { get; set; }
     }
 }

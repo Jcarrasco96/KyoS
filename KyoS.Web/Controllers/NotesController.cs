@@ -20915,6 +20915,8 @@ namespace KyoS.Web.Controllers
             List<FacilitatorEntity> facilitators = await _context.Facilitators
                                                                  .Include(n => n.Workdays_Activities_Facilitators)
                                                                  .ThenInclude(f => f.Activity)
+                                                                 .Include(n => n.Workdays_Activities_Facilitators)
+                                                                 .ThenInclude(f => f.Workday)
                                                                  .Where(n => n.Id != workday_client.Facilitator.Id)
                                                                  .OrderBy(n => n.Name)
                                                                  .ToListAsync();

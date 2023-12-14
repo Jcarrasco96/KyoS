@@ -1449,7 +1449,8 @@ namespace KyoS.Web.Helpers
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
-                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
             };
         }
 
@@ -1479,7 +1480,8 @@ namespace KyoS.Web.Helpers
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
-                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
             };
         }
 

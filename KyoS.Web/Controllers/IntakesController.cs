@@ -130,7 +130,7 @@ namespace KyoS.Web.Controllers
             }            
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
             
@@ -218,7 +218,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> Create(IntakeScreeningViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -283,7 +283,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult Edit(int id = 0)
         {
             IntakeScreeningEntity entity = _context.IntakeScreenings
@@ -327,7 +327,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> Edit(IntakeScreeningViewModel intakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -380,7 +380,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateConsentForTreatment(int id = 0)
         {
 
@@ -443,7 +443,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateConsentForTreatment(IntakeConsentForTreatmentViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -491,7 +491,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateConsentForRelease(int id = 0)
         {
 
@@ -564,7 +564,7 @@ namespace KyoS.Web.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateConsentForRelease(IntakeConsentForReleaseViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -611,7 +611,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateConsumerRights(int id = 0)
         {
 
@@ -667,7 +667,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateConsumerRights(IntakeConsumerRightsViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -867,7 +867,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {
 
@@ -924,7 +924,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateAcknowledgementHippa(IntakeAcknoewledgementHippaViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -970,7 +970,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAcknowledgementHippa", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAccessToServices(int id = 0)
         {
 
@@ -1027,7 +1027,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateAccessToServices(IntakeAccessToServicesViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1073,7 +1073,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateAccessToServices", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateOrientationCheckList(int id = 0)
         {
 
@@ -1150,7 +1150,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateOrientationCheckList(IntakeOrientationCheckListViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1196,7 +1196,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateOrientationCheckList", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateTransportation(int id = 0)
         {
 
@@ -1251,7 +1251,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateTransportation(IntakeTransportationViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1298,7 +1298,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateConsentPhotograph(int id = 0)
         {
 
@@ -1363,7 +1363,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateConsentPhotograph(IntakeConsentPhotographViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1409,7 +1409,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentPhotograph", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateFeeAgreement(int id = 0)
         {
 
@@ -1464,7 +1464,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateFeeAgreement(IntakeFeeAgreementViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1510,7 +1510,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateFeeAgreement", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateTuberculosis(int id = 0)
         {
 
@@ -1592,7 +1592,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> CreateTuberculosis(IntakeTuberculosisViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1638,7 +1638,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTuberculosis", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        [Authorize(Roles = "Documents_Assistant, Supervisor, Documents_Assistant")]
         public IActionResult CreateMedicalhistory(int id = 0, int origin = 0)
         {
 
@@ -1863,7 +1863,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Documents_Assistant, Supervisor")]
+        [Authorize(Roles = "Documents_Assistant, Supervisor, Documents_Assistant")]
         public async Task<IActionResult> CreateMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1924,7 +1924,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicalhistory", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> IntakeDashboard(int id = 0)
         {
             if (id == 0)
@@ -2057,7 +2057,7 @@ namespace KyoS.Web.Controllers
             return View(clientEntity);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> AuditIntake()
         {
             UserEntity user_logged = _context.Users
