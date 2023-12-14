@@ -106,7 +106,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager") || (User.IsInRole("Frontdesk")))
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
                                         {
                                             <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-warning" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
@@ -165,7 +165,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager") || (User.IsInRole("Frontdesk")))
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
                                         {
                                             <a asp-action="IntakeDashboard" asp-route-id="@item.Id" class="btn btn-success" title="Edit Intake"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }

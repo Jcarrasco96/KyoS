@@ -121,7 +121,19 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.Bio)
 
                                                   .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
-                                                      && n.Bio.DocumentsAssistant.Id == doc_assistant.Id))
+                                                            && (n.Bio.DocumentsAssistant.Id == doc_assistant.Id
+                                                            || n.IntakeAccessToServices.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeAcknowledgementHipa.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeConsentForRelease.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeConsentForTreatment.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeConsentPhotograph.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeConsumerRights.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeFeeAgreement.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeMedicalHistory.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeOrientationChecklist.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeScreening.InformationGatheredBy == user_logged.FullName
+                                                            || n.IntakeTransportation.AdmissionedFor == user_logged.FullName
+                                                            || n.IntakeTuberculosis.AdmissionedFor == user_logged.FullName)))
                                                   .ToListAsync());
                         }
                     }
