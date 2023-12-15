@@ -332,7 +332,29 @@
                                                     <td align="center">
                                                         @unit1
                                                     </td>
-                                                    <td align="center">@Html.DisplayFor(modelItem => product.DateOfService)</td>
+                                                    <td align="center">
+                                                        @if (product.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                                        {
+                                                            <span class="label label-success">
+                                                                @Html.DisplayFor(modelItem => product.DateOfService)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (product.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                                            {
+                                                                <span class="label label-info">
+                                                                    @Html.DisplayFor(modelItem => product.DateOfService)
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    @Html.DisplayFor(modelItem => product.DateOfService)
+                                                                </span>
+                                                            }
+                                                        }
+                                                    </td>
                                                     <td align="center">
                                                         @(unit1 * 12)
                                                     </td>
