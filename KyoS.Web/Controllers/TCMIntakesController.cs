@@ -3522,7 +3522,7 @@ namespace KyoS.Web.Controllers
                             Date = DateTime.Now,
                             HasBeen = false,
                             HasHad = false,
-                            IsAt = false,
+                            IsAt = true,
                             IsAwaiting = false,
                             IsExperiencing = false,
                             SupervisorSignatureDate = DateTime.Now,
