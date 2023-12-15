@@ -1,6 +1,13 @@
 ﻿@model KyoS.Web.Models.IntakeConsentForTelehealthViewModel
 <div class="col-md-12">
     <pre>
+    Client Name : <strong>@Html.DisplayFor(modelItem => Model.Client.Name) </strong> 
+    Record :<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
+    Date of Birth :<strong>@Html.DisplayFor(modelItem => Model.Client.DateOfBirth)</strong>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
     <i><strong>"Telehealth"</strong></i> refers to use of communication technologies, such as computers or hand-held electronic devices, to provide remote access to health care services. 
     The same standards of care and protocol exist with telehealth as are adhered to when assessing and treating clients in our offices. Confidentiality and its 
     limits are discussed fully in your Consent to Mental Health Treatment. 

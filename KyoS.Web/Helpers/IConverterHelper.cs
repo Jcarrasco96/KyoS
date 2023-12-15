@@ -229,5 +229,9 @@ namespace KyoS.Web.Helpers
         TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model);
         IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew);
         IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model);
+        IntakeNoDuplicateServiceEntity ToIntakeNoDuplicateServiceEntity(IntakeNoDuplicateServiceViewModel model, bool isNew);
+        IntakeNoDuplicateServiceViewModel ToIntakeNoDuplicateServiceViewModel(IntakeNoDuplicateServiceEntity model);
+        IntakeAdvancedDirectiveEntity ToIntakeAdvancedDirectiveEntity(IntakeAdvancedDirectiveViewModel model, bool isNew, string userId);
+        IntakeAdvancedDirectiveViewModel ToIntakeAdvancedDirectiveViewModel(IntakeAdvancedDirectiveEntity model);
     }
 }

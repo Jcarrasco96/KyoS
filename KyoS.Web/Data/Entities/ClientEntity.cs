@@ -215,5 +215,7 @@ namespace KyoS.Web.Data.Entities
         public List<CiteEntity> CiteList { get; set; }
 
         public IntakeConsentForTelehealthEntity IntakeConsentForTelehealth { get; set; }
+        public IntakeNoDuplicateServiceEntity IntakeNoDuplicateService { get; set; }
+        public IntakeAdvancedDirectiveEntity IntakeAdvancedDirective { get; set; }
     }
 }

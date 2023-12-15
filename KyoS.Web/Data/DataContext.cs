@@ -151,6 +151,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMSubServiceEntity> TCMSubServices { get; set; }
         public DbSet<TCMTransferEntity> TCMTransfers { get; set; }
         public DbSet<IntakeConsentForTelehealthEntity> IntakeConsentForTelehealth { get; set; }
+        public DbSet<IntakeNoDuplicateServiceEntity> IntakeNoDuplicateService { get; set; }
+        public DbSet<IntakeAdvancedDirectiveEntity> IntakeAdvancedDirective { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -662,6 +664,18 @@ namespace KyoS.Web.Data
                        .WithOne(s => s.Client)
                        .OnDelete(DeleteBehavior.Cascade)
                        .HasForeignKey<IntakeConsentForTelehealthEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeNoDuplicateService)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeNoDuplicateServiceEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeAdvancedDirective)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeAdvancedDirectiveEntity>(s => s.Client_FK);
         }
     }
 }

@@ -72,7 +72,8 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.IntakeTuberculosis)
                                               .Include(n => n.IntakeMedicalHistory)
                                               .Include(n => n.IntakeConsentForTelehealth)
-
+                                              .Include(n => n.IntakeNoDuplicateService)
+                                              .Include(n => n.IntakeAdvancedDirective)
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
                                               .ToListAsync());
                 }
@@ -96,7 +97,8 @@ namespace KyoS.Web.Controllers
                                               .Include(n => n.IntakeTuberculosis)
                                               .Include(n => n.IntakeMedicalHistory)
                                               .Include(n => n.IntakeConsentForTelehealth)
-
+                                              .Include(n => n.IntakeNoDuplicateService)
+                                              .Include(n => n.IntakeAdvancedDirective)
                                               .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                                   && n.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0))
                                               .ToListAsync());
@@ -122,7 +124,8 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.IntakeMedicalHistory)
                                                   .Include(n => n.Bio)
                                                   .Include(n => n.IntakeConsentForTelehealth)
-
+                                                  .Include(n => n.IntakeNoDuplicateService)
+                                                  .Include(n => n.IntakeAdvancedDirective)
                                                   .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
                                                             && (n.Bio.DocumentsAssistant.Id == doc_assistant.Id
                                                             || n.IntakeAccessToServices.AdmissionedFor == user_logged.FullName
@@ -1963,6 +1966,8 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeMedicalHistory)
                                                       .Include(c => c.Clinic)
                                                       .Include(n => n.IntakeConsentForTelehealth)
+                                                      .Include(n => n.IntakeNoDuplicateService)
+                                                      .Include(n => n.IntakeAdvancedDirective)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2556,6 +2561,226 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateConsentForTelehealth", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateNoDuplicateService(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeNoDuplicateServiceViewModel model;
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeNoDuplicateServiceEntity intakeConsent = _context.IntakeNoDuplicateService
+                                                                           .Include(n => n.Client)
+                                                                           .ThenInclude(n => n.LegalGuardian)
+                                                                           .FirstOrDefault(n => n.Client.Id == id);
+
+                    if (intakeConsent == null)
+                    {
+                        model = new IntakeNoDuplicateServiceViewModel
+                        {
+                            Client = client,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
+                            Id = 0,
+                            IdClient = id,
+                            Client_FK = id,
+                            AdmissionedFor = user_logged.FullName
+                         
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeConsent.Client.LegalGuardian == null)
+                            intakeConsent.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToIntakeNoDuplicateServiceViewModel(intakeConsent);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateNoDuplicateService(IntakeNoDuplicateServiceViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeNoDuplicateServiceEntity IntakeConsentEntity = _converterHelper.ToIntakeNoDuplicateServiceEntity(IntakeViewModel, false);
+
+                if (IntakeConsentEntity.Id == 0)
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeNoDuplicateService.Add(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeNoDuplicateService.Update(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoDuplicateService", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateIntakeAdvenceDirective(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeAdvancedDirectiveViewModel model;
+            IntakeAdvancedDirectiveEntity AdvancedDirective = _context.IntakeAdvancedDirective
+                                                                       .Include(n => n.Client)
+                                                                       .ThenInclude(n => n.LegalGuardian)
+                                                                       .Include(n => n.Client.EmergencyContact)
+                                                                       .FirstOrDefault(n => n.Client.Id == id);
+
+            if (User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant") || User.IsInRole("Manager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    if (AdvancedDirective == null)
+                    {
+                        model = new IntakeAdvancedDirectiveViewModel
+                        {
+                            Client = _context.Clients
+                                             .Include(n => n.LegalGuardian)
+                                             .Include(n => n.EmergencyContact)
+                                             .FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            Client_FK = id,
+                            Id = 0,
+                            Documents = true,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (model.Client.EmergencyContact == null)
+                        {
+                            model.Client.EmergencyContact = new EmergencyContactEntity();
+                            model.Client.EmergencyContact.Name = "N/A";
+                        }
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (AdvancedDirective.Client.LegalGuardian == null)
+                            AdvancedDirective.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (AdvancedDirective.Client.EmergencyContact == null)
+                        {
+                            AdvancedDirective.Client.EmergencyContact = new EmergencyContactEntity();
+                            AdvancedDirective.Client.EmergencyContact.Name = "N/A";
+                        }
+                        model = _converterHelper.ToIntakeAdvancedDirectiveViewModel(AdvancedDirective);
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+
+                }
+            }
+           
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateIntakeAdvenceDirective(IntakeAdvancedDirectiveViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                           .Include(u => u.Clinic)
+                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeAdvancedDirectiveEntity IntakeConsentEntity = _converterHelper.ToIntakeAdvancedDirectiveEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (IntakeConsentEntity.Id == 0)
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeAdvancedDirective.Add(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeConsentEntity.Client = null;
+                    _context.IntakeAdvancedDirective.Update(IntakeConsentEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeAdvenceDirective", IntakeViewModel) });
         }
 
     }
