@@ -55,10 +55,10 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Classification
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" align="right">
+                            <th class="col-md-3" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -101,7 +101,11 @@
                                         }
                                     </td>
                                    <td align="right">
-                                       <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-warning" title="Edit TCM Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
+                                       @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                                       {
+                                            <a asp-action="EditConsentForRelease" asp-route-id="@item.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-warning" title="Edit TCM Consent for Release"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete Consent"><i class="glyphicon glyphicon-trash"></i></button>
+                                       }                                       
                                        <a asp-action="PrintTCMConsentForRelease" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Consent for Release" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                    </td>
                                 </tr>
@@ -121,23 +125,28 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
-                            $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
-                                "pageLength": 10
-                            });
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 10
+            });
+        });
 
-                            // Delete item
-                            var item_to_delete;
-
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
-
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "TCMIntakes")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });
-                        });
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteConsentForRelease", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
