@@ -135,7 +135,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            if (_context.TCMDateBlocked.Any(n => n.DateBlocked.Day == dateTime.Day) == true)
+            if (_context.TCMDateBlocked.Any(n => n.DateBlocked.Date == dateTime.Date) == true)
             {
                 return RedirectToAction("Index", "TCMBilling", new { id = 1});
             }
