@@ -158,7 +158,7 @@
                 confirmButtonText: 'Yes, do it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    var url = "@Url.Action("Delete", "TCMServicePlans")";
                     window.location.href = url + '/' + e;
                 }
             });
