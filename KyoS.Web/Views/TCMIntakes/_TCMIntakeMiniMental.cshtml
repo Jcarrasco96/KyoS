@@ -32,32 +32,43 @@
     impairment.
 
     Maximum         Score 
-                                   <strong>Orientation</strong>
-        5         <input asp-for="OrientationWhat" style="width:5%">        What is the (year) (season) (date) (day) (month)?
-        5         <input asp-for="OrientationWhere" style="width:5%">        Where are we (state) (country) (town) (hospital) (home) (office) (floor)?
+    <strong>Orientation</strong>
+        5         <input asp-for="OrientationWhat" style="width: 5%; text-align: center" id="OrientationWhat" onchange="CalculateTotal()">        What is the (year) (season) (date) (day) (month)?
+        5         <input asp-for="OrientationWhere" style="width: 5%; text-align: center" id="OrientationWhere" onchange="CalculateTotal()">        Where are we (state) (country) (town) (hospital) (home) (office) (floor)?
 
-                                   <strong>Registration</strong>
-        3         <input asp-for="RegistrationName"  style="width:5%">        Name 3 objects: 1 second to say each. Then ask the patient all 3 after you have said them. Give 1 point for each correct answer. 
-                                   Then repeat them until he/she learns all 3. Count trials and record Trials  <input asp-for="Trials" style="width:5%">
+    <strong>Registration</strong>
+        3         <input asp-for="RegistrationName" style="width: 5%; text-align: center" id="RegistrationName" onchange="CalculateTotal()">        Name 3 objects: 1 second to say each. Then ask the patient all 3 after you have said them. Give 1 point for each correct answer. 
+                                   Then repeat them until he/she learns all 3. Count trials and record Trials  <input asp-for="Trials" style="width: 5%; text-align: center">
                                    
-                                   <strong>Attention and Calculation</strong>         
-        5         <input asp-for="Attention" style="width:5%">        Serial 7’s. 1 point for each correct answer. Stop after 5 answers. Alternatively spell “world” backward. Give 1 point for each letter spelled
+    <strong>Attention and Calculation</strong>         
+        5         <input asp-for="Attention" style="width: 5%; text-align: center" id="Attention" onchange="CalculateTotal()">        Serial 7’s. 1 point for each correct answer. Stop after 5 answers. Alternatively spell “world” backward. Give 1 point for each letter spelled
                                    correctly.
 
-                                   <strong>Recall</strong>
-        3         <input asp-for="Recall" style="width:5%">        Ask for the 3 objects repeated above. Give 1 point for each correct answer.
+    <strong>Recall</strong>
+        3         <input asp-for="Recall" style="width: 5%; text-align: center" id="Recall" onchange="CalculateTotal()">        Ask for the 3 objects repeated above. Give 1 point for each correct answer.
 
-                                   <strong>Language</strong>
-        2         <input asp-for="LanguageName" style="width:5%">        Name a pencil and watch.
-        1         <input asp-for="LanguageRepeat" style="width:5%">        Repeat the following: “No ifs, ands, or buts”
-        3         <input asp-for="LanguageFollow" style="width:5%">        Follow a 3-stage command: “Take a paper in your hand, fold it in half, and put it on the floor.”
-        1         <input asp-for="LanguageRead" style="width:5%">        Read and obey the following: "Close your eyes"
-        1         <input asp-for="LanguageWrite" style="width:5%">        Write a sentence.
-        1         <input asp-for="LanguageCopy" style="width:5%">        Copy the design shown.
+    <strong>Language</strong>
+        2         <input asp-for="LanguageName" style="width: 5%; text-align: center" id="LanguageName" onchange="CalculateTotal()">        Name a pencil and watch.
+        1         <input asp-for="LanguageRepeat" style="width: 5%; text-align: center" id="LanguageRepeat" onchange="CalculateTotal()">        Repeat the following: “No ifs, ands, or buts”
+        3         <input asp-for="LanguageFollow" style="width: 5%; text-align: center" id="LanguageFollow" onchange="CalculateTotal()">        Follow a 3-stage command: “Take a paper in your hand, fold it in half, and put it on the floor.”
+        1         <input asp-for="LanguageRead" style="width: 5%; text-align: center" id="LanguageRead" onchange="CalculateTotal()">        Read and obey the following: "Close your eyes"
+        1         <input asp-for="LanguageWrite" style="width: 5%; text-align: center" id="LanguageWrite" onchange="CalculateTotal()">        Write a sentence.
+        1         <input asp-for="LanguageCopy" style="width: 5%; text-align: center" id="LanguageCopy" onchange="CalculateTotal()">        Copy the design shown.
+                 ___________
 
-                  <input asp-for="LanguageCopy" style="width:5%">        <strong>Total Score</strong>
+                  <input asp-for="TotalScore" style="width:5%; text-align:center; background-color:gainsboro" readonly id="TotalScore">        <strong>Total Score</strong>
     </pre>
 </div>
 <br />
+
+<script>
+    function CalculateTotal() {
+        var total = parseInt($(OrientationWhat).val()) + parseInt($(OrientationWhere).val()) + parseInt($(RegistrationName).val())
+            + parseInt($(Attention).val()) + parseInt($(Recall).val()) + parseInt($(LanguageName).val()) + parseInt($(LanguageRepeat).val())
+            + parseInt($(LanguageFollow).val()) + parseInt($(LanguageRead).val()) + parseInt($(LanguageWrite).val()) + parseInt($(LanguageCopy).val());
+
+        $(TotalScore).val(total);
+    }
+</script>
 
 

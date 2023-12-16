@@ -3522,7 +3522,7 @@ namespace KyoS.Web.Controllers
                             Date = DateTime.Now,
                             HasBeen = false,
                             HasHad = false,
-                            IsAt = false,
+                            IsAt = true,
                             IsAwaiting = false,
                             IsExperiencing = false,
                             SupervisorSignatureDate = DateTime.Now,
@@ -5629,5 +5629,27 @@ namespace KyoS.Web.Controllers
             return View(auditConsent_List);
         }
 
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> DeleteConsentForRelease(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeConsentForReleaseEntity consent = await _context.TCMIntakeConsentForRelease
+                                                                        .Include(c => c.TcmClient)
+                                                                     .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (consent == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.TCMIntakeConsentForRelease.Remove(consent);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ListConsentForrelease", "TCMIntakes", new { id = consent.TcmClient.Id });
+        }
     }
 }

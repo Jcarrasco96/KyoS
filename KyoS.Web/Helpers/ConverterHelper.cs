@@ -7096,23 +7096,23 @@ namespace KyoS.Web.Helpers
                 HaveYouWishedPastMonth = model.HaveYouWishedPastMonth,
                 HaveYouWishedPastMonth_Value = model.HaveYouWishedPastMonth_Value,
 
-                IdHaveYouWishedPastMonth_Value = (model.HaveYouWishedPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouWishedPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouWishedPastMonth_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouWishedLifeTime_Value = (model.HaveYouWishedLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouWishedLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouWishedLifeTime_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouWishedPastMonth_Value = (model.HaveYouWishedPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouWishedPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouWishedPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouWishedLifeTime_Value = (model.HaveYouWishedLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouWishedLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouWishedLifeTime_Value == RiskType.High) ? 2 : 0,
 
-                IdHaveYouActuallyPastMonth_Value = (model.HaveYouActuallyPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouActuallyPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouActuallyPastMonth_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouActuallyLifeTime_Value = (model.HaveYouActuallyLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouActuallyLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouActuallyLifeTime_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouActuallyPastMonth_Value = (model.HaveYouActuallyPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouActuallyPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouActuallyPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouActuallyLifeTime_Value = (model.HaveYouActuallyLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouActuallyLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouActuallyLifeTime_Value == RiskType.High) ? 2 : 0,
 
-                IdHaveYouBeenPastMonth_Value = (model.HaveYouBeenPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouBeenPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouBeenPastMonth_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouBeenLifeTime_Value = (model.HaveYouBeenLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouBeenLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouBeenLifeTime_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouBeenPastMonth_Value = (model.HaveYouBeenPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouBeenPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouBeenPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouBeenLifeTime_Value = (model.HaveYouBeenLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouBeenLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouBeenLifeTime_Value == RiskType.High) ? 2 : 0,
 
-                IdHaveYouHadPastMonth_Value = (model.HaveYouHadPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouHadPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouHadPastMonth_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouHadLifeTime_Value = (model.HaveYouHadLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouHadLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouHadLifeTime_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouHadPastMonth_Value = (model.HaveYouHadPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouHadPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouHadPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouHadLifeTime_Value = (model.HaveYouHadLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouHadLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouHadLifeTime_Value == RiskType.High) ? 2 : 0,
 
-                IdHaveYouStartedPastMonth_Value = (model.HaveYouStartedPastMonth_Value == RiskType.Low) ? 1 : (model.HaveYouStartedPastMonth_Value == RiskType.Moderate) ? 2 : (model.HaveYouStartedPastMonth_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouStartedLifeTime_Value = (model.HaveYouStartedLifeTime_Value == RiskType.Low) ? 1 : (model.HaveYouStartedLifeTime_Value == RiskType.Moderate) ? 2 : (model.HaveYouStartedLifeTime_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouStartedPastMonth_Value = (model.HaveYouStartedPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouStartedPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouStartedPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouStartedLifeTime_Value = (model.HaveYouStartedLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouStartedLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouStartedLifeTime_Value == RiskType.High) ? 2 : 0,
 
-                IdHaveYouEver_Value = (model.HaveYouEver_Value == RiskType.Low) ? 1 : (model.HaveYouEver_Value == RiskType.Moderate) ? 2 : (model.HaveYouEver_Value == RiskType.High) ? 3 : 0,
-                IdHaveYouEverIfYes_Value = (model.HaveYouEverIfYes_Value == RiskType.Low) ? 1 : (model.HaveYouEverIfYes_Value == RiskType.Moderate) ? 2 : (model.HaveYouEverIfYes_Value == RiskType.High) ? 3 : 0,
+                IdHaveYouEver_Value = (model.HaveYouEver_Value == RiskType.Low) ? 0 : (model.HaveYouEver_Value == RiskType.Moderate) ? 1 : (model.HaveYouEver_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouEverIfYes_Value = (model.HaveYouEverIfYes_Value == RiskType.Low) ? 0 : (model.HaveYouEverIfYes_Value == RiskType.Moderate) ? 1 : (model.HaveYouEverIfYes_Value == RiskType.High) ? 2 : 0,
 
                 RiskList = _combosHelper.GetComboRisk(),
 
