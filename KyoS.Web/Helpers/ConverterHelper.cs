@@ -1449,7 +1449,8 @@ namespace KyoS.Web.Helpers
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
-                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
             };
         }
 
@@ -1479,7 +1480,8 @@ namespace KyoS.Web.Helpers
                 DischargeJoinCommission = model.DischargeJoinCommission,
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
-                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
             };
         }
 
@@ -7663,5 +7665,118 @@ namespace KyoS.Web.Helpers
 
             };
         }
+
+        public IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew)
+        {
+            return new IntakeConsentForTelehealthEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+            };
+        }
+
+        public IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model)
+        {
+            return new IntakeConsentForTelehealthViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+
+            };
+
+        }
+
+        public IntakeNoDuplicateServiceEntity ToIntakeNoDuplicateServiceEntity(IntakeNoDuplicateServiceViewModel model, bool isNew)
+        {
+            return new IntakeNoDuplicateServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                Documents = model.Documents
+            };
+        }
+
+        public IntakeNoDuplicateServiceViewModel ToIntakeNoDuplicateServiceViewModel(IntakeNoDuplicateServiceEntity model)
+        {
+            return new IntakeNoDuplicateServiceViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                Documents = model.Documents
+
+            };
+
+        }
+        public IntakeAdvancedDirectiveEntity ToIntakeAdvancedDirectiveEntity(IntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
+        {
+            return new IntakeAdvancedDirectiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot
+
+            };
+        }
+
+        public IntakeAdvancedDirectiveViewModel ToIntakeAdvancedDirectiveViewModel(IntakeAdvancedDirectiveEntity model)
+        {
+            return new IntakeAdvancedDirectiveViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+
+        }
+
     }
 }

@@ -810,6 +810,21 @@ namespace KyoS.Web.Controllers
                                                                      .ToListAsync();
                 MTPrWithReview = MTPrWithReview.Where(wc => wc.Messages.Where(m => m.Notification == false).Count() > 0).ToList();
                 ViewBag.MTPrWithReview = MTPrWithReview.Count.ToString();
+
+                ViewBag.IntakeMissing = await _context.Clients
+                                                          .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                          && wc.IntakeScreening == null
+                                                                          && wc.IntakeConsentForTreatment == null
+                                                                          && wc.IntakeConsentForRelease == null
+                                                                          && wc.IntakeConsumerRights == null
+                                                                          && wc.IntakeAcknowledgementHipa == null
+                                                                          && wc.IntakeAccessToServices == null
+                                                                          && wc.IntakeOrientationChecklist == null
+                                                                          && wc.IntakeTransportation == null
+                                                                          && wc.IntakeConsentPhotograph == null
+                                                                          && wc.IntakeFeeAgreement == null
+                                                                          && wc.IntakeTuberculosis == null
+                                                                          && wc.OnlyTCM == false));
             }
             if (User.IsInRole("TCMSupervisor"))
             {

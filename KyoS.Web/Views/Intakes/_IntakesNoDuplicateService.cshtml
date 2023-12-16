@@ -1,0 +1,52 @@
+﻿@model KyoS.Web.Models.IntakeNoDuplicateServiceViewModel
+<div class="col-md-12">
+    <pre>
+    Client Name: <strong>@Html.DisplayFor(modelItem => Model.Client.Name) </strong> 
+    Record :<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>NO DUPLICATE SERVICE ACKNOWLEDGEMENT</strong>
+
+    I hereby acknowledge that, at the time of signing this form, I am assuredly not receiving Community Mental and 
+    Behavioral Health services through any other agency or provider and that I am requesting this type of services 
+    only from <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 	
+    I certify that the above statement is true and correct to the best of my knowledge. I understand that duplication
+    of services may constitutes fraud under federal and state laws related to Medicaid and Medicare and that a false 
+    statement may disqualify me for services and affect my benefits.
+
+    __________________________________________________________________________________________________________________
+
+    Yo, reconozco que, al momento de firmar esta forma, no estoy recibiendo servicios en la Comunidad de Salud Mental
+    y del Comportamiento a través de otra agencia o proveedor y que estoy solicitando este tipo de servicios solamente 
+    en <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 
+    Certifico que la declaración anterior es verdadera y correcta en lo mejor de mi conocimiento. Entiendo que la 
+    duplicación de servicios puede constituir un fraude bajo las leyes federales y estatales relacionadas con Medicaid 
+    y Medicare que una declaración falsa puede descalificarme para los servicios y afectar mis beneficios.
+
+
+</pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />

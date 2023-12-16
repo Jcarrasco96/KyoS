@@ -124,11 +124,11 @@
                                      <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
                                      @if (User.IsInRole("Manager"))
                                      {
-                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
                                      }
                                      else
                                      { 
-                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
                                      }
                                  }
                                  @if (User.IsInRole("CaseManager"))

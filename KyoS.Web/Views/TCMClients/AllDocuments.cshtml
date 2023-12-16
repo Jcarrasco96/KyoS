@@ -113,21 +113,21 @@
                                      <td align="center">
                                         @if (item.TCMAssessment == null || item.TCMAssessment.Id == 0)
                                         {
-                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
                                             @if (item.TCMAssessment.Approved == 0)
                                             {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             @if (item.TCMAssessment.Approved == 1)
                                             {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             @if (item.TCMAssessment.Approved == 2)
                                             {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Assessment"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Assessment"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
                                     </td>

@@ -3161,8 +3161,11 @@ namespace KyoS.Web.Controllers
 
             TCMDischargeEntity discharge = await _context.TCMDischarge
                                                          .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
-
-            _context.TCMDischarge.Remove(discharge);
+            if (discharge != null)
+            {
+                _context.TCMDischarge.Remove(discharge);
+            }
+            
             await _context.SaveChangesAsync();
 
             List<TCMAdendumEntity> addendums = await _context.TCMAdendums
@@ -3174,8 +3177,11 @@ namespace KyoS.Web.Controllers
 
             TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews
                                                                          .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
-
-            _context.TCMServicePlanReviews.Remove(servicePlanReview);
+            if (servicePlanReview != null)
+            {
+                _context.TCMServicePlanReviews.Remove(servicePlanReview);
+            }
+            
             await _context.SaveChangesAsync();
 
             _context.TCMServicePlans.Remove(servicePlan);

@@ -88,6 +88,8 @@ namespace KyoS.Web.Models
         public bool TCMSupervisorEdit { get; set; }
 
         public bool TCMSupervisionTimeWithCaseManager { get; set; }
-        
+
+        public bool DocumentAssistant_Intake { get; set; }
+
     }
 }

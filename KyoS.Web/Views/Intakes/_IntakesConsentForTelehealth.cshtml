@@ -1,0 +1,92 @@
+﻿@model KyoS.Web.Models.IntakeConsentForTelehealthViewModel
+<div class="col-md-12">
+    <pre>
+    Client Name : <strong>@Html.DisplayFor(modelItem => Model.Client.Name) </strong> 
+    Record :<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
+    Date of Birth :<strong>@Html.DisplayFor(modelItem => Model.Client.DateOfBirth)</strong>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <i><strong>"Telehealth"</strong></i> refers to use of communication technologies, such as computers or hand-held electronic devices, to provide remote access to health care services. 
+    The same standards of care and protocol exist with telehealth as are adhered to when assessing and treating clients in our offices. Confidentiality and its 
+    limits are discussed fully in your Consent to Mental Health Treatment. 
+
+     -  With your consent, <strong>(@Html.DisplayFor(modelItem => Model.Client.Clinic.Name))</strong> may use telehealth to provide behavioral health services 
+        including intake assessments, psychotherapy and ongoing Psychosocial 
+        Rehabilitation (PSR) sessions.
+     -  This consent to participate in telehealth services shall remain in effect for <strong>one (1) year</strong> from the date of this signed consent, or until I revoke my
+        consent orally or in writing by signing the revocation below.
+     -  I understand that telehealth sessions <strong>will not</strong> be recorded at any time.
+     -  I understand that my insurance will be billed for the telehealth service, if applicable, and I will not incur any expenses related to the use of 
+        audio/video equipment.
+     -  <strong>Benefits:</strong> I understand that one of the main benefits of using telehealth for my psychotherapy and/or PSR services is that it allows me to participate
+        in sessions using an electronic device rather than having to travel to a physical location.
+     -  <strong>Risks:</strong> I understand that some risks of telehealth services include the possibility of a breach in privacy and confidentiality if security protocols fail.
+        I also understand that our session may be impacted by technical difficulties resulting in low-quality audio/video transmission or in having to reschedule 
+        our session for a different time.
+     -  I understand that I will be asked to provide my physical location at the start of each session. My location information is gathered for safety purposes 
+        and may be used in instances in which I indicate that I may be a risk to myself or others. Limits to confidentiality are fully discussed in my Consent to
+        Mental Health Treatment.
+     -  I understand that my intake specialist and/or treating clinician may decline the use of telehealth services if my clinical needs would be better served 
+        with face-to-face meetings.
+     -  My signature below indicates that I understand the benefits and risks of receiving services via telehealth and I have chosen to receive services through 
+        telehealth. If at any time I do not wish to receive services via telehealth I will inform my psychotherapist that I want to receive behavioral health 
+        services face to face.
+     -  If I withdraw consent for services via telehealth, and later wish to receive services via telehealth again, I will inform my therapist that I wish to 
+        sign a new Telehealth Consent. 
+
+    <strong>Based on the information I have reviewed with the clinician (check one of the following):</strong>
+        <input type="checkbox" asp-for="IConsentToReceive" class="form-check-input" id="check1"> I CONSENT to receive psychotherapy services via Telehealth.
+        <input type="checkbox" class="form-check-input" readonly id="check101"> I DO NOT consent to receive psychotherapy services via Telehealth.<br />
+</pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+</script>
+    
+
+

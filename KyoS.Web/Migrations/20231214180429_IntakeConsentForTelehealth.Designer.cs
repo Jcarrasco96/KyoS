@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231214180429_IntakeConsentForTelehealth")]
+    partial class IntakeConsentForTelehealth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4246,57 +4248,6 @@ namespace KyoS.Web.Migrations
                     b.ToTable("IntakeAcknowledgement");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeAdvancedDirectiveEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IHave")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IHaveNot")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeAdvancedDirective");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeConsentForReleaseEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -5072,39 +5023,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("IntakeMedicalHistory");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoDuplicateServiceEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignatureLegalGuardian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeNoDuplicateService");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
@@ -12584,17 +12502,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeAdvancedDirectiveEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeAdvancedDirective")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeAdvancedDirectiveEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeConsentForReleaseEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -12666,17 +12573,6 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithOne("IntakeMedicalHistory")
                         .HasForeignKey("KyoS.Web.Data.Entities.IntakeMedicalHistoryEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoDuplicateServiceEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeNoDuplicateService")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeNoDuplicateServiceEntity", "Client_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -13956,8 +13852,6 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("IntakeAcknowledgementHipa");
 
-                    b.Navigation("IntakeAdvancedDirective");
-
                     b.Navigation("IntakeConsentForRelease");
 
                     b.Navigation("IntakeConsentForTelehealth");
@@ -13971,8 +13865,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("IntakeFeeAgreement");
 
                     b.Navigation("IntakeMedicalHistory");
-
-                    b.Navigation("IntakeNoDuplicateService");
 
                     b.Navigation("IntakeOrientationChecklist");
 
