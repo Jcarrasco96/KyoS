@@ -217,5 +217,6 @@ namespace KyoS.Web.Data.Entities
         public IntakeConsentForTelehealthEntity IntakeConsentForTelehealth { get; set; }
         public IntakeNoDuplicateServiceEntity IntakeNoDuplicateService { get; set; }
         public IntakeAdvancedDirectiveEntity IntakeAdvancedDirective { get; set; }
+        public ReferralFormEntity ReferralForm { get; set; }
     }
 }

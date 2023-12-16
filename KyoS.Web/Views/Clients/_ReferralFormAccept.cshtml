@@ -1,0 +1,163 @@
+﻿@model KyoS.Web.Models.ReferralFormViewModel
+<div class="col-md-12">
+    <pre>
+    <strong>CLIENT'S INFORMATION</strong>      
+            
+           Client's Name: <strong>@Html.DisplayFor(modelItem => Model.NameClient)</strong>                 Case: <strong>@Html.DisplayFor(modelItem => Model.CaseNumber)</strong>
+           Date of Birth: <strong>@Html.DisplayFor(modelItem => Model.DateOfBirth)</strong>                      SSN: <strong>@Html.DisplayFor(modelItem => Model.SSN)</strong>              Gender: <strong> @Html.DisplayFor(modelItem => Model.Gender)</strong>
+                 Address: <strong>@Html.DisplayFor(modelItem => Model.Address)</strong>
+    Primary Phone Number: <strong>@Html.DisplayFor(modelItem => Model.PrimaryPhone)</strong>                              Other: <strong> @Html.DisplayFor(modelItem => Model.SecondaryPhone)</strong>
+          
+          Legal Guardian: <strong>@Html.DisplayFor(modelItem => Model.LegalGuardianName)</strong>       Phone: <strong> @Html.DisplayFor(modelItem => Model.LegalGuardianPhone)</strong>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>DIAGNOSIS AND REFERRAL INFORMATION</strong>  
+                
+               Diagnosis: <strong>@Html.DisplayFor(modelItem => Model.Dx), @Html.DisplayFor(modelItem => Model.Dx_Description)</strong>
+             Referred by: <strong>@Html.DisplayFor(modelItem => Model.ReferredBy_Name), @Html.DisplayFor(modelItem => Model.ReferredBy_Title), @Html.DisplayFor(modelItem => Model.ReferredBy_Phone)</strong>          
+   </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>INSURANCE INFORMATION AND ELEGIBILITY VERIFICATION</strong>       
+           
+             Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.MedicaidId)</strong>              
+                     HMO: <strong>@Html.DisplayFor(modelItem => Model.HMO)</strong>
+          Units Approved: <strong>@Html.DisplayFor(modelItem => Model.UnitsApproved)</strong>              Auth Date: <strong>@Html.DisplayFor(modelItem => Model.AuthorizedDate)</strong>             Exp Date: <strong> @Html.DisplayFor(modelItem => Model.ExperatedDate)</strong>
+   </pre>
+</div>
+@if (User.IsInRole("Facilitator"))
+{
+    <div class="col-md-12">
+        <pre>
+        <strong>CASE ASSIGNMENT</strong>       
+           
+                 Program: <strong>@Html.DisplayFor(modelItem => Model.Program)</strong> 
+             Assigned to: <strong>@Html.DisplayFor(modelItem => Model.AssignedTo)</strong>              Case accepted:  Yes <input type="checkbox" asp-for="CaseAcceptedFacilitator" class="form-check-input" id="check1">   No <input type="checkbox" class="form-check-input" id="check101">      <input type="checkbox" asp-for="FacilitatorSign"  /> Facilitator Signature        
+              Supervisor: <strong>@Html.DisplayFor(modelItem => Model.NameSupervisor)</strong>           Case accepted:  Yes <input type="checkbox" asp-for="CaseAcceptedSupervisor" class="form-check-input" disabled id="check2">   No <input type="checkbox" class="form-check-input" disabled id="check102">      <input type="checkbox" asp-for="SupervisorSign" disabled /> Supervisor Signature
+                    Date: <strong> @Html.DisplayFor(modelItem => Model.DateAssigned)</strong> 
+
+           Comments: 
+        <textarea asp-for="Comments" style="width:90%" rows="3" readonly></textarea> 
+
+             Assigned by: <strong>@Html.DisplayFor(modelItem => Model.AssignedBy)</strong> 
+                    Date: <strong> @Html.DisplayFor(modelItem => Model.DateAssigned)</strong>  
+   </pre>
+    </div>
+}
+@if (User.IsInRole("Supervisor"))
+{
+    <div class="col-md-12">
+        <pre>
+        <strong>CASE ASSIGNMENT</strong>       
+           
+                 Program: <strong>@Html.DisplayFor(modelItem => Model.Program)</strong> 
+             Assigned to: <strong>@Html.DisplayFor(modelItem => Model.AssignedTo)</strong>              Case accepted:  Yes <input type="checkbox" asp-for="CaseAcceptedFacilitator" class="form-check-input" disabled id="check1">   No <input type="checkbox" class="form-check-input" disabled id="check101">      <input type="checkbox" asp-for="FacilitatorSign" disabled /> Facilitator Signature        
+              Supervisor: <strong>@Html.DisplayFor(modelItem => Model.NameSupervisor)</strong>           Case accepted:  Yes <input type="checkbox" asp-for="CaseAcceptedSupervisor" class="form-check-input" id="check2">   No <input type="checkbox" class="form-check-input" id="check102">      <input type="checkbox" asp-for="SupervisorSign"  /> Supervisor Signature
+                    Date: <strong> @Html.DisplayFor(modelItem => Model.DateAssigned)</strong> 
+
+           Comments: 
+        <textarea asp-for="Comments" style="width:90%" rows="3" readonly></textarea> 
+
+             Assigned by: <strong>@Html.DisplayFor(modelItem => Model.AssignedBy)</strong> 
+                    Date: <strong> @Html.DisplayFor(modelItem => Model.DateAssigned)</strong>  
+   </pre>
+    </div>
+}
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+
+<script>
+
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //-------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+//----------------------------
+    })
+    check103.addEventListener('change', (e) => {
+        if (check103.checked == true) {
+            check3.checked = false;
+        } else {
+            check3.checked = true;
+        }
+
+    })
+    if (check3.checked == true) {
+        check103.checked = false;
+    } else {
+        check103.checked = true;
+    }
+    //-------------------------------
+    check4.addEventListener('change', (e) => {
+        if (check4.checked == true) {
+            check104.checked = false;
+        } else {
+            check104.checked = true;
+        }
+
+    })
+    check104.addEventListener('change', (e) => {
+        if (check104.checked == true) {
+            check4.checked = false;
+        } else {
+            check4.checked = true;
+        }
+
+    })
+    if (check4.checked == true) {
+        check104.checked = false;
+    } else {
+        check104.checked = true;
+    }
+</script>

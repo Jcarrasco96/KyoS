@@ -1968,7 +1968,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.IntakeConsentForTelehealth)
                                                       .Include(n => n.IntakeNoDuplicateService)
                                                       .Include(n => n.IntakeAdvancedDirective)
-
+                                                      
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -2783,5 +2783,6 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeAdvenceDirective", IntakeViewModel) });
         }
 
+       
     }
 }

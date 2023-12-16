@@ -233,5 +233,7 @@ namespace KyoS.Web.Helpers
         IntakeNoDuplicateServiceViewModel ToIntakeNoDuplicateServiceViewModel(IntakeNoDuplicateServiceEntity model);
         IntakeAdvancedDirectiveEntity ToIntakeAdvancedDirectiveEntity(IntakeAdvancedDirectiveViewModel model, bool isNew, string userId);
         IntakeAdvancedDirectiveViewModel ToIntakeAdvancedDirectiveViewModel(IntakeAdvancedDirectiveEntity model);
+        ReferralFormEntity ToReferralEntity(ReferralFormViewModel model, bool isNew, string userId);
+        ReferralFormViewModel ToReferralViewModel(ReferralFormEntity model);
     }
 }

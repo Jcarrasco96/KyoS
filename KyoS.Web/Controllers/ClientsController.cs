@@ -74,6 +74,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Name).ToListAsync());
             }
@@ -84,6 +85,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Bio.CreatedBy == user_logged.UserName
                                                      || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
@@ -98,6 +100,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
                                                     || c.IndividualTherapyFacilitator.Id == facilitator.Id
@@ -119,6 +122,8 @@ namespace KyoS.Web.Controllers
                                                           .Include(c => c.Client)
                                                           .ThenInclude(c => c.Clients_HealthInsurances)
                                                           .ThenInclude(c => c.HealthInsurance)
+                                                          .Include(c => c.Client)
+                                                          .ThenInclude(c => c.ReferralForm)
                                                           .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
 
                 return View(tcmClient.Client);
@@ -5536,6 +5541,309 @@ namespace KyoS.Web.Controllers
             }
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ReferralAccept(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .Include(g => g.Facilitator)
+                                                            .Include(g => g.Supervisor)
+                                                            .FirstOrDefaultAsync(g => g.Id == id
+                                                                                   && g.Supervisor.LinkedUser == user_logged.UserName);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .FirstOrDefaultAsync(g => g.Id == id
+                                                                                   && g.Facilitator.LinkedUser == user_logged.UserName);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            if (User.IsInRole("Manager"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .FirstOrDefaultAsync(g => g.Id == id);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReferralAccept(ReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ReferralFormEntity Referral = _context.ReferralForms.FirstOrDefault(n => n.Id == model.Id);
+            if (User.IsInRole("Facilitator"))
+            {
+                Referral.FacilitatorSign = true;
+                Referral.CaseAcceptedFacilitator = model.CaseAcceptedFacilitator;
+                _context.ReferralForms.Update(Referral);
+            }
+            if (User.IsInRole("Supervisor"))
+            {
+                Referral.SupervisorSign = true;
+                Referral.CaseAcceptedSupervisor = model.CaseAcceptedSupervisor;
+                _context.ReferralForms.Update(Referral);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ReferralPending", "Clients");
+
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public IActionResult CreateReferralForm(int idClient = 0)
+        {
+            ClientEntity client = _context.Clients
+                                          .Include(d => d.Clients_Diagnostics)
+                                          .ThenInclude(d => d.Diagnostic)
+                                          .Include(d => d.LegalGuardian)
+                                          .Include(d => d.Client_Referred)
+                                          .ThenInclude(d => d.Referred)
+                                          .Include(d => d.Clients_HealthInsurances)
+                                          .ThenInclude(d => d.HealthInsurance)
+
+                                          .FirstOrDefault(n => n.Id == idClient);
+
+            ReferralFormViewModel salida;
+
+            Client_Diagnostic client_Diagnostic = new Client_Diagnostic();
+            if (client.Clients_Diagnostics != null)
+            {
+                client_Diagnostic = client.Clients_Diagnostics
+                                          .FirstOrDefault(n => n.Principal == true);
+            }
+
+            ReferredEntity Referred = new ReferredEntity();
+            if (client.Client_Referred.Count() > 0)
+            {
+                Referred = client.Client_Referred
+                                 .FirstOrDefault(n => n.Service == ServiceAgency.TCM)
+                                 .Referred;
+            }
+
+            Client_HealthInsurance Client_HealtInsurance = new Client_HealthInsurance();
+            if (client.Clients_HealthInsurances.Count() > 0)
+            {
+                Client_HealtInsurance = client.Clients_HealthInsurances
+                                              .FirstOrDefault(n => n.Active == true
+                                                                && n.Agency == ServiceAgency.TCM);
+            }
+
+            LegalGuardianEntity legalGuardian = new LegalGuardianEntity();
+            if (client.LegalGuardian != null)
+            {
+                legalGuardian = client.LegalGuardian;
+            }
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    salida = new ReferralFormViewModel
+                    {
+                        //Client
+                        Address = client.FullAddress,
+                        SecondaryPhone = client.TelephoneSecondary,
+                        SSN = client.SSN,
+                        DateOfBirth = client.DateOfBirth,
+                        MedicaidId = client.MedicaidID,
+                        Gender = (client.Gender == GenderType.Female) ? "Female" : "Male",
+                        HMO = string.Empty,
+                        PrimaryPhone = client.Telephone,
+                        //audit
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        //tcmClient
+                        CaseNumber = client.Code,
+                        NameClient = client.Name,
+                        //Referred
+                        //AssignedTo = .Name,
+                        CaseAcceptedFacilitator = false,
+                        CaseAcceptedSupervisor = false,
+                        Comments = string.Empty,
+                        DateAssigned = client.AdmisionDate,
+                        FacilitatorSign = false,
+                        SupervisorSign = false,
+                        //NameSupervisor = client.Casemanager.TCMSupervisor.Name,
+                        Program = "Mental Health Targeted Case Management",
+                        //Health Insurance
+                        AuthorizedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate : new DateTime(),
+                        ExperatedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate.AddMonths(Client_HealtInsurance.DurationTime) : new DateTime(),
+                        UnitsApproved = Client_HealtInsurance != null ? Client_HealtInsurance.Units : 0,
+                        //Legal Guardian
+                        LegalGuardianName = legalGuardian.Name,
+                        LegalGuardianPhone = legalGuardian.Telephone,
+                        //Diagnostic
+                        Dx = client_Diagnostic.Diagnostic.Code,
+                        Dx_Description = client_Diagnostic.Diagnostic.Description,
+                        //Referred
+                        ReferredBy_Name = Referred.Name,
+                        ReferredBy_Phone = Referred.Telephone,
+                        ReferredBy_Title = Referred.Title,
+                        Client = client,
+                        IdClient = client.Id,
+                        FacilitatorList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false,false),
+                        SupervisorList = _combosHelper.GetComboSupervisorByClinic(user_logged.Clinic.Id, true),
+                        AssignedBy = user_logged.FullName
+                    };
+
+                    return View(salida);
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager, Frontdesk")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReferralForm(ReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            {
+                if (ModelState.IsValid)
+                {
+                    ReferralFormEntity Referral = _converterHelper.ToReferralEntity(model, true, user_logged.UserName);
+                    _context.Add(Referral);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index", "Clients");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public IActionResult ReferralFormReadOnly(int idReferral = 0)
+        {
+            ReferralFormEntity referral = _context.ReferralForms
+                                                  .Include(d => d.Facilitator)
+                                                  .Include(d => d.Supervisor)
+                                                  .Include(d => d.Client)
+                                                  .FirstOrDefault(n => n.Id == idReferral);
+            if (referral != null)
+            {
+                ReferralFormViewModel salida = _converterHelper.ToReferralViewModel(referral);
+                return View(salida);
+
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ReferralPending(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Supervisor"))
+            {
+                return View(await _context.ReferralForms
+                                          .Include(c => c.Facilitator)
+                                          .Include(c => c.Supervisor)
+                                          .Include(c => c.Client)
+                                          .Where(c => c.Supervisor.LinkedUser == user_logged.UserName
+                                                   && c.SupervisorSign == false)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.ReferralForms
+                                          .Include(c => c.Facilitator)
+                                          .Include(c => c.Supervisor)
+                                          .Include(c => c.Client)
+                                          .Where(c => c.Facilitator.LinkedUser == user_logged.UserName
+                                                   && c.FacilitatorSign == false)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+           
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
     }

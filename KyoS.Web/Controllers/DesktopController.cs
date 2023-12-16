@@ -247,6 +247,10 @@ namespace KyoS.Web.Controllers
                                                         .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                                        && m.Status == AdendumStatus.Pending
                                                                        && m.CreatedBy == user_logged.UserName));
+                ViewBag.ReferralPending = await _context.ReferralForms
+                                                        .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                       && m.Facilitator.Id == facilitator.Id
+                                                                       && m.FacilitatorSign == false));
 
             }
             if (User.IsInRole("Supervisor"))
@@ -352,6 +356,11 @@ namespace KyoS.Web.Controllers
                 ViewBag.PendingBrief = await _context.Brief
                                                      .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                                     && m.Status == BioStatus.Pending));
+
+                ViewBag.ReferralPending = await _context.ReferralForms
+                                                        .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                      && m.Supervisor.LinkedUser == user_logged.UserName
+                                                                      && m.SupervisorSign == false));
             }
             if (User.IsInRole("Manager"))
             {

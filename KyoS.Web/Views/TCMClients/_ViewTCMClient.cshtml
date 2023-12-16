@@ -59,7 +59,7 @@
                                  @Html.DisplayFor(modelItem => item.CaseNumber)
                              </td>
                              <td align="center">
-                                 @if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+                                 @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
                                  {
                                      @if (item.TCMReferralForm != null)
                                      {

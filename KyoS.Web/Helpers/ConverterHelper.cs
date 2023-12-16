@@ -7778,5 +7778,99 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public ReferralFormEntity ToReferralEntity(ReferralFormViewModel model, bool isNew, string userId)
+        {
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == model.IdFacilitator);
+            SupervisorEntity Supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
+            return new ReferralFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+
+                Client = _context.Clients
+                                 .FirstOrDefault(n => n.Id == model.IdClient),
+                Address = model.Address,
+                AssignedTo = facilitator.Name,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAcceptedFacilitator = model.CaseAcceptedFacilitator,
+                CaseAcceptedSupervisor = model.CaseAcceptedSupervisor,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = Supervisor.Name,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                FacilitatorSign = model.FacilitatorSign,
+                SupervisorSign = model.SupervisorSign,
+                UnitsApproved = model.UnitsApproved,
+                Facilitator = facilitator,
+                Supervisor = Supervisor,
+                AssignedBy = model.AssignedBy
+
+            };
+        }
+
+        public ReferralFormViewModel ToReferralViewModel(ReferralFormEntity model)
+        {
+            return new ReferralFormViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdClient = model.Client.Id,
+                Client = model.Client,
+
+                Address = model.Address,
+                AssignedTo = model.AssignedTo,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAcceptedFacilitator = model.CaseAcceptedFacilitator,
+                CaseAcceptedSupervisor = model.CaseAcceptedSupervisor,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = model.NameSupervisor,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                FacilitatorSign = model.FacilitatorSign,
+                SupervisorSign = model.SupervisorSign,
+                UnitsApproved = model.UnitsApproved,
+                AssignedBy = model.AssignedBy
+            };
+        }
     }
 }

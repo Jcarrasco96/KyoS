@@ -1,0 +1,77 @@
+﻿@model KyoS.Web.Models.ReferralFormViewModel
+@{
+    ViewData["Title"] = "Referral Form";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Referral Pending", "ReferralPending", "Clients")
+            </li>
+            <li class="active">Referral Form</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Referral Form</h4>
+    <hr />
+    <div class="row">
+        <form asp-action="ReferralAccept" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="NameClient" />
+            <input type="hidden" asp-for="CaseNumber" />
+            <input type="hidden" asp-for="DateOfBirth" />
+            <input type="hidden" asp-for="SSN" />
+            <input type="hidden" asp-for="Gender" />
+            <input type="hidden" asp-for="Address" />
+            <input type="hidden" asp-for="PrimaryPhone" />
+            <input type="hidden" asp-for="SecondaryPhone" />
+            <input type="hidden" asp-for="LegalGuardianName" />
+            <input type="hidden" asp-for="LegalGuardianPhone" />
+            <input type="hidden" asp-for="Dx" />
+            <input type="hidden" asp-for="Dx_Description" />
+            <input type="hidden" asp-for="ReferredBy_Name" />
+            <input type="hidden" asp-for="ReferredBy_Title" />
+            <input type="hidden" asp-for="ReferredBy_Phone" />
+            <input type="hidden" asp-for="MedicaidId" />
+            <input type="hidden" asp-for="HMO" />
+            <input type="hidden" asp-for="UnitsApproved" />
+            <input type="hidden" asp-for="AuthorizedDate" />
+            <input type="hidden" asp-for="ExperatedDate" />
+            <input type="hidden" asp-for="Program" />
+            <input type="hidden" asp-for="AssignedTo" />
+            <input type="hidden" asp-for="DateAssigned" />
+            <input type="hidden" asp-for="NameSupervisor" />
+            <input type="hidden" asp-for="AssignedBy" />
+
+            <partial name="_ReferralFormAccept" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Sign" class="btn btn-primary" />
+                <a asp-action="ReferralPending" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+

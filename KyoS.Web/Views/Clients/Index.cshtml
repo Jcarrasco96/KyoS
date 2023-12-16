@@ -87,7 +87,7 @@
                                 Individual Therapy
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Status
+                                Referral
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -125,11 +125,34 @@
                                     <td align="center">
                                         @if (item.OnlyTCM == true)
                                         {
-                                            <p>TCM</p>
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                            {
+                                                <span class="label label-success">
+                                                    TCM
+                                                </span>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            {
+                                                <span class="label label-default">
+                                                    TCM
+                                                </span>
+                                            }
+
                                         }
                                         else
                                         {
-                                            @Html.DisplayFor(modelItem => item.Service)
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                            {
+                                                <span class="label label-success">
+                                                    @Html.DisplayFor(modelItem => item.Service)
+                                                </span>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            {
+                                                <span class="label label-default">
+                                                    @Html.DisplayFor(modelItem => item.Service)
+                                                </span>
+                                            }
                                         }
                                     </td>
                                     <td align="center">
@@ -142,17 +165,41 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
                                         {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
+                                            @if (item.ReferralForm != null)
+                                            {
+                                                @if (item.ReferralForm.FacilitatorSign == false || item.ReferralForm.SupervisorSign == false)
+                                                {
+                                                    <a asp-action="ReferralFormReadOnly" asp-route-idReferral="@item.ReferralForm.Id" asp-controller="Clients" class="btn btn-info" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                                else
+                                                { 
+                                                    <a asp-action="PrintReferralForm" asp-route-idReferral="@item.ReferralForm.Id" asp-controller="Clients" class="btn btn-success" title="Print Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="CreateReferralForm" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            }
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (User.IsInRole("Facilitator"))
                                         {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
+                                            @if (item.ReferralForm != null)
+                                            {
+                                                @if (item.ReferralForm.FacilitatorSign == true)
+                                                {
+                                                    <a asp-action="ReferralAccept" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="ReferralAccept" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReferralAccept" asp-route-id="@item.Id" asp-controller="Clients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            }
                                         }
                                     </td>
                                     @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
@@ -201,11 +248,34 @@
                                     <td align="center">
                                         @if (item.OnlyTCM == true)
                                         {
-                                            <p>TCM</p>
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                            {
+                                                <span class="label label-success">
+                                                    TCM
+                                                </span>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            {
+                                                <span class="label label-default">
+                                                    TCM
+                                                </span>
+                                            }
+
                                         }
                                         else
                                         {
-                                            @Html.DisplayFor(modelItem => item.Service)
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                            {
+                                                <span class="label label-success">
+                                                    @Html.DisplayFor(modelItem => item.Service)
+                                                </span>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            {
+                                                <span class="label label-default">
+                                                    @Html.DisplayFor(modelItem => item.Service)
+                                                </span>
+                                            }
                                         }
                                     </td>
                                     <td align="center">
@@ -218,18 +288,43 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
                                         {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
+                                            @if (item.ReferralForm != null)
+                                            {
+                                                @if (item.ReferralForm.FacilitatorSign == false || item.ReferralForm.SupervisorSign == false)
+                                                {
+                                                    <a asp-action="ReferralFormReadOnly" asp-route-idReferral="@item.ReferralForm.Id" asp-controller="Clients" class="btn btn-info" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="PrintReferralForm" asp-route-idReferral="@item.ReferralForm.Id" asp-controller="Clients" class="btn btn-success" title="Print Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="CreateReferralForm" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            }
                                         }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        @if (User.IsInRole("Facilitator"))
                                         {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
+                                            @if (item.ReferralForm != null)
+                                            {
+                                                @if (item.ReferralForm.FacilitatorSign == true)
+                                                {
+                                                    <a asp-action="ReferralAccept" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="ReferralAccept" asp-route-idClient="@item.Id" asp-controller="Clients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReferralAccept" asp-route-id="@item.Id" asp-controller="Clients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            }
                                         }
+
                                     </td>
                                     @if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
                                     {

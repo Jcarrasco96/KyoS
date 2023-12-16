@@ -103,5 +103,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboFrecuencyActive();
         IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
         IEnumerable<SelectListItem> GetComboCaseManagersActive();
+        IEnumerable<SelectListItem> GetComboSupervisorByClinic(int idClinic, bool select);
     }
 }

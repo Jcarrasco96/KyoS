@@ -2486,5 +2486,36 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboSupervisorByClinic(int idClinic = 0, bool select = false)
+        {
+            List<SelectListItem> list = _context.Supervisors
+
+                                                .Where(c => c.Status == StatusType.Open)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name} ",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            if (select == false)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All Supervisor...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select Supervisor...]",
+                    Value = "0"
+                });
+            }
+
+            return list;
+        }
     }
 }

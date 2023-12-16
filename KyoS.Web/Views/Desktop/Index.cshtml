@@ -496,8 +496,26 @@
                 &nbsp;
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.ReferralPending == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Referral<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pending</h4>
+                        <span class="message-counter-cero">@ViewBag.ReferralPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="Clients" asp-action="ReferralPending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Referral<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pending</h4>
+                            <span class="message-counter-info">@ViewBag.ReferralPending</span>
+                        </div>
+                    </a>
+                }
             </div>
             <div class="col-md-2">
                 @if (ViewBag.ExpiredMTPsFacilitator == 0)
@@ -553,7 +571,7 @@
                     </a>
                 }
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 &nbsp;
             </div>
 
@@ -657,8 +675,23 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-1">
-                &nbsp;
+            <div class="col-md-2">
+                @if (ViewBag.ReferralPending == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Referral<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pending</h4>
+                        <span class="message-counter-cero">@ViewBag.ReferralPending</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="Clients" asp-action="ReferralPending" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>Referral<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pending</h4>
+                            <span class="message-counter-info">@ViewBag.ReferralPending</span>
+                        </div>
+                    </a>
+                }
             </div>
             <div class="col-md-2">
                 @if (ViewBag.PendingMtp == 0)
@@ -749,9 +782,6 @@
                         </div>
                     </a>
                 }
-            </div>
-            <div class="col-md-1">
-                &nbsp;
             </div>
             //New line
             <div class="col-md-12">
