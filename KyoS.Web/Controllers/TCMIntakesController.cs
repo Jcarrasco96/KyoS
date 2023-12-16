@@ -5650,7 +5650,6 @@ namespace KyoS.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ListConsentForrelease", "TCMIntakes", new { id = consent.TcmClient.Id });
-
         }
     }
 }

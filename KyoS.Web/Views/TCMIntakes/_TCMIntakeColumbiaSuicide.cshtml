@@ -5,33 +5,33 @@
     <div class="col-md-12">
     <pre>  
         <strong>Client's Name:</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
-        <strong>Ask questions that are bolded and underlined.</strong>                                                             <strong>Past Month</strong>                                     <strong>Lifetime</strong>
+        <strong>Ask questions that are bolded and underlined.</strong>                                                           <strong>Past Month</strong>                        <strong>Lifetime</strong>
         
-        <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>              <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" asp-items="Model.RiskList"></select>       <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" readonly id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check108"><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" asp-items="Model.RiskList"></select>
-                                                                                                                        <span asp-validation-for="IdHaveYouWishedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouWishedLifeTime_Value" class="text-danger"></span>                                         
-        <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                     <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" asp-items="Model.RiskList"></select>       <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" readonly id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check109"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" asp-items="Model.RiskList"></select> 
-                                                                                                                        <span asp-validation-for="IdHaveYouActuallyPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouActuallyLifeTime_Value" class="text-danger"></span>
+        <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>              <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" readonly id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check101"><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" asp-items="Model.RiskList" id="IdHaveYouWishedPastMonth_Value"></select>       <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" readonly id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check108"><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" asp-items="Model.RiskList" id="IdHaveYouWishedLifeTime_Value"></select>
+                                                                                                                                                                 
+        <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                     <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" readonly id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check102"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" asp-items="Model.RiskList" id="IdHaveYouActuallyPastMonth_Value"></select>       <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" readonly id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check109"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" asp-items="Model.RiskList" id="IdHaveYouActuallyLifeTime_Value"></select> 
+                                                                                                                        
         <strong>If YES to 2, ask questions 3, 4, 5, and 6. If NO to 2, go directly to question 6.</strong>
-        <strong>3) Have you been thinking about how you might do this?</strong>                                         <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" asp-items="Model.RiskList"></select>       <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" readonly id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check110"><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" asp-items="Model.RiskList"></select> 
-        E.g. “I thought about taking an overdose but I never made a specific plan                                       <span asp-validation-for="IdHaveYouBeenPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouBeenLifeTime_Value" class="text-danger"></span>
+        <strong>3) Have you been thinking about how you might do this?</strong>                                         <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" readonly id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check103"><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" asp-items="Model.RiskList" id="IdHaveYouBeenPastMonth_Value"></select>       <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" readonly id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check110"><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" asp-items="Model.RiskList" id="IdHaveYouBeenLifeTime_Value"></select> 
+        E.g. “I thought about taking an overdose but I never made a specific plan                                       
         as to when where or how I would actually do it….and I would never go
         through with it.”
-        <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                       <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" asp-items="Model.RiskList"></select>       <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" readonly id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check111"><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" asp-items="Model.RiskList"></select> 
-        As opposed to “I have the thoughts but I definitely will not do anything                                        <span asp-validation-for="IdHaveYouHadPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouHadLifeTime_Value" class="text-danger"></span>
+        <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                       <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" readonly id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check104"><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" asp-items="Model.RiskList" id="IdHaveYouHadPastMonth_Value"></select>       <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" readonly id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check111"><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" asp-items="Model.RiskList" id="IdHaveYouHadLifeTime_Value"></select> 
+        As opposed to “I have the thoughts but I definitely will not do anything                                        
         about them.”
-        <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>             <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" asp-items="Model.RiskList"></select>       <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" readonly id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check112"><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" asp-items="Model.RiskList"></select> 
-        Do you intend to carry out this plan?                                                                           <span asp-validation-for="IdHaveYouStartedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouStartedLifeTime_Value" class="text-danger"></span>
+        <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>             <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" readonly id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check105"><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" asp-items="Model.RiskList" id="IdHaveYouStartedPastMonth_Value"></select>       <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" readonly id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check112"><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" asp-items="Model.RiskList" id="IdHaveYouStartedLifeTime_Value"></select> 
+        Do you intend to carry out this plan?                                                                           
     
     
         How long ago did the Worst Point Ideation occur?
-        <strong>6) Have you ever done anything, started to do anything, or prepared to do anything</strong>             <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" readonly id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check106"><strong> NO </strong>  <select asp-for="IdHaveYouEver_Value" asp-items="Model.RiskList"></select>
-        to end your life?                                                                                               <span asp-validation-for="IdHaveYouEver_Value" class="text-danger"></span>              
+        <strong>6) Have you ever done anything, started to do anything, or prepared to do anything             <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" readonly id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check106"><strong> NO </strong>  <select asp-for="IdHaveYouEver_Value" asp-items="Model.RiskList" id="IdHaveYouEver_Value"></select>
+        to end your life?</strong>                                                                                                            
         Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note,
         took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed
         from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot
         yourself, cut yourself, tried to hang yourself, etc.
-        <strong>If YES, ask: Was this within the past three months?</strong>                                            <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" readonly id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check107"><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" asp-items="Model.RiskList"></select>
-                                                                                                                        <span asp-validation-for="IdHaveYouEverIfYes_Value" class="text-danger"></span>
+        <strong>If YES, ask: Was this within the past three months?</strong>                                            <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" readonly id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" id="check107"><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" asp-items="Model.RiskList" id="IdHaveYouEverIfYes_Value"></select>
+                                                                                                                        
     </pre>
     </div>
 
@@ -78,30 +78,30 @@ else
         <strong>Ask questions that are bolded and underlined.</strong>                                                             <strong>Past Month</strong>                                     <strong>Lifetime</strong>
         
         <strong>1) Have you wished you were dead or wished you could go to sleep and not wake up?</strong>              <input type="checkbox" asp-for="HaveYouWishedPastMonth" class="form-check-input" disabled id="check1"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check101"><strong> NO </strong>  <select asp-for="IdHaveYouWishedPastMonth_Value" disabled asp-items="Model.RiskList"></select>           <input type="checkbox" asp-for="HaveYouWishedLifeTime" class="form-check-input" disabled id="check8"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check108"><strong> NO </strong>  <select asp-for="IdHaveYouWishedLifeTime_Value" disabled asp-items="Model.RiskList"></select>
-                                                                                                                        <span asp-validation-for="IdHaveYouWishedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouWishedLifeTime_Value" class="text-danger"></span>                                         
+                                                                                                                                                                 
         <strong>2) Have you actually had any thoughts of killing yourself?</strong>                                     <input type="checkbox" asp-for="HaveYouActuallyPastMonth" class="form-check-input" disabled id="check2"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check102"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyPastMonth_Value" disabled asp-items="Model.RiskList"></select>           <input type="checkbox" asp-for="HaveYouActuallyLifeTime" class="form-check-input" disabled id="check9"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check109"><strong> NO </strong>  <select asp-for="IdHaveYouActuallyLifeTime_Value" disabled asp-items="Model.RiskList"></select> 
-                                                                                                                        <span asp-validation-for="IdHaveYouActuallyPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouActuallyLifeTime_Value" class="text-danger"></span>
+                                                                                                                        
         <strong>If YES to 2, ask questions 3, 4, 5, and 6. If NO to 2, go directly to question 6.</strong>
         <strong>3) Have you been thinking about how you might do this?</strong>                                         <input type="checkbox" asp-for="HaveYouBeenPastMonth" class="form-check-input" disabled id="check3"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check103"><strong> NO </strong>  <select asp-for="IdHaveYouBeenPastMonth_Value" disabled asp-items="Model.RiskList"></select>           <input type="checkbox" asp-for="HaveYouBeenLifeTime" class="form-check-input" disabled id="check10"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check110"><strong> NO </strong>  <select asp-for="IdHaveYouBeenLifeTime_Value" disabled asp-items="Model.RiskList"></select> 
-        E.g. “I thought about taking an overdose but I never made a specific plan                                       <span asp-validation-for="IdHaveYouBeenPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouBeenLifeTime_Value" class="text-danger"></span>
+        E.g. “I thought about taking an overdose but I never made a specific plan                                       
         as to when where or how I would actually do it….and I would never go
         through with it.”
         <strong>4) Have you had these thoughts and had some intention of acting on them?</strong>                       <input type="checkbox" asp-for="HaveYouHadPastMonth" class="form-check-input" disabled id="check4"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check104"><strong> NO </strong>  <select asp-for="IdHaveYouHadPastMonth_Value" disabled asp-items="Model.RiskList"></select>           <input type="checkbox" asp-for="HaveYouHadLifeTime" class="form-check-input" disabled id="check11"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check111"><strong> NO </strong>  <select asp-for="IdHaveYouHadLifeTime_Value" disabled asp-items="Model.RiskList"></select> 
-        As opposed to “I have the thoughts but I definitely will not do anything                                        <span asp-validation-for="IdHaveYouHadPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouHadLifeTime_Value" class="text-danger"></span>
+        As opposed to “I have the thoughts but I definitely will not do anything                                        
         about them.”
         <strong>5) Have you started to work out or worked out the details of how to kill yourself?</strong>             <input type="checkbox" asp-for="HaveYouStartedPastMonth" class="form-check-input" disabled id="check5"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check105"><strong> NO </strong>  <select asp-for="IdHaveYouStartedPastMonth_Value" disabled asp-items="Model.RiskList"></select>           <input type="checkbox" asp-for="HaveYouStartedLifeTime" class="form-check-input" disabled id="check12"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check112"><strong> NO </strong>  <select asp-for="IdHaveYouStartedLifeTime_Value" disabled asp-items="Model.RiskList"></select> 
-    Do you intend to carry out this plan?                                                                               <span asp-validation-for="IdHaveYouStartedPastMonth_Value" class="text-danger"></span>               <span asp-validation-for="IdHaveYouStartedLifeTime_Value" class="text-danger"></span>
+    Do you intend to carry out this plan?                                                                               
     
     
     How long ago did the Worst Point Ideation occur?
         <strong>6) Have you ever done anything, started to do anything, or prepared to do anything</strong>             <input type="checkbox" asp-for="HaveYouEver" class="form-check-input" disabled id="check6"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check106"><strong> NO </strong>  <select asp-for="IdHaveYouEver_Value" disabled asp-items="Model.RiskList"></select>
-        to end your life?                                                                                               <span asp-validation-for="IdHaveYouEver_Value" class="text-danger"></span>              
+        to end your life?                                                                                                           
     Examples: Collected pills, obtained a gun, gave away valuables, wrote a will or suicide note,
     took out pills but didn’t swallow any, held a gun but changed your mind or it was grabbed
     from your hand, went to the roof but didn’t jump; or actually took pills, tried to shoot
     yourself, cut yourself, tried to hang yourself, etc.
         <strong>If YES, ask: Was this within the past three months?</strong>                                            <input type="checkbox" asp-for="HaveYouEverIfYes" class="form-check-input" disabled id="check7"><strong> YES</strong>  <input type="checkbox" class="form-check-input" disabled id="check107"><strong> NO </strong>  <select asp-for="IdHaveYouEverIfYes_Value" disabled asp-items="Model.RiskList"></select>
-                                                                                                                        <span asp-validation-for="IdHaveYouEverIfYes_Value" class="text-danger"></span>
+                                                                                                                        
     </pre>
     </div>
 
@@ -138,270 +138,355 @@ else
     </div>    
     <br />
 }
-<script>
+<script type="text/javascript">
 
     check1.addEventListener('change', (e) => {
         if (check1.checked == true) {
             check101.checked = false;
-        } else {
-            check101.checked = true;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
         }
-
+        else {
+            check101.checked = true;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");           
+            $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
+        }
     })
     check101.addEventListener('change', (e) => {
         if (check101.checked == true) {
             check1.checked = false;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
         } else {
             check1.checked = true;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
         }
-
     })
     if (check1.checked == true) {
         check101.checked = false;
-    } else {
-        check101.checked = true;
+        document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+    }
+    else {
+        check101.checked = true;        
+        document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");        
     }
     //-------------------------------
     check2.addEventListener('change', (e) => {
         if (check2.checked == true) {
-            check102.checked = false;
+            check102.checked = false;            
+            document.getElementById("IdHaveYouActuallyPastMonth_Value").removeAttribute("disabled");            
         } else {
             check102.checked = true;
+            document.getElementById("IdHaveYouActuallyPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouActuallyPastMonth_Value").prop('selectedIndex', 0);
         }
-
     })
     check102.addEventListener('change', (e) => {
         if (check102.checked == true) {
             check2.checked = false;
-        } else {
+            document.getElementById("IdHaveYouActuallyPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouActuallyPastMonth_Value").prop('selectedIndex', 0);
+        } else {            
             check2.checked = true;
+            document.getElementById("IdHaveYouActuallyPastMonth_Value").removeAttribute("disabled");            
         }
-
     })
     if (check2.checked == true) {
         check102.checked = false;
-    } else {
+        document.getElementById("IdHaveYouActuallyPastMonth_Value").removeAttribute("disabled");
+    }
+    else {
         check102.checked = true;
+        document.getElementById("IdHaveYouActuallyPastMonth_Value").setAttribute("disabled", "disabled");
     }
     //--------------------------------
     check3.addEventListener('change', (e) => {
         if (check3.checked == true) {
             check103.checked = false;
+            document.getElementById("IdHaveYouBeenPastMonth_Value").removeAttribute("disabled");
         } else {
             check103.checked = true;
+            document.getElementById("IdHaveYouBeenPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouBeenPastMonth_Value").prop('selectedIndex', 0);
         }
-
     })
     check103.addEventListener('change', (e) => {
         if (check103.checked == true) {
             check3.checked = false;
+            document.getElementById("IdHaveYouBeenPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouBeenPastMonth_Value").prop('selectedIndex', 0);
         } else {
             check3.checked = true;
+            document.getElementById("IdHaveYouBeenPastMonth_Value").removeAttribute("disabled");
         }
-
     })
     if (check3.checked == true) {
         check103.checked = false;
-    } else {
+        document.getElementById("IdHaveYouBeenPastMonth_Value").removeAttribute("disabled");
+    }
+    else {
         check103.checked = true;
+        document.getElementById("IdHaveYouBeenPastMonth_Value").setAttribute("disabled", "disabled");
     }
     //----------------------------
     check4.addEventListener('change', (e) => {
         if (check4.checked == true) {
             check104.checked = false;
+            document.getElementById("IdHaveYouHadPastMonth_Value").removeAttribute("disabled");
         } else {
             check104.checked = true;
+            document.getElementById("IdHaveYouHadPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouHadPastMonth_Value").prop('selectedIndex', 0);
         }
-
     })
     check104.addEventListener('change', (e) => {
         if (check104.checked == true) {
             check4.checked = false;
+            document.getElementById("IdHaveYouHadPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouHadPastMonth_Value").prop('selectedIndex', 0);
         } else {
             check4.checked = true;
+            document.getElementById("IdHaveYouHadPastMonth_Value").removeAttribute("disabled");
         }
-
     })
     if (check4.checked == true) {
         check104.checked = false;
-    } else {
+        document.getElementById("IdHaveYouHadPastMonth_Value").removeAttribute("disabled");
+    }
+    else {
         check104.checked = true;
+        document.getElementById("IdHaveYouHadPastMonth_Value").setAttribute("disabled", "disabled");
     }
     //----------------------------
     check5.addEventListener('change', (e) => {
         if (check5.checked == true) {
             check105.checked = false;
+            document.getElementById("IdHaveYouStartedPastMonth_Value").removeAttribute("disabled");
         } else {
             check105.checked = true;
+            document.getElementById("IdHaveYouStartedPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouStartedPastMonth_Value").prop('selectedIndex', 0);
         }
-
     })
     check105.addEventListener('change', (e) => {
         if (check105.checked == true) {
             check5.checked = false;
+            document.getElementById("IdHaveYouStartedPastMonth_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouStartedPastMonth_Value").prop('selectedIndex', 0);
         } else {
             check5.checked = true;
+            document.getElementById("IdHaveYouStartedPastMonth_Value").removeAttribute("disabled");
         }
-
     })
     if (check5.checked == true) {
         check105.checked = false;
+        document.getElementById("IdHaveYouStartedPastMonth_Value").removeAttribute("disabled");
     } else {
         check105.checked = true;
+        document.getElementById("IdHaveYouStartedPastMonth_Value").setAttribute("disabled", "disabled");
     }
     //--------------------------
     check6.addEventListener('change', (e) => {
         if (check6.checked == true) {
             check106.checked = false;
+            document.getElementById("IdHaveYouEver_Value").removeAttribute("disabled");
         } else {
             check106.checked = true;
+            document.getElementById("IdHaveYouEver_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouEver_Value").prop('selectedIndex', 0);
         }
-
     })
     check106.addEventListener('change', (e) => {
         if (check106.checked == true) {
             check6.checked = false;
+            document.getElementById("IdHaveYouEver_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouEver_Value").prop('selectedIndex', 0);
         } else {
             check6.checked = true;
+            document.getElementById("IdHaveYouEver_Value").removeAttribute("disabled");
         }
-
     })
     if (check6.checked == true) {
         check106.checked = false;
-    } else {
+        document.getElementById("IdHaveYouEver_Value").removeAttribute("disabled");
+    }
+    else {
         check106.checked = true;
+        document.getElementById("IdHaveYouEver_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check7.addEventListener('change', (e) => {
         if (check7.checked == true) {
             check107.checked = false;
+            document.getElementById("IdHaveYouEverIfYes_Value").removeAttribute("disabled");
         } else {
             check107.checked = true;
+            document.getElementById("IdHaveYouEverIfYes_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouEverIfYes_Value").prop('selectedIndex', 0);
         }
-
     })
     check107.addEventListener('change', (e) => {
         if (check107.checked == true) {
             check7.checked = false;
+            document.getElementById("IdHaveYouEverIfYes_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouEverIfYes_Value").prop('selectedIndex', 0);
         } else {
             check7.checked = true;
+            document.getElementById("IdHaveYouEverIfYes_Value").removeAttribute("disabled");
         }
-
     })
     if (check7.checked == true) {
         check107.checked = false;
-    } else {
+        document.getElementById("IdHaveYouEverIfYes_Value").removeAttribute("disabled");
+    }
+    else
+    {
         check107.checked = true;
+        document.getElementById("IdHaveYouEverIfYes_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check8.addEventListener('change', (e) => {
         if (check8.checked == true) {
             check108.checked = false;
+            document.getElementById("IdHaveYouWishedLifeTime_Value").removeAttribute("disabled");
         } else {
             check108.checked = true;
+            document.getElementById("IdHaveYouWishedLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouWishedLifeTime_Value").prop('selectedIndex', 0);
         }
-
     })
     check108.addEventListener('change', (e) => {
         if (check108.checked == true) {
             check8.checked = false;
+            document.getElementById("IdHaveYouWishedLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouWishedLifeTime_Value").prop('selectedIndex', 0);
         } else {
             check8.checked = true;
+            document.getElementById("IdHaveYouWishedLifeTime_Value").removeAttribute("disabled");
         }
-
     })
     if (check8.checked == true) {
         check108.checked = false;
-    } else {
+        document.getElementById("IdHaveYouWishedLifeTime_Value").removeAttribute("disabled");
+    }
+    else {
         check108.checked = true;
+        document.getElementById("IdHaveYouWishedLifeTime_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check9.addEventListener('change', (e) => {
         if (check9.checked == true) {
             check109.checked = false;
+            document.getElementById("IdHaveYouActuallyLifeTime_Value").removeAttribute("disabled");
         } else {
             check109.checked = true;
+            document.getElementById("IdHaveYouActuallyLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouActuallyLifeTime_Value").prop('selectedIndex', 0);
         }
-
     })
     check109.addEventListener('change', (e) => {
         if (check109.checked == true) {
             check9.checked = false;
+            document.getElementById("IdHaveYouActuallyLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouActuallyLifeTime_Value").prop('selectedIndex', 0);
         } else {
             check9.checked = true;
+            document.getElementById("IdHaveYouActuallyLifeTime_Value").removeAttribute("disabled");
         }
-
     })
     if (check9.checked == true) {
         check109.checked = false;
-    } else {
+        document.getElementById("IdHaveYouActuallyLifeTime_Value").removeAttribute("disabled");
+    }
+    else {
         check109.checked = true;
+        document.getElementById("IdHaveYouActuallyLifeTime_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check10.addEventListener('change', (e) => {
         if (check10.checked == true) {
             check110.checked = false;
+            document.getElementById("IdHaveYouBeenLifeTime_Value").removeAttribute("disabled");
         } else {
             check110.checked = true;
+            document.getElementById("IdHaveYouBeenLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouBeenLifeTime_Value").prop('selectedIndex', 0);
         }
-
     })
     check110.addEventListener('change', (e) => {
         if (check110.checked == true) {
             check10.checked = false;
+            document.getElementById("IdHaveYouBeenLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouBeenLifeTime_Value").prop('selectedIndex', 0);
         } else {
             check10.checked = true;
+            document.getElementById("IdHaveYouBeenLifeTime_Value").removeAttribute("disabled");
         }
-
     })
     if (check10.checked == true) {
         check110.checked = false;
-    } else {
+        document.getElementById("IdHaveYouBeenLifeTime_Value").removeAttribute("disabled");
+    }
+    else {
         check110.checked = true;
+        document.getElementById("IdHaveYouBeenLifeTime_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check11.addEventListener('change', (e) => {
         if (check11.checked == true) {
             check111.checked = false;
+            document.getElementById("IdHaveYouHadLifeTime_Value").removeAttribute("disabled");
         } else {
             check111.checked = true;
+            document.getElementById("IdHaveYouHadLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouHadLifeTime_Value").prop('selectedIndex', 0);
         }
-
     })
     check111.addEventListener('change', (e) => {
         if (check111.checked == true) {
             check11.checked = false;
+            document.getElementById("IdHaveYouHadLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouHadLifeTime_Value").prop('selectedIndex', 0);
         } else {
             check11.checked = true;
+            document.getElementById("IdHaveYouHadLifeTime_Value").removeAttribute("disabled");
         }
-
     })
     if (check11.checked == true) {
         check111.checked = false;
-    } else {
+        document.getElementById("IdHaveYouHadLifeTime_Value").removeAttribute("disabled");
+    }
+    else {
         check111.checked = true;
+        document.getElementById("IdHaveYouHadLifeTime_Value").setAttribute("disabled", "disabled");
     }
     //-------------------------------
     check12.addEventListener('change', (e) => {
         if (check12.checked == true) {
             check112.checked = false;
+            document.getElementById("IdHaveYouStartedLifeTime_Value").removeAttribute("disabled");
         } else {
             check112.checked = true;
+            document.getElementById("IdHaveYouStartedLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouStartedLifeTime_Value").prop('selectedIndex', 0);
         }
-
     })
     check112.addEventListener('change', (e) => {
         if (check112.checked == true) {
             check12.checked = false;
+            document.getElementById("IdHaveYouStartedLifeTime_Value").setAttribute("disabled", "disabled");
+            $("#IdHaveYouStartedLifeTime_Value").prop('selectedIndex', 0);
         } else {
             check12.checked = true;
+            document.getElementById("IdHaveYouStartedLifeTime_Value").removeAttribute("disabled");
         }
-
     })
     if (check12.checked == true) {
         check112.checked = false;
-    } else {
-        check112.checked = true;
+        document.getElementById("IdHaveYouStartedLifeTime_Value").removeAttribute("disabled");
     }
-        //-------------------------------
+    else {
+        check112.checked = true;
+        document.getElementById("IdHaveYouStartedLifeTime_Value").setAttribute("disabled", "disabled");
+    }
+    //-------------------------------
 </script>

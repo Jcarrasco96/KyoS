@@ -2052,15 +2052,9 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboRisk()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = RiskType.Low.ToString(), Value = "1"},
-                                  new SelectListItem { Text = RiskType.Moderate.ToString(), Value = "2"},
-                                  new SelectListItem { Text = RiskType.High.ToString(), Value = "3"}};
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "[Select risk...]",
-                Value = "0"
-            });
+                                { new SelectListItem { Text = RiskType.Low.ToString(), Value = "0"},
+                                  new SelectListItem { Text = RiskType.Moderate.ToString(), Value = "1"},
+                                  new SelectListItem { Text = RiskType.High.ToString(), Value = "2"}};
 
             return list;
         }
