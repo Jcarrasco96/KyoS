@@ -1,6 +1,6 @@
-﻿@model KyoS.Web.Models.TCMIntakeAppendixEViewModel
+﻿@model KyoS.Web.Models.TCMIntakeAppendixIViewModel
 @{
-    ViewData["Title"] = "TCM Appendix E";
+    ViewData["Title"] = "TCM Appendix I";
 }
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Update Appendix E", "UpdateAppendixE", "TCMIntakes")
+                @Html.ActionLink("Update Appendix I", "UpdateAppendixI", "TCMIntakes")
             </li>
             <li class="active">TCM Appendix E</li>
         </ul><!--.breadcrumb-->
@@ -24,17 +24,17 @@
     <h4>TCM AppendixJ</h4>
     <hr />
     <div class="row">
-        <form asp-action="EditAppendixE" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="EditAppendixI" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
-            <partial name="_TCMIntakeAppendixEReadOnly" />
+            <partial name="_TCMIntakeAppendixIReadOnly" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Update" class="btn btn-primary" />
-                <a asp-action="UpdateAppendixE" class="btn btn-success">Back</a>
+                <a asp-action="UpdateAppendixI" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

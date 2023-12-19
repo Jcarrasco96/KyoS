@@ -134,23 +134,23 @@
                                      <td align="center">
                                          @if (item.Younger == true)
                                          {
-                                             @if (item.TcmIntakeAppendixE == null || item.TcmIntakeAppendixE.Id == 0)
+                                             @if (item.TcmIntakeAppendixI == null || item.TcmIntakeAppendixI.Id == 0)
                                              {
                                                  <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                              }
                                              else
                                              {
-                                                 @if (item.TcmIntakeAppendixE.Approved == 0)
+                                                 @if (item.TcmIntakeAppendixI.Approved == 0)
                                                  {
                                                      <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                                  }
-                                                 @if (item.TcmIntakeAppendixE.Approved == 1)
+                                                 @if (item.TcmIntakeAppendixI.Approved == 1)
                                                  {
                                                      <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
                                                  }
-                                                 @if (item.TcmIntakeAppendixE.Approved == 2)
+                                                 @if (item.TcmIntakeAppendixI.Approved == 2)
                                                  {
-                                                     <a asp-action="PrintTCMAppendixE" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                     <a asp-action="PrintTCMAppendixI" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                  }
                                              }
                                          }

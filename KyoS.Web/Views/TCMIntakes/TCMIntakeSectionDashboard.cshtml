@@ -626,32 +626,32 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.Younger == true)
                 {
-                    @if (Model.TcmIntakeAppendixE != null)
+                    @if (Model.TcmIntakeAppendixI != null)
                     {
-                        @if (Model.TcmIntakeAppendixE.Approved == 2)
+                        @if (Model.TcmIntakeAppendixI.Approved == 2)
                         {
                             <div class="thumbnail list-group-item list-group-item-success">
-                                <a style="text-decoration: none;" asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print AppendixE" target="_blank">
-                                    <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                <a style="text-decoration: none;" asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print Appendix I" target="_blank">
+                                    <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                 </a>
-                                <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixE" role="button" title="Print AppendixE" target="_blank">
+                                <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixI" role="button" title="Print Appendix I" target="_blank">
                                     <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
                                 </a>
                             </div>
                         }
-                        @if (Model.TcmIntakeAppendixE.Approved == 0)
+                        @if (Model.TcmIntakeAppendixI.Approved == 0)
                         {
-                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
+                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
                                 <div class="thumbnail list-group-item list-group-item-warning">
-                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix E<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                 </div>
                             </a>
                         }
-                        @if (Model.TcmIntakeAppendixE.Approved == 1)
+                        @if (Model.TcmIntakeAppendixI.Approved == 1)
                         {
-                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
+                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
                                 <div class="thumbnail list-group-item list-group-item-info">
-                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix E<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                 </div>
                             </a>
                         }
@@ -659,9 +659,9 @@
                     }
                     else
                     {
-                        <a style="text-decoration: none;" asp-action="CreateTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
+                        <a style="text-decoration: none;" asp-action="CreateTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
                             <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixE<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                             </div>
                         </a>
                     }

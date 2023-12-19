@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMIntakeAppendixEEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity>
 @{
-    ViewData["Title"] = "TCM Appendix E";
+    ViewData["Title"] = "TCM Appendix I";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">TCM Appendix E</li>
+        <li class="active">TCM Appendix I</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Pending Appendix E</h3>
+                <h3 class="panel-title">Pending Appendix I</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -110,13 +110,13 @@
                                     {
                                         @if (item.Approved == 0)
                                         {
-                                            <a asp-action="CreateTCMAppendixE" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Discharge"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="CreateTCMAppendixI" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Create Appendix I"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing Appendix I"><i class="glyphicon glyphicon-ok"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="CreateTCMAppendixE" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Edit Appendix E"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="CreateTCMAppendixI" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Edit Appendix I"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
@@ -124,7 +124,7 @@
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-route-id="@item.TcmClient_FK" asp-action="PrintTCMAppendixJ" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-route-id="@item.TcmClient_FK" asp-action="PrintTCMAppendixI" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("TCMSupervisor"))
@@ -139,14 +139,14 @@
                                         @if (item.Approved == 1)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <a asp-action="CreateTCMAppendixEReadOnly" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="CreateTCMAppendixIReadOnly" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix E"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix I"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("Manager"))
@@ -161,7 +161,7 @@
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix E"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix I"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>

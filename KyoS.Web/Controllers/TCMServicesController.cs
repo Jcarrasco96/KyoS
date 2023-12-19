@@ -1089,7 +1089,7 @@ namespace KyoS.Web.Controllers
             { 
                 Name = tcmServiceFrom.Name,
                 Clinic = tcmServiceFrom.Clinic,
-                CreatedBy = tcmServiceFrom.CreatedBy,
+                CreatedBy = user_logged.UserName,
                 CreatedOn = tcmServiceFrom.CreatedOn,
                 Description = tcmServiceFrom.Description                
             };

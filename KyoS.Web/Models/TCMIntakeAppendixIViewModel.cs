@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 namespace KyoS.Web.Models
 {
-    public class TCMIntakeAppendixEViewModel : TCMIntakeAppendixEEntity
+    public class TCMIntakeAppendixIViewModel : TCMIntakeAppendixIEntity
     {
         [Display(Name = "Client")]
         [Required]

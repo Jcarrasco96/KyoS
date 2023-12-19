@@ -47,9 +47,9 @@
             <div id="view-farsForClient">
                 @if (Model.Younger == true)
                 {
-                    @if (Model.TcmIntakeAppendixE != null)
+                    @if (Model.TcmIntakeAppendixI != null)
                     {
-                        @await Html.PartialAsync("_ViewAppendixEForCase", Model.TcmIntakeAppendixE)
+                        @await Html.PartialAsync("_ViewAppendixIForCase", Model.TcmIntakeAppendixI)
                     }
                 }
                 else

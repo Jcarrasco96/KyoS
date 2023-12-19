@@ -8,7 +8,7 @@ using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMIntakeAppendixEEntity : AuditableEntity
+    public class TCMIntakeAppendixIEntity : AuditableEntity
     {
         public int Id { get; set; }
 

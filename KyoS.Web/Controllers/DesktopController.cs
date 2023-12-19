@@ -619,7 +619,7 @@ namespace KyoS.Web.Controllers
                                                                     || g.TCMIntakeForm == null
                                                                     || g.TCMIntakeOrientationChecklist == null
                                                                     || g.TCMIntakeWelcome == null
-                                                                    || g.TcmIntakeAppendixE == null)));        
+                                                                    || g.TcmIntakeAppendixI == null)));        
 
                 ViewBag.OpenBinder = await _context.TCMClient
                                                    .CountAsync(g => (g.Casemanager.Id == caseManager.Id
@@ -721,10 +721,10 @@ namespace KyoS.Web.Controllers
                                                        && wc.Status == NoteStatus.Pending
                                                        && wc.TCMMessages.Count() > 0)).Count()
                                                 .ToString();
-                ViewBag.AppendiceEPending = await _context.TCMIntakeAppendixE
-                                                        .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                       && g.Approved == 1
-                                                                       && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
+                ViewBag.AppendiceEPending = await _context.TCMIntakeAppendixI
+                                                          .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                         && g.Approved == 1
+                                                                         && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
             }
             if (User.IsInRole("Documents_Assistant"))
             {
@@ -866,7 +866,7 @@ namespace KyoS.Web.Controllers
                                                                             || s.TCMIntakeForm == null
                                                                             || s.TCMIntakeOrientationChecklist == null
                                                                             || s.TCMIntakeWelcome == null
-                                                                            || s.TcmIntakeAppendixE == null)));
+                                                                            || s.TcmIntakeAppendixI == null)));
 
                 ViewBag.OpenBinder = await _context.TCMClient
                                                    .CountAsync(g => (g.Status == StatusType.Open
@@ -960,10 +960,10 @@ namespace KyoS.Web.Controllers
                                          .CountAsync(g => (g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
                                                         && g.Status == StatusType.Open
                                                         && g.Client.Clinic.Id == user_logged.Clinic.Id));
-                ViewBag.AppendiceEPending = await _context.TCMIntakeAppendixE
-                                                         .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && g.Approved == 1
-                                                                        && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
+                ViewBag.AppendiceEPending = await _context.TCMIntakeAppendixI
+                                                          .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                         && g.Approved == 1
+                                                                         && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
             }
             if (User.IsInRole("Frontdesk"))
             {

@@ -7875,10 +7875,10 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMIntakeAppendixEEntity> ToTCMIntakeAppendixEEntity(TCMIntakeAppendixEViewModel model, bool isNew, string userId)
+        public async Task<TCMIntakeAppendixIEntity> ToTCMIntakeAppendixIEntity(TCMIntakeAppendixIViewModel model, bool isNew, string userId)
         {
-            TCMIntakeAppendixEEntity salida;
-            salida = new TCMIntakeAppendixEEntity
+            TCMIntakeAppendixIEntity salida;
+            salida = new TCMIntakeAppendixIEntity
             {
                 Id = isNew ? 0 : model.Id,
                 CreatedBy = isNew ? userId : model.CreatedBy,
@@ -7906,9 +7906,9 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
-        public TCMIntakeAppendixEViewModel ToTCMIntakeAppendixEViewModel(TCMIntakeAppendixEEntity model)
+        public TCMIntakeAppendixIViewModel ToTCMIntakeAppendixIViewModel(TCMIntakeAppendixIEntity model)
         {
-            return new TCMIntakeAppendixEViewModel
+            return new TCMIntakeAppendixIViewModel
             {
                 Id = model.Id,
                 TcmClient = model.TcmClient,

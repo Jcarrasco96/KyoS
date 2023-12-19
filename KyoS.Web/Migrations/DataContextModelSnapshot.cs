@@ -9166,7 +9166,7 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMIntakeAdvancedDirective");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixEEntity", b =>
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -9237,7 +9237,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("TcmSupervisorId");
 
-                    b.ToTable("TCMIntakeAppendixE");
+                    b.ToTable("TCMIntakeAppendixI");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity", b =>
@@ -11187,8 +11187,8 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -13491,11 +13491,11 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmClient");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixEEntity", b =>
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TcmIntakeAppendixE")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAppendixEEntity", "TcmClient_FK")
+                        .WithOne("TcmIntakeAppendixI")
+                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity", "TcmClient_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -14441,7 +14441,7 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMIntakeAdvancedDirective");
 
-                    b.Navigation("TcmIntakeAppendixE");
+                    b.Navigation("TcmIntakeAppendixI");
 
                     b.Navigation("TcmIntakeAppendixJ");
 

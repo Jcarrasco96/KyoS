@@ -1,6 +1,6 @@
-﻿@model KyoS.Web.Models.TCMIntakeAppendixEViewModel
+﻿@model KyoS.Web.Models.TCMIntakeAppendixIViewModel
 @{
-    ViewData["Title"] = "TCM Appendix E";
+    ViewData["Title"] = "TCM Appendix I";
 }
 
 <!DOCTYPE html>
@@ -17,38 +17,38 @@
                 <i class="icon-home"></i>
                 @if (ViewData["origi"].ToString() == "0")
                 {
-                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 4 })
+                    @Html.ActionLink("Pending Appendix I", "ApendiceIStatus", "TCMIntakes", new { approved = 1 })
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
+                    @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
                 }
             </li>
-            <li class="active">TCM Appendix E</li>
+            <li class="active">TCM Appendix I</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>TCM Appendix E</h4>
+    <h4>TCM Appendix I</h4>
     <hr />
     <div class="row">
-        <form asp-action="CreateTCMAppendixE" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="AproveAppendixI" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="TcmClient_FK" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
-            <input type="hidden" asp-for="Approved" />
-            <partial name="_TCMIntakeAppendixE" />
+            <partial name="_TCMIntakeAppendixIReadOnly" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Sign and Submit" class="btn btn-primary" />
+                <input type="submit" value="Sign and Approve" class="btn btn-primary" />
+                <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
                 @if (ViewData["origi"].ToString() == "0")
                 {
-                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="4" class="btn btn-success">Back</a>
+                    <a asp-action="ApendiceIStatus" asp-route-approved="1" class="btn btn-success">Back</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
                 {
-                    <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient_FK" asp-route-section="4" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
@@ -64,3 +64,5 @@
 
     </script>
 }
+
+

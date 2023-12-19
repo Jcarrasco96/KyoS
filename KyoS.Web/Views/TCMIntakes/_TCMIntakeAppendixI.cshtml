@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Models.TCMIntakeAppendixEViewModel
+﻿@model KyoS.Web.Models.TCMIntakeAppendixIViewModel
 <div class="col-md-12">
     <pre>
     Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
@@ -23,10 +23,16 @@
 </div>
 <div class="col-md-12">
     <pre>
+    @if (Model.Approved == 0)
+    {
+    <input type="checkbox" class="form-check-input" disabled > <i>Signed</i>
+    }
+    else
+    { 
     <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-    <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
-                        
+    }
+    <strong>Employee signature date</strong>         <input asp-for="Date">     @*<strong>Legal Guardian signature date</strong>    <input asp-for="SupervisorSignatureDate">*@
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                 
     </pre>
 </div>
 <div class="col-md-12">
