@@ -33,11 +33,14 @@
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Client.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Case Number
+                            <th class="col-md-1" style="text-align:center;">
+                                Number
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.DataOpen)
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Approved
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -72,6 +75,9 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DataOpen)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.TcmIntakeAppendixJ.SupervisorSignatureDate)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)

@@ -3186,27 +3186,27 @@ namespace KyoS.Web.Controllers
             if (section == 1)
             {
                 TCMClientEntity TcmClientEntity = await _context.TCMClient
-                                                               .Include(c => c.TCMIntakeForm)
-                                                               .Include(c => c.TcmIntakeConsentForTreatment)
-                                                               .Include(n => n.TcmIntakeConsentForRelease)
-                                                               .Include(n => n.TcmIntakeConsumerRights)
-                                                               .Include(n => n.TcmIntakeAcknowledgementHipa)
-                                                               .Include(n => n.TCMIntakeOrientationChecklist)
-                                                               .Include(n => n.TCMIntakeAdvancedDirective)
-                                                               .Include(n => n.TCMIntakeForeignLanguage)
-                                                               .Include(n => n.TCMIntakeWelcome)
+                                                                .Include(c => c.TCMIntakeForm)
+                                                                .Include(c => c.TcmIntakeConsentForTreatment)
+                                                                .Include(n => n.TcmIntakeConsentForRelease)
+                                                                .Include(n => n.TcmIntakeConsumerRights)
+                                                                .Include(n => n.TcmIntakeAcknowledgementHipa)
+                                                                .Include(n => n.TCMIntakeOrientationChecklist)
+                                                                .Include(n => n.TCMIntakeAdvancedDirective)
+                                                                .Include(n => n.TCMIntakeForeignLanguage)
+                                                                .Include(n => n.TCMIntakeWelcome)
                                                                
-                                                               .Include(c => c.Client)
-                                                               .Include(n => n.Client.Psychiatrist)
-                                                               .Include(n => n.Client.Doctor)
+                                                                .Include(c => c.Client)
+                                                                .Include(n => n.Client.Psychiatrist)
+                                                                .Include(n => n.Client.Doctor)
                                                                
-                                                               .Include(n => n.TCMIntakeClientSignatureVerification)
-                                                               .Include(n => n.TCMIntakeClientIdDocumentVerification)
-                                                               .Include(n => n.TCMIntakePainScreen)
-                                                               .Include(n => n.TCMIntakeColumbiaSuicide)
-                                                               .Include(n => n.TCMIntakeNutritionalScreen)
-                                                               .Include(n => n.TCMIntakePersonalWellbeing)
-                                                               .FirstOrDefaultAsync(c => c.Id == id);
+                                                                .Include(n => n.TCMIntakeClientSignatureVerification)
+                                                                .Include(n => n.TCMIntakeClientIdDocumentVerification)
+                                                                .Include(n => n.TCMIntakePainScreen)
+                                                                .Include(n => n.TCMIntakeColumbiaSuicide)
+                                                                .Include(n => n.TCMIntakeNutritionalScreen)
+                                                                .Include(n => n.TCMIntakePersonalWellbeing)
+                                                                .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (TcmClientEntity == null)
                 {
@@ -3268,21 +3268,22 @@ namespace KyoS.Web.Controllers
                         {
                             TCMClientEntity TcmClientEntity = await _context.TCMClient
 
-                                                                           .Include(c => c.Client)
-                                                                           .Include(n => n.Client.Psychiatrist)
-                                                                           .Include(n => n.Client.Doctor)
+                                                                            .Include(c => c.Client)
+                                                                            .Include(n => n.Client.Psychiatrist)
+                                                                            .Include(n => n.Client.Doctor)
                                                                           
-                                                                           .Include(n => n.TcmServicePlan)
-                                                                           .ThenInclude(n => n.TCMAdendum)
-                                                                           .Include(n => n.TcmServicePlan)
-                                                                           .ThenInclude(n => n.TCMServicePlanReview)
-                                                                           .Include(n => n.TcmServicePlan)
-                                                                           .ThenInclude(n => n.TCMDischarge)
-                                                                           .Include(n => n.TcmIntakeAppendixJ)
-                                                                           .Include(n => n.TcmInterventionLog)
-                                                                           .Include(n => n.TCMFarsFormList)
-                                                                           .Include(n => n.TCMAssessment)
-                                                                           .FirstOrDefaultAsync(c => c.Id == id);
+                                                                            .Include(n => n.TcmServicePlan)
+                                                                            .ThenInclude(n => n.TCMAdendum)
+                                                                            .Include(n => n.TcmServicePlan)
+                                                                            .ThenInclude(n => n.TCMServicePlanReview)
+                                                                            .Include(n => n.TcmServicePlan)
+                                                                            .ThenInclude(n => n.TCMDischarge)
+                                                                            .Include(n => n.TcmIntakeAppendixJ)
+                                                                            .Include(n => n.TcmInterventionLog)
+                                                                            .Include(n => n.TCMFarsFormList)
+                                                                            .Include(n => n.TCMAssessment)
+                                                                            .Include(n => n.TcmIntakeAppendixI)
+                                                                            .FirstOrDefaultAsync(c => c.Id == id);
 
                             if (TcmClientEntity == null)
                             {
@@ -3437,6 +3438,7 @@ namespace KyoS.Web.Controllers
                                                                             .ThenInclude(n => n.TcmAssessment.MedicationList)
                                                                             .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
                                                                             .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                                            .Include(n => n.TcmIntakeAppendixI)
                                                                             .FirstOrDefaultAsync(c => c.Id == id);
 
                             if (TcmClientEntity == null)

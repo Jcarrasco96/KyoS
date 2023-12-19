@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231219143711_YoungerInTCM")]
-    partial class YoungerInTCM
+    [Migration("20231219170540_ArrosConMango")]
+    partial class ArrosConMango
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

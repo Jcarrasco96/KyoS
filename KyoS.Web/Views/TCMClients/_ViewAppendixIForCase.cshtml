@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Data.Entities.TCMIntakeAppendixEEntity
+﻿@model KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity
 
 @if (Model != null)
 {
@@ -93,36 +93,36 @@
                                     {
                                         @if (Model.Approved == 2)
                                         {
-                                            <a asp-action="AppendixEReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
                                             @if (Model.Approved == 1)
                                             {
-                                                <a asp-action="AppendixEReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="AppendixEReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
-                                        <a onclick="ConfirmDeleteAppendixE(@Model.Id)" class="btn btn-danger" title="Delete Appendix E"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixI(@Model.Id)" class="btn btn-danger" title="Delete Appendix I"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
                                         <a asp-action="AppendixEReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                         @if (Model.Approved == 2)
                                         {
-                                            <a asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PrintTCMAppendixE" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                        <a onclick="ConfirmDeleteAppendixE(@Model.Id)" class="btn btn-danger disabled" title="Delete Appendix E"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixI(@Model.Id)" class="btn btn-danger disabled" title="Delete Appendix I"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>
