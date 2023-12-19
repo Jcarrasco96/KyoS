@@ -235,5 +235,7 @@ namespace KyoS.Web.Helpers
         IntakeAdvancedDirectiveViewModel ToIntakeAdvancedDirectiveViewModel(IntakeAdvancedDirectiveEntity model);
         ReferralFormEntity ToReferralEntity(ReferralFormViewModel model, bool isNew, string userId);
         ReferralFormViewModel ToReferralViewModel(ReferralFormEntity model);
+        Task<TCMIntakeAppendixEEntity> ToTCMIntakeAppendixEEntity(TCMIntakeAppendixEViewModel model, bool isNew, string userId);
+        TCMIntakeAppendixEViewModel ToTCMIntakeAppendixEViewModel(TCMIntakeAppendixEEntity model);
     }
 }

@@ -1565,7 +1565,8 @@ namespace KyoS.Web.Helpers
                 DataOpen = model.DataOpen,
                 DataClose = model.DataClose,
                 Period = model.Period,
-                Client = model.Client
+                Client = model.Client,
+                Younger = model.Younger
             };
         }
 
@@ -1587,6 +1588,7 @@ namespace KyoS.Web.Helpers
                 Period = tcmClientEntity.Period,
                 CreatedOn = tcmClientEntity.CreatedOn,
                 CreatedBy = tcmClientEntity.CreatedBy,
+                Younger = tcmClientEntity.Younger
             };
         }
 
@@ -7872,5 +7874,67 @@ namespace KyoS.Web.Helpers
                 AssignedBy = model.AssignedBy
             };
         }
+
+        public async Task<TCMIntakeAppendixEEntity> ToTCMIntakeAppendixEEntity(TCMIntakeAppendixEViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeAppendixEEntity salida;
+            salida = new TCMIntakeAppendixEEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.Include(n => n.Casemanager).ThenInclude(n => n.TCMSupervisor).FirstAsync(n => n.Id == model.IdTCMClient),
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeAppendixEViewModel ToTCMIntakeAppendixEViewModel(TCMIntakeAppendixEEntity model)
+        {
+            return new TCMIntakeAppendixEViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+        }
+
     }
 }

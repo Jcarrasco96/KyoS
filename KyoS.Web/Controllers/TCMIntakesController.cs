@@ -5651,5 +5651,428 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("ListConsentForrelease", "TCMIntakes", new { id = consent.TcmClient.Id });
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult CreateTCMAppendixE(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeAppendixEViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeAppendixEEntity intakeAppendixE = _context.TCMIntakeAppendixE
+                                                                       .Include(n => n.TcmClient)
+                                                                       .ThenInclude(n => n.Client)
+                                                                       .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (intakeAppendixE == null)
+                    {
+                        model = new TCMIntakeAppendixEViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
+                            Approved = 0,
+                            Date = DateTime.Now,
+                            SupervisorSignatureDate = DateTime.Now,
+                            TcmSupervisor = new TCMSupervisorEntity(),
+                            HasAmental2 = true,
+                            HasAmental6 = true,
+                            RequiresServices = true,
+                            RequiresOngoing = true,
+                            Lacks = true,
+                            IsNot = true,
+                            IsInOut = true,
+                            IsEnrolled = true,
+                            HasRecolated = true
+                        
+                        };
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeAppendixEViewModel(intakeAppendixE);
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> CreateTCMAppendixE(TCMIntakeAppendixEViewModel AppendixEViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeAppendixEEntity AppendixEEntity = await _converterHelper.ToTCMIntakeAppendixEEntity(AppendixEViewModel, false, user_logged.UserName);
+
+                if (AppendixEEntity.Id == 0)
+                {
+                    AppendixEEntity.TcmClient = null;
+                    AppendixEEntity.Approved = 1;
+                    _context.TCMIntakeAppendixE.Add(AppendixEEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (origi == 0)
+                        {
+                            return RedirectToAction("TCMIntakeSectionDashboard", new { id = AppendixEViewModel.IdTCMClient, section = 4 });
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                        }
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    AppendixEEntity.TcmClient = null;
+                    AppendixEEntity.Approved = 1;
+                    _context.TCMIntakeAppendixE.Update(AppendixEEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        if (origi == 0)
+                        {
+                            return RedirectToAction("TCMIntakeSectionDashboard", new { id = AppendixEViewModel.IdTCMClient, section = 4 });
+                        }
+                        if (origi == 1)
+                        {
+                            return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            AppendixEViewModel.TcmClient = _context.TCMClient.Find(AppendixEViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMAppendixJ", AppendixEViewModel) });
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> ApendiceEStatus(int approved = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<TCMIntakeAppendixEEntity> apendiceJ = new List<TCMIntakeAppendixEEntity>();
+
+            if (User.IsInRole("CaseManager"))
+            {
+                apendiceJ = await _context.TCMIntakeAppendixE
+                                          .Include(w => w.TcmClient)
+                                          .ThenInclude(d => d.Client)
+                                          .ThenInclude(d => d.Clinic)
+                                          .Include(w => w.TcmClient)
+                                          .ThenInclude(d => d.Casemanager)
+                                          .Where(w => (w.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && w.Approved == approved
+                                                    && w.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
+                                          .ToListAsync();
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    apendiceJ = await _context.TCMIntakeAppendixE
+                                              .Include(w => w.TcmClient)
+                                              .ThenInclude(d => d.Client)
+                                              .ThenInclude(d => d.Clinic)
+                                              .Include(w => w.TcmClient)
+                                              .ThenInclude(d => d.Casemanager)
+                                              .Where(w => (w.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                        && w.Approved == approved))
+                                              .ToListAsync();
+                }
+                else
+                {
+                    apendiceJ = await _context.TCMIntakeAppendixE
+                                             .Include(w => w.TcmClient)
+                                             .ThenInclude(d => d.Client)
+                                             .ThenInclude(d => d.Clinic)
+                                             .Include(w => w.TcmClient)
+                                             .ThenInclude(d => d.Casemanager)
+                                             .Where(w => (w.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && w.Approved == approved))
+                                             .ToListAsync();
+                }
+
+            }
+
+            return View(apendiceJ);
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> AproveAppendixE(int id, TCMIntakeAppendixEViewModel model, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeAppendixEEntity tcmAppendixE = await _converterHelper.ToTCMIntakeAppendixEEntity(model, false, user_logged.UserName);
+
+            if (tcmAppendixE != null)
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+
+
+                    if (user_logged.Clinic != null)
+                    {
+                        tcmAppendixE.Approved = 2;
+                        tcmAppendixE.TcmSupervisor = tcmAppendixE.TcmClient.Casemanager.TCMSupervisor;
+
+                        _context.Update(tcmAppendixE);
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            if (origi == 0)
+                            {
+                                return RedirectToAction("ApendiceEStatus", "TCMIntakes", new { approved = 1 });
+                            }
+                            if (origi == 1)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboardReadOnly", new { id = tcmAppendixE.TcmClient_FK, section = 4 });
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult CreateTCMAppendixEReadOnly(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeAppendixEViewModel model;
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeAppendixEEntity intakeAppendixE = _context.TCMIntakeAppendixE
+                                                                       .Include(n => n.TcmClient)
+                                                                       .ThenInclude(n => n.Client)
+                                                                       .FirstOrDefault(n => n.TcmClient.Id == id);
+                    if (intakeAppendixE == null)
+                    {
+                        model = new TCMIntakeAppendixEViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == id),
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            AdmissionedFor = user_logged.FullName,
+                            Approved = 0,
+                            Date = DateTime.Now,
+                            SupervisorSignatureDate = DateTime.Now,
+                            TcmSupervisor = new TCMSupervisorEntity()
+
+                        };
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMIntakeAppendixEViewModel(intakeAppendixE);
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> UpdateAppendixE()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TcmIntakeAppendixE)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Include(f => f.Casemanager)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Casemanager.TCMSupervisor.Id == _context.TCMSupervisors.FirstOrDefault(m => m.LinkedUser == user_logged.UserName).Id
+                                                       && n.TcmIntakeAppendixE.Approved == 2)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> EditAppendixE(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixEEntity entity = await _context.TCMIntakeAppendixE
+                                                            .Include(c => c.TcmClient)
+                                                            .ThenInclude(c => c.Client)
+                                                            .ThenInclude(c => c.Clinic)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixEViewModel model = _converterHelper.ToTCMIntakeAppendixEViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAppendixE(int id, TCMIntakeAppendixEViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                TCMIntakeAppendixEEntity appendixE = await _converterHelper.ToTCMIntakeAppendixEEntity(model, false, user_logged.UserName);
+                appendixE.Approved = 2;
+                _context.Update(appendixE);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UpdateAppendixE");
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteAppendixE(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixEEntity appendixE = await _context.TCMIntakeAppendixE
+                                                               .Include(n => n.TcmClient)
+                                                               .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (appendixE == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            _context.TCMIntakeAppendixE.Remove(appendixE);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = appendixE.TcmClient.Id });
+
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> AppendixEReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixEEntity appendixE = await _context.TCMIntakeAppendixE.FirstOrDefaultAsync(s => s.Id == id);
+            if (appendixE == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                appendixE.Approved = 0;
+                _context.TCMIntakeAppendixE.Update(appendixE);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
     }
 }
