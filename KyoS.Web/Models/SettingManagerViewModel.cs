@@ -91,5 +91,6 @@ namespace KyoS.Web.Models
 
         public bool DocumentAssistant_Intake { get; set; }
 
+        public bool CreateTCMNotesWithoutDomain { get; set; }
     }
 }

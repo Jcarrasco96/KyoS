@@ -637,7 +637,7 @@ namespace KyoS.Web.Controllers
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).DataOpen;
                     DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).DateServicePlan;
-                    if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan)
+                    if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                         TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
@@ -923,7 +923,7 @@ namespace KyoS.Web.Controllers
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).DataOpen;
                     DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).DateServicePlan;
-                    if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan)
+                    if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                         TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
@@ -1225,12 +1225,12 @@ namespace KyoS.Web.Controllers
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).DataOpen;
                     DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).DateServicePlan;
-                    if (NoteActivityViewModel.DateOfServiceNote < open || NoteActivityViewModel.DateOfServiceNote > dateServicePlan)
+                    if (NoteActivityViewModel.DateOfServiceNote < open || NoteActivityViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote
-                                                           .Include(n => n.TCMClient)
-                                                           .ThenInclude(n => n.Client)
-                                                           .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
+                                                               .Include(n => n.TCMClient)
+                                                               .ThenInclude(n => n.Client)
+                                                               .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
 
                         NoteActivityViewModel.TCMNote = tcmNote1;
                         NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
