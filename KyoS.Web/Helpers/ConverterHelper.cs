@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KyoS.Web.Helpers
 {
@@ -1450,7 +1451,8 @@ namespace KyoS.Web.Helpers
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
-                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
             };
         }
 
@@ -1481,7 +1483,8 @@ namespace KyoS.Web.Helpers
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
-                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
             };
         }
 
@@ -6071,19 +6074,19 @@ namespace KyoS.Web.Helpers
                 Minutes = model.Minutes,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                TCMDomain = model.TCMDomain,
+                TCMDomain = (model.TCMDomain != null)? model.TCMDomain : new TCMDomainEntity(),
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id,
+                IdTCMDomain = (model.TCMDomain != null)? model.TCMDomain.Id : 0,
                 IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id, model.TCMNote.DateOfService),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
-                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
+                ActivityList = (model.TCMDomain != null)? _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code) : _combosHelper.GetComboTCMNoteActivity(string.Empty),
                 DateOfServiceNote = model.TCMNote.DateOfService,
                 ServiceName = model.ServiceName,
-                IdTCMActivity = model.TCMServiceActivity.Id,
-                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description,
+                IdTCMActivity = (model.TCMServiceActivity != null)? model.TCMServiceActivity.Id : 0,
+                DescriptionTemp = (model.TCMServiceActivity != null)? (model.TCMServiceActivity.Id != 0)? _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description : string.Empty : string.Empty,
                 TimeEnd = model.EndTime.ToShortTimeString(),
                 NeedIdentified = model.TCMDomain.NeedsIdentified
         };
@@ -6176,7 +6179,7 @@ namespace KyoS.Web.Helpers
                 IdSetting = model.IdSetting,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 IdTCMDomain = model.IdTCMDomain,
-                TCMDomainCode = model.TCMDomain.Code,
+                TCMDomainCode = (model.TCMDomain != null)? model.TCMDomain.Code : string.Empty,
                 StartTime = model.StartTime,
                 UserName = userId,
                 IdTCMClient = model.IdTCMClient,

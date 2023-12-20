@@ -35,5 +35,6 @@ namespace KyoS.Web.Data.Entities
         public bool TCMSupervisionTimeWithCaseManager { get; set; }
 
         public bool DocumentAssisstant_Intake { get; set; }
+        public bool CreateTCMNotesWithoutDomain { get; set; }
     }
 }
