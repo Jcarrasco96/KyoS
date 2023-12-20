@@ -6305,11 +6305,6 @@ namespace KyoS.Web.Controllers
 
                 if ((workdayClient.IndividualNote != null) && (workdayClient.IndividualNote.Status == NoteStatus.Approved))
                 {
-                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-                    {                       
-                       Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-                       fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));                        
-                    }
                     if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
                     {
                         Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
@@ -6686,19 +6681,6 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            if (workdayClient.NoteP.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
-                {
-                    Stream stream;
-                    if (!workdayClient.SharedSession)
-                        stream = _reportHelper.SouthFloridaMHRNoteReportSchema3(workdayClient);
-                    else
-                        stream = _reportHelper.SouthFloridaMHRNoteReportSchema3SS(workdayClient);
-                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-                }
-            }
-
             if (workdayClient.NoteP.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
@@ -6708,6 +6690,45 @@ namespace KyoS.Web.Controllers
                         stream = _reportHelper.MedicalRehabNoteReportSchema3(workdayClient);
                     else
                         stream = _reportHelper.MedicalRehabNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.MyFloridaNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.MyFloridaNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.OrionNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.OrionNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.AlliedNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.AlliedNoteReportSchema3SS(workdayClient);
                     return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
                 }
             }
@@ -6746,11 +6767,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);                
-            }
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
@@ -6776,17 +6792,26 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRIndNoteReportSchema1(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.OrionIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -6963,22 +6988,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = null;
-
-                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
-                {
-                    stream = _reportHelper.SouthFloridaMHRGroupNoteReportSchema2(workdayClient);
-                }
-                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
-                {
-                    stream = _reportHelper.SouthFloridaMHRGroupNoteReportSchema3(workdayClient);
-                }
-
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = null;
@@ -6994,7 +7004,51 @@ namespace KyoS.Web.Controllers
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = null;
 
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.MyFloridaGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.MyFloridaGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.OrionGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.OrionGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.AlliedGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.AlliedGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -11953,11 +12007,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Client.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }            
             if (workdayClient.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
@@ -11993,14 +12042,24 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12029,11 +12088,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }            
             if (workdayClient.Facilitator.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
@@ -12069,14 +12123,24 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Facilitator.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12105,11 +12169,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }            
             if (workdayClient.Facilitator.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
@@ -12145,14 +12204,24 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Facilitator.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

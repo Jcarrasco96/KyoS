@@ -490,18 +490,27 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.SapphireMHCFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRFarsReport(entity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
