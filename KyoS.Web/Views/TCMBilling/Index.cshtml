@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMBillingViewModel
 @{
-    ViewData["Title"] = "Calendar";
+    ViewData["Title"] = "TCM Calendar";
 }
 <link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Calendar</li>
+        <li class="active">TCM Calendar</li>
     </ul><!--.breadcrumb-->
 </div>
 @if (ViewBag.DateBlocked == "B")
