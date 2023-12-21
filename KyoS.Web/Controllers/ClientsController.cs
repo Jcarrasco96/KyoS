@@ -4197,9 +4197,6 @@ namespace KyoS.Web.Controllers
             Stream stream = null;
             foreach (var workdayClient in workdayClientList)
             {
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-                    stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-
                 if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
                     stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
 

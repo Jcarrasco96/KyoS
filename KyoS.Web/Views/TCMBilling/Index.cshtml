@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMBillingViewModel
 @{
-    ViewData["Title"] = "Billing";
+    ViewData["Title"] = "TCM Calendar";
 }
 <link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Billing</li>
+        <li class="active">TCM Calendar</li>
     </ul><!--.breadcrumb-->
 </div>
 @if (ViewBag.DateBlocked == "B")
@@ -21,7 +21,7 @@
         </button>
         <i class="icon-ok red"></i>
         <strong class="red">
-            Error. Date blocked for the Manager, this date are unavailable for create notes.
+            Error. The date is disabled for the manager, it is unavailable for create notes.
         </strong>
     </div>
 }
@@ -31,9 +31,6 @@
         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
         <span asp-validation-for="IdClient" class="text-danger"></span>
     </div>
-    @*<div class="col-md-1">
-        &nbsp;
-    </div>*@
     <div class="col-md-1">
         <div class="thumbnail list-group-item list-group-item-success">
             <p style="text-align:center">Notes</p>

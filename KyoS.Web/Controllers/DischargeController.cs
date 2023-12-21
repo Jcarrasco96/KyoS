@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
-using KyoS.Common.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
@@ -35,7 +33,7 @@ namespace KyoS.Web.Controllers
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
         }
-        
+
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
@@ -82,7 +80,7 @@ namespace KyoS.Web.Controllers
                                                                         && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id)))
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
-                                                                 
+
                     return View(ClientList);
                 }
             }
@@ -239,7 +237,7 @@ namespace KyoS.Web.Controllers
                                      .Include(c => c.Clients_Diagnostics)
                                      .ThenInclude(cd => cd.Diagnostic)
                                      .FirstOrDefault(n => n.Id == DischargeViewModel.IdClient),
-                    
+
                     AdmissionedFor = user_logged.FullName,
                     DateDischarge = DischargeViewModel.DateDischarge,
                     DateReport = DischargeViewModel.DateReport,
@@ -284,7 +282,7 @@ namespace KyoS.Web.Controllers
                     ModelState.AddModelError(string.Empty, "You must select the type of therapy in this discharge.");
                 }
                 return View(model);
-                
+
             }
             else
             {
@@ -295,7 +293,7 @@ namespace KyoS.Web.Controllers
                     _context.Discharge.Add(DischargeEntity);
 
                     // update DateResolved in all Objective for this services
-                    
+
                     List<ObjetiveEntity> listObjective = new List<ObjetiveEntity>();
                     List<ObjetiveEntity> listObjective_Salida = new List<ObjetiveEntity>();
                     listObjective = _context.Objetives
@@ -309,7 +307,7 @@ namespace KyoS.Web.Controllers
                             item.DateResolved = DischargeEntity.DateDischarge;
                             _context.Update(item);
                         }
-                        
+
                     }
                     try
                     {
@@ -317,7 +315,7 @@ namespace KyoS.Web.Controllers
 
                         if (DischargeViewModel.Origin == 1)
                         {
-                            return RedirectToAction("ClientswithoutDischarge");                            
+                            return RedirectToAction("ClientswithoutDischarge");
                         }
                         if (DischargeViewModel.Origin == 2)
                         {
@@ -339,14 +337,14 @@ namespace KyoS.Web.Controllers
             }
 
             return RedirectToAction("Create", "Discharge");
-            
+
         }
 
         [Authorize(Roles = "Supervisor, Facilitator")]
         public IActionResult Edit(int id = 0, int origin = 0)
         {
             DischargeViewModel model;
-             
+
             if (User.IsInRole("Supervisor") || User.IsInRole("Facilitator"))
             {
                 UserEntity user_logged = _context.Users
@@ -361,7 +359,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(m => m.MedicationList)
 
                                                         .Include(d => d.Client)
-                                                        .ThenInclude(c => c.Clients_Diagnostics)                                                        
+                                                        .ThenInclude(c => c.Clients_Diagnostics)
                                                         .ThenInclude(cd => cd.Diagnostic)
 
                                                         .FirstOrDefault(m => m.Id == id);
@@ -405,7 +403,7 @@ namespace KyoS.Web.Controllers
                                                         .FirstOrDefault(n => n.Id == dischargeViewModel.IdClient);
                     return View(dischargeViewModel);
                 }
-                
+
 
                 DischargeEntity dischargeEntity = await _converterHelper.ToDischargeEntity(dischargeViewModel, false, user_logged.Id);
                 _context.Discharge.Update(dischargeEntity);
@@ -496,7 +494,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction("ClientHistory", "Clients", new { idClient  = clientId});
+            return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
@@ -504,23 +502,23 @@ namespace KyoS.Web.Controllers
         {
             DischargeEntity entity = _context.Discharge
 
-                                             .Include(d => d.Client)     
+                                             .Include(d => d.Client)
                                              .ThenInclude(c => c.Clinic)
-                                             
-                                             .Include(d => d.Supervisor)                                             
-                                             
+
+                                             .Include(d => d.Supervisor)
+
                                              .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
-                        
+
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream;
 
-                if (!entity.JoinCommission)                
-                    stream = _reportHelper.FloridaSocialHSDischargeReport(entity);                
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.FloridaSocialHSDischargeReport(entity);
                 else
                     stream = _reportHelper.FloridaSocialHSDischargeJCReport(entity);
 
@@ -534,7 +532,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.DreamsMentalHealthDischargeReport(entity);
                 else
                     stream = _reportHelper.DreamsMentalHealthDischargeJCReport(entity);
-                
+
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
@@ -569,18 +567,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.SapphireMHCDischargeJCReport(entity);
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream;
-
-                if (!entity.JoinCommission)
-                    stream = _reportHelper.SouthFloridaMHRDischargeReport(entity);
-                else
-                    stream = _reportHelper.SouthFloridaMHRDischargeJCReport(entity);
-                
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream;
@@ -592,7 +579,39 @@ namespace KyoS.Web.Controllers
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream;
 
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.MyFloridaDischargeReport(entity);
+                else
+                    stream = _reportHelper.MyFloridaDischargeJCReport(entity);
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.OrionDischargeReport(entity);
+                else
+                    stream = _reportHelper.OrionDischargeJCReport(entity);
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.AlliedDischargeReport(entity);
+                else
+                    stream = _reportHelper.AlliedDischargeJCReport(entity);
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -641,7 +660,7 @@ namespace KyoS.Web.Controllers
                                                                    .ToListAsync();
 
                 List<ClientDischarge> clientList = new List<ClientDischarge>();
-                
+
 
                 foreach (var item in clientListPSR)
                 {
@@ -691,7 +710,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> clientListPSR = await _context.Clients
-                                                                
+
                                                                      .Where(m => (m.Clinic.Id == user_logged.Clinic.Id
                                                                             && m.Status == StatusType.Close
                                                                             && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
@@ -749,16 +768,16 @@ namespace KyoS.Web.Controllers
                     clienDischarge.Code = item.Code;
                     clienDischarge.Gender = item.Gender;
                     clienDischarge.Status = item.Status;
-                    
+
                     facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == item.IdFacilitatorGroup);
-                    
+
                     if (facilitator != null)
                     {
                         clienDischarge.FacilitatorName = facilitator.Name;
                     }
                     else
                     {
-                        clienDischarge.FacilitatorName = string.Empty;                              
+                        clienDischarge.FacilitatorName = string.Empty;
                     }
 
                     clientList.Add(clienDischarge);
@@ -775,9 +794,9 @@ namespace KyoS.Web.Controllers
                     clienDischarge.AdmisionDate = item.AdmisionDate;
                     clienDischarge.Gender = item.Gender;
                     clienDischarge.Status = item.Status;
-                    
+
                     facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == item.IndividualTherapyFacilitator.Id);
-                    
+
                     if (facilitator != null)
                     {
                         clienDischarge.FacilitatorName = facilitator.Name;
@@ -787,7 +806,7 @@ namespace KyoS.Web.Controllers
                         clienDischarge.FacilitatorName = string.Empty;
                     }
                     clientList.Add(clienDischarge);
-                    
+
                     facilitator = new FacilitatorEntity();
                     clienDischarge = new ClientDischarge();
                 }
@@ -836,8 +855,8 @@ namespace KyoS.Web.Controllers
             _context.Update(discharge);
 
             await _context.SaveChangesAsync();
-            
-            if(origin == 2)
+
+            if (origin == 2)
             {
                 return RedirectToAction(nameof(PendingDischarge));
             }
@@ -953,7 +972,7 @@ namespace KyoS.Web.Controllers
                                               .ThenInclude(f => f.Clients_Diagnostics)
 
                                               .Where(n => (n.Status == DischargeStatus.Edition
-                                                    && n.Client.Clinic.Id == user_logged.Clinic.Id 
+                                                    && n.Client.Clinic.Id == user_logged.Clinic.Id
                                                     && n.CreatedBy == user_logged.UserName))
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
@@ -1031,9 +1050,9 @@ namespace KyoS.Web.Controllers
 
                 return View(clientList);
             }
-           else
+            else
                 return RedirectToAction("NotAuthorized", "Account");
-        
+
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -1240,19 +1259,19 @@ namespace KyoS.Web.Controllers
                     Group = 0;
                 }
 
-                foreach(var discharge in item.DischargeList)
+                foreach (var discharge in item.DischargeList)
                 {
                     if (discharge.TypeService == ServiceType.PSR)
                     {
-                        PSR --;
+                        PSR--;
                     }
                     if (discharge.TypeService == ServiceType.Group)
                     {
-                        Group --;
+                        Group--;
                     }
                     if (discharge.TypeService == ServiceType.Individual)
                     {
-                        individualTherapy --;
+                        individualTherapy--;
                     }
                 }
 
@@ -1328,11 +1347,11 @@ namespace KyoS.Web.Controllers
                         auditClient_List.Add(auditClient);
                         auditClient = new AuditDischarge();
                     }
-                    
+
                 }
             }
 
             return View(auditClient_List);
-        }        
+        }
     }
 }

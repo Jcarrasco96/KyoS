@@ -814,15 +814,25 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.SapphireMHCIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRIntakeReport(entity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -870,18 +880,27 @@ namespace KyoS.Web.Controllers
             {
                 Stream stream = _reportHelper.SapphireMHCMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (entity.Client.Clinic.Name == "SOUTH FLORIDA MENTAL HEALTH & RECOVERY")
-            {
-                Stream stream = _reportHelper.SouthFloridaMHRMedicalHistoryReport(entity);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
