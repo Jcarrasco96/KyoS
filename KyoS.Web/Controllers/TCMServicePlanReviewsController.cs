@@ -1737,6 +1737,10 @@ namespace KyoS.Web.Controllers
                         tcmServicePlanReview.Approved = 2;
                         tcmServicePlanReview.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
                         _context.Update(tcmServicePlanReview);
+                        TCMClientEntity tcmClient = _context.TCMClient.FirstOrDefault(n => n.Id == tcmServicePlanReview.TcmServicePlan.TcmClient.Id);
+                        tcmClient.DataClose = tcmClient.DataClose.AddMonths(6);
+                        tcmClient.Period = tcmClient.Period + 6;
+                        _context.Update(tcmClient);
                         try
                         {
                             await _context.SaveChangesAsync();
