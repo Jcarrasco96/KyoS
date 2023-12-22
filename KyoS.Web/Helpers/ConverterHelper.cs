@@ -7939,5 +7939,99 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public IntakeClientIdDocumentVerificationEntity ToIntakeClientIdDocumentVerificationEntity(IntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId)
+        {
+            return new IntakeClientIdDocumentVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public IntakeClientIdDocumentVerificationViewModel ToIntakeClientIdDocumentVerificationViewModel(IntakeClientIdDocumentVerificationEntity model)
+        {
+            return new IntakeClientIdDocumentVerificationViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public IntakeForeignLanguageEntity ToIntakeForeignLanguageEntity(IntakeForeignLanguageViewModel model, bool isNew, string userId)
+        {
+            return new IntakeForeignLanguageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+        }
+
+        public IntakeForeignLanguageViewModel ToIntakeForeignLanguageViewModel(IntakeForeignLanguageEntity model)
+        {
+            return new IntakeForeignLanguageViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+        }
+
+
     }
 }

@@ -218,5 +218,7 @@ namespace KyoS.Web.Data.Entities
         public IntakeNoDuplicateServiceEntity IntakeNoDuplicateService { get; set; }
         public IntakeAdvancedDirectiveEntity IntakeAdvancedDirective { get; set; }
         public ReferralFormEntity ReferralForm { get; set; }
+        public IntakeForeignLanguageEntity IntakeForeignLanguage { get; set; }
+        public IntakeClientIdDocumentVerificationEntity IntakeClientIdDocumentVerification { get; set; }
     }
 }

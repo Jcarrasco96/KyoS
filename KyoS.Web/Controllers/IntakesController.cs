@@ -2802,6 +2802,237 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeAdvenceDirective", IntakeViewModel) });
         }
 
-       
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateTCMIntakeClientIdDocumentVerification(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeClientIdDocumentVerificationViewModel model;
+            IntakeClientIdDocumentVerificationEntity clientIdDocumentationverification = _context.IntakeClientDocumentVerification
+                                                                                                 .Include(n => n.Client)
+                                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                                 .FirstOrDefault(n => n.Client.Id == id);
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    if (clientIdDocumentationverification == null)
+                    {
+                        model = new IntakeClientIdDocumentVerificationViewModel
+                        {
+                            Client = _context.Clients
+                                             .Include(n => n.LegalGuardian)
+                                             .Include(n => n.EmergencyContact)
+                                             .FirstOrDefault(n => n.Id == id),
+                            IdClient = id,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            Client_FK = id,
+                            Id = 0,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardianOrClient = DateTime.Now,
+                            HealthPlan = string.Empty,
+                            Id_DriverLicense = string.Empty,
+                            MedicaidId = string.Empty,
+                            MedicareCard = string.Empty,
+                            Other_Identification = string.Empty,
+                            Other_Name = string.Empty,
+                            Passport_Resident = string.Empty,
+                            Social = string.Empty
+
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (clientIdDocumentationverification.Client.LegalGuardian == null)
+                            clientIdDocumentationverification.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        model = _converterHelper.ToIntakeClientIdDocumentVerificationViewModel(clientIdDocumentationverification);
+                        ViewData["origi"] = origi;
+
+                        return View(model);
+                    }
+
+                }
+            }
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    if (clientIdDocumentationverification.Client.LegalGuardian == null)
+                        clientIdDocumentationverification.Client.LegalGuardian = new LegalGuardianEntity();
+
+                    model = _converterHelper.ToIntakeClientIdDocumentVerificationViewModel(clientIdDocumentationverification);
+                    ViewData["origi"] = origi;
+
+                    return View(model);
+                }
+            }
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateIntakeClientIdDocumentVerification(IntakeClientIdDocumentVerificationViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeClientIdDocumentVerificationEntity clientIdDocumentVerificationEntity = _converterHelper.ToIntakeClientIdDocumentVerificationEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (clientIdDocumentVerificationEntity.Id == 0)
+                {
+                    clientIdDocumentVerificationEntity.Client = null;
+                    _context.IntakeClientDocumentVerification.Add(clientIdDocumentVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    clientIdDocumentVerificationEntity.Client = null;
+                    _context.IntakeClientDocumentVerification.Update(clientIdDocumentVerificationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeClientIdDocumentVerification", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateForeignLanguage(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeForeignLanguageViewModel model;
+            IntakeForeignLanguageEntity intakeForeign = _context.IntakeForeignLanguage
+                                                                .Include(n => n.Client)
+                                                                .ThenInclude(n => n.LegalGuardian)
+                                                                .FirstOrDefault(n => n.Client.Id == id);
+
+            if (User.IsInRole("CaseManager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    if (intakeForeign == null)
+                    {
+
+                        model = new IntakeForeignLanguageViewModel
+                        {
+                            Client = _context.Clients
+                                             .Include(d => d.LegalGuardian)
+                                             .FirstOrDefault(n => n.Id == id),
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            IdClient = id,
+                            Client_FK = id,
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.Client.LegalGuardian == null)
+                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeForeign.Client.LegalGuardian == null)
+                            intakeForeign.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToIntakeForeignLanguageViewModel(intakeForeign);
+                        ViewData["origi"] = origi;
+                        return View(model);
+                    }
+
+                }
+            }
+           
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateForeignLanguage(IntakeForeignLanguageViewModel IntakeViewModel, int origi = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeForeignLanguageEntity IntakeForeignEntity = _converterHelper.ToIntakeForeignLanguageEntity(IntakeViewModel, false, user_logged.UserName);
+
+                if (IntakeForeignEntity.Id == 0)
+                {
+                    IntakeForeignEntity.Client = null;
+                    _context.IntakeForeignLanguage.Add(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeForeignEntity.Client = null;
+                    _context.IntakeForeignLanguage.Update(IntakeForeignEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateForeignLanguage", IntakeViewModel) });
+        }
+
     }
 }

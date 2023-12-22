@@ -1,0 +1,81 @@
+﻿@model KyoS.Web.Models.IntakeForeignLanguageViewModel
+@{
+    ViewData["Title"] = "Foreign Language";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
+            </li>
+            <li class="active">
+                Foreign Language Acknowledgement
+            </li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>
+        Foreign Language Acknowledgement
+    </h4>
+    <hr />
+    <div class="row">
+        <form asp-action="CreateForeignLanguage" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client_FK" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <partial name="_IntakeForeignLanguage" />
+            <div class="form-group col-md-12">
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @if (Model.Id == 0)
+                    {
+                        <input type="submit" value="Sign and Save" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    }
+                    <a asp-action="IntakeSectionDashboard" asp-route-id="@Model.IdClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <input type="submit" value="Save" class="btn btn-primary" disabled />
+                    <a asp-action="IntakeSectionDashboardReadOnly" asp-route-id="@Model.IdClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+
+
+
+

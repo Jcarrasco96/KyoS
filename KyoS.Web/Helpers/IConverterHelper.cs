@@ -237,5 +237,10 @@ namespace KyoS.Web.Helpers
         ReferralFormViewModel ToReferralViewModel(ReferralFormEntity model);
         Task<TCMIntakeAppendixIEntity> ToTCMIntakeAppendixIEntity(TCMIntakeAppendixIViewModel model, bool isNew, string userId);
         TCMIntakeAppendixIViewModel ToTCMIntakeAppendixIViewModel(TCMIntakeAppendixIEntity model);
+        IntakeClientIdDocumentVerificationEntity ToIntakeClientIdDocumentVerificationEntity(IntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId);
+        IntakeClientIdDocumentVerificationViewModel ToIntakeClientIdDocumentVerificationViewModel(IntakeClientIdDocumentVerificationEntity model);
+        IntakeForeignLanguageEntity ToIntakeForeignLanguageEntity(IntakeForeignLanguageViewModel model, bool isNew, string userId);
+        IntakeForeignLanguageViewModel ToIntakeForeignLanguageViewModel(IntakeForeignLanguageEntity model);
+
     }
 }
