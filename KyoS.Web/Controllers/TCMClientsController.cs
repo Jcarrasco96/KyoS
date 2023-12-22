@@ -734,6 +734,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(g => g.TCMIntakeAdvancedDirective)
                                                                     .Include(g => g.TCMIntakeForeignLanguage)
                                                                     .Include(g => g.TCMIntakeWelcome)
+                                                                    .Include(g => g.TcmIntakeAppendixI)
                                                                     .Where(g => (g.Casemanager.Id == caseManager.Id))
                                                                     .OrderBy(g => g.Client.Name)
                                                                     .ToListAsync();
@@ -786,6 +787,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(g => g.TCMIntakeAdvancedDirective)
                                                                     .Include(g => g.TCMIntakeForeignLanguage)
                                                                     .Include(g => g.TCMIntakeWelcome)
+                                                                    .Include(g => g.TcmIntakeAppendixI)
                                                                     .Where(g => (g.Client.Clinic.Id == user_logged.Clinic.Id))
                                                                     .OrderBy(g => g.Client.Name)
                                                                     .ToListAsync();
@@ -925,6 +927,7 @@ namespace KyoS.Web.Controllers
                                                           .Include(g => g.TCMAssessment)
                                                           .Include(g => g.TCMNote)
                                                           .ThenInclude(g => g.TCMNoteActivity)
+                                                          .Include(g => g.TcmIntakeAppendixI)
                                                           .FirstOrDefaultAsync(g => (g.Id == id));
 
                 if (tcmClient != null)

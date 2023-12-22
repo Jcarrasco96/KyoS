@@ -622,39 +622,81 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmIntakeAppendixJ != null)
+                @if (Model.Younger == true)
                 {
-                    @if (Model.TcmIntakeAppendixJ.Approved == 2)
+                    @if (Model.TcmIntakeAppendixI != null)
                     {
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <a style="text-decoration: none;" asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print AppendixJ" target="_blank">
-                                <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            </a>
-                            <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixJ" role="button" title="Print AppendixJ" target="_blank">
-                                <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                            </a>
-                        </div>
-                    }
-                    @if (Model.TcmIntakeAppendixJ.Approved == 1)
-                    {
-                        <a style="text-decoration: none;" asp-action="CreateTCMAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" role="button">
-                            <div class="thumbnail list-group-item list-group-item-info">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        @if (Model.TcmIntakeAppendixI.Approved == 2)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-success">
+                                <a style="text-decoration: none;" asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print Appendix I" target="_blank">
+                                    <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </a>
+                                <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixI" role="button" title="Print Appendix I" target="_blank">
+                                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                                </a>
                             </div>
-                        </a>
+                        }
+                        @if (Model.TcmIntakeAppendixI.Approved == 1)
+                        {
+                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixIReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" role="button">
+                                <div class="thumbnail list-group-item list-group-item-info">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </div>
+                            </a>
+                        }
+                        @if (Model.TcmIntakeAppendixI.Approved == 0)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            </div>
+                        }
                     }
-                    @if (Model.TcmIntakeAppendixJ.Approved == 0)
+                    else
                     {
-                        <div class="thumbnail list-group-item list-group-item-warning">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix I<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>
                     }
+
                 }
                 else
                 {
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
+                    @if (Model.TcmIntakeAppendixJ != null)
+                    {
+                        @if (Model.TcmIntakeAppendixJ.Approved == 2)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-success">
+                                <a style="text-decoration: none;" asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print AppendixJ" target="_blank">
+                                    <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </a>
+                                <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixJ" role="button" title="Print AppendixJ" target="_blank">
+                                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                                </a>
+                            </div>
+                        }
+                        @if (Model.TcmIntakeAppendixJ.Approved == 1)
+                        {
+                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" role="button">
+                                <div class="thumbnail list-group-item list-group-item-info">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                </div>
+                            </a>
+                        }
+                        @if (Model.TcmIntakeAppendixJ.Approved == 0)
+                        {
+                            <div class="thumbnail list-group-item list-group-item-warning">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        </div>
+                    }
+
                 }
             </div>
             <div class="col-sm-3 col-md-2">

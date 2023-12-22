@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KyoS.Web.Helpers
 {
@@ -1450,7 +1451,8 @@ namespace KyoS.Web.Helpers
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
-                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
             };
         }
 
@@ -1481,7 +1483,8 @@ namespace KyoS.Web.Helpers
                 CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
-                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
             };
         }
 
@@ -1565,7 +1568,8 @@ namespace KyoS.Web.Helpers
                 DataOpen = model.DataOpen,
                 DataClose = model.DataClose,
                 Period = model.Period,
-                Client = model.Client
+                Client = model.Client,
+                Younger = model.Younger
             };
         }
 
@@ -1587,6 +1591,7 @@ namespace KyoS.Web.Helpers
                 Period = tcmClientEntity.Period,
                 CreatedOn = tcmClientEntity.CreatedOn,
                 CreatedBy = tcmClientEntity.CreatedBy,
+                Younger = tcmClientEntity.Younger
             };
         }
 
@@ -6069,19 +6074,19 @@ namespace KyoS.Web.Helpers
                 Minutes = model.Minutes,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                TCMDomain = model.TCMDomain,
+                TCMDomain = (model.TCMDomain != null)? model.TCMDomain : new TCMDomainEntity(),
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id,
+                IdTCMDomain = (model.TCMDomain != null)? model.TCMDomain.Id : 0,
                 IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
                 DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id, model.TCMNote.DateOfService),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
-                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
+                ActivityList = (model.TCMDomain != null)? _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code) : _combosHelper.GetComboTCMNoteActivity(string.Empty),
                 DateOfServiceNote = model.TCMNote.DateOfService,
                 ServiceName = model.ServiceName,
-                IdTCMActivity = model.TCMServiceActivity.Id,
-                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description,
+                IdTCMActivity = (model.TCMServiceActivity != null)? model.TCMServiceActivity.Id : 0,
+                DescriptionTemp = (model.TCMServiceActivity != null)? (model.TCMServiceActivity.Id != 0)? _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description : string.Empty : string.Empty,
                 TimeEnd = model.EndTime.ToShortTimeString(),
                 NeedIdentified = model.TCMDomain.NeedsIdentified
         };
@@ -6174,7 +6179,7 @@ namespace KyoS.Web.Helpers
                 IdSetting = model.IdSetting,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 IdTCMDomain = model.IdTCMDomain,
-                TCMDomainCode = model.TCMDomain.Code,
+                TCMDomainCode = (model.TCMDomain != null)? model.TCMDomain.Code : string.Empty,
                 StartTime = model.StartTime,
                 UserName = userId,
                 IdTCMClient = model.IdTCMClient,
@@ -7872,5 +7877,67 @@ namespace KyoS.Web.Helpers
                 AssignedBy = model.AssignedBy
             };
         }
+
+        public async Task<TCMIntakeAppendixIEntity> ToTCMIntakeAppendixIEntity(TCMIntakeAppendixIViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeAppendixIEntity salida;
+            salida = new TCMIntakeAppendixIEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.Include(n => n.Casemanager).ThenInclude(n => n.TCMSupervisor).FirstAsync(n => n.Id == model.IdTCMClient),
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeAppendixIViewModel ToTCMIntakeAppendixIViewModel(TCMIntakeAppendixIEntity model)
+        {
+            return new TCMIntakeAppendixIViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+        }
+
     }
 }

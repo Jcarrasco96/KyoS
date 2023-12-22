@@ -758,10 +758,22 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <a class="test" tabindex="-1" href="#">Appendix </a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending Approval", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                                <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Appendix I</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending Approval", "ApendiceIStatus", "TCMIntakes", new { approved = 1 })</li>
+                                                <li>@Html.ActionLink("Approved", "ApendiceIStatus", "TCMIntakes", new { approved = 2 })</li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -807,6 +819,7 @@
                                         <li>@Html.ActionLink("Assessments", "UpdateAssessment", "TCMAssessments")</li>
                                         <li>@Html.ActionLink("Services Plans", "UpdateServicePlan", "TCMServicePlans")</li>
                                         <li>@Html.ActionLink("Appendix J", "UpdateAppendixJ", "TCMIntakes")</li>
+                                        <li>@Html.ActionLink("Appendix I", "UpdateAppendixI", "TCMIntakes")</li>
                                         <li>@Html.ActionLink("Addendums", "UpdateAddendum", "TCMServicePlans")</li>
                                     </ul>
                                 </li>
@@ -900,10 +913,22 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                    <a class="test" tabindex="-1" href="#">Appendix </a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Appendix J</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending", "ApendiceJStatus", "TCMIntakes", new { approved = 1 })</li>
+                                                <li>@Html.ActionLink("Approved", "ApendiceJStatus", "TCMIntakes", new { approved = 2 })</li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" tabindex="-1" href="#">Appendix I</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.ActionLink("Pending", "ApendiceIStatus", "TCMIntakes", new { approved = 1 })</li>
+                                                <li>@Html.ActionLink("Approved", "ApendiceIStatus", "TCMIntakes", new { approved = 2 })</li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">

@@ -15,7 +15,7 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
-        [MaxLength(4, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [MaxLength(5, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Code")]
         public string Code { get; set; }

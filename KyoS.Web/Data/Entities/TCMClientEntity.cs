@@ -81,5 +81,9 @@ namespace KyoS.Web.Data.Entities
         public TCMReferralFormEntity TCMReferralForm { get; set; }
 
         public List<TCMTransferEntity> TCMTransferList { get; set; }
+
+        public bool Younger { get; set; }
+
+        public TCMIntakeAppendixIEntity TcmIntakeAppendixI { get; set; }
     }
 }

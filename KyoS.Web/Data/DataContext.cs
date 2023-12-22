@@ -154,7 +154,7 @@ namespace KyoS.Web.Data
         public DbSet<IntakeNoDuplicateServiceEntity> IntakeNoDuplicateService { get; set; }
         public DbSet<IntakeAdvancedDirectiveEntity> IntakeAdvancedDirective { get; set; }
         public DbSet<ReferralFormEntity> ReferralForms { get; set; }
-
+        public DbSet<TCMIntakeAppendixIEntity> TCMIntakeAppendixI { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -683,6 +683,12 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.Client)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<ReferralFormEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TcmIntakeAppendixI)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeAppendixIEntity>(s => s.TcmClient_FK);
         }
     }
 }

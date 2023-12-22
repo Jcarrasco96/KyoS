@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
-    ViewData["Title"] = "Updates of Appendix E";
+    ViewData["Title"] = "Updates of Appendix I";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Updates of Appendix E</li>
+        <li class="active">Updates of Appendix I</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -21,7 +21,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Appendix J for update</h3>
+                <h3 class="panel-title">Appendix I for update</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -52,7 +52,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if ((item.TcmIntakeAppendixJ.Approved == 2))
+                            @if ((item.TcmIntakeAppendixI.Approved == 2))
                             {
                                 <tr>
                                     <td>
@@ -77,7 +77,7 @@
                                         @Html.DisplayFor(modelItem => item.DataOpen)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.TcmIntakeAppendixJ.SupervisorSignatureDate)
+                                        @Html.DisplayFor(modelItem => item.TcmIntakeAppendixI.SupervisorSignatureDate)
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -96,8 +96,8 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor"))
                                         {
-                                            <a asp-action="EditAppendixJ" asp-route-id="@item.TcmIntakeAppendixJ.Id" class="btn btn-success" title="Edit Appendix J"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.Id" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="EditAppendixI" asp-route-id="@item.TcmIntakeAppendixI.Id" class="btn btn-success" title="Edit Appendix I"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="PrintTCMAppendixI" asp-route-id="@item.Id" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
