@@ -94,7 +94,7 @@
                                         @if (Model.Approved == 2)
                                         {
                                             <a asp-action="ReturnTo" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origin="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                             <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
@@ -102,13 +102,13 @@
                                             @if (Model.Approved == 1)
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origin="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origin="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -117,7 +117,7 @@
                                     else
                                     {
                                         <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
+                                        <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origin="5" class="btn btn-info" title="View Service Plan"><i class="glyphicon glyphicon-list"></i></a>
                                         @if (Model.Approved == 2)
                                         {
                                             <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>

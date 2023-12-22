@@ -2154,7 +2154,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
-        public IActionResult EditReadOnly(int Id = 0, int origi = 0)
+        public IActionResult EditReadOnly(int Id = 0, int origin = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .Include(f => f.TCMDomain)
@@ -2169,7 +2169,7 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefault(u => u.Id == Id);
             TCMServicePlanViewModel model;
 
-            if ((tcmServicePlan != null && tcmServicePlan.Approved != 2) || (origi == 5))
+            if ((tcmServicePlan != null && tcmServicePlan.Approved != 2) || (origin == 5))
             {
                 if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
                 {
@@ -2242,7 +2242,7 @@ namespace KyoS.Web.Controllers
                         };
 
                         model.TCMDomain = model.TCMDomain.Where(n => (n.Origin == "Service Plan")).ToList();
-                        ViewData["origi"] = origi;
+                        ViewData["origi"] = origin;
                         return View(model);
                     }
                     return RedirectToAction("NotAuthorized", "Account");
