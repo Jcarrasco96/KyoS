@@ -15,7 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Intakes", "Index", "Intakes")
+                @Html.ActionLink("Intake", "IntakeDashboard", "Intakes", new { id = @Model.IdClient })
             </li>
             <li class="active">Consent for Release and Request of Information</li>
         </ul><!--.breadcrumb-->

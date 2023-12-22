@@ -248,8 +248,44 @@
         <div class="col-md-12">
             <hr />
         </div>
-        <div class="col-sm-3 col-md-3">
+        <div class="col-sm-3 col-md-1">
             &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeClientIdDocumentVerification == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-action="CreateIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeForeignLanguage == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateForeignLanguage" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang. <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-action="CreateForeignLanguage" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.  <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </div>
+                </a>
+            }
         </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.IntakeConsentForTelehealth == null)
@@ -305,7 +341,7 @@
                 </a>
             }
         </div>
-        <div class="col-sm-3 col-md-3">
+        <div class="col-sm-3 col-md-1">
             &nbsp;
         </div>
     </div>

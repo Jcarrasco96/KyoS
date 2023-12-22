@@ -15,14 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (User.IsInRole("CaseManager"))
-                {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
-                }
-                else
-                {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
-                }
+                @Html.ActionLink("Intake", "IntakeDashboard", "Intakes", new { id = @Model.IdClient })
             </li>
             <li class="active">
                 ID Documents Verification Form
@@ -35,17 +28,17 @@
     </h4>
     <hr />
     <div class="row">
-        <form asp-action="CreateMIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
+        <form asp-action="CreateIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Client_FK" />
             <input type="hidden" asp-for="AdmissionedFor" />
-            <partial name="_TCMIntakeClientIdDocumentVerification" />
+            <partial name="_IntakeClientIdDocumentVerification" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" disabled />
-                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.Client.Id" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>

@@ -1987,7 +1987,9 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.IntakeConsentForTelehealth)
                                                       .Include(n => n.IntakeNoDuplicateService)
                                                       .Include(n => n.IntakeAdvancedDirective)
-                                                      
+                                                      .Include(n => n.IntakeClientIdDocumentVerification)
+                                                      .Include(n => n.IntakeForeignLanguage)
+
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
             {
@@ -2803,7 +2805,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
-        public IActionResult CreateTCMIntakeClientIdDocumentVerification(int id = 0, int origi = 0)
+        public IActionResult CreateIntakeClientIdDocumentVerification(int id = 0, int origi = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -2815,58 +2817,41 @@ namespace KyoS.Web.Controllers
                                                                                                  .Include(n => n.Client)
                                                                                                  .ThenInclude(n => n.LegalGuardian)
                                                                                                  .FirstOrDefault(n => n.Client.Id == id);
-            if (User.IsInRole("CaseManager"))
+            if (user_logged.Clinic != null)
             {
-                if (user_logged.Clinic != null)
+                if (clientIdDocumentationverification == null)
                 {
-                    if (clientIdDocumentationverification == null)
+                    model = new IntakeClientIdDocumentVerificationViewModel
                     {
-                        model = new IntakeClientIdDocumentVerificationViewModel
-                        {
-                            Client = _context.Clients
-                                             .Include(n => n.LegalGuardian)
-                                             .Include(n => n.EmergencyContact)
-                                             .FirstOrDefault(n => n.Id == id),
-                            IdClient = id,
-                            CreatedBy = user_logged.UserName,
-                            CreatedOn = DateTime.Now,
-                            Client_FK = id,
-                            Id = 0,
-                            AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardianOrClient = DateTime.Now,
-                            HealthPlan = string.Empty,
-                            Id_DriverLicense = string.Empty,
-                            MedicaidId = string.Empty,
-                            MedicareCard = string.Empty,
-                            Other_Identification = string.Empty,
-                            Other_Name = string.Empty,
-                            Passport_Resident = string.Empty,
-                            Social = string.Empty
+                        Client = _context.Clients
+                                         .Include(n => n.LegalGuardian)
+                                         .Include(n => n.EmergencyContact)
+                                         .FirstOrDefault(n => n.Id == id),
+                        IdClient = id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        Client_FK = id,
+                        Id = 0,
+                        AdmissionedFor = user_logged.FullName,
+                        DateSignatureEmployee = DateTime.Now,
+                        DateSignatureLegalGuardianOrClient = DateTime.Now,
+                        HealthPlan = string.Empty,
+                        Id_DriverLicense = string.Empty,
+                        MedicaidId = string.Empty,
+                        MedicareCard = string.Empty,
+                        Other_Identification = string.Empty,
+                        Other_Name = string.Empty,
+                        Passport_Resident = string.Empty,
+                        Social = string.Empty
 
-                        };
-                        if (model.Client.LegalGuardian == null)
-                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                    };
+                    if (model.Client.LegalGuardian == null)
+                        model.Client.LegalGuardian = new LegalGuardianEntity();
 
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
-                    else
-                    {
-                        if (clientIdDocumentationverification.Client.LegalGuardian == null)
-                            clientIdDocumentationverification.Client.LegalGuardian = new LegalGuardianEntity();
-
-                        model = _converterHelper.ToIntakeClientIdDocumentVerificationViewModel(clientIdDocumentationverification);
-                        ViewData["origi"] = origi;
-
-                        return View(model);
-                    }
-
+                    ViewData["origi"] = origi;
+                    return View(model);
                 }
-            }
-            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
-            {
-                if (user_logged.Clinic != null)
+                else
                 {
                     if (clientIdDocumentationverification.Client.LegalGuardian == null)
                         clientIdDocumentationverification.Client.LegalGuardian = new LegalGuardianEntity();
@@ -2876,7 +2861,9 @@ namespace KyoS.Web.Controllers
 
                     return View(model);
                 }
+
             }
+
             return RedirectToAction("Index", "Intakes");
         }
 
@@ -2900,7 +2887,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -2914,7 +2901,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -2942,7 +2929,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(n => n.LegalGuardian)
                                                                 .FirstOrDefault(n => n.Client.Id == id);
 
-            if (User.IsInRole("CaseManager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -3006,7 +2993,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {
@@ -3020,7 +3007,7 @@ namespace KyoS.Web.Controllers
                     try
                     {
                         await _context.SaveChangesAsync();
-                        return RedirectToAction("IntakeSectionDashboard", new { id = IntakeViewModel.IdClient, section = 1, origin = origi });
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
                     }
                     catch (System.Exception ex)
                     {

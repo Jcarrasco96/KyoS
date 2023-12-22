@@ -15,14 +15,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (User.IsInRole("CaseManager"))
-                {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
-                }
-                else
-                {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
-                }
+                @Html.ActionLink("Intake", "IntakeDashboard", "Intakes", new { id = @Model.IdClient })
             </li>
             <li class="active">
                 Foreign Language Acknowledgement
@@ -44,23 +37,8 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_IntakeForeignLanguage" />
             <div class="form-group col-md-12">
-                @if (User.IsInRole("CaseManager"))
-                {
-                    @if (Model.Id == 0)
-                    {
-                        <input type="submit" value="Sign and Save" class="btn btn-primary" />
-                    }
-                    else
-                    {
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    }
-                    <a asp-action="IntakeSectionDashboard" asp-route-id="@Model.IdClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
-                }
-                else
-                {
-                    <input type="submit" value="Save" class="btn btn-primary" disabled />
-                    <a asp-action="IntakeSectionDashboardReadOnly" asp-route-id="@Model.IdClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
-                }
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="IntakeDashboard" asp-route-id="@Model.Client.Id" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
