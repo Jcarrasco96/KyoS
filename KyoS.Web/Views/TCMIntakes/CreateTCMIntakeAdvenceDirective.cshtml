@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAdvancedDirectiveViewModel
 @{
-    ViewData["Title"] = "TCM Advanced Directive";
+    ViewData["Title"] = "Advanced Directive";
 }
 
 <!DOCTYPE html>
@@ -68,7 +68,35 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+            }
+            else {
+                check101.checked = true;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+                $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
+            }
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+                $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
+            } else {
+                check1.checked = true;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+            }
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+        }
+        else {
+            check101.checked = true;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+        }
     </script>
 }
 

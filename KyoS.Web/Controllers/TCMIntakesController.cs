@@ -1548,8 +1548,8 @@ namespace KyoS.Web.Controllers
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
                             DateSignaturePerson = DateTime.Now,
-                            AdmissionedFor = user_logged.FullName
-
+                            AdmissionedFor = user_logged.FullName,
+                            IHaveNot = true
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
                             model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
@@ -1574,7 +1574,6 @@ namespace KyoS.Web.Controllers
                         ViewData["origi"] = origi;
                         return View(model);
                     }
-
                 }
             }
             if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))

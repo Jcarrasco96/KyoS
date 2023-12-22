@@ -693,7 +693,6 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
 
                         ViewData["origi"] = origi;
