@@ -57,25 +57,50 @@
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-push-12">
-                <div class="form-group col-md-6">
-                    <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished<br />
+            @if (ViewData["origi"].ToString() != "5")
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-6">
+                        <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished<br />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
+                        <input asp-for="DateAccomplished" class="form-control" />
+                        <span asp-validation-for="DateAccomplished" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
-                    <input asp-for="DateAccomplished" class="form-control"  />
-                    <span asp-validation-for="DateAccomplished" class="text-danger"></span>
+                <div class="col-md-12">
+                    &nbsp;
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div>
-                <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <div>
+                    <div class="col-md-offset-9">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="col-md-push-12">
+                    <div class="form-group col-md-6">
+                        <input type="checkbox" asp-for="Status" class="form-check-input" disabled> Domain complished<br />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
+                        <input asp-for="DateAccomplished" class="form-control" disabled />
+                        <span asp-validation-for="DateAccomplished" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div>
+                    <div class="col-md-offset-10">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            }
+
         </form>
     </div>
 </div>

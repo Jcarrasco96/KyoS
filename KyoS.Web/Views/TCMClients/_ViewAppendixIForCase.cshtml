@@ -94,6 +94,7 @@
                                         @if (Model.Approved == 2)
                                         {
                                             <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="EditAppendixIReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
                                             <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
@@ -101,11 +102,13 @@
                                             @if (Model.Approved == 1)
                                             {
                                                 <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAppendixIReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="AppendixIReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAppendixIReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -114,6 +117,7 @@
                                     else
                                     {
                                         <a asp-action="AppendixEReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="EditAppendixIReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
                                         @if (Model.Approved == 2)
                                         {
                                             <a asp-action="PrintTCMAppendixI" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>

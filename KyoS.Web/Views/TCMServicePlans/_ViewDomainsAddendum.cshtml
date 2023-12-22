@@ -56,21 +56,33 @@
                                                     <td align="center">
                                                         @if (User.IsInRole("CaseManager"))
                                                         {
-                                                            <a onclick="showInPopupLg('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                            <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origi="1" asp-route-idAddendum="@ViewData["idAddendum"]" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                            @if (ViewData["origin"].ToString() != "5")
+                                                            {
+                                                                <a onclick="showInPopupLg('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origi="1" asp-route-idAddendum="@ViewData["idAddendum"]" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                            }
+                                                            else
+                                                            { 
+                                                                <a onclick="showInPopupLg('@Url.Action("EditObjetiveReadOnly", "TCMServicePlans", new { id = value.Id, origi = 5, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','View TCM Objetive')" class="btn btn-info" title="View TCM Objective"><i class="glyphicon glyphicon-search"></i></a>
+                                                            } 
                                                         }
                                                         @if (User.IsInRole("TCMSupervisor"))
                                                         {
-                                                            @if (ViewData["editSupervisor"].ToString() == "1")
+                                                            @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
                                                             {
                                                                 <a onclick="showInPopupLg('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
                                                             }
                                                             else
                                                             {
-                                                                <a onclick="showInPopupLg('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 1 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning disabled" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a onclick="showInPopupLg('@Url.Action("EditObjetiveReadOnly", "TCMServicePlans", new { id = value.Id, origi = 5, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','View TCM Objetive')" class="btn btn-info" title="View TCM Objective"><i class="glyphicon glyphicon-search"></i></a>
                                                             }
 
                                                             <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origi="1" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
+                                                        }
+                                                        @if (User.IsInRole("Manager"))
+                                                        {
+                                                            <a onclick="showInPopupLg('@Url.Action("EditObjetiveReadOnly", "TCMServicePlans", new { id = value.Id, origi = 5, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','View TCM Objetive')" class="btn btn-info" title="View TCM Objective"><i class="glyphicon glyphicon-search"></i></a>
+                                                            <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-origi="1" asp-route-idAddendum="@ViewData["idAddendum"]" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete TCM objective"></i></a>
                                                         }
                                                     </td>
                                                 </tr>
@@ -94,20 +106,33 @@
                             <td align="right">
                                 @if (User.IsInRole("CaseManager"))
                                 {
-                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = Model.Id, origi = 1, aview = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a onclick="showInPopupLg('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = Model.Id, origin = 1, idAddendum = ViewData["idAddendum"]}, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                    @if (ViewData["origin"].ToString() != "5")
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = Model.Id, origi = 1, aview = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopupLg('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = Model.Id, origin = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
+                                    else
+                                    { 
+                                        <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlans", new { id = Model.Id, origi = 5, aview = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)',' View TCM Domain')" class="btn btn-info" title="Edit TCM Domain"><i class="glyphicon glyphicon-search"></i></a>
+                                    }
+
                                 }
                                 @if (User.IsInRole("TCMSupervisor"))
                                 {
-                                    @if (ViewData["editSupervisor"].ToString() == "1")
+                                    @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
                                     {
                                         <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = Model.Id, origi = 1, aview = 4, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning disabled" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
                                     else
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlans", new { id = Model.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Domain')" class="btn btn-warning disabled" title="Edit TCM Domain"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlans", new { id = Model.Id, origi = 5, aview = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)',' View TCM Domain')" class="btn btn-info" title="Edit TCM Domain"><i class="glyphicon glyphicon-search"></i></a>
                                     }
                                     <a onclick="showInPopupLg('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = Model.Id, origin = 0 }, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
+                                }
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlans", new { id = Model.Id, origi = 5, aview = 1, idAddendum = ViewData["idAddendum"] }, Context.Request.Scheme)',' View TCM Domain')" class="btn btn-info" title="Edit TCM Domain"><i class="glyphicon glyphicon-search"></i></a>
+                                    <a onclick="showInPopupLg('@Url.Action("CreateObjetive", "TCMServicePlans", new { id = Model.Id, origin = 1, idAddendum = ViewData["idAddendum"]}, Context.Request.Scheme)','Create TCM Objetive')" class="btn btn-info disabled" title="Create TCM Objective"><i class="glyphicon glyphicon-plus"></i></a>
                                 }
                             </td>
                         </tr>

@@ -95,6 +95,7 @@
                                         @if (item.Approved == 2)
                                         {
                                             <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="EditAdendumReadOnly" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-origin="5" class="btn btn-info" title="View Addendum"><i class="glyphicon glyphicon-list"></i></a>
                                             <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
@@ -102,11 +103,13 @@
                                             @if (item.Approved == 1)
                                             {
                                                 <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAdendumReadOnly" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-origin="5" class="btn btn-info" title="View Addendum"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="AddendumReturnTo" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAdendumReadOnly" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-origin="5" class="btn btn-info" title="View Addendum"><i class="glyphicon glyphicon-list"></i></a>
                                                 <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
@@ -115,6 +118,7 @@
                                     else
                                     {
                                         <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="EditAdendumReadOnly" asp-controller="TCMServicePlans" asp-route-id="@item.Id" asp-route-origin="5" class="btn btn-info" title="View Addendum"><i class="glyphicon glyphicon-list"></i></a>
                                         @if (item.Approved == 2)
                                         {
                                             <a asp-action="PrintAdendum" asp-controller="TCMServicePlans" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>

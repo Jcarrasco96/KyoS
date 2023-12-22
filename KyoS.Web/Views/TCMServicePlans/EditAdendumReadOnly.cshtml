@@ -16,17 +16,25 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (ViewData["aview"].ToString() == "0")
+
+                @if (ViewData["origin"].ToString() == "5")
                 {
-                    @Html.ActionLink("TCM Addendum Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = @ViewData["aview"] })
+                    @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmServicePlan.TcmClient_FK })
                 }
-                @if (ViewData["aview"].ToString() == "1")
+                else
                 {
-                    @Html.ActionLink("TCM Addendum all", "Adendum", "TCMServicePlans", new { aview = @ViewData["aview"] })
-                }
-                @if (ViewData["aview"].ToString() == "2")
-                {
-                    @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
+                    @if (ViewData["aview"].ToString() == "0")
+                    {
+                        @Html.ActionLink("TCM Addendum Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = @ViewData["aview"] })
+                    }
+                    @if (ViewData["aview"].ToString() == "1")
+                    {
+                        @Html.ActionLink("TCM Addendum all", "Adendum", "TCMServicePlans", new { aview = @ViewData["aview"] })
+                    }
+                    @if (ViewData["aview"].ToString() == "2")
+                    {
+                        @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
+                    }
                 }
             </li>
             <li class="active">Approve Addendum</li>
@@ -58,26 +66,31 @@
                     <hr />
                 </div>
                 <div class="form-group col-md-12">
-                    <input type="submit" value="Approve" class="btn btn-primary" />
-                    @if (User.IsInRole("TCMSupervisor"))
+
+                    @if (User.IsInRole("TCMSupervisor") && ViewData["origin"].ToString() != "5")
                     {
+                        <input type="submit" value="Approve" class="btn btn-primary" />
                         <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageAddendumEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["aview"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm addendum due to problems">Review</a>
+                    }
+                   
+                    @if (ViewData["origin"].ToString() == "5")
+                    {
+                        <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-success">Back</a>
                     }
                     else
                     {
-                        <a asp-action="Review" class="btn btn-warning disabled">Review</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "0")
-                    {
-                        <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "1")
-                    {
-                        <a asp-action="Adendum" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "2")
-                    {
-                        <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        @if (ViewData["aview"].ToString() == "0")
+                        {
+                            <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["aview"].ToString() == "1")
+                        {
+                            <a asp-action="Adendum" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["aview"].ToString() == "2")
+                        {
+                            <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        }
                     }
                 </div>
             </div>

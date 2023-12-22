@@ -28,6 +28,10 @@
             {
                 @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.ID_TcmClient, section = 4 })
             }
+            @if (ViewData["origi"].ToString() == "5")
+            {
+                @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.ID_TcmClient })
+            }
         </li>
         <li class="active">Approve Service Plan</li>
     </ul><!--.breadcrumb-->
@@ -108,15 +112,17 @@
             </div>
                 <partial name="TCMServicePlan1ReadOnly" />
                 <div class="form-group">
-                    <input type="submit" value="Sign / Approve" class="btn btn-primary" />
+
                     @if (User.IsInRole("TCMSupervisor"))
                     {
-                        <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
+                        @if (ViewData["origi"].ToString() != "5")
+                        {
+                            <input type="submit" value="Sign / Approve" class="btn btn-primary" />
+                            <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
+                        }
+
                     }
-                    else
-                    {
-                        <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
-                    }
+                  
                     @if (ViewData["origi"].ToString() == "0")
                     {
                         <a asp-action="Index" class="btn btn-success">Back</a>
@@ -136,6 +142,10 @@
                     @if (ViewData["origi"].ToString() == "4")
                     {
                         <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.ID_TcmClient" asp-route-section="4" class="btn btn-success">Back</a>
+                    }
+                    @if (ViewData["origi"].ToString() == "5")
+                    {
+                        <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.ID_TcmClient" class="btn btn-success">Back</a>
                     }
                 </div>
         </form>

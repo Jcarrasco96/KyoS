@@ -13,7 +13,7 @@
                     <select asp-for="ID_TcmServicePlan" asp-items="Model.ListTcmServicePlan" class="form-control" readonly></select>
                     <span asp-validation-for="ID_TcmServicePlan" class="text-danger"></span>
                 </div>
-                @if (ViewData["editSupervisor"].ToString() == "1")
+                @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
                 {
                     <div class="col-md-3">
                         <label asp-for="Date_Identified" class="control-label">Identified Date</label>
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="form-group">
-                @if (ViewData["editSupervisor"].ToString() == "1")
+                @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
                 {
                     <div class="col-md-6">
                         <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>

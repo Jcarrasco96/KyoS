@@ -1,43 +1,88 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
-<div class="col-md-12">
-    <pre>
+@if (ViewData["origin"].ToString() == "1")
+{
+    <div class="col-md-12">
+        <pre>
     Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
 
     Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
-    <input type="checkbox" asp-for="IsEnrolled" /> 1. Is enrolled in a Department of Children and Families adult mental health target population
-    <input type="checkbox" asp-for="HasAMental2" /> 2. Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy
+        <input type="checkbox" asp-for="IsEnrolled" disabled /> 1. Is enrolled in a Department of Children and Families adult mental health target population
+        <input type="checkbox" asp-for="HasAMental2" disabled /> 2. Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy
            for and coordination of services to maintain or improve level of functioning;
-    <input type="checkbox" asp-for="RequiresServices" /> 3. Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work
+        <input type="checkbox" asp-for="RequiresServices" disabled /> 3. Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work
            and social environments of choice;
-    <input type="checkbox" asp-for="Lacks" /> 4. Lacks a natural support system with the ability to access needed medical, social, educational and
+        <input type="checkbox" asp-for="Lacks" disabled /> 4. Lacks a natural support system with the ability to access needed medical, social, educational and
            other services;
-    <input type="checkbox" asp-for="RequiresOngoing" /> 5. Requires ongoing assistance to access or maintain needed care consistently within the service
+        <input type="checkbox" asp-for="RequiresOngoing" disabled /> 5. Requires ongoing assistance to access or maintain needed care consistently within the service
             delivery system;
-    <input type="checkbox" asp-for="HasAMental6" /> 6. Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon
+        <input type="checkbox" asp-for="HasAMental6" disabled /> 6. Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon
            professional judgment, will last for a minimum of one year;
-    <input type="checkbox" asp-for="IsNotReceiving" /> 7. Is not receiving duplicate case management services from another provider;
-    <input type="checkbox" asp-for="Meets" /> 8. Meets at least one of the following requirements (check all that apply):
-            a.  <input type="checkbox" asp-for="IsAwaiting" />  Is awaiting admission to or has been discharged from a state mental health treatment facility;
-            b.  <input type="checkbox" asp-for="HasBeen" />  Has been discharged from a mental health residential treatment facility;
-            c.  <input type="checkbox" asp-for="HasHad" />  Has had more than one admission to a crisis stabilization unit (CSU), short-term
+        <input type="checkbox" asp-for="IsNotReceiving" disabled /> 7. Is not receiving duplicate case management services from another provider;
+        <input type="checkbox" asp-for="Meets" disabled /> 8. Meets at least one of the following requirements (check all that apply):
+            a.  <input type="checkbox" asp-for="IsAwaiting" disabled />  Is awaiting admission to or has been discharged from a state mental health treatment facility;
+            b.  <input type="checkbox" asp-for="HasBeen" disabled />  Has been discharged from a mental health residential treatment facility;
+            c.  <input type="checkbox" asp-for="HasHad" disabled />  Has had more than one admission to a crisis stabilization unit (CSU), short-term
                     residential facility (SRT), inpatient psychiatric unit, or any combination of these
                     facilities in the past 12 months;
-            d.  <input type="checkbox" asp-for="IsAt" />  Is at risk of institutionalization for mental health reasons (provide explanation);
-            e.  <input type="checkbox" asp-for="IsExperiencing" />  Is experiencing long-term or acute episodes of mental impairment that may put him or
+            d.  <input type="checkbox" asp-for="IsAt" disabled />  Is at risk of institutionalization for mental health reasons (provide explanation);
+            e.  <input type="checkbox" asp-for="IsExperiencing" disabled />  Is experiencing long-term or acute episodes of mental impairment that may put him or
                     her at risk of requiring more intensive services (provide explanation); or
 
-    <input type="checkbox" asp-for="HasRecolated" /> 9. Has relocated from a Department of Children and Families district or region where he or she was
+        <input type="checkbox" asp-for="HasRecolated" disabled /> 9. Has relocated from a Department of Children and Families district or region where he or she was
            receiving mental health targeted case management services.    
 </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-    <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
+    </div>
+    <div class="col-md-12">
+        <pre>
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        <strong>Employee signature date</strong>         <input asp-for="Date" disabled>     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
                         
     </pre>
-</div>
+    </div>
+}
+else
+{
+    <div class="col-md-12">
+        <pre>
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+
+    Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
+        <input type="checkbox" asp-for="IsEnrolled"  /> 1. Is enrolled in a Department of Children and Families adult mental health target population
+        <input type="checkbox" asp-for="HasAMental2"  /> 2. Has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy
+           for and coordination of services to maintain or improve level of functioning;
+        <input type="checkbox" asp-for="RequiresServices"  /> 3. Requires services to assist in attaining self sufficiency and satisfaction in the living, learning, work
+           and social environments of choice;
+        <input type="checkbox" asp-for="Lacks"  /> 4. Lacks a natural support system with the ability to access needed medical, social, educational and
+           other services;
+        <input type="checkbox" asp-for="RequiresOngoing"  /> 5. Requires ongoing assistance to access or maintain needed care consistently within the service
+            delivery system;
+        <input type="checkbox" asp-for="HasAMental6"  /> 6. Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon
+           professional judgment, will last for a minimum of one year;
+        <input type="checkbox" asp-for="IsNotReceiving"  /> 7. Is not receiving duplicate case management services from another provider;
+        <input type="checkbox" asp-for="Meets"  /> 8. Meets at least one of the following requirements (check all that apply):
+            a.  <input type="checkbox" asp-for="IsAwaiting"  />  Is awaiting admission to or has been discharged from a state mental health treatment facility;
+            b.  <input type="checkbox" asp-for="HasBeen"  />  Has been discharged from a mental health residential treatment facility;
+            c.  <input type="checkbox" asp-for="HasHad"  />  Has had more than one admission to a crisis stabilization unit (CSU), short-term
+                    residential facility (SRT), inpatient psychiatric unit, or any combination of these
+                    facilities in the past 12 months;
+            d.  <input type="checkbox" asp-for="IsAt"  />  Is at risk of institutionalization for mental health reasons (provide explanation);
+            e.  <input type="checkbox" asp-for="IsExperiencing"  />  Is experiencing long-term or acute episodes of mental impairment that may put him or
+                    her at risk of requiring more intensive services (provide explanation); or
+
+        <input type="checkbox" asp-for="HasRecolated"  /> 9. Has relocated from a Department of Children and Families district or region where he or she was
+           receiving mental health targeted case management services.    
+</pre>
+    </div>
+    <div class="col-md-12">
+        <pre>
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        <strong>Employee signature date</strong>         <input asp-for="Date" >     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate" >
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
+                        
+    </pre>
+    </div>
+}
 <div class="col-md-12">
     &nbsp;
 </div>

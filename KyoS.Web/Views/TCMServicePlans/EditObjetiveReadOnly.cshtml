@@ -17,7 +17,7 @@
                     <h4 style="font-weight:bold;"> <span class="label label-info">Service: @Model.TcmDomain.Code - @Model.TcmDomain.Name</span></h4>
                 </div>
             </div>
-            @if (Model.TcmDomain.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            @if (Model.TcmDomain.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && Model.Origi != 5)
             {
                 <div class="">
                     <div class="form-group col-md-3">
@@ -134,19 +134,28 @@
                     </div>
                 </div>
                 <div>
-                    <div class="col-md-offset-9">
-                        @if (Model.Origi == 0) //viene de la pagina Index de las notas
-                        {
-                            <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="0" />
+                    @if (Model.Origi == 5)
+                    {
+                        <div class="col-md-offset-10">
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-offset-9">
+                            @if (Model.Origi == 0) //viene de la pagina Index de las notas
+                            {
+                                <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="0" />
 
-                        }
-                        @if (Model.Origi == 1) //viene de la pagina Index de las notas
-                        {
-                            <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="1" />
+                            }
+                            @if (Model.Origi == 1) //viene de la pagina Index de las notas
+                            {
+                                <input type="submit" value="Submit" class="btn btn-primary" disabled asp-all-route-id="model.tCMservice.Id" asp-route-origi="1" />
 
-                        }
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                    </div>
+                            }
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                        </div>
+                    }
                 </div>
             }
         </form>

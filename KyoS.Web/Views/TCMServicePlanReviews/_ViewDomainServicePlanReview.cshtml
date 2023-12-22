@@ -68,7 +68,7 @@
                                             </td>
                                             <td align="left">@Html.DisplayFor(modelItem => value.ChangesUpdate)</td>
                                             <td align="center">
-                                                @if (User.IsInRole("CaseManager"))
+                                                @if (User.IsInRole("CaseManager") || ViewData["origi"].ToString() != "5")
                                                 {
                                                     @if (value.Origin == "Service Plan Review")
                                                     {
@@ -83,8 +83,8 @@
                                                 }
                                                 else
                                                 {
-                                                    <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                                    <i class="btn btn-danger disabled glyphicon glyphicon-trash"></i>
+                                                    <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id, origi = 5 }, Context.Request.Scheme)','View Objetive')" class="btn btn-info" title="View Objetive"><i class="glyphicon glyphicon-search"></i> </a>
+                                                    
                                                 }
                                             </td>
                                         </tr>
@@ -113,7 +113,7 @@
                             }
                         </td>
                         <td align="center">
-                            @if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && item.TcmServicePlanReview.TcmServicePlan.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true))
+                            @if (User.IsInRole("CaseManager") || ((User.IsInRole("TCMSupervisor") && item.TcmServicePlanReview.TcmServicePlan.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true)) && ViewData["origi"].ToString() != "5")
                             {
                                 @if (item.TcmDomain.Origin == "Service Plan Review")
                                 {
@@ -130,9 +130,9 @@
                             }
                             else
                             {
-                                <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origi = 5}, Context.Request.Scheme)','View Domain')" class="btn btn-info" title="View Domain"><i class="glyphicon glyphicon-search"></i> </a>
                                 <i class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                <i class="btn btn-danger disabled glyphicon glyphicon-trash"></i>
+                                
                             }
                         </td>
                     </tr>

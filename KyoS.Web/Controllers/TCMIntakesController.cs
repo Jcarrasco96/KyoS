@@ -6076,5 +6076,51 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> EditAppendixIReadOnly(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixIEntity entity = await _context.TCMIntakeAppendixI
+                                                            .Include(c => c.TcmClient)
+                                                            .ThenInclude(c => c.Client)
+                                                            .ThenInclude(c => c.Clinic)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixIViewModel model = _converterHelper.ToTCMIntakeAppendixIViewModel(entity);
+            ViewData["origin"] = origin;
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> EditAppendixJReadOnly(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJEntity entity = await _context.TCMIntakeAppendixJ
+                                                            .Include(c => c.TcmClient)
+                                                            .ThenInclude(c => c.Client)
+                                                            .ThenInclude(c => c.Clinic)
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMIntakeAppendixJViewModel model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
+            ViewData["origin"] = origin;
+            return View(model);
+        }
+
     }
 }

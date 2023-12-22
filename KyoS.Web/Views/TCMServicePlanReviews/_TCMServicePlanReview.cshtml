@@ -22,13 +22,26 @@
             <span asp-validation-for="TcmServicePlan.TcmClient.Casemanager.Name" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-2">
+    @if (ViewData["origi"].ToString() != "5")
+    {
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="DateServicePlanReview" class="control-label">Service Plan Review Date</label>
+                <input asp-for="DateServicePlanReview" class="form-control" />
+                <span asp-validation-for="DateServicePlanReview" class="text-danger"></span>
+            </div>
+        </div>
+    }
+    else
+    { 
+        <div class="col-md-2">
         <div class="form-group">
             <label asp-for="DateServicePlanReview" class="control-label">Service Plan Review Date</label>
-            <input asp-for="DateServicePlanReview" class="form-control" />
+            <input asp-for="DateServicePlanReview" class="form-control" readonly/>
             <span asp-validation-for="DateServicePlanReview" class="text-danger"></span>
         </div>
     </div>
+    }
 </div>
 <div class="col-md-push-12">
     <div class="col-md-2">
@@ -54,7 +67,7 @@
 </div>
 
 <div class="col-md-push-12">
-    @if (User.IsInRole("CaseManager"))
+    @if (User.IsInRole("CaseManager") && ViewData["origi"].ToString() != "5")
     {
         <div class="col-md-6">
             <div class="form-group">

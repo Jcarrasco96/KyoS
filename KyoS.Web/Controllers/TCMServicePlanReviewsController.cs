@@ -919,8 +919,8 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomain", tcmDomainViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> EditDomainReadOnly(int? id)
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> EditDomainReadOnly(int? id, int origi = 0)
         {
             if (id == null)
             {
@@ -953,7 +953,7 @@ namespace KyoS.Web.Controllers
                 tcmDomainViewModel.Id_Service = _context.TCMServices.First(n => n.Code == tcmDomainEntity.Code).Id;
                 tcmDomainViewModel.Status = tcmDomainEntity.Status;
             }
-
+            ViewData["origi"] = origi;
             return View(tcmDomainViewModel);
         }
 
@@ -1422,8 +1422,8 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> EditObjetiveReadOnly(int id = 0)
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
+        public async Task<IActionResult> EditObjetiveReadOnly(int id = 0, int origi = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -1476,7 +1476,7 @@ namespace KyoS.Web.Controllers
                 model.ChangesUpdates = tcmObjetiveEntity.ChangesUpdate;
                 model.Id_Stage = stage.Id;
                 model.Stages = list;
-
+                ViewData["origi"] = origi;
                 return View(model);
 
             }
@@ -1668,7 +1668,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public IActionResult EditReadOnly(int Id, int IdServicePlan, int origi = 0)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)

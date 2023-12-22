@@ -27,6 +27,10 @@
                 {
                     @Html.ActionLink("TCM Intake Section 4", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.TcmClient_FK, section = 4 })
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmClient_FK})
+                }
             </li>
             <li class="active">Edit TCM Assessment</li>
         </ul><!--.breadcrumb-->
@@ -41,7 +45,7 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="Approved" />
-            @if (Model.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            @if (Model.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && @ViewData["origi"].ToString() != "3" )
             {
                 <partial name="_TCMAssessment" />
                 <div class="col-md-push-12">
@@ -238,29 +242,38 @@
                 <partial name="_TCMAssessment6ReadOnly" />
             }
 
-            <div class="form-group col-md-12">
-                <input type="submit" value="Sign / Approve" class="btn btn-primary" />
-                @if (User.IsInRole("TCMSupervisor"))
+        <div class="form-group col-md-12">
+
+            @if (User.IsInRole("TCMSupervisor"))
+            {
+                @if (@ViewData["origi"].ToString() != "3")
                 {
-                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMAssessments",new {id = Model.Id, origi = 1},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Assessment due to problems">Review</a>
+                    <input type="submit" value="Sign / Approve" class="btn btn-primary" />
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity", "TCMAssessments", new { id = Model.Id, origi = 1 }, Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Assessment due to problems">Review</a>
                 }
-                else
-                {
-                    <a asp-action="AddMessageEntity" asp-route-origi="1" asp-controller="TCMAssessments" class="btn btn-warning disabled">Review</a>
-                }
-                @if (@ViewData["origi"].ToString() == "0")
-                {
-                    <a asp-action="TCMAssessmentApproved" asp-route-approved="1" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "1")
-                {
-                    <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
-                }
-                @if (ViewData["origi"].ToString() == "2")
-                {
-                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient_FK" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
-                }
-            </div>
+               
+            }
+            else
+            {
+                <a asp-action="AddMessageEntity" asp-route-origi="1" asp-controller="TCMAssessments" class="btn btn-warning disabled">Review</a>
+            }
+            @if (@ViewData["origi"].ToString() == "0")
+            {
+                <a asp-action="TCMAssessmentApproved" asp-route-approved="1" class="btn btn-success">Back</a>
+            }
+            @if (ViewData["origi"].ToString() == "1")
+            {
+                <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+            }
+            @if (ViewData["origi"].ToString() == "2")
+            {
+                <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.TcmClient_FK" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+            }
+            @if (ViewData["origi"].ToString() == "3")
+            {
+                <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.TcmClient_FK" class="btn btn-success">Back</a>
+            }
+        </div>
         </form>
     </div>
 </body>

@@ -4,26 +4,35 @@
 }
 
 <pre>
-@if (Model.Approved < 1)
+@if (ViewData["origi"].ToString() != "5")
 {
+    @if (Model.Approved < 1)
+    {
     <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-}
-else
-{ 
+    }
+    else
+    {
     <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-}
+    }
     <strong>Employee signature date</strong>      <input asp-for="DateTcmSignature">   
     <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br /> 
-@if (Model.Approved < 2)
-{
+    @if (Model.Approved < 2)
+    {
     <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+    }
+    else
+    {
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+    } 
+    <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+
 }
 else
 { 
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-} 
-    <strong>Supervisor signature date</strong>    <input asp-for="DateSupervisorSignature">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+     <strong>Employee signature date</strong>      <input asp-for="DateTcmSignature" disabled>   
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>  <br /> 
+}
 </pre>
 <div class="col-md-12">
     <hr />

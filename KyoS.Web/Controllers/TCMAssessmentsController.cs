@@ -2507,12 +2507,12 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMAssessmentViewModel model;
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)

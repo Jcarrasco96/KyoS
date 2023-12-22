@@ -2153,7 +2153,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public IActionResult EditReadOnly(int Id = 0, int origi = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
@@ -2169,9 +2169,9 @@ namespace KyoS.Web.Controllers
                                                           .FirstOrDefault(u => u.Id == Id);
             TCMServicePlanViewModel model;
 
-            if (tcmServicePlan != null && tcmServicePlan.Approved != 2)
+            if ((tcmServicePlan != null && tcmServicePlan.Approved != 2) || (origi == 5))
             {
-                if (User.IsInRole("TCMSupervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
                 {
                     UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -2252,8 +2252,8 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMServicePlans", new { caseNumber = tcmServicePlan.TcmClient.CaseNumber });
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditAdendumReadOnly(int? id, int aview = 0)
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> EditAdendumReadOnly(int? id, int aview = 0, int origin = 0)
         {
             if (id == null)
             {
@@ -2285,7 +2285,7 @@ namespace KyoS.Web.Controllers
 
             TCMAdendumViewModel tcmAdendumViewModel = null;
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager") || User.IsInRole("CaseManager"))
             {
                 List<TCMServicePlanEntity> tcmSerivicePlan = _context.TCMServicePlans
                                                                      .Include(g => g.TcmClient)
@@ -2337,10 +2337,12 @@ namespace KyoS.Web.Controllers
                 {
                     ViewData["editSupervisor"] = 0;
                 }
+                ViewData["origin"] = origin;
                 return View(tcmAdendumViewModel);
             }
 
             ViewData["aview"] = aview;
+            ViewData["origin"] = origin;
             return View(tcmAdendumViewModel);
         }
 
@@ -2588,7 +2590,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
         public async Task<IActionResult> EditObjetiveReadOnly(int id = 0, int origi = 0, int idAddendum = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -2597,7 +2599,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Setting)
 
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if ( User.IsInRole("TCMSupervisor"))
+            if ( User.IsInRole("TCMSupervisor") || User.IsInRole("Manager") || User.IsInRole("CaseManager"))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -2758,7 +2760,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
         public async Task<IActionResult> EditDomainReadOnly(int? id, int origi = 0, int aview = 0, int idAddendum = 0)
         {
             if (id == null)
@@ -2785,7 +2787,7 @@ namespace KyoS.Web.Controllers
 
             TCMDomainViewModel tcmDomainViewModel = null;
                         
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager") || User.IsInRole("CaseManager"))
             {
                 tcmDomainViewModel = _converterHelper.ToTCMDomainViewModel(tcmDomainEntity);
 

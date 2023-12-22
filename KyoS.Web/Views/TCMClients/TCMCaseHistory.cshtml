@@ -88,7 +88,7 @@
         </div>
         <div class="col-md-push-12">
             <div id="view-farsForClient">
-                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMAdendum.Count() > 0)
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMServicePlanReview != null)
                 {
                     @await Html.PartialAsync("_ViewServicePlanRForCase", Model.TcmServicePlan.TCMServicePlanReview)
                 }

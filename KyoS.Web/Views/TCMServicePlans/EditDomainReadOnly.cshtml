@@ -14,7 +14,7 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="NameSubService" />
             <input type="hidden" asp-for="Id_SubService" />
-            @if (Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+            @if (Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5")
             {
                 <div class="form-group">
                     <div class="col-md-12 form-group">
@@ -122,10 +122,19 @@
                     &nbsp;
                 </div>
                 <div>
-                    <div class="col-md-offset-9">
-                        <input type="submit" value="Submit" class="btn btn-primary" disabled />
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                    </div>
+                    @if (ViewData["origi"].ToString() != "5")
+                    {
+                        <div class="col-md-offset-9">
+                            <input type="submit" value="Submit" class="btn btn-primary" disabled />
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-offset-10">
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                        </div>
+                    }
                 </div>
             }
         </form>
