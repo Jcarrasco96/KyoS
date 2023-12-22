@@ -41,7 +41,7 @@
             <partial name="_TCMIntakeAppendixJReadOnly" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Sign and Approve" class="btn btn-primary" />
-                <a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>
+                @*<a asp-action="Review" asp-route-approved="1" class="btn btn-warning disabled">Review</a>*@
                 @if (ViewData["origi"].ToString() == "0")
                 {
                     <a asp-action="ApendiceJStatus" asp-route-approved="1" class="btn btn-success">Back</a>

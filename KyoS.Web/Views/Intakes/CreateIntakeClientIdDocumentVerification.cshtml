@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @if (User.IsInRole("CaseManager"))
                 {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
                 }
                 else
                 {
-                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdClient, section = 1, origin = ViewData["origi"] })
                 }
             </li>
             <li class="active">

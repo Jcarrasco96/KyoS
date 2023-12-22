@@ -6076,7 +6076,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> EditAppendixIReadOnly(int? id, int origin = 0)
+        public async Task<IActionResult> EditAppendixIReadOnly(int? id, int origi = 0)
         {
             if (id == null)
             {
@@ -6094,12 +6094,12 @@ namespace KyoS.Web.Controllers
             }
 
             TCMIntakeAppendixIViewModel model = _converterHelper.ToTCMIntakeAppendixIViewModel(entity);
-            ViewData["origin"] = origin;
+            ViewData["origi"] = origi;
             return View(model);
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
-        public async Task<IActionResult> EditAppendixJReadOnly(int? id, int origin = 0)
+        public async Task<IActionResult> EditAppendixJReadOnly(int? id, int origi = 0)
         {
             if (id == null)
             {
@@ -6117,7 +6117,7 @@ namespace KyoS.Web.Controllers
             }
 
             TCMIntakeAppendixJViewModel model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
-            ViewData["origin"] = origin;
+            ViewData["origi"] = origi;
             return View(model);
         }
 

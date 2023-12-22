@@ -33,7 +33,7 @@
             <input type="hidden" asp-for="CreatedBy" />
             <partial name="_TCMIntakeAppendixIReadOnly" />
             <div class="form-group col-md-12">
-                @if (ViewData["origin"].ToString() == "0")
+                @if (ViewData["origi"].ToString() == "0")
                 {
                     <input type="submit" value="Update" class="btn btn-primary" />
                 }
