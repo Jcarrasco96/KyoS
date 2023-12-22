@@ -40,22 +40,29 @@ namespace KyoS.Web.Helpers
 
         public byte[] ImageToByteArray(string imageFilePath)
         {
-            FileStream stream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
-            
-            List<byte> buffers = new List<byte>();
-            
-            using (BinaryReader br = new BinaryReader(stream))
+            try
             {
-                byte[] chunk = br.ReadBytes(1024);
+                FileStream stream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
 
-                while (chunk.Length > 0)
+                List<byte> buffers = new List<byte>();
+
+                using (BinaryReader br = new BinaryReader(stream))
                 {
-                    buffers.AddRange(chunk);
-                    chunk = br.ReadBytes(1024);
-                }
-            }
+                    byte[] chunk = br.ReadBytes(1024);
 
-            return buffers.ToArray();
+                    while (chunk.Length > 0)
+                    {
+                        buffers.AddRange(chunk);
+                        chunk = br.ReadBytes(1024);
+                    }
+                }
+
+                return buffers.ToArray();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public string TrimPath(string path)
