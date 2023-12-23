@@ -1007,7 +1007,7 @@ namespace KyoS.Web.Controllers
                                                                                                    .OrderBy(n => n.CodeDomain)
                                                                                                    .ToListAsync();
 
-
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
                 }
                 catch (System.Exception ex)
@@ -1015,7 +1015,7 @@ namespace KyoS.Web.Controllers
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
             }
-
+            ViewData["origi"] = 0;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomain", tcmDomainViewModel) });
         }
 
@@ -1096,6 +1096,7 @@ namespace KyoS.Web.Controllers
                                                                 .Where(g => (g.TcmServicePlanReview.Id == TCMServicePlanRevDomain.TcmServicePlanReview.Id))
                                                                 .OrderBy(n => n.CodeDomain)
                                                                 .ToListAsync();
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
                 }
                 catch (Exception)
@@ -1116,6 +1117,7 @@ namespace KyoS.Web.Controllers
                                                                 .Where(g => (g.TcmServicePlanReview.Id == TCMServicePlanRevDomain.TcmServicePlanReview.Id))
                                                                 .OrderBy(n => n.CodeDomain)
                                                                 .ToListAsync();
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
                 }
 
@@ -1138,7 +1140,7 @@ namespace KyoS.Web.Controllers
                                                         .Where(g => (g.TcmServicePlanReview.Id == TCMServicePlanRevDomain.TcmServicePlanReview.Id))
                                                         .OrderBy(n => n.CodeDomain)
                                                         .ToListAsync();
-
+            ViewData["origi"] = 0;
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
 
         }
@@ -1264,7 +1266,7 @@ namespace KyoS.Web.Controllers
                                                                                                     .ThenInclude(t => t.TCMSupervisor)
                                                                                                     .ThenInclude(t => t.Clinic)
                                                                                                     .ThenInclude(t => t.Setting)
-                                                                                                    .Where(g => (g.TcmDomain.TcmServicePlan.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
+                                                                                                    .Where(g => (g.TcmDomain.TcmServicePlan.Id == tcmDomain.TcmServicePlan.Id))
                                                                                                     .OrderBy(n => n.TcmDomain.Code)
                                                                                                     .ToListAsync();
 
@@ -1549,7 +1551,7 @@ namespace KyoS.Web.Controllers
                                                                                                        .OrderBy(n => n.TcmDomain.Code)
                                                                                                        .ToListAsync();
 
-
+                        ViewData["origi"] = 0;
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
 
                     }
@@ -1567,9 +1569,10 @@ namespace KyoS.Web.Controllers
 
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
                     tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
                 }
-
+                ViewData["origi"] = 0;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
 
             }
