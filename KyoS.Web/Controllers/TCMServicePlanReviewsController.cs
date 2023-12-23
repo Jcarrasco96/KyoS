@@ -570,7 +570,7 @@ namespace KyoS.Web.Controllers
 
                 model.Services = list_Services;
                 ModelState.AddModelError(string.Empty, "You must select a Service code");
-
+                ViewData["origi"] = 0;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", model) });
 
             }
@@ -631,7 +631,7 @@ namespace KyoS.Web.Controllers
                                                                                                   .OrderBy(n => n.CodeDomain)
                                                                                                   .ToListAsync();
 
-
+                        ViewData["origi"] = 0;
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
                     }
                     catch (System.Exception ex)
@@ -641,12 +641,12 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
                 }
             }
 
-
+            ViewData["origi"] = 0;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
         }
 
@@ -796,7 +796,7 @@ namespace KyoS.Web.Controllers
                                                                                                   .OrderBy(n => n.CodeDomain)
                                                                                                   .ToListAsync();
 
-
+                        ViewData["origi"] = 0;
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
 
 
@@ -815,9 +815,10 @@ namespace KyoS.Web.Controllers
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
                     tcmObjetiveViewModel.Id_Stage = 0;
                     tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmObjetiveViewModel) });
                 }
-
+                ViewData["origi"] = 0;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmObjetiveViewModel) });
 
             }
@@ -907,7 +908,7 @@ namespace KyoS.Web.Controllers
                                                                                                   .OrderBy(n => n.CodeDomain)
                                                                                                   .ToListAsync();
 
-
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
                 }
                 catch (System.Exception ex)
@@ -915,7 +916,7 @@ namespace KyoS.Web.Controllers
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
             }
-
+            ViewData["origi"] = 0;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomain", tcmDomainViewModel) });
         }
 
@@ -947,12 +948,9 @@ namespace KyoS.Web.Controllers
 
             TCMDomainViewModel tcmDomainViewModel = null;
 
-            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
-            {
-                tcmDomainViewModel = _converterHelper.ToTCMDomainViewModel(tcmDomainEntity);
-                tcmDomainViewModel.Id_Service = _context.TCMServices.First(n => n.Code == tcmDomainEntity.Code).Id;
-                tcmDomainViewModel.Status = tcmDomainEntity.Status;
-            }
+            tcmDomainViewModel = _converterHelper.ToTCMDomainViewModel(tcmDomainEntity);
+            tcmDomainViewModel.Id_Service = _context.TCMServices.First(n => n.Code == tcmDomainEntity.Code).Id;
+            tcmDomainViewModel.Status = tcmDomainEntity.Status;
             ViewData["origi"] = origi;
             return View(tcmDomainViewModel);
         }
@@ -1145,7 +1143,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditObjetive(int id = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1154,7 +1152,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Setting)
 
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -1211,7 +1209,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor")]
         public async Task<IActionResult> EditObjetive(TCMObjetiveViewModel tcmObjetiveViewModel)
         {
             
@@ -1219,7 +1217,7 @@ namespace KyoS.Web.Controllers
                                                  .Include(u => u.Clinic)
                                                  .ThenInclude(c => c.Setting)
                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -1270,7 +1268,7 @@ namespace KyoS.Web.Controllers
                                                                                                     .OrderBy(n => n.TcmDomain.Code)
                                                                                                     .ToListAsync();
 
-
+                        ViewData["origi"] = 0;
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomain) });
 
                     }
@@ -1288,12 +1286,14 @@ namespace KyoS.Web.Controllers
 
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
                     tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
                 }
-
+                ViewData["origi"] = 0;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
 
             }
+            ViewData["origi"] = 0;
             return RedirectToAction("NotAuthorized", "Account");
         }
 
@@ -1375,6 +1375,7 @@ namespace KyoS.Web.Controllers
                                                                 .Where(g => (g.TcmServicePlanReview.Id == tcmObjetiveEntity.tcmServicePlanReviewDomain.TcmServicePlanReview.Id))
                                                                 .OrderBy(n => n.CodeDomain)
                                                                 .ToListAsync();
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
                 }
                 catch (Exception)
@@ -1395,6 +1396,7 @@ namespace KyoS.Web.Controllers
                                                                 .Where(g => (g.TcmServicePlanReview.Id == tcmObjetiveEntity.tcmServicePlanReviewDomain.TcmServicePlanReview.Id))
                                                                 .OrderBy(n => n.CodeDomain)
                                                                 .ToListAsync();
+                    ViewData["origi"] = 0;
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
                 }
 
@@ -1417,7 +1419,7 @@ namespace KyoS.Web.Controllers
                                                         .Where(g => (g.TcmServicePlanReview.Id == tcmObjetiveEntity.tcmServicePlanReviewDomain.TcmServicePlanReview.Id))
                                                         .OrderBy(n => n.CodeDomain)
                                                         .ToListAsync();
-
+            ViewData["origi"] = 0;
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainServicePlanReview", servicePlanReviewDomainList) });
 
         }
@@ -1431,7 +1433,7 @@ namespace KyoS.Web.Controllers
                                                   .ThenInclude(c => c.Setting)
 
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
@@ -1674,7 +1676,7 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                         .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
             {
                 TCMServicePlanReviewEntity tcmServicePlanReview = _context.TCMServicePlanReviews
                                                                           .Include(b => b.TCMServicePlanRevDomain)
