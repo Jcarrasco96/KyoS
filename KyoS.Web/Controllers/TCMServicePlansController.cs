@@ -739,10 +739,12 @@ namespace KyoS.Web.Controllers
                     {
                         if (aview == 0)
                         {
+                            ViewData["origin"] = origi;
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
                         }
                         else
                         {
+                            ViewData["origin"] = origi;
                             return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = aview });
                             //return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
                         }
@@ -774,6 +776,7 @@ namespace KyoS.Web.Controllers
                                                                              .FirstOrDefaultAsync(s => s.Id == idAddendum);
 
                         ViewData["idAddendum"] = idAddendum;
+                        ViewData["origin"] = origi;
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
                     }
                 }
@@ -783,6 +786,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            ViewData["origin"] = origi;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDomain", tcmDomainViewModel) });
         }
 
@@ -866,19 +870,21 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
 
                         List<TCMDomainEntity> domainList = await _context.TCMDomains
-                                                                 .Include(h => h.TCMObjetive)
-                                                                 .Include(g => g.TcmServicePlan)
-                                                                 .Where(g => (g.TcmServicePlan.Id == tcmDomainViewModel.Id_ServicePlan))
-                                                                 .OrderBy(g => g.Code)
-                                                                 .ToListAsync();
+                                                                         .Include(h => h.TCMObjetive)
+                                                                         .Include(g => g.TcmServicePlan)
+                                                                         .Where(g => (g.TcmServicePlan.Id == tcmDomainViewModel.Id_ServicePlan))
+                                                                         .OrderBy(g => g.Code)
+                                                                         .ToListAsync();
                         if (origin == 0)
                         {
                             if (aview == 0)
                             {
+                                ViewData["origin"] = origin;
                                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
                             }
                             else
                             {
+                                ViewData["origin"] = origin;
                                 return RedirectToAction("ServicePlanStarted", "TCMServicePlans", new { approved = aview });
                                 //return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
                             }
@@ -897,11 +903,12 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
+                    ViewData["origin"] = origin;
                     ModelState.AddModelError("Error", "The service already exists in the services plan");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
                 }
             }
-            
+            ViewData["origin"] = origin;
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDomain", tcmDomainViewModel) });
         }
 
@@ -1051,7 +1058,7 @@ namespace KyoS.Web.Controllers
                                                                              .Where(g => (g.TcmServicePlan.Id == tcmDomain.TcmServicePlan.Id))
                                                                              .OrderBy(g => g.Code)
                                                                              .ToListAsync();
-                            
+                            ViewData["origin"] = Origin;
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
 
                         }
@@ -1063,6 +1070,7 @@ namespace KyoS.Web.Controllers
                                                                                .FirstOrDefaultAsync(s => s.Id == idAddendum);
 
                             ViewData["idAddendum"] = idAddendum;
+                            ViewData["origin"] = Origin;
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
                         }
                     }
@@ -1082,6 +1090,7 @@ namespace KyoS.Web.Controllers
                 tcmObjetiveViewModel.TcmDomain = tcmdomain;
                 tcmObjetiveViewModel.Id_Stage = 0;
                 tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                ViewData["origin"] = Origin;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjetive", tcmObjetiveViewModel) });                
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -1220,6 +1229,7 @@ namespace KyoS.Web.Controllers
                                                                              .ToListAsync();
 
                             //return RedirectToAction("EditDomain", "TCMServicePlans");
+                            ViewData["origin"] = origi;
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
 
                         }
@@ -1239,7 +1249,7 @@ namespace KyoS.Web.Controllers
                             {
                                 ViewData["editSupervisor"] = 0;
                             }
-                            
+                            ViewData["origin"] = origi;
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
                         }
                     }
@@ -1258,6 +1268,7 @@ namespace KyoS.Web.Controllers
 
                 tcmObjetiveViewModel.TcmDomain = tcmdomain;
                 tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                ViewData["origin"] = origi;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
             }
             return RedirectToAction("NotAuthorized", "Account");
@@ -3507,5 +3518,152 @@ namespace KyoS.Web.Controllers
            
             return View(auditServicePlan_List);
         }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public IActionResult DeleteDomainModal(int id = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+
+                ViewData["origin"] = origin;
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> DeleteDomainModal(DeleteViewModel domainViewModel, int origin = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMDomainEntity tcmDomain = await _context.TCMDomains.Include(n => n.TcmServicePlan).FirstAsync(n => n.Id == domainViewModel.Id_Element);
+            TCMServicePlanEntity serviceplan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == tcmDomain.TcmServicePlan.Id);
+            if (ModelState.IsValid)
+            {
+                if ((User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true) || (User.IsInRole("CaseManager") == true))
+                { 
+                    try
+                    {
+                        _context.TCMDomains.Remove(tcmDomain);
+                        await _context.SaveChangesAsync();
+
+                        List<TCMDomainEntity> domainList = await _context.TCMDomains
+                                                                         .Include(h => h.TCMObjetive)
+                                                                         .Include(g => g.TcmServicePlan)
+                                                                         .Where(g => (g.TcmServicePlan.Id == serviceplan.Id))
+                                                                         .OrderBy(g => g.Code)
+                                                                         .ToListAsync();
+                        ViewData["origin"] = origin;
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
+
+                    }
+                    catch (Exception)
+                    {
+                        ViewData["origin"] = origin;
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+                    }
+                }
+                
+                ViewData["origin"] = origin;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+            }
+            ViewData["origin"] = origin;
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public IActionResult DeleteObjectiveModal(int id = 0, int origin = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+
+                ViewData["origin"] = origin;
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> DeleteObjectiveModal(DeleteViewModel objectiveViewModel, int origin = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMObjetiveEntity tcmObjective = await _context.TCMObjetives
+                                                           .Include(n => n.TcmDomain)
+                                                           .ThenInclude(n => n.TcmServicePlan)
+                                                           .FirstAsync(n => n.Id == objectiveViewModel.Id_Element);
+
+            TCMServicePlanEntity serviceplan = await _context.TCMServicePlans.FirstOrDefaultAsync(n => n.Id == tcmObjective.TcmDomain.TcmServicePlan.Id);
+            if (ModelState.IsValid)
+            {
+                if ((User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true) || (User.IsInRole("CaseManager") == true))
+                {
+                    try
+                    {
+                        _context.TCMObjetives.Remove(tcmObjective);
+                        await _context.SaveChangesAsync();
+
+                        List<TCMDomainEntity> domainList = await _context.TCMDomains
+                                                                         .Include(h => h.TCMObjetive)
+                                                                         .Include(g => g.TcmServicePlan)
+                                                                         .Where(g => (g.TcmServicePlan.Id == serviceplan.Id))
+                                                                         .OrderBy(g => g.Code)
+                                                                         .ToListAsync();
+                        ViewData["origin"] = origin;
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", domainList) });
+
+                    }
+                    catch (Exception)
+                    {
+                        ViewData["origin"] = origin;
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+                    }
+                }
+
+                ViewData["origin"] = origin;
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+            }
+            ViewData["origin"] = origin;
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+        }
+
     }
 }
