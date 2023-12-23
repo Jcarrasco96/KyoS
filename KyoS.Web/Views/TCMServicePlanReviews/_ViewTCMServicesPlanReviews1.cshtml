@@ -201,7 +201,7 @@
                                             <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
-                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                    @if (User.IsInRole("TCMSupervisor"))
                                     {
                                         @if (item.Approved == 0)
                                         {
@@ -212,7 +212,28 @@
                                         @if (item.Approved == 1)
                                         {
                                             <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id"  asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-success" title="Approve TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-success" title="Approve TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    }
+                                    @if (User.IsInRole("Manager") )
+                                    {
+                                        @if (item.Approved == 0)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 1)
+                                        {
+                                            <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-info" title="View TCM Service Plan Review"><i class="glyphicon glyphicon-search"></i></a>
                                             <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)

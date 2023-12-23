@@ -774,9 +774,17 @@ namespace KyoS.Web.Controllers
                                                                              .Include(n => n.TcmDomain)
                                                                              .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
                                                                              .FirstOrDefaultAsync(s => s.Id == idAddendum);
-
                         ViewData["idAddendum"] = idAddendum;
+                        if (user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+                        {
+                            ViewData["editSupervisor"] = 1;
+                        }
+                        else
+                        {
+                            ViewData["editSupervisor"] = 0;
+                        }
                         ViewData["origin"] = origi;
+
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
                     }
                 }
@@ -1610,7 +1618,7 @@ namespace KyoS.Web.Controllers
 
             TCMAdendumViewModel tcmAdendumViewModel = null;
 
-            if (User.IsInRole("CaseManager") || (user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && (user_logged.Clinic.Setting.TCMSupervisorEdit == true)))
             {
                 List<TCMServicePlanEntity> tcmSerivicePlan = _context.TCMServicePlans
                                                                      .Include(g => g.TcmClient)
@@ -1663,11 +1671,12 @@ namespace KyoS.Web.Controllers
                 {
                     ViewData["editSupervisor"] = 0;
                 }
-                
+                ViewData["origin"] = 0;
                 return View(tcmAdendumViewModel);
             }
 
             ViewData["aview"] = aview;
+            ViewData["origin"] = 0;
             return View(tcmAdendumViewModel);
         }
 
@@ -3663,6 +3672,104 @@ namespace KyoS.Web.Controllers
             }
             ViewData["origin"] = origin;
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomains", _context.TCMDomains.Include(n => n.TCMObjetive).Include(n => n.TcmServicePlan).Where(d => d.TcmServicePlan.Id == serviceplan.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public IActionResult DeleteObjectiveAddendumModal(int id = 0, int origin = 0, int idAddendum = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+
+                ViewData["origin"] = origin;
+                ViewData["idAddendum"] = idAddendum;
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> DeleteObjectiveAddendumModal(DeleteViewModel objectiveViewModel, int origin = 0, int idAddendum = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMObjetiveEntity tcmObjective = await _context.TCMObjetives
+                                                           .Include(n => n.TcmDomain)
+                                                           .ThenInclude(n => n.TCMObjetive)
+                                                           .FirstAsync(n => n.Id == objectiveViewModel.Id_Element);
+
+            ViewData["idAddendum"] = idAddendum;
+            if (user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+            {
+                ViewData["editSupervisor"] = 1;
+            }
+            else
+            {
+                ViewData["editSupervisor"] = 0;
+            }
+            ViewData["origin"] = origin;
+
+
+            if (ModelState.IsValid)
+            {
+                if ((User.IsInRole("TCMSupervisor") == true && user_logged.Clinic.Setting.TCMSupervisorEdit == true) || (User.IsInRole("CaseManager") == true))
+                {
+                    try
+                    {
+                        _context.TCMObjetives.Remove(tcmObjective);
+                        await _context.SaveChangesAsync();
+
+                        TCMAdendumEntity tcAddendumEntity = await _context.TCMAdendums
+                                                                          .Include(n => n.TcmDomain)
+                                                                          .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
+                                                                          .FirstOrDefaultAsync(s => s.Id == idAddendum);
+                        
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
+
+                    }
+                    catch (Exception)
+                    {
+                        TCMAdendumEntity tcAddendumEntity = await _context.TCMAdendums
+                                                                          .Include(n => n.TcmDomain)
+                                                                          .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
+                                                                          .FirstOrDefaultAsync(s => s.Id == idAddendum);
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity.TcmDomain) });
+                    }
+                }
+
+                TCMAdendumEntity tcAddendumEntity1 = await _context.TCMAdendums
+                                                                          .Include(n => n.TcmDomain)
+                                                                          .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
+                                                                          .FirstOrDefaultAsync(s => s.Id == idAddendum);
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity1.TcmDomain) });
+            }
+            TCMAdendumEntity tcAddendumEntity2 = await _context.TCMAdendums
+                                                                          .Include(n => n.TcmDomain)
+                                                                          .ThenInclude(g => g.TCMObjetive.Where(m => m.Origin == "Addendum"))
+                                                                          .FirstOrDefaultAsync(s => s.Id == idAddendum);
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDomainsAddendum", tcAddendumEntity2.TcmDomain) });
+           
         }
 
     }

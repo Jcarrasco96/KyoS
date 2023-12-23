@@ -388,6 +388,13 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Assessments</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Services Plans / Clients &nbsp;</a>
                                         <ul class="dropdown-menu">
                                             <li>@Html.ActionLink("Pending Services Plans", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
@@ -402,6 +409,14 @@
                                             <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Services Plans R.</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                            <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                            <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                        </ul>
+                                    </li>
                                     <li>@Html.ActionLink("All Documents", "AllDocuments", "TCMClients")</li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
@@ -412,7 +427,7 @@
                                         </ul>
                                     </li>
                                     <li>@Html.ActionLink("Billing Report", "BillingForWeek", "TCMBilling")</li>
-                                    <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>                              
+                                    <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>
                                     <li>@Html.ActionLink("Supervision Calendar", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                                 </ul>
                             </li>
@@ -721,40 +736,10 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Services Plans</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
-                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Services Plans R.</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
-                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Addendums</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Assessments</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Pending Approval", "TCMAssessmentApproved", "TCMAssessments", new { approved = 1 })</li>
                                         <li>@Html.ActionLink("Approved", "TCMAssessmentApproved", "TCMAssessments", new { approved = 2 })</li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
-                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -774,6 +759,36 @@
                                                 <li>@Html.ActionLink("Approved", "ApendiceIStatus", "TCMIntakes", new { approved = 2 })</li>
                                             </ul>
                                         </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Services Plans</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "Index", "TCMServiceplans")</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanStarted", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ApprovedServicePlan", "TCMServiceplans")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Addendums</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("All Addendums", "Adendum", "TCMServicePlans", new { aview = 1 })</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Services Plans R.</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Started", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 })</li>
+                                        <li>@Html.ActionLink("Pending Approval", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 1 })</li>
+                                        <li>@Html.ActionLink("Approved", "ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 2 })</li>
+                                    </ul>
+                                </li>                              
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">FARS Forms</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Pending Approval", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Pending })</li>
+                                        <li>@Html.ActionLink("Approved", "TCMFarsApproved", "TCMFarsForms", new { status = KyoS.Common.Enums.FarsStatus.Approved })</li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">

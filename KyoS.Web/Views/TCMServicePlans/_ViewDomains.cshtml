@@ -78,7 +78,7 @@
                                                             @if (item.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5")
                                                             {
                                                                 <a onclick="showInPopupLg('@Url.Action("EditObjetive", "TCMServicePlans", new { id = value.Id, origi = 0 }, Context.Request.Scheme)','Edit TCM Objetive')" class="btn btn-warning" title="Edit TCM Objective"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                                   <a onclick="showInPopup('@Url.Action("DeleteObjectiveModal", "TCMServicePlans", new { id = value.Id, origin = 0 }, Context.Request.Scheme)','Delete TCM Objective')" class="btn btn-danger" title="Delete TCM Objective"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                <a onclick="showInPopup('@Url.Action("DeleteObjectiveModal", "TCMServicePlans", new { id = value.Id, origin = 0 }, Context.Request.Scheme)','Delete TCM Objective')" class="btn btn-danger" title="Delete TCM Objective"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
