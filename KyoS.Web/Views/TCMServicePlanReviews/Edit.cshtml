@@ -1,15 +1,15 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 @{
-    ViewData["Title"] = "Edit Service Plan Review";
+    ViewData["Title"] = "Edit SPR";
     ViewData["origi"] = ViewData["origin"];
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
@@ -33,11 +33,11 @@
                     @Html.ActionLink("TCM Service Plan Review", "MessagesOfServicePlanReview", "TCMMessages")
                 }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Edit Service Plan Review</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit service plan review</h4>
+    <h4>Edit Service Plan Review</h4>
     <hr />
 
     <div class="row">
@@ -102,7 +102,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
              $('#MyTable').DataTable({
-                 "order": [[0, "asc"]],
+                 "order": [[1, "asc"]],
                  "pageLength": 100
              });
 

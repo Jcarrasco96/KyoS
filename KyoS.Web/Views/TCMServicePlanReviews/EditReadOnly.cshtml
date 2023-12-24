@@ -1,14 +1,14 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 @{
-    ViewData["Title"] = "Approve Service Plan Review";
+    ViewData["Title"] = "Approve SPR";
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
@@ -28,17 +28,17 @@
                     @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmServicePlan.TcmClient_FK })
                 }
             </li>
-            <li class="active">Approve</li>
+            <li class="active">Approve Service Plan Review</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Approve new service plan review</h4>
+    <h4>Approve Service Plan Review</h4>
     <hr />
 
     <div class="row">
 
         <form asp-action="ApproveTCMServicePlanReview" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
-            <div class="row col-md-12">
+            <div class="col-md-push-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="IdServicePlan" />

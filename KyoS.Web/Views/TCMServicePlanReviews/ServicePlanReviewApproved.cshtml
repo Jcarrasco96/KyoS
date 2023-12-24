@@ -4,15 +4,15 @@
     {
         if (Model.FirstOrDefault().Approved == 2)
         {
-            ViewData["Title"] = "Approved Services Plans Reviews";
+            ViewData["Title"] = "SPR Approved";
         }
         if (Model.FirstOrDefault().Approved == 1)
         {
-            ViewData["Title"] = "Pending Services Plans Reviews";
+            ViewData["Title"] = "SPR Pending";
         }
         if (Model.FirstOrDefault().Approved == 0)
         {
-            ViewData["Title"] = "Services Plans Reviews in Edition ";
+            ViewData["Title"] = "SPR in Edition ";
         }
 
     }
@@ -35,20 +35,20 @@
             {
                 if (Model.FirstOrDefault().Approved == 2)
                 {                    
-                    <li class="active">Approved Services Plans Reviews</li>
+                    <li class="active">Service Plan Reviews Approved</li>
                 }
                 if (Model.FirstOrDefault().Approved == 1)
                 {
-                    <li class="active">Pending Services Plans Reviews</li>
+                    <li class="active">Service Plan Reviews Pending</li>
                 }
                 if (Model.FirstOrDefault().Approved == 0)
                 {
-                    <li class="active">Services Plans Reviews in Edition</li>
+                    <li class="active">Service Plan Reviews in Edition</li>
                 }
             }
             else
             {
-                <li class="active">Services Plans Reviews</li>
+                <li class="active">Service Plan Reviews</li>
             }
         }
 
@@ -71,7 +71,7 @@
     <script type="text/javascript">
                          $(document).ready(function () {
                              $('#MyTable').DataTable({
-                               "order": [[0, "asc"]],
+                               "order": [[1, "asc"]],
                                 "pageLength": 100
                             });
 

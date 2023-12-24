@@ -10,20 +10,20 @@
                     {
                         if (Model.FirstOrDefault().Approved == 2)
                         {
-                            <h3 class="panel-title">Approved Services Plans Reviews</h3>
+                            <h3 class="panel-title">Service Plan Reviews Approved </h3>
                         }
                         if (Model.FirstOrDefault().Approved == 1)
                         {
-                            <h3 class="panel-title">Pending Services Plans Reviews</h3>
+                            <h3 class="panel-title">Service Plan Reviews Pending</h3>
                         }
                         if (Model.FirstOrDefault().Approved == 0)
                         {
-                            <h3 class="panel-title">Services Plans Reviews in Edition</h3>
+                            <h3 class="panel-title">Service Plan Reviews in Edition</h3>
                         }
                     }
                     else
                     {                        
-                        <h3 class="panel-title">Services Plans Reviews</h3>
+                        <h3 class="panel-title">Service Plan Reviews</h3>
                     }
                 }                
             </div>
@@ -67,8 +67,7 @@
                                             <tr>
                                                 <th class="col-md-2"></th>
                                                 <th class="col-md-3">Title</th>
-                                                <th class="col-md-7" style="text-align:center;">Text</th>
-                                                @*<th class="col-md-1"></th>*@
+                                                <th class="col-md-7" style="text-align:center;">Text</th>                                                
                                                 <th></th>
                                             </tr>
                                             @foreach (var message in item.TCMMessages.OrderBy(m => m.DateCreated))
@@ -185,7 +184,6 @@
                                         {
                                             <a asp-action="Edit" asp-controller="TCMServicePlanReviews" asp-route-Id="@item.Id" asp-route-origin="1" asp-route-IdServicePlan="@item.TcmServicePlan.Id" class="btn btn-warning" title="Edit TCM Service Plan Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Service Plan Review"><i class="glyphicon glyphicon-ok"></i></a>
-                                            @*<button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete TCM Service PLan Review"><i class="glyphicon glyphicon-trash"></i></button>*@
                                             <i class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
@@ -198,7 +196,7 @@
                                         {
                                             <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintServicePlanReview" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("TCMSupervisor"))
@@ -219,7 +217,7 @@
                                         {
                                             <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintServicePlanReview" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("Manager") )
@@ -240,7 +238,7 @@
                                         {
                                             <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Print TCM Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintServicePlanReview" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>
