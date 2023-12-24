@@ -219,10 +219,10 @@ namespace KyoS.Web.Controllers
                                                                                 .FirstOrDefaultAsync(n => n.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan);
 
                 List<TCMDomainEntity> tcmDomainEntity = _context.TCMDomains
-                                                          .Include(g => g.TcmServicePlan)
-                                                          .Include(g => g.TCMObjetive)
-                                                          .Where(g => g.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan)
-                                                          .ToList();
+                                                                .Include(g => g.TcmServicePlan)
+                                                                .Include(g => g.TCMObjetive)
+                                                                .Where(g => g.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan)
+                                                                .ToList();
 
                 List<TCMServicePlanReviewDomainEntity> tcmDomainReviewList = new List<TCMServicePlanReviewDomainEntity>();
                 TCMServicePlanReviewDomainEntity tcmDomainReview = new TCMServicePlanReviewDomainEntity();
@@ -278,25 +278,24 @@ namespace KyoS.Web.Controllers
                         if (origin == 1)
                         {
                             TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews
-                                                                                  .Include(f => f.TcmServicePlan)
-                                                                                  .ThenInclude(f => f.TcmClient)
-                                                                                  .ThenInclude(f => f.Client)
-                                                                                  .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
-                                                                                  .FirstOrDefaultAsync(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id)
-                                                                                  ;
+                                                                                         .Include(f => f.TcmServicePlan)
+                                                                                         .ThenInclude(f => f.TcmClient)
+                                                                                         .ThenInclude(f => f.Client)
+                                                                                         .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
+                                                                                         .FirstOrDefaultAsync(s => s.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan);
 
                             return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = servicePlanReview.TcmServicePlan.TcmClient.Id, section = 4 });
                         }
                         else
                         {
                             List<TCMServicePlanReviewEntity> servicePlanReview = await _context.TCMServicePlanReviews
-                                                                                   .Include(f => f.TcmServicePlan)
-                                                                                   .ThenInclude(f => f.TcmClient)
-                                                                                   .ThenInclude(f => f.Client)
-                                                                                   .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
-                                                                                   .Where(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id)
-                                                                                   .OrderBy(f => f.TcmServicePlan.TcmClient.CaseNumber)
-                                                                                   .ToListAsync();
+                                                                                               .Include(f => f.TcmServicePlan)
+                                                                                               .ThenInclude(f => f.TcmClient)
+                                                                                               .ThenInclude(f => f.Client)
+                                                                                               .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
+                                                                                               .Where(s => s.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan)
+                                                                                               .OrderBy(f => f.TcmServicePlan.TcmClient.CaseNumber)
+                                                                                               .ToListAsync();
 
                             return RedirectToAction("Index", "TCMServicePlanReviews");
                         }
@@ -433,7 +432,7 @@ namespace KyoS.Web.Controllers
                                                                                      .ThenInclude(f => f.TcmClient)
                                                                                      .ThenInclude(f => f.Client)
                                                                                      .Include(f => f.TcmServicePlan.TcmClient.Casemanager)
-                                                                                     .FirstOrDefaultAsync(s => s.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id);
+                                                                                     .FirstOrDefaultAsync(s => s.TcmServicePlan.Id == tcmServicePlanreviewViewModel.IdServicePlan);
                     if (origin == 0)
                     {
                         return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = servicePlanReview.TcmServicePlan.TcmClient.Id, section = 4 });
