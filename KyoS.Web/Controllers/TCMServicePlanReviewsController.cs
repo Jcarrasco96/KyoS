@@ -183,17 +183,19 @@ namespace KyoS.Web.Controllers
                 
                     try
                     {
+                        ViewData["origin"] = 1;
                         return View(model);
                     }
                     catch (System.Exception ex)
                     {
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
-
+                    
                     return RedirectToAction("NotAuthorized", "Account");
                 }
                 else
                 {
+                    ViewData["origin"] = 1;
                     return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4 });
                 }
 
