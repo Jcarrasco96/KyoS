@@ -751,12 +751,10 @@
                         </a>
                     }
                     else
-                    {
-                        <a style="text-decoration: none;" role="button">
-                            <div class="thumbnail list-group-item list-group-item-text">
-                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plan</h4>
-                            </div>
-                        </a>
+                    {                       
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plan</h4>
+                        </div>                        
                     }
                 }
             </div>
@@ -771,12 +769,10 @@
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null )
-                {
-                    <a style="text-decoration: none;" role="button">
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                        </div>
-                    </a>
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Addendum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                    </div>                    
                 }
                 else
                 {
@@ -825,11 +821,9 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2)
                 {
-                    <a style="text-decoration: none;" role="button">
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Review</h4>
-                        </div>
-                    </a>
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt disabled" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Review</h4>
+                    </div>
                 }
                 else
                 {
@@ -861,24 +855,24 @@
                         }
                         @if (Model.TcmServicePlan.TCMServicePlanReview.Approved == 2)
                         {
-                            <a style="text-decoration: none;" asp-action="Print" asp-controller="TCMServicePlanReviews" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" asp-route-IdServicePlan="@Model.TcmServicePlan.Id" role="button">
-                                <div class="thumbnail list-group-item list-group-item-success">
+                            <div class="thumbnail list-group-item list-group-item-success">
+                                <a style="text-decoration: none;" asp-controller="TCMServicePlanReviews" asp-action="PrintServicePlanReview"  asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" role="button" target="_blank">
                                     <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Service Plan<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Review</h4>
-                                </div>
-                            </a>
+                                </a>
+                                <a style="text-decoration: none;" asp-controller="TCMServicePlanReviews" asp-action="PrintServicePlanReview" asp-route-id="@Model.TcmServicePlan.TCMServicePlanReview.Id" role="button" title="Print Service Plan Review" target="_blank">
+                                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                                </a>
+                            </div>                            
                         }
                     }
-
                 }
             </div>
             <div class="col-sm-3 col-md-2">
                 @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2)
-                {
-                    <a style="text-decoration: none;" role="button">
-                        <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                        </div>
-                    </a>
+                {                    
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                    </div>                    
                 }
                 else
                 {
