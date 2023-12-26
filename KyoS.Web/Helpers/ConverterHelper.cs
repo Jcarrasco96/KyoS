@@ -2249,7 +2249,19 @@ namespace KyoS.Web.Helpers
                 _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
                 Approved = TcmServicePlanReviewEntity.Approved,
                 CreatedBy = TcmServicePlanReviewEntity.CreatedBy,
-                CreatedOn = TcmServicePlanReviewEntity.CreatedOn
+                CreatedOn = TcmServicePlanReviewEntity.CreatedOn,
+
+                ClientContinue = TcmServicePlanReviewEntity.ClientContinue,
+                ClientHasBeen1 = TcmServicePlanReviewEntity.ClientHasBeen1,
+                ClientHasBeen2 = TcmServicePlanReviewEntity.ClientHasBeen2,
+                ClientNoLonger1 = TcmServicePlanReviewEntity.ClientNoLonger1,
+                ClientNoLonger2 = TcmServicePlanReviewEntity.ClientNoLonger2,
+                ClientWillContinue = TcmServicePlanReviewEntity.ClientWillContinue,
+                ClientWillHave = TcmServicePlanReviewEntity.ClientWillHave,
+                DateTCMCaseManagerSignature = TcmServicePlanReviewEntity.DateTCMCaseManagerSignature,
+                DateTCMSupervisorSignature = TcmServicePlanReviewEntity.DateTCMSupervisorSignature,
+                HasBeenExplained = TcmServicePlanReviewEntity.HasBeenExplained,
+                TheExpertedReviewDate = TcmServicePlanReviewEntity.TheExpertedReviewDate
                 //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
 
             };
@@ -2276,7 +2288,19 @@ namespace KyoS.Web.Helpers
                 TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.TCMServicePlanReview.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                Approved = model.Approved,
+                ClientContinue = model.ClientContinue,
+                ClientHasBeen1 = model.ClientHasBeen1,
+                ClientHasBeen2 = model.ClientHasBeen2,
+                ClientNoLonger1 = model.ClientNoLonger1,
+                ClientNoLonger2 = model.ClientNoLonger2,
+                ClientWillContinue = model.ClientWillContinue,
+                ClientWillHave = model.ClientWillHave,
+                DateTCMCaseManagerSignature = model.DateTCMCaseManagerSignature,
+                DateTCMSupervisorSignature = model.DateTCMSupervisorSignature,
+                HasBeenExplained = model.HasBeenExplained,
+                TheExpertedReviewDate = model.TheExpertedReviewDate
 
             };
         }

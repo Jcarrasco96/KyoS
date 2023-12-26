@@ -232,7 +232,7 @@ namespace KyoS.Web.Controllers
                 {
                     tcmDomainReview.ChangesUpdate = "";
                     tcmDomainReview.TcmDomain = item;
-                    tcmDomainReview.Status = StatusType.Open;
+                    tcmDomainReview.Status = SPRStatus.Open;
                     tcmDomainReview.CodeDomain = item.Code;
                     tcmDomainReview.TCMServicePlanRevDomainObjectiive = new List<TCMServicePlanReviewDomainObjectiveEntity>();
                     //tcmDomainReview.TcmDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == item.ID);
@@ -392,6 +392,19 @@ namespace KyoS.Web.Controllers
                 tcmServicePlanReviewEntity.Recomendation = tcmServicePlanreviewViewModel.Recomendation;
                 tcmServicePlanReviewEntity.SummaryProgress = tcmServicePlanreviewViewModel.SummaryProgress;
                 tcmServicePlanReviewEntity.DateServicePlanReview = tcmServicePlanreviewViewModel.DateServicePlanReview;
+
+                tcmServicePlanReviewEntity.ClientHasBeen1 = tcmServicePlanreviewViewModel.ClientHasBeen1;
+                tcmServicePlanReviewEntity.ClientContinue = tcmServicePlanreviewViewModel.ClientContinue;
+                tcmServicePlanReviewEntity.ClientNoLonger1 = tcmServicePlanreviewViewModel.ClientNoLonger1;
+                tcmServicePlanReviewEntity.ClientHasBeen2 = tcmServicePlanreviewViewModel.ClientHasBeen2;
+                tcmServicePlanReviewEntity.ClientWillContinue = tcmServicePlanreviewViewModel.ClientWillContinue;
+                tcmServicePlanReviewEntity.ClientWillHave = tcmServicePlanreviewViewModel.ClientWillHave;
+                tcmServicePlanReviewEntity.ClientNoLonger2 = tcmServicePlanreviewViewModel.ClientNoLonger2;
+                tcmServicePlanReviewEntity.TheExpertedReviewDate = tcmServicePlanreviewViewModel.TheExpertedReviewDate;
+
+
+                tcmServicePlanReviewEntity.DateTCMCaseManagerSignature = tcmServicePlanreviewViewModel.DateTCMCaseManagerSignature;
+                tcmServicePlanReviewEntity.DateTCMSupervisorSignature = tcmServicePlanreviewViewModel.DateTCMSupervisorSignature;
 
                 List<TCMMessageEntity> messages = tcmServicePlanReviewEntity.TCMMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
                 //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
@@ -977,7 +990,7 @@ namespace KyoS.Web.Controllers
                                                                           .Include(n => n.TcmServicePlanReview)
                                                                           .FirstOrDefault(n => n.TcmDomain.Id == tcmDomainViewModel.Id);
 
-            servciplanR_Domain.Status = (tcmDomainViewModel.Status == false) ? StatusType.Open : StatusType.Close;
+            servciplanR_Domain.Status = (tcmDomainViewModel.Status == false) ? SPRStatus.Open : SPRStatus.Closed;
             _context.Update(servciplanR_Domain);
             tcmDomainViewModel.TcmServicePlan = tcmServicePlan;
 
@@ -1724,7 +1737,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveTCMServicePlanReview(int id, int origi = 0)
+        public async Task<IActionResult> ApproveTCMServicePlanReview(TCMServicePlanReviewViewModel model, int id, int origi = 0)
         {
             TCMServicePlanReviewEntity tcmServicePlanReview = _context.TCMServicePlanReviews
                                                                       .Include(n => n.TcmServicePlan)
@@ -1742,6 +1755,19 @@ namespace KyoS.Web.Controllers
                     {
                         tcmServicePlanReview.Approved = 2;
                         tcmServicePlanReview.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        tcmServicePlanReview.DateTCMCaseManagerSignature = model.DateTCMCaseManagerSignature;
+                        tcmServicePlanReview.DateTCMSupervisorSignature = model.DateTCMSupervisorSignature;
+
+                        tcmServicePlanReview.ClientHasBeen1 = model.ClientHasBeen1;
+                        tcmServicePlanReview.ClientContinue = model.ClientContinue;
+                        tcmServicePlanReview.ClientNoLonger1 = model.ClientNoLonger1;
+                        tcmServicePlanReview.ClientHasBeen2 = model.ClientHasBeen2;
+                        tcmServicePlanReview.ClientWillContinue = model.ClientWillContinue;
+                        tcmServicePlanReview.ClientWillHave = model.ClientWillHave;
+                        tcmServicePlanReview.ClientNoLonger2 = model.ClientNoLonger2;
+                        tcmServicePlanReview.TheExpertedReviewDate = model.TheExpertedReviewDate;
+
+                        
                         _context.Update(tcmServicePlanReview);
                         TCMClientEntity tcmClient = _context.TCMClient.FirstOrDefault(n => n.Id == tcmServicePlanReview.TcmServicePlan.TcmClient.Id);
                         tcmClient.DataClose = tcmClient.DataClose.AddMonths(6);
