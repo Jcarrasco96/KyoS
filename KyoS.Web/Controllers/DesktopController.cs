@@ -609,17 +609,8 @@ namespace KyoS.Web.Controllers
                                                                 && g.Status == StatusType.Open
                                                                 && (g.TcmServicePlan == null
                                                                     || g.TCMAssessment == null
-                                                                    || g.TcmIntakeAppendixJ == null
-                                                                    || g.TcmIntakeAcknowledgementHipa == null
-                                                                    || g.TCMIntakeAdvancedDirective == null
-                                                                    || g.TcmIntakeConsentForRelease == null
-                                                                    || g.TcmIntakeConsentForTreatment == null
-                                                                    || g.TcmIntakeConsumerRights == null
-                                                                    || g.TCMIntakeForeignLanguage == null
-                                                                    || g.TCMIntakeForm == null
-                                                                    || g.TCMIntakeOrientationChecklist == null
-                                                                    || g.TCMIntakeWelcome == null
-                                                                    || g.TcmIntakeAppendixI == null)));        
+                                                                    || (g.TcmIntakeAppendixJ == null
+                                                                     && g.TcmIntakeAppendixI == null))));        
 
                 ViewBag.OpenBinder = await _context.TCMClient
                                                    .CountAsync(g => (g.Casemanager.Id == caseManager.Id

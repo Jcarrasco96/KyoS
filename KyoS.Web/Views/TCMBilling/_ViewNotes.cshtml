@@ -86,7 +86,7 @@
                                                 <th class="col-md-1" style="text-align:center;">Payment</th>
                                                 <th class="col-md-2"></th>
                                             </tr>
-                                            @foreach (var product in item.TCMNote.Where(n => n.BilledDate == null))
+                                            @foreach (var product in item.TCMNote.Where(n => n.BilledDate == null).OrderBy(n => n.DateOfService))
                                             {
                                                 var @valor1 = product.TCMNoteActivity.Sum(m => m.Minutes) / 15;
                                                 var @residuo1 = product.TCMNoteActivity.Sum(m => m.Minutes) % 15;
@@ -285,7 +285,7 @@
                                                 <th class="col-md-1" style="text-align:center;">Payment</th>
                                                 <th class="col-md-2"></th>
                                             </tr>
-                                            @foreach (var product in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null))
+                                            @foreach (var product in item.TCMNote.Where(n => n.BilledDate != null && n.PaymentDate == null).OrderBy(n => n.DateOfService))
                                             {
                                                 var @valor1 = product.TCMNoteActivity.Sum(a => a.Minutes) / 15;
                                                 var @residuo1 = product.TCMNoteActivity.Sum(a => a.Minutes) % 15;
