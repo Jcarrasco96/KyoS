@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 17:03:07" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrq77BGcjlKhw1bDpCDTLfPQ==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMSupervisors" DataType="System.Int32" Enabled="true" TableName="TCMSupervisors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMServicePlans" DataType="System.Int32" Enabled="true" TableName="TCMServicePlans">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="DateServicePlan" DataType="System.DateTime"/>
+        <Column Name="DateIntake" DataType="System.DateTime"/>
+        <Column Name="DateAssessment" DataType="System.DateTime"/>
+        <Column Name="DateCertification" DataType="System.DateTime"/>
+        <Column Name="Strengths" DataType="System.String"/>
+        <Column Name="Weakness" DataType="System.String"/>
+        <Column Name="DischargerCriteria" DataType="System.String"/>
+        <Column Name="TcmClientId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="Approved" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="TCMSupervisorId" DataType="System.Int32"/>
+        <Column Name="DateSupervisorSignature" DataType="System.DateTime"/>
+        <Column Name="DateTcmSignature" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMServicePlanReviews" DataType="System.Int32" Enabled="true" TableName="TCMServicePlanReviews">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="DateServicePlanReview" DataType="System.DateTime"/>
+        <Column Name="DateOpending" DataType="System.DateTime"/>
+        <Column Name="SummaryProgress" DataType="System.String"/>
+        <Column Name="Recomendation" DataType="System.String"/>
+        <Column Name="Approved" DataType="System.Int32"/>
+        <Column Name="TcmServicePlan_FK" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="TCMSupervisorId" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMServicePlanReviewDomains" DataType="System.Int32" Enabled="true" TableName="TCMServicePlanReviewDomains">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="ChangesUpdate" DataType="System.String"/>
+        <Column Name="TcmDomainId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="TcmServicePlanReviewId" DataType="System.Int32"/>
+        <Column Name="CodeDomain" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String" PropName="CreatedBy"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="Goals" DataType="System.String" PropName="LastModifiedBy"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Diagnostics" DataType="System.Int32" Enabled="true" TableName="Diagnostics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="mentalHealth" DataType="System.Boolean"/>
+    <Parameter Name="physicalHealth" DataType="System.Boolean"/>
+    <Parameter Name="vocational" DataType="System.Boolean"/>
+    <Parameter Name="school" DataType="System.Boolean"/>
+    <Parameter Name="environmental" DataType="System.Boolean"/>
+    <Parameter Name="activities" DataType="System.Boolean"/>
+    <Parameter Name="housing" DataType="System.Boolean"/>
+    <Parameter Name="economic" DataType="System.Boolean"/>
+    <Parameter Name="basicNeed" DataType="System.Boolean"/>
+    <Parameter Name="transportation" DataType="System.Boolean"/>
+    <Parameter Name="legal" DataType="System.Boolean"/>
+    <Parameter Name="other" DataType="System.Boolean"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="76.05">
+      <TextObject Name="Textbox12" Left="129.75" Top="18.9" Width="516.2" Height="20.79" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="129.75" Top="40.78" Width="516.2" Height="22" CanGrow="true" Text="CASE MANAGEMENT SERVICE PLAN REVIEW (SPR)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line3" Left="128.3" Top="10.45" Height="65.55"/>
+      <PictureObject Name="Picture1" Left="9.45" Top="9.9" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="127.3" Top="9.45" Height="66.15"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="79.9" Width="778.3" Height="798.03" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text40" Left="6" Top="64.15" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text41" Left="481.95" Top="63.97" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text44" Left="110.4" Top="64.15" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="576.45" Top="64.6" Width="198.45" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text334" Top="258.6" Width="774.9" Height="236.25" Border.Lines="All" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[TCMServicePlanReviews.SummaryProgress]" Font="Arial, 9pt"/>
+      <TextObject Name="Text364" Top="19.9" Width="774.9" Height="20.79" Text="SECTION I" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text39" Top="40.8" Width="774.9" Height="18.9" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Recipient’s Information" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text56" Left="72.8" Top="87.05" Width="47.25" Height="18.9" Text="DOB:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text57" Left="110.6" Top="86.05" Width="141.75" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.DateOfBirth]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text58" Left="252.35" Top="86.05" Width="47.25" Height="18.9" Text="Age:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text59" Left="299.6" Top="86.05" Width="66.15" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Year([Date]) - Year([Clients.DateOfBirth])]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text62" Left="519.75" Top="87.05" Width="56.7" Height="18.9" Text="Gender:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox17" Left="576.9" Top="90.05" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([Clients.Gender] == 0,false,true)"/>
+      <CheckBoxObject Name="CheckBox18" Left="630.6" Top="90.23" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([Clients.Gender] == 0,true,false)"/>
+      <TextObject Name="Text24" Left="591.35" Top="87.05" Width="37.8" Height="18.9" Text="Male" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text25" Left="645.05" Top="87.07" Width="56.7" Height="18.9" Text="Female" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text112" Left="1" Top="123.85" Width="160.65" Height="18.9" Text="Primary Diagnosis (Axis I): " VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text113" Left="181.45" Top="144.2" Width="37.8" Height="18.9" Text="Code" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text114" Left="302.8" Top="144.2" Width="66.15" Height="18.9" Text="Description" HorzAlign="Justify" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text115" Left="148.2" Top="124.25" Width="103.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Diagnostics.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text116" Left="258.15" Top="124.3" Width="516.73" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Diagnostics.Description]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text365" Top="171.1" Width="179.55" Height="18.9" Text="Date of Initial Service Plan:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text366" Left="152.2" Top="171.1" Width="100.17" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMServicePlans.DateServicePlan]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text367" Left="264.6" Top="171.1" Width="170.1" Height="18.9" Text="Date of Service Plan Review:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text368" Left="427.7" Top="171.1" Width="100.17" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMServicePlanReviews.DateServicePlanReview]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text369" Top="203.45" Width="774.9" Height="20.79" Text="SECTION II" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text370" Top="224.35" Width="774.9" Height="34.02" Border.Lines="All" Fill.Color="WhiteSmoke" Text="&lt;b&gt;Summary of Recipient’s Progress and Current Assessment&lt;/b&gt;&#13;&#10;Include significant changes, services provided, client’s progress or lack of progress related to Service Plan" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text371" Top="561.78" Width="774.9" Height="236.25" Border.Lines="All" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[TCMServicePlanReviews.Recomendation]" Font="Arial, 9pt"/>
+      <TextObject Name="Text372" Top="505.63" Width="774.9" Height="20.79" Text="SECTION III" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text373" Top="527.53" Width="774.9" Height="34.02" Border.Lines="All" Fill.Color="WhiteSmoke" Text="&lt;b&gt;Recommendations / Changes / Updates to Service Plan&lt;/b&gt;&#13;&#10;Describe recipient’s continued need for TCM services as related to Service Plan" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextRenderType="HtmlTags"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="881.77" Width="778.3" Height="22.68">
+      <TextObject Name="Text28" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text38" Left="721.2" Width="56.7" Height="18.9" Text="Pg. 1 of 4" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page2" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data2" Width="778.3" Height="155.43" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text3" Top="16.9" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text4" Left="481.95" Top="16.72" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text5" Left="104.4" Top="16.9" Width="378" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text6" Left="576.45" Top="17.35" Width="198.45" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text8" Top="48.25" Width="774.9" Height="20.79" Text="SECTION IV" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text9" Top="69.15" Width="774.9" Height="18.9" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Goals and Objectives" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text374" Top="92.5" Width="774.9" Height="28.35" Text="Select the current status of existing goals on Service Plan (for non-existing goals just write or type “N/A”). Using objectives # indicate any change, update or addition" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox19" Left="5" Top="130.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text375" Left="17.45" Top="127.85" Width="756" Height="18.9" Text="Changes/additions to the Service Plan are not warranted at this time." VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+    </DataBand>
+    <DataBand Name="Data3" Top="185.8" Width="778.3" Height="22.68" DataSource="TCMServicePlanReviewDomains">
+      <TableObject Name="Table9" Width="774.83" Height="22.68">
+        <TableColumn Name="Column31" Width="33.07"/>
+        <TableColumn Name="Column32" Width="222.07"/>
+        <TableColumn Name="Column33" Width="78.56"/>
+        <TableColumn Name="Column34" Width="441.13"/>
+        <TableRow Name="Row9" Height="22.68" AutoSize="true">
+          <TableCell Name="Cell31" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell32" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Goals]" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell33" Border.Lines="All" Fill.Color="White" Text="[Switch([TCMServicePlanReviewDomains.Status] == 0,&quot;Open&quot;,[TCMServicePlanReviewDomains.Status] == 1,&quot;Closed&quot;,[TCMServicePlanReviewDomains.Status] == 2,&quot;Added&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell34" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.ChangesUpdate]" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader1" Top="159.28" Width="778.3" Height="22.68">
+        <TableObject Name="Table8" Width="774.83" Height="22.68">
+          <TableColumn Name="Column27" Width="33.07"/>
+          <TableColumn Name="Column28" Width="222.07"/>
+          <TableColumn Name="Column29" Width="78.56"/>
+          <TableColumn Name="Column30" Width="441.13"/>
+          <TableRow Name="Row8" Height="22.68">
+            <TableCell Name="Cell27" Border.Lines="All" Fill.Color="Gainsboro" Text="#" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TableCell Name="Cell28" Border.Lines="All" Fill.Color="Gainsboro" Text="Goals" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TableCell Name="Cell29" Border.Lines="All" Fill.Color="Gainsboro" Text="Status" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TableCell Name="Cell30" Border.Lines="All" Fill.Color="Gainsboro" Text="Objectives Changes/Updates" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter2" Top="212.33" Width="778.3" Height="22.68">
+      <TextObject Name="Text34" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text35" Left="721.2" Width="56.7" Height="18.9" Text="Pg. 2 of 4" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page3" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data4" Width="778.3" Height="750.78" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text1" Top="16.9" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text2" Left="481.95" Top="16.72" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text7" Left="104.4" Top="16.9" Width="378" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text10" Left="576.45" Top="17.35" Width="198.45" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text11" Top="48.25" Width="774.9" Height="20.79" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text12" Top="69.15" Width="774.9" Height="37.8" Border.Lines="All" Fill.Color="WhiteSmoke" Text="&lt;b&gt;Mental Health Targeted Case Management Re-certification:&lt;/b&gt; Re-evaluation of eligibility for continued Mental Health Targeted Case Management services. (Appendix I and J in Medicaid Manual)" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text13" Top="166.1" Width="774.9" Height="264.6" Text="&lt;b&gt;1.&lt;/b&gt; Client has a mental health disability (i.e., severe and persistent mental illness) which requires advocacy for and coordination of services to     maintain or improve level of functioning;&#13;&#10;&lt;b&gt;2.&lt;/b&gt; Requires services to assist in attaining self-sufficiency and satisfaction in the living, learning, work and social environments of choice;&#13;&#10;&lt;b&gt;3.&lt;/b&gt; Lacks a natural support system with the ability to access needed medical, social, educational and other services;&#13;&#10;&lt;b&gt;4.&lt;/b&gt; Requires ongoing assistance to access or maintain needed care consistently within the service delivery system;&#13;&#10;&lt;b&gt;5.&lt;/b&gt; Has a mental health disability (i.e., severe and persistent mental illness) duration that, based upon professional judgment, will last for a     minimum of one year;&#13;&#10;&lt;b&gt;6.&lt;/b&gt; Is not receiving duplicate case management services from another provider;&#13;&#10;&lt;b&gt;7.&lt;/b&gt; Meets at least one of the following requirements:&#13;&#10;       a. Is awaiting admission to or has been discharged from a state mental health treatment facility;&#13;&#10;       b. Has been discharged from a mental health residential treatment facility;&#13;&#10;       c. Has had more than one admission to a crisis stabilization unit (CSU), short-term residential facility (SRT), inpatient psychiatric unit,            or any combination of these facilities in the past 12 months;&#13;&#10;       d. Is at risk of institutionalization for mental health reasons (provide explanation);&#13;&#10;       e. Is experiencing long-term or acute episodes of mental impairment that may put him or her at risk of requiring more intensive services             (provide explanation); or&#13;&#10;&lt;b&gt;8.&lt;/b&gt; Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case     management services." HorzAlign="Justify" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox1" Left="5" Top="118.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <TextObject Name="Text14" Left="17.45" Top="115.95" Width="756" Height="18.9" Text="Client is hereby certified to meet the following Mental Health Targeted Case Management criteria:" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text376" Top="144.75" Width="68.8" Height="18.9" Text="ADULTS" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text377" Top="428.25" Width="87.7" Height="18.9" Text="CHILDREN" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text378" Top="450.15" Width="774.9" Height="189" Text="&lt;b&gt;1.&lt;/b&gt; Client has a mental health disability (i.e., serious emotional disturbance or emotional disturbance) which requires advocacy for and ordination     of services to maintain or improve level of functioning;&#13;&#10;&lt;b&gt;2.&lt;/b&gt; Requires services to assist him or her in attaining self-sufficiency and satisfaction in the living, learning, work and social environments of his     or her choice;&#13;&#10;&lt;b&gt;3.&lt;/b&gt; Lacks a natural support system with the ability to access needed medical and social environments of his or her choice;&#13;&#10;&lt;b&gt;4.&lt;/b&gt; Requires ongoing assistance to access or maintain needed care consistently within the service delivery system;&#13;&#10;&lt;b&gt;5.&lt;/b&gt; Has a mental health disability (i.e., serious emotional disturbance or emotional disturbance) duration that, based upon professional     judgment, will last for a minimum of one year;&#13;&#10;&lt;b&gt;6.&lt;/b&gt; Is in out-of-home mental health placement or at documented risk of out-of-home mental health placement;&#13;&#10;&lt;b&gt;7.&lt;/b&gt; Is not receiving duplicate case management services from another provider; or&#13;&#10;&lt;b&gt;8.&lt;/b&gt; Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case     management services." HorzAlign="Justify" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter3" Top="754.63" Width="778.3" Height="22.68">
+      <TextObject Name="Text15" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text16" Left="721.2" Width="56.7" Height="18.9" Text="Pg. 3 of 4" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page4" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data5" Width="778.3" Height="892.53" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text17" Top="16.9" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text18" Left="481.95" Top="16.72" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text19" Left="104.4" Top="16.9" Width="378" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text20" Left="576.45" Top="17.35" Width="198.45" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text21" Top="48.25" Width="774.9" Height="20.79" Text="SECTION VI" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text22" Top="69.15" Width="774.9" Height="18.9" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Case Management Utilization Review" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox2" Left="5" Top="133.4" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text26" Left="17.45" Top="130.4" Width="756" Height="18.9" Text="Client has been receiving Mental Health Targeted Case Management services for less than 12 months." VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text30" Top="395.45" Width="774.9" Height="60.15" Text="We, the members of the case management team, hereby certify that the recipient named above continues to be eligible for case management services through [Clinics.Name]&#13;&#10;The current services, goals, and objectives as outlined on the Service Plan continue to be appropriate to the recipient’s needs. The signatures below formally extend the services, goals and objectives on the Service Plan for a period of six (6) months." HorzAlign="Justify" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text379" Top="98.5" Width="97.15" Height="18.9" Text="Opening Date:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text380" Left="90.5" Top="98.5" Width="94.5" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMServicePlanReviews.DateOpending]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox20" Left="28.35" Top="158.2" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text381" Left="40.8" Top="155.2" Width="756" Height="18.9" Text="Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox21" Left="28.35" Top="196" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text382" Left="40.8" Top="193" Width="567" Height="18.9" Text="Client no longer meets criteria for Mental Health Targeted Case Management services." VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text383" Left="255.15" Top="174.1" Width="56.7" Height="18.9" Text="OR" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox22" Left="5" Top="229.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text384" Left="17.45" Top="226.8" Width="756" Height="18.9" Text="Client has been receiving Mental Health Targeted Case Management services for at least 12 months." VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <CheckBoxObject Name="CheckBox23" Left="28.35" Top="254.6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text385" Left="40.8" Top="251.6" Width="756" Height="18.9" Text="Client will continue Mental Health Targeted Case Management services." VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox24" Left="28.35" Top="281.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text386" Left="40.8" Top="278.95" Width="567" Height="18.9" Text="Client will have an Assessment completed to determine need for continued services." VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox25" Left="28.35" Top="309.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text387" Left="40.8" Top="306.85" Width="567" Height="18.9" Text="Client no longer meets criteria for Mental Health Targeted Case Management services." VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text388" Top="345.2" Width="774.9" Height="20.79" Text="SECTION VII" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text389" Top="366.1" Width="774.9" Height="18.9" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Service Plan Review (SPR) Signatures" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text390" Top="474.05" Width="453.6" Height="18.9" Text="The expected review date of the current Service Plan should be no later than:" HorzAlign="Justify" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text391" Left="450.6" Top="472.5" Width="94.5" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text392" Top="511.95" Width="774.9" Height="52.92" Text="This Service Plan Review (SPR) has been explained to me in all its extent in terms I can understand, I have agreed with the recommendations, changes and updates as written and I have given consent to services involved in its development and implementation. A copy of the Service Plan Review has been offered to me:" HorzAlign="Justify" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox26" Left="211.35" Top="541.65" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <CheckBoxObject Name="CheckBox27" Left="258.5" Top="541.83" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false"/>
+      <TextObject Name="Text393" Left="225.8" Top="538.65" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text394" Left="272.95" Top="538.67" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text260" Left="5.45" Top="775.2" Width="170.1" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text261" Left="5" Top="794.45" Width="170.1" Height="18.9" Text="Case Manager's Signature" HorzAlign="Center" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture2" Left="42.8" Top="738.75" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="42.8" Top="812.8" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text264" Left="227.25" Top="775.55" Width="245.7" Height="18.9" Text="______________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text265" Left="226.8" Top="794.8" Width="207.9" Height="18.9" Text="Case Manager Name" Font="Arial, 9pt"/>
+      <TextObject Name="Text268" Left="226.8" Top="771.1" Width="245.7" Height="18.9" Text="[CaseManagers.Name]" Font="Arial, 9pt"/>
+      <TextObject Name="Text269" Left="226.8" Top="848.15" Width="245.7" Height="18.9" Text="[TCMSupervisors.Name]" Font="Arial, 9pt"/>
+      <TextObject Name="Text270" Left="671.5" Top="775.55" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text271" Left="672.05" Top="794.8" Width="103.95" Height="18.9" Text="Date" Font="Arial, 9pt"/>
+      <TextObject Name="Text274" Left="520.3" Top="775.55" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text275" Left="520.85" Top="794.8" Width="103.95" Height="18.9" Text="Credentials" Font="Arial, 9pt"/>
+      <TextObject Name="Text278" Left="520.3" Top="772.1" Width="113.4" Height="18.9" Text="[CaseManagers.Credentials]" Font="Arial, 9pt"/>
+      <TextObject Name="Text784" Left="520.3" Top="848.31" Width="113.4" Height="18.9" Text="[TCMSupervisors.Code]" Font="Arial, 9pt"/>
+      <TextObject Name="Text785" Left="672.05" Top="772.1" Width="103.95" Height="18.9" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <TextObject Name="Text786" Left="671.5" Top="848.15" Width="103.95" Height="18.9" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <TextObject Name="Text266" Left="226.7" Top="853.6" Width="245.7" Height="18.9" Text="______________________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text272" Left="671.95" Top="853.6" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text276" Left="520.75" Top="853.6" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text262" Left="5.9" Top="853.25" Width="170.1" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text263" Left="5.45" Top="872.5" Width="170.1" Height="18.9" Text="CM Supervisor's Signature" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text267" Left="227.25" Top="872.85" Width="236.25" Height="18.9" Text="TCM Supervisor Name " Font="Arial, 9pt"/>
+      <TextObject Name="Text273" Left="672.5" Top="872.85" Width="103.95" Height="18.9" Text="Date" Font="Arial, 9pt"/>
+      <TextObject Name="Text277" Left="521.3" Top="872.85" Width="103.95" Height="18.9" Text="Credentials" Font="Arial, 9pt"/>
+      <TextObject Name="Text787" Left="5.9" Top="620.8" Width="170.1" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text788" Left="5.45" Top="640.05" Width="170.1" Height="18.9" Text="Recipient’s Signature" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text789" Left="6.35" Top="698.85" Width="170.1" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text790" Left="-3.1" Top="718.1" Width="198.45" Height="18.9" Text="Parent/Legal Guardian’s Signature" Font="Arial, 9pt"/>
+      <TextObject Name="Text791" Left="226.8" Top="620.7" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text792" Left="227.35" Top="639.95" Width="103.95" Height="18.9" Text="Date" Font="Arial, 9pt"/>
+      <TextObject Name="Text793" Left="227.35" Top="617.25" Width="103.95" Height="18.9" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <TextObject Name="Text794" Left="226.8" Top="693.3" Width="103.95" Height="18.9" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <TextObject Name="Text795" Left="227.25" Top="698.75" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
+      <TextObject Name="Text796" Left="227.8" Top="718" Width="103.95" Height="18.9" Text="Date" Font="Arial, 9pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter4" Top="896.38" Width="778.3" Height="22.68">
+      <TextObject Name="Text31" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text32" Left="721.2" Width="56.7" Height="18.9" Text="Pg. 4 of 4" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

@@ -11,6 +11,7 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace KyoS.Web.Controllers
 {
@@ -21,14 +22,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IReportHelper _reportHelper;
 
-        public TCMServicePlanReviewsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper)
+        public TCMServicePlanReviewsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IRenderHelper renderHelper, IReportHelper reportHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
             _renderHelper = renderHelper;
+            _reportHelper = reportHelper;
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
@@ -1886,6 +1889,40 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = servicePlanReview.TcmServicePlan.TcmClient.Id });
 
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public IActionResult PrintServicePlanReview(int id)
+        {
+            TCMServicePlanReviewEntity servicePlanReview = _context.TCMServicePlanReviews
+
+                                                                   .Include(spr => spr.TcmServicePlan)
+                                                                   .ThenInclude(sp => sp.TcmClient)
+                                                                   .ThenInclude(c => c.Client)
+                                                                   .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                   .ThenInclude(d => d.Diagnostic)
+
+                                                                   .Include(sp => sp.TCMSupervisor)
+                                                                   .ThenInclude(s => s.Clinic)
+
+                                                                   .Include(spr => spr.TcmServicePlan)
+                                                                   .ThenInclude(sp => sp.TcmClient)
+                                                                   .ThenInclude(c => c.Casemanager)
+
+                                                                   .Include(spr => spr.TCMServicePlanRevDomain)                                                                   
+                                                                   .ThenInclude(d => d.TCMServicePlanRevDomainObjectiive)
+
+                                                                   .Include(spr => spr.TCMServicePlanRevDomain)
+                                                                   .ThenInclude(d => d.TcmDomain)
+
+                                                                   .FirstOrDefault(spr => (spr.Id == id && spr.Approved == 2));
+            if (servicePlanReview == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+                        
+            Stream stream = _reportHelper.TCMServicePlanReview(servicePlanReview);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
         }
     }
 }
