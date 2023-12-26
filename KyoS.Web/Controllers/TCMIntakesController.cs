@@ -5392,7 +5392,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            ViewData["origi"] = 0;
             TCMIntakeAppendixJViewModel model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
 
             return View(model);
@@ -5993,7 +5993,7 @@ namespace KyoS.Web.Controllers
             }
 
             TCMIntakeAppendixIViewModel model = _converterHelper.ToTCMIntakeAppendixIViewModel(entity);
-
+            ViewData["origi"] = 0;
             return View(model);
         }
 
