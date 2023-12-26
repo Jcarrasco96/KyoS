@@ -517,16 +517,8 @@ namespace KyoS.Web.Controllers
                                                                            && s.Status == StatusType.Open
                                                                            && (s.TcmServicePlan == null
                                                                                 || s.TCMAssessment == null
-                                                                                || s.TcmIntakeAppendixJ == null
-                                                                                || s.TcmIntakeAcknowledgementHipa == null
-                                                                                || s.TCMIntakeAdvancedDirective == null
-                                                                                || s.TcmIntakeConsentForRelease == null
-                                                                                || s.TcmIntakeConsentForTreatment == null
-                                                                                || s.TcmIntakeConsumerRights == null
-                                                                                || s.TCMIntakeForeignLanguage == null
-                                                                                || s.TCMIntakeForm == null
-                                                                                || s.TCMIntakeOrientationChecklist == null
-                                                                                || s.TCMIntakeWelcome == null)));
+                                                                                || (s.TcmIntakeAppendixJ == null
+                                                                                 && s.TcmIntakeAppendixI == null))));
                     
                     ViewBag.OpenBinder = await _context.TCMClient
                                                        .CountAsync(g => (g.Status == StatusType.Open
@@ -845,19 +837,9 @@ namespace KyoS.Web.Controllers
                                                                         && (s.TcmServicePlan == null
                                                                             
                                                                             || s.TCMAssessment == null
-                                                                            || s.TcmIntakeAppendixJ == null
+                                                                            || (s.TcmIntakeAppendixJ == null
 
-                                                                            || s.TcmIntakeAcknowledgementHipa == null
-                                                                            || s.TCMIntakeAdvancedDirective == null
-                                                                            || s.TcmIntakeConsentForRelease == null
-                                                                            || s.TcmIntakeConsentForTreatment == null
-                                                                            || s.TcmIntakeConsumerRights == null
-                                                                           
-                                                                            || s.TCMIntakeForeignLanguage == null
-                                                                            || s.TCMIntakeForm == null
-                                                                            || s.TCMIntakeOrientationChecklist == null
-                                                                            || s.TCMIntakeWelcome == null
-                                                                            || s.TcmIntakeAppendixI == null)));
+                                                                            && s.TcmIntakeAppendixI == null))));
 
                 ViewBag.OpenBinder = await _context.TCMClient
                                                    .CountAsync(g => (g.Status == StatusType.Open
