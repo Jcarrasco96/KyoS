@@ -11589,6 +11589,18 @@ namespace KyoS.Web.Helpers
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }                
+            }
+
             if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
