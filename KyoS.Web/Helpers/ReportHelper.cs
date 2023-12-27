@@ -27899,8 +27899,21 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("CreatedOn", typeof(DateTime));
             dt.Columns.Add("LastModifiedBy", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
-            dt.Columns.Add("TCMSupervisorId", typeof(int));            
+            dt.Columns.Add("TCMSupervisorId", typeof(int));
+            
+            dt.Columns.Add("ClientContinue", typeof(bool));
+            dt.Columns.Add("ClientHasBeen1", typeof(bool));
+            dt.Columns.Add("ClientHasBeen2", typeof(bool));
+            dt.Columns.Add("ClientNoLonger1", typeof(bool));
+            dt.Columns.Add("ClientNoLonger2", typeof(bool));
+            dt.Columns.Add("ClientWillContinue", typeof(bool));
+            dt.Columns.Add("ClientWillHave", typeof(bool));
 
+            dt.Columns.Add("DateTCMCaseManagerSignature", typeof(DateTime));
+            dt.Columns.Add("DateTCMSupervisorSignature", typeof(DateTime));
+            dt.Columns.Add("HasBeenExplained", typeof(bool));
+            dt.Columns.Add("TheExpertedReviewDate", typeof(DateTime));
+            
             if (servicePlanReview != null)
             {
                 dt.Rows.Add(new object[]
@@ -27916,8 +27929,19 @@ namespace KyoS.Web.Helpers
                     servicePlanReview.CreatedOn,
                     servicePlanReview.LastModifiedBy,
                     servicePlanReview.LastModifiedOn,
-                    0
-                });
+                    0,
+                    servicePlanReview.ClientContinue,
+                    servicePlanReview.ClientHasBeen1,
+                    servicePlanReview.ClientHasBeen2,
+                    servicePlanReview.ClientNoLonger1,
+                    servicePlanReview.ClientNoLonger2,
+                    servicePlanReview.ClientWillContinue,
+                    servicePlanReview.ClientWillHave,
+                    servicePlanReview.DateTCMCaseManagerSignature,
+                    servicePlanReview.DateTCMSupervisorSignature,
+                    servicePlanReview.HasBeenExplained,
+                    servicePlanReview.TheExpertedReviewDate
+            });
             }
             else
             {
@@ -27934,7 +27958,18 @@ namespace KyoS.Web.Helpers
                     new DateTime(),
                     string.Empty,
                     new DateTime(),
-                    0                                            
+                    0,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    new DateTime(),
+                    new DateTime(),
+                    false,
+                    new DateTime()                    
                 });
             }
 
