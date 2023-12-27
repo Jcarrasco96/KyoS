@@ -11644,10 +11644,11 @@ namespace KyoS.Web.Helpers
             byte[] stream1 = null;
             byte[] stream2 = null;
             string path;
+            
             if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
-                stream1 = _imageHelper.ImageToByteArray(path);
+                stream1 = _imageHelper.ImageToByteArray(path);                
             }
             else
             {
