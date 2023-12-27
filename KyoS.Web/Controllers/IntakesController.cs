@@ -2513,7 +2513,8 @@ namespace KyoS.Web.Controllers
                             IdClient = id,
                             Client_FK = id,
                             AdmissionedFor = user_logged.FullName,
-                            IConsentToReceive = true
+                            IConsentToReceive = true,
+                            Documents = true
 
                         };
                         if (model.Client.LegalGuardian == null)
@@ -2615,7 +2616,8 @@ namespace KyoS.Web.Controllers
                             Id = 0,
                             IdClient = id,
                             Client_FK = id,
-                            AdmissionedFor = user_logged.FullName
+                            AdmissionedFor = user_logged.FullName,
+                            Documents = true
                          
                         };
                         if (model.Client.LegalGuardian == null)
@@ -2701,6 +2703,8 @@ namespace KyoS.Web.Controllers
                                                                        .Include(n => n.Client.EmergencyContact)
                                                                        .FirstOrDefault(n => n.Client.Id == id);
 
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant") || User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
@@ -2719,10 +2723,11 @@ namespace KyoS.Web.Controllers
                             Client_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
-                            AdmissionedFor = user_logged.FullName
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
+                            AdmissionedFor = user_logged.FullName,
+                            IHave = true
 
                         };
                         if (model.Client.LegalGuardian == null)
@@ -2817,6 +2822,9 @@ namespace KyoS.Web.Controllers
                                                                                                  .Include(n => n.Client)
                                                                                                  .ThenInclude(n => n.LegalGuardian)
                                                                                                  .FirstOrDefault(n => n.Client.Id == id);
+
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
             if (user_logged.Clinic != null)
             {
                 if (clientIdDocumentationverification == null)
@@ -2833,8 +2841,8 @@ namespace KyoS.Web.Controllers
                         Client_FK = id,
                         Id = 0,
                         AdmissionedFor = user_logged.FullName,
-                        DateSignatureEmployee = DateTime.Now,
-                        DateSignatureLegalGuardianOrClient = DateTime.Now,
+                        DateSignatureEmployee = client.AdmisionDate,
+                        DateSignatureLegalGuardianOrClient = client.AdmisionDate,
                         HealthPlan = string.Empty,
                         Id_DriverLicense = string.Empty,
                         MedicaidId = string.Empty,
@@ -2928,6 +2936,7 @@ namespace KyoS.Web.Controllers
                                                                 .Include(n => n.Client)
                                                                 .ThenInclude(n => n.LegalGuardian)
                                                                 .FirstOrDefault(n => n.Client.Id == id);
+            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
             {
@@ -2941,9 +2950,9 @@ namespace KyoS.Web.Controllers
                             Client = _context.Clients
                                              .Include(d => d.LegalGuardian)
                                              .FirstOrDefault(n => n.Id == id),
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignatureLegalGuardian = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
                             Documents = true,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
