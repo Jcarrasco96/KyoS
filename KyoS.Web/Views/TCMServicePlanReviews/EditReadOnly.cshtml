@@ -104,8 +104,17 @@
                             { 
         <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
                             } 
+                            @if (ViewData["origi"].ToString() != "5")
+                            {
         <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>                    
+                            }
+                            else
+                            { 
+        <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature" disabled>
         <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                            }
+
                             </pre>
                             </div>
                             <div class="col-md-push-12">
