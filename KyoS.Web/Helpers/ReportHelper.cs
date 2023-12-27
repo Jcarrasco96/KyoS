@@ -30852,13 +30852,13 @@ namespace KyoS.Web.Helpers
 
             //images                      
             string path = string.Empty;
-            if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
-            {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.Clinic.LogoPath)}");
-            }
+            //if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
+            //{
+            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.Clinic.LogoPath)}");
+            //}
 
-            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
-            pic1.Image = new Bitmap(path);
+            //PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            //pic1.Image = new Bitmap(path);
 
             //signatures images 
             byte[] stream1 = null;

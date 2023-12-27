@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 16:17:49" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 18:58:22" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuMl2RLFvq5dobfNR1C8kiMU=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuMDMA6joDGwwBawDdrOGsLg=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -863,7 +863,7 @@
       <TextObject Name="Text367" Top="510.3" Width="255.15" Height="18.9" Text="B. Household Composition" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text368" Top="531.2" Width="774.9" Height="18.9" Text="List all family members living in the same household and indicate their ability to support and take care of the client." HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
     </DataBand>
-    <DataBand Name="Data4" Top="578.69" Width="778.3" Height="18.9" CanGrow="true" DataSource="TCMAssessmentHouseComposition" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data4" Top="578.69" Width="778.3" Height="18.9" CanGrow="true" CanShrink="true" DataSource="TCMAssessmentHouseComposition" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table5" Left="4.16" Width="773.14" Height="18.9">
         <TableColumn Name="Column13" Width="236.25"/>
         <TableColumn Name="Column14" Width="47.25"/>
@@ -895,7 +895,7 @@
       <TextObject Name="Text369" Top="28.35" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="SECTION V: PAST AND CURRENT SERVICES AND EFFECTIVENESS" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
       <TextObject Name="Text370" Top="53.25" Width="774.9" Height="18.9" Text="List past and current services provided to client starting with the most recent on top. Identify providers, dates and effectiveness." HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
     </DataBand>
-    <DataBand Name="Data6" Top="703.63" Width="778.3" Height="18.9" CanGrow="true" DataSource="TCMAssessmentPastCurrentService" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data6" Top="703.63" Width="778.3" Height="18.9" CanGrow="true" CanShrink="true" DataSource="TCMAssessmentPastCurrentService" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table7" Left="4.16" Width="773.17" Height="18.9">
         <TableColumn Name="Column21" Width="200.82"/>
         <TableColumn Name="Column22" Width="304.77"/>

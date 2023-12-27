@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 17:03:07" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 18:55:39" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrq77BGcjlKhw1bDpCDTLfPQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr5k7/RBRgEJTlCYIFvjZTIg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -171,25 +171,13 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <Parameter Name="mentalHealth" DataType="System.Boolean"/>
-    <Parameter Name="physicalHealth" DataType="System.Boolean"/>
-    <Parameter Name="vocational" DataType="System.Boolean"/>
-    <Parameter Name="school" DataType="System.Boolean"/>
-    <Parameter Name="environmental" DataType="System.Boolean"/>
-    <Parameter Name="activities" DataType="System.Boolean"/>
-    <Parameter Name="housing" DataType="System.Boolean"/>
-    <Parameter Name="economic" DataType="System.Boolean"/>
-    <Parameter Name="basicNeed" DataType="System.Boolean"/>
-    <Parameter Name="transportation" DataType="System.Boolean"/>
-    <Parameter Name="legal" DataType="System.Boolean"/>
-    <Parameter Name="other" DataType="System.Boolean"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="76.05">
       <TextObject Name="Textbox12" Left="129.75" Top="18.9" Width="516.2" Height="20.79" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Textbox64" Left="129.75" Top="40.78" Width="516.2" Height="22" CanGrow="true" Text="CASE MANAGEMENT SERVICE PLAN REVIEW (SPR)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="128.3" Top="10.45" Height="65.55"/>
-      <PictureObject Name="Picture1" Left="9.45" Top="9.9" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="9.45" Top="9.9" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="127.3" Top="9.45" Height="66.15"/>
     </ReportTitleBand>
     <DataBand Name="Data1" Top="79.9" Width="778.3" Height="798.03" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
@@ -241,21 +229,21 @@
       <CheckBoxObject Name="CheckBox19" Left="5" Top="130.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
       <TextObject Name="Text375" Left="17.45" Top="127.85" Width="756" Height="18.9" Text="Changes/additions to the Service Plan are not warranted at this time." VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
     </DataBand>
-    <DataBand Name="Data3" Top="185.8" Width="778.3" Height="22.68" DataSource="TCMServicePlanReviewDomains">
-      <TableObject Name="Table9" Width="774.83" Height="22.68">
+    <DataBand Name="Data3" Top="185.8" Width="778.3" Height="18.9" CanGrow="true" CanShrink="true" DataSource="TCMServicePlanReviewDomains">
+      <TableObject Name="Table9" Left="1" Width="774.83" Height="18.9">
         <TableColumn Name="Column31" Width="33.07"/>
         <TableColumn Name="Column32" Width="222.07"/>
         <TableColumn Name="Column33" Width="78.56"/>
         <TableColumn Name="Column34" Width="441.13"/>
-        <TableRow Name="Row9" Height="22.68" AutoSize="true">
-          <TableCell Name="Cell31" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Code]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell32" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Goals]" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell33" Border.Lines="All" Fill.Color="White" Text="[Switch([TCMServicePlanReviewDomains.Status] == 0,&quot;Open&quot;,[TCMServicePlanReviewDomains.Status] == 1,&quot;Closed&quot;,[TCMServicePlanReviewDomains.Status] == 2,&quot;Added&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell34" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.ChangesUpdate]" VertAlign="Center" Font="Arial, 9pt"/>
+        <TableRow Name="Row9" AutoSize="true">
+          <TableCell Name="Cell31" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Code]" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell32" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.Goals]" Font="Arial, 9pt"/>
+          <TableCell Name="Cell33" Border.Lines="All" Fill.Color="White" Text="[Switch([TCMServicePlanReviewDomains.Status] == 0,&quot;Open&quot;,[TCMServicePlanReviewDomains.Status] == 1,&quot;Closed&quot;,[TCMServicePlanReviewDomains.Status] == 2,&quot;Added&quot;)]" HorzAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell34" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.ChangesUpdate]" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader1" Top="159.28" Width="778.3" Height="22.68">
-        <TableObject Name="Table8" Width="774.83" Height="22.68">
+        <TableObject Name="Table8" Left="1" Width="774.83" Height="22.68">
           <TableColumn Name="Column27" Width="33.07"/>
           <TableColumn Name="Column28" Width="222.07"/>
           <TableColumn Name="Column29" Width="78.56"/>
@@ -269,7 +257,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="212.33" Width="778.3" Height="22.68">
+    <PageFooterBand Name="PageFooter2" Top="208.55" Width="778.3" Height="18.9">
       <TextObject Name="Text34" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
       <TextObject Name="Text35" Left="721.2" Width="56.7" Height="18.9" Text="Pg. 2 of 4" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
