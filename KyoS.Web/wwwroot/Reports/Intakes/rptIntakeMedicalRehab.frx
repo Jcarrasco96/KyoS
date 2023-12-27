@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="09/02/2023 13:52:31" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/27/2023 11:07:30" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3+DHCu1fJSF8s1l31al+c9g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3jXJuDj+e19hMVSvPjxJzLA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -492,7 +492,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data7" Top="89.05" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
+    <DataBand Name="Data7" Top="88.9" Width="778.3" Height="822.15" CanGrow="true" CanShrink="true">
       <TextObject Name="Textbox64" Left="141.75" Top="13.9" Width="459.5" Height="22" CanGrow="true" Text="INTAKE SCREENING – FACESHEET / ADMISSION PROFILE" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TableObject Name="Table3" Top="56.7" Width="774.9" Height="75.6" Border.Lines="All">
         <TableColumn Name="Column7" Width="135.45"/>
@@ -677,7 +677,7 @@
       </TableObject>
       <PictureObject Name="Picture40" Left="373.55" Top="620.25" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="915.2" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter1" Top="914.89" Width="778.3" Height="37.8">
       <TableObject Name="Table2" Left="37.35" Top="5.45" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column4" Width="189"/>
         <TableColumn Name="Column5" Width="415.8"/>
@@ -714,7 +714,7 @@
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="89.05" Width="778.3" Height="887.75" DataSource="Clients">
+    <DataBand Name="Data1" Top="88.9" Width="778.3" Height="887.75" DataSource="Clients">
       <TextObject Name="Text34" Left="132.3" Top="13.99" Width="459.5" Height="22" CanGrow="true" Text="CONSENT FOR TREATMENT AND RECEIVE MEDICATION" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text41" Top="37.8" Width="774.9" Height="45.36" Text="The main objective of &lt;b&gt;[Clinics.Name]&lt;/b&gt; is to provide comprehensive mental health services, which are sensitive to the needs of our recipient population. " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text42" Top="85.05" Width="18.9" Height="26.46" Text="I, " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
@@ -724,7 +724,7 @@
       <LineObject Name="Line16" Left="303.85" Top="134.3" Width="-287.28"/>
       <TextObject Name="Text45" Left="311.85" Top="113.4" Width="444.15" Height="26.46" Text="representative/guardian of the above named applicant:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox25" Left="2.45" Top="149.2" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeConsentForTreatment.AuthorizeStaff"/>
-      <TextObject Name="Text46" Left="16.9" Top="146.2" Width="538.65" Height="18.9" Text="I, Authorize the staff of [Clinics.Name] to provide services. " VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text46" Left="16.9" Top="146.2" Width="756" Height="18.9" Text="I, Authorize the staff of [Clinics.Name] to provide services. " VertAlign="Center" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox26" Left="2" Top="173.1" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeConsentForTreatment.AuthorizeRelease"/>
       <TextObject Name="Text47" Left="16.45" Top="163.1" Width="756" Height="75.6" Text="I, Authorize release of necessary information from my service record to any insurer, compensation carrier, or other agency providing financial assistance for treatment / services Information from clinical records may be used by The Department of Children and Families, and/or Human Rights Advocacy Committee for the purpose of monitoring facility, activity and complaints concerning the facility. " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox27" Left="1" Top="242.25" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeConsentForTreatment.Underestand"/>
@@ -762,7 +762,7 @@
       <PictureObject Name="Picture18" Left="194" Top="746.65" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <PictureObject Name="Picture19" Left="193.91" Top="614.25" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="980.8" Width="778.3" Height="37.8">
+    <PageFooterBand Name="PageFooter2" Top="980.49" Width="778.3" Height="37.8">
       <TableObject Name="Table8" Left="37.42" Top="5.29" Width="699.3" Height="28.35" Border.Lines="All" Fill.Color="WhiteSmoke">
         <TableColumn Name="Column27" Width="189"/>
         <TableColumn Name="Column28" Width="415.8"/>
