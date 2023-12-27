@@ -19,6 +19,12 @@
                    (index == 2) ? IncidentsStatus.NotValid :
                    (index == 3) ? IncidentsStatus.Reviewed : IncidentsStatus.NotValid;
         }
+        public static SPRStatus GetSPRStatusByIndex(int index)
+        {
+            return (index == 0) ? SPRStatus.Open :
+                   (index == 1) ? SPRStatus.Closed :
+                   (index == 2) ? SPRStatus.Added : SPRStatus.Open;
+        }
     }
     public enum NoteStatus
     {
@@ -78,5 +84,11 @@
         Edition,
         Pending,
         Approved
+    }
+    public enum SPRStatus
+    {
+        Open,
+        Closed,
+        Added
     }
 }
