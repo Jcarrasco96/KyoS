@@ -33,5 +33,28 @@ namespace KyoS.Web.Data.Entities
         public TCMSupervisorEntity TCMSupervisor { get; set; }
         public List<TCMServicePlanReviewDomainEntity> TCMServicePlanRevDomain { get; set; }
         public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
+
+        public bool ClientHasBeen1 { get; set; }
+        public bool ClientContinue { get; set; }
+        public bool ClientNoLonger1 { get; set; }
+        public bool ClientHasBeen2 { get; set; }
+        public bool ClientWillContinue { get; set; }
+        public bool ClientWillHave { get; set; }
+        public bool ClientNoLonger2 { get; set; }
+
+        public bool HasBeenExplained { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime TheExpertedReviewDate { get; set; }
+
+        [Display(Name = "Date Case Manager Signature")]
+        [DataType(DataType.Date)]
+        public DateTime DateTCMCaseManagerSignature { get; set; }
+
+        [Display(Name = "Date TCM Supervisor Signature")]
+        [DataType(DataType.Date)]
+        public DateTime DateTCMSupervisorSignature { get; set; }
+
+
     }
 }

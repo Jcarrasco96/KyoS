@@ -125,13 +125,13 @@
                             @Html.DisplayFor(modelItem => item.TcmDomain.Name)
                         </td>
                         <td align="center">
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                            @if (item.Status == KyoS.Common.Enums.SPRStatus.Open)
                             {
                                 <span class="label label-success">
                                     Open
                                 </span>
                             }
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                            @if (item.Status == KyoS.Common.Enums.SPRStatus.Closed)
                             {
                                 <span class="label label-default">
                                     Close
