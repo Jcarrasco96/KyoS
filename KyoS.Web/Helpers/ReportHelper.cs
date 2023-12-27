@@ -27879,6 +27879,141 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
+                
+        private DataTable GetTCMServicePlanReviewDS(TCMServicePlanReviewEntity servicePlanReview)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMServicePlanReviews"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));            
+            dt.Columns.Add("DateServicePlanReview", typeof(DateTime));
+            dt.Columns.Add("DateOpending", typeof(DateTime));
+            dt.Columns.Add("SummaryProgress", typeof(string));
+            dt.Columns.Add("Recomendation", typeof(string));
+            dt.Columns.Add("Approved", typeof(int));
+            dt.Columns.Add("TcmServicePlan_FK", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("TCMSupervisorId", typeof(int));
+            
+            dt.Columns.Add("ClientContinue", typeof(bool));
+            dt.Columns.Add("ClientHasBeen1", typeof(bool));
+            dt.Columns.Add("ClientHasBeen2", typeof(bool));
+            dt.Columns.Add("ClientNoLonger1", typeof(bool));
+            dt.Columns.Add("ClientNoLonger2", typeof(bool));
+            dt.Columns.Add("ClientWillContinue", typeof(bool));
+            dt.Columns.Add("ClientWillHave", typeof(bool));
+
+            dt.Columns.Add("DateTCMCaseManagerSignature", typeof(DateTime));
+            dt.Columns.Add("DateTCMSupervisorSignature", typeof(DateTime));
+            dt.Columns.Add("HasBeenExplained", typeof(bool));
+            dt.Columns.Add("TheExpertedReviewDate", typeof(DateTime));
+            
+            if (servicePlanReview != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    servicePlanReview.Id,
+                    servicePlanReview.DateServicePlanReview,
+                    servicePlanReview.DateOpending,
+                    servicePlanReview.SummaryProgress,
+                    servicePlanReview.Recomendation,
+                    servicePlanReview.Approved,
+                    servicePlanReview.TcmServicePlan_FK,
+                    servicePlanReview.CreatedBy,
+                    servicePlanReview.CreatedOn,
+                    servicePlanReview.LastModifiedBy,
+                    servicePlanReview.LastModifiedOn,
+                    0,
+                    servicePlanReview.ClientContinue,
+                    servicePlanReview.ClientHasBeen1,
+                    servicePlanReview.ClientHasBeen2,
+                    servicePlanReview.ClientNoLonger1,
+                    servicePlanReview.ClientNoLonger2,
+                    servicePlanReview.ClientWillContinue,
+                    servicePlanReview.ClientWillHave,
+                    servicePlanReview.DateTCMCaseManagerSignature,
+                    servicePlanReview.DateTCMSupervisorSignature,
+                    servicePlanReview.HasBeenExplained,
+                    servicePlanReview.TheExpertedReviewDate
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,
+                    string.Empty,
+                    0,
+                    0,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime(),
+                    0,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    new DateTime(),
+                    new DateTime(),
+                    false,
+                    new DateTime()                    
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMServicePlanReviewDomainListDS(List<TCMServicePlanReviewDomainEntity> domains)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMServicePlanReviewDomains"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ChangesUpdate", typeof(string));
+            dt.Columns.Add("TcmDomainId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("TcmServicePlanReviewId", typeof(int));
+            dt.Columns.Add("CodeDomain", typeof(string));
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("Goals", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMServicePlanReviewDomainEntity item in domains)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    item.ChangesUpdate,
+                    0,
+                    item.Status,
+                    0,
+                    item.CodeDomain,
+                    (item.TcmDomain != null) ? item.TcmDomain.Code : string.Empty,
+                    item.CreatedOn,
+                    (item.TcmDomain != null) ? item.TcmDomain.Name : string.Empty,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
 
         #endregion
 
@@ -30689,6 +30824,90 @@ namespace KyoS.Web.Helpers
             if (!string.IsNullOrEmpty(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(adendum.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        public Stream TCMServicePlanReview(TCMServicePlanReviewEntity servicePlanReview)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMServicePlanReview.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(servicePlanReview.TCMSupervisor.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(servicePlanReview.TcmServicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(servicePlanReview.TcmServicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(servicePlanReview.TcmServicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(servicePlanReview.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanDS(servicePlanReview.TcmServicePlan));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlans");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanReviewDS(servicePlanReview));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlanReviews");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanReviewDomainListDS(servicePlanReview.TCMServicePlanRevDomain));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlanReviewDomains");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(servicePlanReview.TcmServicePlan.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            //images                      
+            string path = string.Empty;
+            //if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
+            //{
+            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.Clinic.LogoPath)}");
+            //}
+
+            //PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            //pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(servicePlanReview.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 

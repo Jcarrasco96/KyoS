@@ -264,6 +264,7 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);
         Stream TCMDischarge(TCMDischargeEntity intakeDischarge);
         Stream TCMAdendum(TCMAdendumEntity adendum);
+        Stream TCMServicePlanReview(TCMServicePlanReviewEntity servicePlanReview);
         #endregion
 
         #region Referral Form
