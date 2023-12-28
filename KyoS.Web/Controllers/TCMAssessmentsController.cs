@@ -560,27 +560,10 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMIntakeFormEntity intake = _context.TCMIntakeForms
-                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+         
 
             if (ModelState.IsValid)
             {
-                if (intake != null)
-                {
-                    intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
-                    intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
-                    intake.Psychiatrist_Phone = tcmAssessmentViewModel.Psychiatrist_Phone;
-                    intake.Psychiatrist_CityStateZip = tcmAssessmentViewModel.Psychiatrist_CityStateZip;
-
-                    intake.PCP_Name = tcmAssessmentViewModel.PCP_Name;
-                    intake.PCP_Address = tcmAssessmentViewModel.PCP_Address;
-                    intake.PCP_Phone = tcmAssessmentViewModel.PCP_Phone;
-                    intake.PCP_CityStateZip = tcmAssessmentViewModel.PCP_CityStateZip;
-
-                    _context.TCMIntakeForms.Update(intake);
-                    await _context.SaveChangesAsync();
-                }
-
                 TCMAssessmentEntity tcmAssessmentEntity = _context.TCMAssessment.Find(tcmAssessmentViewModel.Id);
                 if (tcmAssessmentEntity == null)
                 {
@@ -715,12 +698,12 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMIntakeFormEntity intake = _context.TCMIntakeForms
-                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+            //TCMIntakeFormEntity intake = _context.TCMIntakeForms
+            //                                    .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
 
             if (ModelState.IsValid)
             {
-                if (intake != null)
+               /* if (intake != null)
                 {
                     intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
                     intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
@@ -734,7 +717,7 @@ namespace KyoS.Web.Controllers
 
                     _context.TCMIntakeForms.Update(intake);
                     await _context.SaveChangesAsync();
-                }
+                }*/
 
                 TCMAssessmentEntity tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, false, user_logged.UserName);
                 if (tcmAssessmentEntity.Approved != 1)
@@ -2543,6 +2526,8 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.Casemanager)
                                                                 .ThenInclude(b => b.TCMSupervisor)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
