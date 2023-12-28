@@ -64,7 +64,7 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = new List<SelectListItem>();
             if (idClinic == 0)
             {
-                list = _context.Users.Where(u => u.UserType == userType).Select(u => new SelectListItem
+                list = _context.Users.Where(u => u.UserType == userType).OrderBy(n => n.UserName).Select(u => new SelectListItem
                 {
                     Text = $"{u.UserName}",
                     Value = $"{u.Id}"
@@ -72,7 +72,7 @@ namespace KyoS.Web.Helpers
             }
             else
             {
-                list = _context.Users.Where(u => (u.UserType == userType && u.Clinic.Id == idClinic)).Select(u => new SelectListItem
+                list = _context.Users.Where(u => (u.UserType == userType && u.Clinic.Id == idClinic)).OrderBy(n => n.UserName).Select(u => new SelectListItem
                 {
                     Text = $"{u.UserName}",
                     Value = $"{u.Id}"
