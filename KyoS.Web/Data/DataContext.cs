@@ -157,6 +157,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeAppendixIEntity> TCMIntakeAppendixI { get; set; }
         public DbSet<IntakeClientIdDocumentVerificationEntity> IntakeClientDocumentVerification { get; set; }
         public DbSet<IntakeForeignLanguageEntity> IntakeForeignLanguage { get; set; }
+        public DbSet<SafetyPlanEntity> SafetyPlan { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -705,6 +706,12 @@ namespace KyoS.Web.Data
                       .WithOne(s => s.Client)
                       .OnDelete(DeleteBehavior.Cascade)
                       .HasForeignKey<IntakeClientIdDocumentVerificationEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.SafetyPlan)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<SafetyPlanEntity>(s => s.Client_FK);
         }
     }
 }

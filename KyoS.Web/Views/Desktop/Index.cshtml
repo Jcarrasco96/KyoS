@@ -496,8 +496,26 @@
                 &nbsp;
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
+            </div>
+            <div class="col-md-2">
+                @if (ViewBag.SafetyPlan == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-list" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;&nbsp; Safety Plan</h4>
+                        <span class="message-counter-cero">@ViewBag.SafetyPlan</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="SafetyPlan" asp-action="ClientswithoutSafetyPlan" role="button">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <h4 style="align-content:end;"><i class="icon-list" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp; Safety Plan</h4>
+                            <span class="message-counter">@ViewBag.SafetyPlan</span>
+                        </div>
+                    </a>
+                }
             </div>
             <div class="col-md-2">
                 @if (ViewBag.ReferralPending == 0)
@@ -571,7 +589,7 @@
                     </a>
                 }
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
             </div>
 
@@ -1301,8 +1319,26 @@
                             &nbsp;
                         </div>
                         <!--New line-->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            @if (ViewBag.SafetyPlan == 0)
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-list" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;&nbsp; Safety Plan</h4>
+                                    <span class="message-counter-cero">@ViewBag.SafetyPlan</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="SafetyPlan" asp-action="ClientswithoutSafetyPlan" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-list" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp; Safety Plan</h4>
+                                        <span class="message-counter">@ViewBag.SafetyPlan</span>
+                                    </div>
+                                </a>
+                            }
                         </div>
                         <div class="col-md-2">
                             @if (ViewBag.ClientAuthorization == 0)
@@ -1340,7 +1376,7 @@
                                 </a>
                             }
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             &nbsp;
                         </div>
                     </div>

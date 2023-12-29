@@ -251,7 +251,10 @@ namespace KyoS.Web.Controllers
                                                         .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                                        && m.Facilitator.Id == facilitator.Id
                                                                        && m.FacilitatorSign == false));
-
+                ViewBag.SafetyPlan = await _context.Clients
+                                                   .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
+                                                                  && c.SafetyPlan == null
+                                                                  && c.IndividualTherapyFacilitator.Id == facilitator.Id));
             }
             if (User.IsInRole("Supervisor"))
             {
@@ -506,7 +509,11 @@ namespace KyoS.Web.Controllers
                                                               .CountAsync(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year 
                                                                                                          && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
                                                                                                          && n.Status == StatusType.Open
-                                                                                                         && n.Clinic.Id == user_logged.Clinic.Id);                                                      
+                                                                                                         && n.Clinic.Id == user_logged.Clinic.Id);
+
+                    ViewBag.SafetyPlan = await _context.Clients
+                                                       .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
+                                                                     && c.SafetyPlan == null));
                 }          
 
                 //TCM Dashboard

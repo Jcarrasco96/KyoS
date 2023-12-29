@@ -8056,6 +8056,68 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public async Task<SafetyPlanEntity> ToSafetyPlanEntity(SafetyPlanViewModel model, bool isNew, string userId)
+        {
+            return new SafetyPlanEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.IdClient,
+                AdviceIwould = model.AdviceIwould,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureFacilitator = model.DateSignatureFacilitator,
+                Documents = model.Documents,
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                PeopleIcanCall = model.PeopleIcanCall,
+                ThingsThat = model.ThingsThat,
+                WarningSignsOfCrisis = model.WarningSignsOfCrisis,
+                WaysToDistract = model.WaysToDistract,
+                WaysToKeepmyselfSafe = model.WaysToKeepmyselfSafe,
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DateDocument = model.DateDocument,
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant)
+            };
+        }
+
+        public SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model)
+        {
+            SafetyPlanViewModel salida;
+            salida = new SafetyPlanViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                AdviceIwould = model.AdviceIwould,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureFacilitator = model.DateSignatureFacilitator,
+                Documents = model.Documents,
+                Facilitator = (model.Facilitator == null) ? new FacilitatorEntity() : model.Facilitator,
+                PeopleIcanCall = model.PeopleIcanCall,
+                ThingsThat = model.ThingsThat,
+                WarningSignsOfCrisis = model.WarningSignsOfCrisis,
+                WaysToDistract = model.WaysToDistract,
+                WaysToKeepmyselfSafe = model.WaysToKeepmyselfSafe,
+                IdFacilitator = (model.Facilitator == null) ? 0 : model.Facilitator.Id,
+                IdSupervisor = (model.Supervisor == null) ? 0 : model.Supervisor.Id,
+                Supervisor = (model.Supervisor == null)? new SupervisorEntity() : model.Supervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DateDocument = model.DateDocument,
+                DocumentAssisstant = (model.DocumentAssisstant == null) ? new DocumentsAssistantEntity() : model.DocumentAssisstant,
+                IdDocumentAssisstant = (model.DocumentAssisstant == null) ? 0 : model.DocumentAssisstant.Id,
+
+            };
+                        
+            return salida;
+        }
 
     }
 }
