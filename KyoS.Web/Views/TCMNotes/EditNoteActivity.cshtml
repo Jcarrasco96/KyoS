@@ -15,15 +15,9 @@
         <input type="hidden" asp-for="EndTime" />
         @if (User.IsInRole("TCMSupervisor"))
         {
-
             <input type="hidden" asp-for="IdTCMDomain" />
             <input type="hidden" asp-for="IdTCMActivity" />
         }
-        <div>
-            <div class="container-fluid">
-                <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.TCMNote.DateOfService.ToShortDateString() - @Model.TCMNote.TCMClient.Client.Name  </span></h4>
-            </div>
-        </div>
         @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
         {
             <div>

@@ -12,11 +12,6 @@
         <input type="hidden" asp-for="IdTCMClient" />
         <input type="hidden" asp-for="DateOfServiceNote" />
         <div>
-            <div class="container-fluid">
-                <h4 style="font-weight:bold; text-align:left"> <span class="label label-info"> @Model.StartTime.ToShortDateString()  </span></h4>
-            </div>
-        </div>
-        <div>
             <div class=" col-md-3 form-group">
                 <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*
                 <input asp-for="StartTime" class="form-control" id="Time_Start" onchange="getMinute();" />
@@ -67,7 +62,7 @@
         </div>
         <div>
             <div class=" col-md-12 form-group">
-                <label asp-for="SubService" class="control-label">Name Sub-Service in domain selected</label>
+                <label asp-for="SubService" class="control-label">Sub-Service in domain selected</label>
                 <textarea asp-for="SubService" class="form-control" rows="1" readonly id="cbSubService"></textarea>
                 <span asp-validation-for="SubService" class="text-danger"></span>
             </div>
