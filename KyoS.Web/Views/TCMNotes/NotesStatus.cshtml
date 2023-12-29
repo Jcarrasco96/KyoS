@@ -186,8 +186,17 @@
                                     <td >
                                         @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
                                     </td>
-                                    <td >
-                                        @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                    <td>
+                                        @if (item.TCMNoteActivity.Count() > 1)
+                                        {
+                                            <span class="label label-info">
+                                                @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                        }
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.DateOfService)

@@ -91,4 +91,10 @@
         Closed,
         Added
     }
+    public enum SafetyPlanStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
 }

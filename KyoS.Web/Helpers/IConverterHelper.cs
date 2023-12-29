@@ -241,6 +241,8 @@ namespace KyoS.Web.Helpers
         IntakeClientIdDocumentVerificationViewModel ToIntakeClientIdDocumentVerificationViewModel(IntakeClientIdDocumentVerificationEntity model);
         IntakeForeignLanguageEntity ToIntakeForeignLanguageEntity(IntakeForeignLanguageViewModel model, bool isNew, string userId);
         IntakeForeignLanguageViewModel ToIntakeForeignLanguageViewModel(IntakeForeignLanguageEntity model);
+        Task<SafetyPlanEntity> ToSafetyPlanEntity(SafetyPlanViewModel model, bool isNew, string userId);
+        SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model);
 
     }
 }

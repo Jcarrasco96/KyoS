@@ -220,5 +220,6 @@ namespace KyoS.Web.Data.Entities
         public ReferralFormEntity ReferralForm { get; set; }
         public IntakeForeignLanguageEntity IntakeForeignLanguage { get; set; }
         public IntakeClientIdDocumentVerificationEntity IntakeClientIdDocumentVerification { get; set; }
+        public SafetyPlanEntity SafetyPlan { get; set; }
     }
 }

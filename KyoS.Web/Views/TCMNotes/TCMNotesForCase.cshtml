@@ -32,13 +32,16 @@
                     <thead>
                         <tr>
                             <th class="col-md-1">
-                                
+
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 TCM Client
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Date Of Service
+                            <th class="col-md-3">
+                                Name Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Minutes
@@ -55,7 +58,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.OrderBy(n => n.DateOfService))
                         {
                             var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
@@ -107,6 +110,18 @@
                                     @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
                                     |
                                     @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                </td>
+                                <td>
+                                    @if (item.TCMNoteActivity.Count() > 1)
+                                    {
+                                        <span class="label label-info">
+                                            @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                    }
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateOfService)
