@@ -8119,5 +8119,68 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
+        public async Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId)
+        {
+            return new IncidentReportEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client =await _context.Clients.FirstOrDefaultAsync(n => n.Id == model.IdClient),
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant),
+                //AdmissionFor
+                DateIncident = model.DateIncident,
+                DateReport = model.DateReport,
+                DescriptionIncident = model.DescriptionIncident,
+                Injured = model.Injured,
+                Injured_Description = model.Injured_Description,
+                Location = model.Location,
+                TimeIncident = model.TimeIncident,
+                Witnesses = model.Witnesses,
+                Witnesses_Contact = model.Witnesses_Contact,
+                AdmissionFor = model.AdmissionFor
+
+            };
+        }
+
+        public IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model)
+        {
+            IncidentReportViewModel salida;
+            salida = new IncidentReportViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Facilitator = (model.Facilitator == null) ? new FacilitatorEntity() : model.Facilitator,
+                IdFacilitator = (model.Facilitator == null) ? 0 : model.Facilitator.Id,
+                IdSupervisor = (model.Supervisor == null) ? 0 : model.Supervisor.Id,
+                Supervisor = (model.Supervisor == null) ? new SupervisorEntity() : model.Supervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DocumentAssisstant = (model.DocumentAssisstant == null) ? new DocumentsAssistantEntity() : model.DocumentAssisstant,
+                IdDocumentAssisstant = (model.DocumentAssisstant == null) ? 0 : model.DocumentAssisstant.Id,
+                DateIncident = model.DateIncident,
+                DateReport = model.DateReport,
+                DescriptionIncident = model.DescriptionIncident,
+                Injured = model.Injured,
+                Injured_Description = model.Injured_Description,
+                Location = model.Location,
+                TimeIncident = model.TimeIncident,
+                Witnesses = model.Witnesses,
+                Witnesses_Contact = model.Witnesses_Contact,
+                AdmissionFor = model.AdmissionFor,
+                DateSignatureEmployee = model.DateSignatureEmployee
+            };
+
+            return salida;
+        }
+
     }
 }

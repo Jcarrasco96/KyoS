@@ -139,9 +139,10 @@
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Clients</a>
                                         <ul class="dropdown-menu">
-                                            <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Create">Create Client</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Signatures">Clients' Signatures</a></li>
+                                            <li><a asp-area="" asp-controller="IncidentReport" asp-action="Index">Incident Report</a></li>
+                                            <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
                                         </ul>
                                     </li>
 
@@ -633,6 +634,7 @@
                                         <li>@Html.ActionLink("All Safety Plan", "Index", "SafetyPlan")</li>
                                     </ul>
                                 </li>
+                                <li>@Html.ActionLink("Incident Report", "Index", "IncidentReport")</li>
                                 <li class="dropdown-submenu">
                                     <a class="test" tabindex="-1" href="#">Fars Forms</a>
                                     <ul class="dropdown-menu">

@@ -221,5 +221,6 @@ namespace KyoS.Web.Data.Entities
         public IntakeForeignLanguageEntity IntakeForeignLanguage { get; set; }
         public IntakeClientIdDocumentVerificationEntity IntakeClientIdDocumentVerification { get; set; }
         public SafetyPlanEntity SafetyPlan { get; set; }
+        public List<IncidentReportEntity> IncidentReport { get; set; }
     }
 }
