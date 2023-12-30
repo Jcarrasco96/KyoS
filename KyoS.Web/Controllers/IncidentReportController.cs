@@ -91,7 +91,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(f => f.IncidentReport)
                                                                   .Include(f => f.Clinic)
                                                                   .ThenInclude(f => f.Setting)
-                                                                  .Where(n => n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                                  .Where(n => (n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                                            || n.IncidentReport.Where(m => m.DocumentAssisstant.Id == documentAssisstant.Id).Count() > 0)
                                                                            && n.IncidentReport.Count() > 0)
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
@@ -185,14 +186,48 @@ namespace KyoS.Web.Controllers
                     return View(model);
                 }
             }
-           
+            if (User.IsInRole("Supervisor"))
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (user_logged.Clinic != null)
+                {
+                    model = new IncidentReportViewModel
+                    {
+                        IdClient = idClient,
+                        Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
+                        Client = client,
+                        Id = 0,
+                        IdFacilitator = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Today,
+                        AdmissionFor = user_logged.FullName,
+                        DateIncident = DateTime.Today,
+                        DateReport = DateTime.Today,
+                        DateSignatureEmployee = DateTime.Today,
+                        DescriptionIncident = string.Empty,
+                        IdDocumentAssisstant = 0,
+                        IdSupervisor = 0,
+                        Injured = false,
+                        Injured_Description = string.Empty,
+                        Location = string.Empty,
+                        TimeIncident = DateTime.Today,
+                        Witnesses = false,
+                        Witnesses_Contact = string.Empty,
+                        Supervisor = supervisor
+
+                    };
+
+                    return View(model);
+                }
+            }
             return View();
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Facilitator, Documents_Assistant, Supervisor")]
         public async Task<IActionResult> Create(IncidentReportViewModel IncidentViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -336,7 +371,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Facilitator, Documents_Assistant, Supervisor")]
         public IActionResult SelectClient()
         {
             UserEntity user_logged = _context.Users
@@ -356,7 +391,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Facilitator, Documents_Assistant, Supervisor")]
         public async Task<IActionResult> SelectClient(IncidentReportViewModel incidentReportViewModel)
         {
             UserEntity user_logged = await _context.Users
