@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.IntakeNoDuplicateServiceViewModel
 @{
-    ViewData["Title"] = "Telehealth Consent";
+    ViewData["Title"] = "No Duplicate Service";
 }
 
 <!DOCTYPE html>
@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("Intake", "IntakeDashboard", "Intakes", new { id = @Model.IdClient })
             </li>
-            <li class="active">No duplicate service</li>
+            <li class="active">No Duplicate Service</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>No duplicate service</h4>
+    <h4>No Duplicate Service</h4>
     <hr />
     <div class="row">        
         <form asp-action="CreateNoDuplicateService" asp-route-id="@Model.Id" enctype="multipart/form-data">

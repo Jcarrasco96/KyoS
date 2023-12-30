@@ -2,31 +2,24 @@
 <div class="col-md-12">
     <pre>
     Client Name: <strong>@Html.DisplayFor(modelItem => Model.Client.Name) </strong> 
-    Record :<strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
+         Record: <strong>@Html.DisplayFor(modelItem => Model.Client.Code)</strong> 
     </pre>
 </div>
 <div class="col-md-12">
     <pre>
     <strong>NO DUPLICATE SERVICE ACKNOWLEDGEMENT</strong>
 
-    I hereby acknowledge that, at the time of signing this form, I am assuredly not receiving Community Mental and 
-    Behavioral Health services through any other agency or provider and that I am requesting this type of services 
-    only from <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 	
-    I certify that the above statement is true and correct to the best of my knowledge. I understand that duplication
-    of services may constitutes fraud under federal and state laws related to Medicaid and Medicare and that a false 
-    statement may disqualify me for services and affect my benefits.
-
+    I hereby acknowledge that, at the time of signing this form, I am assuredly not receiving Community Mental and Behavioral Health services through any other agency or provider 
+    and that I am requesting this type of services only from <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 
+    I certify that the above statement is true and correct to the best of my knowledge. I understand that duplication of services may constitutes fraud under federal and state laws
+    related to Medicaid and Medicare and that a false statement may disqualify me for services and affect my benefits.
     __________________________________________________________________________________________________________________
 
-    Yo, reconozco que, al momento de firmar esta forma, no estoy recibiendo servicios en la Comunidad de Salud Mental
-    y del Comportamiento a través de otra agencia o proveedor y que estoy solicitando este tipo de servicios solamente 
-    en <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 
-    Certifico que la declaración anterior es verdadera y correcta en lo mejor de mi conocimiento. Entiendo que la 
-    duplicación de servicios puede constituir un fraude bajo las leyes federales y estatales relacionadas con Medicaid 
-    y Medicare que una declaración falsa puede descalificarme para los servicios y afectar mis beneficios.
-
-
-</pre>
+    Yo, reconozco que, al momento de firmar este formulario, no estoy recibiendo servicios en la Comunidad de Salud Mental y del Comportamiento a través de otra agencia o proveedor 
+    y que estoy solicitando este tipo de servicios solamente en <u><strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong></u> 
+    Certifico que la declaración anterior es verdadera y correcta en lo mejor de mi conocimiento. Entiendo que la duplicación de servicios puede constituir un fraude bajo 
+    las leyes federales y estatales relacionadas con Medicaid y Medicare que una declaración falsa puede descalificarme para los servicios y afectar mis beneficios.
+    </pre>
 </div>
 <div class="col-md-12">
     <pre>
