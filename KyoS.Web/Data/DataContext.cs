@@ -158,6 +158,7 @@ namespace KyoS.Web.Data
         public DbSet<IntakeClientIdDocumentVerificationEntity> IntakeClientDocumentVerification { get; set; }
         public DbSet<IntakeForeignLanguageEntity> IntakeForeignLanguage { get; set; }
         public DbSet<SafetyPlanEntity> SafetyPlan { get; set; }
+        public DbSet<IncidentReportEntity> IncidentReport { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -712,6 +713,11 @@ namespace KyoS.Web.Data
                      .WithOne(s => s.Client)
                      .OnDelete(DeleteBehavior.Cascade)
                      .HasForeignKey<SafetyPlanEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<IncidentReportEntity>()
+                         .HasOne(g => g.Client)
+                         .WithMany(m => m.IncidentReport)
+                         .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

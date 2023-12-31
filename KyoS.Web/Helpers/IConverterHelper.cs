@@ -243,6 +243,7 @@ namespace KyoS.Web.Helpers
         IntakeForeignLanguageViewModel ToIntakeForeignLanguageViewModel(IntakeForeignLanguageEntity model);
         Task<SafetyPlanEntity> ToSafetyPlanEntity(SafetyPlanViewModel model, bool isNew, string userId);
         SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model);
-
+        Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId);
+        IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model);
     }
 }
