@@ -904,6 +904,30 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintIDDocumentsVerificationForm(int id)
+        {
+            IntakeClientIdDocumentVerificationEntity entity = await _context.IntakeClientDocumentVerification
+                                                                               
+                                                                            .Include(i => i.Client)
+                                                                            
+                                                                            .Include(c => c.Client)
+                                                                            .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                            .Include(i => i.Client)
+                                                                            .ThenInclude(cm => cm.Clinic)
+
+                                                                            .FirstOrDefaultAsync(t => t.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeClientDocumentVerification(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {

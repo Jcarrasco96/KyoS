@@ -12037,6 +12037,84 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeDocumentVerification.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeClientDocumentVerificationDS(intake));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeClientDocumentVerification");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intake.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string nameEmployee = string.Empty;
+
+            if (!string.IsNullOrEmpty(intake.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(m => m.Name == intake.AdmissionedFor);
+
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+                nameEmployee = manager.Name;
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(d => d.Name == intake.AdmissionedFor);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                    nameEmployee = assistant.Name;
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("nameEmployee", nameEmployee);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Fars Form reports
@@ -21339,6 +21417,82 @@ namespace KyoS.Web.Helpers
                                             false,
                                             string.Empty
                                         });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeClientDocumentVerificationDS(IntakeClientIdDocumentVerificationEntity intakeDocumentation)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeClientDocumentVerification"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("Id_DriverLicense", typeof(string));
+            dt.Columns.Add("Social", typeof(string));
+            dt.Columns.Add("MedicaidId", typeof(string));
+            dt.Columns.Add("MedicareCard", typeof(string));
+            dt.Columns.Add("HealthPlan", typeof(string));
+            dt.Columns.Add("Passport_Resident", typeof(string));
+            dt.Columns.Add("Other_Name", typeof(string));
+            dt.Columns.Add("Other_Identification", typeof(string));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("DateSignatureLegalGuardianOrClient", typeof(DateTime));            
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));            
+
+            if (intakeDocumentation != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    intakeDocumentation.Id,
+                    0,
+                    intakeDocumentation.Id_DriverLicense,
+                    intakeDocumentation.Social,
+                    intakeDocumentation.MedicaidId,
+                    intakeDocumentation.MedicareCard,
+                    intakeDocumentation.HealthPlan,
+                    intakeDocumentation.Passport_Resident,
+                    intakeDocumentation.Other_Name,
+                    intakeDocumentation.Other_Identification,
+                    intakeDocumentation.AdmissionedFor,
+                    intakeDocumentation.DateSignatureEmployee,
+                    intakeDocumentation.DateSignatureLegalGuardianOrClient,                                            
+                    intakeDocumentation.CreatedBy,
+                    intakeDocumentation.CreatedOn,
+                    intakeDocumentation.LastModifiedBy,
+                    intakeDocumentation.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    new DateTime(),
+                    new DateTime(),                                            
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
+                });
             }
 
             return dt;
