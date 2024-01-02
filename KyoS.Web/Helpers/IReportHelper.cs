@@ -116,6 +116,7 @@ namespace KyoS.Web.Helpers
         Stream OrionIntakeReport(IntakeScreeningEntity intake);
         Stream AlliedIntakeReport(IntakeScreeningEntity intake);
         Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake);
+        Stream IntakeForeignLanguage(IntakeForeignLanguageEntity intake);
         #endregion
 
         #region Fars reports
