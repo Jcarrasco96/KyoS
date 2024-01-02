@@ -12197,6 +12197,90 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream IntakeAdvancedDirective(IntakeAdvancedDirectiveEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeAdvancedDirective.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAdvancedDirectiveDS(intake));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAdvancedDirective");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intake.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            string nameEmployee = string.Empty;
+
+            if (!string.IsNullOrEmpty(intake.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(m => m.Name == intake.AdmissionedFor);
+
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+                nameEmployee = manager.Name;
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(d => d.Name == intake.AdmissionedFor);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                    nameEmployee = assistant.Name;
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("nameEmployee", nameEmployee);
+            WebReport.Report.Prepare();
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Fars Form reports
@@ -25160,6 +25244,70 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             new DateTime()
                                        });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeAdvancedDirectiveDS(IntakeAdvancedDirectiveEntity intakeAdvanceDirective)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeAdvancedDirective"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("IHave", typeof(bool));
+            dt.Columns.Add("IHaveNot", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            
+            if (intakeAdvanceDirective != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    intakeAdvanceDirective.Id,
+                    0,
+                    intakeAdvanceDirective.DateSignatureLegalGuardian,
+                    intakeAdvanceDirective.DateSignaturePerson,
+                    intakeAdvanceDirective.DateSignatureEmployee,
+                    intakeAdvanceDirective.AdmissionedFor,
+                    intakeAdvanceDirective.Documents,
+                    intakeAdvanceDirective.IHave,
+                    intakeAdvanceDirective.IHaveNot,
+                    intakeAdvanceDirective.CreatedBy,
+                    intakeAdvanceDirective.CreatedOn,
+                    intakeAdvanceDirective.LastModifiedBy,
+                    intakeAdvanceDirective.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,
+                    false,
+                    false,
+                    false,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
+                });
             }
 
             return dt;

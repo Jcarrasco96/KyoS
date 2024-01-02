@@ -928,6 +928,7 @@ namespace KyoS.Web.Controllers
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> PrintForeignLangAcknowledgement(int id)
         {
             IntakeForeignLanguageEntity entity = await _context.IntakeForeignLanguage
@@ -950,7 +951,34 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.IntakeForeignLanguage(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
-        
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintAdvancedDirective(int id)
+        {
+            IntakeAdvancedDirectiveEntity entity = await _context.IntakeAdvancedDirective
+
+                                                                 .Include(c => c.Client)
+
+                                                                 .Include(c => c.Client)
+                                                                 .ThenInclude(cl => cl.LegalGuardian)
+
+                                                                 .Include(c => c.Client)
+                                                                 .ThenInclude(cl => cl.EmergencyContact)
+
+                                                                 .Include(c => c.Client)
+                                                                 .ThenInclude(cm => cm.Clinic)
+
+                                                                 .FirstOrDefaultAsync(c => c.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeAdvancedDirective(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {

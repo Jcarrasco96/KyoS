@@ -117,6 +117,7 @@ namespace KyoS.Web.Helpers
         Stream AlliedIntakeReport(IntakeScreeningEntity intake);
         Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake);
         Stream IntakeForeignLanguage(IntakeForeignLanguageEntity intake);
+        Stream IntakeAdvancedDirective(IntakeAdvancedDirectiveEntity intake);
         #endregion
 
         #region Fars reports
