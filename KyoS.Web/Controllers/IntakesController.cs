@@ -979,6 +979,27 @@ namespace KyoS.Web.Controllers
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
 
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintTelehealthConsent(int id)
+        {
+            IntakeConsentForTelehealthEntity entity = await _context.IntakeConsentForTelehealth
+
+                                                                    .Include(c => c.Client)
+                                                                 
+                                                                    .Include(c => c.Client)
+                                                                    .ThenInclude(cm => cm.Clinic)
+
+                                                                    .FirstOrDefaultAsync(c => c.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeTelehealthConsent(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }        
+
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
         {

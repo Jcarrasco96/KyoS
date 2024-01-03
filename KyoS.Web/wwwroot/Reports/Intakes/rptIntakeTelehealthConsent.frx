@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/03/2024 17:30:06" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrPp3R3gfhrMqK1pzbdYLvuA==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="IntakeConsentForTelehealth" DataType="System.Int32" Enabled="true" TableName="IntakeConsentForTelehealth">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Client_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureLegalGuardian" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="IConsentToReceive" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="78.15">
+      <TextObject Name="Textbox12" Left="132.75" Top="9.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="131.75" Top="31.33" Width="535.1" Height="22" CanGrow="true" Text="TELEHEALTH CONSENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="132.3" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="75.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="131.3" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="74.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="82" Width="778.3" Height="809.92">
+      <TextObject Name="Text40" Left="2" Top="57.25" Width="90.72" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text41" Left="374" Top="57.25" Width="94.5" Height="18.9" Text="Client Record:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text44" Left="80.6" Top="57.25" Width="292.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="469.5" Top="57.25" Width="103.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text304" Left="18.9" Top="217.9" Width="756" Height="359.1" CanGrow="true" CanShrink="true" CanBreak="false" Text="✓ With your consent, &lt;b&gt;[Clinics.Name]&lt;/b&gt; may use telehealth to provide behavioral health services including intake assessments, psychotherapy and ongoing Psychosocial Rehabilitation (PSR) sessions.&#13;&#10;✓ This consent to participate in telehealth services shall remain in effect for &lt;b&gt;one (1) year&lt;/b&gt; from the date of this signed consent, or until I revoke my consent orally or in writing by signing the revocation below.&#13;&#10;✓ I understand that telehealth sessions &lt;b&gt;will not&lt;/b&gt; be recorded at any time.&#13;&#10;✓ I understand that my insurance will be billed for the telehealth service, if applicable, and I will not incur any expenses related to the use of audio/video equipment.&#13;&#10;✓ &lt;b&gt;Benefits:&lt;/b&gt; I understand that one of the main benefits of using telehealth for my psychotherapy and/or PSR services is that it allows me to participate in sessions using an electronic device rather than having to travel to a physical location.&#13;&#10;✓ &lt;b&gt;Risks:&lt;/b&gt; I understand that some risks of telehealth services include the possibility of a breach in privacy and confidentiality if security protocols fail. I also understand that our session may be impacted by technical difficulties resulting in low-quality audio/video transmission or in having to reschedule our session for a different time.&#13;&#10;✓ I understand that I will be asked to provide my physical location at the start of each session. My location information is gathered for safety purposes and may be used in instances in which I indicate that I may be a risk to myself or others. Limits to confidentiality are fully discussed in my Consent to Mental Health Treatment.&#13;&#10;✓ I understand that my intake specialist and/or treating clinician may decline the use of telehealth services if my clinical needs would be better served with face-to-face meetings.&#13;&#10;✓ My signature below indicates that I understand the benefits and risks of receiving services via telehealth and I have chosen to receive services through telehealth. If at any time I do not wish to receive services via telehealth I will inform my psychotherapist that I want to receive behavioral health services face to face.&#13;&#10;✓ If I withdraw consent for services via telehealth, and later wish to receive services via telehealth again, I will inform my therapist that I wish to sign a new Telehealth Consent. &#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox27" Left="13.45" Top="617.25" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="IntakeConsentForTelehealth.IConsentToReceive"/>
+      <TextObject Name="Text310" Left="27.35" Top="615.8" Width="718.2" Height="30.24" Text="I CONSENT to receive psychotherapy services via Telehealth. " HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox28" Left="13.45" Top="641.5" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([IntakeConsentForTelehealth.IConsentToReceive] == true,false,true)"/>
+      <TextObject Name="Text317" Left="27.35" Top="640.05" Width="718.2" Height="30.24" Text="I DO NOT consent to receive psychotherapy services via Telehealth." HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text290" Left="56.7" Top="763.9" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line15" Left="249.7" Top="762.45" Width="-192.78"/>
+      <TextObject Name="Text291" Left="532.2" Top="764.9" Width="134.19" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text292" Left="532.2" Top="744.1" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeConsentForTelehealth.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture4" Left="103.95" Top="701.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text303" Top="16" Width="780.8" Height="31.45" CanGrow="true" Text="Note: (The person signing this consent may withdraw their consent orally or in writing before or during treatment by notifying the treating professional.)" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text322" Left="570.45" Top="57.25" Width="94.5" Height="18.9" Text="Date of Birth:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text323" Left="665.95" Top="57.25" Width="103.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.DateOfBirth]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text324" Left="-2" Top="85.6" Width="308.07" Height="18.9" Text="This consent is valid for a period of one (1) year." VertAlign="Center" Font="Arial, 9pt, style=Bold, Underline"/>
+      <TextObject Name="Text325" Left="-2" Top="113.95" Width="90.72" Height="18.9" Text="Today's Date:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text326" Left="80.51" Top="113.95" Width="103.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeConsentForTelehealth.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text327" Left="328.45" Top="113.95" Width="156.87" Height="18.9" Text="Consent Expiration Date:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text328" Left="469.5" Top="113.95" Width="103.95" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[AddYears([IntakeConsentForTelehealth.DateSignatureEmployee],1)]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text329" Top="154.75" Width="774.9" Height="66.15" Text="&lt;b&gt;&quot;Telehealth&quot;&lt;/b&gt; refers to the use of communication technologies, such as computers or hand-held electronic devices, to provide remote access to health care services. The same standards of care and protocol exist with telehealth as are adhered to when assessing and treating clients in our offices. Confidentiality and its limits are discussed fully in your Consent to Mental Health Treatment.&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text330" Top="591.9" Width="629.37" Height="18.9" Text="Based on the information I have reviewed with the clinician (check one of the following):" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </DataBand>
+  </ReportPage>
+</Report>

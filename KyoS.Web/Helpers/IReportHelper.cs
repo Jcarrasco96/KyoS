@@ -118,6 +118,7 @@ namespace KyoS.Web.Helpers
         Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake);
         Stream IntakeForeignLanguage(IntakeForeignLanguageEntity intake);
         Stream IntakeAdvancedDirective(IntakeAdvancedDirectiveEntity intake);
+        Stream IntakeTelehealthConsent(IntakeConsentForTelehealthEntity intake);
         #endregion
 
         #region Fars reports

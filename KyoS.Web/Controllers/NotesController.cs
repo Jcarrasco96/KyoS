@@ -6809,7 +6809,7 @@ namespace KyoS.Web.Controllers
             }
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
-                Stream stream = _reportHelper.OrionIndNoteReportSchema1(workdayClient);
+                Stream stream = _reportHelper.AlliedIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
