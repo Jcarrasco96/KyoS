@@ -12333,6 +12333,89 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream IntakeNoDuplicateService(IntakeNoDuplicateServiceEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeNoDuplicateService.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeNoDuplicateServiceDS(intake));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeNoDuplicateService");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intake.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            string nameEmployee = string.Empty;
+
+            if (!string.IsNullOrEmpty(intake.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(m => m.Name == intake.AdmissionedFor);
+
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+                nameEmployee = manager.Name;
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(d => d.Name == intake.AdmissionedFor);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                    nameEmployee = assistant.Name;
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("nameEmployee", nameEmployee);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Fars Form reports
@@ -21758,6 +21841,52 @@ namespace KyoS.Web.Helpers
                     new DateTime(),
                     string.Empty,
                     false,
+                    false
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeNoDuplicateServiceDS(IntakeNoDuplicateServiceEntity intakeNoDuplicate)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeNoDuplicateService"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));            
+            dt.Columns.Add("Documents", typeof(bool));            
+
+            if (intakeNoDuplicate != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    intakeNoDuplicate.Id,
+                    0,
+                    intakeNoDuplicate.DateSignatureLegalGuardian,
+                    intakeNoDuplicate.DateSignaturePerson,
+                    intakeNoDuplicate.DateSignatureEmployee,
+                    intakeNoDuplicate.AdmissionedFor,                    
+                    intakeNoDuplicate.Documents
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,                    
                     false
                 });
             }

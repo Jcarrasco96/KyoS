@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/02/2024 14:37:05" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/04/2024 10:53:35" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrF4DprSE9qrBIP5RsB0Jo6A==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrGKcZm8U1hwbzPmuUWcPMzQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -149,7 +149,7 @@
       <TextObject Name="Text291" Left="532.2" Top="574.9" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line16" Left="725.2" Top="573.45" Width="-192.78"/>
       <TextObject Name="Text292" Left="532.2" Top="554.1" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeAdvancedDirective.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text318" Left="256.05" Top="670.95" Width="238.14" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text318" Left="256.05" Top="670.95" Width="238.14" Height="24.57" CanGrow="true" Text="Authorized Representative Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line17" Left="502.75" Top="670.5" Width="-249.48"/>
       <TextObject Name="Text319" Left="256.15" Top="782.35" Width="238.14" Height="24.57" CanGrow="true" Text="Employee Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line18" Left="502.85" Top="781.9" Width="-249.48"/>

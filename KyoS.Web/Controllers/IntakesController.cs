@@ -998,6 +998,30 @@ namespace KyoS.Web.Controllers
 
             Stream stream = _reportHelper.IntakeTelehealthConsent(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintNoDuplicateService(int id)
+        {
+            IntakeNoDuplicateServiceEntity entity = await _context.IntakeNoDuplicateService
+
+                                                                  .Include(c => c.Client)
+
+                                                                  .Include(c => c.Client)
+                                                                  .ThenInclude(cm => cm.Clinic)
+
+                                                                  .Include(c => c.Client)
+                                                                  .ThenInclude(cm => cm.LegalGuardian)
+
+                                                                  .FirstOrDefaultAsync(c => c.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeNoDuplicateService(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }        
 
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]

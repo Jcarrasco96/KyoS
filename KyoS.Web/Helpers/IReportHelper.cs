@@ -119,6 +119,7 @@ namespace KyoS.Web.Helpers
         Stream IntakeForeignLanguage(IntakeForeignLanguageEntity intake);
         Stream IntakeAdvancedDirective(IntakeAdvancedDirectiveEntity intake);
         Stream IntakeTelehealthConsent(IntakeConsentForTelehealthEntity intake);
+        Stream IntakeNoDuplicateService(IntakeNoDuplicateServiceEntity intake);
         #endregion
 
         #region Fars reports
