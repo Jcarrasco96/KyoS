@@ -99,6 +99,17 @@
         </div>
         <div class="col-md-push-12">
             <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMDischarge != null)
+                {
+                    @await Html.PartialAsync("_ViewDischarge", Model.TcmServicePlan.TCMDischarge)
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
                 @if (Model.TCMNote.Count() > 0)
                 {
                     @await Html.PartialAsync("_ViewTCMNotesForCase", Model.TCMNote.ToList())

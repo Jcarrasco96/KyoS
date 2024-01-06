@@ -738,12 +738,12 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "TCMSupervisor, Manager, CaseManager")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMDischargeViewModel model;
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager") || User.IsInRole("CaseManager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -910,6 +910,55 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        public async Task<IActionResult> Delete1(int id = 0, int tcmClientId = 0)
+        {
+            TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                      .FirstOrDefault(m => m.Id == id);
+            if (tcmDischarge == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMDischarge.Remove(tcmDischarge);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMDischargeEntity tcmDischarge = await _context.TCMDischarge.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmDischarge == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                tcmDischarge.Approved = 0;
+                _context.TCMDischarge.Update(tcmDischarge);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
 
     }
 }
