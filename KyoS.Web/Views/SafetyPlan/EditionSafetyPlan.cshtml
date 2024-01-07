@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.SafetyPlanEntity>
 @{
-    ViewData["Title"] = "Edition Safety Plan";
+    ViewData["Title"] = "Safety Plans in edition";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,7 +10,7 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Edition Safety Plan</li>
+        <li class="active">Safety Plan in edition</li>
     </ul><!--.breadcrumb-->
 </div>
 
@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Edition Safety Plan</h3>
+                <h3 class="panel-title">Safety Plan in edition</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -27,13 +27,13 @@
                             <th class="col-md-3">
                                 Client
                             </th>
-                            <th class="col-md-2" style="text-align:center">
+                            <th class="col-md-1" style="text-align:center">
                                 Admission
                             </th>
                             <th class="col-md-2" style="text-align:center">
                                 Doc.
                             </th>
-                            <th class="col-md-2" style="text-align:center">
+                            <th class="col-md-3" style="text-align:center">
                                 Admissioned for
                             </th>
                            

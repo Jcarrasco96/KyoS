@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.SafetyPlanViewModel
 @{
-    ViewData["Title"] = "Edit Safety Plan";
+    ViewData["Title"] = "Safety Plan";
 }
 
 <!DOCTYPE html>
@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @Html.ActionLink("All Safety Plans", "Index", "SafetyPlan")
             </li>
-            <li class="active">Edit Safety Plan</li>
+            <li class="active">Safety Plan</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit Safety Plan</h4>
+    <h4>Safety Plan</h4>
     <hr />
     <div class="row">
         <form asp-action="EditReadOnly" asp-route-id="@Model.Id" enctype="multipart/form-data">
