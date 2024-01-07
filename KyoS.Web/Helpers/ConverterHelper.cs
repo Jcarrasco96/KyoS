@@ -8182,5 +8182,69 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
+        public async Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew)
+        {
+            return new MeetingNoteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Date = model.Date,
+                Description = model.Description,
+                PlanNote = model.PlanNote,
+                Status = model.Status,
+                Title = model.Title,
+                Supervisor = model.Supervisor,
+                FacilitatorList = model.FacilitatorList
+            };
+        }
+
+        public MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity entity)
+        {
+
+            MeetingNotesViewModel model = new MeetingNotesViewModel();
+            model = new MeetingNotesViewModel
+            {
+                Id = entity.Id,
+                Date = entity.Date,
+                Description = entity.Description,
+                PlanNote = entity.PlanNote,
+                Status = entity.Status,
+                Title = entity.Title,
+                Supervisor = entity.Supervisor,
+                FacilitatorList = entity.FacilitatorList
+            };
+         
+            return model;
+        }
+
+        public async Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew)
+        {
+            return new MeetingNotes_Facilitator
+            {
+                Id = isNew ? 0 : model.Id,
+                DateSign = model.DateSign,
+                Intervention = model.Intervention,
+                Sign = model.Sign
+                
+            };
+        }
+
+        public MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator entity)
+        {
+
+            MeetingNotesFacilitatorModel model = new MeetingNotesFacilitatorModel();
+            model = new MeetingNotesFacilitatorModel
+            {
+               Id = entity.Id,
+               DateSign = entity.DateSign,
+               Intervention = entity.Intervention,
+               Sign = entity.Sign,
+               Facilitator = entity.Facilitator,
+               MeetingNoteEntity = entity.MeetingNoteEntity,
+               IdSupervisorNote = entity.MeetingNoteEntity.Id
+            };
+
+            return model;
+        }
+
     }
 }

@@ -39,5 +39,6 @@ namespace KyoS.Web.Data.Entities
 
         public List<CiteEntity> CiteList { get; set; }
         public List<ReferralFormEntity> ReferralFormList { get; set; }
+        public List<MeetingNotes_Facilitator> SupervisorNotes_FacilitatorList { get; set; }
     }
 }

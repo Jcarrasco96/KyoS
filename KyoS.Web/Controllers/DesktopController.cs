@@ -255,6 +255,11 @@ namespace KyoS.Web.Controllers
                                                    .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
                                                                   && c.SafetyPlan == null
                                                                   && c.IndividualTherapyFacilitator.Id == facilitator.Id));
+                ViewBag.PendingMeetingSign = await _context.MeetingNotes
+                                                           .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
+                                                                          && (m.FacilitatorList.Where(n => n.Facilitator.LinkedUser == user_logged.UserName
+                                                                                                        && n.Sign == false).Count() > 0)
+                                                                          && m.Status != NoteStatus.Approved));
             }
             if (User.IsInRole("Supervisor"))
             {
@@ -364,6 +369,11 @@ namespace KyoS.Web.Controllers
                                                         .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
                                                                       && m.Supervisor.LinkedUser == user_logged.UserName
                                                                       && m.SupervisorSign == false));
+
+                ViewBag.PendingSupervisorNotes = await _context.MeetingNotes
+                                                               .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
+                                                                              && m.Supervisor.LinkedUser == user_logged.UserName
+                                                                              && m.Status != NoteStatus.Approved));
             }
             if (User.IsInRole("Manager"))
             {
