@@ -19332,6 +19332,94 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Safety Plan reports
+        public Stream SafetyPlanReport(SafetyPlanEntity safety)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptSafetyPlan.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(safety.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(safety.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(safety.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(safety.Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(safety.DocumentAssisstant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSafetyPlanDS(safety));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "SafetyPlan");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(safety.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(safety.Client.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            string nameEmployee = string.Empty;
+
+            if (!string.IsNullOrEmpty(safety.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(safety.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if ((safety.Facilitator != null) && (!string.IsNullOrEmpty(safety.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(safety.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+                nameEmployee = safety.Facilitator.Name;
+            }
+            else
+            {
+                if ((safety.DocumentAssisstant != null) && (!string.IsNullOrEmpty(safety.DocumentAssisstant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(safety.DocumentAssisstant.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                    nameEmployee = safety.DocumentAssisstant.Name;
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("nameEmployee", nameEmployee);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -21888,6 +21976,91 @@ namespace KyoS.Web.Helpers
                     new DateTime(),
                     string.Empty,                    
                     false
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetSafetyPlanDS(SafetyPlanEntity safetyPlan)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "SafetyPlan"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));           
+            dt.Columns.Add("DateSignatureClient", typeof(DateTime));
+            dt.Columns.Add("DateSignatureFacilitator", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("PeopleIcanCall", typeof(string));
+            dt.Columns.Add("WaysToKeepmyselfSafe", typeof(string));
+            dt.Columns.Add("AdviceIwould", typeof(string));
+            dt.Columns.Add("WaysToDistract", typeof(string));
+            dt.Columns.Add("WarningSignsOfCrisis", typeof(string));
+            dt.Columns.Add("ThingsThat", typeof(string));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("DateDocument", typeof(DateTime));
+            dt.Columns.Add("DocumentAssisstantId", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));            
+
+            if (safetyPlan != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    safetyPlan.Id,
+                    0,
+                    safetyPlan.DateSignatureClient,
+                    safetyPlan.DateSignatureFacilitator,
+                    safetyPlan.Documents,
+                    0,
+                    safetyPlan.PeopleIcanCall,
+                    safetyPlan.WaysToKeepmyselfSafe,
+                    safetyPlan.AdviceIwould,
+                    safetyPlan.WaysToDistract,
+                    safetyPlan.WarningSignsOfCrisis,
+                    safetyPlan.ThingsThat,
+                    safetyPlan.Status,
+                    0,
+                    safetyPlan.DateDocument,
+                    0,
+                    safetyPlan.CreatedBy,
+                    safetyPlan.CreatedOn,
+                    safetyPlan.LastModifiedBy,
+                    safetyPlan.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    false,
+                    0,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    SafetyPlanStatus.Pending,
+                    0,
+                    new DateTime(),
+                    0,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
                 });
             }
 
