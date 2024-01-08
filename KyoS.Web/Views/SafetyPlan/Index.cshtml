@@ -56,7 +56,7 @@
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.AdmisionDate)
+                                Admission Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -109,7 +109,7 @@
                                 </td>
                                 <td align="right">
                                     <a asp-action="EditReadOnly" asp-route-id="@item.SafetyPlan.Id" class="btn btn-info" title="View Safety Plan"><i class="glyphicon glyphicon-search"></i></a>
-                                    <a class="btn btn-success disabled" title="Print Safety Plan"><i class="glyphicon glyphicon-print"></i></a>
+                                    <a class="btn btn-success" asp-action="PrintSafetyPlan" asp-route-id="@item.SafetyPlan.Id" title="Print Safety Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                 </td>
                             </tr>
                         }

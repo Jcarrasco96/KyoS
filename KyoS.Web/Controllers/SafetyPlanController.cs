@@ -466,5 +466,31 @@ namespace KyoS.Web.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "Manager, Facilitator, Supervisor, Documents_Assistant")]
+        public IActionResult PrintSafetyPlan(int id)
+        {
+            SafetyPlanEntity entity = _context.SafetyPlan
+
+                                              .Include(s => s.Client)
+                                              .ThenInclude(s => s.Clinic)           
+                                              
+                                              .Include(s => s.Facilitator)
+
+                                              .Include(s => s.DocumentAssisstant)
+
+                                              .Include(s => s.Supervisor)                                       
+
+                                              .FirstOrDefault(s => (s.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            
+            Stream stream = _reportHelper.SafetyPlanReport(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);            
+            
+        }
     }
 }

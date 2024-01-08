@@ -215,6 +215,10 @@ namespace KyoS.Web.Helpers
         Stream AlliedBriefReport(BriefEntity brief);
         #endregion
 
+        #region Safety Plan reports
+        Stream SafetyPlanReport(SafetyPlanEntity safety);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);
         #endregion

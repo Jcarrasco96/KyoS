@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/07/2024 20:07:30" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrJJhLngMCl+U9KZh7DaI4BA==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="SafetyPlan" DataType="System.Int32" Enabled="true" TableName="SafetyPlan">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Client_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureClient" DataType="System.DateTime"/>
+        <Column Name="DateSignatureFacilitator" DataType="System.DateTime"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FacilitatorId" DataType="System.Int32"/>
+        <Column Name="PeopleIcanCall" DataType="System.String"/>
+        <Column Name="WaysToKeepmyselfSafe" DataType="System.String"/>
+        <Column Name="AdviceIwould" DataType="System.String"/>
+        <Column Name="WaysToDistract" DataType="System.String"/>
+        <Column Name="WarningSignsOfCrisis" DataType="System.String"/>
+        <Column Name="ThingsThat" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="SupervisorId" DataType="System.Int32"/>
+        <Column Name="DateDocument" DataType="System.DateTime"/>
+        <Column Name="DocumentAssisstantId" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="DocumentsAssistant" DataType="System.Int32" Enabled="true" TableName="DocumentsAssistant">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="nameEmployee" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="87.6">
+      <TextObject Name="Textbox12" Left="123.75" Top="14.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="122.75" Top="36.33" Width="535.1" Height="22" CanGrow="true" Text="Safety Plan Report" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="123.3" Top="19.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="9.45" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="122.3" Top="18.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="91.45" Width="778.3" Height="876.07">
+      <TextObject Name="Text40" Top="18.9" Width="90.72" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text41" Left="455.6" Top="18.9" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text44" Left="81.6" Top="18.9" Width="340.2" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="551.1" Top="18.9" Width="223.78" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text284" Left="132.3" Top="849.05" Width="153.09" Height="24.57" CanGrow="true" Text="Employee's Signature" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line11" Left="325.3" Top="847.6" Width="-192.78"/>
+      <PictureObject Name="Picture3" Left="179.55" Top="787.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="132.3" Top="754.45" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line15" Left="325.3" Top="753" Width="-192.78"/>
+      <TextObject Name="Text319" Left="407.35" Top="848.5" Width="238.14" Height="24.57" CanGrow="true" Text="Employee's Name" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line18" Left="654.05" Top="848.05" Width="-249.48"/>
+      <TextObject Name="Text320" Left="405.35" Top="828.6" Width="255.15" Height="18.9" Text="[nameEmployee]" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture4" Left="179.55" Top="691.85" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text322" Top="66.15" Width="298.62" Height="18.9" Text="People I can call or talk to for help" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text423" Top="85.05" Width="774.9" Height="61.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[SafetyPlan.PeopleIcanCall]" Font="Arial, 9pt"/>
+      <TextObject Name="Text424" Top="151.2" Width="298.62" Height="18.9" Text="Warning signs of crisis" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text425" Top="170.1" Width="774.9" Height="61.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[SafetyPlan.WarningSignsOfCrisis]" Font="Arial, 9pt"/>
+      <TextObject Name="Text426" Top="236.25" Width="298.62" Height="18.9" Text="Ways to keep myself safe" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text427" Top="255.15" Width="774.9" Height="61.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[SafetyPlan.WaysToKeepmyselfSafe]" Font="Arial, 9pt"/>
+      <TextObject Name="Text428" Top="321.3" Width="298.62" Height="18.9" Text="Advice I would give a friend" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text429" Top="340.2" Width="774.9" Height="61.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[SafetyPlan.AdviceIwould]" Font="Arial, 9pt"/>
+      <TextObject Name="Text430" Top="406.35" Width="298.62" Height="18.9" Text="Ways to distract myself" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text431" Top="425.25" Width="774.9" Height="61.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[SafetyPlan.WaysToDistract]" Font="Arial, 9pt"/>
+      <TextObject Name="Text432" Left="409.35" Top="753" Width="238.14" Height="24.57" CanGrow="true" Text="Client's Name" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line19" Left="656.05" Top="752.55" Width="-249.48"/>
+      <TextObject Name="Text433" Left="407.35" Top="733.1" Width="255.15" Height="18.9" Text="[Clients.Name]" Font="Arial, 9pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
