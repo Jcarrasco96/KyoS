@@ -2359,15 +2359,16 @@ namespace KyoS.Web.Helpers
                 PresentProblems = TcmDischargeEntity.PresentProblems,
                 ProgressToward = TcmDischargeEntity.ProgressToward,
                 Referred = TcmDischargeEntity.Referred,
-                StaffingDate = DateTime.Now,
-                StaffSignatureDate = DateTime.Now,
-                SupervisorSignatureDate = DateTime.Now,
+                StaffingDate = TcmDischargeEntity.StaffingDate,
+                StaffSignatureDate = TcmDischargeEntity.StaffSignatureDate,
+                SupervisorSignatureDate = TcmDischargeEntity.SupervisorSignatureDate,
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
                 TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
                 Approved = TcmDischargeEntity.Approved,
                 CreatedBy = TcmDischargeEntity.CreatedBy,
-                CreatedOn = TcmDischargeEntity.CreatedOn
+                CreatedOn = TcmDischargeEntity.CreatedOn,
+                TCMSupervisor = TcmDischargeEntity.TCMSupervisor
 
             };
         }

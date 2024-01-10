@@ -65,6 +65,8 @@
                     </div>
                 </div>
                 <br />
+                <partial name="_TCMDischargeSignReadOnly" />
+                <br />
                 <div class="form-group col-md-12">
 
                     @if (User.IsInRole("TCMSupervisor") && Model.Approved == 1)
@@ -72,7 +74,7 @@
                         <input type="submit" value="Approve" class="btn btn-primary" />
                         <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMDischarges",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm service plan due to problems">Review</a>
                     }
-                  
+
                     @if (ViewData["origi"].ToString() == "0")
                     {
                         <a asp-action="TCMDischargeApproved" asp-route-approved="1" class="btn btn-success">Back</a>
