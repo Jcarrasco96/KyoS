@@ -19915,40 +19915,49 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Email", typeof(string));
             dt.Columns.Add("Agency", typeof(string));
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZidCode", typeof(string));            
             
             if (referred != null)
             {
                 dt.Rows.Add(new object[]
-                                            {
-                                            referred.Id,
-                                            referred.CreatedBy,
-                                            referred.CreatedOn,
-                                            referred.LastModifiedBy,
-                                            referred.LastModifiedOn,
-                                            referred.Name,
-                                            referred.Address,
-                                            referred.Telephone,
-                                            referred.Email,
-                                            referred.Agency,
-                                            referred.Title
-                                            });
+                {
+                referred.Id,
+                referred.CreatedBy,
+                referred.CreatedOn,
+                referred.LastModifiedBy,
+                referred.LastModifiedOn,
+                referred.Name,
+                referred.Address,
+                referred.Telephone,
+                referred.Email,
+                referred.Agency,
+                referred.Title,
+                referred.City,
+                referred.State,
+                referred.ZidCode
+                });
             }
             else
             {
                 dt.Rows.Add(new object[]
-                                            {
-                                            0,
-                                            string.Empty,
-                                            new DateTime(),
-                                            string.Empty,
-                                            new DateTime(),
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty,
-                                            string.Empty                                            
-                                            });
+                {
+                0,
+                string.Empty,
+                new DateTime(),
+                string.Empty,
+                new DateTime(),
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty
+                });
             }
 
             return dt;
@@ -23502,6 +23511,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Email", typeof(string));
             dt.Columns.Add("Agency", typeof(string));
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZidCode", typeof(string));
 
             foreach (Client_Referred item in referredList)
             {
@@ -23519,7 +23531,10 @@ namespace KyoS.Web.Helpers
                                             item.Referred.Telephone,
                                             item.Referred.Email,
                                             item.Referred.Agency,
-                                            item.Referred.Title
+                                            item.Referred.Title,
+                                            item.Referred.City,
+                                            item.Referred.State,
+                                            item.Referred.ZidCode
                                         });
                 }                
             }
