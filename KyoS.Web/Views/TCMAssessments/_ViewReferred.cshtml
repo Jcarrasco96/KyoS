@@ -44,7 +44,10 @@
                                         @Html.DisplayFor(modelItem => item.Referred.Agency)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Referred.Address)
+                                        @Html.DisplayFor(modelItem => item.Referred.Address),
+                                        @Html.DisplayFor(modelItem => item.Referred.City),
+                                        @Html.DisplayFor(modelItem => item.Referred.State),
+                                        @Html.DisplayFor(modelItem => item.Referred.ZidCode)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Referred.Telephone)

@@ -21,5 +21,9 @@ namespace KyoS.Web.Data.Entities
         public int IdClient { get; set; }
 
         public ReferredType type { get; set; }
+
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZidCode { get; set; }
     }
 }

@@ -245,5 +245,9 @@ namespace KyoS.Web.Helpers
         SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model);
         Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId);
         IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model);
+        Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew);
+        MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity model);
+        Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
+        MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
     }
 }

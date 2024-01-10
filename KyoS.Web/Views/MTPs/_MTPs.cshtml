@@ -15,10 +15,10 @@
         </div>
     </div>
     <div class="form-group col-md-6">
-        <label class="control-label">Diagnosis</label>
+        <label class="control-label">Diagnosis (only Dx. principal)</label>
         @if(Model.Client != null)
         {
-            @if (Model.Client.Clients_Diagnostics.Count() > 0)
+            @if (Model.Client.Clients_Diagnostics.Where(n => n.Principal == true && n.Diagnostic != null).Count() > 0)
             {
                 <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly id="txtDiagnosis">
             }

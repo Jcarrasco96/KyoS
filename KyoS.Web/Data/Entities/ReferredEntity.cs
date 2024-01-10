@@ -11,5 +11,8 @@ namespace KyoS.Web.Data.Entities
         public string Title { get; set; }
 
         public string Agency { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZidCode { get; set; }
     }
 }

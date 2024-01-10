@@ -159,6 +159,8 @@ namespace KyoS.Web.Data
         public DbSet<IntakeForeignLanguageEntity> IntakeForeignLanguage { get; set; }
         public DbSet<SafetyPlanEntity> SafetyPlan { get; set; }
         public DbSet<IncidentReportEntity> IncidentReport { get; set; }
+        public DbSet<MeetingNoteEntity> MeetingNotes { get; set; }
+        public DbSet<MeetingNotes_Facilitator> MeetingNotes_Facilitators { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -718,6 +720,12 @@ namespace KyoS.Web.Data
                          .HasOne(g => g.Client)
                          .WithMany(m => m.IncidentReport)
                          .OnDelete(DeleteBehavior.Cascade);
+
+             modelBuilder.Entity<MeetingNotes_Facilitator>()
+                        .HasOne(cd => cd.MeetingNoteEntity)
+                        .WithMany(c => c.FacilitatorList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
