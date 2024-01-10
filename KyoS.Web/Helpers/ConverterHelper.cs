@@ -1167,7 +1167,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Agency = model.Agency,
-                Title = model.Title
+                Title = model.Title,
+                City = model.City,
+                State = model.State,
+                ZidCode = model.ZidCode
             };
         }
 
@@ -1235,7 +1238,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 Agency = model.Agency,
-                Title = model.Title
+                Title = model.Title,
+                City = model.City,
+                State = model.State,
+                ZidCode = model.ZidCode
             };
         }
 

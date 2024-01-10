@@ -41,15 +41,32 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <label asp-for="Agency" class="control-label"></label>
                 <textarea asp-for="Agency" id="lbAgency" class="form-control" rows="1" disabled />
                 <span asp-validation-for="Agency" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="col-md-6">
                 <label asp-for="Address" class="control-label"></label>
                 <textarea asp-for="Address" id="lbAddress" class="form-control" rows="1" disabled />
                 <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="City" class="control-label"></label>
+                <textarea asp-for="City" id="lbCity" class="form-control" rows="1" disabled />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="State" class="control-label"></label>
+                <textarea asp-for="State" id="lbState" class="form-control" rows="1" disabled />
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ZidCode" class="control-label"></label>
+                <textarea asp-for="ZidCode" id="lbZidcode" class="form-control" rows="1" disabled />
+                <span asp-validation-for="ZidCode" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-12">
@@ -98,6 +115,9 @@
             $("#lbAddress").prop('disabled', false);
             $("#lbPhone").prop('disabled', false);
             $("#lbEmail").prop('disabled', false);
+            $("#lbCity").prop('disabled', false);
+            $("#lbState").prop('disabled', false);
+            $("#lbZidcode").prop('disabled', false);
             
         }
         else {
@@ -116,6 +136,12 @@
             $("#lbPhone").prop('disabled', true);
             $("#lbEmail").val("");
             $("#lbEmail").prop('disabled', true);
+            $("#lbCity").val("");
+            $("#lbCity").prop('disabled', true);
+            $("#lbState").val("");
+            $("#lbState").prop('disabled', true);
+            $("#lbZidcode").val("");
+            $("#lbZidcode").prop('disabled', true);
         }
     })
     

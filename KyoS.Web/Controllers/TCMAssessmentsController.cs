@@ -2639,7 +2639,10 @@ namespace KyoS.Web.Controllers
                         Telephone = referredTempViewModel.Telephone,
                         Title = referredTempViewModel.Title,
                         CreatedBy = user_logged.Id,
-                        CreatedOn = createdDate
+                        CreatedOn = createdDate,
+                        City = referredTempViewModel.City,
+                        State = referredTempViewModel.State,
+                        ZidCode = referredTempViewModel.ZidCode
 
                     };
 
