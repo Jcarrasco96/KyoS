@@ -1979,6 +1979,7 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workday_Client = _context.Workdays_Clients
                                                           .Where(n => (n.Workday.Date == start.Date
                                                                     && n.Client.Id == idClient
+                                                                    && n.Present == true
                                                                     && ((n.Workday.Service != ServiceType.Individual
                                                                         && (n.Schedule.InitialTime.TimeOfDay <= start.TimeOfDay && n.Schedule.EndTime.TimeOfDay >= start.TimeOfDay
                                                                          || n.Schedule.InitialTime.TimeOfDay <= end.TimeOfDay && n.Schedule.EndTime.TimeOfDay >= end.TimeOfDay
