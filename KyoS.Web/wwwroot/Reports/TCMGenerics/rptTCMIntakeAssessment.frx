@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 18:58:22" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/09/2024 19:10:17" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuMDMA6joDGwwBawDdrOGsLg=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuG48ku/GiE+bRejppp/gmsY=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -689,8 +689,7 @@
       <TextObject Name="Text67" Left="491.4" Top="130.85" Width="94.5" Height="18.9" Text="Marital Status:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text68" Left="585.9" Top="130.85" Width="190.13" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Switch([Clients.MaritalStatus] == 0, &quot;Unknown&quot;,[Clients.MaritalStatus] == 1, &quot;Single&quot;,[Clients.MaritalStatus] == 2, &quot;Married&quot;,[Clients.MaritalStatus] == 3, &quot;Cohabiting&quot;,[Clients.MaritalStatus] == 4, &quot;Divorced&quot;,[Clients.MaritalStatus] == 5, &quot;Separated&quot;,[Clients.MaritalStatus] == 6, &quot;Widowed&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text73" Top="152.2" Width="113.4" Height="18.9" Text="Primary Language:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text74" Left="110.4" Top="152.2" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.PreferredLanguage]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text75" Left="283.5" Top="152.2" Width="113.4" Height="18.9" Text="Other Language:" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text75" Left="276.5" Top="152.2" Width="113.4" Height="18.9" Text="Other Language:" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text76" Left="387.45" Top="152.2" Width="160.65" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.OtherLanguage]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text77" Left="567" Top="153.33" Width="47.25" Height="18.9" Text="Read" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text78" Left="631.15" Top="153.33" Width="47.25" Height="18.9" Text="Speak" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
@@ -775,6 +774,7 @@
       <CheckBoxObject Name="CheckBox59" Left="446.15" Top="564.87" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.Other"/>
       <TextObject Name="Text328" Left="500.85" Top="563.55" Width="275.94" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox23" Left="198.45" Top="304.67" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([TCMAssessment.NeedOfSpecial] == true,false,true)"/>
+      <TextObject Name="Text787" Left="111.4" Top="152.2" Width="170.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Switch([Clients.PreferredLanguage] == 0,&quot;English&quot;,[Clients.PreferredLanguage] == 1,&quot;Spanish&quot;,[Clients.PreferredLanguage] == 2,&quot;French&quot;,[Clients.PreferredLanguage] == 3,&quot;Portuguese&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
     </DataBand>
     <DataBand Name="Data3" Top="744.64" Width="778.3" Height="18.9" DataSource="TCMAssessmentIndividualAgency" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table3" Left="4.16" Width="773.14" Height="18.9">
@@ -905,7 +905,7 @@
           <TableCell Name="Cell21" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.TypeService]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell22" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.ProviderAgency]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell23" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.DateReceived]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell24" Border.Lines="All" Text="[TCMAssessmentPastCurrentService.Efectiveness]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell24" Border.Lines="All" Text="[Switch([TCMAssessmentPastCurrentService.Efectiveness] == 0, &quot;Effective&quot;,[TCMAssessmentPastCurrentService.Efectiveness] == 1, &quot;Highly effective&quot;,[TCMAssessmentPastCurrentService.Efectiveness] == 2, &quot;Somewhat effective&quot;, [TCMAssessmentPastCurrentService.Efectiveness] == 3, &quot;slightly effective&quot;, [TCMAssessmentPastCurrentService.Efectiveness] == 4, &quot;Not at all effective&quot;, [TCMAssessmentPastCurrentService.Efectiveness] == 5, &quot;unable to evaluate&quot;, [TCMAssessmentPastCurrentService.Efectiveness] == 6, &quot;In progress&quot;, [TCMAssessmentPastCurrentService.Efectiveness] == 7, &quot;Successful&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader3" Top="680.88" Width="778.3" Height="18.9">
