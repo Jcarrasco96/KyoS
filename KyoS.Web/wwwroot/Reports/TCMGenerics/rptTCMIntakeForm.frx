@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:32:22" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 09:39:52" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38baaRIGZROG/VSThxwTpVQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3U66Xa9FdgI84V82jxMzgWg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -233,12 +233,12 @@
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="98.5">
-      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="402.8" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
-      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="402.8" Height="22" CanGrow="true" Text="CASE MANAGEMENT INTAKE FORM" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <TextObject Name="Textbox12" Left="155.65" Top="9.45" Width="459.5" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="155.65" Top="31.33" Width="459.5" Height="22" CanGrow="true" Text="CASE MANAGEMENT INTAKE FORM" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <LineObject Name="Line3" Left="146.2" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
       <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
-      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line6" Left="145.2" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
     <DataBand Name="Data1" Top="102.35" Width="778.3" Height="661.5" DataSource="Clients">
@@ -283,7 +283,7 @@
       <TextObject Name="Text71" Left="103.95" Top="179.1" Width="207.9" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForms.EducationLevel]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text72" Left="481.95" Top="179.1" Width="294.46" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForms.ReligionOrEspiritual]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text73" Top="199.45" Width="113.4" Height="18.9" Text="Primary Language:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text74" Left="110.4" Top="199.45" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.PreferredLanguage]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text74" Left="110.4" Top="199.45" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Switch([Clients.PreferredLanguage] == 0,&quot;English&quot;,[Clients.PreferredLanguage] == 1,&quot;Spanish&quot;,[Clients.PreferredLanguage] == 2,&quot;French&quot;,[Clients.PreferredLanguage] == 3,&quot;Portuguese&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text75" Left="283.5" Top="199.45" Width="113.4" Height="18.9" Text="Other Language:" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text76" Left="387.45" Top="199.45" Width="160.65" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.OtherLanguage]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text77" Left="567" Top="200.58" Width="47.25" Height="18.9" Text="Read" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
