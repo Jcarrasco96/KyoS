@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/05/2024 12:20:57" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 14:08:41" ReportInfo.CreatorVersion="2021.1.0.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u30bILZGswPKNvaDCZc8QYbg==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3qfpcmeDXdJ0tja0SO6Vl6g==">
       <TableDataSource Name="TCMDomains1" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -58,7 +58,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3A5EhiqbcnEv2rTCDijcHSg==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3aMttfjqm612PbHbyQ78cEQ==">
       <TableDataSource Name="TCMDomains2" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38Gg/zIR0Vsl2eGa+ATSY0g==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3+nYHP+q2N2z5bAYOqxvn2A==">
       <TableDataSource Name="TCMDomains4" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -130,7 +130,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3j3C+MA2q27UmSU0nSj0ETQ==">
+    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3zzmsOHLgQpBz3GAcFt3oVA==">
       <TableDataSource Name="TCMDomains5" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -166,7 +166,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3HwGEHxqLCCGOsLQQe05Q5g==">
+    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3saYgbj6F6J24qol+tFR1sA==">
       <TableDataSource Name="TCMDomains6" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -202,7 +202,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cyl/jejhz+imDxQaIMMdZg==">
+    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3P7t4EkdGG/y3CTJ0GMpleA==">
       <TableDataSource Name="TCMDomains7" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -238,7 +238,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39DZgQT1dcvXpEoi67G5olQ==">
+    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3I/7Oym/9Yx5UI2M498lBlw==">
       <TableDataSource Name="TCMDomains8" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -274,7 +274,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u39To8ngstgCmHm97AbVqAhw==">
+    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3J5fjQ97r72IuD/5YkYFBng==">
       <TableDataSource Name="TCMDomains9" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -310,7 +310,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection10" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ZUG1hK8h9h3/jt8x54SG2Q==">
+    <MsSqlDataConnection Name="Connection10" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3zqaF9KfjNcUD2+szeZhL7Q==">
       <TableDataSource Name="TCMDomains10" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -346,7 +346,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection11" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3EYmEyyxV7wIYSvKvwC1Mfg==">
+    <MsSqlDataConnection Name="Connection11" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3b3RnNv7kDAWh5znThp7PIw==">
       <TableDataSource Name="TCMDomains11" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -382,7 +382,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection12" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3fsUoLoED26YxMxkzEneipg==">
+    <MsSqlDataConnection Name="Connection12" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Fa0tqMlYGN/cnknuX0yIxw==">
       <TableDataSource Name="TCMDomains12" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -418,7 +418,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3nfXThA3Uieec8uE2IOyJig==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3qIZALg+ZAcDlr3pf3YFK5w==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -537,7 +537,7 @@ namespace FastReport
         <Column Name="TCMSupervisorId" DataType="System.Int32"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38bjttgAwNyi5htS+icD4qQ==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3TQbYY/sOhg5/Vn3U+NYyrA==">
       <TableDataSource Name="TCMDomains3" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -573,7 +573,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection13" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrXo5ZtgQSIuTBQo2efQQg2A==">
+    <MsSqlDataConnection Name="Connection13" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrqhJZ0awWOVSfy8yx53mDTw==">
       <TableDataSource Name="TCMDomains" Alias="TCMDomains13" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -609,7 +609,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection14" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrWheYM6b8mVSYOKnLuM0jUA==">
+    <MsSqlDataConnection Name="Connection14" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrBqZF50wG6oWb8fgAJlvwnw==">
       <TableDataSource Name="TCMDomains13" Alias="TCMDomains14" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -645,7 +645,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection15" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrHggfLBaay84SLGlW/MmsTg==">
+    <MsSqlDataConnection Name="Connection15" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrSZ618VJchteFGj5tnPIB7g==">
       <TableDataSource Name="TCMDomains14" Alias="TCMDomains15" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -681,7 +681,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection16" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrKw9iX+KTQsYJ1H103/AoBg==">
+    <MsSqlDataConnection Name="Connection16" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrql5zAaOgrxHDLEotvJOTWg==">
       <TableDataSource Name="TCMDomains15" Alias="TCMDomains16" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -717,7 +717,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection17" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr7hSHCAw2G5sNViz2n6acdw==">
+    <MsSqlDataConnection Name="Connection17" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrloVOMOFah5ia9K+1A/Io6Q==">
       <TableDataSource Name="TCMDomains16" Alias="TCMDomains17" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -753,7 +753,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection18" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrHU7YQ/JKDwCAntbDDZulLA==">
+    <MsSqlDataConnection Name="Connection18" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrmjtqAytlGWyxCi6WRkkGdQ==">
       <TableDataSource Name="TCMDomains17" Alias="TCMDomains18" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -789,7 +789,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection19" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrAdCvhumexYmQ2XmOY0s6iQ==">
+    <MsSqlDataConnection Name="Connection19" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr5VUmTNnG0SOkpbFKzAHKXg==">
       <TableDataSource Name="TCMDomains18" Alias="TCMDomains19" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -825,7 +825,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection20" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrldJYvcI1gVNmw/enSLkBEQ==">
+    <MsSqlDataConnection Name="Connection20" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrbD0CcBrq2rvKbKZC/uXR6A==">
       <TableDataSource Name="TCMDomains19" Alias="TCMDomains20" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1161,7 +1161,7 @@ namespace FastReport
           <TableCell Name="Cell10" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell12" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives1.Id] &gt; 0,FormatDateTime([TCMObjetives1.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell358" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives1.Id] &gt; 0,FormatDateTime([TCMObjetives1.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell360" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives1.Id] &gt; 0,FormatDateTime([TCMObjetives1.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell360" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives1.Id] &gt; 0 &amp;&amp; Year([TCMObjetives1.EndDate]) &gt; 1,FormatDateTime([TCMObjetives1.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row87">
           <TableCell Name="Cell361" Font="Arial, 10pt"/>
@@ -1219,7 +1219,7 @@ namespace FastReport
           <TableCell Name="Cell17" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell18" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives2.Id] &gt; 0,FormatDateTime([TCMObjetives2.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell19" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives2.Id] &gt; 0,FormatDateTime([TCMObjetives2.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell20" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives2.Id] &gt; 0,FormatDateTime([TCMObjetives2.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell20" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives2.Id] &gt; 0 &amp;&amp; Year([TCMObjetives2.EndDate]) &gt; 1,FormatDateTime([TCMObjetives2.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row7">
           <TableCell Name="Cell21" Font="Arial, 10pt"/>
@@ -1277,7 +1277,7 @@ namespace FastReport
           <TableCell Name="Cell37" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell38" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives3.Id] &gt; 0,FormatDateTime([TCMObjetives3.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell39" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives3.Id] &gt; 0,FormatDateTime([TCMObjetives3.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell40" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives3.Id] &gt; 0,FormatDateTime([TCMObjetives3.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell40" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives3.Id] &gt; 0 &amp;&amp; Year([TCMObjetives3.EndDate]) &gt; 1,FormatDateTime([TCMObjetives3.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row11">
           <TableCell Name="Cell41" Font="Arial, 10pt"/>
@@ -1335,7 +1335,7 @@ namespace FastReport
           <TableCell Name="Cell57" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell58" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives4.Id] &gt; 0,FormatDateTime([TCMObjetives4.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell59" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives4.Id] &gt; 0,FormatDateTime([TCMObjetives4.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell60" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives4.Id] &gt; 0,FormatDateTime([TCMObjetives4.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell60" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives4.Id] &gt; 0 &amp;&amp; Year([TCMObjetives4.EndDate]) &gt; 1,FormatDateTime([TCMObjetives4.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row15">
           <TableCell Name="Cell61" Font="Arial, 10pt"/>
@@ -1393,7 +1393,7 @@ namespace FastReport
           <TableCell Name="Cell77" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell78" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives5.Id] &gt; 0,FormatDateTime([TCMObjetives5.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell79" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives5.Id] &gt; 0,FormatDateTime([TCMObjetives5.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell80" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives5.Id] &gt; 0,FormatDateTime([TCMObjetives5.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell80" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives5.Id] &gt; 0 &amp;&amp; Year([TCMObjetives5.EndDate]) &gt; 1,FormatDateTime([TCMObjetives5.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row19">
           <TableCell Name="Cell81" Font="Arial, 10pt"/>
@@ -1451,7 +1451,7 @@ namespace FastReport
           <TableCell Name="Cell97" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell98" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0,FormatDateTime([TCMObjetives6.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell99" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0,FormatDateTime([TCMObjetives6.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell100" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0,FormatDateTime([TCMObjetives6.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell100" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0 &amp;&amp; Year([TCMObjetives6.EndDate]) &gt; 1,FormatDateTime([TCMObjetives6.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row23">
           <TableCell Name="Cell101" Font="Arial, 10pt"/>
@@ -1509,7 +1509,7 @@ namespace FastReport
           <TableCell Name="Cell117" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell118" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0,FormatDateTime([TCMObjetives7.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell119" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0,FormatDateTime([TCMObjetives7.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell120" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0,FormatDateTime([TCMObjetives7.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell120" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0 &amp;&amp; Year([TCMObjetives7.EndDate]) &gt; 1,FormatDateTime([TCMObjetives7.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row27">
           <TableCell Name="Cell121" Font="Arial, 10pt"/>
@@ -1567,7 +1567,7 @@ namespace FastReport
           <TableCell Name="Cell137" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell138" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0,FormatDateTime([TCMObjetives8.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell139" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0,FormatDateTime([TCMObjetives8.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell140" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0,FormatDateTime([TCMObjetives8.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell140" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0 &amp;&amp; Year([TCMObjetives8.EndDate]) &gt; 1,FormatDateTime([TCMObjetives8.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row31">
           <TableCell Name="Cell141" Font="Arial, 10pt"/>
@@ -1625,7 +1625,7 @@ namespace FastReport
           <TableCell Name="Cell157" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell158" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0,FormatDateTime([TCMObjetives9.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell159" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0,FormatDateTime([TCMObjetives9.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell160" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0,FormatDateTime([TCMObjetives9.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell160" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0 &amp;&amp; Year([TCMObjetives9.EndDate]) &gt; 1,FormatDateTime([TCMObjetives9.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row35">
           <TableCell Name="Cell161" Font="Arial, 10pt"/>
@@ -1683,7 +1683,7 @@ namespace FastReport
           <TableCell Name="Cell177" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell178" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0,FormatDateTime([TCMObjetives10.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell179" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0,FormatDateTime([TCMObjetives10.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell180" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0,FormatDateTime([TCMObjetives10.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell180" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0 &amp;&amp; Year([TCMObjetives10.EndDate]) &gt; 1,FormatDateTime([TCMObjetives10.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row39">
           <TableCell Name="Cell181" Font="Arial, 10pt"/>
@@ -1741,7 +1741,7 @@ namespace FastReport
           <TableCell Name="Cell197" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell198" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0,FormatDateTime([TCMObjetives11.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell199" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0,FormatDateTime([TCMObjetives11.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell200" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0,FormatDateTime([TCMObjetives11.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell200" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0 &amp;&amp; Year([TCMObjetives11.EndDate]) &gt; 1,FormatDateTime([TCMObjetives11.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row43">
           <TableCell Name="Cell201" Font="Arial, 10pt"/>
@@ -1799,7 +1799,7 @@ namespace FastReport
           <TableCell Name="Cell217" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell218" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0,FormatDateTime([TCMObjetives12.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell219" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0,FormatDateTime([TCMObjetives12.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell220" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0,FormatDateTime([TCMObjetives12.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell220" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0 &amp;&amp; Year([TCMObjetives12.EndDate]) &gt; 1,FormatDateTime([TCMObjetives12.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row47">
           <TableCell Name="Cell221" Font="Arial, 10pt"/>
@@ -1857,7 +1857,7 @@ namespace FastReport
           <TableCell Name="Cell237" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell238" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0,FormatDateTime([TCMObjetives13.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell239" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0,FormatDateTime([TCMObjetives13.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell240" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0,FormatDateTime([TCMObjetives13.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell240" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0 &amp;&amp; Year([TCMObjetives13.EndDate]) &gt; 1,FormatDateTime([TCMObjetives13.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row51">
           <TableCell Name="Cell241" Font="Arial, 10pt"/>
@@ -1915,7 +1915,7 @@ namespace FastReport
           <TableCell Name="Cell257" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell258" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0,FormatDateTime([TCMObjetives14.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell259" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0,FormatDateTime([TCMObjetives14.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell260" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0,FormatDateTime([TCMObjetives14.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell260" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0 &amp;&amp; Year([TCMObjetives14.EndDate]) &gt; 1,FormatDateTime([TCMObjetives14.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row55">
           <TableCell Name="Cell261" Font="Arial, 10pt"/>
@@ -1973,7 +1973,7 @@ namespace FastReport
           <TableCell Name="Cell277" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell278" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0,FormatDateTime([TCMObjetives15.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell279" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0,FormatDateTime([TCMObjetives15.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell280" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0,FormatDateTime([TCMObjetives15.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell280" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0 &amp;&amp; Year([TCMObjetives15.EndDate]) &gt; 1,FormatDateTime([TCMObjetives15.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row59">
           <TableCell Name="Cell281" Font="Arial, 10pt"/>
@@ -2031,7 +2031,7 @@ namespace FastReport
           <TableCell Name="Cell413" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell414" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0,FormatDateTime([TCMObjetives16.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell415" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0,FormatDateTime([TCMObjetives16.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell416" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0,FormatDateTime([TCMObjetives16.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell416" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0 &amp;&amp; Year([TCMObjetives16.EndDate]) &gt; 1,FormatDateTime([TCMObjetives16.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row63">
           <TableCell Name="Cell417" Font="Arial, 10pt"/>
@@ -2089,7 +2089,7 @@ namespace FastReport
           <TableCell Name="Cell433" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell434" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0,FormatDateTime([TCMObjetives17.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell435" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0,FormatDateTime([TCMObjetives17.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell436" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0,FormatDateTime([TCMObjetives17.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell436" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0 &amp;&amp; Year([TCMObjetives17.EndDate]) &gt; 1,FormatDateTime([TCMObjetives17.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row67">
           <TableCell Name="Cell437" Font="Arial, 10pt"/>
@@ -2147,7 +2147,7 @@ namespace FastReport
           <TableCell Name="Cell453" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell454" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0,FormatDateTime([TCMObjetives18.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell455" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0,FormatDateTime([TCMObjetives18.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell456" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0,FormatDateTime([TCMObjetives18.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell456" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0 &amp;&amp; Year([TCMObjetives18.EndDate]) &gt; 1,FormatDateTime([TCMObjetives18.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row100">
           <TableCell Name="Cell457" Font="Arial, 10pt"/>
@@ -2205,7 +2205,7 @@ namespace FastReport
           <TableCell Name="Cell473" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell474" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0,FormatDateTime([TCMObjetives19.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell475" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0,FormatDateTime([TCMObjetives19.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell476" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0,FormatDateTime([TCMObjetives19.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell476" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0 &amp;&amp; Year([TCMObjetives19.EndDate]) &gt; 1,FormatDateTime([TCMObjetives19.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row104">
           <TableCell Name="Cell477" Font="Arial, 10pt"/>
@@ -2263,7 +2263,7 @@ namespace FastReport
           <TableCell Name="Cell493" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell494" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0,FormatDateTime([TCMObjetives20.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell495" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0,FormatDateTime([TCMObjetives20.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell496" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0,FormatDateTime([TCMObjetives20.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell496" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0 &amp;&amp; Year([TCMObjetives20.EndDate]) &gt; 1,FormatDateTime([TCMObjetives20.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
         <TableRow Name="Row108">
           <TableCell Name="Cell497" Font="Arial, 10pt"/>
