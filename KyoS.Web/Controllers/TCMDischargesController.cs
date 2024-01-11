@@ -253,6 +253,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(b => b.TcmServicePlan)
                                                               .ThenInclude(b => b.TcmClient)
                                                               .ThenInclude(b => b.Casemanager)
+                                                              .Include(b => b.TCMSupervisor)
                                                               .FirstOrDefault(m => m.Id == id);
                     if (TcmDischarge == null)
                     {
@@ -766,6 +767,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(b => b.TcmServicePlan)
                                                               .ThenInclude(b => b.TcmClient)
                                                               .ThenInclude(b => b.Casemanager)
+                                                              .Include(b => b.TCMSupervisor)
                                                               .FirstOrDefault(m => m.Id == id);
                     if (TcmDischarge == null)
                     {

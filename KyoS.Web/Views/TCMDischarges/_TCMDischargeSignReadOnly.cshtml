@@ -5,20 +5,20 @@
     <div class="col-md-12">
         <div class="col-md-push-12">
             <pre>
-            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
    
-            <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate" disabled>
-            <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
+        <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
             <br />
-            <input type="checkbox" class="form-check-input"> <i>Signed</i>
-            <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate">
+        <input type="checkbox" class="form-check-input"> <i>Signed</i>
+        <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate">
     @if (Model.TCMSupervisor != null)
     {
-            <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
+        <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
     }
     else
     {
-            <strong>()</strong>
+        <strong>()</strong>
     }
     </pre>
         </div>
@@ -32,20 +32,20 @@ else
     <div class="col-md-12">
         <div class="col-md-push-12">
             <pre>
-            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
    
-            <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate" disabled>
-            <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
+        <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
             <br />
-            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-            <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate" disabled>
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate" disabled>
     @if (Model.TCMSupervisor != null)
     {
-            <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
+        <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
     }
     else
     { 
-            <strong>()</strong>
+        <strong>()</strong>
     }
     </pre>
         </div>
