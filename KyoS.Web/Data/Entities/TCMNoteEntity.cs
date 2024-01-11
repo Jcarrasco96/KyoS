@@ -52,6 +52,7 @@ namespace KyoS.Web.Data.Entities
         public bool Sign { get; set; }
 
         public BillDmsEntity BillDms { get; set; }
+        public TCMPayStubEntity PayStub { get; set; }
 
     }
 }

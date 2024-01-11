@@ -161,7 +161,8 @@ namespace KyoS.Web.Data
         public DbSet<IncidentReportEntity> IncidentReport { get; set; }
         public DbSet<MeetingNoteEntity> MeetingNotes { get; set; }
         public DbSet<MeetingNotes_Facilitator> MeetingNotes_Facilitators { get; set; }
-
+        public DbSet<TCMPayStubEntity> TCMPayStubs { get; set; }
+        public DbSet<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
