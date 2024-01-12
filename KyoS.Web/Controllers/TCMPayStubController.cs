@@ -100,13 +100,13 @@ namespace KyoS.Web.Controllers
                 model = PayStubDetailsByDate(datePayStubclose);
 
                 if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created)
-                    ViewData["note"] = "The established payment condition is a note CREATED in the application.";
+                    ViewData["note"] = "The established payment condition is the CREATED services in the application.";
                 if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved)
-                    ViewData["note"] = "The established payment condition is a note APPROVED by the supervisor.";
+                    ViewData["note"] = "The established payment condition is the APPROVED services by the supervisor.";
                 if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed)
-                    ViewData["note"] = "The established payment condition is a note BILLED from the insurance.";
+                    ViewData["note"] = "The established payment condition is the BILLED services to the insurance.";
                 if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Paid)
-                    ViewData["note"] = "The established payment condition is a note COLLECTED from the insurance.";
+                    ViewData["note"] = "The established payment condition is the PAID services by the insurance.";
                 return View(model);
             }
 

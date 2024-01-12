@@ -1001,9 +1001,9 @@
                                 <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>
                             </ul>
                         </li>
-                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                         <li><a asp-area="" asp-controller="TCMPayStub" asp-action="Index">Paystub</a></li>
+                        <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>                        
                     }
                     else
                  if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))

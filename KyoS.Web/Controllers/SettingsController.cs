@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -210,7 +211,9 @@ namespace KyoS.Web.Controllers
                 ZipCode = user_logged.Clinic.ZipCode,
                 TCMSupervisionTimeWithCaseManager = user_logged.Clinic.Setting.TCMSupervisionTimeWithCaseManager,
                 DocumentAssistant_Intake = user_logged.Clinic.Setting.DocumentAssisstant_Intake,
-                CreateTCMNotesWithoutDomain = user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain
+                CreateTCMNotesWithoutDomain = user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain,
+                IdFiltroPayStub = (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic()
 
             };
 
@@ -270,6 +273,7 @@ namespace KyoS.Web.Controllers
                     setting.TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager;
                     setting.DocumentAssisstant_Intake = model.DocumentAssistant_Intake;
                     setting.CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain;
+                    setting.TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub);
 
                 }
                 _context.Update(setting);

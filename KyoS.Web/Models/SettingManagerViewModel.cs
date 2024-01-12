@@ -92,5 +92,8 @@ namespace KyoS.Web.Models
         public bool DocumentAssistant_Intake { get; set; }
 
         public bool CreateTCMNotesWithoutDomain { get; set; }
+        public int IdFiltroPayStub { get; set; }
+
+        public IEnumerable<SelectListItem> FiltroPayStubs { get; set; }
     }
 }
