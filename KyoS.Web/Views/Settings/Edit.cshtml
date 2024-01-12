@@ -104,8 +104,10 @@
                                 <input asp-for="UnitsForDayForClient" class="form-control" />
                                 <span asp-validation-for="UnitsForDayForClient" class="text-danger"></span>
                             </div>
-                            <div class=" col-md-6 ">
-                                &nbsp;
+                            <div class="form-group col-md-6">
+                                <label class="control-label"></label><strong>Select the filter for Paystub.</strong>
+                                <select asp-for="IdFiltroPayStub" asp-items="Model.FiltroPayStubs" class="form-control"></select>
+                                <span asp-validation-for="IdFiltroPayStub" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-12">

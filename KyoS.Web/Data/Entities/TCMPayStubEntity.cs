@@ -18,11 +18,11 @@ namespace KyoS.Web.Data.Entities
         public DateTime DatePayStubPayment { get; set; }
         public decimal Amount { get; set; }
         public int Units { get; set; }
-        public StatusBill StatusPayStub { get; set; }
+        public StatusTCMPaystub StatusPayStub { get; set; }
 
         public CaseMannagerEntity CaseMannager { get; set; }
         public List<TCMNoteEntity> TCMNotes { get; set; }
-        public List<BillDmsDetailsEntity> BillDmsDetails { get; set; }
+        public List<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
 
       
     }

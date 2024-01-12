@@ -2511,5 +2511,25 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = TCMPayStubFiltro.Created.ToString(), Value = "0"},
+                                  new SelectListItem { Text = TCMPayStubFiltro.Approved.ToString(), Value = "1"},
+                                  new SelectListItem { Text = TCMPayStubFiltro.Billed.ToString(), Value = "2"},
+                                  new SelectListItem { Text = TCMPayStubFiltro.Paid.ToString(), Value = "3"}};
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboPaystubStatus()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = StatusBill.Unbilled.ToString(), Value = "0"},
+                                  new SelectListItem { Text = StatusBill.Billed.ToString(), Value = "1"}};
+
+            return list;
+        }
     }
 }

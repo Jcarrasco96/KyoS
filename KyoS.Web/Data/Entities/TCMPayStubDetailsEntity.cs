@@ -9,7 +9,7 @@ namespace KyoS.Web.Data.Entities
     public class TCMPayStubDetailsEntity
     {
         public int Id { get; set; }
-        public TCMPayStubEntity Bill { get; set; }
+        public TCMPayStubEntity TCMPayStub { get; set; }
         public int IdCaseManager { get; set; }
         public int IdTCMNotes { get; set; }
       
@@ -18,6 +18,7 @@ namespace KyoS.Web.Data.Entities
 
         public int Unit { get; set; }
         public decimal Amount { get; set; }
+        public string NameClient { get; set; }
 
     }
 }

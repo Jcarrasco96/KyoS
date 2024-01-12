@@ -1,0 +1,75 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMPayStubEntity>
+@{
+    ViewData["Title"] = "TCM PayStub history";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM PayStub history</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    @if (User.IsInRole("Manager"))
+    {
+        <a asp-action="TCMNotesPendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Generar Paystubs</a>
+    }
+    @if (User.IsInRole("CaseManager"))
+    {
+        <a asp-action="TCMNotesPendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View next Paystubs</a>
+    }
+</p>
+
+<div class="row">
+    <div id="view-billdms">
+        @await Html.PartialAsync("_ViewTCMPayStubs", Model)
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMPayStub")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+
