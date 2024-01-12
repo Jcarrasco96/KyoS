@@ -115,21 +115,22 @@ namespace KyoS.Web.Controllers
                                          .Where(t => (t.TCMNote.TCMClient.Casemanager.LinkedUser == user_logged.UserName
                                                   && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                          .Select(t => new
-                                         {
-                                             //id = t.TCMNote.Id,
-                                             title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
+                                         {                                             
+                                             title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                             backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                             textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                             borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                             textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                            (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                             borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                          })
                                          .ToList();
 
@@ -143,20 +144,21 @@ namespace KyoS.Web.Controllers
                                                   && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                          .Select(t => new
                                          {
-                                             //id = t.TCMNote.Id,
-                                             title = t.ServiceName.ToString(),
+                                             title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName}" :
+                                                                $"{t.ServiceName}",                                             
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                             backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                             textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                             borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                             textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                            (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                             borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                          })
                                          .ToList();
 
@@ -171,20 +173,21 @@ namespace KyoS.Web.Controllers
                                                && t.TCMNote.DateOfService >= initDate && t.TCMNote.DateOfService <= finalDate))
                                          .Select(t => new
                                          {
-                                             //id = t.TCMNote.Id,
-                                             title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
+                                             title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",                                             
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                             backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                             textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                             borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                       (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                             backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                             textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                            (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                             borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                       (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                           (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                          })
                                          .ToList();
 
@@ -945,19 +948,21 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
+                                                 title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                                 backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                    (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :                                                                    
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                              })
                                              .ToList();
 
@@ -970,19 +975,21 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
+                                                 title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name} - {t.TCMNote.TCMClient.Casemanager.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                                 backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                    (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :                                                                    
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                              })
                                              .ToList();
 
@@ -1000,19 +1007,21 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
+                                                 title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                                 backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                    (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :                                                                    
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                              })
                                              .ToList();
 
@@ -1026,26 +1035,27 @@ namespace KyoS.Web.Controllers
                                              .Select(t => new
                                              {
                                                  //id = t.TCMNote.Id,
-                                                 title = $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
+                                                 title = (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? $"(R) {t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}" :
+                                                                $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                                  start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                                  url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
-                                                 backgroundColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#fcf8e3" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#d9edf7" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
-                                                 textColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49",
-                                                 borderColor = (t.TCMNote.Status == Common.Enums.NoteStatus.Edition) ? "#9e7d67" :
-                                                                           (t.TCMNote.Status == Common.Enums.NoteStatus.Pending) ? "#487c93" :
-                                                                               (t.TCMNote.Status == Common.Enums.NoteStatus.Approved) ? "#417c49" : "#417c49"
+                                                 backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                                                 textColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :
+                                                                    (t.TCMNote.Status == NoteStatus.Pending && t.TCMNote.TCMMessages.Count() > 0) ? "#Be2528" :
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49",
+                                                 borderColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#9e7d67" :                                                                    
+                                                                           (t.TCMNote.Status == NoteStatus.Pending) ? "#487c93" :
+                                                                               (t.TCMNote.Status == NoteStatus.Approved) ? "#417c49" : "#417c49"
                                              })
                                              .ToList();
 
                     return new JsonResult(events);
                 }
             }
-
         }
 
         [Authorize(Roles = "TCMSupervisor, Manager")]
