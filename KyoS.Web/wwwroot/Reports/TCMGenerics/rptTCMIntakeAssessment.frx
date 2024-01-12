@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 13:07:13" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/11/2024 18:14:12" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuCCCGi5evNafABYhvq5MEzg=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuKWB6/YAqonhfjsfJqNtb2s=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1149,7 +1149,7 @@
         <TableColumn Name="Column58" Width="153.09"/>
         <TableRow Name="Row15">
           <TableCell Name="Cell54" Border.Lines="All" Text="[TCMAssessmentDrug.SustanceName]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf(Year([TCMAssessmentDrug.DateBegin]) == 1,&quot;&quot;,[TCMAssessmentDrug.DateBegin])]&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="[IIf(Year([TCMAssessmentDrug.DateBegin]) == 1,&quot;&quot;,[TCMAssessmentDrug.DateBegin])]&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell56" Border.Lines="All" Text="[TCMAssessmentDrug.Age]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell57" Border.Lines="All" Text="[TCMAssessmentDrug.Frequency]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell58" Border.Lines="All" Text="[TCMAssessmentDrug.LastTimeUsed]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1370,7 +1370,7 @@
       <TextObject Name="Text527" Left="348.1" Top="271.05" Width="56.7" Height="18.9" Text="Specify:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text528" Left="400.9" Top="272.05" Width="376.11" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.AreYouPhysicianSpecify]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text529" Top="293.95" Width="349.65" Height="18.9" Text="How active are you? I exercise or engage in physical activities " Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text530" Left="343.2" Top="293.95" Width="433.94" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.HowActive][TCMAssessment.HowActive]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text530" Left="343.2" Top="293.95" Width="433.94" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[Switch([TCMAssessment.HowActive] == 0, &quot;Daily&quot;,[TCMAssessment.HowActive] == 1, &quot;Three time per week or more&quot;,[TCMAssessment.HowActive] == 2, &quot;Three time per week or less&quot;,[TCMAssessment.HowActive] == 3, &quot;Once per week&quot;,[TCMAssessment.HowActive] == 4, &quot;Rarely&quot;,[TCMAssessment.HowActive] == 5, &quot;Never&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text531" Left="368.55" Top="313.85" Width="75.6" Height="18.9" Text="(Frequency)" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </DataBand>
     <PageFooterBand Name="PageFooter5" Top="699.87" Width="778.3" Height="19.07">
