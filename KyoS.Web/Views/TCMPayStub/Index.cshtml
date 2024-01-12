@@ -27,7 +27,7 @@
 </p>
 
 <div class="row">
-    <div id="view-billdms">
+    <div id="view-paystub">
         @await Html.PartialAsync("_ViewTCMPayStubs", Model)
     </div>
 </div>
@@ -40,6 +40,12 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
         function ConfirmDelete(e) {
             Swal.fire({
                 title: 'Do you want to delete?',

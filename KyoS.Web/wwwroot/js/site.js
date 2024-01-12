@@ -2866,3 +2866,38 @@ QueryAjaxPostTCMSubService = form => {
         console.log(ex)
     }
 }
+
+jQueryAjaxTCMPaystubPaid = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-paystub').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}

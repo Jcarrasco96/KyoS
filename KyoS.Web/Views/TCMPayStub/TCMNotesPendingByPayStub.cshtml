@@ -21,6 +21,17 @@
 
 <div class="row">
     <div class="col-md-12">
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+        <div class="col-md-4 form-group">
+           <strong>Note:</strong><i> @ViewData["note"]</i>
+        </div>
+        <div class="col-md-4 form-group">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
         @if (User.IsInRole("Manager"))
         {
             <form asp-action="TCMNotesPendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" enctype="multipart/form-data">
@@ -66,7 +77,7 @@
                     <span asp-validation-for="DatePayStubClose" class="text-danger"></span>
                 </div>
 
-                
+
                 <div class="col-md-5 form-group">
                     &nbsp;
                 </div>

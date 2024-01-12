@@ -38,12 +38,24 @@
                 <h4 style="text-align:center; font-weight:bold;">@Model.Units</h4>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="thumbnail list-group-item list-group-item-success">
-                <p style="text-align:center">Estimated Income</p>
-                <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+        @if (Model.StatusPayStub == KyoS.Common.Enums.StatusTCMPaystub.Pending)
+        {
+            <div class="col-md-2">
+                <div class="thumbnail list-group-item list-group-item-info">
+                    <p style="text-align:center">Estimated Income</p>
+                    <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="col-md-2">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <p style="text-align:center">Estimated Income</p>
+                    <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+                </div>
+            </div>
+        }
         <div class="col-md-4">
             &nbsp;
         </div>

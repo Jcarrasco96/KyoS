@@ -87,7 +87,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, CaseManager")]
-        public IActionResult TCMNotesPendingByPayStub(DateTime datePayStubclose )
+        public IActionResult TCMNotesPendingByPayStub(DateTime datePayStubclose)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -98,6 +98,15 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Manager") || User.IsInRole("CaseManager"))
             {
                 model = PayStubDetailsByDate(datePayStubclose);
+
+                if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created)
+                    ViewData["note"] = "The established payment condition is a note CREATED in the application.";
+                if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved)
+                    ViewData["note"] = "The established payment condition is a note APPROVED by the supervisor.";
+                if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed)
+                    ViewData["note"] = "The established payment condition is a note BILLED from the insurance.";
+                if (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Paid)
+                    ViewData["note"] = "The established payment condition is a note COLLECTED from the insurance.";
                 return View(model);
             }
 
@@ -202,7 +211,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("TCMNotesPendingByPayStub", new { dateTime = datePayStubclose });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, CaseManager")]
         private  TCMNotePendingByPayStubViewModel PayStubDetailsByDate(DateTime datePayclose)
         {
             UserEntity user_logged = _context.Users
@@ -447,5 +456,96 @@ namespace KyoS.Web.Controllers
 
             return null;
         }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> UpdatePaid(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMPayStubEntity entity = await _context.TCMPayStubs
+                                                    .Include(n => n.TCMPayStubDetails)
+                                                    .FirstOrDefaultAsync(f => f.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMPaystubPaidViewModel model = new TCMPaystubPaidViewModel();
+            if (User.IsInRole("Manager"))
+            {
+                model = new TCMPaystubPaidViewModel()
+                {
+                    IdTCMPaystub = entity.Id,
+                    Amount = entity.Amount,
+                    IdStatus = Convert.ToInt32(entity.StatusPayStub),
+                    StatusList = _combosHelper.GetComboPaystubStatus(),
+                    DatePayStubPayment = DateTime.Today
+
+                };
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePaid(int id, TCMPaystubPaidViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                TCMPayStubEntity entity = await _context.TCMPayStubs.FirstOrDefaultAsync(n => n.Id == model.Id);
+
+                if (entity != null)
+                {
+                    if (entity.Amount <= model.Amount)
+                    {
+                        entity.StatusPayStub = StatusTCMPaystub.Paid;
+                        entity.DatePayStubPayment = model.DatePayStubPayment;
+                    }
+                    else
+                    {
+                        entity.StatusPayStub = StatusTCMPaystub.Pending;
+                        entity.DatePayStubPayment = model.DatePayStubPayment;
+                    }
+
+                    _context.Update(entity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<TCMPayStubEntity> salida = await _context.TCMPayStubs
+                                                                      .Include(c => c.TCMPayStubDetails)
+                                                                      .Include(c => c.TCMNotes)
+                                                                      .Include(c => c.CaseMannager)
+                                                                      .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMPayStubs", salida) });
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the Paystub: {model.DatePayStubPayment}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }              
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "UpdatePaid", model) });
+        }
+
     }
 }
