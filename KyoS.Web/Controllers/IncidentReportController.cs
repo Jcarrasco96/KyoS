@@ -1,6 +1,4 @@
-﻿using KyoS.Common.Enums;
-using KyoS.Common.Helpers;
-using KyoS.Web.Data;
+﻿using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -9,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -240,7 +237,7 @@ namespace KyoS.Web.Controllers
                 if (IncidentReprot == null)
                 {
                     IncidentReprot = await _converterHelper.ToIncidentReportEntity(IncidentViewModel, true, user_logged.UserName);
-                   
+
                     _context.IncidentReport.Add(IncidentReprot);
 
                     try
