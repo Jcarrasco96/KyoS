@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -406,6 +407,28 @@ namespace KyoS.Web.Controllers
 
         }
 
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
+        public IActionResult PrintIncidentReport(int id)
+        {
+            IncidentReportEntity entity = _context.IncidentReport
 
+                                                  .Include(s => s.Client)
+                                                  .ThenInclude(s => s.Clinic)
+
+                                                  .Include(s => s.Facilitator)
+
+                                                  .Include(s => s.DocumentAssisstant)
+
+                                                  .Include(s => s.Supervisor)
+
+                                              .FirstOrDefault(s => (s.Id == id));
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IncidentReport(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
     }
 }

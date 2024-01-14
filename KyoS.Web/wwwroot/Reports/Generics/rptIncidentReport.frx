@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/13/2024 19:54:44" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrwAYy61WtqTHJRcS23eTk3Q==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Codigo" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Supervisors" DataType="System.Int32" Enabled="true" TableName="Supervisors">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+      </TableDataSource>
+      <TableDataSource Name="DocumentsAssistant" DataType="System.Int32" Enabled="true" TableName="DocumentsAssistant">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Firm" DataType="System.String"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="RaterEducation" DataType="System.String"/>
+        <Column Name="RaterFMHCertification" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="IncidentReport" DataType="System.Int32" Enabled="true" TableName="IncidentReport">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="FacilitatorId" DataType="System.Int32"/>
+        <Column Name="SupervisorId" DataType="System.Int32"/>
+        <Column Name="DocumentAssisstantId" DataType="System.Int32"/>
+        <Column Name="DateIncident" DataType="System.DateTime"/>
+        <Column Name="DateReport" DataType="System.DateTime"/>
+        <Column Name="TimeIncident" DataType="System.DateTime"/>
+        <Column Name="Location" DataType="System.String"/>
+        <Column Name="DescriptionIncident" DataType="System.String"/>
+        <Column Name="Injured" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Injured_Description" DataType="System.String"/>
+        <Column Name="Witnesses" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Witnesses_Contact" DataType="System.String"/>
+        <Column Name="AdmissionFor" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="nameEmployee" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="87.6">
+      <TextObject Name="Textbox12" Left="123.75" Top="14.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="122.75" Top="36.33" Width="535.1" Height="22" CanGrow="true" Text="Incident Report" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="123.3" Top="19.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="9.45" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="122.3" Top="18.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="91.45" Width="778.3" Height="876.62">
+      <TextObject Name="Text40" Top="118.85" Width="90.72" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text41" Left="453.6" Top="118.85" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text44" Left="81.6" Top="118.85" Width="359.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="551.1" Top="118.85" Width="223.78" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text284" Left="67.15" Top="852.05" Width="143.64" Height="24.57" CanGrow="true" Text="Employee's Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt"/>
+      <LineObject Name="Line11" Left="211.9" Top="847.6" Width="-145.53"/>
+      <PictureObject Name="Picture3" Left="92.5" Top="790.45" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text319" Left="273.05" Top="851.5" Width="228.69" Height="24.57" CanGrow="true" Text="Employee's Name" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line18" Left="502.85" Top="848.05" Width="-230.58"/>
+      <TextObject Name="Text320" Left="273.05" Top="828.6" Width="226.8" Height="18.9" Text="[nameEmployee]" Font="Arial, 9pt"/>
+      <TextObject Name="Text322" Top="247.7" Width="128.52" Height="18.9" Text="Describe the incident" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text423" Top="268.6" Width="774.9" Height="70.8" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[IncidentReport.DescriptionIncident]" Font="Arial, 9pt"/>
+      <TextObject Name="Text434" Top="9.45" Width="776.79" Height="37.8" CanBreak="false" Text="Use this form to report accidents, injuries, medical situations, criminal activities, traffic incidents, or student behavior incidents. If possible, a report should be completed within 24 hours of the event. " Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text435" Top="56.7" Width="100.17" Height="18.9" Text="Date of Report:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text436" Left="94.5" Top="56.7" Width="214.33" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IncidentReport.DateReport]" Format="Date" Format.Format="MMMM dd, yyyy" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text39" Top="94.5" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="CLIENT INVOLVED" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text437" Left="20.9" Top="141.75" Width="62.37" Height="18.9" Text="Address:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text438" Left="82.05" Top="141.75" Width="359.1" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.FullAddress]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text439" Left="29.35" Top="165.1" Width="52.92" Height="18.9" Text="Phone:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text440" Left="82.05" Top="165.1" Width="113.4" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Telephone]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text441" Left="206.9" Top="165.19" Width="52.92" Height="18.9" Text="Email:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text442" Left="252.6" Top="165.19" Width="189" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanBreak="false" Text="[Clients.Email]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text443" Top="201.45" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="THE INCIDENT" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text444" Top="226.8" Width="100.17" Height="18.9" Text="Date of Incident:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text445" Left="96.5" Top="226.8" Width="214.33" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IncidentReport.DateIncident]" Format="Date" Format.Format="MMMM dd, yyyy" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text446" Left="313.85" Top="226.8" Width="43.47" Height="18.9" Text="Time:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text447" Left="354.65" Top="226.8" Width="82.03" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IncidentReport.TimeIncident]" Format="Time" Format.Format="t" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text448" Left="441.15" Top="226.8" Width="62.37" Height="18.9" Text="Location:" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text449" Left="499.85" Top="226.8" Width="275.18" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IncidentReport.Location]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text450" Top="357.1" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="INJURIES" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text451" Top="383.45" Width="128.52" Height="18.9" Text="Was anyone injured?" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text305" Left="195" Top="384.45" Width="28.35" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text306" Left="145.75" Top="384.45" Width="37.8" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox45" Left="132.85" Top="386.77" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="IncidentReport.Injured"/>
+      <CheckBoxObject Name="CheckBox23" Left="179.55" Top="386.72" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([IncidentReport.Injured] == true,false,true)"/>
+      <TextObject Name="Text452" Top="406.35" Width="194.67" Height="18.9" Text="If yes, describe the injuries" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text453" Top="427.25" Width="774.9" Height="70.8" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[IncidentReport.Injured_Description]" Font="Arial, 9pt"/>
+      <TextObject Name="Text454" Top="515.75" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="WITNESSES" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
+      <TextObject Name="Text455" Top="542.1" Width="223.02" Height="18.9" Text="Where there witnesses in the incident?" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text456" Left="280.05" Top="543.1" Width="28.35" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text457" Left="230.8" Top="543.1" Width="37.8" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox46" Left="217.9" Top="545.42" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="IncidentReport.Witnesses"/>
+      <CheckBoxObject Name="CheckBox47" Left="264.6" Top="545.37" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" Expression="IIf([IncidentReport.Witnesses] == true,false,true)"/>
+      <TextObject Name="Text458" Top="565" Width="326.97" Height="18.9" Text="If yes, enter the witnesses' names and contact info" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text459" Top="585.9" Width="774.9" Height="51.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[IncidentReport.Witnesses_Contact]" Font="Arial, 9pt"/>
+      <TextObject Name="Text460" Left="567" Top="851.05" Width="105.84" Height="24.57" CanGrow="true" Text="Signature Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line19" Left="674.95" Top="847.6" Width="-107.73"/>
+      <TextObject Name="Text461" Left="567" Top="828.15" Width="103.95" Height="18.9" Text="[IncidentReport.DateSignatureEmployee]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
