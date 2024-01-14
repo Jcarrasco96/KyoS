@@ -19420,6 +19420,106 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region Incident reports
+        public Stream IncidentReport(IncidentReportEntity incident)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Generics\\rptIncidentReport.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(incident.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(incident.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(incident.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(incident.Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(incident.DocumentAssisstant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIncidentReportDS(incident));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IncidentReport");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(incident.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(incident.Client.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            string nameEmployee = string.Empty;
+
+            SupervisorEntity supervisor = _context.Supervisors
+                                                  .FirstOrDefault(s => s.LinkedUser == incident.CreatedBy);
+
+            if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+                nameEmployee = supervisor.Name;
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(d => d.LinkedUser == incident.CreatedBy);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                    nameEmployee = assistant.Name;
+                }
+                else 
+                {
+                    FacilitatorEntity facilitator = _context.Facilitators
+                                                            .FirstOrDefault(f => f.LinkedUser == incident.CreatedBy);
+
+                    if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
+                    {
+                        path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                        stream1 = _imageHelper.ImageToByteArray(path);
+                        nameEmployee = facilitator.Name;
+                    }
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.SetParameterValue("nameEmployee", nameEmployee);
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        #endregion
+
         #region Utils functions
         public byte[] ConvertStreamToByteArray(Stream stream)
         {
@@ -22066,6 +22166,91 @@ namespace KyoS.Web.Helpers
                     0,
                     new DateTime(),
                     0,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIncidentReportDS(IncidentReportEntity incidentReport)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IncidentReport"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ClientId", typeof(int));            
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("FacilitatorId", typeof(int));
+            dt.Columns.Add("SupervisorId", typeof(int));
+            dt.Columns.Add("DocumentAssisstantId", typeof(int));
+            dt.Columns.Add("DateIncident", typeof(DateTime));
+            dt.Columns.Add("DateReport", typeof(DateTime));
+            dt.Columns.Add("TimeIncident", typeof(DateTime));
+            dt.Columns.Add("Location", typeof(string));
+            dt.Columns.Add("DescriptionIncident", typeof(string));
+            dt.Columns.Add("Injured", typeof(bool));
+            dt.Columns.Add("Injured_Description", typeof(string));
+            dt.Columns.Add("Witnesses", typeof(bool));
+            dt.Columns.Add("Witnesses_Contact", typeof(string));
+            dt.Columns.Add("AdmissionFor", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));          
+
+            if (incidentReport != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    incidentReport.Id,
+                    0,
+                    incidentReport.DateSignatureEmployee,
+                    0,
+                    0,
+                    0,
+                    incidentReport.DateIncident,
+                    incidentReport.DateReport,
+                    incidentReport.TimeIncident,
+                    incidentReport.Location,
+                    incidentReport.DescriptionIncident,
+                    incidentReport.Injured,
+                    incidentReport.Injured_Description,
+                    incidentReport.Witnesses,
+                    incidentReport.Witnesses_Contact,
+                    incidentReport.AdmissionFor,
+                    incidentReport.CreatedBy,
+                    incidentReport.CreatedOn,
+                    incidentReport.LastModifiedBy,
+                    incidentReport.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    0,
+                    0,
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,
+                    string.Empty,
+                    false,
+                    string.Empty,
+                    false,
+                    string.Empty,
+                    string.Empty,
                     string.Empty,
                     new DateTime(),
                     string.Empty,
@@ -31856,13 +32041,13 @@ namespace KyoS.Web.Helpers
 
             //images                      
             string path = string.Empty;
-            //if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
-            //{
-            //    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.Clinic.LogoPath)}");
-            //}
+            if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.Clinic.LogoPath)}");
+            }
 
-            //PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
-            //pic1.Image = new Bitmap(path);
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
 
             //signatures images 
             byte[] stream1 = null;

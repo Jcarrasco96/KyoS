@@ -52,43 +52,43 @@
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>THE INCIDENT</strong>  <br />
-        Date of Incicdent: <input asp-for="DateIncident" disabled>              Time of Incicdent: <input asp-for="TimeIncident" disabled><br />
-        Location: <input asp-for="Location" style="width:80%" disabled> 
+    <pre>
+<strong>THE INCIDENT</strong>  <br />
+    Date of Incident: <input asp-for="DateIncident" readonly>              Time of Incident: <input asp-for="TimeIncident" readonly><br />
+    Location: <input asp-for="Location" style="width:50%" readonly> 
 
-        Describe the Incident: 
-        <textarea asp-for="DescriptionIncident" style="width:85%" rows="3" disabled></textarea>              
-        </pre>
+    Describe the Incident: 
+    <textarea asp-for="DescriptionIncident" style="width:95%" rows="4" readonly></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>INJURIES</strong>  <br />
-        Was anyone injured?  Yes <input type="checkbox" asp-for="Injured" class="form-check-input" disabled id="check1">   No <input type="checkbox" class="form-check-input" id="check101" disabled>
-        If yes, describe the injuries: 
-        <textarea asp-for="Injured_Description" style="width:85%" rows="3" disabled></textarea>              
-        </pre>
+    <pre>
+<strong>INJURIES</strong>  <br />
+    Was anyone injured?  Yes <input type="checkbox" asp-for="Injured" class="form-check-input" disabled id="check1">   No <input type="checkbox" class="form-check-input" id="check101" disabled>
+    
+    If yes, describe the injuries: 
+    <textarea asp-for="Injured_Description" style="width:95%" rows="4" readonly></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>WITNESSES</strong>  <br />
-        Where there witnesses to the incident?   Yes <input type="checkbox" asp-for="Witnesses" class="form-check-input" disabled id="check2">   No <input type="checkbox" class="form-check-input" id="check102" disabled>
-        If yes, enter the witnessess' name and contact info: 
-        <textarea asp-for="Witnesses_Contact" style="width:85%" rows="3" disabled></textarea>              
-        </pre>
+    <pre>
+<strong>WITNESSES</strong>  <br />
+    Were there witnesses to the incident?   Yes <input type="checkbox" asp-for="Witnesses" class="form-check-input" disabled id="check2">   No <input type="checkbox" class="form-check-input" id="check102" disabled>
+    
+    If yes, enter the witnessess' name and contact info: 
+    <textarea asp-for="Witnesses_Contact" style="width:95%" rows="4" readonly></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-12">
-    <pre>
+    <pre>    
+    <strong>Date report </strong>                    <input asp-for="DateReport" readonly>        
     
-    <strong>Date report: </strong>                   <input asp-for="DateReport" disabled>      
-        
-    
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" readonly>
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionFor))</strong>                                                                    
     </pre>
 </div>

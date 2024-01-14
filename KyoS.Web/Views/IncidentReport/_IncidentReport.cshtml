@@ -52,41 +52,41 @@
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>THE INCIDENT</strong>  <br />
-        Date of Incicdent: <input asp-for="DateIncident">              Time of Incicdent: <input asp-for="TimeIncident"><br />
-        Location: <input asp-for="Location" style="width:80%"> 
+    <pre>
+<strong>THE INCIDENT</strong>  <br />
+    Date of Incident: <input asp-for="DateIncident">              Time of Incident: <input asp-for="TimeIncident"><br />
+    Location: <input asp-for="Location" style="width:50%"> 
 
-        Describe the Incident: 
-        <textarea asp-for="DescriptionIncident" style="width:85%" rows="3"></textarea>              
-        </pre>
+    Describe the Incident: 
+    <textarea asp-for="DescriptionIncident" style="width:95%" rows="4"></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>INJURIES</strong>  <br />
-        Was anyone injured?  Yes <input type="checkbox" asp-for="Injured" class="form-check-input" readonly id="check1">   No <input type="checkbox" class="form-check-input" id="check101">
-        If yes, describe the injuries: 
-        <textarea asp-for="Injured_Description" style="width:85%" rows="3"></textarea>              
-        </pre>
+    <pre>
+<strong>INJURIES</strong>  <br />
+    Was anyone injured?  Yes <input type="checkbox" asp-for="Injured" class="form-check-input" readonly id="check1">   No <input type="checkbox" class="form-check-input" id="check101">
+    
+    If yes, describe the injuries: 
+    <textarea asp-for="Injured_Description" style="width:95%" rows="4"></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="container-fluid col-md-12">
-        <pre>
-        <strong>WITNESSES</strong>  <br />
-        Where there witnesses to the incident?   Yes <input type="checkbox" asp-for="Witnesses" class="form-check-input" readonly id="check2">   No <input type="checkbox" class="form-check-input" id="check102">
-        If yes, enter the witnessess' name and contact info: 
-        <textarea asp-for="Witnesses_Contact" style="width:85%" rows="3"></textarea>              
-        </pre>
+    <pre>
+<strong>WITNESSES</strong>  <br />
+    Were there witnesses to the incident?   Yes <input type="checkbox" asp-for="Witnesses" class="form-check-input" readonly id="check2">   No <input type="checkbox" class="form-check-input" id="check102">
+    
+    If yes, enter the witnessess' name and contact info: 
+    <textarea asp-for="Witnesses_Contact" style="width:95%" rows="4"></textarea>
+    </pre>
     </div>
 </div>
 <div class="col-md-12">
-    <pre>
-    
-    <strong>Date report: </strong>                   <input asp-for="DateReport">      
-        
+    <pre>    
+    <strong>Date report </strong>                    <input asp-for="DateReport">      
     
     <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionFor))</strong>                                                                    
