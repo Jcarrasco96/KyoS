@@ -79,9 +79,14 @@
                                     @Html.DisplayFor(modelItem => item.DatePayStubPayment)
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("Manager") || User.IsInRole("CaseManager"))
+                                    @if (User.IsInRole("Manager"))
                                     {
                                         <a onclick="showInPopup('@Url.Action("UpdatePaid", "TCMPayStub", new { id = @item.Id }, Context.Request.Scheme)','Update Paid')" class="btn btn-warning" title="Update Paid"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="TCMPaystubDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
+                                        <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
+                                    }
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
                                         <a asp-action="TCMPaystubDetails" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list" title="Bill Details"></i></a>
                                         <a asp-action="EXCEL" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-export" title="Export to Excell"></i></a>
                                     }
