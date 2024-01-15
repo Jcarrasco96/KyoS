@@ -3213,8 +3213,8 @@ namespace KyoS.Web.Controllers
 
         }
        
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> DeleteAddendum(int? id)
+        [Authorize(Roles = "Manager, CaseManager")]
+        public async Task<IActionResult> DeleteAddendum(int? id, int origin = 0)
         {
             if (id == null)
             {
@@ -3248,8 +3248,15 @@ namespace KyoS.Web.Controllers
 
             _context.TCMAdendums.Remove(addendum);
             await _context.SaveChangesAsync();
-
-            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = addendum.TcmServicePlan.TcmClient.Id });
+            if (origin == 0)
+            {
+                return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = addendum.TcmServicePlan.TcmClient.Id });
+            }
+            else
+            {
+                return RedirectToAction("Adendum", "TCMServicePlans", new { caseNumber = addendum.TcmServicePlan.TcmClient.CaseNumber });
+            }
+            
 
         }
 

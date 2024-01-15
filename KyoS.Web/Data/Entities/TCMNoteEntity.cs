@@ -50,8 +50,10 @@ namespace KyoS.Web.Data.Entities
         public DateTime? ApprovedDate { get; set; }
 
         public bool Sign { get; set; }
-
+        [DataType(DataType.Date)]
         public BillDmsEntity BillDms { get; set; }
+        [DataType(DataType.Date)]
+        public TCMPayStubEntity PayStub { get; set; }
 
     }
 }

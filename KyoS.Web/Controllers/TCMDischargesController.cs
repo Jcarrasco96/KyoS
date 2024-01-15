@@ -250,6 +250,10 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(b => b.Client)
                                                               .Include(b => b.TcmServicePlan)
                                                               .ThenInclude(b => b.TCMDomain)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TcmClient)
+                                                              .ThenInclude(b => b.Casemanager)
+                                                              .Include(b => b.TCMSupervisor)
                                                               .FirstOrDefault(m => m.Id == id);
                     if (TcmDischarge == null)
                     {
@@ -760,6 +764,10 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(b => b.Client)
                                                               .Include(b => b.TcmServicePlan)
                                                               .ThenInclude(b => b.TCMDomain)
+                                                              .Include(b => b.TcmServicePlan)
+                                                              .ThenInclude(b => b.TcmClient)
+                                                              .ThenInclude(b => b.Casemanager)
+                                                              .Include(b => b.TCMSupervisor)
                                                               .FirstOrDefault(m => m.Id == id);
                     if (TcmDischarge == null)
                     {
@@ -767,6 +775,10 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
+                        if (TcmDischarge.TCMSupervisor == null)
+                        {
+                            TcmDischarge.TCMSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        }
                         model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
                         ViewData["origi"] = origi;
                         return View(model);
@@ -781,7 +793,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveDischarge(int id)
+        public async Task<IActionResult> ApproveDischarge(int id, TCMDischargeViewModel model)
         {
             TCMDischargeEntity tcmDischarge = _context.TCMDischarge
                                                       .Include(u => u.TcmServicePlan)
@@ -801,6 +813,8 @@ namespace KyoS.Web.Controllers
                         tcmDischarge.Approved = 2;
                         tcmDischarge.LastModifiedBy = user_logged.UserName;
                         tcmDischarge.LastModifiedOn = DateTime.Now;
+                        tcmDischarge.SupervisorSignatureDate = model.SupervisorSignatureDate;
+                        tcmDischarge.TCMSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                         _context.Update(tcmDischarge);
                         tcmDischarge.TcmServicePlan.TcmClient.Status = StatusType.Close;
                         tcmDischarge.TcmServicePlan.TcmClient.DataClose = tcmDischarge.DischargeDate;

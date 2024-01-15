@@ -1458,7 +1458,8 @@ namespace KyoS.Web.Helpers
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
-                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
+                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub)
             };
         }
 
@@ -1490,7 +1491,9 @@ namespace KyoS.Web.Helpers
                 SupervisorEdit = model.SupervisorEdit,
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
-                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
+                IdFiltroPayStub = (model.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic()
             };
         }
 
@@ -2359,15 +2362,16 @@ namespace KyoS.Web.Helpers
                 PresentProblems = TcmDischargeEntity.PresentProblems,
                 ProgressToward = TcmDischargeEntity.ProgressToward,
                 Referred = TcmDischargeEntity.Referred,
-                StaffingDate = DateTime.Now,
-                StaffSignatureDate = DateTime.Now,
-                SupervisorSignatureDate = DateTime.Now,
+                StaffingDate = TcmDischargeEntity.StaffingDate,
+                StaffSignatureDate = TcmDischargeEntity.StaffSignatureDate,
+                SupervisorSignatureDate = TcmDischargeEntity.SupervisorSignatureDate,
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
                 TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
                 Approved = TcmDischargeEntity.Approved,
                 CreatedBy = TcmDischargeEntity.CreatedBy,
-                CreatedOn = TcmDischargeEntity.CreatedOn
+                CreatedOn = TcmDischargeEntity.CreatedOn,
+                TCMSupervisor = TcmDischargeEntity.TCMSupervisor
 
             };
         }
@@ -8250,6 +8254,44 @@ namespace KyoS.Web.Helpers
             };
 
             return model;
+        }
+
+        public async Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
+        {
+            return new TCMPayStubEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Amount = model.Amount,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                StatusPayStub = StatusTCMPaystubUtils.GetStatusBillByIndex(model.IdStatus),
+                TCMNotes = model.TCMNoteList,
+                Units = model.Units,
+                CaseMannager = _context.CaseManagers.Find(model.IdCaseManager),
+                TCMPayStubDetails = model.TCMPaystubDetails
+
+            };
+        }
+
+        public TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model)
+        {
+            return new TCMNotePendingByPayStubViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                TCMPaystubDetails = model.TCMPayStubDetails,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                Units = model.Units,
+                IdStatus = (model.StatusPayStub == StatusTCMPaystub.Pending) ? 0 : 1,
+                StatusList = _combosHelper.GetComboBillStatus()
+                
+               // AmountCMHNotes = model.TCMPayStubDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
+               // AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
+                
+            };
         }
 
     }

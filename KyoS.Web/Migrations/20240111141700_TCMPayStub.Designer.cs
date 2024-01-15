@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240111141700_TCMPayStub")]
+    partial class TCMPayStub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,12 +169,17 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("StatusBill")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TCMPayStubEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Unit")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
+
+                    b.HasIndex("TCMPayStubEntityId");
 
                     b.ToTable("BillDmsDetails");
                 });
@@ -7313,9 +7320,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("TCMInitialTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TCMPayStub_Filtro")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TCMSupervisionTimeWithCaseManager")
                         .HasColumnType("bit");
 
@@ -11377,6 +11381,9 @@ namespace KyoS.Web.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("BillId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateService")
                         .HasColumnType("datetime2");
 
@@ -11386,18 +11393,12 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("IdTCMNotes")
                         .HasColumnType("int");
 
-                    b.Property<string>("NameClient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TCMPayStubId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Unit")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TCMPayStubId");
+                    b.HasIndex("BillId");
 
                     b.ToTable("TCMPayStubDetails");
                 });
@@ -12727,6 +12728,10 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.BillDmsEntity", "Bill")
                         .WithMany("BillDmsDetails")
                         .HasForeignKey("BillId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.TCMPayStubEntity", null)
+                        .WithMany("BillDmsDetails")
+                        .HasForeignKey("TCMPayStubEntityId");
 
                     b.Navigation("Bill");
                 });
@@ -14383,11 +14388,11 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMPayStubDetailsEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.TCMPayStubEntity", "TCMPayStub")
-                        .WithMany("TCMPayStubDetails")
-                        .HasForeignKey("TCMPayStubId");
+                    b.HasOne("KyoS.Web.Data.Entities.TCMPayStubEntity", "Bill")
+                        .WithMany()
+                        .HasForeignKey("BillId");
 
-                    b.Navigation("TCMPayStub");
+                    b.Navigation("Bill");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMPayStubEntity", b =>
@@ -15122,9 +15127,9 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMPayStubEntity", b =>
                 {
-                    b.Navigation("TCMNotes");
+                    b.Navigation("BillDmsDetails");
 
-                    b.Navigation("TCMPayStubDetails");
+                    b.Navigation("TCMNotes");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServiceEntity", b =>

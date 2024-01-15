@@ -249,5 +249,7 @@ namespace KyoS.Web.Helpers
         MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity model);
         Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
         MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
+        Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
+        TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
     }
 }

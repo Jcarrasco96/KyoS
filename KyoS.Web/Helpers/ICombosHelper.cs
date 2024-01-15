@@ -104,5 +104,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
         IEnumerable<SelectListItem> GetComboCaseManagersActive();
         IEnumerable<SelectListItem> GetComboSupervisorByClinic(int idClinic, bool select);
+        IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic();
+        IEnumerable<SelectListItem> GetComboPaystubStatus();
     }
 }
