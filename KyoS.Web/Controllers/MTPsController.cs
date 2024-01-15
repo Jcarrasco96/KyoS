@@ -1058,22 +1058,44 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             GoalEntity goalEntity = await _context.Goals
 
                                                   .Include(g => g.MTP)
                                                   .ThenInclude(m => m.Client)
+                                                  .ThenInclude(m => m.IndividualTherapyFacilitator)
 
                                                   .Include(g => g.Adendum)
 
                                                   .FirstOrDefaultAsync(d => d.Id == id);
 
             GoalViewModel model = _converterHelper.ToGoalViewModel(goalEntity);
+
             if (model == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
+            if (goalEntity.Adendum != null )
+            {
+                ViewData["Permit"] = 0;
+                ViewData["text"] = "The selected goal doesn't belong to the MTP, you must to do a new addendum to extend this goal";
+                return View(model);
+            }
+            if ((User.IsInRole("Facilitator") == true && user_logged.UserName != goalEntity.MTP.Client.IndividualTherapyFacilitator.LinkedUser && goalEntity.Service == ServiceType.Individual))
+            {
+                ViewData["Permit"] = 0;
+                ViewData["text"] = goalEntity.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
+                return View(model);
+            }
+
+           
+
             model.IdMTPReviewOfView = idMTPReviewOfView;
+            ViewData["Permit"] = 1;
             return View(model);
         }
 
@@ -1098,8 +1120,8 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(model.AreaOfFocus))
                 {
                     model.AreaOfFocus = (model.AreaOfFocus.Last() == '.') ? model.AreaOfFocus : $"{model.AreaOfFocus}.";                    
-                }                
-                
+                }
+
                 GoalEntity goalEntity = await _converterHelper.ToGoalEntity(model, false);
 
                 if (model.Compliment_IdMTPReview == 0 && model.Compliment == true)
@@ -1818,12 +1840,19 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             ObjetiveEntity objectiveEntity = await _context.Objetives
 
                                                            .Include(o => o.Goal)
                                                            .ThenInclude(g => g.MTP)
                                                            .ThenInclude(m => m.Client)
-
+                                                           .ThenInclude(m => m.IndividualTherapyFacilitator)
+                                                           .Include(o => o.Goal)
+                                                           .ThenInclude(g => g.Adendum)
+                                                           
                                                            .FirstOrDefaultAsync(d => d.Id == id);
 
             ObjectiveViewModel model = _converterHelper.ToObjectiveViewModel(objectiveEntity);
@@ -1833,6 +1862,19 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            if (objectiveEntity.Goal.Adendum != null)
+            {
+                ViewData["Permit"] = 0;
+                ViewData["text"] = "The selected objective doesn't belong to the MTP, you must to do a new addendum to extend this goal";
+                return View(model);
+            }
+            if ((User.IsInRole("Facilitator") == true && user_logged.UserName != objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.LinkedUser && objectiveEntity.Goal.Service == ServiceType.Individual))
+            {
+                ViewData["Permit"] = 0;
+                ViewData["text"] = objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the objective in this MTPR, only can do it the individual therapy facilitator";
+                return View(model);
+            }
+            ViewData["Permit"] = 1;
             return View(model);
         }
 
@@ -2842,16 +2884,40 @@ namespace KyoS.Web.Controllers
                     //-------listo los goals y sus objectives para actualizar DateResolved-------------
                     List<GoalEntity> goalMtp = _context.Goals
                                                        .Include(n => n.Objetives)
+                                                       .Include(n => n.Adendum)
+                                                       .Include(n => n.MTP)
+                                                       .ThenInclude(n => n.Client)
+                                                       .ThenInclude(g => g.IndividualTherapyFacilitator)
                                                        .Where(n => n.MTP.Id == mtpReviewViewModel.IdMTP
                                                                 && n.Compliment == false)
                                                        .ToList();
+                   
                     foreach (var item in goalMtp)
                     {
-                        foreach (var obj in item.Objetives)
+                        if (item.Adendum == null)
                         {
-                            if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                            if ((item.Service != ServiceType.Individual))
                             {
-                                obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                                foreach (var obj in item.Objetives)
+                                {
+                                    if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                                    {
+                                        obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                                {
+                                    foreach (var obj in item.Objetives)
+                                    {
+                                        if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                                        {
+                                            obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -3199,16 +3265,39 @@ namespace KyoS.Web.Controllers
                         //-------listo los goals y sus objectives para actualizar DateResolved-------------
                         List<GoalEntity> goalMtp = _context.Goals
                                                            .Include(n => n.Objetives)
+                                                           .Include(n => n.Adendum)
+                                                           .Include(n => n.MTP)
+                                                           .ThenInclude(n => n.Client)
+                                                           .ThenInclude(g => g.IndividualTherapyFacilitator)
                                                            .Where(n => n.MTP.Id == reviewViewModel.IdMTP
                                                                     && n.Compliment == false)
                                                            .ToList();
                         foreach (var item in goalMtp)
                         {
-                            foreach (var obj in item.Objetives)
+                            if (item.Adendum == null)
                             {
-                                if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                if ((item.Service != ServiceType.Individual))
                                 {
-                                    obj.DateResolved = reviewViewModel.ReviewedOn;
+                                    foreach (var obj in item.Objetives)
+                                    {
+                                        if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                        {
+                                            obj.DateResolved = reviewViewModel.ReviewedOn;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                                    {
+                                        foreach (var obj in item.Objetives)
+                                        {
+                                            if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                            {
+                                                obj.DateResolved = reviewViewModel.ReviewedOn;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
