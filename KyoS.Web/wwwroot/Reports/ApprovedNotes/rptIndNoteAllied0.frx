@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="12/20/2023 14:44:11" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/25/2021 16:28:52" ReportInfo.Modified="01/16/2024 10:37:48" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3+5h/7hNVTpK4AHNArbIl/w==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3Vrgcz8+vIg4LFWggfvRtLA==">
       <TableDataSource Name="Facilitators" DataType="System.Int32" Enabled="true" TableName="Facilitators">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -385,7 +385,6 @@
       <TextObject Name="Text60" Left="330.75" Top="87.5" Width="47.25" Height="18.9" Text="Date" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <TextObject Name="Text62" Left="495.05" Top="89.95" Width="255.15" Height="18.9" Text="Supervisor (print legibly)" HorzAlign="Center" Font="Times New Roman, 10pt, style=Bold" FirstTabOffset="37.8" TextRenderType="HtmlTags"/>
       <LineObject Name="Line6" Left="756" Top="87.15" Width="-766.55"/>
-      <TextObject Name="Text68" Left="293.33" Top="68.42" Width="122.85" Height="18.9" Text="[dateSupervisor]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
     </PageFooterBand>
   </ReportPage>
 </Report>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/20/2023 14:47:20" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/16/2024 11:00:56" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3JHEj1B/syHQfwbWVlE20Dw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3XPhyH2CW07CM8X2nrzRSJQ==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -1271,7 +1271,7 @@
       <TextObject Name="Text35" Left="9.45" Top="203.9" Width="242.15" Height="24.57" CanGrow="true" Text="Licensed Practitioner &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line10" Left="556.1" Top="198.45" Width="-240.03"/>
       <TextObject Name="Text36" Left="300.4" Top="203.9" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text37" Left="614.25" Top="204.45" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text37" Left="610.25" Top="204.45" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line11" Left="756.55" Top="199" Width="-136.08"/>
       <TextObject Name="Text755" Left="606.8" Top="179.55" Width="160.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Bio.DateSignatureLicensedPractitioner],&quot;&quot;)]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text756" Top="236.25" Width="771.35" Height="24.57" CanGrow="true" Text="UNLICENSED CLINICAL SIGNATURE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
@@ -1282,15 +1282,14 @@
       <LineObject Name="Line14" Left="756.55" Top="371.1" Width="-136.08"/>
       <TextObject Name="Text758" Left="9.45" Top="376" Width="242.15" Height="24.57" CanGrow="true" Text="Unlicensed Therapist &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text759" Left="300.4" Top="376" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text760" Left="614.25" Top="376.55" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text760" Left="610.25" Top="376.55" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text763" Top="415.8" Width="771.35" Height="24.57" CanGrow="true" Text="LICENSED REVIEWER SIGNATURE AND DIAGNOSTIC CONCURRENCE" Padding="2, 2, 2, 2" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text766" Left="606.8" Top="595.9" Width="160.65" Height="18.9" Text="[Bio.DateSignatureSupervisor]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line15" Left="254.7" Top="615.35" Width="-240.03"/>
       <LineObject Name="Line16" Left="556.1" Top="614.8" Width="-240.03"/>
       <LineObject Name="Line17" Left="756.55" Top="615.35" Width="-136.08"/>
       <TextObject Name="Text767" Left="1" Top="620.25" Width="270.5" Height="34.02" CanGrow="true" Text="Clinical Supervisor/Reviewer’s Signature &amp; Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text768" Left="300.4" Top="620.25" Width="270.5" Height="24.57" CanGrow="true" Text="Print Name" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
-      <TextObject Name="Text769" Left="614.25" Top="620.8" Width="157.1" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text769" Left="614.25" Top="620.8" Width="147.65" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <CheckBoxObject Name="CheckBox549" Left="8.9" Top="480.4" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Bio.IConcurWhitDiagnistic] == true,false,true)"/>
       <TextObject Name="Text770" Left="22.8" Top="476.95" Width="515.97" Height="18.9" Text="I do not concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text771" Left="22.35" Top="453.6" Width="389.34" Height="18.9" Text="I concur with the diagnosis and treatment recommendations" VertAlign="Center" Font="Arial, 10pt"/>
