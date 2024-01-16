@@ -725,6 +725,11 @@ namespace KyoS.Web.Controllers
                                                           .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                          && g.Approved == 1
                                                                          && g.TcmClient.Casemanager.LinkedUser == user_logged.UserName));
+                ViewBag.ClientWithoutDischarge = await _context.TCMServicePlans
+                                                               .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                              && g.TcmClient.Status == StatusType.Close
+                                                                              && g.TCMDischarge == null
+                                                                              && g.TcmClient.Casemanager.LinkedUser == user_logged.UserName));
             }
             if (User.IsInRole("Documents_Assistant"))
             {
