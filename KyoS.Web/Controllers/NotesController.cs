@@ -6018,7 +6018,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(GroupNotesSupervision));
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> PrintNotes(int id)
         {
             WorkdayEntity workday = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
@@ -6038,7 +6038,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> PrintNotes(PrintNotesViewModel model, IFormCollection form)
         {
             var meridian = (form["classifications"] == "First") ? "AM" : "PM";
@@ -6474,7 +6474,7 @@ namespace KyoS.Web.Controllers
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]        
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]        
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6575,7 +6575,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintNoteP(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6736,7 +6736,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6815,7 +6815,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6874,7 +6874,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintGroupNote2(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11332,7 +11332,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, Supervisor")]
         public async Task<IActionResult> ApprovedNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -11437,7 +11437,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Supervisor")]
         public IActionResult ApprovedNotesClinic(ApprovedNotesClinicViewModel model)
         {
             UserEntity user_logged = _context.Users

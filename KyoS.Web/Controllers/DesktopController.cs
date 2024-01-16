@@ -374,6 +374,14 @@ namespace KyoS.Web.Controllers
                                                                .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
                                                                               && m.Supervisor.LinkedUser == user_logged.UserName
                                                                               && m.Status != NoteStatus.Approved));
+
+                ViewBag.ApprovedNotes = await _context.Workdays_Clients
+                                                      .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                        (wc.Note.Status == NoteStatus.Approved
+                                                                      || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                      || wc.GroupNote.Status == NoteStatus.Approved
+                                                                      || wc.GroupNote2.Status == NoteStatus.Approved
+                                                                      || wc.NoteP.Status == NoteStatus.Approved)));
             }
             if (User.IsInRole("Manager"))
             {
