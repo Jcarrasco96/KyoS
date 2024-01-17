@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/11/2024 18:14:12" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/17/2024 11:40:12" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuKWB6/YAqonhfjsfJqNtb2s=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuC/1Hbg2IXHDruu9i1Sl3IQ=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -652,7 +652,7 @@
       <TextObject Name="Textbox64" Left="160.65" Top="31.33" Width="450.05" Height="22" CanGrow="true" Text="CASE MANAGEMENT ASSESSMENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="151.2" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
       <LineObject Name="Line6" Left="150.2" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
@@ -1765,7 +1765,7 @@
     </PageFooterBand>
   </ReportPage>
   <ReportPage Name="Page9" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
-    <DataBand Name="Data24" Width="778.3" Height="964.45">
+    <DataBand Name="Data24" Width="778.3" Height="962">
       <TextObject Name="Text82" Top="9.45" Width="94.5" Height="18.9" Text="Client's Name:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text83" Left="451.6" Top="9.45" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text84" Left="86.05" Top="9.45" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -1804,40 +1804,40 @@
       <TextObject Name="Text684" Left="440.23" Top="164.55" Width="160.65" Height="18.9" Text="Appliances not working" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox205" Left="428.89" Top="165.87" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.Appliances"/>
       <TextObject Name="Text685" Left="3.02" Top="189" Width="708.75" Height="18.9" Text="Describe neighborhood &lt;i&gt;(urban/rural, location, crime level, safety, accessibility to community resources and services, etc.):&lt;/i&gt;" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text686" Left="7.18" Top="207.9" Width="766.58" Height="66.15" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeNeighborhood]" Font="Arial, 9pt"/>
-      <TextObject Name="Text687" Left="3.02" Top="282.5" Width="349.65" Height="18.9" Text="Does the client feel safe in the current living arrangement? " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox206" Left="386.9" Top="285.82" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.DoesClientFeel] == false,true,false)"/>
-      <CheckBoxObject Name="CheckBox207" Left="338.2" Top="285.77" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.DoesClientFeel"/>
-      <TextObject Name="Text688" Left="351.65" Top="284.5" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text689" Left="400.25" Top="284.5" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text690" Left="3.02" Top="302.4" Width="85.05" Height="18.9" Text="If No, explain:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text691" Left="85.05" Top="302.4" Width="688.72" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.DoesClientFeelExplain]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text692" Left="3.02" Top="329.75" Width="765.45" Height="18.9" Text="Would the client like to continue to live in the current place, or is there somewhere else he/she would prefer to live? " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text693" Left="19.43" Top="351.65" Width="170.1" Height="18.9" Text="Continue to live here&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox208" Left="7.94" Top="353.97" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.ContinueToLive"/>
-      <TextObject Name="Text694" Left="19.43" Top="370.55" Width="170.1" Height="18.9" Text="Prefer to live elsewhere" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox209" Left="7.94" Top="372.87" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.PreferToLive"/>
-      <TextObject Name="Text695" Left="213.43" Top="352.1" Width="406.35" Height="18.9" Text="Continue to live here only if housing condition improves&#13;&#10;&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox210" Left="201.98" Top="353.42" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.ContinueToLive"/>
-      <TextObject Name="Text696" Left="213.43" Top="371" Width="406.35" Height="18.9" Text="Doesn’t know / not sure" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox211" Left="201.98" Top="372.32" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.DoesNotKnow"/>
-      <TextObject Name="Text697" Left="3.02" Top="397.45" Width="708.75" Height="18.9" Text="If there are any housing needs or concern not listed above, please describe: " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text698" Left="7.18" Top="416.35" Width="766.58" Height="66.15" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeNeighborhood]" Font="Arial, 9pt"/>
-      <TextObject Name="Text699" Top="491.4" Width="776.03" Height="22.68" Fill.Color="Gray" Text="8. ECONOMIC / FINANCIAL / BASIC NEEDS &lt;i&gt;(Food, clothing, furniture, household items, etc.)&lt;/i&gt;" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text700" Left="3.02" Top="519.75" Width="406.35" Height="18.9" Text="Monthly Family Income &lt;i&gt;(include income from all household members):&lt;/i&gt;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text701" Left="387.9" Top="520.2" Width="113.4" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.MonthlyFamilyIncome]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text702" Left="3.02" Top="541.65" Width="406.35" Height="18.9" Text="What is the main source(s) of income for the client and/or family? " VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text703" Left="3.02" Top="563.55" Width="255.15" Height="18.9" Text="Other financial resources available to client: " VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text704" Left="359.48" Top="541.65" Width="415.04" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.WhatIsTheMainSource]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text705" Left="245.7" Top="562.55" Width="529.58" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.OtherFinancial]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text706" Left="3" Top="589.9" Width="406.35" Height="18.9" Text="Is the client or the client’s family currently having any financial difficulties?" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <CheckBoxObject Name="CheckBox212" Left="457.05" Top="594.22" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.IsTheClientHavingFinancial] == false,true,false)"/>
-      <CheckBoxObject Name="CheckBox213" Left="408.35" Top="594.17" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.IsTheClientHavingFinancial"/>
-      <TextObject Name="Text707" Left="421.8" Top="592.9" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text708" Left="470.4" Top="592.9" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text709" Left="3.02" Top="611.8" Width="141.75" Height="18.9" Text="If Yes, please describe:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text710" Left="7.18" Top="631.25" Width="768.47" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.IsTheClientHavingFinancialExplain]" Font="Arial, 9pt"/>
-      <TableObject Name="Table26" Left="7.18" Top="711.2" Width="769.23" Height="164.43">
+      <TextObject Name="Text686" Left="7.18" Top="207.9" Width="766.58" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeNeighborhood]" Font="Arial, 9pt"/>
+      <TextObject Name="Text687" Left="3.02" Top="272.5" Width="349.65" Height="18.9" Text="Does the client feel safe in the current living arrangement? " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox206" Left="386.9" Top="275.82" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.DoesClientFeel] == false,true,false)"/>
+      <CheckBoxObject Name="CheckBox207" Left="338.2" Top="275.77" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.DoesClientFeel"/>
+      <TextObject Name="Text688" Left="351.65" Top="274.5" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text689" Left="400.25" Top="274.5" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text690" Left="3.02" Top="292.4" Width="85.05" Height="18.9" Text="If No, explain:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text691" Left="85.05" Top="292.4" Width="688.72" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.DoesClientFeelExplain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text692" Left="3.02" Top="319.75" Width="765.45" Height="18.9" Text="Would the client like to continue to live in the current place, or is there somewhere else he/she would prefer to live? " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text693" Left="19.43" Top="341.65" Width="170.1" Height="18.9" Text="Continue to live here&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox208" Left="7.94" Top="343.97" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.ContinueToLive"/>
+      <TextObject Name="Text694" Left="19.43" Top="360.55" Width="170.1" Height="18.9" Text="Prefer to live elsewhere" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox209" Left="7.94" Top="362.87" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.PreferToLive"/>
+      <TextObject Name="Text695" Left="213.43" Top="342.1" Width="406.35" Height="18.9" Text="Continue to live here only if housing condition improves&#13;&#10;&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox210" Left="201.98" Top="343.42" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.ContinueToLive"/>
+      <TextObject Name="Text696" Left="213.43" Top="361" Width="406.35" Height="18.9" Text="Doesn’t know / not sure" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox211" Left="201.98" Top="362.32" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.DoesNotKnow"/>
+      <TextObject Name="Text697" Left="3.02" Top="387.45" Width="708.75" Height="18.9" Text="If there are any housing needs or concern not listed above, please describe: " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text698" Left="7.18" Top="406.35" Width="766.58" Height="47.25" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DescribeNeighborhood]" Font="Arial, 9pt"/>
+      <TextObject Name="Text699" Top="461.4" Width="776.03" Height="22.68" Fill.Color="Gray" Text="8. ECONOMIC / FINANCIAL" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text700" Left="3.02" Top="489.75" Width="406.35" Height="18.9" Text="Monthly Family Income &lt;i&gt;(include income from all household members):&lt;/i&gt;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text701" Left="387.9" Top="490.2" Width="113.4" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.MonthlyFamilyIncome]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text702" Left="3.02" Top="511.65" Width="406.35" Height="18.9" Text="What is the main source(s) of income for the client and/or family? " VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text703" Left="3.02" Top="533.55" Width="255.15" Height="18.9" Text="Other financial resources available to client: " VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text704" Left="359.48" Top="511.65" Width="415.04" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.WhatIsTheMainSource]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text705" Left="245.7" Top="532.55" Width="529.58" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.OtherFinancial]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text706" Left="3" Top="559.9" Width="406.35" Height="18.9" Text="Is the client or the client’s family currently having any financial difficulties?" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox212" Left="457.05" Top="564.22" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.IsTheClientHavingFinancial] == false,true,false)"/>
+      <CheckBoxObject Name="CheckBox213" Left="408.35" Top="564.17" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.IsTheClientHavingFinancial"/>
+      <TextObject Name="Text707" Left="421.8" Top="562.9" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text708" Left="470.4" Top="562.9" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text709" Left="3.02" Top="581.8" Width="141.75" Height="18.9" Text="If Yes, please describe:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text710" Left="7.18" Top="601.25" Width="768.47" Height="61.99" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.IsTheClientHavingFinancialExplain]" Font="Arial, 9pt"/>
+      <TableObject Name="Table26" Left="7.18" Top="718.2" Width="769.23" Height="164.43">
         <TableColumn Name="Column103" Width="308.07"/>
         <TableColumn Name="Column104" Width="94.5"/>
         <TableColumn Name="Column105" Width="170.1"/>
@@ -1904,11 +1904,12 @@
           <TableCell Name="Cell220" Border.Lines="All" Text="[TCMAssessment.OtherProvider]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <TextObject Name="Text711" Left="3.02" Top="690.85" Width="491.4" Height="18.9" Text="Does the client receive or use any of the following types of food assistance? " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text722" Left="3.02" Top="878.85" Width="774.9" Height="18.9" Text="Does the client have other basic needs? &lt;i&gt;(e.g. utilities, clothing, school uniforms and supplies, furniture, necessary household items, etc.)&lt;/i&gt;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text723" Left="7.18" Top="898.3" Width="768.47" Height="66.15" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DoesClientBasicNeed]" Font="Arial, 9pt"/>
+      <TextObject Name="Text711" Left="3.02" Top="697.85" Width="491.4" Height="18.9" Text="Does the client receive or use any of the following types of food assistance? " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text722" Left="3.02" Top="885.85" Width="774.9" Height="18.9" Text="Does the client have other basic needs? &lt;i&gt;(e.g. utilities, clothing, school uniforms and supplies, furniture, necessary household items, etc.)&lt;/i&gt;" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text723" Left="7.18" Top="905.3" Width="768.47" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DoesClientBasicNeed]" Font="Arial, 9pt"/>
+      <TextObject Name="Text788" Top="670.95" Width="776.03" Height="22.68" Fill.Color="Gray" Text="9. BASIC NEEDS &lt;i&gt;(Food, clothing, furniture, household items, etc.)&lt;/i&gt;" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter9" Top="968.3" Width="778.3" Height="19.07">
+    <PageFooterBand Name="PageFooter9" Top="965.85" Width="778.3" Height="19.07">
       <TextObject Name="Text136" Left="5.29" Top="0.17" Width="283.5" Height="18.9" Text="Assessment 07.2021" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
       <TextObject Name="Text137" Left="689.85" Width="85.05" Height="18.9" Text="Pg. 9 of 11" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
@@ -1919,7 +1920,7 @@
       <TextObject Name="Text91" Left="451.6" Top="9.45" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text92" Left="86.05" Top="9.45" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text93" Left="547.1" Top="9.45" Width="228.69" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text94" Top="39.8" Width="776.03" Height="22.68" Fill.Color="Gray" Text="9. TRANSPORTATION" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text94" Top="39.8" Width="776.03" Height="22.68" Fill.Color="Gray" Text="10. TRANSPORTATION" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
       <SubreportObject Name="Subreport7" Left="-9450" Top="-9450" Width="94.5" Height="18.9" ReportPage="null"/>
       <TextObject Name="Text95" Left="3.02" Top="66.15" Width="538.65" Height="18.9" Text="How does client get to the places he/she want or need to go? &lt;i&gt;(Check all that apply)&lt;/i&gt;" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text109" Left="19.45" Top="88.05" Width="170.1" Height="18.9" Text="Walks" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
@@ -1952,8 +1953,8 @@
       <TextObject Name="Text726" Left="317.85" Top="217.9" Width="30.24" Height="18.9" Text="Yes" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text727" Left="366.45" Top="217.9" Width="30.24" Height="18.9" Text="No" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text728" Left="3" Top="236.25" Width="141.75" Height="18.9" Text="If Yes, explain:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text729" Left="7.16" Top="255.7" Width="768.47" Height="28.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.IsTheClientHavingFinancialExplain]" Font="Arial, 9pt"/>
-      <TextObject Name="Text730" Top="292.95" Width="776.03" Height="22.68" Fill.Color="Gray" Text="10. LEGAL / IMMIGRATION" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text729" Left="7.16" Top="255.7" Width="768.47" Height="28.35" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMAssessment.DoesClientTranspotationExplain]" Font="Arial, 9pt"/>
+      <TextObject Name="Text730" Top="292.95" Width="776.03" Height="22.68" Fill.Color="Gray" Text="11. LEGAL / IMMIGRATION" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
       <TextObject Name="Text731" Top="318.3" Width="425.25" Height="18.9" Text="&lt;b&gt;A.&lt;/b&gt; Court / Department of Juvenile Justice (DJJ) Involvement" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text732" Left="3" Top="340.2" Width="179.55" Height="18.9" Text="Has client ever been arrested? " HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox226" Left="230.25" Top="343.52" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.HasClientEverArrest] == false,true,false)"/>
@@ -1996,7 +1997,7 @@
       <CheckBoxObject Name="CheckBox236" Left="188" Top="476.82" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.ImmigrationOther"/>
       <TextObject Name="Text760" Left="201.35" Top="473.5" Width="58.59" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text761" Left="243.7" Top="473.5" Width="401.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMAssessment.ImmigrationOtherExplain]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text762" Top="595.35" Width="776.03" Height="22.68" Fill.Color="Gray" Text="11. OTHERS" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text762" Top="595.35" Width="776.03" Height="22.68" Fill.Color="Gray" Text="12. OTHERS" VertAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="White" TextRenderType="HtmlTags"/>
       <TextObject Name="Text763" Left="7.18" Top="621.7" Width="768.47" Height="66.15" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Font="Arial, 9pt"/>
       <TextObject Name="Text764" Top="708.75" Width="774.9" Height="17.01" Border.Shadow="true" Border.ShadowWidth="1.5" Border.Lines="All" Fill.Color="Gainsboro" Text="SECTION VIII: SUMMARY OF CLIENT’S STRENGHTS AND WEAKNESS" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
       <TextObject Name="Text765" Left="3.02" Top="731.65" Width="774.9" Height="28.35" Text="A. List client’s current and potential strengths, abilities, assets, interests, preferences, resources that may contribute to his/her recovery and wellbeing:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
