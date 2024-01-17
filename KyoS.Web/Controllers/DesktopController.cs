@@ -374,6 +374,14 @@ namespace KyoS.Web.Controllers
                                                                .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
                                                                               && m.Supervisor.LinkedUser == user_logged.UserName
                                                                               && m.Status != NoteStatus.Approved));
+
+                ViewBag.ApprovedNotes = await _context.Workdays_Clients
+                                                      .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
+                                                                        (wc.Note.Status == NoteStatus.Approved
+                                                                      || wc.IndividualNote.Status == NoteStatus.Approved
+                                                                      || wc.GroupNote.Status == NoteStatus.Approved
+                                                                      || wc.GroupNote2.Status == NoteStatus.Approved
+                                                                      || wc.NoteP.Status == NoteStatus.Approved)));
             }
             if (User.IsInRole("Manager"))
             {
@@ -725,6 +733,11 @@ namespace KyoS.Web.Controllers
                                                           .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                          && g.Approved == 1
                                                                          && g.TcmClient.Casemanager.LinkedUser == user_logged.UserName));
+                ViewBag.ClientWithoutDischarge = await _context.TCMServicePlans
+                                                               .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                              && g.TcmClient.Status == StatusType.Close
+                                                                              && g.TCMDischarge == null
+                                                                              && g.TcmClient.Casemanager.LinkedUser == user_logged.UserName));
             }
             if (User.IsInRole("Documents_Assistant"))
             {

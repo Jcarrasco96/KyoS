@@ -209,7 +209,14 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmDischarge.TcmServicePlan.TcmClient_FK, section = 4 }); ;
+                            if (origin == 2)
+                            {
+                                return RedirectToAction("Index", "TCMDischarges", new { idTCMClient = tcmDischarge.TcmServicePlan.TcmClient.Id });
+                            }
+                            else
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = tcmDischarge.TcmServicePlan.TcmClient_FK, section = 4 }); ;
+                            }                            
                         }
                     }
                     catch (System.Exception ex)
@@ -349,7 +356,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public async Task<IActionResult> TCMDischargeCandidates(int idError = 0)
+        public async Task<IActionResult> TCMClientWithoutDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -375,8 +382,7 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(f => f.Client)
                                                                           .Include(g => g.TcmClient.Casemanager)
                                                                           .Where(s => (s.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
-                                                                                    && s.TcmClient.Status == StatusType.Open
-                                                                                    && s.TcmClient.DataClose > DateTime.Now
+                                                                                    && s.TcmClient.Status == StatusType.Close
                                                                                     && s.Approved == 2
                                                                                     && s.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
                                                                           .OrderBy(f => f.TcmClient.CaseNumber)

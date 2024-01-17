@@ -29,16 +29,6 @@
         <li class="active">TCM Cases</li>
     </ul><!--.breadcrumb-->
 </div>
-@if (User.IsInRole("CaseManager"))
-{
-<p>
-    @if (ViewData["idTCMClient"].ToString() == "0")
-    {
-        <a asp-action="TCMDischargeCandidates" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> TCM Discharge Candidate</a>
-    }
-</p>
-}
-
 
 <div class="row">
     <div id="view-tcmClient">
