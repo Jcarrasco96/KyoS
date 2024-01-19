@@ -631,6 +631,10 @@ namespace KyoS.Web.Controllers
                     }
 
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                    bioViewModel.StartTime = start;
+                    DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                    bioViewModel.EndTime = end;
                     bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
 
                     if (documentAssistant != null)
@@ -971,6 +975,10 @@ namespace KyoS.Web.Controllers
                     bioViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                bioViewModel.StartTime = start;
+                DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                bioViewModel.EndTime = end;
                 BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
                 _context.Bio.Update(bioEntity);
                 try

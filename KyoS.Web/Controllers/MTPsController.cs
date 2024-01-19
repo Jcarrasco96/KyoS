@@ -277,6 +277,10 @@ namespace KyoS.Web.Controllers
                 }
 
                 mtpViewModel.Units = 0;
+                DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
+                mtpViewModel.StartTime = start;
+                DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
+                mtpViewModel.EndTime = end;
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 //mtpEntity.Setting = form["Setting"].ToString();
 
@@ -498,6 +502,10 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
+                mtpViewModel.StartTime = start;
+                DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
+                mtpViewModel.EndTime = end;
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
                 
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
@@ -5622,5 +5630,51 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+        #region
+        [Authorize(Roles = "Documents_Assistant")]
+        private bool VerifyDocumentAssistantAtSameTime(int idDocumentAssistant, DateTime initialTime, DateTime endTime, DocumentDescription document)
+        {
+            DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.Id == idDocumentAssistant);
+            
+            if (documentAssistant != null)
+            {
+                if (_context.Bio.Where(n => (n.DocumentsAssistant.Id == idDocumentAssistant)
+                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                {
+                    return false;
+                }
+                if (_context.MTPs.Where(n => (n.DocumentAssistant.Id == idDocumentAssistant)
+                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                {
+                    return false;
+                }
+                if (_context.FarsForm.Where(n => (n.CreatedBy == documentAssistant.LinkedUser )
+                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                {
+                    return false;
+                }
+                if (_context.IntakeMedicalHistory.Where(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                          || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                          || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                          || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                {
+                    return false;
+                }
+            }
+           
+            return true;
+        }
+        #endregion
     }
 }

@@ -2039,6 +2039,10 @@ namespace KyoS.Web.Controllers
 
                 if (IntakeViewModel.Id == 0)
                 {
+                    DateTime start = new DateTime(IntakeViewModel.DateSignatureEmployee.Year, IntakeViewModel.DateSignatureEmployee.Month, IntakeViewModel.DateSignatureEmployee.Day, IntakeViewModel.StartTime.Hour, IntakeViewModel.StartTime.Minute, IntakeViewModel.StartTime.Second);
+                    IntakeViewModel.StartTime = start;
+                    DateTime end = new DateTime(IntakeViewModel.DateSignatureEmployee.Year, IntakeViewModel.DateSignatureEmployee.Month, IntakeViewModel.DateSignatureEmployee.Day, IntakeViewModel.EndTime.Hour, IntakeViewModel.EndTime.Minute, IntakeViewModel.EndTime.Second);
+                    IntakeViewModel.EndTime = end;
                     IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, true, user_logged.UserName);
                     IntakeMedicalHistoryEntity.Client = null;
                     _context.IntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);

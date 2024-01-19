@@ -215,6 +215,10 @@ namespace KyoS.Web.Controllers
                         FarsFormViewModel.Units = units;
                     }
 
+                    DateTime start = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.StartTime.Hour, FarsFormViewModel.StartTime.Minute, FarsFormViewModel.StartTime.Second);
+                    FarsFormViewModel.StartTime = start;
+                    DateTime end = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.EndTime.Hour, FarsFormViewModel.EndTime.Minute, FarsFormViewModel.EndTime.Second);
+                    FarsFormViewModel.EndTime = end;
                     farsFormEntity = await _converterHelper.ToFarsFormEntity(FarsFormViewModel, true, user_logged.UserName);
                     _context.FarsForm.Add(farsFormEntity);
                     try
@@ -357,6 +361,10 @@ namespace KyoS.Web.Controllers
                     farsFormViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.StartTime.Hour, farsFormViewModel.StartTime.Minute, farsFormViewModel.StartTime.Second);
+                farsFormViewModel.StartTime = start;
+                DateTime end = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.EndTime.Hour, farsFormViewModel.EndTime.Minute, farsFormViewModel.EndTime.Second);
+                farsFormViewModel.EndTime = end;
                 FarsFormEntity farsFormEntity = await _converterHelper.ToFarsFormEntity(farsFormViewModel, false, user_logged.Id);
                 _context.FarsForm.Update(farsFormEntity);
                 try
