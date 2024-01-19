@@ -338,7 +338,7 @@ namespace KyoS.Web.Controllers
                     model.Client.MedicationList = new List<MedicationEntity>();
                 if (model.Client.Doctor == null)
                     model.Client.Doctor = new DoctorEntity();
-                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
                     model.Client.Client_Referred = new List<Client_Referred>();
@@ -582,7 +582,7 @@ namespace KyoS.Web.Controllers
                     model.Client.MedicationList = new List<MedicationEntity>();
                 if (model.Client.Doctor == null)
                     model.Client.Doctor = new DoctorEntity();
-                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
                     model.Client.Client_Referred = new List<Client_Referred>();
