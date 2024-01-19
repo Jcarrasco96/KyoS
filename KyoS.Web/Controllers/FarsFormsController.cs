@@ -152,7 +152,9 @@ namespace KyoS.Web.Controllers
                    IdSupervisor = 0,
                    Supervisor = new SupervisorEntity(),
                    IdType = 0,
-                   FarsType = _combosHelper.GetComboFARSType()
+                   FarsType = _combosHelper.GetComboFARSType(),
+                   StartTime = DateTime.Now,
+                   EndTime = DateTime.Now.AddMinutes(15)
                 };
 
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);

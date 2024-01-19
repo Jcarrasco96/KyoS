@@ -184,7 +184,9 @@ namespace KyoS.Web.Controllers
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
                             GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
-                            CodeBill = user_logged.Clinic.CodeMTP
+                            CodeBill = user_logged.Clinic.CodeMTP,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(60)
                         };
                     }
                     else
@@ -217,7 +219,9 @@ namespace KyoS.Web.Controllers
                             Other = false,
                             Client = new ClientEntity(),
                             AdmissionedFor = user_logged.FullNameWithDocument,
-                            GoalTempList = new List<GoalsTempEntity>()
+                            GoalTempList = new List<GoalsTempEntity>(),
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(60)
 
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();

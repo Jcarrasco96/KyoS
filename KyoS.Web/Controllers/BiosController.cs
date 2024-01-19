@@ -569,7 +569,9 @@ namespace KyoS.Web.Controllers
                     MilitaryServiceHistory = false,
                     MilitaryServiceHistory_Explain = string.Empty,
                     VocationalAssesment = string.Empty,
-                    Code90791 = false
+                    Code90791 = false,
+                    StartTime = DateTime.Now,
+                    EndTime = DateTime.Now.AddMinutes(45)
                 };
 
                 if (model.Client.LegalGuardian == null)
