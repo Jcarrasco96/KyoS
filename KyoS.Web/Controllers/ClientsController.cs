@@ -5292,7 +5292,7 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
         public async Task<IActionResult> ActiveClients(int warning = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -5335,6 +5335,18 @@ namespace KyoS.Web.Controllers
                                                     || c.IndividualTherapyFacilitator.Id == facilitator.Id
                                                     || c.IdFacilitatorPSR == facilitator.Id
                                                     || c.IdFacilitatorGroup == facilitator.Id))
+                                        .ToListAsync();
+
+            }
+
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Include(n => n.IndividualTherapyFacilitator)
+                                        .Where(c => c.Status == StatusType.Open
+                                                 && c.Clinic.Id == user_logged.Clinic.Id)
                                         .ToListAsync();
 
             }

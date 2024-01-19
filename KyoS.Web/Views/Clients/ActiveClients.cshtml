@@ -14,7 +14,7 @@
         <li class="active">Active clients</li>
     </ul><!--.breadcrumb-->
 </div>
-@if (User.IsInRole("Manager"))
+@if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
 {
     <p>
         <a asp-action="ActiveClients" asp-controller="Clients" asp-route-warning="0" class="btn btn-info"><i class="glyphicon glyphicon-list"></i> All client</a>
