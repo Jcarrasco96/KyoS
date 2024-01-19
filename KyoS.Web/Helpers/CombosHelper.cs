@@ -2531,5 +2531,47 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboDocumentsAssistantByClinic(int idClinic, bool blank, bool all)
+        {
+            List<SelectListItem> list = _context.DocumentsAssistant.Where(f => f.Clinic.Id == idClinic).OrderBy(f => f.Name).Select(f => new SelectListItem
+            {
+                Text = $"{f.Name}",
+                Value = $"{f.Id}"
+            }).ToList();
+
+            if (all)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All documents assistants are visualized...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                if (!blank)
+                {
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = "[Select documents assistants...]",
+                        Value = "0"
+                    });
+                }
+                else
+                {
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = string.Empty,
+                        Value = "0"
+                    });
+                }
+            }
+
+
+
+            return list;
+        }
+
     }
 }

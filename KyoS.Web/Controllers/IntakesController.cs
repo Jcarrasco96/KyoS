@@ -1985,7 +1985,13 @@ namespace KyoS.Web.Controllers
                             UsualDurationOfPeriods = "",
                             UsualIntervalBetweenPeriods = "",
                             AdmissionedFor = user_logged.FullName,
-                            IdDoctor = 0
+                            IdDoctor = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = null,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(30)
 
                         };
                         if (model.Client.LegalGuardian == null)
@@ -2029,10 +2035,11 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity;
 
-                if (IntakeMedicalHistoryEntity.Id == 0)
+                if (IntakeViewModel.Id == 0)
                 {
+                    IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, true, user_logged.UserName);
                     IntakeMedicalHistoryEntity.Client = null;
                     _context.IntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);
                     try
@@ -2055,6 +2062,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
+                    IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false, user_logged.UserName);
                     IntakeMedicalHistoryEntity.Client = null;
                     _context.IntakeMedicalHistory.Update(IntakeMedicalHistoryEntity);
                     try
