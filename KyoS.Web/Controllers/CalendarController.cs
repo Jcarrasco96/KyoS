@@ -249,7 +249,7 @@ namespace KyoS.Web.Controllers
                 model = new CalendarCMH_DocAssistant
                 {
                     IdDocumentAssistant = 0,
-                    DocumentAssistants = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false)
+                    DocumentAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id, false)
                 };
             }
             if (User.IsInRole("Documents_Assistant"))
