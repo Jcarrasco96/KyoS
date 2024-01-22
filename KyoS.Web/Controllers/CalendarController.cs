@@ -282,14 +282,16 @@ namespace KyoS.Web.Controllers
                // Task<List<object>> notesTask = NotesByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
                 Task<List<object>> mtpsTask = MTPsByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
                 Task<List<object>> biosTask = BIOsByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
+                Task<List<object>> briefTask = BriefsByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
                 Task<List<object>> mtpReviewTask = MTPReviewsByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
                 Task<List<object>> farsTask = FarsByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
                 Task<List<object>> MedicalHistoryTask = MedicalHistoryByDocumentsAssistant(idDocumentsAssistant, initDate, finalDate);
 
-                await Task.WhenAll(mtpsTask, biosTask, mtpReviewTask, farsTask, MedicalHistoryTask);
+                await Task.WhenAll(mtpsTask, biosTask, briefTask, mtpReviewTask, farsTask, MedicalHistoryTask);
 
                 var mtps = await mtpsTask;
                 var bios = await biosTask;
+                var brief = await briefTask;
                 var reviews = await mtpReviewTask;
                 var fars = await farsTask;
                 var MedicalHistory = await MedicalHistoryTask;
@@ -297,6 +299,7 @@ namespace KyoS.Web.Controllers
                 List<object> events = new List<object>();
                 events.AddRange(mtps);
                 events.AddRange(bios);
+                events.AddRange(brief);
                 events.AddRange(reviews);
                 events.AddRange(fars);
                 events.AddRange(MedicalHistory);
@@ -754,17 +757,17 @@ namespace KyoS.Web.Controllers
 
                 mtpEntity = await db.MTPs
                                     .Include(m => m.Client)
-                                    .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
+                                    .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                     .ToListAsync();
             }
 
             return mtpEntity.Select(m => new
             {
                 title = $"MTP Document - {m.Client.Name}",
-                start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                start = new DateTime(m.StartTime.Year, m.StartTime.Month, m.StartTime.Date.Day,
                                                                     m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                     m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),
                 backgroundColor = "#dff0d8",
@@ -786,17 +789,17 @@ namespace KyoS.Web.Controllers
 
                 bioEntityList = await db.Bio
                                         .Include(m => m.Client)
-                                        .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
+                                        .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                         .ToListAsync();
             }
 
             return bioEntityList.Select(m => new
             {
                 title = $"BIO Document - {m.Client.Name}",
-                start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                start = new DateTime(m.StartTime.Year, m.StartTime.Month, m.StartTime.Date.Day,
                                                                                             m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                             m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
                 backgroundColor = "#dff0d8",
@@ -819,17 +822,17 @@ namespace KyoS.Web.Controllers
                 mtpReviewEntity = await db.MTPReviews
                                           .Include(m => m.Mtp)
                                             .ThenInclude(mt => mt.Client)
-                                          .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
+                                          .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                           .ToListAsync();
             }
 
             return mtpReviewEntity.Select(m => new
             {
                 title = $"MTPR Document - {m.Mtp.Client.Name}",
-                start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                start = new DateTime(m.StartTime.Year, m.StartTime.Month, m.StartTime.Date.Day,
                                                                                             m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                             m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
                 backgroundColor = "#dff0d8",
@@ -851,17 +854,17 @@ namespace KyoS.Web.Controllers
 
                 farsEntityList = await db.FarsForm
                                          .Include(f => f.Client)
-                                         .Where(m => (m.CreatedOn >= initDate && m.CreatedOn <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
+                                         .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                          .ToListAsync();
             }
 
             return farsEntityList.Select(m => new
             {
                 title = $"FARS Document  - {m.Client.Name}",
-                start = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                start = new DateTime(m.StartTime.Year, m.StartTime.Month, m.StartTime.Date.Day,
                                                                                                                 m.StartTime.Hour, m.StartTime.Minute, 0)
                                                                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
+                end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                                                 m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK"),
                 backgroundColor = "#dff0d8",
@@ -901,6 +904,38 @@ namespace KyoS.Web.Controllers
                 borderColor = "#417c49"
             })
                                  .ToList<object>();
+        }
+        private async Task<List<object>> BriefsByDocumentsAssistant(int idDocumentsAssistant, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<BriefEntity> briefEntityList;
+            DocumentsAssistantEntity documentsAssistant;
+
+            using (DataContext db = new DataContext(options))
+            {
+                documentsAssistant = await db.DocumentsAssistant
+                                             .FirstOrDefaultAsync(f => f.Id == idDocumentsAssistant);
+
+                briefEntityList = await db.Brief
+                                          .Include(m => m.Client)
+                                          .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
+                                          .ToListAsync();
+            }
+
+            return briefEntityList.Select(m => new
+            {
+                title = $"Bief Document - {m.Client.Name}",
+                start = new DateTime(m.StartTime.Year, m.StartTime.Month, m.StartTime.Date.Day,
+                                                                                            m.StartTime.Hour, m.StartTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
+                                                                                            m.EndTime.Hour, m.EndTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                backgroundColor = "#dff0d8",
+                textColor = "#417c49",
+                borderColor = "#417c49"
+            })
+                                .ToList<object>();
         }
         #endregion
     }

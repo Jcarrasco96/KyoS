@@ -24,8 +24,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public BriefsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public BriefsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -33,6 +34,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
@@ -303,7 +305,33 @@ namespace KyoS.Web.Controllers
                 if (briefEntity == null)
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    
+                    DateTime start = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.StartTime.Hour, briefViewModel.StartTime.Minute, briefViewModel.StartTime.Second);
+                    briefViewModel.StartTime = start;
+                    DateTime end = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.EndTime.Hour, briefViewModel.EndTime.Minute, briefViewModel.EndTime.Second);
+                    briefViewModel.EndTime = end;
+
                     briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            briefViewModel.Client = _context.Clients
+                                                          .Include(n => n.LegalGuardian)
+                                                          .Include(n => n.EmergencyContact)
+                                                          .Include(n => n.MedicationList)
+                                                          .Include(n => n.Client_Referred)
+                                                          .ThenInclude(n => n.Referred)
+                                                          .Include(n => n.List_BehavioralHistory)
+                                                          .Include(f => f.Clients_Diagnostics)
+                                                          .ThenInclude(f => f.Diagnostic)
+                                                          .FirstOrDefault(n => n.Id == briefViewModel.Client_FK);
+                          
+                            return View(briefViewModel);
+                        }
+                    }
 
                     if (documentAssistant != null)
                     {
@@ -557,7 +585,35 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                DateTime start = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.StartTime.Hour, briefViewModel.StartTime.Minute, briefViewModel.StartTime.Second);
+                briefViewModel.StartTime = start;
+                DateTime end = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.EndTime.Hour, briefViewModel.EndTime.Minute, briefViewModel.EndTime.Second);
+                briefViewModel.EndTime = end;
+
                 BriefEntity briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, false, user_logged.UserName);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        briefViewModel.Client = _context.Clients
+                                                      .Include(n => n.LegalGuardian)
+                                                      .Include(n => n.EmergencyContact)
+                                                      .Include(n => n.MedicationList)
+                                                      .Include(n => n.Client_Referred)
+                                                      .ThenInclude(n => n.Referred)
+                                                      .Include(n => n.List_BehavioralHistory)
+                                                      .Include(f => f.Clients_Diagnostics)
+                                                      .ThenInclude(f => f.Diagnostic)
+                                                      .FirstOrDefault(n => n.Id == briefViewModel.Client_FK);
+
+                        ViewData["origi"] = origi;
+                        return View(briefViewModel);
+                    }
+                }
+
                 _context.Brief.Update(briefEntity);
                 try
                 {

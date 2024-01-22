@@ -78,6 +78,7 @@ namespace KyoS.Web
             services.AddScoped<IMimeType, MimeType>();
             services.AddScoped<IExportExcellHelper, ExportExcellHelper>();
             services.AddScoped<IFileHelper, FileHelper>();
+            services.AddScoped<IOverlapindHelper, OverlapindHelper>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
