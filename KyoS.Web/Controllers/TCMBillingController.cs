@@ -84,10 +84,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if (form["Billable"] == "Value1")
-                {
-                    return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient, origin = 1 });                          
-                }
+                return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient, origin = 1 });
             }
 
             return RedirectToAction("Index");

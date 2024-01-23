@@ -308,23 +308,27 @@ namespace KyoS.Web.Controllers
                                     List<Workday_Client> workday_client = new List<Workday_Client>();
                                     foreach (ClientEntity client in clients)
                                     {
-                                        developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
-                                        //si el workday que estoy creando es mayor o igual que la fecha de desarrollo del mtp del cliente entonces creo el workday_client
-                                        if (workday.Date >= developed_date)
+                                        if (client.MTPs.FirstOrDefault(m => m.Active == true) != null)
                                         {
-                                            workday_client.Add(new Workday_Client
+                                            developed_date = client.MTPs.FirstOrDefault(m => m.Active == true).MTPDevelopedDate;
+                                            //si el workday que estoy creando es mayor o igual que la fecha de desarrollo del mtp del cliente entonces creo el workday_client
+                                            if (workday.Date >= developed_date)
                                             {
-                                                Workday = workday,
-                                                Client = client,
-                                                Facilitator = client.Group.Facilitator,
-                                                Session = client.Group.Meridian,
-                                                Present = true,
-                                                GroupSize = client.Group.Clients.Count(),
-                                                SharedSession = client.Group.SharedSession,
-                                                CodeBill = clinic_entity.CodePSRTherapy,
-                                                Schedule = client.Group.Schedule
-                                            });                                           
+                                                workday_client.Add(new Workday_Client
+                                                {
+                                                    Workday = workday,
+                                                    Client = client,
+                                                    Facilitator = client.Group.Facilitator,
+                                                    Session = client.Group.Meridian,
+                                                    Present = true,
+                                                    GroupSize = client.Group.Clients.Count(),
+                                                    SharedSession = client.Group.SharedSession,
+                                                    CodeBill = clinic_entity.CodePSRTherapy,
+                                                    Schedule = client.Group.Schedule
+                                                });
+                                            }
                                         }
+                                        
                                     }
                                     _context.AddRange(workday_client);
                                 }
