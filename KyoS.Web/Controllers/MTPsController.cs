@@ -545,6 +545,7 @@ namespace KyoS.Web.Controllers
                                                       .ThenInclude(n => n.Diagnostic)
                                                       .FirstOrDefault(n => n.MTPs.Where(m => m.Id == mtpViewModel.Id).Count() > 0);
                         mtpViewModel.Goals = _context.Goals
+                                                     .Include(n => n.Objetives)
                                                      .Where(n => n.MTP.Id == mtpViewModel.Id
                                                               && n.Adendum == null 
                                                               && n.IdMTPReview == 0);
