@@ -14,10 +14,10 @@
                     &nbsp;
                 </div>
                 <div class="col-md-3">
-                    <input type="radio" name="Billable" value="Value1" checked="checked" /> Billable
+                    <input type="checkbox" asp-for="Billable" class="form-check-input" readonly id="check1"> Billable
                 </div>
                 <div class="col-md-3">
-                    <input type="radio" name="Billable" value="Value2" /> Non-Billable
+                    <input type="checkbox" class="form-check-input" id="check101"> Non-Billable
                 </div>
                 <div class="col-md-3">
                     &nbsp;
@@ -48,4 +48,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }
+<script>
+
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+</script>

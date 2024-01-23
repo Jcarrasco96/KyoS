@@ -65,7 +65,8 @@ namespace KyoS.Web.Controllers
                 {
                     Date = datetemp,
                     IdClient = 0,
-                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp)
+                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp),
+                    Billable = true
                 };
             }            
 
