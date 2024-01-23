@@ -29,7 +29,7 @@
     <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>
         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
-        <span asp-validation-for="IdClient" class="text-danger"></span>
+        <span asp-validation-for="IdClient" class="text-danger"></span>        
     </div>
     <div class="col-md-1">
         <div class="thumbnail list-group-item list-group-item-success">
@@ -87,6 +87,7 @@
                   center: 'title',
                   end: 'today prev,next'
                 },
+                initialDate: '@Model.StartDate',
                 initialView: 'timeGridWeek',
                 allDaySlot: false,
                 slotDuration: '00:15:00',
@@ -158,7 +159,7 @@
             $("#cbClient").change(function () {
                 calendar.refetchEvents();
             })
-        });
+        });        
     </script>
 }
 

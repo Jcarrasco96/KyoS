@@ -242,7 +242,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "TCMBilling");    
+                        return RedirectToAction("Index", "TCMBilling", new { initDate = TcmNoteViewModel.DateOfService.ToString() });    
                     }
                     catch (System.Exception ex)
                     {
@@ -412,9 +412,7 @@ namespace KyoS.Web.Controllers
             }
 
             if (ModelState.IsValid)
-            {
-               
-               
+            {           
                 TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
                 if (tcmNotesEntity.Status == NoteStatus.Pending)
                 {
@@ -480,7 +478,7 @@ namespace KyoS.Web.Controllers
                         }
                         if (origin == 2)
                         {
-                            return RedirectToAction("Index", "TCMBilling");
+                            return RedirectToAction("Index", "TCMBilling", new { initDate = tcmNotesViewModel.DateOfService.ToString() });
                         }
                         if (origin == 3)
                         {

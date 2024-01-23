@@ -49,9 +49,8 @@
                 {
                     @if (@ViewData["origin"].ToString() == "1")
                     {
-                        <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
+                        <a asp-action="Index" asp-controller="TCMBilling" asp-route-initDate="@Model.DateOfService.ToString()" class="btn btn-success">Back</a>
                     }
-
                 }
             </div>
         </form>
