@@ -25,7 +25,8 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly ITranslateHelper _translateHelper;
-        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IReportHelper reportHelper, ITranslateHelper translateHelper)
+        private readonly IOverlapindHelper _overlapingHelper;
+        public MTPsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IReportHelper reportHelper, ITranslateHelper translateHelper, IOverlapindHelper overlapingHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -33,6 +34,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _reportHelper = reportHelper;
             _translateHelper = translateHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
         [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant, Frontdesk")]
@@ -184,7 +186,9 @@ namespace KyoS.Web.Controllers
                                              .First(n => n.Id == idClient),
                             AdmissionedFor = user_logged.FullName,
                             GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
-                            CodeBill = user_logged.Clinic.CodeMTP
+                            CodeBill = user_logged.Clinic.CodeMTP,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(60)
                         };
                     }
                     else
@@ -217,7 +221,9 @@ namespace KyoS.Web.Controllers
                             Other = false,
                             Client = new ClientEntity(),
                             AdmissionedFor = user_logged.FullNameWithDocument,
-                            GoalTempList = new List<GoalsTempEntity>()
+                            GoalTempList = new List<GoalsTempEntity>(),
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(60)
 
                         };
                         model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
@@ -246,9 +252,6 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                ClientEntity client = await _context.Clients.FindAsync(mtpViewModel.IdClient);
-                DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-               
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";                    
@@ -273,6 +276,37 @@ namespace KyoS.Web.Controllers
                 }
 
                 mtpViewModel.Units = 0;
+                DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
+                mtpViewModel.StartTime = start;
+                DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
+                mtpViewModel.EndTime = end;
+
+                DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                if (User.IsInRole("Documents_Assistant"))
+                {                   
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ViewData["origin"] = origin;
+                        mtpViewModel.Client = _context.Clients
+                                                      .Include(n => n.Clients_Diagnostics)
+                                                      .ThenInclude(n => n.Diagnostic)
+                                                      .FirstOrDefault(n => n.Id == mtpViewModel.IdClient);
+                        mtpViewModel.GoalTempList = _context.GoalsTemp
+                                                            .Include(m => m.ObjetiveTempList)
+                                                            .Where(m => m.IdClient == mtpViewModel.IdClient && m.UserName == user_logged.UserName)
+                                                            .ToList();
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = mtpViewModel.Client.Name,
+                            Value = $"{mtpViewModel.Client.Id}"
+                        });
+                        mtpViewModel.Clients = list;
+                        return View(mtpViewModel);
+                    }
+                }
+
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, true, user_logged.UserName);
                 //mtpEntity.Setting = form["Setting"].ToString();
 
@@ -470,7 +504,7 @@ namespace KyoS.Web.Controllers
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+                
                 if (!string.IsNullOrEmpty(mtpViewModel.InitialDischargeCriteria))
                 {
                     mtpViewModel.InitialDischargeCriteria = (mtpViewModel.InitialDischargeCriteria.Last() == '.') ? mtpViewModel.InitialDischargeCriteria : $"{mtpViewModel.InitialDischargeCriteria}.";
@@ -494,6 +528,37 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
+                mtpViewModel.StartTime = start;
+                DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
+                mtpViewModel.EndTime = end;
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ViewData["origi"] = origi;
+                        mtpViewModel.Client = _context.Clients
+                                                      .Include(n => n.Clients_Diagnostics)
+                                                      .ThenInclude(n => n.Diagnostic)
+                                                      .FirstOrDefault(n => n.MTPs.Where(m => m.Id == mtpViewModel.Id).Count() > 0);
+                        mtpViewModel.Goals = _context.Goals
+                                                     .Include(n => n.Objetives)
+                                                     .Where(n => n.MTP.Id == mtpViewModel.Id
+                                                              && n.Adendum == null 
+                                                              && n.IdMTPReview == 0);
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = mtpViewModel.Client.Name,
+                            Value = $"{mtpViewModel.Client.Id}"
+                        });
+                        mtpViewModel.Clients = list;
+                        return View(mtpViewModel);
+                    }
+                }
                 MTPEntity mtpEntity = await _converterHelper.ToMTPEntity(mtpViewModel, false, user_logged.UserName);
                 
                 // mtpEntity.MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(u => u.MTP_FK == mtpViewModel.Id);
@@ -5618,5 +5683,7 @@ namespace KyoS.Web.Controllers
 
             return View();
         }
+
+       
     }
 }

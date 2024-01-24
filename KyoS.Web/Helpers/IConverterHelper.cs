@@ -82,7 +82,7 @@ namespace KyoS.Web.Helpers
         IntakeFeeAgreementViewModel ToIntakeFeeAgreementViewModel(IntakeFeeAgreementEntity model);
         IntakeTuberculosisEntity ToIntakeTuberculosisEntity(IntakeTuberculosisViewModel model, bool isNew);
         IntakeTuberculosisViewModel ToIntakeTuberculosisViewModel(IntakeTuberculosisEntity model);
-        IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew);
+        IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew, string userId);
         IntakeMedicalHistoryViewModel ToIntakeMedicalHistoryViewModel(IntakeMedicalHistoryEntity model);
         Task<DischargeEntity> ToDischargeEntity(DischargeViewModel model, bool isNew, string userId);
         DischargeViewModel ToDischargeViewModel(DischargeEntity model);

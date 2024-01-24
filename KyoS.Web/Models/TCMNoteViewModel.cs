@@ -16,5 +16,8 @@ namespace KyoS.Web.Models
         public IEnumerable<TCMNoteActivityTempEntity> TCMNoteActivityTemp { get; set; }
         public bool SignSupervisor { get; set; }
 
+        public bool Billable { get; set; }
+
+
     }
 }

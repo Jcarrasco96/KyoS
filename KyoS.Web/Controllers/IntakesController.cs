@@ -1985,7 +1985,13 @@ namespace KyoS.Web.Controllers
                             UsualDurationOfPeriods = "",
                             UsualIntervalBetweenPeriods = "",
                             AdmissionedFor = user_logged.FullName,
-                            IdDoctor = 0
+                            IdDoctor = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = null,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddMinutes(30)
 
                         };
                         if (model.Client.LegalGuardian == null)
@@ -2029,10 +2035,15 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false);
+                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity;
 
-                if (IntakeMedicalHistoryEntity.Id == 0)
+                if (IntakeViewModel.Id == 0)
                 {
+                    DateTime start = new DateTime(IntakeViewModel.DateSignatureEmployee.Year, IntakeViewModel.DateSignatureEmployee.Month, IntakeViewModel.DateSignatureEmployee.Day, IntakeViewModel.StartTime.Hour, IntakeViewModel.StartTime.Minute, IntakeViewModel.StartTime.Second);
+                    IntakeViewModel.StartTime = start;
+                    DateTime end = new DateTime(IntakeViewModel.DateSignatureEmployee.Year, IntakeViewModel.DateSignatureEmployee.Month, IntakeViewModel.DateSignatureEmployee.Day, IntakeViewModel.EndTime.Hour, IntakeViewModel.EndTime.Minute, IntakeViewModel.EndTime.Second);
+                    IntakeViewModel.EndTime = end;
+                    IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, true, user_logged.UserName);
                     IntakeMedicalHistoryEntity.Client = null;
                     _context.IntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);
                     try
@@ -2055,6 +2066,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
+                    IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false, user_logged.UserName);
                     IntakeMedicalHistoryEntity.Client = null;
                     _context.IntakeMedicalHistory.Update(IntakeMedicalHistoryEntity);
                     try

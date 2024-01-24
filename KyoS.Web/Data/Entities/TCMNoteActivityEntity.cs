@@ -33,5 +33,6 @@ namespace KyoS.Web.Data.Entities
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ServiceName { get; set; }
+        public bool Billable { get; set; }
     }
 }

@@ -12,6 +12,23 @@
         <input type="hidden" asp-for="Setting" />
         <input type="hidden" asp-for="IdTCMClient" />
         <input type="hidden" asp-for="DateOfServiceNote" />
+        <div class="col-md-push-12">
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            <div class="col-md-4">
+                <input type="checkbox" asp-for="Billable" class="form-check-input" readonly id="check1"> Billable
+            </div>
+
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
         <div>
             <div class=" col-md-3 form-group">
                 <label asp-for="StartTime" class="control-label">Start Time</label>&nbsp;*

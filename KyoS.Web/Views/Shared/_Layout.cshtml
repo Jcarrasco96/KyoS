@@ -249,6 +249,7 @@
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
+                                            <li><a asp-area="" asp-controller="Calendar" asp-action="IndexDocumentsAssistant">Documents Assistant</a></li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -1008,6 +1009,7 @@
                     else
                  if (User.Identity.IsAuthenticated && (User.IsInRole("Documents_Assistant")))
                     {
+                        <li><a asp-area="" asp-controller="Calendar" asp-action="IndexDocumentsAssistant">My Calendar</a></li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" asp-controller="Clients" asp-action="Index" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Clients <span class="caret"></span>
@@ -1017,6 +1019,7 @@
                                     <a class="test" tabindex="-1" href="#">Clients</a>
                                     <ul class="dropdown-menu">
                                         <li><a asp-area="" asp-controller="IncidentReport" asp-action="Index">Incident Reports</a></li>
+                                        <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
                                         <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
                                     </ul>
                                 </li>

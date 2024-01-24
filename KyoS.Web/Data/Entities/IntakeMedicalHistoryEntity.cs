@@ -8,7 +8,7 @@ using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class IntakeMedicalHistoryEntity
+    public class IntakeMedicalHistoryEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -219,5 +219,15 @@ namespace KyoS.Web.Data.Entities
 
 
         public bool Documents { get; set; }
+
+        [Display(Name = "Start Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime StartTime { get; set; }
+
+        [Display(Name = "End Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime EndTime { get; set; }
     }
 }

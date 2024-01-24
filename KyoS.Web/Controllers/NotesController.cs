@@ -15566,7 +15566,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult ViewAllGoals(int idMtp = 0)
         {
             UserEntity user_logged = _context.Users

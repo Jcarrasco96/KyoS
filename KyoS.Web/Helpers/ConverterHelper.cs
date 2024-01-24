@@ -2472,8 +2472,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
-                
+                AdmissionedFor = model.AdmissionedFor                
 
             };
 
@@ -2567,7 +2566,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
+        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew, string userId)
         {
             return new IntakeMedicalHistoryEntity
             {
@@ -2726,7 +2725,13 @@ namespace KyoS.Web.Helpers
                 UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
 
                 AdmissionedFor = model.AdmissionedFor,
-                InformationProvided = model.InformationProvided
+                InformationProvided = model.InformationProvided,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
             };
         }
 
@@ -2891,7 +2896,13 @@ namespace KyoS.Web.Helpers
 
                 AdmissionedFor = model.AdmissionedFor,
                 InformationProvided = model.InformationProvided,
-                IdDoctor = (model.Client.Doctor == null) ? 0 : model.Client.Doctor.Id
+                IdDoctor = (model.Client.Doctor == null) ? 0 : model.Client.Doctor.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
                 
             };
 
@@ -6089,7 +6100,8 @@ namespace KyoS.Web.Helpers
                 TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote),
                 ServiceName = model.ServiceName,
-                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity)
+                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity),
+                Billable = model.Billable
             };
         }
 
@@ -6122,7 +6134,8 @@ namespace KyoS.Web.Helpers
                 IdTCMActivity = (model.TCMServiceActivity != null)? model.TCMServiceActivity.Id : 0,
                 DescriptionTemp = (model.TCMServiceActivity != null)? (model.TCMServiceActivity.Id != 0)? _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description : string.Empty : string.Empty,
                 TimeEnd = model.EndTime.ToShortTimeString(),
-                NeedIdentified = model.TCMDomain.NeedsIdentified
+                NeedIdentified = model.TCMDomain.NeedsIdentified,
+                Billable = model.Billable
         };
 
             return salida;
@@ -6199,6 +6212,7 @@ namespace KyoS.Web.Helpers
                 Status = TcmStageEntity.Status,
                 Approved = TcmStageEntity.Approved,
                 Frecuency = TcmStageEntity.Frecuency
+                
             };
         }
 
@@ -6219,7 +6233,8 @@ namespace KyoS.Web.Helpers
                 IdTCMClient = model.IdTCMClient,
                 DateOfServiceOfNote = model.StartTime,
                 ServiceName = model.ServiceName,
-                IdTCMServiceActivity = model.IdTCMActivity
+                IdTCMServiceActivity = model.IdTCMActivity,
+                Billable = model.Billable
             };
         }
 

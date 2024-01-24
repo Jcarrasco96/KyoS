@@ -24,8 +24,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public BiosController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public BiosController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -33,6 +34,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
@@ -338,7 +340,7 @@ namespace KyoS.Web.Controllers
                     model.Client.MedicationList = new List<MedicationEntity>();
                 if (model.Client.Doctor == null)
                     model.Client.Doctor = new DoctorEntity();
-                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
                     model.Client.Client_Referred = new List<Client_Referred>();
@@ -569,7 +571,9 @@ namespace KyoS.Web.Controllers
                     MilitaryServiceHistory = false,
                     MilitaryServiceHistory_Explain = string.Empty,
                     VocationalAssesment = string.Empty,
-                    Code90791 = false
+                    Code90791 = false,
+                    StartTime = DateTime.Now,
+                    EndTime = DateTime.Now.AddMinutes(45)
                 };
 
                 if (model.Client.LegalGuardian == null)
@@ -580,7 +584,7 @@ namespace KyoS.Web.Controllers
                     model.Client.MedicationList = new List<MedicationEntity>();
                 if (model.Client.Doctor == null)
                     model.Client.Doctor = new DoctorEntity();
-                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
                     model.Client.Client_Referred = new List<Client_Referred>();
@@ -629,7 +633,38 @@ namespace KyoS.Web.Controllers
                     }
 
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                    bioViewModel.StartTime = start;
+                    DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                    bioViewModel.EndTime = end;
                     bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, bioViewModel.StartTime, bioViewModel.EndTime) == false)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            bioViewModel.Client = _context.Clients
+                                                          .Include(n => n.LegalGuardian)
+                                                          .Include(n => n.EmergencyContact)
+                                                          .Include(n => n.MedicationList)
+                                                          .Include(n => n.Client_Referred)
+                                                          .ThenInclude(n => n.Referred)
+                                                          .Include(n => n.List_BehavioralHistory)
+                                                          .Include(f => f.Clients_Diagnostics)
+                                                          .ThenInclude(f => f.Diagnostic) 
+                                                          .FirstOrDefault(n => n.Id == bioViewModel.Client_FK);
+                            bioViewModel.Appetite_Status = _combosHelper.GetComboBio_Appetite();
+                            bioViewModel.IdHydratation = 0;
+                            bioViewModel.Hydratation_Status = _combosHelper.GetComboBio_Hydration();
+                            bioViewModel.IdRecentWeight = 0;
+                            bioViewModel.RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight();
+                            bioViewModel.IdIfSexuallyActive = 0;
+                            bioViewModel.IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive();
+
+                            return View(bioViewModel);
+                        }
+                    }
 
                     if (documentAssistant != null)
                     {
@@ -969,7 +1004,40 @@ namespace KyoS.Web.Controllers
                     bioViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                bioViewModel.StartTime = start;
+                DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                bioViewModel.EndTime = end;
                 BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, bioViewModel.StartTime, bioViewModel.EndTime) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        bioViewModel.Client = _context.Clients
+                                                      .Include(n => n.LegalGuardian)
+                                                      .Include(n => n.EmergencyContact)
+                                                      .Include(n => n.MedicationList)
+                                                      .Include(n => n.Client_Referred)
+                                                      .ThenInclude(n => n.Referred)
+                                                      .Include(n => n.List_BehavioralHistory)
+                                                      .Include(f => f.Clients_Diagnostics)
+                                                      .ThenInclude(f => f.Diagnostic)
+                                                      .FirstOrDefault(n => n.Id == bioViewModel.Client_FK);
+                        bioViewModel.Appetite_Status = _combosHelper.GetComboBio_Appetite();
+                        bioViewModel.IdHydratation = 0;
+                        bioViewModel.Hydratation_Status = _combosHelper.GetComboBio_Hydration();
+                        bioViewModel.IdRecentWeight = 0;
+                        bioViewModel.RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight();
+                        bioViewModel.IdIfSexuallyActive = 0;
+                        bioViewModel.IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive();
+                        ViewData["origi"] = origi;
+                        return View(bioViewModel);
+                    }
+                }
+
                 _context.Bio.Update(bioEntity);
                 try
                 {

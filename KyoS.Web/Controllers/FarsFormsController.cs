@@ -25,8 +25,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public FarsFormsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public FarsFormsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -34,6 +35,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
@@ -152,7 +154,9 @@ namespace KyoS.Web.Controllers
                    IdSupervisor = 0,
                    Supervisor = new SupervisorEntity(),
                    IdType = 0,
-                   FarsType = _combosHelper.GetComboFARSType()
+                   FarsType = _combosHelper.GetComboFARSType(),
+                   StartTime = DateTime.Now,
+                   EndTime = DateTime.Now.AddMinutes(15)
                 };
 
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
@@ -213,7 +217,28 @@ namespace KyoS.Web.Controllers
                         FarsFormViewModel.Units = units;
                     }
 
+                    DateTime start = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.StartTime.Hour, FarsFormViewModel.StartTime.Minute, FarsFormViewModel.StartTime.Second);
+                    FarsFormViewModel.StartTime = start;
+                    DateTime end = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.EndTime.Hour, FarsFormViewModel.EndTime.Minute, FarsFormViewModel.EndTime.Second);
+                    FarsFormViewModel.EndTime = end;
                     farsFormEntity = await _converterHelper.ToFarsFormEntity(FarsFormViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime) == false)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            ViewData["Origin"] = origin;
+                            FarsFormViewModel.Client = _context.Clients
+                                                               .Include(n => n.Clinic)
+                                                               .FirstOrDefault(n => n.Id == FarsFormViewModel.IdClient);
+
+                            FarsFormViewModel.FarsType = _combosHelper.GetComboFARSType();
+                            return View(FarsFormViewModel);
+                        }
+                    }
+
                     _context.FarsForm.Add(farsFormEntity);
                     try
                     {
@@ -355,7 +380,27 @@ namespace KyoS.Web.Controllers
                     farsFormViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.StartTime.Hour, farsFormViewModel.StartTime.Minute, farsFormViewModel.StartTime.Second);
+                farsFormViewModel.StartTime = start;
+                DateTime end = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.EndTime.Hour, farsFormViewModel.EndTime.Minute, farsFormViewModel.EndTime.Second);
+                farsFormViewModel.EndTime = end;
                 FarsFormEntity farsFormEntity = await _converterHelper.ToFarsFormEntity(farsFormViewModel, false, user_logged.Id);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        farsFormViewModel.Client = _context.Clients
+                                                           .Include(n => n.Clinic)
+                                                           .FirstOrDefault(n => n.Id == farsFormViewModel.IdClient);
+
+                        farsFormViewModel.FarsType = _combosHelper.GetComboFARSType();
+                        return View(farsFormViewModel);
+                    }
+                }
+
                 _context.FarsForm.Update(farsFormEntity);
                 try
                 {

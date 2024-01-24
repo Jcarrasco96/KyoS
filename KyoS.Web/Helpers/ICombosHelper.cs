@@ -106,5 +106,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboSupervisorByClinic(int idClinic, bool select);
         IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic();
         IEnumerable<SelectListItem> GetComboPaystubStatus();
+        IEnumerable<SelectListItem> GetComboDocumentsAssistantByClinic(int idClinic, bool blank = false, bool all = false);
     }
 }
