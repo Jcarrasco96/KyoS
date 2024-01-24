@@ -6100,7 +6100,8 @@ namespace KyoS.Web.Helpers
                 TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote),
                 ServiceName = model.ServiceName,
-                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity)
+                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity),
+                Billable = model.Billable
             };
         }
 
@@ -6133,7 +6134,8 @@ namespace KyoS.Web.Helpers
                 IdTCMActivity = (model.TCMServiceActivity != null)? model.TCMServiceActivity.Id : 0,
                 DescriptionTemp = (model.TCMServiceActivity != null)? (model.TCMServiceActivity.Id != 0)? _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description : string.Empty : string.Empty,
                 TimeEnd = model.EndTime.ToShortTimeString(),
-                NeedIdentified = model.TCMDomain.NeedsIdentified
+                NeedIdentified = model.TCMDomain.NeedsIdentified,
+                Billable = model.Billable
         };
 
             return salida;
@@ -6210,6 +6212,7 @@ namespace KyoS.Web.Helpers
                 Status = TcmStageEntity.Status,
                 Approved = TcmStageEntity.Approved,
                 Frecuency = TcmStageEntity.Frecuency
+                
             };
         }
 
@@ -6230,7 +6233,8 @@ namespace KyoS.Web.Helpers
                 IdTCMClient = model.IdTCMClient,
                 DateOfServiceOfNote = model.StartTime,
                 ServiceName = model.ServiceName,
-                IdTCMServiceActivity = model.IdTCMActivity
+                IdTCMServiceActivity = model.IdTCMActivity,
+                Billable = model.Billable
             };
         }
 

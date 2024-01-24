@@ -84,7 +84,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient, origin = 1 });
+                return RedirectToAction("Create", "TCMNotes", new { dateTime = model.Date, IdTCMClient = model.IdClient, origin = 1, billable = model.Billable });
             }
 
             return RedirectToAction("Index");

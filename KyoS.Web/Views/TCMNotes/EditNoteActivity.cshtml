@@ -18,6 +18,23 @@
             <input type="hidden" asp-for="IdTCMDomain" />
             <input type="hidden" asp-for="IdTCMActivity" />
         }
+        <div class="col-md-push-12">
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+            <div class="col-md-4">
+                <input type="checkbox" asp-for="Billable" class="form-check-input" readonly id="check1"> Billable
+            </div>
+
+            <div class="col-md-4">
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
         @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
         {
             <div>

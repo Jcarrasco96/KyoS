@@ -66,7 +66,7 @@
                             <th class="col-md-2" style="text-align:left;">
                                 Domain
                             </th>
-                            <th class="col-md-5" style="text-align:left;">
+                            <th class="col-md-4" style="text-align:left;">
                                 Description
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -77,6 +77,9 @@
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Minutes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billable
                             </th>
                             <th class="col-md-1">
 
@@ -105,6 +108,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Minutes)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Billable)
                                 </td>
                                 <td align="right">
                                     @if (User.IsInRole("CaseManager"))

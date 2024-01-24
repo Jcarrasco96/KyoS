@@ -129,7 +129,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Create(DateTime dateTime, int IdTCMClient, int origin = 0)
+        public IActionResult Create(DateTime dateTime, int IdTCMClient, int origin = 0, bool billable = true)
         {
 
             UserEntity user_logged = _context.Users
@@ -176,8 +176,8 @@ namespace KyoS.Web.Controllers
                         TCMNoteActivityTemp = _context.TCMNoteActivityTemp
                                                       .Where(na => na.UserName == user_logged.UserName),
                         Sign = false,
-                        CodeBill = user_logged.Clinic.CPTCode_TCM
-
+                        CodeBill = user_logged.Clinic.CPTCode_TCM,
+                        Billable = billable
 
                     };
                     ViewData["origin"] = origin;
@@ -230,7 +230,8 @@ namespace KyoS.Web.Controllers
                             StartTime = item.StartTime,
                             TCMNote = NoteEntity,
                             ServiceName = item.ServiceName,
-                            TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == item.IdTCMServiceActivity)
+                            TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == item.IdTCMServiceActivity),
+                            Billable = item.Billable
                         };
                         _context.TCMNoteActivity.Add(noteActivity);                   
                     }
@@ -554,7 +555,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0, int unitsAvaliable = 0)
+        public IActionResult CreateNoteActivity(int idNote = 0, int idTCMClient = 0, int unitsAvaliable = 0, bool billable = true)
         {
             UserEntity user_logged = _context.Users
 
@@ -868,7 +869,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateNoteActivityTemp(DateTime initDate, int idTCMClient = 0)
+        public IActionResult CreateNoteActivityTemp(DateTime initDate, int idTCMClient = 0, bool billable = true)
         {
             UserEntity user_logged = _context.Users
 
@@ -898,7 +899,8 @@ namespace KyoS.Web.Controllers
                     StartTime = initDate,
                     TimeEnd = initDate.AddMinutes(15).ToShortTimeString(),
                     DateOfServiceNote = initDate,
-                    Units = 1
+                    Units = 1,
+                    Billable = billable
                 };
 
                 return View(model);

@@ -68,7 +68,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Domain
                             </th>
-                            <th class="col-md-6" style="text-align:left;">
+                            <th class="col-md-5" style="text-align:left;">
                                 Description
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -79,6 +79,9 @@
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Minutes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billable
                             </th>
                             <th class="col-md-1">
 
@@ -107,6 +110,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Minutes)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Billable)
                                 </td>
                                 <td align="right">                                    
                                     <a asp-action="DeleteTCMNoteActivityTemp" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
