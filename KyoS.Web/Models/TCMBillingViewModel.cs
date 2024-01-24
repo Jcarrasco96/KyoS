@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,9 +14,6 @@ namespace KyoS.Web.Models
         public int IdCaseManager { get; set; }
         public IEnumerable<SelectListItem> CaseManagers { get; set; }
 
-        public static implicit operator TCMBillingViewModel(AddProgressNoteViewModel v)
-        {
-            throw new NotImplementedException();
-        }
+        public string StartDate { get; set; }
     }
 }

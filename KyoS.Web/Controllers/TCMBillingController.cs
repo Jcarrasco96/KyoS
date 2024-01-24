@@ -32,7 +32,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult Index(int id = 0)
+        public IActionResult Index(int id = 0, string initDate = "")
         {
             if (id == 1)
             {
@@ -42,10 +42,14 @@ namespace KyoS.Web.Controllers
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            DateTime initialDate = (initDate == string.Empty) ? DateTime.Now : Convert.ToDateTime(initDate);
+            
             TCMBillingViewModel model = new TCMBillingViewModel
             {
                 IdClient = 0,
-                Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName)
+                Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName),
+                StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"                
             };
 
             return View(model);
@@ -118,7 +122,7 @@ namespace KyoS.Web.Controllers
                                                                 $"{t.ServiceName} - {t.TCMNote.TCMClient.Client.Name}",
                                              start = t.StartTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
                                              end = t.EndTime.ToString("yyyy-MM-ddTHH:mm:ssK"),
-                                             url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),
+                                             url = Url.Action("Edit", "TCMNotes", new { id = t.TCMNote.Id, origin = 2 }),                                             
                                              backgroundColor = (t.TCMNote.Status == NoteStatus.Edition) ? "#fcf8e3" :
                                                                        (t.TCMNote.Status == NoteStatus.Pending) ? "#d9edf7" :
                                                                            (t.TCMNote.Status == NoteStatus.Approved) ? "#dff0d8" : "#dff0d8",
