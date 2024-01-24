@@ -323,6 +323,17 @@ namespace KyoS.Web.Controllers
                         model.TCMClient = TcmNote.TCMClient;
                         ViewData["origin"] = origin;
                         ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                        if (TcmNote.TCMNoteActivity.Count() > 0)
+                        {
+                            if (TcmNote.TCMNoteActivity.Where(n => n.Billable == false).Count() > 0)
+                                model.Billable = false;
+                            else
+                                model.Billable = true;
+                        }
+                        else
+                        {
+                            model.Billable = true;
+                        }
                         return View(model);
                     }
 
@@ -366,6 +377,17 @@ namespace KyoS.Web.Controllers
                             model.TCMClient = TcmNote.TCMClient;
                             ViewData["origin"] = origin;
                             ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                            if (TcmNote.TCMNoteActivity.Count() > 0)
+                            {
+                                if (TcmNote.TCMNoteActivity.Where(n => n.Billable == false).Count() > 0)
+                                    model.Billable = false;
+                                else
+                                    model.Billable = true;
+                            }
+                            else
+                            {
+                                model.Billable = true;
+                            }
                             return View(model);
                         }
 
