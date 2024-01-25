@@ -284,7 +284,7 @@ namespace KyoS.Web.Controllers
                 DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 if (User.IsInRole("Documents_Assistant"))
                 {                   
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime) == false)
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP) == false)
                     {
                         ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                         ViewData["origin"] = origin;
@@ -472,7 +472,11 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
-
+                //redirect to note print report
+                if (mtpEntity.Status == MTPStatus.Approved)
+                {
+                    return RedirectToAction("PrintMTP", new { id = mtpEntity.Id });
+                }
                 List<SelectListItem> list = new List<SelectListItem>();
                 list.Insert(0, new SelectListItem
                 {
@@ -536,7 +540,7 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime) == false)
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP) == false)
                     {
                         ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                         ViewData["origi"] = origi;
@@ -611,6 +615,10 @@ namespace KyoS.Web.Controllers
                         if (origi == 2)
                         {
                             return RedirectToAction("MtpWithReview", "MTPs");
+                        }
+                        if (origi == 3)
+                        {
+                            return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                         }
                     }
                     catch (System.Exception ex)
@@ -2876,6 +2884,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            //redirect to MTPR print report
+            if (mtpReviewEntity.Status == AdendumStatus.Approved)
+            {
+                return RedirectToAction("PrintMTPReview", new { id = mtpReviewEntity.Id });
+            }
+
             MTPReviewViewModel mtpReviewViewModel = _converterHelper.ToMTPReviewViewModel(mtpReviewEntity);
             mtpReviewViewModel.Origin = origin;
             if (mtpReviewViewModel.Mtp.Client.LegalGuardian == null)
@@ -2913,7 +2927,22 @@ namespace KyoS.Web.Controllers
 
                 MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
 
+                DateTime start = new DateTime(mtpReviewViewModel.DataOfService.Year, mtpReviewViewModel.DataOfService.Month, mtpReviewViewModel.DataOfService.Day, mtpReviewViewModel.StartTime.Hour, mtpReviewViewModel.StartTime.Minute, mtpReviewViewModel.StartTime.Second);
+                mtpReviewViewModel.StartTime = start;
+                DateTime end = new DateTime(mtpReviewViewModel.DataOfService.Year, mtpReviewViewModel.DataOfService.Month, mtpReviewViewModel.DataOfService.Day, mtpReviewViewModel.EndTime.Hour, mtpReviewViewModel.EndTime.Minute, mtpReviewViewModel.EndTime.Second);
+                mtpReviewViewModel.EndTime = end;
                 _context.Update(mtpReviewEntity);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpReviewViewModel.StartTime, mtpReviewViewModel.EndTime, mtpReviewViewModel.Id, DocumentDescription.MTP_review) == false)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+
+                        return View(mtpReviewViewModel);
+                    }
+                }
 
                 try
                 {
@@ -3021,6 +3050,10 @@ namespace KyoS.Web.Controllers
                     if (mtpReviewViewModel.Origin == 8)
                     {
                         return RedirectToAction(nameof(MTPrWithReview));
+                    }
+                    if (mtpReviewViewModel.Origin == 9)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                     }
                     return RedirectToAction(nameof(Index));
                 }
@@ -3317,7 +3350,22 @@ namespace KyoS.Web.Controllers
                 MTPReviewEntity reviewEntity = _context.MTPReviews.Find(reviewViewModel.Id);
                 if (reviewEntity == null)
                 {
+                    DateTime start = new DateTime(reviewViewModel.DataOfService.Year, reviewViewModel.DataOfService.Month, reviewViewModel.DataOfService.Day, reviewViewModel.StartTime.Hour, reviewViewModel.StartTime.Minute, reviewViewModel.StartTime.Second);
+                    reviewViewModel.StartTime = start;
+                    DateTime end = new DateTime(reviewViewModel.DataOfService.Year, reviewViewModel.DataOfService.Month, reviewViewModel.DataOfService.Day, reviewViewModel.EndTime.Hour, reviewViewModel.EndTime.Minute, reviewViewModel.EndTime.Second);
+                    reviewViewModel.EndTime = end;
                     reviewEntity = await _converterHelper.ToMTPReviewEntity(reviewViewModel, true, reviewViewModel.CreatedBy);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, reviewViewModel.StartTime, reviewViewModel.EndTime, reviewViewModel.Id, DocumentDescription.MTP_review) == false)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                          
+                            return View(reviewViewModel);
+                        }
+                    }
 
                     _context.MTPReviews.Add(reviewEntity);
 

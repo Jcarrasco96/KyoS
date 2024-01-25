@@ -757,6 +757,7 @@ namespace KyoS.Web.Controllers
 
                 mtpEntity = await db.MTPs
                                     .Include(m => m.Client)
+                                    .Include(m => m.Messages)
                                     .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                     .ToListAsync();
             }
@@ -770,9 +771,17 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                     m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                     .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                backgroundColor = "#dff0d8",
-                textColor = "#417c49",
-                borderColor = "#417c49"
+                url = Url.Action("Edit", "MTPs", new { id = m.Id, origi = 3 }),
+                backgroundColor = (m.Status == MTPStatus.Edition) ? "#fcf8e3" :
+                                                                           (m.Status == MTPStatus.Pending) ? "#d9edf7" :
+                                                                               (m.Status == MTPStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                textColor = (m.Status == MTPStatus.Edition) ? "#9e7d67" :
+                                                                    (m.Status == MTPStatus.Pending && m.Messages.Count() > 0) ? "#Be2528" :
+                                                                           (m.Status == MTPStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == MTPStatus.Approved) ? "#417c49" : "#417c49",
+                borderColor = (m.Status == MTPStatus.Edition) ? "#9e7d67" :
+                                                                           (m.Status == MTPStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == MTPStatus.Approved) ? "#417c49" : "#417c49"
             })
                             .ToList<object>();
         }
@@ -789,6 +798,7 @@ namespace KyoS.Web.Controllers
 
                 bioEntityList = await db.Bio
                                         .Include(m => m.Client)
+                                        .Include(m => m.Messages)
                                         .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                         .ToListAsync();
             }
@@ -802,9 +812,17 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                             m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                backgroundColor = "#dff0d8",
-                textColor = "#417c49",
-                borderColor = "#417c49"
+                url = Url.Action("Edit", "Bios", new { id = m.Client_FK, origi = 3 }),
+                backgroundColor = (m.Status == BioStatus.Edition) ? "#fcf8e3" :
+                                                                           (m.Status == BioStatus.Pending) ? "#d9edf7" :
+                                                                               (m.Status == BioStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                textColor = (m.Status == BioStatus.Edition) ? "#9e7d67" :
+                                                                    (m.Status == BioStatus.Pending && m.Messages.Count() > 0) ? "#Be2528" :
+                                                                           (m.Status == BioStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == BioStatus.Approved) ? "#417c49" : "#417c49",
+                borderColor = (m.Status == BioStatus.Edition) ? "#9e7d67" :
+                                                                           (m.Status == BioStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == BioStatus.Approved) ? "#417c49" : "#417c49"
             })
                                 .ToList<object>();
         }
@@ -822,6 +840,7 @@ namespace KyoS.Web.Controllers
                 mtpReviewEntity = await db.MTPReviews
                                           .Include(m => m.Mtp)
                                             .ThenInclude(mt => mt.Client)
+                                          .Include(m => m.Messages)
                                           .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                           .ToListAsync();
             }
@@ -835,9 +854,17 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                             m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                backgroundColor = "#dff0d8",
-                textColor = "#417c49",
-                borderColor = "#417c49"
+                url = Url.Action("EditMTPReview", "MTPs", new { id = m.Id, origin = 9 }),
+                backgroundColor = (m.Status == AdendumStatus.Edition) ? "#fcf8e3" :
+                                                                           (m.Status == AdendumStatus.Pending) ? "#d9edf7" :
+                                                                               (m.Status == AdendumStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                textColor = (m.Status == AdendumStatus.Edition) ? "#9e7d67" :
+                                                                    (m.Status == AdendumStatus.Pending && m.Messages.Count() > 0) ? "#Be2528" :
+                                                                           (m.Status == AdendumStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == AdendumStatus.Approved) ? "#417c49" : "#417c49",
+                borderColor = (m.Status == AdendumStatus.Edition) ? "#9e7d67" :
+                                                                           (m.Status == AdendumStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == AdendumStatus.Approved) ? "#417c49" : "#417c49"
             })
                                   .ToList<object>();
         }
@@ -854,6 +881,7 @@ namespace KyoS.Web.Controllers
 
                 farsEntityList = await db.FarsForm
                                          .Include(f => f.Client)
+                                         .Include(f => f.Messages)
                                          .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                          .ToListAsync();
             }
@@ -867,9 +895,17 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                                                 m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                backgroundColor = "#dff0d8",
-                textColor = "#417c49",
-                borderColor = "#417c49"
+                url = Url.Action("Edit", "FarsForms", new { id = m.Id, origin = 5 }),
+                backgroundColor = (m.Status == FarsStatus.Edition) ? "#fcf8e3" :
+                                                                           (m.Status == FarsStatus.Pending) ? "#d9edf7" :
+                                                                               (m.Status == FarsStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                textColor = (m.Status == FarsStatus.Edition) ? "#9e7d67" :
+                                                                    (m.Status == FarsStatus.Pending && m.Messages.Count() > 0) ? "#Be2528" :
+                                                                           (m.Status == FarsStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == FarsStatus.Approved) ? "#417c49" : "#417c49",
+                borderColor = (m.Status == FarsStatus.Edition) ? "#9e7d67" :
+                                                                           (m.Status == FarsStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == FarsStatus.Approved) ? "#417c49" : "#417c49"
             })
                                  .ToList<object>();
         }
@@ -899,6 +935,7 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.CreatedOn.Year, m.CreatedOn.Month, m.CreatedOn.Date.Day,
                                                                                                                 m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                                                 .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                url = Url.Action("CreateMedicalhistory", "Intakes", new { id = m.Id, origin = 2 }),
                 backgroundColor = "#dff0d8",
                 textColor = "#417c49",
                 borderColor = "#417c49"
@@ -918,6 +955,7 @@ namespace KyoS.Web.Controllers
 
                 briefEntityList = await db.Brief
                                           .Include(m => m.Client)
+                                          .Include(m => m.Messages)
                                           .Where(m => (m.StartTime >= initDate && m.StartTime <= finalDate && m.CreatedBy == documentsAssistant.LinkedUser))
                                           .ToListAsync();
             }
@@ -931,9 +969,17 @@ namespace KyoS.Web.Controllers
                 end = new DateTime(m.EndTime.Year, m.EndTime.Month, m.EndTime.Date.Day,
                                                                                             m.EndTime.Hour, m.EndTime.Minute, 0)
                                                                                             .ToString("yyyy-MM-ddTHH:mm:ssK"),
-                backgroundColor = "#dff0d8",
-                textColor = "#417c49",
-                borderColor = "#417c49"
+                url = Url.Action("Edit", "Briefs", new { id = m.Id, origi = 3 }),
+                backgroundColor = (m.Status == BioStatus.Edition) ? "#fcf8e3" :
+                                                                           (m.Status == BioStatus.Pending) ? "#d9edf7" :
+                                                                               (m.Status == BioStatus.Approved) ? "#dff0d8" : "#dff0d8",
+                textColor = (m.Status == BioStatus.Edition) ? "#9e7d67" :
+                                                                    (m.Status == BioStatus.Pending && m.Messages.Count() > 0) ? "#Be2528" :
+                                                                           (m.Status == BioStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == BioStatus.Approved) ? "#417c49" : "#417c49",
+                borderColor = (m.Status == BioStatus.Edition) ? "#9e7d67" :
+                                                                           (m.Status == BioStatus.Pending) ? "#487c93" :
+                                                                               (m.Status == BioStatus.Approved) ? "#417c49" : "#417c49"
             })
                                 .ToList<object>();
         }

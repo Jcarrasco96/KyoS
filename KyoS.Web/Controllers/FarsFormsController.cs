@@ -226,7 +226,7 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Documents_Assistant"))
                     {
                         DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime) == false)
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime, FarsFormViewModel.Id, DocumentDescription.Fars) == false)
                         {
                             ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                             ViewData["Origin"] = origin;
@@ -344,6 +344,11 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
+                        //redirect to MTPR print report
+                        if (FarsForm.Status == FarsStatus.Approved)
+                        {
+                            return RedirectToAction("PrintFarsForm", new { id = FarsForm.Id });
+                        }
 
                         model = _converterHelper.ToFarsFormViewModel(FarsForm);
                         model.Origin = origin;
@@ -389,7 +394,7 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime) == false)
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime, farsFormViewModel.Id, DocumentDescription.Fars) == false)
                     {
                         ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                         farsFormViewModel.Client = _context.Clients
@@ -448,6 +453,10 @@ namespace KyoS.Web.Controllers
                     if (farsFormViewModel.Origin == 4)
                     {
                         return RedirectToAction(nameof(EditionFars));
+                    }
+                    if (farsFormViewModel.Origin == 5)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                     }
                     return RedirectToAction(nameof(Index));
                 }

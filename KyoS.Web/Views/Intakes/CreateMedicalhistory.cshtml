@@ -15,7 +15,15 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Clients without Medical History", "ClientswithoutMedicalHistory", "Intakes")
+                @if (ViewData["origin"].ToString() == "2")
+                {
+                    @Html.ActionLink("Documents Assistant CMH Calendar", "IndexDocumentsAssistant", "Calendar")
+                }
+                else
+                {
+                    @Html.ActionLink("Clients without Medical History", "ClientswithoutMedicalHistory", "Intakes")
+                }
+
             </li>
             <li class="active">Medical History</li>
         </ul><!--.breadcrumb-->
@@ -59,7 +67,15 @@
             </div>
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="ClientswithoutMedicalHistory" class="btn btn-success">Back</a>
+                @if (ViewData["origin"].ToString() == "2")
+                {
+                    <a asp-action="IndexDocumentsAssistant" asp-controller="Calendar" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <a asp-action="ClientswithoutMedicalHistory" class="btn btn-success">Back</a>
+                }
+
             </div>
         </form>        
     </div>

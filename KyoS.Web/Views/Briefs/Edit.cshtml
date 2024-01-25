@@ -27,6 +27,10 @@
                 {
                     @Html.ActionLink("BIOs with rview ", "BioWithReview", "Bios")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("Documents Assistant CMH Calendar", "IndexDocumentsAssistant", "Calendar")
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
@@ -95,6 +99,10 @@
                 @if (ViewData["origi"].ToString() == "2")
                 {
                     <a asp-action="BriefWithReview" asp-controller="Briefs" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="IndexDocumentsAssistant" asp-controller="Calendar" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

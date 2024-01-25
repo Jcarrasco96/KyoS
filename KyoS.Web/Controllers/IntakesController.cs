@@ -1822,6 +1822,7 @@ namespace KyoS.Web.Controllers
                                                                               .Include(n => n.Client)
                                                                               .ThenInclude(n => n.MedicationList)
                                                                               .FirstOrDefault(n => n.Client.Id == id);
+
                     DoctorEntity doctor = _context.Clients.FirstOrDefault(n => n.Id == id).Doctor;
                     if (doctor == null)
                     {
@@ -2055,7 +2056,14 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("MedicalHistory");
+                            if (origin == 2)
+                            {
+                                return RedirectToAction("IndexDocumentsAssistant", "Calendar");
+                            }
+                            else
+                            {
+                                return RedirectToAction("MedicalHistory");
+                            }
                         }
                         
                     }

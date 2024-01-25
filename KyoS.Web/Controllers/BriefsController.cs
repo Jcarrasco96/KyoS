@@ -315,7 +315,7 @@ namespace KyoS.Web.Controllers
 
                     if (User.IsInRole("Documents_Assistant"))
                     {
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others) == false)
                         {
                             ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                             briefViewModel.Client = _context.Clients
@@ -523,6 +523,11 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
+                //redirect to briefs print report
+                if (entity.Status == BioStatus.Approved)
+                {
+                    return RedirectToAction("PrintBrief", new { id = entity.Id });
+                }
                 UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
@@ -595,7 +600,7 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others) == false)
                     {
                         ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
                         briefViewModel.Client = _context.Clients
@@ -659,6 +664,10 @@ namespace KyoS.Web.Controllers
                     if (origi == 2)
                     {
                         return RedirectToAction("BriefWithReview", "Briefs");
+                    }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                     }
                 }
                 catch (System.Exception ex)
