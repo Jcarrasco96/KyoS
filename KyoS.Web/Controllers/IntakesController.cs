@@ -2963,7 +2963,11 @@ namespace KyoS.Web.Controllers
                                                                                                  .ThenInclude(n => n.LegalGuardian)
                                                                                                  .FirstOrDefault(n => n.Client.Id == id);
 
-            ClientEntity client = _context.Clients.Include(d => d.LegalGuardian).FirstOrDefault(n => n.Id == id);
+            ClientEntity client = _context.Clients
+                                          .Include(d => d.LegalGuardian)
+                                          .Include(d => d.Clients_HealthInsurances)
+                                          .ThenInclude(d => d.HealthInsurance)
+                                          .FirstOrDefault(n => n.Id == id);
 
             if (user_logged.Clinic != null)
             {
@@ -2983,14 +2987,14 @@ namespace KyoS.Web.Controllers
                         AdmissionedFor = user_logged.FullName,
                         DateSignatureEmployee = client.AdmisionDate,
                         DateSignatureLegalGuardianOrClient = client.AdmisionDate,
-                        HealthPlan = string.Empty,
+                        HealthPlan = (client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null) ? client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name : string.Empty,
                         Id_DriverLicense = string.Empty,
-                        MedicaidId = string.Empty,
-                        MedicareCard = string.Empty,
+                        MedicaidId = client.MedicaidID,
+                        MedicareCard = client.MedicareId,
                         Other_Identification = string.Empty,
                         Other_Name = string.Empty,
                         Passport_Resident = string.Empty,
-                        Social = string.Empty
+                        Social = client.SSN
 
                     };
                     if (model.Client.LegalGuardian == null)
