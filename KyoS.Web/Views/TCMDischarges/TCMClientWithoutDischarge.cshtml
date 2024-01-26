@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMServicePlanEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
     ViewData["Title"] = "Case without Discharge";
 }
@@ -39,22 +39,28 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2" align="center">
-                                TCM Cases
-                            </th>
                             <th class="col-md-3" align="center">
                                 Client Name
                             </th>
-                            <th class="col-md-2" align="center">
+                            <th class="col-md-1" align="center" style="text-align: center;">
+                                Case N.
+                            </th>
+                            <th class="col-md-1" align="center" style="text-align: center;">
+                                Date Open
+                            </th>
+                            <th class="col-md-1" align="center" style="text-align: center;">
                                 Date Close
                             </th>
                             <th class="col-md-2" align="center">
                                 CaseManager
                             </th>
-                            <th class="col-md-1" align="center">
+                            <th class="col-md-2" align="center"style="text-align: center;">
+                                Insurance
+                            </th>
+                            <th class="col-md-1" align="center"style="text-align: center;">
                                 Status
                             </th>
-                            <th class="col-md-2" align="center">
+                            <th class="col-md-1" align="center">
                             </th>
                         </tr>
                     </thead>
@@ -63,25 +69,38 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                </td>
+                                 <td align="center">
+                                    @Html.DisplayFor(modelItem => item.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataClose)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
+                                    @Html.DisplayFor(modelItem => item.Casemanager.Name)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TcmClient.DataClose)
+                                <td align="center">
+                                   @if (item.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+                                   {
+                                       @item.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
+                                   }
+                                   else
+                                   { 
+                                      <p> - </p>
+                                   }
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
-                                </td>
-                                <td>
-                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Open) && (item.Approved == 2))
+                                <td align="center">
+                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Open))
                                     {
                                         <span class="label label-success">
                                             Open
                                         </span>
                                     }
-                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Close) && (item.Approved == 2))
+                                    @if ((item.Status == KyoS.Common.Enums.StatusType.Close))
                                     {
                                         <span class="label label-default">
                                             Close
@@ -89,7 +108,14 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    <a asp-action="Create" asp-controller="TCMDischarges" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-primary" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
+                                        <a asp-action="Create" asp-controller="TCMDischarges" asp-route-id="@item.TcmServicePlan.Id" asp-route-origin="2" class="btn btn-primary" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
+                                    else
+                                    { 
+                                        <a asp-action="Create" asp-controller="TCMDischarges" asp-route-id="@item.TcmServicePlan.Id" asp-route-origin="2" class="btn btn-primary disabled" title="Create Discharge"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }
