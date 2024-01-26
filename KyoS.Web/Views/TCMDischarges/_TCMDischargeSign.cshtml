@@ -1,27 +1,57 @@
 ﻿@model KyoS.Web.Models.TCMDischargeViewModel
 
-<div class="col-md-12">
-    <div class="col-md-push-12">
-        <pre>
-    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+@if (Model.Approved != 2)
+{
+    <div class="col-md-12">
+        <div class="col-md-push-12">
+            <pre>
+            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
    
-    <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
-    <br />
-    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-    <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate" disabled>
+            <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate">
+            <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
+            <br />
+            <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+            <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate" disabled>
     @if (Model.TCMSupervisor != null)
     {
-        <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
+            <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
+    }
+    else
+    {
+            <strong>()</strong>
+    }
+    </pre>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <hr />
+    </div>
+}
+else
+{
+    <div class="col-md-12">
+        <div class="col-md-push-12">
+            <pre>
+            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+   
+            <strong>Sataff signature date</strong>    <input asp-for="StaffSignatureDate">
+            <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>
+            <br />
+            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+            <strong>Supervisor signature date</strong>  <input asp-for="SupervisorSignatureDate">
+    @if (Model.TCMSupervisor != null)
+    {
+            <strong>(@Html.DisplayFor(modelItem => Model.TCMSupervisor.Name))</strong>
     }
     else
     { 
-        <strong>()</strong>
+            <strong>()</strong>
     }
     </pre>
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <hr />
-</div>
+    <div class="col-md-push-12">
+        <hr />
+    </div>
+}
 

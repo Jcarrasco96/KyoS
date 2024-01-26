@@ -254,6 +254,7 @@ namespace KyoS.Web.Controllers
             }
             if (User.IsInRole("Documents_Assistant"))
             {
+                //int a = AjustarHorarios();
                 DocumentsAssistantEntity documentsAssistant = _context.DocumentsAssistant
                                                                       .FirstOrDefault(f => f.LinkedUser == User.Identity.Name);
                 model = new CalendarCMH_DocAssistant
@@ -984,5 +985,75 @@ namespace KyoS.Web.Controllers
                                 .ToList<object>();
         }
         #endregion
+
+        private int AjustarHorarios()
+        {
+            List<DocumentsAssistantEntity> listDocumentAssistant = _context.DocumentsAssistant.ToList();
+            int cant = 0;
+            foreach (var employed in listDocumentAssistant)
+            {
+                List<MTPEntity> mtps = _context.MTPs.Where(n => n.CreatedBy == employed.LinkedUser).ToList();
+
+                foreach (var mtp in mtps)
+                {
+                    DateTime start = new DateTime(mtp.AdmissionDateMTP.Year, mtp.AdmissionDateMTP.Month, mtp.AdmissionDateMTP.Day, mtp.StartTime.Hour, mtp.StartTime.Minute, mtp.StartTime.Second);
+                    mtp.StartTime = start;
+                    DateTime end = new DateTime(mtp.AdmissionDateMTP.Year, mtp.AdmissionDateMTP.Month, mtp.AdmissionDateMTP.Day, mtp.EndTime.Hour, mtp.EndTime.Minute, mtp.EndTime.Second);
+                    mtp.EndTime = end;
+                    cant++;
+                    _context.Update(mtp);
+                }
+
+                List<BioEntity> Bios = _context.Bio.Where(n => n.CreatedBy == employed.LinkedUser).ToList();
+
+                foreach (var bio in Bios)
+                {
+                    DateTime start = new DateTime(bio.DateBio.Year, bio.DateBio.Month, bio.DateBio.Day, bio.StartTime.Hour, bio.StartTime.Minute, bio.StartTime.Second);
+                    bio.StartTime = start;
+                    DateTime end = new DateTime(bio.DateBio.Year, bio.DateBio.Month, bio.DateBio.Day, bio.EndTime.Hour, bio.EndTime.Minute, bio.EndTime.Second);
+                    bio.EndTime = end;
+                    cant++;
+                    _context.Update(bio);
+                }
+
+                List<FarsFormEntity> FARSs = _context.FarsForm.Where(n => n.CreatedBy == employed.LinkedUser).ToList();
+
+                foreach (var fars in FARSs)
+                {
+                    DateTime start = new DateTime(fars.EvaluationDate.Year, fars.EvaluationDate.Month, fars.EvaluationDate.Day, fars.StartTime.Hour, fars.StartTime.Minute, fars.StartTime.Second);
+                    fars.StartTime = start;
+                    DateTime end = new DateTime(fars.EvaluationDate.Year, fars.EvaluationDate.Month, fars.EvaluationDate.Day, fars.EndTime.Hour, fars.EndTime.Minute, fars.EndTime.Second);
+                    fars.EndTime = end;
+                    cant++;
+                    _context.Update(fars);
+                }
+
+                List<MTPReviewEntity> MTPRs = _context.MTPReviews.Where(n => n.CreatedBy == employed.LinkedUser).ToList();
+
+                foreach (var mtpr in MTPRs)
+                {
+                    DateTime start = new DateTime(mtpr.DataOfService.Year, mtpr.DataOfService.Month, mtpr.DataOfService.Day, mtpr.StartTime.Hour, mtpr.StartTime.Minute, mtpr.StartTime.Second);
+                    mtpr.StartTime = start;
+                    DateTime end = new DateTime(mtpr.DataOfService.Year, mtpr.DataOfService.Month, mtpr.DataOfService.Day, mtpr.EndTime.Hour, mtpr.EndTime.Minute, mtpr.EndTime.Second);
+                    mtpr.EndTime = end;
+                    cant++;
+                    _context.Update(mtpr);
+                }
+
+                List<IntakeMedicalHistoryEntity> medicalHistoryList = _context.IntakeMedicalHistory.Where(n => n.CreatedBy == employed.LinkedUser).ToList();
+
+                foreach (var MH in medicalHistoryList)
+                {
+                    DateTime start = new DateTime(MH.DateSignatureEmployee.Year, MH.DateSignatureEmployee.Month, MH.DateSignatureEmployee.Day, MH.StartTime.Hour, MH.StartTime.Minute, MH.StartTime.Second);
+                    MH.StartTime = start;
+                    DateTime end = new DateTime(MH.DateSignatureEmployee.Year, MH.DateSignatureEmployee.Month, MH.DateSignatureEmployee.Day, MH.EndTime.Hour, MH.EndTime.Minute, MH.EndTime.Second);
+                    MH.EndTime = end;
+                    cant++;
+                    _context.Update(MH);
+                }
+            }
+             _context.SaveChanges();
+            return cant;
+        }
     }
 }

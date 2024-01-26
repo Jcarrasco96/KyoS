@@ -214,7 +214,10 @@ else
         <strong>I understand that the specific reports disclosed might include: </strong>
         <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge" disabled> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord" disabled> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports" disabled> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport" disabled> Incident Reports
         <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation" disabled> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History" disabled> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork" disabled> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord" disabled> Hospital Records
-        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other" disabled> Other (explain)     <input asp-for="Other_Explain" disabled>
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other" disabled> Other (explain)     
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other" disabled> Other (explain)              <textarea asp-for="Other_Explain" style="width:70%" rows="1" disabled></textarea>
+        <strong>Other Purpose Request</strong>           <textarea asp-for="OtherPurposeRequest" style="width:70%" rows="1" disabled></textarea>
+        <strong>Other Authorized Information</strong>    <textarea asp-for="OtherAutorizedInformation" style="width:70%" rows="1" disabled></textarea>
     </pre>
     </div>
     <div class="col-md-12">
