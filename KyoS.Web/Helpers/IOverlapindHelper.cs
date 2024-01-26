@@ -9,7 +9,7 @@ namespace KyoS.Web.Helpers
 {
     public interface IOverlapindHelper
     {
-        bool OverlapingDocumentsAssistant(int idDocumentAssistant, DateTime initialTime, DateTime endTime, int idDocument, DocumentDescription typeDocument);
+        string OverlapingDocumentsAssistant(int idDocumentAssistant, DateTime initialTime, DateTime endTime, int idDocument, DocumentDescription typeDocument);
        
     }
 }

@@ -226,9 +226,10 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Documents_Assistant"))
                     {
                         DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime, FarsFormViewModel.Id, DocumentDescription.Fars) == false)
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime, FarsFormViewModel.Id, DocumentDescription.Fars);
+                        if ( overlapping != string.Empty)
                         {
-                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                             ViewData["Origin"] = origin;
                             FarsFormViewModel.Client = _context.Clients
                                                                .Include(n => n.Clinic)
@@ -394,9 +395,10 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime, farsFormViewModel.Id, DocumentDescription.Fars) == false)
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime, farsFormViewModel.Id, DocumentDescription.Fars);
+                    if (overlapping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                         farsFormViewModel.Client = _context.Clients
                                                            .Include(n => n.Clinic)
                                                            .FirstOrDefault(n => n.Id == farsFormViewModel.IdClient);

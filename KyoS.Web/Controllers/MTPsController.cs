@@ -283,10 +283,11 @@ namespace KyoS.Web.Controllers
 
                 DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 if (User.IsInRole("Documents_Assistant"))
-                {                   
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP) == false)
+                {
+                    string overlaping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP);
+                    if (overlaping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlaping);
                         ViewData["origin"] = origin;
                         mtpViewModel.Client = _context.Clients
                                                       .Include(n => n.Clients_Diagnostics)
@@ -540,9 +541,10 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP) == false)
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpViewModel.StartTime, mtpViewModel.EndTime, mtpViewModel.Id, DocumentDescription.MTP);
+                    if (overlapping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                         ViewData["origi"] = origi;
                         mtpViewModel.Client = _context.Clients
                                                       .Include(n => n.Clients_Diagnostics)
@@ -2936,9 +2938,10 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpReviewViewModel.StartTime, mtpReviewViewModel.EndTime, mtpReviewViewModel.Id, DocumentDescription.MTP_review) == false)
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, mtpReviewViewModel.StartTime, mtpReviewViewModel.EndTime, mtpReviewViewModel.Id, DocumentDescription.MTP_review);
+                    if (overlapping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
 
                         return View(mtpReviewViewModel);
                     }
@@ -3359,9 +3362,10 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Documents_Assistant"))
                     {
                         DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, reviewViewModel.StartTime, reviewViewModel.EndTime, reviewViewModel.Id, DocumentDescription.MTP_review) == false)
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, reviewViewModel.StartTime, reviewViewModel.EndTime, reviewViewModel.Id, DocumentDescription.MTP_review);
+                        if (overlapping != string.Empty)
                         {
-                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval "+ overlapping);
                           
                             return View(reviewViewModel);
                         }

@@ -315,9 +315,10 @@ namespace KyoS.Web.Controllers
 
                     if (User.IsInRole("Documents_Assistant"))
                     {
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others) == false)
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                        if (overlapping != string.Empty)
                         {
-                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                             briefViewModel.Client = _context.Clients
                                                           .Include(n => n.LegalGuardian)
                                                           .Include(n => n.EmergencyContact)
@@ -600,9 +601,10 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others) == false)
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                    if (overlapping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                         briefViewModel.Client = _context.Clients
                                                       .Include(n => n.LegalGuardian)
                                                       .Include(n => n.EmergencyContact)
