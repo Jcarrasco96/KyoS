@@ -26,55 +26,189 @@ namespace KyoS.Web.Helpers
             _userHelper = userHelper;
         }
 
-        public bool OverlapingDocumentsAssistant(int idDocumentAssistant, DateTime initialTime, DateTime endTime)
+        public string OverlapingDocumentsAssistant(int idDocumentAssistant, DateTime initialTime, DateTime endTime, int idDocument, DocumentDescription typeDocument)
         {
             DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.Id == idDocumentAssistant);
 
             if (documentAssistant != null)
             {
-                if (_context.Bio.Where(n => (n.DocumentsAssistant.Id == idDocumentAssistant)
-                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
-                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
-                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
-                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                if (typeDocument == DocumentDescription.Bio)
                 {
-                    return false;
+                    BioEntity bio = _context.Bio
+                                            .Include(n => n.Client)
+                                            .FirstOrDefault(n => (n.DocumentsAssistant.Id == idDocumentAssistant)
+                                                               && n.Id != idDocument
+                                                               && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (bio != null)
+                    {
+                        return "BIO - " + bio.Client.Name + " - " + bio.StartTime + " - " + bio.EndTime;
+                    }
                 }
-                if (_context.Brief.Where(n => (n.DocumentsAssistant.Id == idDocumentAssistant)
-                                        && ((n.StartTime >= initialTime && n.StartTime <= endTime)
-                                        || (n.EndTime >= initialTime && n.EndTime <= endTime)
-                                        || (n.StartTime <= initialTime && n.EndTime >= initialTime)
-                                        || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                else
                 {
-                    return false;
+                    BioEntity bio = _context.Bio
+                                            .Include(n => n.Client)
+                                            .FirstOrDefault(n => (n.DocumentsAssistant.Id == idDocumentAssistant)
+                                                 && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                 || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                 || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                 || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (bio != null)
+                    {
+                        return "BIO - " + bio.Client.Name + " - " + bio.StartTime + " - " + bio.EndTime;
+                    }
                 }
-                if (_context.MTPs.Where(n => (n.DocumentAssistant.Id == idDocumentAssistant)
-                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
-                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
-                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
-                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                //if(typeDocument == DocumentDescription.B)falta poner el brief en los tipod de documentos
+               
+                if (typeDocument == DocumentDescription.MTP)
                 {
-                    return false;
+                    MTPEntity mtp = _context.MTPs
+                                            .Include(n => n.Client)
+                                            .FirstOrDefault(n => (n.DocumentAssistant.Id == idDocumentAssistant)
+                                             && n.Id != idDocument
+                                             && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                             || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                             || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                             || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (mtp != null)
+                    {
+                        return "MTP - " + mtp.Client.Name + " - " + mtp.StartTime + " - " + mtp.EndTime;
+                    }
                 }
-                if (_context.FarsForm.Where(n => (n.CreatedBy == documentAssistant.LinkedUser)
-                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
-                                         || (n.EndTime >= initialTime && n.EndTime <= endTime)
-                                         || (n.StartTime <= initialTime && n.EndTime >= initialTime)
-                                         || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                else
                 {
-                    return false;
+                    MTPEntity mtp = _context.MTPs
+                                            .Include(n => n.Client)
+                                            .FirstOrDefault(n => (n.DocumentAssistant.Id == idDocumentAssistant)
+                                             && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                             || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                             || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                             || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (mtp != null)
+                    {
+                        return "MTP - " + mtp.Client.Name + " - " + mtp.StartTime + " - " + mtp.EndTime;
+                    }
                 }
-                if (_context.IntakeMedicalHistory.Where(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                if (typeDocument == DocumentDescription.Fars)
+                {
+                    FarsFormEntity fars = _context.FarsForm
+                                                  .Include(n => n.Client)
+                                                  .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                                     && n.Id != idDocument
+                                                                     && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                      || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                      || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                      || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (fars != null)
+                    {
+                        return "FARS - " + fars.Client.Name + " - " + fars.StartTime + " - " + fars.EndTime;
+                    }
+                }
+                else
+                {
+                    FarsFormEntity fars = _context.FarsForm
+                                                  .Include(n => n.Client)
+                                                  .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                                   && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                    || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                    || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                    || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (fars != null)
+                    {
+                        return "FARS - " + fars.Client.Name + " - " + fars.StartTime + " - " + fars.EndTime;
+                    }
+                }
+                // el medical history esta comentado porque no se bilea
+                /*if (typeDocument == DocumentDescription.MedicalHistory)
+                {
+                    if (_context.IntakeMedicalHistory.Where(n => (n.CreatedBy == documentAssistant.LinkedUser)
                                                          && ((n.StartTime >= initialTime && n.StartTime <= endTime)
                                                           || (n.EndTime >= initialTime && n.EndTime <= endTime)
                                                           || (n.StartTime <= initialTime && n.EndTime >= initialTime)
                                                           || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
-                    return false;
+                    if (_context.IntakeMedicalHistory.Where(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                          || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                          || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                          || (n.StartTime <= endTime && n.EndTime >= endTime))).Count() > 0)
+                    {
+                        return false;
+                    }
+                }
+                */
+                if (typeDocument == DocumentDescription.MTP_review)
+                {
+                    MTPReviewEntity mtpr = _context.MTPReviews
+                                                   .Include(n => n.Mtp)
+                                                   .ThenInclude(n => n.Client)
+                                                   .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                         && n.Id != idDocument
+                                                         && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                          || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                          || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                          || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (mtpr != null)
+                    {
+                        return "MTPR - " + mtpr.Mtp.Client.Name + " - " + mtpr.Mtp.StartTime + " - " + mtpr.Mtp.EndTime;
+                    }
+                }
+                else
+                {
+                    MTPReviewEntity mtpr = _context.MTPReviews
+                                                   .Include(n => n.Mtp)
+                                                   .ThenInclude(n => n.Client)
+                                                   .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                                    && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                     || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                     || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                     || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (mtpr != null)
+                    {
+                        return "MTPR - " + mtpr.Mtp.Client.Name + " - " + mtpr.Mtp.StartTime + " - " + mtpr.Mtp.EndTime;
+                    }
+                }
+                // el brief esta puesto en tipo de documento como others
+                if (typeDocument == DocumentDescription.Others)
+                {
+                    BriefEntity brief = _context.Brief
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                                   && n.Id != idDocument
+                                                                   && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                    || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                    || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                    || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (brief != null)
+                    {
+                        return "BRIEFS - " + brief.Client.Name + " - " + brief.StartTime + " - " + brief.EndTime;
+                    }
+                }
+                else
+                {
+                    BriefEntity brief = _context.Brief
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => (n.CreatedBy == documentAssistant.LinkedUser)
+                                                                 && ((n.StartTime >= initialTime && n.StartTime <= endTime)
+                                                                  || (n.EndTime >= initialTime && n.EndTime <= endTime)
+                                                                  || (n.StartTime <= initialTime && n.EndTime >= initialTime)
+                                                                  || (n.StartTime <= endTime && n.EndTime >= endTime)));
+                    if (brief != null)
+                    {
+                        return "BRIEFS - " + brief.Client.Name + " - " + brief.StartTime + " - " + brief.EndTime;
+                    }
                 }
             }
 
-            return true;
+            return string.Empty;
         }
 
     }

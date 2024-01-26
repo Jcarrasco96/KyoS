@@ -967,6 +967,13 @@ namespace KyoS.Web.Controllers
                                                           .CountAsync(g => (g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                          && g.Approved == 1
                                                                          && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
+
+                ViewBag.ClientWithoutDischarge = await _context.TCMClient
+                                                               .CountAsync(g => (g.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                         && g.TcmServicePlan != null
+                                                                         && g.TcmServicePlan.TCMDischarge == null
+                                                                         && g.Status == StatusType.Close
+                                                                         && g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName));
             }
             if (User.IsInRole("Frontdesk"))
             {

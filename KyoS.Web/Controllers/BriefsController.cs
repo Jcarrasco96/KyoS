@@ -315,9 +315,10 @@ namespace KyoS.Web.Controllers
 
                     if (User.IsInRole("Documents_Assistant"))
                     {
-                        if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                        if (overlapping != string.Empty)
                         {
-                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                             briefViewModel.Client = _context.Clients
                                                           .Include(n => n.LegalGuardian)
                                                           .Include(n => n.EmergencyContact)
@@ -523,6 +524,11 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
+                //redirect to briefs print report
+                if (entity.Status == BioStatus.Approved)
+                {
+                    return RedirectToAction("PrintBrief", new { id = entity.Id });
+                }
                 UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
@@ -595,9 +601,10 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Documents_Assistant"))
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
-                    if (_overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime) == false)
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                    if (overlapping != string.Empty)
                     {
-                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
                         briefViewModel.Client = _context.Clients
                                                       .Include(n => n.LegalGuardian)
                                                       .Include(n => n.EmergencyContact)
@@ -659,6 +666,10 @@ namespace KyoS.Web.Controllers
                     if (origi == 2)
                     {
                         return RedirectToAction("BriefWithReview", "Briefs");
+                    }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                     }
                 }
                 catch (System.Exception ex)

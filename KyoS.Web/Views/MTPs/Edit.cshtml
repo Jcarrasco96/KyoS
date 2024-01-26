@@ -29,6 +29,10 @@
                 {
                     @Html.ActionLink("MTPs with review", "MtpWithReview", "MTPs")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("Documents Assistant CMH Calendar", "IndexDocumentsAssistant", "Calendar")
+                }
             </li>
             <li class="active">Edit MTP</li>
         </ul><!--.breadcrumb-->
@@ -71,6 +75,10 @@
                 @if (ViewData["origi"].ToString() == "2")
                 {
                     <a asp-action="MtpWithReview" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="IndexDocumentsAssistant" asp-controller="Calendar" class="btn btn-success">Back</a>
                 }
                 @*<a asp-action="UpdateGoals" asp-route-id="@Model.Id" class="btn btn-info">Update goals - objetives</a>*@
             </div>

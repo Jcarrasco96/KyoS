@@ -235,55 +235,74 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmDischargeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult Edit(int id = 0, int origi  = 0)
         {
             TCMDischargeViewModel model;
-
+            UserEntity user_logged = _context.Users
+                                                .Include(u => u.Clinic)
+                                                .ThenInclude(u => u.Setting)
+                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMDischargeEntity TcmDischarge = new TCMDischargeEntity();
             if (User.IsInRole("CaseManager"))
             {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
                 if (user_logged.Clinic != null)
                 {
-
-                    TCMDischargeEntity TcmDischarge = _context.TCMDischarge
-                                                              .Include(m => m.TcmDischargeFollowUp)
-                                                              .Include(n => n.TcmDischargeServiceStatus)
-                                                              .Include(b => b.TcmServicePlan)
-                                                              .ThenInclude(b => b.TcmClient)
-                                                              .ThenInclude(b => b.Client)
-                                                              .Include(b => b.TcmServicePlan)
-                                                              .ThenInclude(b => b.TCMDomain)
-                                                              .Include(b => b.TcmServicePlan)
-                                                              .ThenInclude(b => b.TcmClient)
-                                                              .ThenInclude(b => b.Casemanager)
-                                                              .Include(b => b.TCMSupervisor)
-                                                              .FirstOrDefault(m => m.Id == id);
-                    if (TcmDischarge == null)
-                    {
-                        return RedirectToAction("NotAuthorized", "Account");
-                    }
-                    else
-                    {
-                        ViewData["origi"] = origi;
-                        model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
-                        return View(model);
-                       
-                    }
+                    TcmDischarge = _context.TCMDischarge
+                                           .Include(m => m.TcmDischargeFollowUp)
+                                           .Include(n => n.TcmDischargeServiceStatus)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TcmClient)
+                                           .ThenInclude(b => b.Client)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TCMDomain)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TcmClient)
+                                           .ThenInclude(b => b.Casemanager)
+                                           .Include(b => b.TCMSupervisor)
+                                           .FirstOrDefault(m => m.Id == id
+                                                             && m.CreatedBy == user_logged.UserName);
                    
                 }
             }
+            if (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TcmDischarge = _context.TCMDischarge
+                                           .Include(m => m.TcmDischargeFollowUp)
+                                           .Include(n => n.TcmDischargeServiceStatus)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TcmClient)
+                                           .ThenInclude(b => b.Client)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TCMDomain)
+                                           .Include(b => b.TcmServicePlan)
+                                           .ThenInclude(b => b.TcmClient)
+                                           .ThenInclude(b => b.Casemanager)
+                                           .Include(b => b.TCMSupervisor)
+                                           .FirstOrDefault(m => m.Id == id
+                                                             && m.TCMSupervisor.LinkedUser == user_logged.UserName);
 
-            model = new TCMDischargeViewModel();
-            return View(model);
+                }
+            }
+            if (TcmDischarge == null)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ViewData["origi"] = origi;
+                model = _converterHelper.ToTCMDischargeViewModel(TcmDischarge);
+                return View(model);
+
+            }
+           
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Edit(TCMDischargeViewModel tcmDischargeViewModel, int origi  = 0)
         {
             UserEntity user_logged = _context.Users
@@ -336,14 +355,22 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        if (origi == 4)
+                        if (origi == 5)
                         {
-                            return RedirectToAction("MessagesOfDischarges", "TCMMessages");
+                            return RedirectToAction("UpdateTCMDischarge", "TCMDischarges");
                         }
                         else
                         {
-                            return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = (origi - 1) });
+                            if (origi == 4)
+                            {
+                                return RedirectToAction("MessagesOfDischarges", "TCMMessages");
+                            }
+                            else
+                            {
+                                return RedirectToAction("TCMDischargeApproved", "TCMDischarges", new { approved = (origi - 1) });
+                            }
                         }
+                        
                     }
                 }
                 catch (System.Exception ex)
@@ -355,7 +382,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmDischargeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> TCMClientWithoutDischarge(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -375,34 +402,41 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            List<TCMServicePlanEntity> tcmServicePlanList = await _context.TCMServicePlans
-                                                                          .Include(f => f.TCMService)
-                                                                          .Include(f => f.TCMDomain)
-                                                                          .Include(f => f.TcmClient)
-                                                                          .ThenInclude(f => f.Client)
-                                                                          .Include(g => g.TcmClient.Casemanager)
-                                                                          .Where(s => (s.TcmClient.Casemanager.Clinic.Id == user_logged.Clinic.Id
-                                                                                    && s.TcmClient.Status == StatusType.Close
-                                                                                    && s.Approved == 2
-                                                                                    && s.TcmClient.Casemanager.LinkedUser == user_logged.UserName))
-                                                                          .OrderBy(f => f.TcmClient.CaseNumber)
-                                                                          .ToListAsync();
-            List<TCMDischargeEntity> tcmDischargeList = await _context.TCMDischarge
-                                                                      .Include(f => f.TcmServicePlan)
-                                                                      .ToListAsync();
-            TCMDischargeEntity tcmDiscaharge = new TCMDischargeEntity();
-            for (int i = 0; i < tcmDischargeList.Count(); i++)
+            if (User.IsInRole("CaseManager"))
             {
-                tcmDiscaharge.TcmServicePlan = tcmServicePlanList.FirstOrDefault(g => g.Id == tcmDischargeList[i].TcmServicePlan.Id);
-                if (tcmDiscaharge != null)
-                {
-                    tcmServicePlanList.Remove(tcmDiscaharge.TcmServicePlan);
-                }
-
+                List<TCMClientEntity> clients = await _context.TCMClient
+                                                              .Include(n => n.TcmServicePlan)
+                                                              .ThenInclude(n => n.TCMDischarge)
+                                                              .Include(n => n.Client)
+                                                              .Include(n => n.Casemanager)
+                                                              .Include(n => n.Client)
+                                                              .ThenInclude(n => n.Clients_HealthInsurances)
+                                                              .ThenInclude(n => n.HealthInsurance)
+                                                              .Where(n => n.TcmServicePlan.TCMDischarge == null
+                                                                       && n.Casemanager.LinkedUser == user_logged.UserName
+                                                                       && n.Status == StatusType.Close)
+                                                              .ToListAsync();
+                return View(clients);
+            }
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMClientEntity> clients = await _context.TCMClient
+                                                              .Include(n => n.TcmServicePlan)
+                                                              .ThenInclude(n => n.TCMDischarge)
+                                                              .Include(n => n.Client)
+                                                              .Include(n => n.Casemanager)
+                                                              .Include(n => n.Client)
+                                                              .ThenInclude(n => n.Clients_HealthInsurances)
+                                                              .ThenInclude(n => n.HealthInsurance)
+                                                              .Where(n => n.TcmServicePlan != null
+                                                                       && n.TcmServicePlan.TCMDischarge == null
+                                                                       && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                                                       && n.Status == StatusType.Close)
+                                                              .ToListAsync();
+                return View(clients);
             }
 
-            return View(tcmServicePlanList);
-
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -979,6 +1013,52 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
+
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> UpdateTCMDischarge(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.FinishEdition = "Y";
+            }
+
+
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                return View(await _context.TCMDischarge
+                                          .Include(n => n.TcmServicePlan)
+                                          .ThenInclude(n => n.TcmClient)
+                                          .ThenInclude(n => n.Casemanager)
+                                          .ThenInclude(n => n.TCMSupervisor)
+                                          .Include(n => n.TcmServicePlan)
+                                          .ThenInclude(n => n.TcmClient)
+                                          .ThenInclude(n => n.Client)
+                                          .ThenInclude(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
+                                          .Where(w => (w.TcmServicePlan.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && w.TCMSupervisor.Id == tcmSupervisor.Id
+                                                    && w.Approved == 2))
+                                          .ToListAsync());
+            }
+            else
+            {
+                return View();
+            }
+        }
+
 
     }
 }
