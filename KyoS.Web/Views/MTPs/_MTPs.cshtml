@@ -139,7 +139,7 @@
     <strong>        <u>TYPE</u></strong>                                 <label style="width:10%; text-decoration:underline; text-align:center">CODE</label>      <label style="width:10%; text-decoration:underline; text-align:center">UNITS</label>      <label style="width:15%; text-decoration:underline; text-align:center">FRECUENCY</label>      <label style="width:10%; text-decoration:underline; text-align:center">DURATION (months)</label>
     <input type="checkbox" asp-for="Medication" class="form-check-input" id="chbMedication"> Medication Management                      <input asp-for="MedicationCode" type="text" style="width:10%" readonly/>      <input asp-for="MedicationUnits" type="number" style="width:10%" id="txtMedicationUnits" readonly/>     <input asp-for="MedicationFrecuency" type="text" style="width:15%" id="txtMedicationFrecuency" readonly/>      <input asp-for="MedicationDuration" type="number" style="width:10%" id="txtMedicationDuration" readonly/>
 
-    <input type="checkbox" asp-for="Individual" class="form-check-input" id="chbIndividual"> Individual Therapy                         <input asp-for="IndividualCode" type="text" style="width:10%" readonly/>      <input asp-for="IndividualUnits" type="number" style="width:10%" id="txtIndividualUnits" readonly/>     <input asp-for="IndividualFrecuency" type="text" style="width:15%" id="txtIndividualFrecuency" readonly/>      <input asp-for="IndividualDuration" type="number" style="width:10%" id="txtIndividualDuration" readonly/>
+    <input type="checkbox" asp-for="Individual" class="form-check-input" id="chbIndividual"> Individual Therapy                         <input asp-for="IndividualCode" type="text" style="width:10%" readonly/>      <input asp-for="IndividualUnits" type="number" style="width:10%" id="txtIndividualUnits"/>     <input asp-for="IndividualFrecuency" type="text" style="width:15%" id="txtIndividualFrecuency"/>      <input asp-for="IndividualDuration" type="number" style="width:10%" id="txtIndividualDuration"/>
 
     <input type="checkbox" asp-for="Family" class="form-check-input" id="chbFamily"> Family Therapy                             <input asp-for="FamilyCode" type="text" style="width:10%" readonly/>      <input asp-for="FamilyUnits" type="number" style="width:10%" id="txtFamilyUnits" readonly/>     <input asp-for="FamilyFrecuency" type="text" style="width:15%" id="txtFamilyFrecuency" readonly/>      <input asp-for="FamilyDuration" type="number" style="width:10%" id="txtFamilyDuration" readonly/>
     
@@ -302,17 +302,15 @@
     })
     //--------------------------------
     chbIndividual.addEventListener('change', (e) => {
-        if (chbIndividual.checked == true)
-        {
+        if (chbIndividual.checked == true) {
             $("#txtIndividualUnits").val("4");
-            $("#txtIndividualFrecuency").val("once a week");
+            $("#txtIndividualFrecuency").val("Once a week");
             $("#txtIndividualDuration").val("6");
 
             $("#txtIndividualUnits").attr('readonly', false);
             $("#txtIndividualFrecuency").attr('readonly', false);
             $("#txtIndividualDuration").attr('readonly', false);
-        } else
-        {
+        } else {
             $("#txtIndividualUnits").val("0");
             $("#txtIndividualFrecuency").val("");
             $("#txtIndividualDuration").val("0");
