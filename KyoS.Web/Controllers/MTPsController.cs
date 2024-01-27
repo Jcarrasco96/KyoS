@@ -1153,7 +1153,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            /*Aqui mandaba un mensaje para que no se editara un goal que provenia de un addendum
             if (goalEntity.Adendum != null )
             {
                 ViewData["Permit"] = 0;
@@ -1166,7 +1166,7 @@ namespace KyoS.Web.Controllers
                 ViewData["text"] = goalEntity.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
                 return View(model);
             }
-
+            */
            
 
             model.IdMTPReviewOfView = idMTPReviewOfView;
@@ -1936,7 +1936,7 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            /* Aqui mandabe un mensaje diciendo que no se podia editar este objective porque venia de un addendum
             if (objectiveEntity.Goal.Adendum != null)
             {
                 ViewData["Permit"] = 0;
@@ -1948,7 +1948,7 @@ namespace KyoS.Web.Controllers
                 ViewData["Permit"] = 0;
                 ViewData["text"] = objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the objective in this MTPR, only can do it the individual therapy facilitator";
                 return View(model);
-            }
+            }*/
             ViewData["Permit"] = 1;
             return View(model);
         }
@@ -2991,28 +2991,25 @@ namespace KyoS.Web.Controllers
                    
                     foreach (var item in goalMtp)
                     {
-                        if (item.Adendum == null)
+                        if ((item.Service != ServiceType.Individual))
                         {
-                            if ((item.Service != ServiceType.Individual))
+                            foreach (var obj in item.Objetives)
+                            {
+                                if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                                {
+                                    obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                             {
                                 foreach (var obj in item.Objetives)
                                 {
                                     if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
                                     {
                                         obj.DateResolved = mtpReviewViewModel.ReviewedOn;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
-                                {
-                                    foreach (var obj in item.Objetives)
-                                    {
-                                        if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
-                                        {
-                                            obj.DateResolved = mtpReviewViewModel.ReviewedOn;
-                                        }
                                     }
                                 }
                             }
@@ -3391,28 +3388,25 @@ namespace KyoS.Web.Controllers
                                                            .ToList();
                         foreach (var item in goalMtp)
                         {
-                            if (item.Adendum == null)
+                            if ((item.Service != ServiceType.Individual))
                             {
-                                if ((item.Service != ServiceType.Individual))
+                                foreach (var obj in item.Objetives)
+                                {
+                                    if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                    {
+                                        obj.DateResolved = reviewViewModel.ReviewedOn;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                                 {
                                     foreach (var obj in item.Objetives)
                                     {
                                         if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
                                         {
                                             obj.DateResolved = reviewViewModel.ReviewedOn;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
-                                    {
-                                        foreach (var obj in item.Objetives)
-                                        {
-                                            if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
-                                            {
-                                                obj.DateResolved = reviewViewModel.ReviewedOn;
-                                            }
                                         }
                                     }
                                 }
