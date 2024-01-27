@@ -279,7 +279,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public IActionResult Edit(int id = 0, int origin = 0, int error = 0)
+        public IActionResult Edit(int id = 0, int origin = 0, int error = 0, string interval = "")
         {
             if (error == 1) //Imposible to delete
             {
@@ -323,6 +323,7 @@ namespace KyoS.Web.Controllers
                         model.TCMClient = TcmNote.TCMClient;
                         ViewData["origin"] = origin;
                         ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                        ViewData["interval"] = interval;
                         if (TcmNote.TCMNoteActivity.Count() > 0)
                         {
                             if (TcmNote.TCMNoteActivity.Where(n => n.Billable == false).Count() > 0)
@@ -377,6 +378,7 @@ namespace KyoS.Web.Controllers
                             model.TCMClient = TcmNote.TCMClient;
                             ViewData["origin"] = origin;
                             ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                            ViewData["interval"] = interval;
                             if (TcmNote.TCMNoteActivity.Count() > 0)
                             {
                                 if (TcmNote.TCMNoteActivity.Where(n => n.Billable == false).Count() > 0)
@@ -416,7 +418,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> Edit(TCMNoteViewModel tcmNotesViewModel, int origin = 0)
+        public async Task<IActionResult> Edit(TCMNoteViewModel tcmNotesViewModel, int origin = 0, string interval = "")
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -526,7 +528,7 @@ namespace KyoS.Web.Controllers
                         {
                             if (origin == 7)
                             {
-                                return RedirectToAction("UpdateNote");
+                                return RedirectToAction("UpdateNote", new { dateInterval = interval, idCaseManager = tcmNotesViewModel.IdCaseManager, idTCMClient = tcmNotesViewModel.IdTCMClient} );
                             }
                             else
                             {
@@ -2111,14 +2113,8 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> UpdateNote(int id = 0)
+        public async Task<IActionResult> UpdateNote(string dateInterval = "", int idCaseManager = 0, int idTCMClient = 0)
         {
-            if (id == 1)
-            {
-                ViewBag.FinishEdition = "Y";
-            }
-
-
             UserEntity user_logged = _context.Users
 
                                              .Include(u => u.Clinic)
@@ -2132,28 +2128,95 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("TCMSupervisor"))
+            IQueryable<TCMNoteEntity> query = null;
+
+            if (dateInterval == string.Empty && idCaseManager == 0 && idTCMClient == 0)
             {
-                return View(await _context.TCMNote
-                                          .Include(n => n.TCMClient)
-                                          .ThenInclude(n => n.Casemanager)
-                                          .ThenInclude(n => n.TCMSupervisor)
-                                          .Include(n => n.TCMClient)
-                                          .ThenInclude(n => n.Client)
-                                          .ThenInclude(n => n.Clinic)
-                                          .ThenInclude(n => n.Setting)
-                                          .Include(n => n.TCMNoteActivity)
-                                          .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
-                                                    && w.TCMClient.Casemanager.TCMSupervisor.Id == tcmSupervisor.Id
-                                                    && w.Status == NoteStatus.Approved))
-                                          .ToListAsync());
+                query = _context.TCMNote
+                                .Include(wc => wc.TCMNoteActivity)
+                                .Include(wc => wc.TCMClient)
+                                .ThenInclude(wc => wc.Casemanager)
+                                .ThenInclude(wc => wc.TCMSupervisor)
+                                .Include(wc => wc.TCMClient)
+                                .ThenInclude(wc => wc.Client)
+                                .ThenInclude(wc => wc.Clinic)
+                                .ThenInclude(wc => wc.Setting)
+                                .Where(wc => wc.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                          && wc.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
+                                          && wc.Status == NoteStatus.Approved 
+                                          && wc.DateOfService >= DateTime.Now.AddMonths(-1));
+
+                return View(new ApprovedTCMNotesClinicViewModel
+                {
+                    DateIterval = $"{DateTime.Now.AddMonths(-1).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                    IdCaseManager = 0,
+                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName,0),
+                    IdTCMClient = 0,
+                    TCMClients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName, 0),
+                    TCMNotes = query.ToList()
+                }
+                           );
             }
-            else
+
+            query = query = _context.TCMNote
+                                    .Include(wc => wc.TCMNoteActivity)
+                                    .Include(wc => wc.TCMClient)
+                                    .ThenInclude(wc => wc.Casemanager)
+                                    .ThenInclude(wc => wc.TCMSupervisor)
+                                    .Include(wc => wc.TCMClient)
+                                    .ThenInclude(wc => wc.Client)
+                                    .ThenInclude(wc => wc.Clinic)
+                                    .ThenInclude(wc => wc.Setting)
+                                    .Where(wc => wc.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                              && wc.Status == NoteStatus.Approved);
+
+            if (dateInterval != string.Empty)
             {
-                return View();
+                string[] date = dateInterval.Split(" - ");
+                query = query.Where(wc => (wc.DateOfService >= Convert.ToDateTime(date[0]) && wc.DateOfService <= Convert.ToDateTime(date[1])));
+            }
+
+            if (idCaseManager != 0)
+                query = query.Where(wc => wc.TCMClient.Casemanager.Id == idCaseManager);
+
+            if (idTCMClient != 0)
+                query = query.Where(wc => wc.TCMClient.Id == idTCMClient);
+
+            try
+            {
+                ApprovedTCMNotesClinicViewModel model = new ApprovedTCMNotesClinicViewModel
+                {
+                    DateIterval = dateInterval,
+                    IdCaseManager = idCaseManager,
+                    CaseManagers = _combosHelper.GetComboCaseManagersByTCMSupervisor(user_logged.UserName, 0),
+                    IdTCMClient = idTCMClient,
+                    TCMClients = _combosHelper.GetComboTCMClientsByCaseManagerByTCMSupervisor(user_logged.UserName,0),
+                    TCMNotes = query.ToList()
+                };
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(UpdateNote));
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "TCMSupervisor")]
+        public IActionResult UpdateNote(ApprovedTCMNotesClinicViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(UpdateNote), new { dateInterval = model.DateIterval, idCaseManager = model.IdCaseManager, idTCMClient = model.IdTCMClient });
+            }
+
+            return View(model);
+        }
         public JsonResult GetNeedIdentified(int idDomain)
         {
             TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(o => o.Id == idDomain);
