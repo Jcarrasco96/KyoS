@@ -1159,14 +1159,14 @@ namespace KyoS.Web.Controllers
                 ViewData["Permit"] = 0;
                 ViewData["text"] = "The selected goal doesn't belong to the MTP, you must to do a new addendum to extend this goal";
                 return View(model);
-            }
+            }*/
             if ((User.IsInRole("Facilitator") == true && user_logged.UserName != goalEntity.MTP.Client.IndividualTherapyFacilitator.LinkedUser && goalEntity.Service == ServiceType.Individual))
             {
                 ViewData["Permit"] = 0;
                 ViewData["text"] = goalEntity.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
                 return View(model);
             }
-            */
+            
            
 
             model.IdMTPReviewOfView = idMTPReviewOfView;
@@ -1942,13 +1942,13 @@ namespace KyoS.Web.Controllers
                 ViewData["Permit"] = 0;
                 ViewData["text"] = "The selected objective doesn't belong to the MTP, you must to do a new addendum to extend this goal";
                 return View(model);
-            }
+            }*/
             if ((User.IsInRole("Facilitator") == true && user_logged.UserName != objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.LinkedUser && objectiveEntity.Goal.Service == ServiceType.Individual))
             {
                 ViewData["Permit"] = 0;
                 ViewData["text"] = objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the objective in this MTPR, only can do it the individual therapy facilitator";
                 return View(model);
-            }*/
+            }
             ViewData["Permit"] = 1;
             return View(model);
         }

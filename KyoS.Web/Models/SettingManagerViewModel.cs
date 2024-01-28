@@ -95,5 +95,6 @@ namespace KyoS.Web.Models
         public int IdFiltroPayStub { get; set; }
 
         public IEnumerable<SelectListItem> FiltroPayStubs { get; set; }
+        public bool MTPmultipleSignatures { get; set; }
     }
 }

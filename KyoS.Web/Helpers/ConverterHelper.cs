@@ -1459,7 +1459,8 @@ namespace KyoS.Web.Helpers
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
                 CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
-                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub)
+                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
@@ -1493,7 +1494,8 @@ namespace KyoS.Web.Helpers
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
                 CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
                 IdFiltroPayStub = (model.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
-                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic()
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
