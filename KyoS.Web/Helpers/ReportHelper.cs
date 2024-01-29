@@ -83,6 +83,14 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
+            dataSet.Tables.Add(GetScheduleDS(am_list.Count() == 0 ? null : am_list.First().Schedule));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Schedule");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetScheduleDS(pm_list.Count() == 0 ? null : pm_list.First().Schedule));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Schedule1");
+
+            dataSet = new DataSet();
             DataTable dt = GetWorkdaysClientsDS(am_list);
             int to = 14 - am_list.Count();
             for (int i = 0; i < to; i++)
@@ -23209,20 +23217,40 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
             dt.Columns.Add("ClinicId", typeof(int));
 
-            dt.Rows.Add(new object[]
-                                        {
-                                            schedule.Id,
-                                            schedule.InitialTime,
-                                            schedule.EndTime,
-                                            schedule.Session,
-                                            schedule.Service,
-                                            schedule.Description,
-                                            schedule.CreatedBy,
-                                            schedule.CreatedOn,
-                                            schedule.LastModifiedBy,
-                                            schedule.LastModifiedOn,
-                                            0                                            
-            });
+            if (schedule != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    schedule.Id,
+                    schedule.InitialTime,
+                    schedule.EndTime,
+                    schedule.Session,
+                    schedule.Service,
+                    schedule.Description,
+                    schedule.CreatedBy,
+                    schedule.CreatedOn,
+                    schedule.LastModifiedBy,
+                    schedule.LastModifiedOn,
+                    0
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,
+                    ServiceType.PSR,
+                    string.Empty,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime(),
+                    0
+                });
+            }           
 
             return dt;
         }
