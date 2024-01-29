@@ -78,6 +78,28 @@
             <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="ClinicalDirector" />
+            @if (User.IsInRole("Supervisor") == false)
+            {
+                <input type="hidden" asp-for="DateClinicalDirector" />
+                <input type="hidden" asp-for="DateLicensedPractitioner" />
+            }
+            @if (User.IsInRole("Supervisor") == false && Model.Mtp.Client.IndividualTherapyFacilitator.LinkedUser != User.Identity.Name)
+            {
+                <input type="hidden" asp-for="DateIndFacilitator" />
+            }
+            @if (User.IsInRole("Facilitator"))
+            {
+                @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+                {
+                    <input type="hidden" asp-for="SignTherapy" />
+                    <input type="hidden" asp-for="DateTherapist" />
+                }
+                else
+                {
+                    <input type="hidden" asp-for="SignIndTherapy" />
+                    <input type="hidden" asp-for="DateIndFacilitator" />
+                }
+            }
             <partial name="_MTPReviews" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
@@ -92,27 +114,83 @@
             </div>
             <br />
             <div class="form-group col-md-12">
-        <pre>
-        <strong>Person served signature date</strong>                               <input asp-for="DateSignaturePerson">                         
-        <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Name))</strong>     
-        
-        <strong>Therapist Name / Signature </strong>                                <input asp-for="DateTherapist">
-        <strong>(@Html.DisplayFor(modelItem => Model.Therapist))</strong> 
+                <pre>
+        @if (User.IsInRole("Facilitator") == true)
+        {
+            @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+            {
+                @Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist" disabled>       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator">          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>____________________________</strong>                 <strong>__________________________</strong>           <strong>_____________________________________</strong>           <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>           <strong>Therapist Individual Name / Signature</strong>           <strong>Clinical Director / Reviewer Name / Signature</strong>    
 
-        <strong>Licensed Practitioner Name / Signature </strong>                    <input asp-for="DateLicensedPractitioner">
-        <strong>(@Html.DisplayFor(modelItem => Model.LicensedPractitioner))</strong>
+            }
+            else
+            { 
+ @Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator" disabled>          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>____________________________</strong>                 <strong>__________________________</strong>            <strong>_____________________________________</strong>           <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>            <strong>Therapist Individual Name / Signature</strong>           <strong>Clinical Director / Reviewer Name / Signature</strong>    
+                 
+            }
+        }
+        else
+        { 
+             @if (User.IsInRole("Documents_Assistant") == true)
+            {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">            @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.LicensedPractitioner)  <input asp-for="DateLicensedPractitioner" disabled>             @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>____________________________</strong>                   <strong>__________________________</strong>            <strong>______________________________________</strong>         <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                   <strong>Therapist Name / Signature</strong>            <strong>Licensed Practitioner Name / Signature</strong>         <strong>Clinical Director / Reviewer Name / Signature</strong>    
 
-        <strong>Clinical Director / Reviewer Name / Signature </strong>             <input asp-for="DateClinicalDirector">
-        <strong>(@Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector))</strong>
+             }
+             else
+             {
+                 @if (User.IsInRole("Supervisor"))
+                 {
+                    @if (Model.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                    {
+                        @if (Model.IndFacilitator != null)
+                        {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">        @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.IndFacilitator)  <input asp-for="DateIndFacilitator">     @Html.DisplayFor(modelItem => Model.LicensedPractitioner)  <input asp-for="DateLicensedPractitioner">
+<strong>____________________________</strong>               <strong>__________________________</strong>                 <strong>_____________________________________</strong>                <strong>______________________________________</strong>    
+<strong>Person served signature date</strong>               <strong>Therapist Name / Signature</strong>                 <strong>Therapist Individual Name / Signature</strong>                <strong>Licensed Practitioner Name / Signature</strong>    
+
+                        }
+                        else
+                        { 
+                        @Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">        @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">                                                               @Html.DisplayFor(modelItem => Model.LicensedPractitioner)  <input asp-for="DateLicensedPractitioner">
+<strong>____________________________</strong>              <strong>__________________________</strong>                    <strong>_____________________________________</strong>              <strong>______________________________________</strong>    
+<strong>Person served signature date</strong>              <strong>Therapist Name / Signature</strong>                    <strong>Therapist Individual Name / Signature</strong>              <strong>Licensed Practitioner Name / Signature</strong>    
+
+                        }
+                    }
+                    else
+                    { 
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.LicensedPractitioner)  <input asp-for="DateLicensedPractitioner">                  @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>_____________________________</strong>                 <strong>______________________________________</strong>                <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                  <strong>Licensed Practitioner Name / Signature </strong>               <strong>Clinical Director / Reviewer Name / Signature</strong>    
+
+                    }
+                 }
+            }
+        }
+
+        @if (User.IsInRole("Facilitator"))
+        {
+            @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+            {
+    <input asp-for="SignTherapy" type="checkbox" disabled> <i> Sign Here (Therapist)</i>
+    <input asp-for="SignIndTherapy" type="checkbox"> <i> Sign Here (Indivudual Therapist)</i>
+            }
+            else
+            { 
+    <input asp-for="SignTherapy" type="checkbox"> <i> Sign Here (Therapist)</i>
+    <input asp-for="SignIndTherapy" type="checkbox" disabled> <i> Sign Here (Indivudual Therapist)</i>
+    
+            }
+        }
         </pre>
             </div>
             <div class="form-group col-md-12">
                 <input onclick="GenderVerification()" type="submit" value="Save All" class="btn btn-primary" />
-                @if (User.IsInRole("Supervisor"))
-                {
-                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","MTPs",new {id = Model.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
-                    <a asp-action="ApproveMTPReview" asp-route-id="@Model.Id" asp-route-origin="@Model.Origin" class="btn btn-default" title="Approve MTP Review">Approve</a>
-                }
                 @if (User.IsInRole("Documents_Assistant"))
                 {
                     <a asp-action="FinishEditingMtpReview" asp-route-id="@Model.Id" asp-route-origin="3" class="btn btn-warning" title="Finish edition MTPR">Finish Edition</a>
