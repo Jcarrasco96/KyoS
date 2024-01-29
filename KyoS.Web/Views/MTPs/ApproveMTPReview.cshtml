@@ -1,15 +1,15 @@
 ﻿@model KyoS.Web.Models.MTPReviewViewModel
 
 @{
-    ViewData["Title"] = "Create MTP Review";
+    ViewData["Title"] = "Approve MTP Review";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+    <meta name="viewport" content="width=device-width" />
 </head>
 <body>
 
@@ -17,44 +17,141 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("MTP Review", "Index", "MTPs")
+                @if (Model.Origin == 0)
+                {
+                    @Html.ActionLink("MTP Review", "Index", "MTPs")
+                }
+                @if (Model.Origin == 1)
+                {
+                    @Html.ActionLink("Pending MTPR", "PendingMtpReview", "MTPs")
+                }
+                @if (Model.Origin == 2)
+                {
+                    @Html.ActionLink("MTPR in Edition", "MTPRinEdit", "MTPs")
+                }
+                @if (Model.Origin == 3)
+                {
+                    @Html.ActionLink("MTPR Messages", "MessagesOfMTPReviews", "Messages")
+                }
+                @if (Model.Origin == 4)
+                {
+                    @Html.ActionLink("MTP Notifications", "Notifications", "Messages")
+                }
+              
+                @if (Model.Origin == 6)
+                {
+                    @Html.ActionLink("MTP in Edition", "MTPRinEdit", "MTPs")
+                }
+                @if (Model.Origin == 7)
+                {
+                    @Html.ActionLink("MTPRs", "IndexMTPR", "MTPs")
+                }
+                @if (Model.Origin == 8)
+                {
+                    @Html.ActionLink("MTPRs with review", "MTPrWithReview", "MTPs")
+                }
+               
             </li>
-            <li class="active">Create MTP Review</li>
+            <li class="active">Approve MTP Review</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Create MTP Review</h4>
+    <h4>Approve MTP Review</h4>
     <hr />
     <div class="row">
-        <form asp-action="CreateMTPReview" asp-route-id="@Model.Id" enctype="multipart/form-data" onsubmit="return false;" id="form1">
+        <form asp-action="ApproveMTPReview" asp-route-id="@Model.Id" enctype="multipart/form-data" onsubmit="return false;" id="formEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IdMTP" />
             <input type="hidden" asp-for="MTP_FK" />
             <input type="hidden" asp-for="Therapist" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="LastModifiedBy" />
+            <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="ClinicalDirector" />
-            <input type="hidden" asp-for="IdIndFacilitator" />
-            <input type="hidden" asp-for="DateClinicalDirector" />
-            <input type="hidden" asp-for="DateIndFacilitator" />
-            <input type="hidden" asp-for="DateLicensedPractitioner" />
-            <input type="hidden" asp-for="DateSignaturePerson" />
-            <input type="hidden" asp-for="DateTherapist" />
             <partial name="_MTPReviews" />
+            <div class="col-md-push-12">
+                <div class="col-md-12 form-group">
+                    <a onclick="showInPopup('@Url.Action("CreateGoalMTPReviewModal", "MTPs", new { id = @Model.IdMTP, idReview = @Model.Id }, Context.Request.Scheme)','Create goal of MTP Review')" class="btn btn-success disabled" title="Create Goal of this MTP Review"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
+                    <a onclick="showInPopup('@Url.Action("AuditGoalsObjective", "MTPs", new { idMtp = @Model.IdMTP}, Context.Request.Scheme)','Audit goals')" class="btn btn-danger" title="Audit Goals"><i class="glyphicon glyphicon-search"></i> Audit Goals</a>
+                </div>
+                <div class="col-md-12">
+                    <div id="view-goals">
+                        @await Html.PartialAsync("_ViewGoalsMTPReview", Model.Mtp.Goals.ToList(), new ViewDataDictionary(ViewData) { { "Id", @Model.Id } })
+                    </div>
+                </div>
+            </div>
+            <br />
             <div class="form-group col-md-12">
-                <input onclick="GenderVerification()" type="submit" value="Update Goal" class="btn btn-primary" />
+                <pre>
+                @if (User.IsInRole("Supervisor"))
+                {
+                    @if (Model.IndFacilitator != null)
+                        {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name) <input asp-for="DateSignaturePerson">   @Html.DisplayFor(modelItem => Model.Therapist) <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name) <input asp-for="DateIndFacilitator">       @Html.DisplayFor(modelItem => Model.LicensedPractitioner) <input asp-for="DateLicensedPractitioner">
+<strong>____________________________</strong>           <strong>__________________________</strong>             <strong>_____________________________________</strong>              <strong>______________________________________</strong>
+<strong>Person served signature date</strong>           <strong>Therapist Name / Signature</strong>             <strong>Therapist Individual Name / Signature</strong>              <strong>Licensed Practitioner Name / Signature</strong>
+
+                        }
+                        else
+                        {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name) <input asp-for="DateSignaturePerson"> @Html.DisplayFor(modelItem => Model.Therapist) <input asp-for="DateTherapist">                                                           @Html.DisplayFor(modelItem => Model.LicensedPractitioner) <input asp-for="DateLicensedPractitioner">
+<strong>____________________________</strong>           <strong>__________________________</strong>             <strong>_____________________________________</strong>          <strong>______________________________________</strong>
+<strong>Person served signature date</strong>           <strong>Therapist Name / Signature</strong>             <strong>Therapist Individual Name / Signature</strong>          <strong>Licensed Practitioner Name / Signature</strong>
+
+                        }
+                }
+                </pre>
+            </div>
+            <div class="form-group col-md-12">
+                <input onclick="GenderVerification()" type="submit" value="Save All and Approve" class="btn btn-primary"  title="Approve MTP Review"/>
+                @if (User.IsInRole("Supervisor"))
+                {
+                    <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","MTPs",new {id = Model.Id, origin = Model.Origin},Context.Request.Scheme)','Add message to document creator')" title="Not approved note due to problems">Review</a>
+                }
+               
                 @if (Model.Origin == 0)
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
                 }
                 @if (Model.Origin == 1)
                 {
-                    <a asp-action="ExpiredMTP" class="btn btn-success">Back</a>
+                    <a asp-action="PendingMtpReview" class="btn btn-success">Back</a>
                 }
                 @if (Model.Origin == 2)
                 {
                     <a asp-action="MTPRinEdit" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 3)
+                {
+                    <a asp-action="MessagesOfMTPReviews" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 4)
+                {
+                    <a asp-action="Notifications" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 5)
+                {
+                    <a asp-action="ExpiredMTP" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 6)
+                {
+                    <a asp-action="MTPRinEdit" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 7)
+                {
+                    <a asp-action="IndexMTPR" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 8)
+                {
+                    <a asp-action="MTPrWithReview" asp-controller="MTPs" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 9)
+                {
+                    <a asp-action="IndexDocumentsAssistant" asp-controller="Calendar" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
@@ -72,7 +169,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                                "order": [[0, "asc"]],
+                                "order": [[1, "asc"]],
                                 "pageLength": 100
                             });
 
@@ -100,11 +197,11 @@
             });
         });
 
-        function GenderVerification() {                
+        function GenderVerification() {
                 var url = "@Url.Action("GetGenderByMTP", "MTPs")";
-            
+
                 $.get(url, { idMTP: @Model.IdMTP }, function (data) {
-                    
+
                     let summaryOfServices = $("#summaryOfServices").val();
                     let describeClient = $("#describeClient").val();
                     let describeAnyGoals = $("#describeAnyGoals").val();
@@ -141,12 +238,12 @@
                                 confirmButtonText: 'Yes, continue!'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    form1.submit();
+                                    formEdit.submit();
                                 }
                             });
                         }
                         else {
-                            form1.submit();
+                            formEdit.submit();
                         }
                     }
                     else
@@ -180,12 +277,12 @@
                                     confirmButtonText: 'Yes, continue!'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        form1.submit();
+                                        formEdit.submit();
                                     }
                                 });
                             }
                             else {
-                                form1.submit();
+                                formEdit.submit();
                             }
                         }
                     }
@@ -215,6 +312,3 @@
         }
     </script>
 }
-
-
-

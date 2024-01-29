@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMNoteEntity>
+﻿@model KyoS.Web.Models.ApprovedTCMNotesClinicViewModel
 @{
     ViewData["Title"] = "Updates of Notes";
 }
@@ -32,9 +32,176 @@
 </div>
 
 <div class="row">
-    <div id="view-corrections">
-        @await Html.PartialAsync("_ViewUpdate", Model)
+    <form asp-action="UpdateNote" enctype="multipart/form-data">
+        <div class="form-group col-md-3">
+            <label class="control-label">Select date interval</label><br />
+            <input type="text"
+                   asp-for="DateIterval"
+                   data-range="true"
+                   data-multiple-dates-separator=" - "
+                   data-language="en"
+                   class="form-control datepicker-here"
+                   id="datepicker" />
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="IdCaseManager" class="control-label">Select TCM</label>
+            <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control"></select>
+            <span asp-validation-for="IdCaseManager" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="IdTCMClient" class="control-label">Select Case</label>
+            <select asp-for="IdTCMClient" asp-items="Model.TCMClients" class="form-control"></select>
+            <span asp-validation-for="IdTCMClient" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-filter"></i> Filter</button>&nbsp;
+        </div>
+
+    </form>
+    <div class="col-md-12">
+        <hr />
     </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Notes for update</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Case Manager
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Services
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Minutes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Unit
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billed
+                            </th>
+                            <th class="col-md-1">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.TCMNotes)
+                        {
+                            var @minute = item.TCMNoteActivity.Sum(n => n.Minutes);
+                            var @valor1 = minute / 15;
+                            var @residuo1 = minute % 15;
+                            var @valorAumentado1 = valor1 + 1;
+                            var @unit1 = 0;
+                            if (@residuo1 > 7)
+                            {
+                                unit1 = valorAumentado1;
+                            }
+                            else
+                            {
+                                unit1 = valor1;
+                            }
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
+                                </td>
+                                <td>
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                    {
+                                        <span class="label label-success">
+                                            Approved
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                        {
+                                            <span class="label label-warning">
+                                                Edition
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.TCMNoteActivity.Count()
+                                </td>
+                                <td align="center">
+                                    @item.TCMNoteActivity.Sum(n => n.Minutes)
+                                </td>
+                                <td align="center">
+                                    @unit1
+                                </td>
+                                <td align="center">
+                                    @if (item.BilledDate != null)
+                                    {
+                                        <span class="label label-success">
+                                            Yes
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">
+                                            NO
+                                        </span>
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (item.TCMClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="7" asp-route-interval="@Model.DateIterval" class="btn btn-warning" title="Edit TCM Note"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <partial name="_ModalPopup" />
@@ -46,8 +213,10 @@
 
     <script type="text/javascript">
                         $(document).ready(function () {
-                            $('#MyTable').DataTable();
-
+                            $('#MyTable').DataTable({
+                                "order": [[3, "asc"]],
+                                "pageLength": 100
+                            });
                             // Delete item
                             var item_to_delete;
 

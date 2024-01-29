@@ -224,11 +224,21 @@ namespace KyoS.Web.Controllers
                 ViewBag.MTPReviewEdition = await _context.MTPReviews                                                               
                                                          .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                                         && m.Status == AdendumStatus.Edition
-                                                                        && m.CreatedBy == user_logged.UserName));                
+                                                                        && m.CreatedBy == user_logged.UserName
+                                                                        && m.SignTherapy == false)
+                                                                      ||
+                                                                          (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                        && m.Status == AdendumStatus.Edition
+                                                                        && m.IndFacilitator.LinkedUser == user_logged.UserName
+                                                                        && m.SignIndTherapy == false));                
                 ViewBag.MTPReviewPending = await _context.MTPReviews
                                                          .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
                                                                         && m.Status == AdendumStatus.Pending
-                                                                        && m.CreatedBy == user_logged.UserName));
+                                                                        && m.CreatedBy == user_logged.UserName)
+                                                                        ||
+                                                                          (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                        && m.Status == AdendumStatus.Pending
+                                                                        && m.IndFacilitator.LinkedUser == user_logged.UserName));
 
                 ViewBag.ClientWithoutFARS = await _context.Clients                                                    
                                                           .CountAsync(n => n.Clinic.Id == user_logged.Clinic.Id

@@ -1135,6 +1135,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             GoalEntity goalEntity = await _context.Goals
@@ -1153,21 +1154,72 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            /*Aqui mandaba un mensaje para que no se editara un goal que provenia de un addendum
             if (goalEntity.Adendum != null )
             {
                 ViewData["Permit"] = 0;
                 ViewData["text"] = "The selected goal doesn't belong to the MTP, you must to do a new addendum to extend this goal";
                 return View(model);
-            }
-            if ((User.IsInRole("Facilitator") == true && user_logged.UserName != goalEntity.MTP.Client.IndividualTherapyFacilitator.LinkedUser && goalEntity.Service == ServiceType.Individual))
-            {
-                ViewData["Permit"] = 0;
-                ViewData["text"] = goalEntity.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
-                return View(model);
-            }
+            }*/
 
-           
+            if (user_logged.Clinic.Setting.MTPmultipleSignatures == true)
+            {
+                if (goalEntity.Service == ServiceType.Individual)
+                {
+                    if (goalEntity.MTP.Client.IndividualTherapyFacilitator != null)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != goalEntity.MTP.Client.IndividualTherapyFacilitator.LinkedUser && goalEntity.MTP.Client.IndividualTherapyFacilitator != null))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
+                        return View(model);
+                    }
+
+                }
+                if (goalEntity.Service == ServiceType.Group)
+                {
+                    if (goalEntity.MTP.Client.IdFacilitatorGroup > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == goalEntity.MTP.Client.IdFacilitatorGroup).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the group therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the group therapy facilitator";
+                        return View(model);
+                    }
+                }
+                if (goalEntity.Service == ServiceType.PSR)
+                {
+                    if (goalEntity.MTP.Client.IdFacilitatorPSR > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == goalEntity.MTP.Client.IdFacilitatorPSR).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the PSR therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the PSR therapy facilitator";
+                        return View(model);
+                    }
+                }
+            }
 
             model.IdMTPReviewOfView = idMTPReviewOfView;
             ViewData["Permit"] = 1;
@@ -1296,7 +1348,7 @@ namespace KyoS.Web.Controllers
 
             MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
             ViewData["classification"] = classification_list;
-
+          
             return View(model);
         }
 
@@ -1499,9 +1551,15 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
+            
+            UserEntity user_logged = _context.Users
+                                            .Include(u => u.Clinic)
+                                            .ThenInclude(n => n.Setting)
+                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
                                                         .ThenInclude(m => m.Client)
+                                                        .ThenInclude(m => m.IndividualTherapyFacilitator)
                                                         .Include(g => g.Objetives)
                                                         .FirstOrDefaultAsync(m => m.Id == id);
             if (goalEntity == null)
@@ -1530,6 +1588,65 @@ namespace KyoS.Web.Controllers
             MultiSelectList classification_list = new MultiSelectList(await _context.Classifications.ToListAsync(), "Id", "Name");
             ViewData["classification"] = classification_list;
 
+            if (user_logged.Clinic.Setting.MTPmultipleSignatures == true)
+            {
+                if (goalEntity.Service == ServiceType.Individual)
+                {
+                    if (goalEntity.MTP.Client.IndividualTherapyFacilitator != null)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != goalEntity.MTP.Client.IndividualTherapyFacilitator.LinkedUser && goalEntity.MTP.Client.IndividualTherapyFacilitator != null))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the individual therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the individual therapy facilitator";
+                        return View(model);
+                    }
+
+                }
+                if (goalEntity.Service == ServiceType.Group)
+                {
+                    if (goalEntity.MTP.Client.IdFacilitatorGroup > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == goalEntity.MTP.Client.IdFacilitatorGroup).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the group therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the group therapy facilitator";
+                        return View(model);
+                    }
+                }
+                if (goalEntity.Service == ServiceType.PSR)
+                {
+                    if (goalEntity.MTP.Client.IdFacilitatorPSR > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == goalEntity.MTP.Client.IdFacilitatorPSR).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the PSR therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to created the goal in this MTPR, only can do it the PSR therapy facilitator";
+                        return View(model);
+                    }
+                }
+            }
+            ViewData["Permit"] = 1;
             return View(model);
         }
 
@@ -1917,6 +2034,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             ObjetiveEntity objectiveEntity = await _context.Objetives
@@ -1936,19 +2054,74 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            /* Aqui mandabe un mensaje diciendo que no se podia editar este objective porque venia de un addendum
             if (objectiveEntity.Goal.Adendum != null)
             {
                 ViewData["Permit"] = 0;
                 ViewData["text"] = "The selected objective doesn't belong to the MTP, you must to do a new addendum to extend this goal";
                 return View(model);
-            }
-            if ((User.IsInRole("Facilitator") == true && user_logged.UserName != objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.LinkedUser && objectiveEntity.Goal.Service == ServiceType.Individual))
+            }*/
+           
+            if (user_logged.Clinic.Setting.MTPmultipleSignatures == true)
             {
-                ViewData["Permit"] = 0;
-                ViewData["text"] = objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.Name + " are not authorized to extend the objective in this MTPR, only can do it the individual therapy facilitator";
-                return View(model);
+                if (objectiveEntity.Goal.Service == ServiceType.Individual)
+                {
+                    if (objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator != null)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator.LinkedUser && objectiveEntity.Goal.MTP.Client.IndividualTherapyFacilitator != null))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the individual therapy facilitator";
+                        return View(model);
+                    }
+
+                }
+                if (objectiveEntity.Goal.Service == ServiceType.Group)
+                {
+                    if (objectiveEntity.Goal.MTP.Client.IdFacilitatorGroup > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == objectiveEntity.Goal.MTP.Client.IdFacilitatorGroup).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the group therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the group therapy facilitator";
+                        return View(model);
+                    }
+                }
+                if (objectiveEntity.Goal.Service == ServiceType.PSR)
+                {
+                    if (objectiveEntity.Goal.MTP.Client.IdFacilitatorPSR > 0)
+                    {
+                        if ((User.IsInRole("Facilitator") == true && user_logged.UserName != _context.Facilitators.FirstOrDefault(n => n.Id == objectiveEntity.Goal.MTP.Client.IdFacilitatorPSR).LinkedUser))
+                        {
+                            ViewData["Permit"] = 0;
+                            ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the PSR therapy facilitator";
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Permit"] = 0;
+                        ViewData["text"] = user_logged.FullName + " are not authorized to extend the goal in this MTPR, only can do it the PSR therapy facilitator";
+                        return View(model);
+                    }
+                }
             }
+
+
             ViewData["Permit"] = 1;
             return View(model);
         }
@@ -2876,10 +3049,15 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             MTPReviewEntity mtpReviewEntity = await _context.MTPReviews.Include(m => m.Mtp.Client)
                                                                        .ThenInclude(m => m.Clinic)
                                                                        .Include(m => m.Mtp.Goals)
                                                                        .ThenInclude(m => m.Objetives)
+                                                                       .Include(m => m.IndFacilitator)
                                                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpReviewEntity == null)
             {
@@ -2896,6 +3074,16 @@ namespace KyoS.Web.Controllers
             mtpReviewViewModel.Origin = origin;
             if (mtpReviewViewModel.Mtp.Client.LegalGuardian == null)
                 mtpReviewViewModel.Mtp.Client.LegalGuardian = new LegalGuardianEntity();
+
+            if (User.IsInRole("Supervisor"))
+            {
+                mtpReviewViewModel.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
+            }
+            else
+            {
+                mtpReviewViewModel.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.Status == StatusType.Open).Name;
+            }
+            
             return View(mtpReviewViewModel);
         }
 
@@ -2913,6 +3101,7 @@ namespace KyoS.Web.Controllers
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
+                                                 .ThenInclude(u => u.Setting)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 //calcular las unidades a partir del tiempo de desarrollo del MTPR
@@ -2933,6 +3122,18 @@ namespace KyoS.Web.Controllers
                 mtpReviewViewModel.StartTime = start;
                 DateTime end = new DateTime(mtpReviewViewModel.DataOfService.Year, mtpReviewViewModel.DataOfService.Month, mtpReviewViewModel.DataOfService.Day, mtpReviewViewModel.EndTime.Hour, mtpReviewViewModel.EndTime.Minute, mtpReviewViewModel.EndTime.Second);
                 mtpReviewViewModel.EndTime = end;
+
+                if (user_logged.Clinic.Setting.MTPmultipleSignatures == true)
+                {
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        if (mtpReviewEntity.SignIndTherapy == true && mtpReviewViewModel.SignTherapy == true)
+                        {
+                            mtpReviewEntity.Status = AdendumStatus.Pending;
+                        }
+                    }
+                }
+
                 _context.Update(mtpReviewEntity);
 
                 if (User.IsInRole("Documents_Assistant"))
@@ -2991,28 +3192,25 @@ namespace KyoS.Web.Controllers
                    
                     foreach (var item in goalMtp)
                     {
-                        if (item.Adendum == null)
+                        if ((item.Service != ServiceType.Individual))
                         {
-                            if ((item.Service != ServiceType.Individual))
+                            foreach (var obj in item.Objetives)
+                            {
+                                if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
+                                {
+                                    obj.DateResolved = mtpReviewViewModel.ReviewedOn;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                             {
                                 foreach (var obj in item.Objetives)
                                 {
                                     if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
                                     {
                                         obj.DateResolved = mtpReviewViewModel.ReviewedOn;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
-                                {
-                                    foreach (var obj in item.Objetives)
-                                    {
-                                        if (obj.DateResolved < mtpReviewViewModel.ReviewedOn && obj.Compliment == false)
-                                        {
-                                            obj.DateResolved = mtpReviewViewModel.ReviewedOn;
-                                        }
                                     }
                                 }
                             }
@@ -3078,14 +3276,61 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> FinishEditingMtpReview(int id, int origin = 0)
         {
-            MTPReviewEntity MtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            MTPReviewEntity MtpReview = await _context.MTPReviews
+                                                      .Include(n => n.Mtp)
+                                                      .ThenInclude(n => n.Client)
+                                                      .ThenInclude(n => n.IndividualTherapyFacilitator)
+                                                      .FirstOrDefaultAsync(n => n.Id == id);
             if (User.IsInRole("Supervisor"))
             {
+                SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 MtpReview.Status = AdendumStatus.Approved;
+                MtpReview.LicensedPractitioner = supervisor.Name;
             }
             else
             {
-                MtpReview.Status = AdendumStatus.Pending;
+                if (user_logged.Clinic.Setting.MTPmultipleSignatures == true)
+                {
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        if (MtpReview.IndFacilitator == null)
+                        {
+                            MtpReview.Status = AdendumStatus.Pending;
+                        }
+                        else
+                        {
+                            if (user_logged.UserName == MtpReview.Mtp.Client.IndividualTherapyFacilitator.LinkedUser)
+                            {
+                                MtpReview.SignIndTherapy = true;
+                                if (MtpReview.SignTherapy == true)
+                                {
+                                    MtpReview.Status = AdendumStatus.Pending;
+                                }
+                            }
+                            else
+                            {
+                                MtpReview.SignTherapy = true;
+                                if (MtpReview.SignIndTherapy == true)
+                                {
+                                    MtpReview.Status = AdendumStatus.Pending;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MtpReview.Status = AdendumStatus.Pending;
+                    }
+                }
+                else
+                {
+                    MtpReview.Status = AdendumStatus.Pending;
+                }
+                
             }
 
             _context.Update(MtpReview);
@@ -3105,7 +3350,118 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> ApproveMTPReview(int id, int origin = 0)
+        public async Task<IActionResult> ApproveMTPReview(int? id, int origin = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            MTPReviewEntity mtpReviewEntity = await _context.MTPReviews.Include(m => m.Mtp.Client)
+                                                                       .ThenInclude(m => m.Clinic)
+                                                                       .Include(m => m.Mtp.Goals)
+                                                                       .ThenInclude(m => m.Objetives)
+                                                                       .Include(m => m.IndFacilitator)
+                                                                       .FirstOrDefaultAsync(m => m.Id == id);
+            if (mtpReviewEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewViewModel mtpReviewViewModel = _converterHelper.ToMTPReviewViewModel(mtpReviewEntity);
+            mtpReviewViewModel.Origin = origin;
+            if (mtpReviewViewModel.Mtp.Client.LegalGuardian == null)
+                mtpReviewViewModel.Mtp.Client.LegalGuardian = new LegalGuardianEntity();
+
+                mtpReviewViewModel.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
+           
+            return View(mtpReviewViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> ApproveMTPReview(int id, MTPReviewViewModel mtpReviewViewModel)
+        {
+            if (id != mtpReviewViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                //calcular las unidades a partir del tiempo de desarrollo del MTPR
+                int units = (mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes / 15;
+                if ((mtpReviewViewModel.EndTime.TimeOfDay - mtpReviewViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                {
+                    units++;
+                    mtpReviewViewModel.Units = units;
+                }
+                else
+                {
+                    mtpReviewViewModel.Units = units;
+                }
+
+                MTPReviewEntity mtpReviewEntity = await _converterHelper.ToMTPReviewEntity(mtpReviewViewModel, false, user_logged.Id);
+                mtpReviewEntity.Status = AdendumStatus.Approved;
+                mtpReviewEntity.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
+                mtpReviewEntity.DateLicensedPractitioner = mtpReviewViewModel.DateLicensedPractitioner;
+
+                _context.Update(mtpReviewEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    if (mtpReviewViewModel.Origin == 1)
+                    {
+                        return RedirectToAction(nameof(PendingMtpReview));
+                    }
+                    if (mtpReviewViewModel.Origin == 3)
+                    {
+                        return RedirectToAction("MessagesOfMTPReviews", "Messages");
+                    }
+                    if (mtpReviewViewModel.Origin == 4)
+                    {
+                        return RedirectToAction("Notifications", "Messages");
+                    }
+                    
+                    if (mtpReviewViewModel.Origin == 7)
+                    {
+                        return RedirectToAction(nameof(IndexMTPR));
+                    }
+                    if (mtpReviewViewModel.Origin == 8)
+                    {
+                        return RedirectToAction(nameof(MTPrWithReview));
+                    }
+                   
+                    return RedirectToAction(nameof(Index));
+                    
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator: {mtpReviewEntity.Mtp.Client.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(mtpReviewViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveMTPReview1(int id, int origin = 0)
         {
             UserEntity user_logged = await _context.Users
                                                   .Include(u => u.Clinic)
@@ -3115,7 +3471,8 @@ namespace KyoS.Web.Controllers
             MTPReviewEntity mtpReview = await _context.MTPReviews.FirstOrDefaultAsync(n => n.Id == id);
             mtpReview.Status = AdendumStatus.Approved;
             mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
-                
+            mtpReview.DateLicensedPractitioner = DateTime.Today;
+
             _context.Update(mtpReview);
 
             await _context.SaveChangesAsync();
@@ -3170,9 +3527,10 @@ namespace KyoS.Web.Controllers
 
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
-                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                            && m.Status == AdendumStatus.Pending 
-                                                            && m.CreatedBy == user_logged.UserName)
+                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id
+                                                            && m.Status == AdendumStatus.Pending) 
+                                                            && (m.CreatedBy == user_logged.UserName
+                                                             || m.IndFacilitator.LinkedUser == user_logged.UserName))
                                                   .ToListAsync());
                     }
                     else
@@ -3224,6 +3582,8 @@ namespace KyoS.Web.Controllers
                                     .Include(n => n.Goals)
                                     .ThenInclude(n => n.Objetives)
                                     .Include(n => n.MtpReviewList)
+                                    .Include(n => n.Client)
+                                    .ThenInclude(n => n.IndividualTherapyFacilitator)
                                     .FirstOrDefault(m => m.Id == id);
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
@@ -3316,7 +3676,10 @@ namespace KyoS.Web.Controllers
                     MonthOfTreatment = 3,
                     Setting = "02",
                     DataOfService = aux,
-                    Origin = origin                    
+                    Origin = origin,
+                    DateIndFacilitator = DateTime.Now,
+                    IndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? _context.Facilitators.FirstOrDefault(n => n.Id == mtp.Client.IndividualTherapyFacilitator.Id) : null,
+                    IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0
                 };
 
             }
@@ -3391,28 +3754,25 @@ namespace KyoS.Web.Controllers
                                                            .ToList();
                         foreach (var item in goalMtp)
                         {
-                            if (item.Adendum == null)
+                            if ((item.Service != ServiceType.Individual))
                             {
-                                if ((item.Service != ServiceType.Individual))
+                                foreach (var obj in item.Objetives)
+                                {
+                                    if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
+                                    {
+                                        obj.DateResolved = reviewViewModel.ReviewedOn;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                                 {
                                     foreach (var obj in item.Objetives)
                                     {
                                         if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
                                         {
                                             obj.DateResolved = reviewViewModel.ReviewedOn;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
-                                    {
-                                        foreach (var obj in item.Objetives)
-                                        {
-                                            if (obj.DateResolved < reviewViewModel.ReviewedOn && obj.Compliment == false)
-                                            {
-                                                obj.DateResolved = reviewViewModel.ReviewedOn;
-                                            }
                                         }
                                     }
                                 }
@@ -3661,14 +4021,17 @@ namespace KyoS.Web.Controllers
                     if (User.IsInRole("Facilitator"))
                     {
                         List<MTPEntity> mtp = await _context.MTPs
-                                                  .Include(m => m.MtpReviewList)
+                                                            .Include(m => m.MtpReviewList)
+                                                            .Include(c => c.Client)
+                                                            .ThenInclude(c => c.Clinic)
 
-                                                  .Include(c => c.Client)
-                                                  .ThenInclude(c => c.Clinic)
-
-                                                  .Where(m => (m.Client.Clinic.Id == clinic.Id
-                                                        && (m.MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0)
-                                                        ))
+                                                            .Where(m => (m.Client.Clinic.Id == clinic.Id
+                                                                     && (m.MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName
+                                                                                                 && r.SignTherapy == false).Count() > 0))
+                                                                     ||
+                                                                     (m.Client.Clinic.Id == clinic.Id
+                                                                     && (m.MtpReviewList.Where(r => r.IndFacilitator.LinkedUser == user_logged.UserName
+                                                                                                 && r.SignIndTherapy == false).Count() > 0)))
                                                   .OrderBy(m => m.Client.Clinic.Name)
                                                   .ToListAsync();
 

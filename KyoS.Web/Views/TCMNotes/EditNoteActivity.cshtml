@@ -15,8 +15,8 @@
         <input type="hidden" asp-for="EndTime" />
         @if (User.IsInRole("TCMSupervisor"))
         {
-            <input type="hidden" asp-for="IdTCMDomain" />
-            <input type="hidden" asp-for="IdTCMActivity" />
+            <input type="hidden" asp-for="IdSetting" />
+            <input type="hidden" asp-for="Minutes" />
         }
         <div class="col-md-push-12">
             <div class="col-md-4">
@@ -44,10 +44,23 @@
                     <span asp-validation-for="StartTime" class="text-danger"></span>
                 </div>
             </div>
+        }
+        @if (User.IsInRole("CaseManager"))
+        {
             <div>
                 <div class=" col-md-2 form-group">
                     <label asp-for="Minutes" class="control-label">Minutes</label>
                     <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" />
+                    <span asp-validation-for="Minutes" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <div class=" col-md-2 form-group">
+                    <label asp-for="Minutes" class="control-label">Minutes</label>
+                    <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" disabled />
                     <span asp-validation-for="Minutes" class="text-danger"></span>
                 </div>
             </div>
@@ -66,47 +79,41 @@
                 <span asp-validation-for="Units" class="text-danger"></span>
             </div>
         </div>
-        <div>
-            <div class=" col-md-3 form-group">
-                <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
-                <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
-                <span asp-validation-for="IdSetting" class="text-danger"></span>
-            </div>
-        </div>
+
         @if (User.IsInRole("TCMSupervisor"))
         {
             <div>
-                <div class=" col-md-6 form-group">
-                    <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain" disabled></select>
-                    <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class=" col-md-6 form-group">
-                    <label asp-for="IdTCMActivity" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities" disabled></select>
-                    <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
+                <div class=" col-md-3 form-group">
+                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control" disabled></select>
+                    <span asp-validation-for="IdSetting" class="text-danger"></span>
                 </div>
             </div>
         }
         else
         {
             <div>
-                <div class=" col-md-6 form-group">
-                    <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>
-                    <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class=" col-md-6 form-group">
-                    <label asp-for="IdTCMActivity" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities"></select>
-                    <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
+                <div class=" col-md-3 form-group">
+                    <label asp-for="IdSetting" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdSetting" asp-items="Model.SettingList" class="form-control"></select>
+                    <span asp-validation-for="IdSetting" class="text-danger"></span>
                 </div>
             </div>
         }
+        <div>
+            <div class=" col-md-6 form-group">
+                <label asp-for="IdTCMDomain" class="control-label"></label>&nbsp;*
+                <select asp-for="IdTCMDomain" asp-items="Model.DomainList" class="form-control" id="cbDomain"></select>
+                <span asp-validation-for="IdTCMDomain" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class=" col-md-6 form-group">
+                <label asp-for="IdTCMActivity" class="control-label"></label>&nbsp;*
+                <select asp-for="IdTCMActivity" asp-items="Model.ActivityList" class="form-control" id="cbActivities"></select>
+                <span asp-validation-for="IdTCMActivity" class="text-danger"></span>
+            </div>
+        </div>
         <div>
             <div class=" col-md-12 form-group">
                 <label asp-for="SubService" class="control-label">Name Sub-Service in domain selected</label>

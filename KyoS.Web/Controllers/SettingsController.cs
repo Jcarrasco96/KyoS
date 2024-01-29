@@ -213,8 +213,8 @@ namespace KyoS.Web.Controllers
                 DocumentAssistant_Intake = user_logged.Clinic.Setting.DocumentAssisstant_Intake,
                 CreateTCMNotesWithoutDomain = user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain,
                 IdFiltroPayStub = (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
-                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic()
-
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
+                MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures
             };
 
             return View(model);
@@ -274,7 +274,7 @@ namespace KyoS.Web.Controllers
                     setting.DocumentAssisstant_Intake = model.DocumentAssistant_Intake;
                     setting.CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain;
                     setting.TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub);
-
+                    setting.MTPmultipleSignatures = model.MTPmultipleSignatures;
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

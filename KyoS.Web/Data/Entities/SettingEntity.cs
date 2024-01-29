@@ -37,5 +37,7 @@ namespace KyoS.Web.Data.Entities
         public bool DocumentAssisstant_Intake { get; set; }
         public bool CreateTCMNotesWithoutDomain { get; set; }
         public TCMPayStubFiltro TCMPayStub_Filtro { get; set; }
+
+        public bool MTPmultipleSignatures { get; set; }
     }
 }

@@ -72,7 +72,11 @@
         <input type="checkbox" asp-for="DocumentAssistant_Intake" /> Enable create intakes by Document Assisstant
     </div>
 </div>
-
+<div class="col-md-12">
+    <div class="form-group">
+        <input type="checkbox" asp-for="MTPmultipleSignatures" /> Enable MTP's multiple signatures
+    </div>
+</div>
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
         @if (@Model.IdClinic != 0)

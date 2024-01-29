@@ -1459,7 +1459,8 @@ namespace KyoS.Web.Helpers
                 TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
                 CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
-                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub)
+                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
@@ -1493,7 +1494,8 @@ namespace KyoS.Web.Helpers
                 DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
                 CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
                 IdFiltroPayStub = (model.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
-                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic()
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
@@ -3774,7 +3776,12 @@ namespace KyoS.Web.Helpers
                 DataOfService = model.DataOfService,
                 Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                DateIndFacilitator = model.DateIndFacilitator,
+                IndFacilitator = await _context.Facilitators
+                                               .FirstOrDefaultAsync(c => c.Id == model.IdIndFacilitator),
+                SignIndTherapy = model.SignIndTherapy,
+                SignTherapy = model.SignTherapy
 
             };
             
@@ -3822,7 +3829,12 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 DataOfService = model.DataOfService,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                IdIndFacilitator = (model.IndFacilitator != null) ? model.IndFacilitator.Id : 0,
+                DateIndFacilitator = model.DateIndFacilitator,
+                IndFacilitator = model.IndFacilitator,
+                SignIndTherapy = model.SignIndTherapy,
+                SignTherapy = model.SignTherapy
 
             };           
         }

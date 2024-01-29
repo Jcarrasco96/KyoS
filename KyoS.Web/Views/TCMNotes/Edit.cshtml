@@ -42,7 +42,7 @@
                     }
                     @if (ViewData["origin"].ToString() == "7")
                     {
-                        @Html.ActionLink("Update Notes", "UpdateNote", "TCMNotes")
+                        @Html.ActionLink("Update Notes", "UpdateNote", "TCMNotes", new { dateInterval = @ViewData["interval"], idCaseManager = Model.IdCaseManager, idTCMClient = Model.IdTCMClient })
                     }
                 }
             </li>
@@ -74,7 +74,7 @@
                 </div>
             }
         </div>
-        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="IdTCMNote" />
@@ -83,7 +83,7 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Status" />
             <input type="hidden" asp-for="IdCaseManager" />
-            <input type="hidden" asp-for="ApprovedDate" />
+            
             <input type="hidden" asp-for="BilledDate" />
             <input type="hidden" asp-for="PaymentDate" />
             <input type="hidden" asp-for="BillDms" />
@@ -104,7 +104,7 @@
             </div>
             <partial name="_TCMNotes1" />
             <div class="col-md-12">
-                <input type="submit" value="Save All" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
+                <input type="submit" value="Save All" asp-route-origin="@ViewData["origin"]" asp-route-interval="@ViewData["interval"]" class="btn btn-primary" />
                 @if (User.IsInRole("CaseManager"))
                 {
                     @if (@ViewData["origin"].ToString() == "0")
@@ -150,7 +150,7 @@
                     {
                         @if (ViewData["origin"].ToString() == "7")
                         {
-                            <a asp-action="UpdateNote" class="btn btn-success">Back</a>
+                            <a asp-action="UpdateNote" asp-route-dateInterval="@ViewData["interval"]" asp-route-idCaseManager="@Model.IdCaseManager" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
                         }
                         else
                         {

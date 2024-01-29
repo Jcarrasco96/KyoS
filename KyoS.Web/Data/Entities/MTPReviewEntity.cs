@@ -107,5 +107,14 @@ namespace KyoS.Web.Data.Entities
         public bool DeniedBill { get; set; }
 
         public int Units { get; set; }
+
+        public FacilitatorEntity IndFacilitator { get; set; }
+        
+        [Display(Name = "Date of Facilitator of Individual Therapy")]
+        [DataType(DataType.Date)]
+        public DateTime DateIndFacilitator { get; set; }
+
+        public bool SignIndTherapy { get; set; }
+        public bool SignTherapy { get; set; }
     }
 }

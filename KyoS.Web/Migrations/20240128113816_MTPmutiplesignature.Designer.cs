@@ -4,14 +4,16 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240128113816_MTPmutiplesignature")]
+    partial class MTPmutiplesignature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5913,9 +5915,6 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateClinicalDirector")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateIndFacilitator")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateLicensedPractitioner")
                         .HasColumnType("datetime2");
 
@@ -5945,9 +5944,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("IfCurrent")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("IndFacilitatorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -5985,12 +5981,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Setting")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("SignIndTherapy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SignTherapy")
-                        .HasColumnType("bit");
-
                     b.Property<string>("SpecifyChanges")
                         .HasColumnType("nvarchar(max)");
 
@@ -6016,8 +6006,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IndFacilitatorId");
 
                     b.HasIndex("MtpId");
 
@@ -13509,16 +13497,10 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
                 {
-                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "IndFacilitator")
-                        .WithMany()
-                        .HasForeignKey("IndFacilitatorId");
-
                     b.HasOne("KyoS.Web.Data.Entities.MTPEntity", "Mtp")
                         .WithMany("MtpReviewList")
                         .HasForeignKey("MtpId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("IndFacilitator");
 
                     b.Navigation("Mtp");
                 });
