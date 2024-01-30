@@ -38,10 +38,7 @@
                                 {
                                     <a class="icon-plus-sign-alt"></a>
                                 }
-                                else
-                                {
-
-                                }
+                               
                                 <div style="display:none">
                                     <table class="table table-striped table-bordered">
                                         <tr>
@@ -52,7 +49,7 @@
                                             <th class="col-md-1" style="text-align:center">End Date</th>
                                             <th class="col-md-2" style="text-align:center"></th>
                                         </tr>
-                                        @foreach (var value in item.TCMObjetive)
+                                        @foreach (var value in item.TCMObjetive.OrderBy(o => o.IdObjetive))
                                         {
                                             @if (value.Origin == "Service Plan")
                                             {
@@ -90,7 +87,6 @@
                                                     </td>
                                                 </tr>
                                             }
-
                                         }
                                     </table>
                                 </div>

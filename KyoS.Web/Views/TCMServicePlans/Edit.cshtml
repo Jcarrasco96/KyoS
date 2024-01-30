@@ -111,7 +111,7 @@
                     }
                     else
                     {
-                        <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success disabled" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
+                        <a class="btn btn-success disabled" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
                         <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.Id}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
                     }
                 </div>
@@ -234,7 +234,7 @@
         $(document).ready(function () {
             $('#MyTable').DataTable({
                                 "order": [[1, "asc"]],
-                                "pageLength": 100
+                                "pageLength": 25
                             });
 
             var item_to_delete;
