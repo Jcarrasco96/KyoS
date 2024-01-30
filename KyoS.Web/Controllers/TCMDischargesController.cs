@@ -964,10 +964,13 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> Delete1(int id = 0, int tcmClientId = 0)
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> Delete1(int id = 0)
         {
             TCMDischargeEntity tcmDischarge = _context.TCMDischarge
+                                                      .Include(n => n.TcmServicePlan)
+                                                      .ThenInclude(n => n.TcmClient)
+                                                      .Include(n => n.TCMMessages)
                                                       .FirstOrDefault(m => m.Id == id);
             if (tcmDischarge == null)
             {
@@ -983,7 +986,7 @@ namespace KyoS.Web.Controllers
             {
 
             }
-            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmDischarge.TcmServicePlan.TcmClient_FK });
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
