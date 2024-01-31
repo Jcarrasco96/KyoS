@@ -6634,10 +6634,22 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet4.Tables[0], "NotesP");
 
             int i = 0;
-            var num_of_goal = string.Empty;
-            var goal_text = string.Empty;
-            var num_of_obj = string.Empty;
-            var obj_text = string.Empty;
+            var num_of_goal1 = string.Empty;
+            var goal_text1 = string.Empty;
+            var num_of_obj1 = string.Empty;
+            var obj_text1 = string.Empty;
+            var num_of_goal2 = string.Empty;
+            var goal_text2 = string.Empty;
+            var num_of_obj2 = string.Empty;
+            var obj_text2 = string.Empty;
+            var num_of_goal3 = string.Empty;
+            var goal_text3 = string.Empty;
+            var num_of_obj3 = string.Empty;
+            var obj_text3 = string.Empty;
+            var num_of_goal4 = string.Empty;
+            var goal_text4 = string.Empty;
+            var num_of_obj4 = string.Empty;
+            var obj_text4 = string.Empty;
             foreach (NoteP_Activity item in workdayClient.NoteP.NotesP_Activities)
             {
                 if (i == 0)
@@ -6656,10 +6668,17 @@ namespace KyoS.Web.Helpers
 
                     if (item.Objetive != null)
                     {
-                        num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
-                        goal_text = item.Objetive.Goal.Name;
-                        num_of_obj = $"OBJ {item.Objetive.Objetive}:";
-                        obj_text = item.Objetive.Description;
+                        num_of_goal1 = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text1 = item.Objetive.Goal.Name;
+                        num_of_obj1 = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text1 = item.Objetive.Description;
+                    }
+                    else
+                    {
+                        num_of_goal1 = "GOAL:";
+                        goal_text1 = "-";
+                        num_of_obj1 = "OBJ:";
+                        obj_text1 = "-";
                     }
                 }
                 if (i == 1)
@@ -6676,15 +6695,19 @@ namespace KyoS.Web.Helpers
                     dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes2");
 
-                    if (num_of_goal == string.Empty)
+                    if (item.Objetive != null)
                     {
-                        if (item.Objetive != null)
-                        {
-                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
-                            goal_text = item.Objetive.Goal.Name;
-                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
-                            obj_text = item.Objetive.Description;
-                        }
+                        num_of_goal2 = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text2 = item.Objetive.Goal.Name;
+                        num_of_obj2 = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text2 = item.Objetive.Description;
+                    }
+                    else
+                    {
+                        num_of_goal2 = "GOAL:";
+                        goal_text2 = "-";
+                        num_of_obj2 = "OBJ:";
+                        obj_text2 = "-";
                     }
                 }
                 if (i == 2)
@@ -6701,15 +6724,19 @@ namespace KyoS.Web.Helpers
                     dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes3");
 
-                    if (num_of_goal == string.Empty)
+                    if (item.Objetive != null)
                     {
-                        if (item.Objetive != null)
-                        {
-                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
-                            goal_text = item.Objetive.Goal.Name;
-                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
-                            obj_text = item.Objetive.Description;
-                        }
+                        num_of_goal3 = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text3 = item.Objetive.Goal.Name;
+                        num_of_obj3 = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text3 = item.Objetive.Description;
+                    }
+                    else
+                    {
+                        num_of_goal3 = "GOAL:";
+                        goal_text3 = "-";
+                        num_of_obj3 = "OBJ:";
+                        obj_text3 = "-";
                     }
                 }
                 if (i == 3)
@@ -6726,15 +6753,19 @@ namespace KyoS.Web.Helpers
                     dataSet.Tables.Add(GetThemeDS(item.Activity?.Theme));
                     WebReport.Report.RegisterData(dataSet.Tables[0], "Themes4");
 
-                    if (num_of_goal == string.Empty)
+                    if (item.Objetive != null)
                     {
-                        if (item.Objetive != null)
-                        {
-                            num_of_goal = $"GOAL #{item.Objetive.Goal.Number}:";
-                            goal_text = item.Objetive.Goal.Name;
-                            num_of_obj = $"OBJ {item.Objetive.Objetive}:";
-                            obj_text = item.Objetive.Description;
-                        }
+                        num_of_goal4 = $"GOAL #{item.Objetive.Goal.Number}:";
+                        goal_text4 = item.Objetive.Goal.Name;
+                        num_of_obj4 = $"OBJ {item.Objetive.Objetive}:";
+                        obj_text4 = item.Objetive.Description;
+                    }
+                    else
+                    {
+                        num_of_goal4 = "GOAL:";
+                        goal_text4 = "-";
+                        num_of_obj4 = "OBJ:";
+                        obj_text4 = "-";
                     }
                 }
                 i = ++i;
@@ -6800,10 +6831,22 @@ namespace KyoS.Web.Helpers
             WebReport.Report.SetParameterValue("datenote", date);
             WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
             WebReport.Report.SetParameterValue("dateSupervisor", dateSupervisor);
-            WebReport.Report.SetParameterValue("num_of_goal", num_of_goal);
-            WebReport.Report.SetParameterValue("goal_text", goal_text);
-            WebReport.Report.SetParameterValue("num_of_obj", num_of_obj);
-            WebReport.Report.SetParameterValue("obj_text", obj_text);
+            WebReport.Report.SetParameterValue("num_of_goal1", num_of_goal1);
+            WebReport.Report.SetParameterValue("goal_text1", goal_text1);
+            WebReport.Report.SetParameterValue("num_of_obj1", num_of_obj1);
+            WebReport.Report.SetParameterValue("obj_text1", obj_text1);
+            WebReport.Report.SetParameterValue("num_of_goal2", num_of_goal2);
+            WebReport.Report.SetParameterValue("goal_text2", goal_text2);
+            WebReport.Report.SetParameterValue("num_of_obj2", num_of_obj2);
+            WebReport.Report.SetParameterValue("obj_text2", obj_text2);
+            WebReport.Report.SetParameterValue("num_of_goal3", num_of_goal3);
+            WebReport.Report.SetParameterValue("goal_text3", goal_text3);
+            WebReport.Report.SetParameterValue("num_of_obj3", num_of_obj3);
+            WebReport.Report.SetParameterValue("obj_text3", obj_text3);
+            WebReport.Report.SetParameterValue("num_of_goal4", num_of_goal4);
+            WebReport.Report.SetParameterValue("goal_text4", goal_text4);
+            WebReport.Report.SetParameterValue("num_of_obj4", num_of_obj4);
+            WebReport.Report.SetParameterValue("obj_text4", obj_text4);
             WebReport.Report.SetParameterValue("diagnostic", (diagnostic == null) ? string.Empty : diagnostic.Diagnostic.Code);
 
             WebReport.Report.Prepare();
