@@ -112,7 +112,7 @@
                                                 <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
-                                        <a onclick="ConfirmDeleteServicePlan(@Model.Id)" class="btn btn-danger" title="Delete Services Plan"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteDischarge(@Model.Id)" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
@@ -126,7 +126,7 @@
                                         {
                                             <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                        <a onclick="ConfirmDeleteServicePlan(@Model.Id)" class="btn btn-danger disabled" title="Delete Services Plan"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteDischarge(@Model.Id)" class="btn btn-danger disabled" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

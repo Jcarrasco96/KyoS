@@ -68,11 +68,11 @@
                                                     <td align="center">
                                                         @if (User.IsInRole("Manager") && product1.Status == KyoS.Common.Enums.ActivityStatus.Approved)
                                                         {
-                                                            <a asp-action="ReturnTo" asp-route-id="@item.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            <a asp-action="ReturnTo" asp-route-id="@product1.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                         }
                                                         else
                                                         {
-                                                            <a asp-action="ReturnTo" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit Client"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                            <a asp-action="ReturnTo" asp-route-id="@product1.Id" class="btn btn-warning disabled" title="Edit Client"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                         }
                                                         @if (product1.Status == KyoS.Common.Enums.ActivityStatus.Pending)
                                                         {

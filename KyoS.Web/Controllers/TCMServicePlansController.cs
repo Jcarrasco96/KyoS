@@ -3149,8 +3149,7 @@ namespace KyoS.Web.Controllers
                                                                  .ToListAsync();
 
             _context.TCMMessages.RemoveRange(messageEntity);
-            await _context.SaveChangesAsync();
-
+           
             List<TCMDomainEntity> domains = await _context.TCMDomains
                                                           .Include(n => n.TcmServicePlan)
                                                           .Include(n => n.TCMObjetive)
@@ -3160,7 +3159,6 @@ namespace KyoS.Web.Controllers
             foreach (var item in domains)
             {
                 _context.TCMObjetives.RemoveRange(item.TCMObjetive);
-                await _context.SaveChangesAsync();
             }
            
             List<TCMNoteEntity> notes = await _context.TCMNote
@@ -3172,15 +3170,12 @@ namespace KyoS.Web.Controllers
             foreach (var item in notes)
             {
                 _context.TCMNoteActivity.RemoveRange(item.TCMNoteActivity);
-                await _context.SaveChangesAsync();
             }
 
             _context.TCMNote.RemoveRange(notes);
-            await _context.SaveChangesAsync();
-
+          
             _context.TCMDomains.RemoveRange(domains);
-            await _context.SaveChangesAsync();
-
+            
             TCMDischargeEntity discharge = await _context.TCMDischarge
                                                          .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
             if (discharge != null)
@@ -3188,15 +3183,13 @@ namespace KyoS.Web.Controllers
                 _context.TCMDischarge.Remove(discharge);
             }
             
-            await _context.SaveChangesAsync();
-
+            
             List<TCMAdendumEntity> addendums = await _context.TCMAdendums
                                                              .Where(d => d.TcmServicePlan.Id == id)
                                                              .ToListAsync();
 
             _context.TCMAdendums.RemoveRange(addendums);
-            await _context.SaveChangesAsync();
-
+            
             TCMServicePlanReviewEntity servicePlanReview = await _context.TCMServicePlanReviews
                                                                          .FirstOrDefaultAsync(d => d.TcmServicePlan.Id == id);
             if (servicePlanReview != null)
@@ -3204,8 +3197,6 @@ namespace KyoS.Web.Controllers
                 _context.TCMServicePlanReviews.Remove(servicePlanReview);
             }
             
-            await _context.SaveChangesAsync();
-
             _context.TCMServicePlans.Remove(servicePlan);
             await _context.SaveChangesAsync();
 

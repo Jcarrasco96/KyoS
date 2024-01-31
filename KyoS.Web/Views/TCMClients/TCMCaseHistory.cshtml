@@ -268,6 +268,38 @@
                 }
             });
         }
+        function ConfirmDeleteDischarge(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The Discharge I will  deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMDischarge")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        function ConfirmDeleteDischarge(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete1", "TCMDischarges")";
+                    window.location.href = url + '?id=' + e;
+                }
+            });
+        }
     </script>
 
 
