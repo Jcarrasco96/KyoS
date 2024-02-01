@@ -12431,45 +12431,46 @@ namespace KyoS.Web.Controllers
 
             if (idWeek != 0)
             {
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(g => g.Facilitator)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(g => g.Facilitator)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Note)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Note)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.NoteP)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.NoteP)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.GroupNote)
-                                                       .ThenInclude(wc => wc.GroupNotes_Activities)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
+                                                        .ThenInclude(wc => wc.GroupNotes_Activities)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.GroupNote2)
-                                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote2)
+                                                        .ThenInclude(wc => wc.GroupNotes2_Activities)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Client)
-                                                       .ThenInclude(c => c.Clients_Diagnostics)
-                                                       .ThenInclude(cd => cd.Diagnostic)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                        .ThenInclude(cd => cd.Diagnostic)
 
-                                                       .Include(w => w.Clinic)
-                                                       .ThenInclude(w => w.Setting)
+                                                        .Include(w => w.Clinic)
+                                                        .ThenInclude(w => w.Setting)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(d => d.Schedule)
-                                                       .ThenInclude(d => d.SubSchedules)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(d => d.Schedule)
+                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))
+                                                        .ToListAsync();
 
                 try
                 {
@@ -12479,7 +12480,7 @@ namespace KyoS.Web.Controllers
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                         IdClient = 0,
                         Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        Weeks = query.ToList(),
+                        Weeks = query,
                         IdWeek = idWeek,
                         WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                     };
@@ -12500,7 +12501,7 @@ namespace KyoS.Web.Controllers
                     max = week.Max(m => m.Id);
                 }
 
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -12538,7 +12539,8 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(d => d.Schedule)
                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))
+                                                       .ToListAsync();
                 
                 BillingReport1ViewModel model = new BillingReport1ViewModel
                 {
@@ -12546,7 +12548,7 @@ namespace KyoS.Web.Controllers
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query.ToList(),
+                    Weeks = query,
                     IdWeek = max,
                     WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                 };
