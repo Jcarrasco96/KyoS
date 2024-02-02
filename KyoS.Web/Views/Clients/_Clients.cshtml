@@ -13,11 +13,23 @@
         <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
         <span asp-validation-for="IdGender" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
-        <input asp-for="AdmisionDate" class="form-control" />
-        <span asp-validation-for="AdmisionDate" class="text-danger"></span>
-    </div>
+    @if (User.IsInRole("CaseManager") == true || User.IsInRole("TCMSupervisor") == true || Model.OnlyTCM == true)
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDateTCM" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDateTCM" class="form-control" />
+            <span asp-validation-for="AdmisionDateTCM" class="text-danger"></span>
+        </div>
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDate" class="form-control" />
+            <span asp-validation-for="AdmisionDate" class="text-danger"></span>
+        </div>
+    }
+
     <div class="form-group col-md-2">
         <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
         <input asp-for="DateOfBirth" class="form-control" />

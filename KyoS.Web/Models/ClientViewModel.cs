@@ -151,5 +151,10 @@ namespace KyoS.Web.Models
         public string FaxNumberPsychiatrists { get; set; }
         public string CreateByPsychiatrists { get; set; }
         public DateTime CreateOnPsychiatrists { get; set; }
+
+        [Display(Name = "Date of admission TCM")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime AdmisionDateTCM { get; set; }
     }
 }

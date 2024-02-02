@@ -640,7 +640,14 @@ namespace KyoS.Web.Controllers
             //{
             //    clientEntity.EmergencyContact = new EmergencyContactEntity();
             //}
-
+            if (clientViewModel.IdTCMClient != 0)
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
+            }
+            else
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientViewModel.Id).DataOpen;
+            }
             return View(clientViewModel);
         }
 
@@ -1052,7 +1059,14 @@ namespace KyoS.Web.Controllers
             {
                 clientEntity.EmergencyContact = new EmergencyContactEntity();
             }
-
+            if (clientViewModel.IdTCMClient != 0)
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
+            }
+            else
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientViewModel.Id).DataOpen;
+            }
             return View(clientViewModel);
         }
 

@@ -99,6 +99,14 @@
         </div>
         <div class="col-md-push-12">
             <div id="view-farsForClient">
+                @await Html.PartialAsync("_ViewTCMFars", Model.TCMFarsFormList)
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
                 @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMDischarge != null)
                 {
                     @await Html.PartialAsync("_ViewDischarge", Model.TcmServicePlan.TCMDischarge)
@@ -297,6 +305,22 @@
                 if (result.isConfirmed) {
                     var url = "@Url.Action("Delete1", "TCMDischarges")";
                     window.location.href = url + '?id=' + e;
+                }
+            });
+        }
+        function ConfirmDeleteFARS(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The FARS and messages will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete1", "TCMFarsForms")";
+                    window.location.href = url + '/' + e;
                 }
             });
         }

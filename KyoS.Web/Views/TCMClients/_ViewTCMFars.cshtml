@@ -1,0 +1,141 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMFarsFormEntity>
+
+@if (Model.Count() > 0)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">FARS </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" >
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Client
+                            </th>
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Evaluation Date
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Admissioned for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Case
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.EvaluationDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Casemanager.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Status)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        if (item.Status == KyoS.Common.Enums.FarsStatus.Pending)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="EditReadOnly" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-origi="2" class="btn btn-info" title="View FARS"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintFarsForm" asp-controller="TCMFarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.FarsStatus.Edition)
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-origi="2" class="btn btn-info" title="View FARS"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintFarsForm" asp-controller="TCMFarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-origi="2" class="btn btn-info" title="View FARS"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintServicePlan" asp-controller="TCMFarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                        <a onclick="ConfirmDeleteFARS(@item.Id)" class="btn btn-danger" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ReturnTo" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="EditReadOnly" asp-controller="TCMFarsForms" asp-route-id="@item.Id" asp-route-origi="3" class="btn btn-info" title="View FARS"><i class="glyphicon glyphicon-list"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.FarsStatus.Approved)
+                                        {
+                                            <a asp-action="PrintDischarge" asp-controller="TCMFarsForms" asp-route-id="@item.Id" class="btn btn-success" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintServicePlan" asp-controller="TCMFarsForms" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a onclick="ConfirmDeleteFARS(@item.Id)" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                         }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+ 
