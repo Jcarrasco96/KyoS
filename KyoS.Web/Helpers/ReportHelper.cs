@@ -3836,7 +3836,11 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -4097,7 +4101,11 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -4441,8 +4449,13 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
 
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
+            
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
@@ -4702,7 +4715,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -4908,7 +4926,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -5169,7 +5192,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -5375,7 +5403,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -5636,7 +5669,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -5842,7 +5880,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -6103,7 +6146,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -6309,7 +6357,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -6570,7 +6623,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -6807,7 +6865,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -7080,7 +7143,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -7286,7 +7354,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -7547,7 +7620,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -7753,7 +7831,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
@@ -8014,7 +8097,12 @@ namespace KyoS.Web.Helpers
             var date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
             var dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
             var dateSupervisor = workdayClient.NoteP.DateOfApprove.Value.ToShortDateString();
-            var diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+
+            Client_Diagnostic diagnostic = null;
+            if (workdayClient.Client.Clients_Diagnostics != null)
+            {
+                diagnostic = workdayClient.Client.Clients_Diagnostics.FirstOrDefault(d => d.Principal == true);
+            }
 
             //signatures images 
             byte[] stream1 = null;
