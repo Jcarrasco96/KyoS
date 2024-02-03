@@ -20201,48 +20201,51 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("ZipCode", typeof(string));
             dt.Columns.Add("TelephoneSecondary", typeof(string));
             dt.Columns.Add("AddressLine2", typeof(string));
+            dt.Columns.Add("SignPath", typeof(string));
 
             if (legal != null)
             {
                 dt.Rows.Add(new object[]
-                                            {
-                                        legal.Id,
-                                        legal.CreatedBy,
-                                        legal.CreatedOn,
-                                        legal.LastModifiedBy,
-                                        legal.LastModifiedOn,
-                                        legal.Name,
-                                        legal.Address,
-                                        legal.Telephone,
-                                        legal.Email,
-                                        legal.Country,
-                                        legal.City,
-                                        legal.State,
-                                        legal.ZipCode,
-                                        legal.TelephoneSecondary,
-                                        legal.AdressLine2
-            });
+                {
+                    legal.Id,
+                    legal.CreatedBy,
+                    legal.CreatedOn,
+                    legal.LastModifiedBy,
+                    legal.LastModifiedOn,
+                    legal.Name,
+                    legal.Address,
+                    legal.Telephone,
+                    legal.Email,
+                    legal.Country,
+                    legal.City,
+                    legal.State,
+                    legal.ZipCode,
+                    legal.TelephoneSecondary,
+                    legal.AdressLine2,
+                    legal.SignPath
+                });
             }
             else
             {
                 dt.Rows.Add(new object[]
-                                            {
-                                        0,
-                                        string.Empty,
-                                        new DateTime(),
-                                        string.Empty,
-                                        new DateTime(),
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty,
-                                        string.Empty
-                                            });
+                {
+                    0,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty
+                });
             }
 
             return dt;
@@ -25284,6 +25287,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
             dt.Columns.Add("TcmClient_FK", typeof(int));
             dt.Columns.Add("TCMSupervisorId", typeof(string));
+            dt.Columns.Add("DateSupervisorSignature", typeof(DateTime));
+            dt.Columns.Add("DateTcmSignature", typeof(DateTime));
 
             if (servicePlan != null)
             {
@@ -25305,7 +25310,9 @@ namespace KyoS.Web.Helpers
                                 servicePlan.LastModifiedBy,
                                 servicePlan.LastModifiedOn,
                                 0,
-                                0
+                                0,
+                                servicePlan.DateSupervisorSignature,
+                                servicePlan.DateTcmSignature
                 });
             }
             else
@@ -25328,7 +25335,9 @@ namespace KyoS.Web.Helpers
                                 string.Empty,
                                 new DateTime(),
                                 0,
-                                0
+                                0,
+                                new DateTime(),
+                                new DateTime()
                 });
             }
 
@@ -29645,9 +29654,29 @@ namespace KyoS.Web.Helpers
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");            
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 
@@ -29855,9 +29884,29 @@ namespace KyoS.Web.Helpers
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 
@@ -29960,9 +30009,29 @@ namespace KyoS.Web.Helpers
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 
@@ -30065,9 +30134,29 @@ namespace KyoS.Web.Helpers
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 
@@ -30170,9 +30259,29 @@ namespace KyoS.Web.Helpers
                 stream2 = _imageHelper.ImageToByteArray(path);
             }
 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }            
+
             dataSet = new DataSet();
             dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
 
             WebReport.Report.Prepare();
 
