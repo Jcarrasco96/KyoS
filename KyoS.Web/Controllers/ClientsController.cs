@@ -3936,35 +3936,35 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.MTPs)
-                                                                            .ThenInclude(m => m.Goals)
-                                                                                .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.Clients_Diagnostics)
-                                                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Supervisor)
-                                                                            .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Activity)
-                                                                                .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Objetive)
-                                                                                .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }            
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -4000,30 +4000,32 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.NotesP_Activities)
-                                                                        .ThenInclude(na => na.Activity)
-                                                                            .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.NotesP_Activities)
+                                                .ThenInclude(na => na.Activity)
+                                                    .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.NotesP_Activities)
-                                                                        .ThenInclude(na => na.Objetive)
-                                                                            .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.NotesP_Activities)
+                                                .ThenInclude(na => na.Objetive)
+                                                    .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
-                                                                    .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                                        .ThenInclude(waf => waf.Facilitator)
+                                            .Include(wc => wc.Workday)
+                                            .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                .ThenInclude(waf => waf.Facilitator)                                                                    
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -4075,31 +4077,31 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                      .ThenInclude(c => c.MTPs)
-                                                                          .ThenInclude(m => m.Goals)
-                                                                              .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.Supervisor)
-                                                                          .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.GroupNotes_Activities)
-                                                                          .ThenInclude(na => na.Activity)
-                                                                              .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.GroupNotes_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.GroupNotes_Activities)
-                                                                          .ThenInclude(na => na.Objetive)
-                                                                              .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.GroupNotes_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -4128,33 +4130,37 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.MTPs)
-                                                                        .ThenInclude(m => m.Goals)
-                                                                            .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                                .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
-                                                                        .ThenInclude(na => na.Activity)
-                                                                            .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.GroupNotes2_Activities)
+                                                .ThenInclude(na => na.Activity)
+                                                    .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
-                                                                        .ThenInclude(na => na.Objetive)
-                                                                            .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.GroupNotes2_Activities)
+                                                .ThenInclude(na => na.Objetive)
+                                                    .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Include(wc => wc.Schedule)
+                                            .Include(wc => wc.Schedule)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                                .ThenInclude(cd => cd.Diagnostic)
+
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -4183,28 +4189,28 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.MTPs)
-                                                                        .ThenInclude(m => m.Goals)
-                                                                            .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                                .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                                                        .ThenInclude(cd => cd.Diagnostic)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                                .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.IndividualNote)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.IndividualNote)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.IndividualNote)
-                                                                    .ThenInclude(n => n.Objective)
+                                            .Include(wc => wc.IndividualNote)
+                                            .ThenInclude(n => n.Objective)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
