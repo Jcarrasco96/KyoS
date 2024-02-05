@@ -503,7 +503,7 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.Client.IntakeMedicalHistory != null)
+                @if (Model.TCMIntakeMedicalHistory != null)
                 {
                     <a style="text-decoration: none;" asp-action="CreateTCMMedicalhistory" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">

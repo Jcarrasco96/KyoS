@@ -15,13 +15,16 @@
         <li class="active">TCM Cases</li>
     </ul><!--.breadcrumb-->
 </div>
-@if (User.IsInRole("Manager") )
+@if (User.IsInRole("Manager"))
 {
     <p>
         <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
     </p>
+    <p>
+        <a onclick="showInPopup('@Url.Action("CopyTCMMedicalHistory", "TCMClients", null, Context.Request.Scheme)','Copy los medical History ')" class="btn btn-primary" title="Copy Medical History"><i class="glyphicon glyphicon-plus"></i> Copy Medical history</a>
+    </p>
 }
-@if ( User.IsInRole("TCMSupervisor"))
+@if (User.IsInRole("TCMSupervisor"))
 {
     <p>
         <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary disabled" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
