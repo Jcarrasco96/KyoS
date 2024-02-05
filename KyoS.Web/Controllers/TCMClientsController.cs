@@ -1787,6 +1787,8 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
+
+        //esto fue para generar los medical history de TCM a partir de los exixtentes en MH
         public async Task<IActionResult> CopyTCMMedicalHistory()
         {
             List<TCMClientEntity> listTCMClient = await _context.TCMClient

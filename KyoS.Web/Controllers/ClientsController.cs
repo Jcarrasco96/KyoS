@@ -644,10 +644,7 @@ namespace KyoS.Web.Controllers
             {
                 clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
             }
-            else
-            {
-                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientViewModel.Id).DataOpen;
-            }
+           
             return View(clientViewModel);
         }
 
