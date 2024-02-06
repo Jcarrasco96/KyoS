@@ -1785,5 +1785,207 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMTransferReport(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+
+        //esto fue para generar los medical history de TCM a partir de los exixtentes en MH
+        public async Task<IActionResult> CopyTCMMedicalHistory()
+        {
+            List<TCMClientEntity> listTCMClient = await _context.TCMClient
+                                                                .Include(n => n.Client)
+                                                                .ThenInclude(n => n.IntakeMedicalHistory)
+                                                                .Include(n => n.Casemanager)
+                                                                .ToListAsync();
+            
+            if (listTCMClient.Count() == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<TCMIntakeMedicalHistoryEntity> TCMmedicalHistoryList = new List<TCMIntakeMedicalHistoryEntity>();
+
+            foreach (var item in listTCMClient)
+            {
+                if (item.Client.IntakeMedicalHistory != null)
+                {
+                    TCMIntakeMedicalHistoryEntity TCMmedicalHistory = new TCMIntakeMedicalHistoryEntity();
+
+                    TCMmedicalHistory.AddressPhysician = item.Client.IntakeMedicalHistory.AddressPhysician;
+                    TCMmedicalHistory.AdmissionedFor = item.Casemanager.Name;
+                    TCMmedicalHistory.AgeFirstTalked = item.Client.IntakeMedicalHistory.AgeFirstTalked;
+                    TCMmedicalHistory.AgeFirstWalked = item.Client.IntakeMedicalHistory.AgeFirstWalked;
+                    TCMmedicalHistory.AgeOfFirstMenstruation = item.Client.IntakeMedicalHistory.AgeOfFirstMenstruation;
+                    TCMmedicalHistory.AgeToiletTrained = item.Client.IntakeMedicalHistory.AgeToiletTrained;
+                    TCMmedicalHistory.AgeWeaned = item.Client.IntakeMedicalHistory.AgeWeaned;
+                    TCMmedicalHistory.Allergies = item.Client.IntakeMedicalHistory.Allergies;
+                    TCMmedicalHistory.Allergies_Describe = item.Client.IntakeMedicalHistory.Allergies_Describe;
+                    TCMmedicalHistory.AndOrSoiling = item.Client.IntakeMedicalHistory.AndOrSoiling;
+                    TCMmedicalHistory.Anemia = item.Client.IntakeMedicalHistory.Anemia;
+                    TCMmedicalHistory.AreYouCurrently = item.Client.IntakeMedicalHistory.AreYouCurrently;
+                    TCMmedicalHistory.AreYouPhysician = item.Client.IntakeMedicalHistory.AreYouPhysician;
+                    TCMmedicalHistory.Arthritis = item.Client.IntakeMedicalHistory.Arthritis;
+                    TCMmedicalHistory.AssumingCertainPositions = item.Client.IntakeMedicalHistory.AssumingCertainPositions;
+                    TCMmedicalHistory.BackPain = item.Client.IntakeMedicalHistory.BackPain;
+                    TCMmedicalHistory.BeingConfused = item.Client.IntakeMedicalHistory.BeingConfused;
+                    TCMmedicalHistory.BeingDisorientated = item.Client.IntakeMedicalHistory.BeingDisorientated;
+                    TCMmedicalHistory.BirthWeight = item.Client.IntakeMedicalHistory.BirthWeight;
+                    TCMmedicalHistory.BlackStools = item.Client.IntakeMedicalHistory.BlackStools;
+                    TCMmedicalHistory.BloodInUrine = item.Client.IntakeMedicalHistory.BloodInUrine;
+                    TCMmedicalHistory.BloodyStools = item.Client.IntakeMedicalHistory.BloodyStools;
+                    TCMmedicalHistory.BottleFedUntilAge = item.Client.IntakeMedicalHistory.BottleFedUntilAge;
+                    TCMmedicalHistory.BreastFed = item.Client.IntakeMedicalHistory.BreastFed;
+                    TCMmedicalHistory.BurningUrine = item.Client.IntakeMedicalHistory.BurningUrine;
+                    TCMmedicalHistory.Calculating = item.Client.IntakeMedicalHistory.Calculating;
+                    TCMmedicalHistory.Cancer = item.Client.IntakeMedicalHistory.Cancer;
+                    TCMmedicalHistory.ChestPain = item.Client.IntakeMedicalHistory.ChestPain;
+                    TCMmedicalHistory.ChronicCough = item.Client.IntakeMedicalHistory.ChronicCough;
+                    TCMmedicalHistory.ChronicIndigestion = item.Client.IntakeMedicalHistory.ChronicIndigestion;
+                    TCMmedicalHistory.City = item.Client.IntakeMedicalHistory.City;
+                    TCMmedicalHistory.Complications = item.Client.IntakeMedicalHistory.Complications;
+                    TCMmedicalHistory.Complications_Explain = item.Client.IntakeMedicalHistory.Complications_Explain;
+                    TCMmedicalHistory.Comprehending = item.Client.IntakeMedicalHistory.Comprehending;
+                    TCMmedicalHistory.Concentrating = item.Client.IntakeMedicalHistory.Concentrating;
+                    TCMmedicalHistory.Constipation = item.Client.IntakeMedicalHistory.Constipation;
+                    TCMmedicalHistory.ConvulsionsOrFits = item.Client.IntakeMedicalHistory.ConvulsionsOrFits;
+                    TCMmedicalHistory.CoughingOfBlood = item.Client.IntakeMedicalHistory.CoughingOfBlood;
+                    TCMmedicalHistory.CreatedBy = item.Client.IntakeMedicalHistory.CreatedBy;
+                    TCMmedicalHistory.CreatedOn = item.Client.IntakeMedicalHistory.CreatedOn;
+                    TCMmedicalHistory.DateOfLastBreastExam = item.Client.IntakeMedicalHistory.DateOfLastBreastExam;
+                    TCMmedicalHistory.DateOfLastPelvic = item.Client.IntakeMedicalHistory.DateOfLastPelvic;
+                    TCMmedicalHistory.DateOfLastPeriod = item.Client.IntakeMedicalHistory.DateOfLastPeriod;
+                    TCMmedicalHistory.DateSignatureEmployee = item.Client.IntakeMedicalHistory.DateSignatureEmployee;
+                    TCMmedicalHistory.DateSignatureLegalGuardian = item.Client.IntakeMedicalHistory.DateSignatureLegalGuardian;
+                    TCMmedicalHistory.DateSignaturePerson = item.Client.IntakeMedicalHistory.DateSignaturePerson;
+                    TCMmedicalHistory.DescriptionOfChild = item.Client.IntakeMedicalHistory.DescriptionOfChild;
+                    TCMmedicalHistory.Diabetes = item.Client.IntakeMedicalHistory.Diabetes;
+                    TCMmedicalHistory.Diphtheria = item.Client.IntakeMedicalHistory.Diphtheria;
+                    TCMmedicalHistory.Documents = item.Client.IntakeMedicalHistory.Documents;
+                    TCMmedicalHistory.DoYouSmoke = item.Client.IntakeMedicalHistory.DoYouSmoke;
+                    TCMmedicalHistory.DoYouSmoke_PackPerDay = item.Client.IntakeMedicalHistory.DoYouSmoke_PackPerDay;
+                    TCMmedicalHistory.DoYouSmoke_Year = item.Client.IntakeMedicalHistory.DoYouSmoke_Year;
+                    TCMmedicalHistory.EarInfections = item.Client.IntakeMedicalHistory.EarInfections;
+                    TCMmedicalHistory.EndTime = item.Client.IntakeMedicalHistory.EndTime;
+                    TCMmedicalHistory.Epilepsy = item.Client.IntakeMedicalHistory.Epilepsy;
+                    TCMmedicalHistory.EyeTrouble = item.Client.IntakeMedicalHistory.EyeTrouble;
+                    TCMmedicalHistory.Fainting = item.Client.IntakeMedicalHistory.Fainting;
+                    TCMmedicalHistory.FamilyAsthma = item.Client.IntakeMedicalHistory.FamilyAsthma;
+                    TCMmedicalHistory.FamilyAsthma_ = item.Client.IntakeMedicalHistory.FamilyAsthma_;
+                    TCMmedicalHistory.FamilyCancer = item.Client.IntakeMedicalHistory.FamilyCancer;
+                    TCMmedicalHistory.FamilyCancer_ = item.Client.IntakeMedicalHistory.FamilyCancer_;
+                    TCMmedicalHistory.FamilyDiabetes = item.Client.IntakeMedicalHistory.FamilyDiabetes;
+                    TCMmedicalHistory.FamilyDiabetes_ = item.Client.IntakeMedicalHistory.FamilyDiabetes_;
+                    TCMmedicalHistory.FamilyEpilepsy = item.Client.IntakeMedicalHistory.FamilyEpilepsy;
+                    TCMmedicalHistory.FamilyEpilepsy_ = item.Client.IntakeMedicalHistory.FamilyEpilepsy_;
+                    TCMmedicalHistory.FamilyGlaucoma = item.Client.IntakeMedicalHistory.FamilyGlaucoma;
+                    TCMmedicalHistory.FamilyGlaucoma_ = item.Client.IntakeMedicalHistory.FamilyGlaucoma_;
+                    TCMmedicalHistory.FamilyHayFever = item.Client.IntakeMedicalHistory.FamilyHayFever;
+                    TCMmedicalHistory.FamilyHayFever_ = item.Client.IntakeMedicalHistory.FamilyHayFever_;
+                    TCMmedicalHistory.FamilyHeartDisease = item.Client.IntakeMedicalHistory.FamilyHeartDisease;
+                    TCMmedicalHistory.FamilyHeartDisease_ = item.Client.IntakeMedicalHistory.FamilyHeartDisease_;
+                    TCMmedicalHistory.FamilyHighBloodPressure = item.Client.IntakeMedicalHistory.FamilyHighBloodPressure;
+                    TCMmedicalHistory.FamilyHighBloodPressure_ = item.Client.IntakeMedicalHistory.FamilyHighBloodPressure_;
+                    TCMmedicalHistory.FamilyKidneyDisease = item.Client.IntakeMedicalHistory.FamilyKidneyDisease;
+                    TCMmedicalHistory.FamilyKidneyDisease_ = item.Client.IntakeMedicalHistory.FamilyKidneyDisease_;
+                    TCMmedicalHistory.FamilyNervousDisorders = item.Client.IntakeMedicalHistory.FamilyNervousDisorders;
+                    TCMmedicalHistory.FamilyNervousDisorders_ = item.Client.IntakeMedicalHistory.FamilyNervousDisorders_;
+                    TCMmedicalHistory.FamilyOther = item.Client.IntakeMedicalHistory.FamilyOther;
+                    TCMmedicalHistory.FamilyOther_ = item.Client.IntakeMedicalHistory.FamilyOther_;
+                    TCMmedicalHistory.FamilySyphilis = item.Client.IntakeMedicalHistory.FamilySyphilis;
+                    TCMmedicalHistory.FamilySyphilis_ = item.Client.IntakeMedicalHistory.FamilySyphilis_;
+                    TCMmedicalHistory.FamilyTuberculosis = item.Client.IntakeMedicalHistory.FamilyTuberculosis;
+                    TCMmedicalHistory.FamilyTuberculosis_ = item.Client.IntakeMedicalHistory.FamilyTuberculosis_;
+                    TCMmedicalHistory.FirstYearMedical = item.Client.IntakeMedicalHistory.FirstYearMedical;
+                    TCMmedicalHistory.Fractures = item.Client.IntakeMedicalHistory.Fractures;
+                    TCMmedicalHistory.FrequentColds = item.Client.IntakeMedicalHistory.FrequentColds;
+                    TCMmedicalHistory.FrequentHeadaches = item.Client.IntakeMedicalHistory.FrequentHeadaches;
+                    TCMmedicalHistory.FrequentNoseBleeds = item.Client.IntakeMedicalHistory.FrequentNoseBleeds;
+                    TCMmedicalHistory.FrequentSoreThroat = item.Client.IntakeMedicalHistory.FrequentSoreThroat;
+                    TCMmedicalHistory.FrequentVomiting = item.Client.IntakeMedicalHistory.FrequentVomiting;
+                    TCMmedicalHistory.HaveYouEverBeenPregnant = item.Client.IntakeMedicalHistory.HaveYouEverBeenPregnant;
+                    TCMmedicalHistory.HaveYouEverHadComplications = item.Client.IntakeMedicalHistory.HaveYouEverHadComplications;
+                    TCMmedicalHistory.HaveYouEverHadComplications = item.Client.IntakeMedicalHistory.HaveYouEverHadComplications;
+                    TCMmedicalHistory.HaveYouEverHadExcessive = item.Client.IntakeMedicalHistory.HaveYouEverHadExcessive;
+                    TCMmedicalHistory.HaveYouEverHadPainful = item.Client.IntakeMedicalHistory.HaveYouEverHadPainful;
+                    TCMmedicalHistory.HaveYouEverHadSpotting = item.Client.IntakeMedicalHistory.HaveYouEverHadSpotting;
+                    TCMmedicalHistory.HayFever = item.Client.IntakeMedicalHistory.HayFever;
+                    TCMmedicalHistory.HeadInjury = item.Client.IntakeMedicalHistory.HeadInjury;
+                    TCMmedicalHistory.Hearing = item.Client.IntakeMedicalHistory.Hearing;
+                    TCMmedicalHistory.HearingTrouble = item.Client.IntakeMedicalHistory.HearingTrouble;
+                    TCMmedicalHistory.HeartPalpitation = item.Client.IntakeMedicalHistory.HeartPalpitation;
+                    TCMmedicalHistory.Hemorrhoids = item.Client.IntakeMedicalHistory.Hemorrhoids;
+                    TCMmedicalHistory.Hepatitis = item.Client.IntakeMedicalHistory.Hepatitis;
+                    TCMmedicalHistory.Hernia = item.Client.IntakeMedicalHistory.Hernia;
+                    TCMmedicalHistory.HighBloodPressure = item.Client.IntakeMedicalHistory.HighBloodPressure;
+                    TCMmedicalHistory.Hoarseness = item.Client.IntakeMedicalHistory.Hoarseness;
+                    TCMmedicalHistory.Immunizations = item.Client.IntakeMedicalHistory.Immunizations;
+                    TCMmedicalHistory.InfectiousDisease = item.Client.IntakeMedicalHistory.InfectiousDisease;
+                    TCMmedicalHistory.InformationProvided = item.Client.IntakeMedicalHistory.InformationProvided;
+                    TCMmedicalHistory.Jaundice = item.Client.IntakeMedicalHistory.Jaundice;
+                    TCMmedicalHistory.KidneyStones = item.Client.IntakeMedicalHistory.KidneyStones;
+                    TCMmedicalHistory.KidneyTrouble = item.Client.IntakeMedicalHistory.KidneyTrouble;
+                    TCMmedicalHistory.LastModifiedBy = item.Client.IntakeMedicalHistory.LastModifiedBy;
+                    TCMmedicalHistory.LastModifiedBy = item.Client.IntakeMedicalHistory.LastModifiedBy;
+                    TCMmedicalHistory.LastModifiedOn = item.Client.IntakeMedicalHistory.LastModifiedOn;
+                    TCMmedicalHistory.Length = item.Client.IntakeMedicalHistory.Length;
+                    TCMmedicalHistory.ListAllCurrentMedications = item.Client.IntakeMedicalHistory.ListAllCurrentMedications;
+                    TCMmedicalHistory.LossOfMemory = item.Client.IntakeMedicalHistory.LossOfMemory;
+                    TCMmedicalHistory.Mumps = item.Client.IntakeMedicalHistory.Mumps;
+                    TCMmedicalHistory.Nervousness = item.Client.IntakeMedicalHistory.Nervousness;
+                    TCMmedicalHistory.NightSweats = item.Client.IntakeMedicalHistory.NightSweats;
+                    TCMmedicalHistory.Normal = item.Client.IntakeMedicalHistory.Normal;
+                    TCMmedicalHistory.PainfulJoints = item.Client.IntakeMedicalHistory.PainfulJoints;
+                    TCMmedicalHistory.PainfulMuscles = item.Client.IntakeMedicalHistory.PainfulMuscles;
+                    TCMmedicalHistory.PainfulUrination = item.Client.IntakeMedicalHistory.PainfulUrination;
+                    TCMmedicalHistory.PerformingCertainMotions = item.Client.IntakeMedicalHistory.PerformingCertainMotions;
+                    TCMmedicalHistory.Planned = item.Client.IntakeMedicalHistory.Planned;
+                    TCMmedicalHistory.Poliomyelitis = item.Client.IntakeMedicalHistory.Poliomyelitis;
+                    TCMmedicalHistory.PrimaryCarePhysician = item.Client.IntakeMedicalHistory.PrimaryCarePhysician;
+                    TCMmedicalHistory.ProblemWithBedWetting = item.Client.IntakeMedicalHistory.ProblemWithBedWetting;
+                    TCMmedicalHistory.Reading = item.Client.IntakeMedicalHistory.Reading;
+                    TCMmedicalHistory.RheumaticFever = item.Client.IntakeMedicalHistory.RheumaticFever;
+                    TCMmedicalHistory.Rheumatism = item.Client.IntakeMedicalHistory.Rheumatism;
+                    TCMmedicalHistory.ScarletFever = item.Client.IntakeMedicalHistory.ScarletFever;
+                    TCMmedicalHistory.Seeing = item.Client.IntakeMedicalHistory.Seeing;
+                    TCMmedicalHistory.SeriousInjury = item.Client.IntakeMedicalHistory.SeriousInjury;
+                    TCMmedicalHistory.ShortnessOfBreath = item.Client.IntakeMedicalHistory.ShortnessOfBreath;
+                    TCMmedicalHistory.SkinTrouble = item.Client.IntakeMedicalHistory.SkinTrouble;
+                    TCMmedicalHistory.Speaking = item.Client.IntakeMedicalHistory.Speaking;
+                    TCMmedicalHistory.StartTime = item.Client.IntakeMedicalHistory.StartTime;
+                    TCMmedicalHistory.State = item.Client.IntakeMedicalHistory.State;
+                    TCMmedicalHistory.StomachPain = item.Client.IntakeMedicalHistory.StomachPain;
+                    TCMmedicalHistory.Surgery = item.Client.IntakeMedicalHistory.Surgery;
+                    TCMmedicalHistory.SwellingOfFeet = item.Client.IntakeMedicalHistory.SwellingOfFeet;
+                    TCMmedicalHistory.SwollenAnkles = item.Client.IntakeMedicalHistory.SwollenAnkles;
+                    TCMmedicalHistory.TCMClient = item;
+                    TCMmedicalHistory.TCMClient_FK = item.Id;
+                    TCMmedicalHistory.Tuberculosis = item.Client.IntakeMedicalHistory.Tuberculosis;
+                    TCMmedicalHistory.Unplanned = item.Client.IntakeMedicalHistory.Unplanned;
+                    TCMmedicalHistory.UsualDurationOfPeriods = item.Client.IntakeMedicalHistory.UsualDurationOfPeriods;
+                    TCMmedicalHistory.UsualIntervalBetweenPeriods = item.Client.IntakeMedicalHistory.UsualIntervalBetweenPeriods;
+                    TCMmedicalHistory.VaricoseVeins = item.Client.IntakeMedicalHistory.VaricoseVeins;
+                    TCMmedicalHistory.VenerealDisease = item.Client.IntakeMedicalHistory.VenerealDisease;
+                    TCMmedicalHistory.VomitingOfBlood = item.Client.IntakeMedicalHistory.VomitingOfBlood;
+                    TCMmedicalHistory.Walking = item.Client.IntakeMedicalHistory.Walking;
+                    TCMmedicalHistory.WeightLoss = item.Client.IntakeMedicalHistory.WeightLoss;
+                    TCMmedicalHistory.WhoopingCough = item.Client.IntakeMedicalHistory.WhoopingCough;
+                    TCMmedicalHistory.WritingSentence = item.Client.IntakeMedicalHistory.WritingSentence;
+                    TCMmedicalHistory.ZipCode = item.Client.IntakeMedicalHistory.ZipCode;
+
+                    TCMmedicalHistoryList.Add(TCMmedicalHistory);
+                }
+            }
+
+            try
+            {
+                _context.TCMIntakeMedicalHistory.UpdateRange(TCMmedicalHistoryList);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("Index", "TCMClients");
+        }
     }
 }

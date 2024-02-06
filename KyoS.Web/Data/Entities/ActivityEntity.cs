@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class ActivityEntity
+    public class ActivityEntity : AuditableEntity
     {
         public int Id { get; set; }
 

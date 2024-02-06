@@ -2509,21 +2509,24 @@ namespace KyoS.Web.Controllers
                                                  .Include(u => u.Clinic)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            IntakeMedicalHistoryViewModel model;
+            TCMIntakeMedicalHistoryViewModel model;
 
             TCMClientEntity tcmClient = _context.TCMClient
                                                 .Include(n => n.Client)
                                                 .ThenInclude(n => n.Doctor)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == idTCMClient);
 
             if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
             {
                 if (user_logged.Clinic != null)
                 {
-                    IntakeMedicalHistoryEntity intakeMedicalHistory = _context.IntakeMedicalHistory
-                                                                            .Include(n => n.Client)
-                                                                            .ThenInclude(n => n.LegalGuardian)
-                                                                            .FirstOrDefault(n => n.Client.Id == id);
+                    TCMIntakeMedicalHistoryEntity intakeMedicalHistory = _context.TCMIntakeMedicalHistory
+                                                                                 .Include(n => n.TCMClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .FirstOrDefault(n => n.TCMClient.Id == idTCMClient);
                     DoctorEntity doctor = _context.Clients.FirstOrDefault(n => n.Id == id).Doctor;
                     if (doctor == null)
                     {
@@ -2531,11 +2534,10 @@ namespace KyoS.Web.Controllers
                     }
                     if (intakeMedicalHistory == null)
                     {
-                        model = new IntakeMedicalHistoryViewModel
+                        model = new TCMIntakeMedicalHistoryViewModel
                         {
-                            Client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id),
-                            IdClient = id,
-                            Client_FK = id,
+                            TCMClient = _context.TCMClient.Include(n => n.Client).ThenInclude(n => n.LegalGuardian).FirstOrDefault(n => n.Id == idTCMClient),
+                            TCMClient_FK = id,
                             Id = 0,
                             DateSignatureEmployee = DateTime.Now,
                             DateSignatureLegalGuardian = DateTime.Now,
@@ -2689,17 +2691,17 @@ namespace KyoS.Web.Controllers
                             AdmissionedFor = user_logged.FullName
                             
                         };
-                        if (model.Client.LegalGuardian == null)
-                            model.Client.LegalGuardian = new LegalGuardianEntity();
+                        if (model.TCMClient.Client.LegalGuardian == null)
+                            model.TCMClient.Client.LegalGuardian = new LegalGuardianEntity();
                         model.IdTCMClient = idTCMClient;
                         ViewData["CaseNumber"] = tcmClient.CaseNumber;
                         return View(model);
                     }
                     else
                     {
-                        if (intakeMedicalHistory.Client.LegalGuardian == null)
-                            intakeMedicalHistory.Client.LegalGuardian = new LegalGuardianEntity();
-                        model = _converterHelper.ToIntakeMedicalHistoryViewModel(intakeMedicalHistory);
+                        if (intakeMedicalHistory.TCMClient.Client.LegalGuardian == null)
+                            intakeMedicalHistory.TCMClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToTCMIntakeMedicalHistoryViewModel(intakeMedicalHistory);
                         model.IdTCMClient = idTCMClient;
                         ViewData["CaseNumber"] = tcmClient.CaseNumber;
                         return View(model);
@@ -2714,7 +2716,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> CreateTCMMedicalhistory(IntakeMedicalHistoryViewModel IntakeViewModel)
+        public async Task<IActionResult> CreateTCMMedicalhistory(TCMIntakeMedicalHistoryViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -2722,12 +2724,12 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                IntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToIntakeMedicalHistoryEntity(IntakeViewModel, false, user_logged.UserName);
+                TCMIntakeMedicalHistoryEntity IntakeMedicalHistoryEntity = _converterHelper.ToTCMIntakeMedicalHistoryEntity(IntakeViewModel, false, user_logged.UserName);
 
                 if (IntakeMedicalHistoryEntity.Id == 0)
                 {
-                    IntakeMedicalHistoryEntity.Client = null;
-                    _context.IntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);
+                    //IntakeMedicalHistoryEntity.TCMClient = null;
+                    _context.TCMIntakeMedicalHistory.Add(IntakeMedicalHistoryEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -2747,8 +2749,8 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    IntakeMedicalHistoryEntity.Client = null;
-                    _context.IntakeMedicalHistory.Update(IntakeMedicalHistoryEntity);
+                    IntakeMedicalHistoryEntity.TCMClient = null;
+                    _context.TCMIntakeMedicalHistory.Update(IntakeMedicalHistoryEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -2768,7 +2770,7 @@ namespace KyoS.Web.Controllers
                 }
             }
             //Preparing Data
-            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+            IntakeViewModel.TCMClient = _context.TCMClient.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedicalhistory", IntakeViewModel) });
         }
@@ -3247,7 +3249,7 @@ namespace KyoS.Web.Controllers
                                                                        
                                                                        .Include(n => n.Client.Psychiatrist)
                                                                        .Include(n => n.Client.Doctor)
-                                                                       .Include(n => n.Client.IntakeMedicalHistory)
+                                                                       .Include(n => n.TCMIntakeMedicalHistory)
                                                                        .Include(n => n.Client.MedicationList)
                                                                        .Include(n => n.TCMIntakeMiniMental)
                                                                        .Include(n => n.TCMIntakeCoordinationCare)

@@ -13,7 +13,7 @@
         <input type="hidden" asp-for="IdTCMClient" />
         <input type="hidden" asp-for="DateOfServiceNote" />
         <input type="hidden" asp-for="EndTime" />
-        @if (User.IsInRole("TCMSupervisor"))
+        @if (User.IsInRole("TCMSupervisor") && Model.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
         {
             <input type="hidden" asp-for="IdSetting" />
             <input type="hidden" asp-for="Minutes" />
@@ -45,17 +45,7 @@
                 </div>
             </div>
         }
-        @if (User.IsInRole("CaseManager"))
-        {
-            <div>
-                <div class=" col-md-2 form-group">
-                    <label asp-for="Minutes" class="control-label">Minutes</label>
-                    <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" />
-                    <span asp-validation-for="Minutes" class="text-danger"></span>
-                </div>
-            </div>
-        }
-        else
+        @if (Model.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
         {
             <div>
                 <div class=" col-md-2 form-group">
@@ -64,6 +54,29 @@
                     <span asp-validation-for="Minutes" class="text-danger"></span>
                 </div>
             </div>
+        }
+        else
+        {
+            @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            {
+                <div>
+                    <div class=" col-md-2 form-group">
+                        <label asp-for="Minutes" class="control-label">Minutes</label>
+                        <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" />
+                        <span asp-validation-for="Minutes" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <div class=" col-md-2 form-group">
+                        <label asp-for="Minutes" class="control-label">Minutes</label>
+                        <input asp-for="Minutes" id="lbMinutes" class="form-control" onchange="getMinute();" disabled />
+                        <span asp-validation-for="Minutes" class="text-danger"></span>
+                    </div>
+                </div>
+            }
         }
         <div>
             <div class=" col-md-2 form-group">
@@ -80,7 +93,7 @@
             </div>
         </div>
 
-        @if (User.IsInRole("TCMSupervisor"))
+        @if (User.IsInRole("TCMSupervisor") && Model.TCMNote.Status == KyoS.Common.Enums.NoteStatus.Approved)
         {
             <div>
                 <div class=" col-md-3 form-group">

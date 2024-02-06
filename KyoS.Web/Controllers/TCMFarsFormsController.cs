@@ -705,12 +705,12 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMFarsFormViewModel model;
 
-            if (User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -847,6 +847,57 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> Delete1(int id = 0)
+        {
+            TCMFarsFormEntity tcmFars = _context.TCMFarsForm
+                                                .Include(n => n.TCMClient)
+                                                .Include(n => n.TcmMessages)
+                                                .FirstOrDefault(m => m.Id == id);
+            if (tcmFars == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMFarsForm.Remove(tcmFars);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmFars.TCMClient.Id });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMFarsFormEntity tcmFars = await _context.TCMFarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmFars == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                tcmFars.Status = FarsStatus.Edition;
+                _context.TCMFarsForm.Update(tcmFars);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
 
     }
 }

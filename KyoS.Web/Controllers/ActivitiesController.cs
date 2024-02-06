@@ -141,6 +141,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 ThemeEntity themeEntity = await _context.Themes.FirstOrDefaultAsync(t => t.Id == activityViewModel.IdTheme);
@@ -149,7 +151,7 @@ namespace KyoS.Web.Controllers
                 {
                     FacilitatorEntity facilitator_logged = await _context.Facilitators.Include(u => u.Clinic)
                                                                                       .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -227,6 +229,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create3(ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 ThemeEntity themeEntity = await _context.Themes.FirstOrDefaultAsync(t => t.Id == activityViewModel.IdTheme);
@@ -236,7 +240,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator_logged = await _context.Facilitators
                                                                          .Include(u => u.Clinic)
                                                                          .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -319,6 +323,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -326,7 +332,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 _context.Update(activityEntity);
                 try
                 {
@@ -397,6 +403,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit3(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -404,7 +412,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 _context.Update(activityEntity);
                 try
                 {
@@ -1968,6 +1976,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddLink(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -1975,7 +1985,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 activityEntity.Name = activityEntity.Name + activityViewModel.Link;
                 _context.Update(activityEntity);
                 try
@@ -2046,13 +2056,12 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditActivity3Modal(ActivityViewModel activityViewModel)
         {
-
             if (ModelState.IsValid)
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 _context.Update(activityEntity);
                 try
                 {

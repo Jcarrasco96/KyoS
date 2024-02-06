@@ -42,7 +42,8 @@
                                         <table class="table table-striped table-bordered">
                                             <tr>
                                                 <th class="col-md-1">Id</th>
-                                                <th class="col-md-8" style="text-align:center;">Activities</th>
+                                                <th class="col-md-7" style="text-align:center;">Activities</th>
+                                                <th class="col-md-1" style="text-align:center;">Update</th>
                                                 <th class="col-md-1" style="text-align:center;">Status</th>
                                                 <th class="col-md-2" style="text-align:center;"></th>
                                             </tr>
@@ -51,6 +52,7 @@
                                                 <tr>
                                                     <td>@Html.DisplayFor(modelItem => product1.Id)</td>
                                                     <td>@Html.DisplayFor(modelItem => product1.Name)</td>
+                                                    <td align="center">@Html.DisplayFor(modelItem => product1.LastModifiedOn)</td>
                                                     <td align="center">
                                                         @if (product1.Status == KyoS.Common.Enums.ActivityStatus.Pending)
                                                         {
@@ -81,8 +83,17 @@
                                                         }
                                                         else
                                                         {
-                                                            <a class="btn btn-warning disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
-                                                            <a class="btn btn-danger disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            @if (User.IsInRole("Supervisor"))
+                                                            {
+                                                                <a onclick="showInPopup('@Url.Action("EditActivity3Modal", "Themes", new {id = product1.Id }, Context.Request.Scheme)','Edit Activity')" class="btn btn-warning" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-danger disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-warning disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                <a class="btn btn-danger disabled" title="Add Behavioral Health History"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            }
+
                                                         }
                                                     </td>
                                                 </tr>

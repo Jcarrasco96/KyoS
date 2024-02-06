@@ -599,7 +599,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator_logged = await _context.Facilitators
                                                                          .Include(u => u.Clinic)
                                                                          .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -745,7 +745,11 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
+                if (User.IsInRole("Supervisor"))
+                {
+                    activityEntity.Status = ActivityStatus.Approved;
+                }
                 _context.Update(activityEntity);
                 try
                 {

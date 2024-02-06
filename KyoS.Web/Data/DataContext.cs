@@ -163,7 +163,7 @@ namespace KyoS.Web.Data
         public DbSet<MeetingNotes_Facilitator> MeetingNotes_Facilitators { get; set; }
         public DbSet<TCMPayStubEntity> TCMPayStubs { get; set; }
         public DbSet<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
-
+        public DbSet<TCMIntakeMedicalHistoryEntity> TCMIntakeMedicalHistory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -727,6 +727,11 @@ namespace KyoS.Web.Data
                         .WithMany(c => c.FacilitatorList)
                         .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeMedicalHistory)
+                        .WithOne(s => s.TCMClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeMedicalHistoryEntity>(s => s.TCMClient_FK);
         }
     }
 }

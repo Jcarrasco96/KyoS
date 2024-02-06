@@ -85,5 +85,6 @@ namespace KyoS.Web.Data.Entities
         public bool Younger { get; set; }
 
         public TCMIntakeAppendixIEntity TcmIntakeAppendixI { get; set; }
+        public TCMIntakeMedicalHistoryEntity TCMIntakeMedicalHistory { get; set; }
     }
 }

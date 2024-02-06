@@ -13,7 +13,7 @@ namespace KyoS.Web.Helpers
         Task<ThemeEntity> ToTheme3Entity(Theme3ViewModel model, bool isNew);
         ThemeViewModel ToThemeViewModel(ThemeEntity model);
         Theme3ViewModel ToTheme3ViewModel(ThemeEntity model);
-        Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew);
+        Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew, string userId);
         ActivityViewModel ToActivityViewModel(ActivityEntity model);
         Task<NotePrototypeEntity> ToNotePrototypeEntity(NotePrototypeViewModel model, bool isNew);
         NotePrototypeViewModel ToNotePrototypeViewModel(NotePrototypeEntity model);
@@ -251,5 +251,8 @@ namespace KyoS.Web.Helpers
         MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
         Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
         TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
+
+        TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId);
+        TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
     }
 }
