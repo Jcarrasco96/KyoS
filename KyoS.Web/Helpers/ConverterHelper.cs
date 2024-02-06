@@ -11,6 +11,7 @@ using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
+
 namespace KyoS.Web.Helpers
 {
     public class ConverterHelper : IConverterHelper
@@ -139,15 +140,20 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew)
+        public async Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew, string userId)
         {
             return new ActivityEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
                 Status = ActivityStatus.Pending,
-                Theme = await _context.Themes.FindAsync(model.IdTheme)
+                Theme = await _context.Themes.FindAsync(model.IdTheme),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
             };
+
         }
 
         public ActivityViewModel ToActivityViewModel(ActivityEntity activityEntity)
@@ -158,7 +164,9 @@ namespace KyoS.Web.Helpers
                 Name = activityEntity.Name,
                 Themes = _combosHelper.GetComboThemes(),
                 IdTheme = activityEntity.Theme.Id,
-                Theme = activityEntity.Theme
+                Theme = activityEntity.Theme,
+                CreatedBy = activityEntity.CreatedBy,
+                CreatedOn = activityEntity.CreatedOn
             };
         }
 
