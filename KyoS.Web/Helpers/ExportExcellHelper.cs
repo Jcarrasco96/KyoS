@@ -36,7 +36,7 @@ namespace KyoS.Web.Helpers
                 {
                     currentRow++;
                     worksheet.Cell(currentRow, 4).Value = item.Name;
-                    worksheet.Cell(currentRow, 5).Value = item.Status;
+                    worksheet.Cell(currentRow, 5).Value = item.Status.ToString();
                     worksheet.Cell(currentRow, 6).Value = item.LinkedUser;
 
                 }
@@ -554,7 +554,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 1).Value = item.Name;
                     worksheet.Cell(currentRow, 2).Value = item.Code;
                     worksheet.Cell(currentRow, 3).Value = item.DateOfBirth.ToShortDateString();
-                    worksheet.Cell(currentRow, 4).Value = item.Gender;
+                    worksheet.Cell(currentRow, 4).Value = item.Gender.ToString();
                     worksheet.Cell(currentRow, 5).Value = item.MedicaidID;
                     worksheet.Cell(currentRow, 6).Value = item.MedicareId;
 
@@ -579,7 +579,7 @@ namespace KyoS.Web.Helpers
                     }
 
                     worksheet.Cell(currentRow, 9).Value = item.AdmisionDate;
-                    worksheet.Cell(currentRow, 10).Value = item.Status;
+                    worksheet.Cell(currentRow, 10).Value = item.Status.ToString();
                     if (item.Status == Common.Enums.StatusType.Open)
                     {
                         worksheet.Cell(currentRow, 10).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -593,8 +593,8 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 12).Value = item.City;
                     worksheet.Cell(currentRow, 13).Value = item.ZipCode;
                     worksheet.Cell(currentRow, 14).Value = item.Telephone;
-                    worksheet.Cell(currentRow, 15).Value = item.Race;
-                    worksheet.Cell(currentRow, 16).Value = item.PreferredLanguage;
+                    worksheet.Cell(currentRow, 15).Value = item.Race.ToString();
+                    worksheet.Cell(currentRow, 16).Value = item.PreferredLanguage.ToString();
                     worksheet.Cell(currentRow, 17).Value = item.DateOfClose.ToShortDateString();
 
                     if (item.DateOfClose.DayOfYear == 1 && item.Status == Common.Enums.StatusType.Close)
@@ -1024,7 +1024,7 @@ namespace KyoS.Web.Helpers
 
                         worksheet.Cell(currentRow, 1).Value = item.Referred.Name;
                         worksheet.Cell(currentRow, 2).Value = item.Referred.Address;
-                        worksheet.Cell(currentRow, 3).Value = item.type;
+                        worksheet.Cell(currentRow, 3).Value = item.type.ToString();
                         if (item.type == Common.Enums.ReferredType.In)
                         {
                             worksheet.Cell(currentRow, 3).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -1033,11 +1033,11 @@ namespace KyoS.Web.Helpers
                         {
                             worksheet.Cell(currentRow, 3).Style.Fill.SetBackgroundColor(XLColor.Gray);
                         }
-                        worksheet.Cell(currentRow, 4).Value = item.Service;
+                        worksheet.Cell(currentRow, 4).Value = item.Service.ToString();
                         worksheet.Cell(currentRow, 5).Value = item.Client.Name;
                         worksheet.Cell(currentRow, 6).Value = item.Client.Code;
                         worksheet.Cell(currentRow, 7).Value = item.Client.AdmisionDate;
-                        worksheet.Cell(currentRow, 8).Value = item.Client.Status;
+                        worksheet.Cell(currentRow, 8).Value = item.Client.Status.ToString();
                         if (item.Client.Status == Common.Enums.StatusType.Open)
                         {
                             worksheet.Cell(currentRow, 8).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -1762,7 +1762,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                     worksheet.Cell(currentRow, 2).Value = item.DateService;
                     worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    worksheet.Cell(currentRow, 3).Value = item.ServiceAgency;
+                    worksheet.Cell(currentRow, 3).Value = item.ServiceAgency.ToString();
                     worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(currentRow, 4).Value = item.Unit;
                     worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
