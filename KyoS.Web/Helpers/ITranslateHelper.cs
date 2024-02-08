@@ -8,7 +8,7 @@ namespace KyoS.Web.Helpers
 {
     public interface ITranslateHelper
     {
-        string TranslateText(string fromLanguage, string toLanguage, string textToTranslate);
+        Task<string> TranslateText(string fromLanguage, string toLanguage, string textToTranslate);
         Task<string> TranslateTextAux(string fromLanguage, string toLanguage, string textToTranslate);
     }
 }

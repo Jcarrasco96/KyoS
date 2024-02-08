@@ -990,7 +990,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
-        public async Task<IActionResult> CopyActivity(int idServiceTo = 0)
+        public IActionResult CopyActivity(int idServiceTo = 0)
         {
             TCMCopyActivityViewModel model;
 
@@ -1055,7 +1055,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, TCMSupervisor")]
-        public async Task<IActionResult> DuplicateService(int idServiceFrom = 0)
+        public IActionResult DuplicateService(int idServiceFrom = 0)
         {
             TCMCopyActivityViewModel model;
 

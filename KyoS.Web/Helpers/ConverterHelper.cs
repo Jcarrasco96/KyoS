@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 
 namespace KyoS.Web.Helpers
 {
@@ -7431,7 +7427,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew)
+        public BillDmsEntity ToBillDMSEntity(BillDmsViewModel model, bool isNew)
         {
             return new BillDmsEntity
             {
@@ -7473,7 +7469,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew)
+        public BillDmsPaidEntity ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew)
         {
             return new BillDmsPaidEntity
             {
@@ -7662,7 +7658,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId)
+        public TCMTransferEntity ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId)
         {
             return new TCMTransferEntity
             {
@@ -8227,7 +8223,7 @@ namespace KyoS.Web.Helpers
             return salida;
         }
 
-        public async Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew)
+        public MeetingNoteEntity ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew)
         {
             return new MeetingNoteEntity
             {
@@ -8261,7 +8257,7 @@ namespace KyoS.Web.Helpers
             return model;
         }
 
-        public async Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew)
+        public MeetingNotes_Facilitator ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew)
         {
             return new MeetingNotes_Facilitator
             {
@@ -8291,7 +8287,7 @@ namespace KyoS.Web.Helpers
             return model;
         }
 
-        public async Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
+        public TCMPayStubEntity ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
         {
             return new TCMPayStubEntity
             {
@@ -8305,7 +8301,6 @@ namespace KyoS.Web.Helpers
                 Units = model.Units,
                 CaseMannager = _context.CaseManagers.Find(model.IdCaseManager),
                 TCMPayStubDetails = model.TCMPaystubDetails
-
             };
         }
 

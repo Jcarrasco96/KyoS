@@ -1291,8 +1291,6 @@ namespace KyoS.Web.Helpers
                 int count = 0;
                 foreach (var item in tcmNotes.GroupBy(n => n.TCMClient))
                 {
-                    int amount1 = 0;
-                    int unit_total1 = 0;
                     if (item.Key.Client.Name.ToString().Length > 24)
                     {
                         count = workbook.Worksheets.Where(n => n.Name.Contains(item.Key.Client.Name.Substring(0, 24).ToString()) == true).Count();
@@ -1496,8 +1494,7 @@ namespace KyoS.Web.Helpers
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
-                    var content = ConvertStreamToByteArray(stream);
-                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    var content = ConvertStreamToByteArray(stream);                    
                     return stream.ToArray();
                 }
             }
@@ -1505,9 +1502,7 @@ namespace KyoS.Web.Helpers
 
         public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data)
         {
-            var billDms = abillDms;
-            int amount = 0;
-            int unit_total = 0;
+            var billDms = abillDms;            
 
             using (var workbook = new XLWorkbook())
             {
@@ -1546,9 +1541,7 @@ namespace KyoS.Web.Helpers
                 IXLRange range0 = worksheet.Range(worksheet.Cell(11, 1).Address, worksheet.Cell(11, 6).Address);
                 range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range0.Style.Font.Bold = true;
-                currentRow++;
-                unit_total = 0;
-                amount = 0;
+                currentRow++;                
                 worksheet.ColumnsUsed().AdjustToContents();
 
                 worksheet.Cell(currentRow, 1).Value = "(* Units to be invoiced)";

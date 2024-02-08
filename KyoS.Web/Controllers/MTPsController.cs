@@ -4908,9 +4908,9 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
         }
 
-        public JsonResult Translate(string text)
+        public async Task<JsonResult> Translate(string text)
         {
-            return Json(text = _translateHelper.TranslateText("es", "en", text));
+            return Json(text = await _translateHelper.TranslateText("es", "en", text));
         }
 
         [Authorize(Roles = "Manager")]

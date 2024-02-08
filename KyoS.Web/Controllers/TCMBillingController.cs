@@ -1645,7 +1645,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        public IActionResult BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
 
             if (abilled == 1)
@@ -1720,7 +1720,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillTCMClient(BillViewModel model, int abilled = 0)
+        public IActionResult BillTCMClient(BillViewModel model, int abilled = 0)
         {
 
             if (abilled == 1)
@@ -1813,7 +1813,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        public IActionResult PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
             if (abilled == 2)
             {
@@ -1859,7 +1859,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> PayTCMClient(BillViewModel model, int abilled = 0)
+        public IActionResult PayTCMClient(BillViewModel model, int abilled = 0)
         {
             if (abilled == 2)
             {

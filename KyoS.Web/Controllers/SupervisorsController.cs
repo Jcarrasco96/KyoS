@@ -771,7 +771,7 @@ namespace KyoS.Web.Controllers
                 model.FacilitatorList = list;
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
                 model.Supervisor = supervisor;
-                supervisorNotes = await _converterHelper.ToMeetingNoteEntity(model, true);
+                supervisorNotes = _converterHelper.ToMeetingNoteEntity(model, true);
                 _context.Add(supervisorNotes);
                 try
                 {
@@ -871,7 +871,7 @@ namespace KyoS.Web.Controllers
                 model.FacilitatorList = list;
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
                 model.Supervisor = supervisor;
-                supervisorNotes = await _converterHelper.ToMeetingNoteEntity(model, false);
+                supervisorNotes = _converterHelper.ToMeetingNoteEntity(model, false);
                 _context.Update(supervisorNotes);
                 try
                 {
@@ -897,10 +897,11 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> EditNoteFacilitator(int id = 0)
+        public IActionResult EditNoteFacilitator(int id = 0)
         {
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             MeetingNotes_Facilitator entity = _context.MeetingNotes_Facilitators
                                                       .Include(n => n.MeetingNoteEntity)
@@ -931,7 +932,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 MeetingNotes_Facilitator noteFacilitator;
-                noteFacilitator = await _converterHelper.ToMeetingNoteFacilitatorEntity(model, false);
+                noteFacilitator = _converterHelper.ToMeetingNoteFacilitatorEntity(model, false);
                 _context.Update(noteFacilitator);
                 
                 

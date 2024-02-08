@@ -117,7 +117,7 @@ namespace KyoS.Web.Controllers
                 if (BillDms == null)
                 {
                     model.StatusBill = StatusBill.Billed;
-                    BillDmsEntity billDmsEntity = await _converterHelper.ToBillDMSEntity(model, true);
+                    BillDmsEntity billDmsEntity = _converterHelper.ToBillDMSEntity(model, true);
 
                     _context.Add(billDmsEntity);
                     try
@@ -516,7 +516,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BillDmsPaidEntity billDmsPaidEntity = await _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, true);
+                BillDmsPaidEntity billDmsPaidEntity = _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, true);
 
                 _context.Add(billDmsPaidEntity);
                 try
@@ -631,7 +631,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BillDmsPaidEntity billDmsPaidEntity = await _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, false);
+                BillDmsPaidEntity billDmsPaidEntity = _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, false);
                               
                 _context.BillDmsPaid.Update(billDmsPaidEntity);
                

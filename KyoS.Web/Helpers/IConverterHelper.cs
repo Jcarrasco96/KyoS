@@ -215,9 +215,9 @@ namespace KyoS.Web.Helpers
         TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model);
         Task<CiteEntity> ToCiteEntity(CiteViewModel model, bool isNew, string userId);
         CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic);
-        Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew);
+        BillDmsEntity ToBillDMSEntity(BillDmsViewModel model, bool isNew);
         BillDmsViewModel ToBillDMSViewModel(BillDmsEntity model);
-        Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew);
+        BillDmsPaidEntity ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew);
         BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model);
         Task<TCMReferralFormEntity> ToTCMReferralFormEntity(TCMReferralFormViewModel model, bool isNew, string userId);
         TCMReferralFormViewModel ToTCMReferralFormViewModel(TCMReferralFormEntity model);
@@ -225,7 +225,7 @@ namespace KyoS.Web.Helpers
         TCMSupervisionTimeViewModel ToTCMSupervisionTimeViewModel(TCMSupervisionTimeEntity model, int idClinic);
         Task<TCMSubServiceEntity> ToTCMSubServiceEntity(TCMSubServiceViewModel model, bool isNew, string userId);
         TCMSubServiceViewModel ToTCMSubServiceViewModel(TCMSubServiceEntity model);
-        Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId);
+        TCMTransferEntity ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId);
         TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model);
         IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew);
         IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model);
@@ -245,13 +245,12 @@ namespace KyoS.Web.Helpers
         SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model);
         Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId);
         IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model);
-        Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew);
+        MeetingNoteEntity ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew);
         MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity model);
-        Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
+        MeetingNotes_Facilitator ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
         MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
-        Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
+        TCMPayStubEntity ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
         TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
-
         TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId);
         TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
     }

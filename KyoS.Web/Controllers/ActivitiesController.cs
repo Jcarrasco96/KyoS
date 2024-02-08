@@ -440,9 +440,9 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public JsonResult Translate(string text)
+        public async Task<JsonResult> Translate(string text)
         {
-            return Json(text = _translateHelper.TranslateText("es", "en", text));
+            return Json(text = await _translateHelper.TranslateText("es", "en", text));
         }
 
         [Authorize(Roles = "Facilitator")]

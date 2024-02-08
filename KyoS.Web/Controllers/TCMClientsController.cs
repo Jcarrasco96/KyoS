@@ -1422,7 +1422,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                tcmTransfer = await _converterHelper.ToTCMTransferEntity(transferViewModel, true, user_logged.UserName);
+                tcmTransfer = _converterHelper.ToTCMTransferEntity(transferViewModel, true, user_logged.UserName);
                 _context.Add(tcmTransfer);
 
                 try
@@ -1528,7 +1528,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                tcmTransfer = await _converterHelper.ToTCMTransferEntity(transferViewModel, false, user_logged.UserName);
+                tcmTransfer = _converterHelper.ToTCMTransferEntity(transferViewModel, false, user_logged.UserName);
                 _context.Update(tcmTransfer);
                 try
                 {
@@ -1589,9 +1589,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 return RedirectToAction("NotAuthorized", "Account");
-            }
-
-            return View();
+            }            
         }
 
         [HttpPost]

@@ -2113,7 +2113,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> UpdateNote(string dateInterval = "", int idCaseManager = 0, int idTCMClient = 0)
+        public IActionResult UpdateNote(string dateInterval = "", int idCaseManager = 0, int idTCMClient = 0)
         {
             UserEntity user_logged = _context.Users
 
@@ -2121,6 +2121,7 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Setting)
 
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             TCMSupervisorEntity tcmSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
