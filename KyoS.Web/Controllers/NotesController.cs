@@ -12420,8 +12420,6 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        [RequestTimeout(milliseconds: 100000)]
-        //[DisableRequestTimeout]
         public async Task<IActionResult> BillingReport1(int idWeek = 0)
         {
             UserEntity user_logged = await _context.Users

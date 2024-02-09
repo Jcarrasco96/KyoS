@@ -82,12 +82,6 @@ namespace KyoS.Web
             services.AddScoped<IOverlapindHelper, OverlapindHelper>();
             services.AddFastReport();
 
-            services.AddRequestTimeouts(options =>
-            {
-                options.DefaultPolicy = new Microsoft.AspNetCore.Http.Timeouts.RequestTimeoutPolicy { Timeout = TimeSpan.FromSeconds(60) };
-                //options.AddPolicy("MyTimeoutPolicy", TimeSpan.FromSeconds(60));                
-            });
-
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
@@ -107,9 +101,7 @@ namespace KyoS.Web
             app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseFastReport();
-
-            app.UseRequestTimeouts();          
+            app.UseFastReport();            
 
             app.UseRouting();
 

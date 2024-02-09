@@ -45,24 +45,6 @@ namespace KyoS.Web.Helpers
             {
                 return textToTranslate;
             }
-        }
-        public async Task<string> TranslateTextAux(string fromLanguage, string toLanguage, string textToTranslate)
-        {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://nlp-translation.p.rapidapi.com/v1/translate?text=Hello%2C%20world!!&to=es&from=en"),
-                Headers =
-                    {
-                        { "x-rapidapi-host", "nlp-translation.p.rapidapi.com" },
-                        { "x-rapidapi-key", "3297a3b5a2msh20bb50ffc96cac2p1ba7b7jsn3b5fb87c3e46" },
-                    },
-            };
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-            return body;
-        }
+        }        
     }
 }
