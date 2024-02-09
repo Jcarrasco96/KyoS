@@ -8,6 +8,7 @@ using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12419,6 +12420,8 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
+        [RequestTimeout(milliseconds: 100000)]
+        //[DisableRequestTimeout]
         public async Task<IActionResult> BillingReport1(int idWeek = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -12431,7 +12434,7 @@ namespace KyoS.Web.Controllers
 
             if (idWeek != 0)
             {
-                List<WeekEntity> query = await _context.Weeks
+                IQueryable<WeekEntity> query =  _context.Weeks
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
@@ -12469,8 +12472,7 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))
-                                                        .ToListAsync();
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));                                                            
 
                 try
                 {
@@ -12480,7 +12482,7 @@ namespace KyoS.Web.Controllers
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                         IdClient = 0,
                         Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        Weeks = query,
+                        Weeks = query.ToList(),
                         IdWeek = idWeek,
                         WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                     };
@@ -12495,13 +12497,10 @@ namespace KyoS.Web.Controllers
             else
             {
                 int max = 0;
-                List<WeekEntity> week = _context.Weeks.Where(m => m.Clinic.Id == user_logged.Clinic.Id).ToList();
-                if ( week.Count() > 0)
-                {
-                    max = week.Max(m => m.Id);
-                }
-
-                List<WeekEntity> query = await _context.Weeks
+                max = _context.Weeks
+                              .Max(w => w.Id);                                                
+                
+                IQueryable<WeekEntity> query = _context.Weeks
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -12539,16 +12538,15 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(d => d.Schedule)
                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))
-                                                       .ToListAsync();
-                
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));                                                       
+
                 BillingReport1ViewModel model = new BillingReport1ViewModel
                 {
                     IdFacilitator = 0,
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query,
+                    Weeks = query.ToList(),
                     IdWeek = max,
                     WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                 };

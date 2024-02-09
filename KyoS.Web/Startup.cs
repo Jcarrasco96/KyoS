@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Globalization;
 
 namespace KyoS.Web
@@ -81,6 +82,12 @@ namespace KyoS.Web
             services.AddScoped<IOverlapindHelper, OverlapindHelper>();
             services.AddFastReport();
 
+            services.AddRequestTimeouts(options =>
+            {
+                options.DefaultPolicy = new Microsoft.AspNetCore.Http.Timeouts.RequestTimeoutPolicy { Timeout = TimeSpan.FromSeconds(60) };
+                //options.AddPolicy("MyTimeoutPolicy", TimeSpan.FromSeconds(60));                
+            });
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
@@ -101,6 +108,8 @@ namespace KyoS.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseFastReport();
+
+            app.UseRequestTimeouts();          
 
             app.UseRouting();
 

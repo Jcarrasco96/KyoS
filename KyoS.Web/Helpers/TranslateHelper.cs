@@ -10,7 +10,7 @@ namespace KyoS.Web.Helpers
         public async Task<string> TranslateText(string fromLanguage, string toLanguage, string textToTranslate)
         {
             string traslation = string.Empty;
-            string result = string.Empty;
+            string result;
             
             var client = new HttpClient();
             try
@@ -59,12 +59,10 @@ namespace KyoS.Web.Helpers
                         { "x-rapidapi-key", "3297a3b5a2msh20bb50ffc96cac2p1ba7b7jsn3b5fb87c3e46" },
                     },
             };
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                return body;
-            }            
+            using var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            return body;
         }
     }
 }

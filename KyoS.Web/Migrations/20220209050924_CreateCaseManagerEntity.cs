@@ -2,7 +2,7 @@
 
 namespace KyoS.Web.Migrations
 {
-    public partial class erwe : Migration
+    public partial class CreateCaseManagerEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

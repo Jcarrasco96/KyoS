@@ -11,7 +11,7 @@ namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20220209050924_erwe")]
-    partial class erwe
+    partial class CreateCaseManagerEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
