@@ -12289,7 +12289,7 @@ namespace KyoS.Web.Controllers
             {
                 string[] date = dateInterval.Split(" - ");
 
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
@@ -12326,7 +12326,10 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));
+                                                        .AsSplitQuery()
+
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])))
+                                                        .ToListAsync();
 
                 try
                 {
@@ -12337,7 +12340,7 @@ namespace KyoS.Web.Controllers
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                         IdClient = 0,
                         Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        Weeks = query.ToList()
+                        Weeks = query
                     };
 
                     return View(model);
@@ -12349,7 +12352,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
@@ -12386,7 +12389,10 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-2) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
+                                                        .AsSplitQuery()
+
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-2) && w.FinalDate <= DateTime.Now.AddDays(6)))
+                                                        .ToListAsync();
 
                 BillingReportViewModel model = new BillingReportViewModel
                 {
@@ -12395,7 +12401,7 @@ namespace KyoS.Web.Controllers
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query.ToList()
+                    Weeks = query
                 };
 
                 return View(model);
@@ -12432,7 +12438,7 @@ namespace KyoS.Web.Controllers
 
             if (idWeek != 0)
             {
-                IQueryable<WeekEntity> query =  _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                         .Include(w => w.Days)
                                                         .ThenInclude(d => d.Workdays_Clients)
@@ -12470,7 +12476,10 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));                                                            
+                                                        .AsSplitQuery()
+
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))
+                                                        .ToListAsync();
 
                 try
                 {
@@ -12480,7 +12489,7 @@ namespace KyoS.Web.Controllers
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                         IdClient = 0,
                         Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        Weeks = query.ToList(),
+                        Weeks = query,
                         IdWeek = idWeek,
                         WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                     };
@@ -12496,9 +12505,10 @@ namespace KyoS.Web.Controllers
             {
                 int max = 0;
                 max = _context.Weeks
+                              .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
                               .Max(w => w.Id);                                                
                 
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -12536,7 +12546,10 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(d => d.Schedule)
                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));                                                       
+                                                       .AsSplitQuery()
+
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))
+                                                       .ToListAsync();
 
                 BillingReport1ViewModel model = new BillingReport1ViewModel
                 {
@@ -12544,7 +12557,7 @@ namespace KyoS.Web.Controllers
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query.ToList(),
+                    Weeks = query,
                     IdWeek = max,
                     WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                 };
