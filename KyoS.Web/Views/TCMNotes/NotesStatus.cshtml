@@ -53,7 +53,12 @@
         }
     </ul><!--.breadcrumb-->
 </div>
+<a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" asp-route-withoutReview="0" class="btn btn-info" title="All Pending"><i class="glyphicon glyphicon-globe"></i> All Pending</a>
+<a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" asp-route-withoutReview="1" class="btn btn-info" title="Only Pending without review"><i class="glyphicon glyphicon-search"></i> Only Pending without review</a>
+<a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" asp-route-withoutReview="2" class="btn btn-warning" title="Only Pending with review"><i class="glyphicon glyphicon-pencil"></i> Only Pending with review</a>
 
+<br />
+<br />
 <div class="row">    
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -195,7 +200,15 @@
                                         }
                                         else
                                         {
-                                            @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                            @if (item.TCMNoteActivity.Count() == 1)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.TCMNoteActivity.FirstOrDefault().ServiceName)
+                                            }
+                                            else
+                                            {
+                                                <p> - </p>
+                                            }
+                                            
                                         }
                                     </td>
                                     <td align="center">
