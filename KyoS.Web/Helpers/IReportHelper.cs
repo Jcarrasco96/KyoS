@@ -45,6 +45,8 @@ namespace KyoS.Web.Helpers
         Stream OrionNoteReportSchema3SS(Workday_Client workdayClient);
         Stream AlliedNoteReportSchema3(Workday_Client workdayClient);
         Stream AlliedNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream YourNeighborNoteReportSchema3(Workday_Client workdayClient);
+        Stream YourNeighborNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -57,6 +59,7 @@ namespace KyoS.Web.Helpers
         Stream MyFloridaIndNoteReportSchema1(Workday_Client workdayClient);
         Stream OrionIndNoteReportSchema1(Workday_Client workdayClient);
         Stream AlliedIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream YourNeighborIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -81,6 +84,8 @@ namespace KyoS.Web.Helpers
         Stream OrionGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream AlliedGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream AlliedGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream YourNeighborGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream YourNeighborGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
