@@ -6609,6 +6609,8 @@ namespace KyoS.Web.Controllers
                                                    .Include(wc => wc.Workday)
                                                    .ThenInclude(w => w.Workdays_Activities_Facilitators)
                                                    .ThenInclude(waf => waf.Facilitator)
+
+                                                   .AsSplitQuery()
                                                    
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.NoteP.Status == NoteStatus.Approved));
             
@@ -6734,6 +6736,19 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.YourNeighborNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.YourNeighborNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
@@ -6761,6 +6776,8 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(n => n.Objective)
 
                                                     .Include(wc => wc.Workday)
+
+                                                    .AsSplitQuery()
 
                                                     .FirstOrDefault(wc => (wc.Id == id && wc.IndividualNote.Status == NoteStatus.Approved));
             if (workdayClient == null)
@@ -6813,6 +6830,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -6843,6 +6865,8 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(o => o.Goal)
 
                                                    .Include(wc => wc.Workday)
+
+                                                   .AsSplitQuery()
 
                                                    .FirstOrDefault(wc => (wc.Id == id && (wc.GroupNote.Status == NoteStatus.Approved || wc.GroupNote2.Status == NoteStatus.Approved)));
             if (workdayClient == null)
@@ -6908,6 +6932,8 @@ namespace KyoS.Web.Controllers
                                                    .Include(wc => wc.Client)
                                                    .ThenInclude(c => c.Clients_Diagnostics)
                                                    .ThenInclude(cd => cd.Diagnostic)
+
+                                                   .AsSplitQuery()
 
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote2.Status == NoteStatus.Approved));
             if (workdayClient == null)
@@ -7046,6 +7072,21 @@ namespace KyoS.Web.Controllers
                 if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
                 {
                     stream = _reportHelper.AlliedGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.YourNeighborGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.YourNeighborGroupNoteReportSchema3(workdayClient);
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
